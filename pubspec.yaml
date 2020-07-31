@@ -23,6 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.16.1
+  material_segmented_control: ^2.1.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -57,6 +60,12 @@ flutter:
     - lib/assets/sportbutton1.png
     - lib/assets/partybutton1.png
     - lib/assets/otherbutton1.png
+    - lib/assets/dummyqr.png
+    - lib/assets/ndlogo.png
+    - lib/assets/kilwins.jpg
+    - lib/assets/chens.jpg
+    - lib/assets/woman.jpg
+    - lib/assets/chinese.png
 
 
 
@@ -85,9 +94,6 @@ flutter:
       fonts:
         - asset: lib/fonts/OpenSans-Bold.ttf
 
-    - family: heart
-      fonts:
-        - asset: lib/fonts/heart.ttf
     # - family: Solway
     #   fonts:
     #     - asset: lib/fonts/So.ttf
