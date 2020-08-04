@@ -12,7 +12,7 @@ class FoodFeed extends StatelessWidget {
       appBar: MyAppBar(
           title: Text(
         'FOOD',
-        style: TextThemes.extraBold,
+        style: TextThemes.extraBoldWhite,
         textScaleFactor: 1.2,
       )),
       body: Column(

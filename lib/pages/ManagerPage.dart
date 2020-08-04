@@ -1,9 +1,11 @@
 import 'package:MOOV3/helpers/themes.dart';
+import 'package:MOOV3/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV3/pages/HomePage.dart';
 import 'package:MOOV3/pages/MOOVSPage.dart';
 import 'package:MOOV3/pages/ProfilePage.dart';
+import 'package:MOOV3/pages/pages.dart';
 
 class ManagerPage extends StatefulWidget {
   @override
@@ -11,15 +13,19 @@ class ManagerPage extends StatefulWidget {
 }
 
 class _ManagerPageState extends State<ManagerPage> {
-  bool isSignedIn = false;
-  PageController pageController;
-  int currentIndex = 0;
-  bool isActive = false;
+  bool isSignedIn = true;
+  int getPageIndex = 0;
 
+  PageController pageController;
   void initState() {
     super.initState();
     pageController = PageController();
   }
+
+  // Pages _pages = Pages.home;
+
+  // void _selectPage(Pages pages) => setState(() => _pages = pages);
+
   //   gSignIn.onCurrentUserChanged.listen((gSigninAccount) {
   //     controlSignIn(gSigninAccount);
   //   }, onError: (gError) {
@@ -53,8 +59,7 @@ class _ManagerPageState extends State<ManagerPage> {
 
   whenPageChanges(int pageIndex) {
     setState(() {
-      this.currentIndex = pageIndex;
-      this.isActive = true;
+      this.getPageIndex = pageIndex;
     });
   }
 
@@ -64,46 +69,45 @@ class _ManagerPageState extends State<ManagerPage> {
       duration: Duration(milliseconds: 400),
       curve: Curves.easeIn,
     );
-    setState(() {
-      currentIndex = pageIndex;
-    });
   }
 
   Scaffold buildHomeScreen() {
     return Scaffold(
         body: PageView(
-          children: <Widget>[
-            HomePage(),
-            MOOVSPage(),
-            ProfilePage(),
-          ],
+          children: <Widget>[HomePage(), MOOVSPage(), ProfilePage()],
           controller: pageController,
           onPageChanged: whenPageChanges,
-          physics: NeverScrollableScrollPhysics(),
         ),
         bottomNavigationBar: CupertinoTabBar(
-          currentIndex: currentIndex,
+          currentIndex: getPageIndex,
           onTap: onTapChangePage,
-          backgroundColor: CupertinoColors.extraLightBackgroundGray,
-          activeColor: currentIndex == 0
-              ? Color.fromRGBO(220, 180, 57, 1.0)
-              : Color.fromRGBO(220, 180, 57, 1.0),
+          activeColor: TextThemes.ndGold,
           inactiveColor: Colors.blueGrey,
           items: [
             BottomNavigationBarItem(
-                title: Text('Home'), icon: Icon(CupertinoIcons.home)),
+                title: Text("Home"), icon: Icon(Icons.home)),
             BottomNavigationBarItem(
-                title: Text('My MOOVs'), icon: Icon(CupertinoIcons.heart)),
+                title: Text("My MOOVs"), icon: Icon(Icons.directions_run)),
             BottomNavigationBarItem(
-                title: Text('Profile'),
-                icon: Icon(CupertinoIcons.profile_circled)),
+                title: Text("Profile"), icon: Icon(Icons.person)),
           ],
         ));
+    // MyBottomNavigation(pages: _pages, onSelectPage: _selectPage));
 
     // return RaisedButton.icon(
     //     onPressed: logoutUser(),
     //     icon: Icon(Icons.close),
     //     label: Text("Sign out"));
+    // }
+
+    // Widget _buildBody() {
+    //   return <Pages, WidgetBuilder>{
+    //     Pages.home: (_) => HomePage(),
+    //     Pages.moovs: (_) => MOOVSPage(),
+    //     Pages.profile: (_) => ProfilePage(),
+    //     //  Page.nested: (_) => NestedScrollViewPage(),
+    //   }[_pages](context);
+    // }
   }
 
   Scaffold buildSignInScreen() {
@@ -152,7 +156,8 @@ class _ManagerPageState extends State<ManagerPage> {
     if (isSignedIn) {
       return buildHomeScreen();
     } else {
-      return buildSignInScreen();
+      return buildHomeScreen();
+      // return buildSignInScreen();
     }
   }
 }

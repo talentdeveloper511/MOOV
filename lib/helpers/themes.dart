@@ -16,7 +16,19 @@ class TextThemes {
     fontSize: 24,
     fontWeight: FontWeight.w800,
   );
+  static final TextStyle extraBoldWhite = TextStyle(
+    fontFamily: 'Solway',
+    fontSize: 24,
+    fontWeight: FontWeight.w800,
+    color: Colors.white
+  );
 
+  static final TextStyle italic = TextStyle(
+    fontFamily: 'Solway',
+    fontSize: 14,
+    fontStyle: FontStyle.italic,
+    color: ndGold
+  );
   static final TextStyle subtitle1 = TextStyle(
     fontFamily: 'Solway',
     fontSize: 14,
@@ -27,6 +39,18 @@ class TextThemes {
     fontFamily: 'Solway',
     fontSize: 11,
     fontWeight: FontWeight.w300,
+  );
+  static final TextStyle bodyTextWhite = TextStyle(
+    fontFamily: 'Solway',
+    fontSize: 11,
+    fontWeight: FontWeight.w300,
+    color: Colors.white
+  );
+  static final TextStyle mediumbody = TextStyle(
+    fontFamily: 'Solway',
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+    color: ndBlue
   );
 
   static final TextStyle dateStyle = TextStyle(

@@ -27,6 +27,7 @@ class PostCard extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: aspectRatio,
         child: Card(
+          color: Colors.white,
           elevation: 2,
           child: Container(
             margin: const EdgeInsets.all(4.0),
@@ -84,12 +85,14 @@ class _PostTitleSummaryAndTime extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  title,
-                  style: titleTheme,
+                Center(
+                  child: Text(
+                    title, textAlign: TextAlign.center,
+                    style: titleTheme,
+                  ),
                 ),
                 SizedBox(height: 2.0),
-                Text(summary, style: summaryTheme),
+                Center(child: Text(summary, style: summaryTheme)),
               ],
             ),
             PostTimeStamp(alignment: Alignment.centerRight),
@@ -106,7 +109,18 @@ class _PostImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PostModel postData = InheritedPostModel.of(context).postData;
-    return Expanded(flex: 2, child: Image.asset(postData.imageURL));
+    return Expanded(
+        flex: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: TextThemes.ndBlue, width: 1)),
+              child: Image.asset(
+                postData.imageURL,
+                fit: BoxFit.cover,
+              )),
+        ));
   }
 }
 

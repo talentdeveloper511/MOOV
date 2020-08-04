@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:MOOV3/widgets/going_status.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV3/models/post_model.dart';
 import 'package:MOOV3/helpers/themes.dart';
@@ -28,8 +29,8 @@ class PostDepth extends StatelessWidget {
       appBar: MyAppBar(
           title: Text(
         postData.title,
-        style: TextThemes.bodyText1,
-        textScaleFactor: 2,
+        style: TextThemes.bodyTextWhite,
+        textScaleFactor: 1.6,
       )),
       body: InheritedPostModel(
         postData: postData,
@@ -65,6 +66,7 @@ class _NonImageContents extends StatelessWidget {
           ),
           SizedBox(height: 8.0),
           PostStats(),
+          GoingStatus(),
           CommentsList(),
         ],
       ),
@@ -122,9 +124,11 @@ class _Summary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Text(
-        InheritedPostModel.of(context).postData.summary,
-        style: TextThemes.headline1,
+      child: Center(
+        child: Text(
+          InheritedPostModel.of(context).postData.summary, textAlign: TextAlign.center,
+          style: TextThemes.headline1, maxLines: 2, overflow: TextOverflow.ellipsis,
+        ),
       ),
     );
   }
