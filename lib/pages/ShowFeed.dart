@@ -4,14 +4,14 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-class FoodFeed extends StatefulWidget {
-  FoodFeed({Key key}) : super(key: key);
+class ShowFeed extends StatefulWidget {
+  ShowFeed({Key key}) : super(key: key);
 
   @override
-  _FoodFeedState createState() => _FoodFeedState();
+  _ShowFeedState createState() => _ShowFeedState();
 }
 
-class _FoodFeedState extends State<FoodFeed> {
+class _ShowFeedState extends State<ShowFeed> {
   bool _isPressed = false;
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _FoodFeedState extends State<FoodFeed> {
       body: StreamBuilder(
           stream: Firestore.instance
               .collection('food')
-              .where("type", isEqualTo: "Food")
+              .where("type", isEqualTo: "Show")
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
@@ -89,7 +89,7 @@ class _FoodFeedState extends State<FoodFeed> {
                                         width: 1,
                                       )),
                                       child: Image.asset(
-                                          'lib/assets/foodbutton1.png',
+                                          'lib/assets/filmbutton1.png',
                                           fit: BoxFit.cover,
                                           height: 130,
                                           width: 50)))),
@@ -191,48 +191,3 @@ class _FoodFeedState extends State<FoodFeed> {
     );
   }
 }
-
-// import 'package:MOOV4/widgets/segmented_control.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'HomePage.dart';
-// import 'package:MOOV4/helpers/themes.dart';
-
-// class FoodFeed extends StatefulWidget {
-//   FoodFeed({Key key}) : super(key: key);
-
-//   @override
-//   _FoodFeedState createState() => _FoodFeedState();
-// }
-
-// class _FoodFeedState extends State<FoodFeed> {
-
-//   Widget build(BuildContext context) {
-//     return Container(
-//         child: Scaffold(
-//       backgroundColor: CupertinoColors.lightBackgroundGray,
-//       appBar: MyAppBar(
-//           title: Text(
-//         'FOOD',
-//         style: TextThemes.extraBoldWhite,
-//         textScaleFactor: 1.2,
-//       )),
-//       body: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: <Widget>[
-//           Flexible(flex: 1, child: SegmentedControl()),
-//           // Flexible(
-//           //   flex: 4,
-//           //   fit: FlexFit.loose,
-//           //   child: ListView.builder(
-//           //       itemCount: DemoValues.posts.length,
-//           //       itemBuilder: (BuildContext context, int index) {
-//           //         return PostCard(postData: DemoValues.posts[index]);
-//           //       }),
-//           // ),
-//         ],
-//       ),
-//     ));
-//   }
-// }

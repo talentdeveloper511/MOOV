@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:MOOV3/models/post_model.dart';
-import 'package:MOOV3/helpers/themes.dart';
-import 'package:MOOV3/widgets/inherited_widgets/inherited_post_model.dart';
+import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
 
 class PostTimeStamp extends StatelessWidget {
   final Alignment alignment;

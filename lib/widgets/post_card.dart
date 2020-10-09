@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:MOOV3/helpers/common.dart';
-import 'package:MOOV3/models/post_model.dart';
-import 'package:MOOV3/pages/PostDepth.dart';
-import 'package:MOOV3/widgets/inherited_widgets/inherited_post_model.dart';
-import 'package:MOOV3/widgets/post_stats.dart';
-import 'package:MOOV3/widgets/post_time_stamp.dart';
-import 'package:MOOV3/widgets/user_details.dart';
-import 'package:MOOV3/helpers/themes.dart';
+import 'package:MOOV/helpers/common.dart';
+import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/pages/PostDepth.dart';
+import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
+import 'package:MOOV/widgets/post_stats.dart';
+import 'package:MOOV/widgets/post_time_stamp.dart';
+import 'package:MOOV/widgets/user_details.dart';
+import 'package:MOOV/helpers/themes.dart';
 
 class PostCard extends StatelessWidget {
   final PostModel postData;
@@ -87,7 +87,8 @@ class _PostTitleSummaryAndTime extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: Text(
-                    title, textAlign: TextAlign.center,
+                    title,
+                    textAlign: TextAlign.center,
                     style: titleTheme,
                   ),
                 ),

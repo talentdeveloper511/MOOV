@@ -1,16 +1,18 @@
+import 'package:MOOV/pages/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:MOOV3/pages/ManagerPage.dart';
-import 'package:MOOV3/helpers/themes.dart';
+import 'package:MOOV/pages/ManagerPage.dart';
+import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/pages/LoginPage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(MOOV3());
+  runApp(MOOV());
 }
 
-class MOOV3 extends StatelessWidget {
-  const MOOV3({Key key}) : super(key: key);
+class MOOV extends StatelessWidget {
+  const MOOV({Key key}) : super(key: key);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class MOOV3 extends StatelessWidget {
             bodyText1: TextThemes.bodyText1),
         fontFamily: 'Solway',
       ),
-      home: ManagerPage(),
+      home: Home(),
     );
   }
 }

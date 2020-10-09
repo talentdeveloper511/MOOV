@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CLIENT_ID</key>
+    <string>539403240889-gke8cen93mic6rf9kaqiiknvalt2p9pu.apps.googleusercontent.com</string>
+    <key>REVERSED_CLIENT_ID</key>
+    <string>com.googleusercontent.apps.539403240889-gke8cen93mic6rf9kaqiiknvalt2p9pu</string>
+    <key>ANDROID_CLIENT_ID</key>
+    <string>539403240889-qear257te9l9ceiloo7j7ol6084qt9eb.apps.googleusercontent.com</string>
+    <key>API_KEY</key>
+    <string>AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A</string>
+    <key>GCM_SENDER_ID</key>
+    <string>539403240889</string>
+    <key>PLIST_VERSION</key>
+    <string>1</string>
+    <key>BUNDLE_ID</key>
+    <string>com.example.MOOV4</string>
+    <key>PROJECT_ID</key>
+    <string>moov4-4d3c4</string>
+    <key>STORAGE_BUCKET</key>
+    <string>moov4-4d3c4.appspot.com</string>
+    <key>IS_ADS_ENABLED</key>
+    <false></false>
+    <key>IS_ANALYTICS_ENABLED</key>
+    <false></false>
+    <key>IS_APPINVITE_ENABLED</key>
+    <true></true>
+    <key>IS_GCM_ENABLED</key>
+    <true></true>
+    <key>IS_SIGNIN_ENABLED</key>
+    <true></true>
+    <key>GOOGLE_APP_ID</key>
+    <string>1:539403240889:ios:61718a625359aadd726268</string>
+    <key>DATABASE_URL</key>
+    <string>https://moov4-4d3c4.firebaseio.com</string>
+</dict>
+</plist>

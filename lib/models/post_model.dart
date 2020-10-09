@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:MOOV3/models/comment_model.dart';
-import 'package:MOOV3/models/user_model.dart';
+import 'package:MOOV/models/comment_model.dart';
+import 'package:MOOV/models/user_model.dart';
 
 class PostModel {
   final String id, title, summary, body, imageURL;

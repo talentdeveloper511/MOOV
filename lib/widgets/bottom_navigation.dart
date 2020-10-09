@@ -1,6 +1,6 @@
-import 'package:MOOV3/helpers/themes.dart';
+import 'package:MOOV/helpers/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:MOOV3/pages/pages.dart';
+import 'package:MOOV/pages/pages.dart';
 
 class MyBottomNavigation extends StatelessWidget {
   const MyBottomNavigation({Key key, this.pages, this.onSelectPage})
@@ -8,7 +8,8 @@ class MyBottomNavigation extends StatelessWidget {
   final Pages pages;
   final ValueChanged<Pages> onSelectPage;
 
-  Color _color(Pages pages) => this.pages == pages ? TextThemes.ndGold : Colors.grey;
+  Color _color(Pages pages) =>
+      this.pages == pages ? TextThemes.ndGold : Colors.grey;
 
   static const Map<Pages, IconData> icons = {
     Pages.home: Icons.home,

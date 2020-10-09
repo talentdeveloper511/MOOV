@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:MOOV3/models/post_model.dart';
+import 'package:MOOV/models/post_model.dart';
 
 class InheritedPostModel extends InheritedWidget {
   final PostModel postData;

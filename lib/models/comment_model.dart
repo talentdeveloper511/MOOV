@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:MOOV3/models/user_model.dart';
+import 'package:MOOV/models/user_model.dart';
 
 class CommentModel {
   final UserModel user;

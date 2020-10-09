@@ -1,11 +1,27 @@
-import 'package:MOOV3/helpers/themes.dart';
-import 'package:MOOV3/widgets/bottom_navigation.dart';
+import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/create_account.dart';
+import 'package:MOOV/pages/sign_in.dart';
+import 'package:MOOV/pages/upload.dart';
+import 'package:MOOV/widgets/bottom_navigation.dart';
+import 'package:MOOV/widgets/segmented_control.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MOOV3/pages/HomePage.dart';
-import 'package:MOOV3/pages/MOOVSPage.dart';
-import 'package:MOOV3/pages/ProfilePage.dart';
-import 'package:MOOV3/pages/pages.dart';
+import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/MOOVSPage.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/pages.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final GoogleSignIn gSignIn = GoogleSignIn();
+final StorageReference storageRef = FirebaseStorage.instance.ref();
+final usersRef = Firestore.instance.collection('users');
+final postsRef = Firestore.instance.collection('posts');
+final DateTime timestamp = DateTime.now();
+User currentUser;
 
 class ManagerPage extends StatefulWidget {
   @override
@@ -13,49 +29,80 @@ class ManagerPage extends StatefulWidget {
 }
 
 class _ManagerPageState extends State<ManagerPage> {
-  bool isSignedIn = true;
+  bool isSignedIn = false;
   int getPageIndex = 0;
-
   PageController pageController;
+
   void initState() {
     super.initState();
+
     pageController = PageController();
+
+    googleSignIn.onCurrentUserChanged.listen((account) {
+      controlSignIn(account);
+    }, onError: (err) {
+      print("Error Message: $err");
+    });
+    googleSignIn.signInSilently(suppressErrors: false).then((account) {
+      controlSignIn(account);
+    }).catchError((err) {
+      print("Error Message: $err");
+    });
   }
 
-  // Pages _pages = Pages.home;
+  controlSignIn(GoogleSignInAccount account) {
+    if (account != null) {
+      createUserInFirestore();
+      setState(() {
+        isSignedIn = true;
+      });
+    } else {
+      setState(() {
+        isSignedIn = false;
+      });
+    }
+  }
 
-  // void _selectPage(Pages pages) => setState(() => _pages = pages);
+  createUserInFirestore() async {
+    //check if user exists in users collection in database according to their id
+    final GoogleSignInAccount user = googleSignIn.currentUser;
+    DocumentSnapshot doc = await usersRef.document(user.id).get();
 
-  //   gSignIn.onCurrentUserChanged.listen((gSigninAccount) {
-  //     controlSignIn(gSigninAccount);
-  //   }, onError: (gError) {
-  //     print("Error Message " + gError);
-  //   });
+    //if user doesnt exist, take them to create account page
+    if (!doc.exists) {
+      final username = await Navigator.push(
+          context, MaterialPageRoute(builder: (context) => CreateAccount()));
+      print('alive');
 
-  //   gSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
-  //     controlSignIn(gSignInAccount);
-  //   }).catchError((gError) {
-  //     print("Error Message " + gError);
-  //   });
-  // }
+      //get username from create account, use it to make new doc in users collection
+      usersRef.document(user.id).setData({
+        "id": user.id,
+        "username": username,
+        "photoUrl": user.photoUrl,
+        "email": user.email,
+        "displayName": user.displayName,
+        "bio": "",
+        "timestamp": timestamp
+      });
+      doc = await usersRef.document(user.id).get();
+    }
 
-  // controlSignIn(GoogleSignInAccount signInAccount) async {
-  //   if (signInAccount != null) {
-  //     setState(() {
-  //       isSignedIn = true;
-  //     });
-  //   } else {
-  //     isSignedIn = false;
-  //   }
-  // }
+    currentUser = User.fromDocument(doc);
+  }
 
-  // loginUser() {
-  //   gSignIn.signIn();
-  // }
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
-  // logoutUser() {
-  //   gSignIn.signOut();
-  // }
+  loginUser() {
+    gSignIn.signIn();
+  }
+
+  logoutUser() {
+    gSignIn.signOut();
+  }
 
   whenPageChanges(int pageIndex) {
     setState(() {
@@ -72,9 +119,10 @@ class _ManagerPageState extends State<ManagerPage> {
   }
 
   Scaffold buildHomeScreen() {
+    // Upload();
     return Scaffold(
         body: PageView(
-          children: <Widget>[HomePage(), MOOVSPage(), ProfilePage()],
+          children: <Widget>[Upload(), MOOVSPage(), ProfilePage()],
           controller: pageController,
           onPageChanged: whenPageChanges,
         ),
@@ -92,22 +140,6 @@ class _ManagerPageState extends State<ManagerPage> {
                 title: Text("Profile"), icon: Icon(Icons.person)),
           ],
         ));
-    // MyBottomNavigation(pages: _pages, onSelectPage: _selectPage));
-
-    // return RaisedButton.icon(
-    //     onPressed: logoutUser(),
-    //     icon: Icon(Icons.close),
-    //     label: Text("Sign out"));
-    // }
-
-    // Widget _buildBody() {
-    //   return <Pages, WidgetBuilder>{
-    //     Pages.home: (_) => HomePage(),
-    //     Pages.moovs: (_) => MOOVSPage(),
-    //     Pages.profile: (_) => ProfilePage(),
-    //     //  Page.nested: (_) => NestedScrollViewPage(),
-    //   }[_pages](context);
-    // }
   }
 
   Scaffold buildSignInScreen() {
@@ -121,7 +153,7 @@ class _ManagerPageState extends State<ManagerPage> {
             Image.asset('lib/assets/appicon.png'),
             Spacer(flex: 3),
             GestureDetector(
-              onTap: null,
+              onTap: loginUser,
               child: Container(
                 width: 300.0,
                 height: 50.0,
@@ -153,11 +185,6 @@ class _ManagerPageState extends State<ManagerPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (isSignedIn) {
-      return buildHomeScreen();
-    } else {
-      return buildHomeScreen();
-      // return buildSignInScreen();
-    }
+    return isSignedIn ? buildSignInScreen() : buildHomeScreen();
   }
 }

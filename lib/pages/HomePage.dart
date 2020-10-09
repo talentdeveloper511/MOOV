@@ -1,5 +1,13 @@
-import 'package:MOOV3/helpers/themes.dart';
-import 'package:MOOV3/pages/FoodFeed.dart';
+import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/pages/FoodFeed.dart';
+import 'package:MOOV/pages/SportFeed.dart';
+import 'package:MOOV/pages/ShowFeed.dart';
+import 'package:MOOV/pages/PartyFeed.dart';
+import 'package:MOOV/pages/ManagerPage.dart';
+import 'package:MOOV/pages/MoovMaker.dart';
+import 'package:MOOV/pages/search.dart';
+import 'package:MOOV/pages/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
@@ -82,15 +90,36 @@ class _HomePageState extends State<HomePage>
           context, MaterialPageRoute(builder: (context) => FoodFeed()));
     }
 
+    Future navigateToSportFeed(context) async {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => SportFeed()));
+    }
+
+    Future navigateToShowFeed(context) async {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ShowFeed()));
+    }
+
+    Future navigateToPartyFeed(context) async {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => PartyFeed()));
+    }
+
     return Scaffold(
       floatingActionButton: FadeTransition(
         opacity: _hideFabAnimController,
         child: ScaleTransition(
           scale: _hideFabAnimController,
           child: FloatingActionButton.extended(
-              onPressed: () {},
-              label: const Text('Have a MOOV?',
-                  style: TextStyle(color: Colors.white))),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MoovMaker(postModel: PostModel())),
+                );
+              },
+              label: const Text("What's the Moov?",
+                  style: TextStyle(fontSize: 16, color: Colors.white))),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -108,6 +137,8 @@ class _HomePageState extends State<HomePage>
                 color: Colors.white,
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                 onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Search()));
                   // Implement navigation to shopping cart page here...
                   print('Click Search');
                 },
@@ -238,7 +269,12 @@ class _HomePageState extends State<HomePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/sportbutton1.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToSportFeed(context);
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/sportbutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -254,7 +290,12 @@ class _HomePageState extends State<HomePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/filmbutton1.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToShowFeed(context);
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/filmbutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -281,7 +322,12 @@ class _HomePageState extends State<HomePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/partybutton1.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToPartyFeed(context);
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/partybutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(

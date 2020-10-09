@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:MOOV3/models/comment_model.dart';
-import 'package:MOOV3/widgets/inherited_widgets/inherited_post_model.dart';
-import 'package:MOOV3/widgets/user_details_with_follow.dart';
+import 'package:MOOV/models/comment_model.dart';
+import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
+import 'package:MOOV/widgets/user_details_with_follow.dart';
 
 class CommentsListKeyPrefix {
   static final String singleComment = "Comment";

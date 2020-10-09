@@ -1,5 +1,5 @@
-import 'package:MOOV3/helpers/demo_values.dart';
-import 'package:MOOV3/widgets/post_card.dart';
+import 'package:MOOV/helpers/demo_values.dart';
+import 'package:MOOV/widgets/post_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

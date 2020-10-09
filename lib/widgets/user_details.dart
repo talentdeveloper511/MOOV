@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:MOOV3/helpers/common.dart';
-import 'package:MOOV3/models/user_model.dart';
-import 'package:MOOV3/widgets/inherited_widgets/inherited_user_model.dart';
+import 'package:MOOV/helpers/common.dart';
+import 'package:MOOV/models/user_model.dart';
+import 'package:MOOV/widgets/inherited_widgets/inherited_user_model.dart';
 
 class UserDetails extends StatelessWidget {
   final UserModel userData;

@@ -1,14 +1,14 @@
 import 'dart:ui';
 
-import 'package:MOOV3/widgets/going_status.dart';
+import 'package:MOOV/widgets/going_status.dart';
 import 'package:flutter/material.dart';
-import 'package:MOOV3/models/post_model.dart';
-import 'package:MOOV3/helpers/themes.dart';
-import 'package:MOOV3/widgets/comments_list.dart';
-import 'package:MOOV3/widgets/inherited_widgets/inherited_post_model.dart';
-import 'package:MOOV3/widgets/post_stats.dart';
-import 'package:MOOV3/widgets/post_time_stamp.dart';
-import 'package:MOOV3/widgets/user_details_with_follow.dart';
+import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/widgets/comments_list.dart';
+import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
+import 'package:MOOV/widgets/post_stats.dart';
+import 'package:MOOV/widgets/post_time_stamp.dart';
+import 'package:MOOV/widgets/user_details_with_follow.dart';
 import 'HomePage.dart';
 
 class PostDepthKeys {
@@ -126,8 +126,11 @@ class _Summary extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Center(
         child: Text(
-          InheritedPostModel.of(context).postData.summary, textAlign: TextAlign.center,
-          style: TextThemes.headline1, maxLines: 2, overflow: TextOverflow.ellipsis,
+          InheritedPostModel.of(context).postData.summary,
+          textAlign: TextAlign.center,
+          style: TextThemes.headline1,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

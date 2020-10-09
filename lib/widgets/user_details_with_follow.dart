@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:MOOV3/models/user_model.dart';
-import 'package:MOOV3/widgets/user_details.dart';
+import 'package:MOOV/models/user_model.dart';
+import 'package:MOOV/widgets/user_details.dart';
 
 class UserDetailsWithFollowKeys {
   static final ValueKey userDetails = ValueKey("UserDetails");

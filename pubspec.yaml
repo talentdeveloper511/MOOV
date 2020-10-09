@@ -1,5 +1,5 @@
-name: MOOV3
-description: A new Flutter project.
+name: MOOV
+description: A game changing app.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -25,7 +25,33 @@ dependencies:
     sdk: flutter
   intl: ^0.16.1
   material_segmented_control: ^2.1.0
-  # cloud_firestore: ^0.13.7
+  cloud_firestore: ^0.13.0+1
+  firebase_storage: ^3.1.0+1
+  image_picker: ^0.6.7+4
+  firebase_messaging: ^6.0.16
+  firebase_core: ^0.4.4
+  shared_preferences: ^0.5.0
+  date_range_picker: ^1.0.6
+  image_cropper: ^1.2.3
+  datetime_picker_formfield: ^1.0.0
+  cached_network_image: ^2.2.0+1
+  flutter_svg: ^0.18.0
+  geolocator: ^5.3.2+2
+  image: ^2.1.14
+  firebase_auth: ^0.16.0
+  google_sign_in: ^4.4.4
+  permission_handler: ^5.0.0
+  contacts_service: ^0.3.10
+  flutter_sms: ^2.0.0
+  firebase_analytics: ^5.0.6
+
+
+
+
+
+
+
+
 
 
 
@@ -76,6 +102,8 @@ flutter:
     - lib/assets/gamesbutton1.png
     - lib/assets/otherbutton2.png
     - lib/assets/me.jpg
+    # - lib/assets/google1.png
+
 
 
 

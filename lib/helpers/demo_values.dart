@@ -1,6 +1,6 @@
-import 'package:MOOV3/models/comment_model.dart';
-import 'package:MOOV3/models/post_model.dart';
-import 'package:MOOV3/models/user_model.dart';
+import 'package:MOOV/models/comment_model.dart';
+import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/models/user_model.dart';
 
 class DemoValues {
   static final List<UserModel> users = [
@@ -103,7 +103,8 @@ Repudiandae sint soluta ullam sunt eos id laborum. Veniam molestiae ipsa odit so
       author: users[1],
       title: "50% off Chinese!",
       summary: "Come on in to J.W. Chens today!",
-      body: "Scan your code at the restaurant. Only today, one visit per customer.",
+      body:
+          "Scan your code at the restaurant. Only today, one visit per customer.",
       imageURL: "lib/assets/chens.jpg",
       postTime: DateTime(2020, 11, 27, 7, 36),
       reacts: 123,
