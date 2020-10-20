@@ -1,7 +1,7 @@
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/create_account.dart';
-import 'package:MOOV/pages/sign_in.dart';
+import 'package:MOOV/pages/auth/sign_in.dart';
 import 'package:MOOV/pages/upload.dart';
 import 'package:MOOV/widgets/bottom_navigation.dart';
 import 'package:MOOV/widgets/segmented_control.dart';

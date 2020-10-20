@@ -1,6 +1,6 @@
 // import 'package:MOOV/pages/ManagerPage.dart';
 import 'package:flutter/material.dart';
-import 'package:MOOV/pages/sign_in.dart';
+import 'package:MOOV/pages/auth/sign_in.dart';
 import 'HomePage.dart';
 import 'MOOVSPage.dart';
 import 'package:MOOV/helpers/themes.dart';
