@@ -1,8 +1,8 @@
-import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/HomePage.dart';
-import 'package:MOOV/pages/MOOVSPage.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/home/HomePage.dart';
+import 'package:MOOV/pages/post/MOOVSPage.dart';
+import 'package:MOOV/pages/profile/ProfilePage.dart';
 // import 'package:MOOV/pages/upload.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:MOOV/pages/FoodFeed.dart';
-import 'create_account.dart';
+import '../create_account/create_account.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final StorageReference storageRef = FirebaseStorage.instance.ref();

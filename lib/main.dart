@@ -1,9 +1,9 @@
-import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/home/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/ManagerPage.dart';
-import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/pages/LoginPage.dart';
+import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/pages/auth/LoginPage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

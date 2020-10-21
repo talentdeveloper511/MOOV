@@ -1,11 +1,12 @@
 // import 'package:MOOV/pages/ManagerPage.dart';
-import 'package:flutter/material.dart';
+
 import 'package:MOOV/pages/auth/sign_in.dart';
-import 'HomePage.dart';
-import 'MOOVSPage.dart';
-import 'package:MOOV/helpers/themes.dart';
+import 'package:flutter/material.dart';
+import '../home/HomePage.dart';
+import '../post/MOOVSPage.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:flutter/cupertino.dart';
-import 'ProfilePage.dart';
+import '../profile/ProfilePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {

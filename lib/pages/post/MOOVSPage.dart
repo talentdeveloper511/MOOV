@@ -1,11 +1,11 @@
 // import 'package:MOOV/widgets/segmented_control.dart';
-import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:MOOV/pages/MoovMaker.dart';
+import 'package:MOOV/pages/post/MoovMaker.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/services/database.dart';
 

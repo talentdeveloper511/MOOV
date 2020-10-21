@@ -1,11 +1,11 @@
-import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/pages/FoodFeed.dart';
-import 'package:MOOV/pages/SportFeed.dart';
-import 'package:MOOV/pages/ShowFeed.dart';
-import 'package:MOOV/pages/PartyFeed.dart';
+import 'package:MOOV/pages/feed/FoodFeed.dart';
+import 'package:MOOV/pages/feed/SportFeed.dart';
+import 'package:MOOV/pages/feed/ShowFeed.dart';
+import 'package:MOOV/pages/feed/PartyFeed.dart';
 import 'package:MOOV/pages/ManagerPage.dart';
-import 'package:MOOV/pages/MoovMaker.dart';
+import 'package:MOOV/pages/post/MoovMaker.dart';
 import 'package:MOOV/pages/search.dart';
 import 'package:MOOV/pages/upload.dart';
 import 'package:flutter/material.dart';

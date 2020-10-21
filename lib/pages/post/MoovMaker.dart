@@ -1,7 +1,7 @@
 // import 'dart:io';
 
 import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/home/HomePage.dart';
 // import 'package:MOOV/pages/sign_in.dart';
 import 'package:MOOV/services/database.dart';
 // import 'package:MOOV/widgets/date_picker.dart';
@@ -11,7 +11,7 @@ import 'package:MOOV/services/database.dart';
 // import 'package:MOOV/widgets/time_picker2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
 import 'package:flutter/services.dart';

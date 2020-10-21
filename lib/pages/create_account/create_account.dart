@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/utils/AssetStrings.dart';
+
 // import 'package:MOOV/pages/HomePage.dart';
 import 'package:flutter/material.dart';
 
@@ -43,12 +45,12 @@ class _CreateAccountState extends State<CreateAccount> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'lib/assets/moovheader.png',
+                AssetStrings.headerImage,
                 fit: BoxFit.cover,
                 height: 45.0,
               ),
               Image.asset(
-                'lib/assets/ndlogo.png',
+                AssetStrings.logoImage,
                 fit: BoxFit.cover,
                 height: 25,
               )

@@ -44,6 +44,7 @@ dependencies:
   contacts_service: ^0.3.10
   flutter_sms: ^2.0.0
   firebase_analytics: ^5.0.6
+  provider: ^3.0.0+1
 
 
 
@@ -76,49 +77,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/appicon.png
-    - lib/assets/google.png
-    - lib/assets/moovheader.png
-    - lib/assets/foodbutton1.png
-    - lib/assets/motd.jpg
-    - lib/assets/bouts.jpg
-    - lib/assets/pete!!.jpg
-    - lib/assets/filmbutton1.png
-    - lib/assets/sportbutton1.png
-    - lib/assets/partybutton1.png
-    - lib/assets/otherbutton1.png
-    - lib/assets/dummyqr.png
-    - lib/assets/ndlogo.png
-    - lib/assets/kilwins.jpg
-    - lib/assets/chens.jpg
-    - lib/assets/woman.jpg
-    - lib/assets/chinese.png
-    - lib/assets/studybutton1.png
-    - lib/assets/govbutton1.png
-    - lib/assets/massbutton1.png
-    - lib/assets/volunteerbutton1.png
-    - lib/assets/charitybutton1.png
-    - lib/assets/tailgatebutton1.png
-    - lib/assets/gamesbutton1.png
-    - lib/assets/otherbutton2.png
-    - lib/assets/me.jpg
-    # - lib/assets/google1.png
+    - lib/assets/
 
 
-
-
-
-
-
-
-
-    
-
-
-
- 
-
-  # An image asset can refer to one or more resolution-specific "variants", see
+   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
   # For details regarding adding assets from package dependencies, see

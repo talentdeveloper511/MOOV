@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
 
 class PostTimeStamp extends StatelessWidget {
