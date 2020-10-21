@@ -1,4 +1,5 @@
 import 'package:MOOV/models/user_model.dart';
+import 'package:MOOV/services/firestore_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -66,8 +67,8 @@ class AuthProvider extends ChangeNotifier {
   }
 
   //Method for new user registration using email and password
-  Future<UserModel> registerWithEmailAndPassword(
-      String email, String password) async {
+  Future<UserModel> registerWithEmailAndPassword(String email,
+      String password) async {
     try {
       _status = Status.Registering;
       notifyListeners();
@@ -110,4 +111,26 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     return Future.delayed(Duration.zero);
   }
+
+
+  //set user data to firebase->firestore collectoin
+  Future<void> setUserData(AuthCredential authCredential) async {
+    var authResult = await _auth.signInWithCredential(authCredential); //mark user auth table
+    var firebaseUser=authResult.user;
+    var firestoreDb = FirestoreDatabase(uid: firebaseUser.uid);
+    var userData=await firestoreDb.getUserData();
+    //if creating user first time
+    if(userData==null) {
+      var userModel = UserModel(id: firebaseUser.uid,
+          name: firebaseUser.displayName,
+          email: firebaseUser.email,
+          image: firebaseUser.photoUrl,
+          followers: 0,
+          posts: 0,
+          joined: DateTime.now());
+      await firestoreDb.setUserData(userModel);
+    }
+    notifyListeners();
+  }
+
 }

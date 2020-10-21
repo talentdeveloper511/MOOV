@@ -1,6 +1,6 @@
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:MOOV/pages/pages.dart';
+import 'package:MOOV/enums/pages.dart';
 
 class MyBottomNavigation extends StatelessWidget {
   const MyBottomNavigation({Key key, this.pages, this.onSelectPage})

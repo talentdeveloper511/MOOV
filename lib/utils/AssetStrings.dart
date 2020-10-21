@@ -13,8 +13,8 @@ class AssetStrings {
   //create account section
   static const String headerImage = "lib/assets/moovheader.png";
   static const String logoImage = "lib/assets/ndlogo.png";
-
-
+  static const String logoGoogleSignin = 'lib/assets/google.png';
+  static const String appIcon='lib/assets/appicon.png';
 
 
 

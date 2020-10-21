@@ -20,5 +20,7 @@ class SharedPrefsKeys {
   static const String IS_UPGRADED_ACCOUNT = "is_upgraded_account";
   static const String HIDE_PROFILE = "hide_profile";
 
+  static const String is_dark_mode = "is_dark_mode";
+  static const String language_code = "language_code";
 
 }

@@ -1,6 +1,7 @@
 // import 'package:MOOV/pages/ManagerPage.dart';
 
-import 'package:MOOV/pages/auth/sign_in.dart';
+import 'package:MOOV/pages/auth/google_sign_in.dart';
+import 'package:MOOV/utils/AssetStrings.dart';
 import 'package:flutter/material.dart';
 import '../home/HomePage.dart';
 import '../post/MOOVSPage.dart';
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image(image: AssetImage("lib/assets/google1.png"), height: 35.0),
+            Image(image: AssetImage(AssetStrings.logoGoogleSignin), height: 35.0),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(

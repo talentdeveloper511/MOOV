@@ -1,14 +1,19 @@
+import 'package:MOOV/provider/auth_provider.dart';
+import 'package:MOOV/utils/AssetStrings.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home/HomePage.dart';
 import 'package:MOOV/pages/post/MOOVSPage.dart';
 import 'package:MOOV/pages/profile/ProfilePage.dart';
+
 // import 'package:MOOV/pages/upload.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+
 // import 'package:MOOV/pages/FoodFeed.dart';
 import '../create_account/create_account.dart';
 
@@ -28,6 +33,7 @@ class _HomeState extends State<Home> {
   bool isAuth = false;
   PageController pageController;
   int pageIndex = 0;
+  AuthProvider _authProvider;
 
   @override
   void initState() {
@@ -155,7 +161,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              'lib/assets/appicon.png',
+              AssetStrings.appIcon,
               scale: .5,
             ),
             GestureDetector(
@@ -166,7 +172,7 @@ class _HomeState extends State<Home> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
-                      'lib/assets/google.png',
+                      AssetStrings.logoGoogleSignin,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -181,6 +187,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    _authProvider = Provider.of<AuthProvider>(context);
+
     return isAuth ? buildAuthScreen() : buildUnAuthScreen();
   }
 }

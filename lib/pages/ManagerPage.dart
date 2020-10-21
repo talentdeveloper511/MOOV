@@ -2,7 +2,7 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/create_account/create_account.dart';
 
-import 'package:MOOV/pages/upload.dart';
+import 'package:MOOV/pages/firebaseupload/upload.dart';
 import 'package:MOOV/widgets/bottom_navigation.dart';
 import 'package:MOOV/widgets/segmented_control.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:MOOV/pages/home/HomePage.dart';
 import 'package:MOOV/pages/post/MOOVSPage.dart';
 import 'package:MOOV/pages/profile/ProfilePage.dart';
-import 'package:MOOV/pages/pages.dart';
+import 'package:MOOV/enums/pages.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
