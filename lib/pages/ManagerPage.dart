@@ -10,7 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV/pages/home/HomePage.dart';
-import 'package:MOOV/pages/post/MOOVSPage.dart';
+import 'package:MOOV/pages/my_moovs/MOOVSPage.dart';
 import 'package:MOOV/pages/profile/ProfilePage.dart';
 import 'package:MOOV/enums/pages.dart';
 import 'package:google_sign_in/google_sign_in.dart';

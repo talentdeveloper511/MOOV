@@ -3,7 +3,7 @@ import 'package:MOOV/utils/AssetStrings.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home/HomePage.dart';
-import 'package:MOOV/pages/post/MOOVSPage.dart';
+import 'package:MOOV/pages/my_moovs/MOOVSPage.dart';
 import 'package:MOOV/pages/profile/ProfilePage.dart';
 
 // import 'package:MOOV/pages/upload.dart';

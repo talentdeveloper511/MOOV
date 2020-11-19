@@ -4,7 +4,7 @@ import 'package:MOOV/pages/auth/google_sign_in.dart';
 import 'package:MOOV/utils/AssetStrings.dart';
 import 'package:flutter/material.dart';
 import '../home/HomePage.dart';
-import '../post/MOOVSPage.dart';
+import '../my_moovs/MOOVSPage.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:flutter/cupertino.dart';
 import '../profile/ProfilePage.dart';
