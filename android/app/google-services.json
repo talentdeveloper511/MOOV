@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "539403240889",
+    "firebase_url": "https://moov4-4d3c4.firebaseio.com",
+    "project_id": "moov4-4d3c4",
+    "storage_bucket": "moov4-4d3c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539403240889:android:f9c85aa92bf350ff726268",
+        "android_client_info": {
+          "package_name": "com.example.MOOV3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539403240889-tbehpefa2mmq0im4j5shehhoup16pepb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.MOOV3",
+            "certificate_hash": "c17dafe6ebef404cb7734a6d6d753a85748f4cf7"
+          }
+        },
+        {
+          "client_id": "539403240889-crs4qlkboi73l9ju84a7ocnbhh3tslfk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzJWxmyHJPoncxsiu4Wqb0UdF1Oq2uodM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539403240889-ptr88r86nvou6iu8dbdfj33vhqh93tar.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "539403240889-ktah8982icuobtdo02rvi20rghoad92s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alvinalaphat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

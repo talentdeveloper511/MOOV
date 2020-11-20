@@ -1,8 +1,8 @@
-import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/helpers/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MOOV/pages/contacts/contactsPage.dart';
+import 'package:MOOV/pages/contactsPage.dart';
 // import 'package:url_launcher/url_launcher.dart';
 // import 'package:flutter_sms/flutter_sms.dart';
 

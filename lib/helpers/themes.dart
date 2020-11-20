@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TextThemes {
-
-  const TextThemes();
-
   static final Color ndGold = Color.fromRGBO(220, 180, 57, 1.0);
   static final Color ndBlue = Color.fromRGBO(2, 43, 91, 1.0);
 
@@ -62,12 +59,4 @@ class TextThemes {
     fontWeight: FontWeight.w500,
     color: Color.fromRGBO(2, 43, 91, 1.0),
   );
-
-  static double fullWidth(BuildContext context) {
-    return MediaQuery.of(context).size.width;
-  }
-
-  static double fullHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height;
-  }
 }

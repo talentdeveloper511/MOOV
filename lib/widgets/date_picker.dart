@@ -1,5 +1,5 @@
 import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/pages/post/MoovMaker.dart';
+import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;

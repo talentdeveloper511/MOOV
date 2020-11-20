@@ -1,48 +1,19 @@
-import 'package:MOOV/pages/home/home.dart';
-import 'package:MOOV/provider/auth_provider.dart';
-import 'package:MOOV/provider/language_provider.dart';
-import 'package:MOOV/provider/theme_provider.dart';
+import 'package:MOOV/pages/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/ManagerPage.dart';
-import 'package:MOOV/utils/themes_styles.dart';
-import 'package:MOOV/pages/auth/LoginPage.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/pages/LoginPage.dart';
 
-import 'enums/flavor.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) async {
-    runApp(
-      /*
-      * MultiProvider for top services that do not depends on any runtime values
-      * such as user uid/email.
-       */
-      MultiProvider(providers: [
-        Provider<Flavor>.value(value: Flavor.dev),
-          ChangeNotifierProvider<AuthProvider>(
-            create: (context) => AuthProvider(),
-          ),
-
-          ChangeNotifierProvider<LanguageProvider>(
-            create: (context) => LanguageProvider(),
-          ),
-        ChangeNotifierProvider<ThemeProvider>(
-          create: (context) => ThemeProvider(),
-        ),
-      ], child: MOOV()),
-    );
-  });
+  runApp(MOOV());
 }
 
 class MOOV extends StatelessWidget {
   const MOOV({Key key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

@@ -3,13 +3,13 @@ import 'dart:ui';
 import 'package:MOOV/widgets/going_status.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/widgets/comments_list.dart';
 import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
 import 'package:MOOV/widgets/post_stats.dart';
 import 'package:MOOV/widgets/post_time_stamp.dart';
 import 'package:MOOV/widgets/user_details_with_follow.dart';
-import 'home/HomePage.dart';
+import 'HomePage.dart';
 
 class PostDepthKeys {
   static final ValueKey wholePage = ValueKey("wholePage");
@@ -28,7 +28,8 @@ class PostDepth extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(
           title: Text(
-        postData.title,
+            'Demo',
+     //   postData.title,
         style: TextThemes.bodyTextWhite,
         textScaleFactor: 1.6,
       )),

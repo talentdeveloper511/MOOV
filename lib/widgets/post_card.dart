@@ -6,7 +6,7 @@ import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
 import 'package:MOOV/widgets/post_stats.dart';
 import 'package:MOOV/widgets/post_time_stamp.dart';
 import 'package:MOOV/widgets/user_details.dart';
-import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/helpers/themes.dart';
 
 class PostCard extends StatelessWidget {
   final PostModel postData;

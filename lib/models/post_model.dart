@@ -8,6 +8,7 @@ class PostModel {
   final DateTime postTime;
   final int reacts, views;
   final UserModel author;
+  final bool likeStatus;
   final List<CommentModel> comments;
 
   const PostModel({
@@ -21,6 +22,7 @@ class PostModel {
     @required this.reacts,
     @required this.views,
     @required this.comments,
+    @required this.likeStatus,
   });
 
   String get postTimeFormatted => DateFormat.yMMMMEEEEd().format(postTime);
