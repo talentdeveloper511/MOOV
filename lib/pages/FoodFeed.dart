@@ -138,7 +138,7 @@ class _FoodFeedState extends State<FoodFeed> {
                             color: Colors.pink,
                             iconSize: 24.0,
                             splashColor: Colors.pink,
-                          //  splashRadius: 7.0,
+                            splashRadius: 7.0,
                             highlightColor: Colors.pink,
                             onPressed: () {
                               // Perform action
@@ -404,7 +404,7 @@ class _FoodFeedState extends State<FoodFeed> {
                                           color: Colors.pink,
                                           iconSize: 24.0,
                                           splashColor: Colors.pink,
-                                         // splashRadius: 7.0,
+                                          splashRadius: 7.0,
                                           highlightColor: Colors.pink,
                                           onPressed: () {
                                             // Perform action

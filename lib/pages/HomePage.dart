@@ -26,31 +26,31 @@ class HomePage extends StatefulWidget {
 class MyAppBar extends AppBar {
   MyAppBar({Key key, Widget title})
       : super(
-      key: key,
-      title: title,
-      backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-      actions: <Widget>[
-        IconButton(
-          padding: EdgeInsets.all(5.0),
-          icon: Icon(Icons.search),
-          color: Colors.white,
-          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-          onPressed: () {
-            // Implement navigation to shopping cart page here...
-            print('Click Search');
-          },
-        ),
-        IconButton(
-          padding: EdgeInsets.all(5.0),
-          icon: Icon(Icons.message),
-          color: Colors.white,
-          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-          onPressed: () {
-            // Implement navigation to shopping cart page here...
-            print('Click Message');
-          },
-        )
-      ]);
+            key: key,
+            title: title,
+            backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
+            actions: <Widget>[
+              IconButton(
+                padding: EdgeInsets.all(5.0),
+                icon: Icon(Icons.search),
+                color: Colors.white,
+                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                onPressed: () {
+                  // Implement navigation to shopping cart page here...
+                  print('Click Search');
+                },
+              ),
+              IconButton(
+                padding: EdgeInsets.all(5.0),
+                icon: Icon(Icons.message),
+                color: Colors.white,
+                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                onPressed: () {
+                  // Implement navigation to shopping cart page here...
+                  print('Click Message');
+                },
+              )
+            ]);
 }
 
 class _HomePageState extends State<HomePage>
@@ -69,22 +69,22 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _scrollController = ScrollController();
     _hideFabAnimController = AnimationController(
-    //  vsync: this,
+      vsync: this,
       duration: kThemeAnimationDuration,
       value: 1,
     );
 
     _scrollController.addListener(() {
       switch (_scrollController.position.userScrollDirection) {
-      // Scrolling up - forward the animation (value goes to 1)
+        // Scrolling up - forward the animation (value goes to 1)
         case ScrollDirection.forward:
           _hideFabAnimController.forward();
           break;
-      // Scrolling down - reverse the animation (value goes to 0)
+        // Scrolling down - reverse the animation (value goes to 0)
         case ScrollDirection.reverse:
           _hideFabAnimController.reverse();
           break;
-      // Idle - keep FAB visibility unchanged
+        // Idle - keep FAB visibility unchanged
         case ScrollDirection.idle:
           break;
       }
@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage>
                   List<dynamic> likedArray;
                   Firestore.instance.collection("users").document(strUserId).get().then((docSnapshot) => {
                     likedArray = docSnapshot.data['request'],
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(strUserId, likedArray))),
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(strUserId, likedArray))),
                   });
                 },
               )
@@ -440,13 +440,13 @@ class _HomePageState extends State<HomePage>
                   showDialog(
                       context: context,
                       builder: (_) => CupertinoAlertDialog(
-                        title: Text("Join us."),
-                        content: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                              "Our app is run by current students. Would you like to join the team? Email kcamson@nd.edu."),
-                        ),
-                      ),
+                            title: Text("Join us."),
+                            content: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                  "Our app is run by current students. Would you like to join the team? Email kcamson@nd.edu."),
+                            ),
+                          ),
                       barrierDismissible: true);
                 },
                 child: Card(
@@ -461,7 +461,7 @@ class _HomePageState extends State<HomePage>
                         child: RichText(
                           textScaleFactor: 1.75,
                           text:
-                          TextSpan(style: TextThemes.mediumbody, children: [
+                              TextSpan(style: TextThemes.mediumbody, children: [
                             TextSpan(text: "Made ", style: TextStyle()),
                             TextSpan(text: "by", style: TextThemes.italic),
                             TextSpan(text: " students"),
@@ -734,7 +734,7 @@ class Motd extends StatelessWidget {
                   ),
                 ),
                 margin:
-                EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 7.5),
+                    EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 7.5),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
@@ -760,11 +760,11 @@ class Motd extends StatelessWidget {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      // colors: <Color>[
-                      //   Colors.black.withAlpha(0),
-                      //   Colors.black,
-                      //   Colors.black12,
-                      // ],
+                      colors: <Color>[
+                        Colors.black.withAlpha(0),
+                        Colors.black,
+                        Colors.black12,
+                      ],
                     ),
                   ),
                   child: Text(
@@ -789,13 +789,13 @@ class Motd extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (_) => CupertinoAlertDialog(
-                        title: Text("Your MOOV."),
-                        content: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                              "Do you have the MOOV of the Day? Email kcamson@nd.edu."),
-                        ),
-                      ),
+                            title: Text("Your MOOV."),
+                            content: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                  "Do you have the MOOV of the Day? Email kcamson@nd.edu."),
+                            ),
+                          ),
                       barrierDismissible: true);
                 },
                 child: Card(

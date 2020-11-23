@@ -1,4 +1,4 @@
-
+// import 'package:MOOV/widgets/segmented_control.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -237,7 +237,7 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                           color: Colors.pink,
                                           iconSize: 26.0,
                                           splashColor: Colors.pink,
-                                          //splashRadius: 7.0,
+                                          splashRadius: 7.0,
                                           highlightColor: Colors.pink,
                                           onPressed: () async {
                                             // Perform action

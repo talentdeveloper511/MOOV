@@ -5,7 +5,6 @@ import 'package:MOOV/pages/ManagerPage.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/LoginPage.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
