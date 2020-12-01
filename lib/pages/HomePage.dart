@@ -332,6 +332,186 @@ class _HomePageState extends State<HomePage>
           SliverPadding(
             padding: EdgeInsets.only(left: 10, right: 10),
             sliver: SliverGrid.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: .85,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                          onTap: () {
+                            navigateToFoodFeed(context);
+                          },
+                          child:
+                              CategoryButton(asset: 'lib/assets/foodb2.png')),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Food & Drinks",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ),
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: <Widget>[
+                //     GestureDetector(
+                //         onTap: () {
+                //           navigateToSportFeed(context);
+                //         },
+                //         child: CategoryButton(
+                //             asset: 'lib/assets/sportbutton1.png')),
+                //     Align(
+                //         alignment: Alignment.center,
+                //         child: Text(
+                //           "Sports",
+                //           style: TextStyle(
+                //               fontFamily: 'Open Sans',
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.black,
+                //               fontSize: 16.0),
+                //         ))
+                //   ],
+                // ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          navigateToShowFeed(context);
+                        },
+                        child: CategoryButton(asset: 'lib/assets/party2.png')),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Parties & Hangouts",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: <Widget>[
+                //     GestureDetector(
+                //         onTap: () {
+                //           navigateToShowFeed(context);
+                //         },
+                //         child: CategoryButton(
+                //             asset: 'lib/assets/filmbutton1.png')),
+                //     Align(
+                //         alignment: Alignment.center,
+                //         child: Text(
+                //           "Shows",
+                //           style: TextStyle(
+                //               fontFamily: 'Open Sans',
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.black,
+                //               fontSize: 16.0),
+                //         ))
+                //   ],
+                // ),
+              ],
+            ),
+          ),
+          // SliverPadding(
+          //   padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+          //   sliver: SliverGrid.extent(
+          //     maxCrossAxisExtent: 200,
+          //     mainAxisSpacing: 15.0,
+          //     crossAxisSpacing: 10.0,
+          //     childAspectRatio: 1.1,
+          //     children: <Widget>[
+          //       Column(
+          //         crossAxisAlignment: CrossAxisAlignment.center,
+          //         children: <Widget>[
+          //           GestureDetector(
+          //               onTap: () {
+          //                 navigateToPartyFeed(context);
+          //               },
+          //               child: CategoryButton(
+          //                   asset: 'lib/assets/partybutton1.png')),
+          //           Align(
+          //               alignment: Alignment.center,
+          //               child: Text(
+          //                 "Parties",
+          //                 style: TextStyle(
+          //                     fontFamily: 'Open Sans',
+          //                     fontWeight: FontWeight.bold,
+          //                     color: Colors.black,
+          //                     fontSize: 16.0),
+          //               ))
+          //         ],
+          //       ),
+          //       Column(
+          //         crossAxisAlignment: CrossAxisAlignment.center,
+          //         children: <Widget>[
+          //           CategoryButton(asset: 'lib/assets/otherbutton1.png'),
+          //           Align(
+          //               alignment: Alignment.center,
+          //               child: Text(
+          //                 "Surprise",
+          //                 style: TextStyle(
+          //                     fontFamily: 'Open Sans',
+          //                     fontWeight: FontWeight.bold,
+          //                     color: Colors.black,
+          //                     fontSize: 16.0),
+          //               ))
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MorePage()));
+                },
+                child: Card(
+                  margin: EdgeInsets.all(15),
+                  color: TextThemes.ndBlue,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 25, top: 25),
+                        child: RichText(
+                          textScaleFactor: 1.75,
+                          text:
+                              TextSpan(style: TextThemes.mediumbody, children: [
+                            TextSpan(
+                                text: "Somethin' ",
+                                style: TextStyle(color: Colors.white)),
+                            TextSpan(text: "else?", style: TextThemes.italic),
+                          ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            sliver: SliverGrid.count(
               crossAxisCount: 3,
               mainAxisSpacing: 0.0,
               crossAxisSpacing: 10.0,
