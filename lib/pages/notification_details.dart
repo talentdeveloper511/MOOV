@@ -30,13 +30,23 @@ class _NotificationDetailsState extends State<NotificationDetails> {
   final dbRef = Firestore.instance;
   _NotificationDetailsState(this.photoUrl, this.displayName, this.id,
       this.email, this.username);
-
+bool rejectRequest= false;
+bool sendRequest= false;
+bool acceptRequest = false;
+bool freinds=false;
+  bool hide = false;
   @override
   Widget build(BuildContext context) {
     final GoogleSignInAccount userMe = googleSignIn.currentUser;
     final strUserId = userMe.id;
     final strPic = userMe.photoUrl;
     final strUserName = userMe.displayName;
+    bool viewVisible = true;
+    void hideWidget() {
+      setState(() {
+        viewVisible = false;
+      });
+    }
     return Scaffold(
       body: Container(
         child: Column(
@@ -69,13 +79,6 @@ class _NotificationDetailsState extends State<NotificationDetails> {
                 style: TextThemes.extraBold,
               ),
             ),
-          /*  Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                email,
-                style: TextThemes.subtitle1,
-              ),
-            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -97,42 +100,91 @@ class _NotificationDetailsState extends State<NotificationDetails> {
               padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
               child: Row(
                 children: [
-                  RaisedButton(
-                    padding: const EdgeInsets.all(10.0),
-                    color:  Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                    onPressed: () {
-                      Database().sendFriendRequest(strUserId, id, strUserName, strPic);
-                      Navigator.pop(context);
-                    },
-                    child: Text("Reject Friend Request",
-                      style: new TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.0,
+                  Opacity(
+                    opacity: hide ? 0 : 1,
+                    child: RaisedButton(
+                      padding: const EdgeInsets.all(10.0),
+                      //color:  Colors.red,
+                      color: rejectRequest ?  Color.fromRGBO(2, 43, 91, 1.0): Colors.red,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                      onPressed: () {
+                        setState(() {
+                          sendRequest = !sendRequest;
+                          Database().sendFriendRequest(strUserId, id, strUserName, strPic);
+                        });
+                        setState(() {
+                          rejectRequest=!rejectRequest;
+                        });
+                        //    Database().sendFriendRequest(strUserId, id, strUserName, strPic);
+                        // Navigator.pop(context);
+                      },
+                      child: rejectRequest?Text("Send Freind Request",
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),
+                      ):Text("Reject Friend Request",
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),
                       ),
                     ),
                   ),
+
                   Spacer(),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(10.0),
-                    color:  Color.fromRGBO(2, 43, 91, 1.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                    onPressed: () {
-                      Database().acceptFriendRequest(strUserId, id, strUserName, strPic);
-                      Navigator.pop(context);
+                  GestureDetector(
+                    onTap: (){
+                      hideWidget();
                     },
-                    child: Text("Accept Friend Request",
-                      style: new TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.0,
-                      ),
+                    child:  Container(
+                      child:   RaisedButton(
+                          padding: const EdgeInsets.all(10.0),
+                          // color:  Color.fromRGBO(2, 43, 91, 1.0),
+                          color: freinds ?  Colors.green:Color.fromRGBO(2, 43, 91, 1.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                          onPressed: () {
+                            setState(() {
+                              freinds=!freinds;
+                            });
+                            setState((){
+                              hide = !hide;
+                            });
+                            setState(() {
+                              acceptRequest=! acceptRequest;
+                              Database().acceptFriendRequest(strUserId, id, strUserName, strPic);
+                            });
+
+                            //  Navigator.pop(context);
+                          },
+                          child:
+                          hide?Container(
+
+                            child: acceptRequest?Text("Freinds",
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                              ),
+                            ):Text("Accept Friend Request",  style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                            ),),
+                          ):Container(child: Text("Accept Friend Request",  style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0,
+                          ),),)
+
+                      )
                     ),
-                  ),
+                  )
+
+
                 ],
               )
             ),
+
           ],
         ),
       ),

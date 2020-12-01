@@ -104,7 +104,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
     final image = await CustomCamera.openCamera();
     setState(() {
       _image = image;
-    //  fileName = p.basename(_image.path);
+      //  fileName = p.basename(_image.path);
     });
   }
 
@@ -117,30 +117,30 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
   Future handleTakePhoto() async {
     Navigator.pop(context);
-     final file = await picker.getImage(
-        source: ImageSource.camera,
-        maxHeight: 675,
-        maxWidth: 960,
-      );
-     setState(() {
-       if (_image != null) {
-         _image = File(file.path);
-       }
-     });
+    final file = await picker.getImage(
+      source: ImageSource.camera,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
   }
 
   handleChooseFromGallery() async {
     Navigator.pop(context);
-     final file = await picker.getImage(
-       source: ImageSource.gallery,
-       maxHeight: 675,
-       maxWidth: 960,
-     );
-     setState(() {
-       if (_image != null) {
-         _image = File(file.path);
-       }
-     });
+    final file = await picker.getImage(
+      source: ImageSource.gallery,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
   }
 
   selectImage(parentContext) {
@@ -148,20 +148,24 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
       context: parentContext,
       builder: (context) {
         return SimpleDialog(
-          title: Text("Create Post", style: TextStyle(color: Colors.white),),
+          title: Text(
+            "Create Post",
+            style: TextStyle(color: Colors.white),
+          ),
           children: <Widget>[
             SimpleDialogOption(
-                child: Text(
-                  "Photo with Camera",
-                  style: TextStyle(color: Colors.white),
-                ),
+              child: Text(
+                "Photo with Camera",
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
-              openCamera(context);
-              Navigator.of(context).pop();
-            },),
+                openCamera(context);
+                Navigator.of(context).pop();
+              },
+            ),
             SimpleDialogOption(
-            //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: handleChooseFromGallery),
-            //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: () => openGallery(context)),
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: handleChooseFromGallery),
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: () => openGallery(context)),
               child: Text(
                 "Image from Gallery",
                 style: TextStyle(color: Colors.white),
@@ -169,9 +173,13 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               onPressed: () {
                 openGallery(context);
                 Navigator.of(context).pop();
-              },),
+              },
+            ),
             SimpleDialogOption(
-              child: Text("Cancel", style: TextStyle(color: Colors.white),),
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () => Navigator.pop(context, true),
             )
           ],
@@ -247,9 +255,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-            child: Column(children: <Widget>[
+      key: _formKey,
+      child: SingleChildScrollView(
+        child: Column(children: <Widget>[
           Padding(
             padding: EdgeInsets.all(20.0),
             child: TextFormField(
@@ -393,7 +401,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               onChanged: (DateTime newValue) {
                 setState(() {
                   currentValue = currentValues; // = newValue;
-               //   newValue = currentValue;
+                  //   newValue = currentValue;
                 });
               },
               onShowPicker: (context, currentValue) async {
@@ -460,7 +468,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               onChanged: (DateTime et) {
                 setState(() {
                   endTime = endTimes;
-              //    et = endTime;
+                  //    et = endTime;
                 });
               },
               onShowPicker: (context, endTime) async {
@@ -513,47 +521,35 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           RaisedButton(
               color: TextThemes.ndBlue,
               child: Text('Upload an image',
-              style: TextStyle(color: Colors.white, fontSize: 22)),
+                  style: TextStyle(color: Colors.white, fontSize: 22)),
               shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0)),
-              onPressed: () => selectImage(context)
+                  borderRadius: BorderRadius.circular(8.0)),
+              onPressed: () => selectImage(context)),
+          Container(
+            height: 220,
+            width: MediaQuery.of(context).size.width * .8,
+            child: Center(
+              child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: _image != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: Image.file(_image,
+                              width: 100, height: 100, fit: BoxFit.fitHeight),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(4)),
+                          width: 100,
+                          height: 100,
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.grey[800],
+                          ),
+                        )),
+            ),
           ),
-         Container(
-                height: 220,
-                width: MediaQuery.of(context).size.width * .8,
-                child: Center(
-               child: AspectRatio(
-                 aspectRatio: 16 / 9,
-                   child: _image != null
-                       ? ClipRRect(
-                     borderRadius: BorderRadius.circular(4),
-                //     child: Image.memory(_image, width: 200, height: 100, fit: BoxFit.fitHeight),
-                     child: Image.file(_image, width: 100, height: 100, fit: BoxFit.fitHeight),
-                   //  child: FileImage(_image),
-
-                   )
-                       : Container(
-                     decoration: BoxDecoration(
-                         color: Colors.grey[200],
-                         borderRadius: BorderRadius.circular(4)),
-                     width: 100,
-                     height: 100,
-                     child: Icon(
-                       Icons.camera_alt,
-                       color: Colors.grey[800],
-                     ),
-                   )
-                 /*child: Container(
-                   decoration: BoxDecoration(
-                       image: DecorationImage(
-                           fit: BoxFit.cover,
-                           image: FileImage(_image)
-                       )
-                   ),
-                 ),*/
-               ),
-             ),
-           ),
           Padding(
               padding: EdgeInsets.all(20.0),
               child: Row(
@@ -563,19 +559,26 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                       color: Colors.amber[300],
                       child: Text('Post!'),
                       onPressed: () async {
-                        final GoogleSignInAccount user = googleSignIn.currentUser;
+                        final GoogleSignInAccount user =
+                            googleSignIn.currentUser;
                         final strUserId = user.id;
                         final profilePic = user.photoUrl;
                         final userName = user.displayName;
                         final userEmail = user.email;
                         if (_formKey.currentState.validate()) {
-                          if (_image != null){
-                            StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("images/" + titleController.text);
-                            StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-                            StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+                          if (_image != null) {
+                            StorageReference firebaseStorageRef =
+                                FirebaseStorage.instance
+                                    .ref()
+                                    .child("images/" + titleController.text);
+                            StorageUploadTask uploadTask =
+                                firebaseStorageRef.putFile(_image);
+                            StorageTaskSnapshot taskSnapshot =
+                                await uploadTask.onComplete;
                             if (taskSnapshot.error == null) {
                               print("added to Firebase Storage");
-                              final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+                              final String downloadUrl =
+                                  await taskSnapshot.ref.getDownloadURL();
                               Database().createPost(
                                 title: titleController.text,
                                 type: typeDropdownValue,
@@ -592,26 +595,14 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                 profilePic: profilePic,
                               );
                             }
-                            /*Database().createPost(
-                                title: titleController.text,
-                                type: typeDropdownValue,
-                                description: descriptionController.text,
-                                location: locationDropdownValue,
-                                address: addressController.text,
-                                startDate: currentValue,
-                                endDate: endTime,
-                                imageUrl: _image,
-                            );*/
                             Navigator.pop(context);
                           }
                         }
-                      }
-                      ),
+                      }),
                 ],
               )),
-        ]
-            ),
-        ),
+        ]),
+      ),
     );
   }
 

@@ -22,7 +22,8 @@ class Database {
       userId,
       userName,
       userEmail,
-      profilePic}) async {
+      profilePic,
+        featured}) async {
     DocumentReference ref = await dbRef.collection("food").add({
       'title': title,
       'likes': likes,
@@ -37,6 +38,7 @@ class Database {
       'userName': userName,
       'userEmail': userEmail,
       'profilePic': profilePic,
+      "featured":featured,
     });
     // final String postId = ref.documentID;
     print(ref.documentID);
@@ -113,6 +115,20 @@ class Database {
       });
     });
   }*/
+  Future<void> sendEventNotification(String senderId, String receiverId, String senderName, String senderPic) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('users/$receiverId');
+      Map<String, dynamic> serializedMessage = {
+        "uid" : senderId,
+        "strName" : senderName,
+        "strPic" : senderPic,
+        "requestStatus" : "pending"
+      };
+      transaction.update(ref, {
+        'request': FieldValue.arrayUnion([serializedMessage]),
+      });
+    });
+  }
 
   Future<void> sendFriendRequest(String senderId, String receiverId, String senderName, String senderPic) async {
     return dbRef.runTransaction((transaction) async {

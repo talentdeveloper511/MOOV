@@ -13,12 +13,14 @@ class MyBottomNavigation extends StatelessWidget {
 
   static const Map<Pages, IconData> icons = {
     Pages.home: Icons.home,
+    Pages.search: Icons.search,
     Pages.moovs: Icons.directions_run,
     Pages.profile: Icons.person,
 //    Page.nested: Icons.table_chart,
   };
   static const Map<Pages, String> names = {
     Pages.home: 'Home',
+    Pages.search: 'Search',
     Pages.moovs: 'My MOOVs',
     Pages.profile: 'Profile',
 //    Page.nested: 'nested',

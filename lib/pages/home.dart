@@ -3,7 +3,8 @@ import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
-// import 'package:MOOV/pages/upload.dart';
+import 'package:MOOV/pages/search.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,7 +29,8 @@ class _HomeState extends State<Home> {
   bool isAuth = false;
   PageController pageController;
   int pageIndex = 0;
-
+  dynamic startDate, moovId;
+  List<dynamic> likedArray;
   @override
   Future<void> initState() {
     super.initState();
@@ -121,6 +123,7 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           // Timeline(),
           HomePage(),
+          Search(),
           MOOVSPage(),
           ProfilePage()
         ],
@@ -134,6 +137,8 @@ class _HomeState extends State<Home> {
           items: [
             BottomNavigationBarItem(
                 title: Text("Home"), icon: Icon(Icons.home)),
+            BottomNavigationBarItem(
+                title: Text("Search"), icon: Icon(Icons.search)),
             BottomNavigationBarItem(
                 title: Text("My MOOVs"), icon: Icon(Icons.directions_run)),
             BottomNavigationBarItem(

@@ -33,14 +33,13 @@ class _NotificationState extends State<NotificationPage> {
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
+
       child: Center(
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            SvgPicture.asset(
-              'assets/images/search.svg',
-              height: orientation == Orientation.portrait ? 300.0 : 200.0,
-            ),
+            Icon(Icons.search),
+            
             Text(
               "",
               textAlign: TextAlign.center,
@@ -58,79 +57,116 @@ class _NotificationState extends State<NotificationPage> {
   }
 
   buildSearchResults() {
-    return ListView.builder(
-        shrinkWrap: true, //MUST TO ADDED
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: likedArray.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Column(
-              children: [
-                Container(
-                    color: Colors.grey[300],
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: CircleAvatar(
-                              radius: 22,
-                              backgroundColor: TextThemes.ndBlue,
+    return Column(
+      children: [
+        ListView.builder(
+            shrinkWrap: true, //MUST TO ADDED
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: likedArray.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Column(
+                  children: [
+                    Container(
+                        color: Colors.grey[300],
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
                               child: CircleAvatar(
-                                radius: 22.0,
-                                backgroundImage:
-                                NetworkImage(likedArray[index]['strPic']),
-                                backgroundColor: Colors.transparent,
-                              )
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 22.0),
-                          child: Text(likedArray[index]['strName'],
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: TextThemes.ndBlue,
-                                  decoration: TextDecoration.none)),
-                        ),
-                        Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: RaisedButton(
-                            padding: const EdgeInsets.all(2.0),
-                            color: TextThemes.ndBlue,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                            onPressed: () {
-                              if(likedArray[index]['uid'] == moovId){
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder:(context)=>ProfilePage()
-                                    )
-                                );
-                              } else {
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder:(context)=>NotificationDetails(likedArray[index]['strPic'],
-                                            likedArray[index]['strName'], likedArray[index]['uid'],
-                                            likedArray[index]['strName'], likedArray[index]['strName'])
-                                    )
-                                );
-                              }
-                            },
-                            child: Text("View Detail",
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 10.0,
+                                  radius: 22,
+                                  backgroundColor: TextThemes.ndBlue,
+                                  child: CircleAvatar(
+                                    radius: 22.0,
+                                    backgroundImage:
+                                    NetworkImage(likedArray[index]['strPic']),
+                                    backgroundColor: Colors.transparent,
+                                  )
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    )),
-              ],
-            ),
-          );
-        });
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(likedArray[index]['strName']+" has sent you a friend request",
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      color: TextThemes.ndBlue,
+                                      decoration: TextDecoration.none)),
+                            ),
+                            Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: RaisedButton(
+                                padding: const EdgeInsets.all(2.0),
+                                color: TextThemes.ndBlue,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                                onPressed: () {
+                                  if(likedArray[index]['uid'] == moovId){
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder:(context)=>ProfilePage()
+                                        )
+                                    );
+                                  } else {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder:(context)=>NotificationDetails(likedArray[index]['strPic'],
+                                                likedArray[index]['strName'], likedArray[index]['uid'],
+                                                likedArray[index]['strName'], likedArray[index]['strName'])
+                                        )
+                                    );
+                                  }
+                                },
+                                child: Text("View Detail",
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10.0,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
+                  ],
+                ),
+              );
+            }),
+        Container(child:  Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Column(
+            children: [
+              Container(
+                  color: Colors.grey[300],
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: CircleAvatar(
+                            radius: 22,
+                            backgroundColor: TextThemes.ndBlue,
+                            child: CircleAvatar(
+                              radius: 22.0,
+                              backgroundImage:
+                              AssetImage('lib/assets/me.jpg'),
+                            )
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Text("Heena Dhawan has Created Food Event",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: TextThemes.ndBlue,
+                                decoration: TextDecoration.none)),
+                      ),
+                      Spacer(),
+                    ],
+                  )),
+            ],
+          ),
+        ),)
+      ],);
   }
 
   void getNotificationList() async {
@@ -144,23 +180,23 @@ class _NotificationState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
   //  getNotificationList();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: TextThemes.ndBlue,
-        title: Text('Notification',
-          style: TextStyle(color: Color(0xffFFFFFF)),
-        ),
-        leading: InkWell(
-          onTap: () => Navigator.of(context).pop(),
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-            size: 26.0,
-          ),
-        ),
-      ),
-      body: likedArray == null ? buildNoContent() : buildSearchResults(),
-    );
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     backgroundColor: TextThemes.ndBlue,
+    //     title: Text('Notification',
+    //       style: TextStyle(color: Color(0xffFFFFFF)),
+    //     ),
+    //     leading: InkWell(
+    //       onTap: () => Navigator.of(context).pop(),
+    //       child: Icon(
+    //         Icons.arrow_back,
+    //         color: Colors.white,
+    //         size: 26.0,
+    //       ),
+    //     ),
+    //   ),
+    //   body: likedArray == null ? buildNoContent() : buildSearchResults(),
+    // );
 
    /* return Scaffold(
 
@@ -256,7 +292,7 @@ class UserResult extends StatelessWidget {
     final GoogleSignInAccount userMe = googleSignIn.currentUser;
     final strUserId = userMe.id;
     return Container(
-    //  color: Theme.of(context).primaryColor.withOpacity(0.7),
+
       child: Column(
         children: <Widget>[
           GestureDetector(
@@ -275,44 +311,21 @@ class UserResult extends StatelessWidget {
                 user.username,
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
-              /*trailing: Wrap(
-                spacing: 12, // space between two icons
-                children: <Widget>[
-                  Container(
-                  //  margin: EdgeInsets.all(20),
-                    child: FlatButton(
-                      child: Text('Accept'),
-                      color: Colors.blueAccent,
-                      textColor: Colors.white,
-                      onPressed: () {},
-                    ),
-                  ),
-                  Container(
-                 //   margin: EdgeInsets.all(20),
-                    child: FlatButton(
-                      child: Text('Reject'),
-                      color: Colors.blueAccent,
-                      textColor: Colors.white,
-                      onPressed: () {},
-                    ),
-                  ),
-              //    Icon(Icons.call), // icon-1
-              //    Icon(Icons.message), // icon-2
-                ],
-              ),*/
               trailing: RaisedButton(
                 padding: const EdgeInsets.all(2.0),
                 color: TextThemes.ndBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
+
                   if(user.id == strUserId){
                     Navigator.of(context).push(
                         MaterialPageRoute(
                             builder:(context)=>ProfilePage()
                         )
                     );
-                  } else {
+                  }
+                  else {
                     Navigator.of(context).push(
                         MaterialPageRoute(
                             builder:(context)=>NotificationDetails(user.photoUrl,

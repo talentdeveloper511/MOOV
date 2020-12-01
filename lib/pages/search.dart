@@ -61,10 +61,7 @@ class _SearchState extends State<Search> {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            SvgPicture.asset(
-              'assets/images/search.svg',
-              height: orientation == Orientation.portrait ? 300.0 : 200.0,
-            ),
+            Icon(Icons.search),
             Text(
               "",
               textAlign: TextAlign.center,
@@ -107,7 +104,7 @@ class _SearchState extends State<Search> {
       backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
       appBar: buildSearchField(),
       body:
-      searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
+          searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
     );
   }
 }
@@ -133,43 +130,41 @@ class UserResult extends StatelessWidget {
                 backgroundImage: CachedNetworkImageProvider(user.photoUrl),
               ),
               title: Text(
-                user.displayName,
+                user.displayName == null ? "" : user.displayName,
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
-                user.username,
+                user.username == null ? "" : user.username,
                 style: TextStyle(color: Colors.white),
               ),
-             trailing: RaisedButton(
-               padding: const EdgeInsets.all(2.0),
-               color:  Colors.grey[600],
-               shape: RoundedRectangleBorder(
-                   borderRadius: BorderRadius.all(Radius.circular(3.0))),
-               onPressed: () {
-                 if(user.id == strUserId){
-                   Navigator.of(context).push(
-                       MaterialPageRoute(
-                           builder:(context)=>ProfilePage()
-                       )
-                   );
-                 } else {
-                   Navigator.of(context).push(
-                       MaterialPageRoute(
-                           builder:(context)=>OtherProfile(user.photoUrl,
-                               user.displayName, user.id,
-                               user.email, user.username)
-                       )
-                   );
-                 }
-               },
-               child: Text("View Profile",
-                 style: new TextStyle(
-                   color: Colors.white,
-                   fontSize: 10.0,
-                 ),
-               ),
-             ),
+              trailing: RaisedButton(
+                padding: const EdgeInsets.all(2.0),
+                color: Colors.grey[600],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                onPressed: () {
+                  if (user.id == strUserId) {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ProfilePage()));
+                  } else {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => OtherProfile(
+                            user.photoUrl,
+                            user.displayName,
+                            user.id,
+                            user.email,
+                            user.username)));
+                  }
+                },
+                child: Text(
+                  "View Profile",
+                  style: new TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.0,
+                  ),
+                ),
+              ),
             ),
           ),
           Divider(

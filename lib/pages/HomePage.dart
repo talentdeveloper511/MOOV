@@ -57,6 +57,29 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
+  List<dynamic> likedArray;
+  String eventpofile, tittle;
+
+  _getdata() {
+    Firestore.instance
+        .collection('food')
+        .where("type", isEqualTo: "Sport")
+        .orderBy("startDate")
+        .snapshots()
+        .listen((snapshot) {
+      for (var i = 0; i < snapshot.documents.length; i++) {
+        DocumentSnapshot course = snapshot.documents[i];
+        likedArray = course["liked"];
+        eventpofile = course["image"];
+        tittle = course["title"];
+        print(likedArray);
+        print("Liked");
+        print(eventpofile);
+        print("TIttle");
+        print(tittle);
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -68,6 +91,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _getdata();
     _hideFabAnimController = AnimationController(
       vsync: this,
       duration: kThemeAnimationDuration,
@@ -131,7 +155,6 @@ class _HomePageState extends State<HomePage>
                   style: TextStyle(fontSize: 16, color: Colors.white))),
         ),
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: CustomScrollView(
         controller: _scrollController,
@@ -160,10 +183,18 @@ class _HomePageState extends State<HomePage>
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                 onPressed: () {
                   List<dynamic> likedArray;
-                  Firestore.instance.collection("users").document(strUserId).get().then((docSnapshot) => {
-                    likedArray = docSnapshot.data['request'],
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationPage(strUserId, likedArray))),
-                  });
+                  Firestore.instance
+                      .collection("users")
+                      .document(strUserId)
+                      .get()
+                      .then((docSnapshot) => {
+                            likedArray = docSnapshot.data['request'],
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NotificationPage(
+                                        strUserId, likedArray))),
+                          });
                 },
               )
             ],
@@ -250,52 +281,54 @@ class _HomePageState extends State<HomePage>
           ),
           SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.all(5.0),
-                      icon: Image.asset('lib/assets/friendfinder.png'),
-                      color: Colors.white,
-                      splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                      onPressed: () {
+            padding: const EdgeInsets.only(bottom: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  padding: EdgeInsets.all(5.0),
+                  icon: Image.asset('lib/assets/friendfinder.png'),
+                  color: Colors.white,
+                  splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                FriendFinder(likedArray, eventpofile,tittle)));
+                    // Implement navigation to shopping cart page here...
+                    print('FRIEND FINDER CLICKED');
+                  },
+                ),
+                Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => FriendFinder()));
-                        // Implement navigation to shopping cart page here...
-                        print('FRIEND FINDER CLICKED');
+                                builder: (context) =>
+                                    FriendFinder(likedArray, eventpofile,tittle)));
                       },
-                    ),
-                    Align(
-                        alignment: Alignment.center,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FriendFinder()));
-                          },
-                          child: Card(
-                            borderOnForeground: true,
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text(
-                                "Friend Finder",
-                                style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16.0),
-                              ),
-                            ),
+                      child: Card(
+                        borderOnForeground: true,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Text(
+                            "Friend Finder",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
                           ),
-                        )),
-                  ],
-                ),
-              )),
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+          )),
           SliverPadding(
             padding: EdgeInsets.only(left: 10, right: 10),
             sliver: SliverGrid.count(

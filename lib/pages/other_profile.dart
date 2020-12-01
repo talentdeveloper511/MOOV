@@ -30,7 +30,8 @@ class _OtherProfileState extends State<OtherProfile> {
   final dbRef = Firestore.instance;
   _OtherProfileState(this.photoUrl, this.displayName, this.id,
       this.email, this.username);
-
+  bool requestsent = false;
+  bool sendRequest = false;
   @override
   Widget build(BuildContext context) {
     final GoogleSignInAccount userMe = googleSignIn.currentUser;
@@ -95,24 +96,38 @@ class _OtherProfileState extends State<OtherProfile> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 35.0),
-              child:RaisedButton(
+              child:
+
+
+              RaisedButton(
                 padding: const EdgeInsets.all(12.0),
                 color:  Color.fromRGBO(2, 43, 91, 1.0),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
+                  setState(() {
+                    sendRequest = !sendRequest;
+                    Database().sendFriendRequest(strUserId, id, strUserName, strPic);
+                  });
+
+                  setState(() => requestsent = !requestsent);
               //    Database().sendFriendRequest(strUserId, "115832884538005478119", "Developer Mind", "https://lh4.googleusercontent.com/-WU1Fg5u4Hmo/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclNL2hzvtuvNsFTWAHzUlpVyoos8Q/s96-c/photo.jpg");
-                  Database().sendFriendRequest(strUserId, id, strUserName, strPic);
-                  Navigator.pop(context);
+
+                 // Navigator.pop(context);
                 },
-                child: Text("Send Friend Request",
+                child:  requestsent ? Text("Request Sent",
                   style: new TextStyle(
                     color: Colors.white,
                     fontSize: 14.0,
                   ),
-                ),
+                ): Text("Send Friend Request",style: new TextStyle(
+                  color: Colors.white,
+                  fontSize: 14.0,
+                ),),
               ),
+
             ),
+
           ],
         ),
       ),

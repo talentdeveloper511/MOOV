@@ -1,200 +1,126 @@
-
 import 'package:MOOV/helpers/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:MOOV/pages/SportFeed.dart';
+
+
 class FriendFinder extends StatelessWidget {
+  dynamic startDate, moovId;
+  List<dynamic> likedArray;
+  String eventpofile,tittle;
+
+  FriendFinder(this.likedArray,this.eventpofile,this.tittle);
+
+
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          backgroundColor: TextThemes.ndBlue,
-          //pinned: true,
-          floating: false,
-          expandedHeight: 30.0,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text('FRIEND FINDER',
-                style: TextStyle(fontSize: 20, color: Colors.white)),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: TextThemes.ndBlue,
+        title: Text(
+          "Friend Finder",
+          style: TextStyle(color: Colors.white),
         ),
-        SliverFixedExtentList(
-          itemExtent: 100,
-          delegate: SliverChildListDelegate([
-            Container(
-                color: Colors.grey[300],
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: TextThemes.ndBlue,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('lib/assets/me.jpg'),
-                          maxRadius: 18,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text('Kevin Camson is',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: TextThemes.ndBlue,
-                              decoration: TextDecoration.none)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 3.0, right: 5),
-                      child: Text('Going',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: CupertinoColors.activeGreen,
-                              decoration: TextDecoration.none)),
-                    ),
-                    Text('to',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: CupertinoColors.black,
-                            decoration: TextDecoration.none)),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 32, left: 0.0),
+      ),
+      body:
+
+
+      Container(
+          child: likedArray != null
+              ? ListView.builder(
+                  shrinkWrap: true, //MUST TO ADDED
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: likedArray.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child: Column(
                         children: [
-                          Image.asset(
-                            'lib/assets/chens.jpg',
-                            height: 40,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text('J.W. Chens',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CupertinoColors.black,
-                                    decoration: TextDecoration.none)),
-                          ),
+                          Container(
+                              color: Colors.grey[300],
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: CircleAvatar(
+                                        radius: 22,
+                                        backgroundColor: TextThemes.ndBlue,
+                                        child: CircleAvatar(
+                                          radius: 22.0,
+                                          backgroundImage: NetworkImage(
+                                              likedArray[index]['strPic']),
+                                          backgroundColor: Colors.transparent,
+                                        )),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 22.0),
+                                    child: Text(likedArray[index]['strName'],
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: TextThemes.ndBlue,
+                                            decoration: TextDecoration.none)),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 3.0, right: 5),
+                                    child: Text('Going',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: CupertinoColors.activeGreen,
+                                            decoration: TextDecoration.none)),
+                                  ),
+                                  Text('to',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: CupertinoColors.black,
+                                          decoration: TextDecoration.none)),
+                        Padding(
+                                    padding: const EdgeInsets.only(top: 32, left: 0.0),
+                                    child: Row(
+                                      children: [
+
+                                        Container(
+                                          margin:  EdgeInsets.only(bottom: 30,left: 5),
+                                          child:
+                                          CircleAvatar(
+                                              radius: 22,
+                                              backgroundColor: TextThemes.ndBlue,
+                                              child: CircleAvatar(
+                                                radius: 22.0,
+                                                backgroundImage: NetworkImage(
+                                                  eventpofile),
+                                                backgroundColor: Colors.transparent,
+                                              )),
+                                        ),
+GestureDetector(
+  onTap: (){
+    print("ClickEvent");
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SportFeed()));
+
+  },
+  child:  Container(
+    margin:  EdgeInsets.only(bottom: 10),
+    padding: const EdgeInsets.only(top: 0.0,bottom: 12,left: 5),
+    child: Text(tittle,
+        style: TextStyle(
+            fontSize: 15,
+            color: CupertinoColors.black,
+            decoration: TextDecoration.none)),
+  ),
+)
+
+                                ],
+                              )),
                         ],
                       ),
-                    )
-                  ],
-                )),
-            Container(
-                color: Colors.grey[300],
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: TextThemes.ndBlue,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('lib/assets/alvin.png'),
-                          maxRadius: 18,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text('Alvin Alaphat is',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: TextThemes.ndBlue,
-                              decoration: TextDecoration.none)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 3.0, right: 5),
-                      child: Text('Going',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: CupertinoColors.activeGreen,
-                              decoration: TextDecoration.none)),
-                    ),
-                    Text('to',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: CupertinoColors.black,
-                            decoration: TextDecoration.none)),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 32, left: 0.0),
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'lib/assets/kilwins.jpg',
-                            height: 40,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text('Hiking Trip',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CupertinoColors.black,
-                                    decoration: TextDecoration.none)),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )),
-            Container(
-                color: Colors.grey[300],
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: TextThemes.ndBlue,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('lib/assets/ingrid.png'),
-                          maxRadius: 18,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text('Ingrid Vu is',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: TextThemes.ndBlue,
-                              decoration: TextDecoration.none)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 3.0, right: 5),
-                      child: Text('Going',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: CupertinoColors.activeGreen,
-                              decoration: TextDecoration.none)),
-                    ),
-                    Text('to',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: CupertinoColors.black,
-                            decoration: TextDecoration.none)),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 32, left: 0.0),
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            'lib/assets/kilwins.jpg',
-                            height: 40,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text('Ice Cream w/ AC',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CupertinoColors.black,
-                                    decoration: TextDecoration.none)),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )),
-          ]),
-        ),
-      ],
+                    )]));
+                  })
+              : Center(
+                  child: Image.asset(
+                  'lib/assets/chens.jpg',
+                  height: 40,
+                ))),
     );
   }
 }

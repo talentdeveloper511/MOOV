@@ -1,83 +1,115 @@
-
-import 'package:MOOV/pages/home.dart';
-import 'package:flutter/material.dart';
+import 'package:MOOV/helpers/demo_values.dart';
+import 'package:MOOV/widgets/post_card.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MOOV/helpers/themes.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 
-import 'PostDepth.dart';
+import 'package:MOOV/helpers/themes.dart';
 
-class MOOVSPage extends StatefulWidget {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
+import 'package:MOOV/pages/home.dart';
+
+
+class PartySegment extends StatefulWidget{
   @override
-  _MOOVSPageState createState() => _MOOVSPageState();
-}
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return PartySegmentState();
+  }
 
-class _MOOVSPageState extends State<MOOVSPage> {
-  final String currentUserId = currentUser?.id;
-  bool isLiked = false;
-  bool _isPressed;
+}
+class PartySegmentState extends State<PartySegment>{
+  Map<int, Widget> map =
+  new Map(); // Cupertino Segmented Control takes children in form of Map.
+  List<Widget>
+  childWidgets; //The Widgets that has to be loaded when a tab is selected.
+  int selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    loadCupertinoTabs(); //Method to add Tabs to the Segmented Control.
+    loadChildWidgets(); //Method to add the Children as user selected.
+  }
+  bool _isPressed; // = false;
   @override
   Widget build(BuildContext context) {
-    isLiked = false;
+    // TODO: implement build
+    return Column(
+      children: <Widget>[
+        CupertinoSegmentedControl(
+          onValueChanged: (value) {
+//Callback function executed when user changes the Tabs
+            setState(() {
+              selectedIndex = value;
+            });
+          },
+          groupValue: selectedIndex, //The current selected Index or key
+          selectedColor: Color.fromRGBO(
+              2, 43, 91, 1.0), //Color that applies to selecte key or index
+          pressedColor: Color.fromRGBO(220, 180, 57,
+              1.0), //The color that applies when the user clicks or taps on a tab
+          unselectedColor: Colors
+              .grey, // The color that applies to the unselected tabs or inactive tabs
+          children: map, //The tabs which are assigned in the form of map
+          padding: EdgeInsets.all(10),
+          borderColor: Color.fromRGBO(2, 43, 91, 1.0),
+        ),
+        Expanded(
+          child: getChildWidget(),
+        ),
+      ],
+    );
+  }
+  void loadCupertinoTabs() {
+    map = new Map();
+    map = {
+      0: Container(
+          width: 100,
+          child: Center(
+            child: Text(
+              "Featured",
+              style: TextStyle(color: Colors.white),
+            ),
+          )),
+      1: Container(
+          width: 100,
+          child: Center(
+            child: Text(
+              "All",
+              style: TextStyle(color: Colors.white),
+            ),
+          )),
+      2: Container(
+          width: 100,
+          child: Center(
+            child: Text(
+              "Friends",
+              style: TextStyle(color: Colors.white),
+            ),
+          ))
+    };
+
+  }
+
+  void loadChildWidgets() {
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
     final strUserName = user.displayName;
     final strUserPic = user.photoUrl;
     dynamic likeCount;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
-        actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.search),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              // Implement navigation to shopping cart page here...
-              print('Click Search');
-            },
-          ),
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.notifications_active),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              // Implement navigation to shopping cart page here...
-              print('Click Message');
-            },
-          )
-        ],
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Image.asset(
-                'lib/assets/moovheader.png',
-                fit: BoxFit.cover,
-                height: 45.0,
-              ),
-              Image.asset(
-                'lib/assets/ndlogo.png',
-                fit: BoxFit.cover,
-                height: 25,
-              )
-            ],
-          ),
-        ),
-      ),
-// .where("liked", arrayContains: strUserId)
-      body: StreamBuilder (
+    childWidgets = [
+      ListView.builder(
+          itemCount: 2, //DemoValues.posts.length,
+          itemBuilder: (BuildContext context, int index) {
+            return PostCard(postData: DemoValues.posts[index]);
+          }),
+      StreamBuilder(
           stream: Firestore.instance
               .collection('food')
-              .where("liked", arrayContains: {"strName": strUserName, "strPic": strUserPic, "uid": strUserId})
+              .where("type", isEqualTo: "Party")
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
@@ -86,7 +118,7 @@ class _MOOVSPageState extends State<MOOVSPage> {
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot course = snapshot.data.documents[index];
-                /*List<dynamic> likedArray = course["liked"];
+                List<dynamic> likedArray = course["liked"];
                 List<String> uidArray = List<String>();
                 if (likedArray != null) {
                   likeCount = likedArray.length;
@@ -98,21 +130,16 @@ class _MOOVSPageState extends State<MOOVSPage> {
                   likeCount = 0;
                 }
 
-                if (uidArray != null) {
+                if (uidArray != null && uidArray.contains(strUserId)) {
                   _isPressed = true;
                 } else {
                   _isPressed = false;
-                }*/
-                List<dynamic> likedArray = course["liked"];
-                if (likedArray != null) {
-                  likeCount = likedArray.length;
-                } else{
-                  likeCount = 0;
                 }
+
                 return Card(
                   color: Colors.white,
                   clipBehavior: Clip.antiAlias,
-                  child: new InkWell(
+                  child: InkWell(
                     onTap: () {
                       Navigator.of(context).push(
                           MaterialPageRoute(
@@ -137,6 +164,11 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                             color: Color(0xff000000),
                                             width: 1,
                                           )),
+                                      /*child: Image.asset(
+                                          'lib/assets/filmbutton1.png',
+                                          fit: BoxFit.cover,
+                                          height: 130,
+                                          width: 50),*/
                                       child: Image.network(course['image'],
                                           fit: BoxFit.cover,
                                           height: 130,
@@ -231,20 +263,33 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                       Padding(
                                         padding: const EdgeInsets.only(right: 6.0),
                                         child: IconButton(
-                                          icon: Icon(
-                                            Icons.favorite,
-                                          ),
+                                          icon: (_isPressed)
+                                              ? new Icon(Icons.favorite)
+                                              : new Icon(Icons.favorite_border),
                                           color: Colors.pink,
-                                          iconSize: 26.0,
+                                          iconSize: 24.0,
                                           splashColor: Colors.pink,
                                           //splashRadius: 7.0,
                                           highlightColor: Colors.pink,
-                                          onPressed: () async {
+                                          onPressed: () {
                                             // Perform action
                                             setState(() {
-                                              final GoogleSignInAccount user = googleSignIn.currentUser;
-                                              final strUserId = user.id;
-                                              Database().removeLike(strUserId, course.documentID, strUserName, strUserPic);
+                                              List<dynamic> likedArray = course["liked"];
+                                              List<String> uidArray = List<String>();
+                                              if (likedArray != null) {
+                                                likeCount = likedArray.length;
+                                                for (int i = 0; i < likeCount; i++){
+                                                  var id = likedArray[i]["uid"];
+                                                  uidArray.add(id);
+                                                }
+                                              }
+
+                                              if (uidArray != null && uidArray.contains(strUserId)) {
+                                                Database().removeLike(strUserId, course.documentID, strUserName, strUserPic);
+                                              } else {
+                                                Database().sendMessageToChatroom(strUserId, course.documentID, strUserName, strUserPic);
+                                              }
+
                                             });
                                           },
                                         ),
@@ -269,11 +314,6 @@ class _MOOVSPageState extends State<MOOVSPage> {
                             textColor: const Color(0xFF6200EE),
                             onPressed: () {
                               // Perform some action
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PostDepth()),
-                              );
                             },
                             child: Padding(
                                 padding: const EdgeInsets.all(2.0),
@@ -290,24 +330,32 @@ class _MOOVSPageState extends State<MOOVSPage> {
                               // Perform some action
                             },
                             child: IconButton(
-                              icon: Icon(
-                                Icons.favorite,
-                              ),
+                              icon: (_isPressed)
+                                  ? new Icon(Icons.favorite)
+                                  : new Icon(Icons.favorite_border),
                               color: Colors.pink,
                               iconSize: 24.0,
                               splashColor: Colors.pink,
                               splashRadius: 7.0,
                               highlightColor: Colors.pink,
-                              onPressed: () async {
+                              onPressed: () {
                                 // Perform action
                                 setState(() {
-                                  final GoogleSignInAccount user = googleSignIn.currentUser;
-                                  final strUserId = user.id;
-                                  Database().removeLike(strUserId, course.documentID);
+                                  List<dynamic> likedArray = course["liked"];
+                                  if (likedArray != null && likedArray.contains(strUserId)) {
+                                    Database().removeLike(strUserId, course.documentID);
+                                  } else {
+                                    Database().addLike(strUserId, course.documentID);
+                                  }
+                                  *//*if (_isPressed) {
+                                    Database().removeLike(strUserId, course.documentID);
+                                  } else {
+                                    Database().addLike(strUserId, course.documentID);
+                                  }*//*
                                 });
                               },
                             ),
-                          ),
+                          )
                         ],
                       ),*/
                       ],
@@ -317,22 +365,30 @@ class _MOOVSPageState extends State<MOOVSPage> {
               },
             );
           }),
-      // FloatingActionButton.extended(
-      //     onPressed: () {
-      //       // Add your onPressed code here!
-      //     },
-      //     label: Text('Find a MOOV',
-      //         style: TextStyle(color: Colors.white)),
-      //     icon: Icon(Icons.search, color: Colors.white),
-      //     backgroundColor: Color.fromRGBO(220, 180, 57, 1.0))
-    );
+      Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                "Aw, you have no friends! Add some now.",
+              ),
+            ),
+            FloatingActionButton.extended(
+                onPressed: () {
+                  // Add your onPressed code here!
+                },
+                label: Text('Add Friends'),
+                icon: Icon(Icons.person_add),
+                backgroundColor: Color.fromRGBO(220, 180, 57, 1.0)),
+          ],
+        ),
+      )
+    ];
   }
 
-  handleLikePost() {
-    if (isLiked == true) {
-      isLiked = false;
-    } else {
-      isLiked = true;
-    }
-  }
+  Widget getChildWidget() => childWidgets[selectedIndex];
+
 }
