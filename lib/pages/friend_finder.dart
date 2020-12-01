@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 
 import 'package:MOOV/pages/SportFeed.dart';
 
-
 class FriendFinder extends StatelessWidget {
   dynamic startDate, moovId;
   List<dynamic> likedArray;
-  String eventpofile,tittle;
+  String eventprofile, title;
 
-  FriendFinder(this.likedArray,this.eventpofile,this.tittle);
-
+  FriendFinder(this.likedArray, this.eventprofile, this.title);
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +21,7 @@ class FriendFinder extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body:
-
-
-      Container(
+      body: Container(
           child: likedArray != null
               ? ListView.builder(
                   shrinkWrap: true, //MUST TO ADDED
@@ -34,87 +29,94 @@ class FriendFinder extends StatelessWidget {
                   itemCount: likedArray.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: Column(
-                        children: [
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Column(children: [
                           Container(
-                              color: Colors.grey[300],
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: CircleAvatar(
-                                        radius: 22,
-                                        backgroundColor: TextThemes.ndBlue,
-                                        child: CircleAvatar(
-                                          radius: 22.0,
-                                          backgroundImage: NetworkImage(
-                                              likedArray[index]['strPic']),
-                                          backgroundColor: Colors.transparent,
-                                        )),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 22.0),
-                                    child: Text(likedArray[index]['strName'],
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: TextThemes.ndBlue,
-                                            decoration: TextDecoration.none)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 3.0, right: 5),
-                                    child: Text('Going',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: CupertinoColors.activeGreen,
-                                            decoration: TextDecoration.none)),
-                                  ),
-                                  Text('to',
+                            color: Colors.grey[300],
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: CircleAvatar(
+                                      radius: 22,
+                                      backgroundColor: TextThemes.ndBlue,
+                                      child: CircleAvatar(
+                                        radius: 22.0,
+                                        backgroundImage: NetworkImage(
+                                            likedArray[index]['strPic']),
+                                        backgroundColor: Colors.transparent,
+                                      )),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 22.0),
+                                  child: Text(likedArray[index]['strName'],
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: TextThemes.ndBlue,
+                                          decoration: TextDecoration.none)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 3.0, right: 5),
+                                  child: Text('Going',
                                       style: TextStyle(
                                           fontSize: 14,
-                                          color: CupertinoColors.black,
+                                          color: CupertinoColors.activeGreen,
                                           decoration: TextDecoration.none)),
-                        Padding(
-                                    padding: const EdgeInsets.only(top: 32, left: 0.0),
+                                ),
+                                Text('to',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: CupertinoColors.black,
+                                        decoration: TextDecoration.none)),
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 32, left: 0.0),
                                     child: Row(
                                       children: [
-
                                         Container(
-                                          margin:  EdgeInsets.only(bottom: 30,left: 5),
-                                          child:
-                                          CircleAvatar(
+                                          margin: EdgeInsets.only(
+                                              bottom: 30, left: 5),
+                                          child: CircleAvatar(
                                               radius: 22,
-                                              backgroundColor: TextThemes.ndBlue,
+                                              backgroundColor:
+                                                  TextThemes.ndBlue,
                                               child: CircleAvatar(
                                                 radius: 22.0,
-                                                backgroundImage: NetworkImage(
-                                                  eventpofile),
-                                                backgroundColor: Colors.transparent,
+                                                backgroundImage:
+                                                    NetworkImage(eventprofile),
+                                                backgroundColor:
+                                                    Colors.transparent,
                                               )),
                                         ),
-GestureDetector(
-  onTap: (){
-    print("ClickEvent");
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SportFeed()));
-
-  },
-  child:  Container(
-    margin:  EdgeInsets.only(bottom: 10),
-    padding: const EdgeInsets.only(top: 0.0,bottom: 12,left: 5),
-    child: Text(tittle,
-        style: TextStyle(
-            fontSize: 15,
-            color: CupertinoColors.black,
-            decoration: TextDecoration.none)),
-  ),
-)
-
-                                ],
-                              )),
-                        ],
-                      ),
-                    )]));
+                                        GestureDetector(
+                                          onTap: () {
+                                            print("Friend's Event Clicked");
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SportFeed()));
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(bottom: 10),
+                                            padding: const EdgeInsets.only(
+                                                top: 0.0, bottom: 12, left: 5),
+                                            child: Text(title,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color:
+                                                        CupertinoColors.black,
+                                                    decoration:
+                                                        TextDecoration.none)),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            ),
+                          )
+                        ]));
                   })
               : Center(
                   child: Image.asset(

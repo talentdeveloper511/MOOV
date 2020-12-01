@@ -33,13 +33,11 @@ class _NotificationState extends State<NotificationPage> {
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
-
       child: Center(
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
             Icon(Icons.search),
-            
             Text(
               "",
               textAlign: TextAlign.center,
@@ -79,15 +77,16 @@ class _NotificationState extends State<NotificationPage> {
                                   backgroundColor: TextThemes.ndBlue,
                                   child: CircleAvatar(
                                     radius: 22.0,
-                                    backgroundImage:
-                                    NetworkImage(likedArray[index]['strPic']),
+                                    backgroundImage: NetworkImage(
+                                        likedArray[index]['strPic']),
                                     backgroundColor: Colors.transparent,
-                                  )
-                              ),
+                                  )),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(likedArray[index]['strName']+" has sent you a friend request",
+                              child: Text(
+                                  likedArray[index]['strName'] +
+                                      " has sent you a friend request",
                                   style: TextStyle(
                                       fontSize: 10,
                                       color: TextThemes.ndBlue,
@@ -100,25 +99,31 @@ class _NotificationState extends State<NotificationPage> {
                                 padding: const EdgeInsets.all(2.0),
                                 color: TextThemes.ndBlue,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(3.0))),
                                 onPressed: () {
-                                  if(likedArray[index]['uid'] == moovId){
+                                  if (likedArray[index]['uid'] == moovId) {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder:(context)=>ProfilePage()
-                                        )
-                                    );
+                                            builder: (context) =>
+                                                ProfilePage()));
                                   } else {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder:(context)=>NotificationDetails(likedArray[index]['strPic'],
-                                                likedArray[index]['strName'], likedArray[index]['uid'],
-                                                likedArray[index]['strName'], likedArray[index]['strName'])
-                                        )
-                                    );
+                                            builder: (context) =>
+                                                NotificationDetails(
+                                                    likedArray[index]['strPic'],
+                                                    likedArray[index]
+                                                        ['strName'],
+                                                    likedArray[index]['uid'],
+                                                    likedArray[index]
+                                                        ['strName'],
+                                                    likedArray[index]
+                                                        ['strName'])));
                                   }
                                 },
-                                child: Text("View Detail",
+                                child: Text(
+                                  "View Detail",
                                   style: new TextStyle(
                                     color: Colors.white,
                                     fontSize: 10.0,
@@ -132,54 +137,60 @@ class _NotificationState extends State<NotificationPage> {
                 ),
               );
             }),
-        Container(child:  Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Column(
-            children: [
-              Container(
-                  color: Colors.grey[300],
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: CircleAvatar(
-                            radius: 22,
-                            backgroundColor: TextThemes.ndBlue,
-                            child: CircleAvatar(
-                              radius: 22.0,
-                              backgroundImage:
-                              AssetImage('lib/assets/me.jpg'),
-                            )
+        Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Column(
+              children: [
+                Container(
+                    color: Colors.grey[300],
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: CircleAvatar(
+                              radius: 22,
+                              backgroundColor: TextThemes.ndBlue,
+                              child: CircleAvatar(
+                                radius: 22.0,
+                                backgroundImage:
+                                    AssetImage('lib/assets/me.jpg'),
+                              )),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Text("Heena Dhawan has Created Food Event",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: TextThemes.ndBlue,
-                                decoration: TextDecoration.none)),
-                      ),
-                      Spacer(),
-                    ],
-                  )),
-            ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text("Heena Dhawan has Created Food Event",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: TextThemes.ndBlue,
+                                  decoration: TextDecoration.none)),
+                        ),
+                        Spacer(),
+                      ],
+                    )),
+              ],
+            ),
           ),
-        ),)
-      ],);
+        )
+      ],
+    );
   }
 
   void getNotificationList() async {
-    Firestore.instance.collection("users").document(moovId).get().then((docSnapshot) => {
-      likedArray = docSnapshot.data['request'],
-    });
+    Firestore.instance
+        .collection("users")
+        .document(moovId)
+        .get()
+        .then((docSnapshot) => {
+              likedArray = docSnapshot.data['request'],
+            });
 
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-  //  getNotificationList();
+    //  getNotificationList();
     // return Scaffold(
     //   appBar: AppBar(
     //     backgroundColor: TextThemes.ndBlue,
@@ -198,7 +209,7 @@ class _NotificationState extends State<NotificationPage> {
     //   body: likedArray == null ? buildNoContent() : buildSearchResults(),
     // );
 
-   /* return Scaffold(
+    /* return Scaffold(
 
 
 
@@ -292,7 +303,6 @@ class UserResult extends StatelessWidget {
     final GoogleSignInAccount userMe = googleSignIn.currentUser;
     final strUserId = userMe.id;
     return Container(
-
       child: Column(
         children: <Widget>[
           GestureDetector(
@@ -304,8 +314,9 @@ class UserResult extends StatelessWidget {
               ),
               title: Text(
                 user.displayName,
-                style:
-                TextStyle(color: Colors.black.withOpacity(0.6), fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.black.withOpacity(0.6),
+                    fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
                 user.username,
@@ -317,25 +328,21 @@ class UserResult extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
-
-                  if(user.id == strUserId){
+                  if (user.id == strUserId) {
                     Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder:(context)=>ProfilePage()
-                        )
-                    );
-                  }
-                  else {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder:(context)=>NotificationDetails(user.photoUrl,
-                                user.displayName, user.id,
-                                user.email, user.username)
-                        )
-                    );
+                        MaterialPageRoute(builder: (context) => ProfilePage()));
+                  } else {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => NotificationDetails(
+                            user.photoUrl,
+                            user.displayName,
+                            user.id,
+                            user.email,
+                            user.username)));
                   }
                 },
-                child: Text("View Detail",
+                child: Text(
+                  "View Detail",
                   style: new TextStyle(
                     color: Colors.white,
                     fontSize: 10.0,

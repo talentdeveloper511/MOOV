@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage>
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
   List<dynamic> likedArray;
-  String eventpofile, tittle;
+  String eventprofile, title;
 
   _getdata() {
     Firestore.instance
@@ -70,13 +70,13 @@ class _HomePageState extends State<HomePage>
       for (var i = 0; i < snapshot.documents.length; i++) {
         DocumentSnapshot course = snapshot.documents[i];
         likedArray = course["liked"];
-        eventpofile = course["image"];
-        tittle = course["title"];
+        eventprofile = course["image"];
+        title = course["title"];
         print(likedArray);
         print("Liked");
-        print(eventpofile);
-        print("TIttle");
-        print(tittle);
+        print(eventprofile);
+        print("title");
+        print(title);
       }
     });
   }
@@ -296,7 +296,7 @@ class _HomePageState extends State<HomePage>
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                FriendFinder(likedArray, eventpofile,tittle)));
+                                FriendFinder(likedArray, eventprofile, title)));
                     // Implement navigation to shopping cart page here...
                     print('FRIEND FINDER CLICKED');
                   },
@@ -308,8 +308,8 @@ class _HomePageState extends State<HomePage>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    FriendFinder(likedArray, eventpofile,tittle)));
+                                builder: (context) => FriendFinder(
+                                    likedArray, eventprofile, title)));
                       },
                       child: Card(
                         borderOnForeground: true,
