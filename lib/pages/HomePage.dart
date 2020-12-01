@@ -73,11 +73,6 @@ class _HomePageState extends State<HomePage>
         likedArray = course["liked"];
         eventprofile = course["image"];
         title = course["title"];
-        print(likedArray);
-        print("Liked");
-        print(eventprofile);
-        print("title");
-        print(title);
       }
     });
   }
@@ -161,6 +156,10 @@ class _HomePageState extends State<HomePage>
         controller: _scrollController,
         slivers: <Widget>[
           SliverAppBar(
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset('lib/assets/ndlogo.png'),
+            ),
             backgroundColor: TextThemes.ndBlue,
             //pinned: true,
             floating: true,
@@ -202,18 +201,14 @@ class _HomePageState extends State<HomePage>
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: EdgeInsets.all(5),
               title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  
                   Image.asset(
-                    'lib/assets/moovheader.png',
+                    'lib/assets/moovblue.png',
                     fit: BoxFit.cover,
-                    height: 45.0,
+                    height: 55.0,
                   ),
-                  Image.asset(
-                    'lib/assets/ndlogo.png',
-                    fit: BoxFit.cover,
-                    height: 25,
-                  )
                 ],
               ),
             ),
@@ -232,63 +227,120 @@ class _HomePageState extends State<HomePage>
               ],
             ),
           ),
-          SliverToBoxAdapter(
-              child: Padding(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  padding: EdgeInsets.all(5.0),
-                  icon: Image.asset('lib/assets/friendfinder.png'),
-                  color: Colors.white,
-                  splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                FriendFinder(likedArray, eventprofile, title)));
-                    // Implement navigation to shopping cart page here...
-                    print('FRIEND FINDER CLICKED');
-                  },
-                ),
-                Align(
-                    alignment: Alignment.center,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FriendFinder(
-                                    likedArray, eventprofile, title)));
-                      },
-                      child: Card(
-                        borderOnForeground: true,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            "Friend Finder",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
-                          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            sliver: SliverGrid.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 0.0,
+              childAspectRatio: 1.55,
+              children: <Widget>[
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          padding: EdgeInsets.all(5.0),
+                          icon: Image.asset('lib/assets/ff.png'),
+                          color: Colors.white,
+                          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FriendFinder(
+                                        likedArray, eventprofile, title)));
+                            // Implement navigation to shopping cart page here...
+                            print('FRIEND FINDER CLICKED');
+                          },
                         ),
-                      ),
-                    )),
+                        Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FriendFinder(
+                                            likedArray, eventprofile, title)));
+                              },
+                              child: Card(
+                                borderOnForeground: true,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "Friend Finder",
+                                    style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16.0),
+                                  ),
+                                ),
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          padding: EdgeInsets.all(5.0),
+                          icon: Image.asset('lib/assets/fg1.png'),
+                          color: Colors.white,
+                          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FriendFinder(
+                                        likedArray, eventprofile, title)));
+                            // Implement navigation to shopping cart page here...
+                            print('FRIEND GROUPS CLICKED');
+                          },
+                        ),
+                        Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Card(
+                                borderOnForeground: true,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "Friend Groups",
+                                    style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16.0),
+                                  ),
+                                ),
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
-          )),
+          ),
           SliverPadding(
             padding: EdgeInsets.only(left: 10, right: 10),
             sliver: SliverGrid.count(
               crossAxisCount: 2,
               mainAxisSpacing: 0.0,
               crossAxisSpacing: 10.0,
-              childAspectRatio: .85,
+              childAspectRatio: .95,
               children: <Widget>[
                 Container(
                   child: Column(
@@ -359,9 +411,9 @@ class _HomePageState extends State<HomePage>
                           text:
                               TextSpan(style: TextThemes.mediumbody, children: [
                             TextSpan(
-                                text: "Somethin' ",
+                                text: "More ",
                                 style: TextStyle(color: Colors.white)),
-                            TextSpan(text: "else?", style: TextThemes.italic),
+                            TextSpan(text: "MOOVs", style: TextThemes.italic),
                           ]),
                         ),
                       ),

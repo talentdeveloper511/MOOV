@@ -1,7 +1,9 @@
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV/pages/Friends_List.dart';
-class FriendGroupsButton extends StatelessWidget {
+
+class FriendButton extends StatelessWidget {
   List<dynamic> likedArray;
   dynamic moovId;
   @override
@@ -19,12 +21,12 @@ class FriendGroupsButton extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: Icon(
-              Icons.people,
+              Icons.people, color: TextThemes.ndGold,
             ),
           ),
           Container(
               child: Text(
-            'Friend Groups',
+            'My Friends List', style: TextStyle(color: TextThemes.ndBlue),
             //   style: TextStyle(color: TextThemes.ndBlue)
           )),
         ],

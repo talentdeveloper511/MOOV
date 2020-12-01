@@ -89,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 SeeContactsButton(),
-                FriendGroupsButton()
+                FriendButton()
                 // Padding(
                 //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 //   child: Text(''),

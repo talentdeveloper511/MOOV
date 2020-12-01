@@ -58,7 +58,7 @@ class FriendFinder extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       left: 3.0, right: 5),
-                                  child: Text('Going',
+                                  child: Text('is Going',
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: CupertinoColors.activeGreen,
@@ -74,21 +74,21 @@ class FriendFinder extends StatelessWidget {
                                         top: 32, left: 0.0),
                                     child: Row(
                                       children: [
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              bottom: 30, left: 5),
-                                          child: CircleAvatar(
-                                              radius: 22,
-                                              backgroundColor:
-                                                  TextThemes.ndBlue,
-                                              child: CircleAvatar(
-                                                radius: 22.0,
-                                                backgroundImage:
-                                                    NetworkImage(eventprofile),
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                              )),
-                                        ),
+                                        // Container(
+                                        //   margin: EdgeInsets.only(
+                                        //       bottom: 30, left: 5),
+                                        //   child: CircleAvatar(
+                                        //       radius: 22,
+                                        //       backgroundColor:
+                                        //           TextThemes.ndBlue,
+                                        //       child: CircleAvatar(
+                                        //         radius: 22.0,
+                                        //         backgroundImage:
+                                        //             NetworkImage(eventprofile),
+                                        //         backgroundColor:
+                                        //             Colors.transparent,
+                                        //       )),
+                                        // ),
                                         GestureDetector(
                                           onTap: () {
                                             print("Friend's Event Clicked");
@@ -101,9 +101,10 @@ class FriendFinder extends StatelessWidget {
                                           child: Container(
                                             margin: EdgeInsets.only(bottom: 10),
                                             padding: const EdgeInsets.only(
-                                                top: 0.0, bottom: 12, left: 5),
+                                                top: 0.0, bottom: 22, left: 5),
                                             child: Text(title,
                                                 style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
                                                     fontSize: 15,
                                                     color:
                                                         CupertinoColors.black,

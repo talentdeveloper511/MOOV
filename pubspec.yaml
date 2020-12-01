@@ -110,6 +110,11 @@ flutter:
     - lib/assets/party2.png
     - lib/assets/club2.png
     - lib/assets/bag1.png
+    - lib/assets/fg1.png
+    - lib/assets/ff.png
+    - lib/assets/moovblue.png
+
+
     # - lib/assets/google1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
