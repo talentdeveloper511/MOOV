@@ -3,26 +3,26 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/notification_details.dart';
 
-class FreindsList extends StatefulWidget {
+class friendsList extends StatefulWidget {
   dynamic moovId;
   TextEditingController searchController = TextEditingController();
   List<dynamic> likedArray;
 
-  FreindsList(this.moovId, this.likedArray);
+  friendsList(this.moovId, this.likedArray);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return FreindsListState(this.moovId, this.likedArray);
+    return friendsListState(this.moovId, this.likedArray);
   }
 }
 
-class FreindsListState extends State<FreindsList> {
+class friendsListState extends State<friendsList> {
   dynamic moovId;
   TextEditingController searchController = TextEditingController();
   List<dynamic> likedArray;
 
-  FreindsListState(this.moovId, this.likedArray);
+  friendsListState(this.moovId, this.likedArray);
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +55,12 @@ class FreindsListState extends State<FreindsList> {
                                 child: CircleAvatar(
                                     radius: 22,
                                     child: CircleAvatar(
-                                      radius: 22.0,
-                                      backgroundImage:
-                                      AssetImage('lib/assets/me.jpg')
-                                      // NetworkImage(likedArray[index]['strPic']),
+                                        radius: 22.0,
+                                        backgroundImage:
+                                            AssetImage('lib/assets/me.jpg')
+                                        // NetworkImage(likedArray[index]['strPic']),
 
-                                    )),
+                                        )),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
@@ -80,7 +80,7 @@ class FreindsListState extends State<FreindsList> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(3.0))),
                                   onPressed: () {
-                                    print("Click Freinds");
+                                    print("Click friends");
 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(

@@ -15,25 +15,25 @@ import 'home.dart';
 
 class NotificationDetails extends StatefulWidget {
   String photoUrl, displayName, id, email, username;
-  NotificationDetails(this.photoUrl, this.displayName, this.id, this.email,
-      this.username);
+  NotificationDetails(
+      this.photoUrl, this.displayName, this.id, this.email, this.username);
 
   @override
   State<StatefulWidget> createState() {
-    return _NotificationDetailsState(this.photoUrl, this.displayName, this.id,
-        this.email, this.username);
+    return _NotificationDetailsState(
+        this.photoUrl, this.displayName, this.id, this.email, this.username);
   }
 }
 
 class _NotificationDetailsState extends State<NotificationDetails> {
   String photoUrl, displayName, id, email, username;
   final dbRef = Firestore.instance;
-  _NotificationDetailsState(this.photoUrl, this.displayName, this.id,
-      this.email, this.username);
-bool rejectRequest= false;
-bool sendRequest= false;
-bool acceptRequest = false;
-bool freinds=false;
+  _NotificationDetailsState(
+      this.photoUrl, this.displayName, this.id, this.email, this.username);
+  bool rejectRequest = false;
+  bool sendRequest = false;
+  bool acceptRequest = false;
+  bool friends = false;
   bool hide = false;
   @override
   Widget build(BuildContext context) {
@@ -47,6 +47,7 @@ bool freinds=false;
         viewVisible = false;
       });
     }
+
     return Scaffold(
       body: Container(
         child: Column(
@@ -97,94 +98,109 @@ bool freinds=false;
               ],
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
-              child: Row(
-                children: [
-                  Opacity(
-                    opacity: hide ? 0 : 1,
-                    child: RaisedButton(
-                      padding: const EdgeInsets.all(10.0),
-                      //color:  Colors.red,
-                      color: rejectRequest ?  Color.fromRGBO(2, 43, 91, 1.0): Colors.red,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                      onPressed: () {
-                        setState(() {
-                          sendRequest = !sendRequest;
-                          Database().sendFriendRequest(strUserId, id, strUserName, strPic);
-                        });
-                        setState(() {
-                          rejectRequest=!rejectRequest;
-                        });
-                        //    Database().sendFriendRequest(strUserId, id, strUserName, strPic);
-                        // Navigator.pop(context);
-                      },
-                      child: rejectRequest?Text("Send Freind Request",
-                        style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                        ),
-                      ):Text("Reject Friend Request",
-                        style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                        ),
+                padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
+                child: Row(
+                  children: [
+                    Opacity(
+                      opacity: hide ? 0 : 1,
+                      child: RaisedButton(
+                        padding: const EdgeInsets.all(10.0),
+                        //color:  Colors.red,
+                        color: rejectRequest
+                            ? Color.fromRGBO(2, 43, 91, 1.0)
+                            : Colors.red,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(3.0))),
+                        onPressed: () {
+                          setState(() {
+                            sendRequest = !sendRequest;
+                            Database().sendFriendRequest(
+                                strUserId, id, strUserName, strPic);
+                          });
+                          setState(() {
+                            rejectRequest = !rejectRequest;
+                          });
+                          //    Database().sendFriendRequest(strUserId, id, strUserName, strPic);
+                          // Navigator.pop(context);
+                        },
+                        child: rejectRequest
+                            ? Text(
+                                "Send Freind Request",
+                                style: new TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.0,
+                                ),
+                              )
+                            : Text(
+                                "Reject Friend Request",
+                                style: new TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.0,
+                                ),
+                              ),
                       ),
                     ),
-                  ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        hideWidget();
+                      },
+                      child: Container(
+                          child: RaisedButton(
+                              padding: const EdgeInsets.all(10.0),
+                              // color:  Color.fromRGBO(2, 43, 91, 1.0),
+                              color: friends
+                                  ? Colors.green
+                                  : Color.fromRGBO(2, 43, 91, 1.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(3.0))),
+                              onPressed: () {
+                                setState(() {
+                                  friends = !friends;
+                                });
+                                setState(() {
+                                  hide = !hide;
+                                });
+                                setState(() {
+                                  acceptRequest = !acceptRequest;
+                                  Database().acceptFriendRequest(
+                                      strUserId, id, strUserName, strPic);
+                                });
 
-                  Spacer(),
-                  GestureDetector(
-                    onTap: (){
-                      hideWidget();
-                    },
-                    child:  Container(
-                      child:   RaisedButton(
-                          padding: const EdgeInsets.all(10.0),
-                          // color:  Color.fromRGBO(2, 43, 91, 1.0),
-                          color: freinds ?  Colors.green:Color.fromRGBO(2, 43, 91, 1.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                          onPressed: () {
-                            setState(() {
-                              freinds=!freinds;
-                            });
-                            setState((){
-                              hide = !hide;
-                            });
-                            setState(() {
-                              acceptRequest=! acceptRequest;
-                              Database().acceptFriendRequest(strUserId, id, strUserName, strPic);
-                            });
-
-                            //  Navigator.pop(context);
-                          },
-                          child:
-                          hide?Container(
-
-                            child: acceptRequest?Text("Freinds",
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 12.0,
-                              ),
-                            ):Text("Accept Friend Request",  style: new TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.0,
-                            ),),
-                          ):Container(child: Text("Accept Friend Request",  style: new TextStyle(
-                            color: Colors.white,
-                            fontSize: 12.0,
-                          ),),)
-
-                      )
-                    ),
-                  )
-
-
-                ],
-              )
-            ),
-
+                                //  Navigator.pop(context);
+                              },
+                              child: hide
+                                  ? Container(
+                                      child: acceptRequest
+                                          ? Text(
+                                              "friends",
+                                              style: new TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12.0,
+                                              ),
+                                            )
+                                          : Text(
+                                              "Accept Friend Request",
+                                              style: new TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12.0,
+                                              ),
+                                            ),
+                                    )
+                                  : Container(
+                                      child: Text(
+                                        "Accept Friend Request",
+                                        style: new TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.0,
+                                        ),
+                                      ),
+                                    ))),
+                    )
+                  ],
+                )),
           ],
         ),
       ),
