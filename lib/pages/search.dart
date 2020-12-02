@@ -92,9 +92,8 @@ class _SearchState extends State<Search> {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            Icon(Icons.search),
             Text(
-              "",
+              "TRENDING PAGE HERE",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

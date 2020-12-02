@@ -7,13 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/helpers/themes.dart';
-
+import 'HomePage.dart';
 import 'ProfilePage.dart';
 import 'notification_details.dart';
 
 class NotificationPage extends StatefulWidget {
   dynamic moovId;
   List<dynamic> likedArray;
+  List userList;
 
   NotificationPage(this.moovId, this.likedArray);
 
@@ -27,6 +28,7 @@ class _NotificationState extends State<NotificationPage> {
   dynamic moovId;
   TextEditingController searchController = TextEditingController();
   List<dynamic> likedArray;
+  List userList;
 
   _NotificationState(this.moovId, this.likedArray);
 
@@ -209,86 +211,118 @@ class _NotificationState extends State<NotificationPage> {
     //   body: likedArray == null ? buildNoContent() : buildSearchResults(),
     // );
 
-    /* return Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
+        backgroundColor: TextThemes.ndBlue,
+        //pinned: true,
 
-
-
+        flexibleSpace: FlexibleSpaceBar(
+          titlePadding: EdgeInsets.all(5),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'lib/assets/moovblue.png',
+                fit: BoxFit.cover,
+                height: 55.0,
+              ),
+            ],
+          ),
+        ),
+      ),
       body: userList != null
           ? ListView.builder(
-          shrinkWrap: true, //MUST TO ADDED
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: userList.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Column(
-                children: [
-                  Container(
-                      color: Colors.grey[300],
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: CircleAvatar(
-                                radius: 22,
-                                backgroundColor: TextThemes.ndBlue,
+              shrinkWrap: true, //MUST TO ADDED
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: userList.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
+                    children: [
+                      Container(
+                          color: Colors.grey[300],
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
                                 child: CircleAvatar(
-                                  radius: 22.0,
-                                  backgroundImage:
-                                  NetworkImage(userList[index]['strPic']),
-                                  backgroundColor: Colors.transparent,
-                                )
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 22.0),
-                            child: Text(userList[index]['strName'],
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: TextThemes.ndBlue,
-                                    decoration: TextDecoration.none)),
-                          ),
-                          Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: RaisedButton(
-                              padding: const EdgeInsets.all(2.0),
-                              color: TextThemes.ndBlue,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                              onPressed: () {
-                                 if(userList[index]['uid'] == moovId){
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder:(context)=>ProfilePage()
-                                    )
-                                );
-                              } else {
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder:(context)=>NotificationDetails(userList[index]['strPic'],
-                                            userList[index]['strName'], userList[index]['uid'],
-                                            userList[index]['strName'], userList[index]['strName'])
-                                    )
-                                );
-                              }
-                              },
-                              child: Text("View Detail",
-                                style: new TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10.0,
-                                ),
+                                    radius: 22,
+                                    backgroundColor: TextThemes.ndBlue,
+                                    child: CircleAvatar(
+                                      radius: 22.0,
+                                      backgroundImage: NetworkImage(
+                                          userList[index]['strPic']),
+                                      backgroundColor: Colors.transparent,
+                                    )),
                               ),
-                            ),
-                          )
-                        ],
-                      )),
-                ],
-              ),
-            );
-          })
-          : Center(child: Image.asset('lib/assets/chens.jpg', height: 40,)),
-    );*/
+                              Padding(
+                                padding: const EdgeInsets.only(left: 22.0),
+                                child: Text(userList[index]['strName'],
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: TextThemes.ndBlue,
+                                        decoration: TextDecoration.none)),
+                              ),
+                              Spacer(),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: RaisedButton(
+                                  padding: const EdgeInsets.all(2.0),
+                                  color: TextThemes.ndBlue,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(3.0))),
+                                  onPressed: () {
+                                    if (userList[index]['uid'] == moovId) {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProfilePage()));
+                                    } else {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NotificationDetails(
+                                                      userList[index]['strPic'],
+                                                      userList[index]
+                                                          ['strName'],
+                                                      userList[index]['uid'],
+                                                      userList[index]
+                                                          ['strName'],
+                                                      userList[index]
+                                                          ['strName'])));
+                                    }
+                                  },
+                                  child: Text(
+                                    "View Detail",
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10.0,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
+                    ],
+                  ),
+                );
+              })
+          : Center(child: Text('You have no notifications.')),
+    );
   }
 }
 

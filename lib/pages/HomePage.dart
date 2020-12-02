@@ -22,6 +22,8 @@ import 'home.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
+  static const IconData leaderboard_outlined =
+      IconData(0xe26f, fontFamily: 'MaterialIcons');
 }
 
 class MyAppBar extends AppBar {
@@ -114,6 +116,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
+
     Future navigateToFoodFeed(context) async {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => FoodFeed()));
@@ -166,12 +169,10 @@ class _HomePageState extends State<HomePage>
             actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.search),
+                icon: Icon(Icons.insert_chart),
                 color: Colors.white,
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Search()));
                   // Implement navigation to shopping cart page here...
                   print('Click Search');
                 },
@@ -203,7 +204,6 @@ class _HomePageState extends State<HomePage>
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  
                   Image.asset(
                     'lib/assets/moovblue.png',
                     fit: BoxFit.cover,
