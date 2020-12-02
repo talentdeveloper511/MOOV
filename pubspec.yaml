@@ -113,6 +113,9 @@ flutter:
     - lib/assets/fg1.png
     - lib/assets/ff.png
     - lib/assets/moovblue.png
+    - lib/assets/sendmoov.png
+    - lib/assets/launchscreen1.png
+    - lib/assets/landingpage.png
 
 
     # - lib/assets/google1.png

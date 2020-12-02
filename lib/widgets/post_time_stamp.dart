@@ -20,7 +20,11 @@ class PostTimeStamp extends StatelessWidget {
     return Container(
       width: double.infinity,
       alignment: alignment,
-      child: Text(postData.postTimeFormatted, style: timeTheme),
+      child: Column(
+        children: [
+          Text(postData.postTimeFormatted, style: timeTheme),
+        ],
+      ),
     );
   }
 }

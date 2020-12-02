@@ -154,20 +154,20 @@ class _HomeState extends State<Home> {
   Scaffold buildUnAuthScreen() {
     return Scaffold(
       body: Container(
-        color: TextThemes.ndGold,
+        color: TextThemes.ndBlue,
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              'lib/assets/appicon.png',
+              'lib/assets/landingpage.png',
               scale: .5,
             ),
             GestureDetector(
               onTap: login,
               child: Container(
-                width: 260.0,
+                width: 300.0,
                 height: 60.0,
                 decoration: BoxDecoration(
                   image: DecorationImage(

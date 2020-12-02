@@ -1,5 +1,6 @@
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,22 +35,52 @@ class _SearchState extends State<Search> {
 
   AppBar buildSearchField() {
     return AppBar(
-      backgroundColor: Colors.white,
-      title: TextFormField(
-        controller: searchController,
-        decoration: InputDecoration(
-          hintText: "Search for a user...",
-          filled: true,
-          prefixIcon: Icon(
-            Icons.account_box,
-            size: 28.0,
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.clear),
-            onPressed: clearSearch,
+      toolbarHeight: 110,
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 58.0),
+          child: Image.asset('lib/assets/ndlogo.png'),
+        ),
+      ),
+      backgroundColor: TextThemes.ndBlue,
+      //pinned: true,
+      actions: <Widget>[],
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: EdgeInsets.all(5),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 40.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4.0),
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  height: 55,
+                ),
+              ),
+              TextFormField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  hintStyle: TextStyle(fontSize: 15),
+                  contentPadding: EdgeInsets.only(top: 18, bottom: 10),
+                  hintText: "Search for user or MOOV...",
+                  filled: true,
+                  prefixIcon: Icon(
+                    Icons.account_box,
+                    size: 28.0,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: clearSearch,
+                  ),
+                ),
+                onFieldSubmitted: handleSearch,
+              ),
+            ],
           ),
         ),
-        onFieldSubmitted: handleSearch,
       ),
     );
   }

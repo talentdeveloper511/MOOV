@@ -12,20 +12,19 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
 
-
-class PartySegment extends StatefulWidget{
+class PartySegment extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return PartySegmentState();
   }
-
 }
-class PartySegmentState extends State<PartySegment>{
+
+class PartySegmentState extends State<PartySegment> {
   Map<int, Widget> map =
-  new Map(); // Cupertino Segmented Control takes children in form of Map.
+      new Map(); // Cupertino Segmented Control takes children in form of Map.
   List<Widget>
-  childWidgets; //The Widgets that has to be loaded when a tab is selected.
+      childWidgets; //The Widgets that has to be loaded when a tab is selected.
   int selectedIndex = 0;
   @override
   void initState() {
@@ -33,6 +32,7 @@ class PartySegmentState extends State<PartySegment>{
     loadCupertinoTabs(); //Method to add Tabs to the Segmented Control.
     loadChildWidgets(); //Method to add the Children as user selected.
   }
+
   bool _isPressed; // = false;
   @override
   Widget build(BuildContext context) {
@@ -63,6 +63,7 @@ class PartySegmentState extends State<PartySegment>{
       ],
     );
   }
+
   void loadCupertinoTabs() {
     map = new Map();
     map = {
@@ -91,7 +92,6 @@ class PartySegmentState extends State<PartySegment>{
             ),
           ))
     };
-
   }
 
   void loadChildWidgets() {
@@ -122,11 +122,11 @@ class PartySegmentState extends State<PartySegment>{
                 List<String> uidArray = List<String>();
                 if (likedArray != null) {
                   likeCount = likedArray.length;
-                  for (int i = 0; i < likeCount; i++){
+                  for (int i = 0; i < likeCount; i++) {
                     var id = likedArray[i]["uid"];
                     uidArray.add(id);
                   }
-                } else{
+                } else {
                   likeCount = 0;
                 }
 
@@ -139,43 +139,52 @@ class PartySegmentState extends State<PartySegment>{
                 return Card(
                   color: Colors.white,
                   clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder:(context)=>PostDetail(course['image'],
-                                  course['title'], course['description'],
-                                  course['startDate'], course['profilePic'],
-                                  course['userName'], course['userEmail'],
-                                  likedArray, course.documentID)
-                          )
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Row(children: <Widget>[
-                            Expanded(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                          child: Image.asset('lib/assets/sendmoov.png',
+                              height: 30),
+                          top: 10,
+                          right: 10),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => PostDetail(
+                                  course['image'],
+                                  course['title'],
+                                  course['description'],
+                                  course['startDate'],
+                                  course['profilePic'],
+                                  course['userName'],
+                                  course['userEmail'],
+                                  likedArray,
+                                  course.documentID)));
+                        },
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Row(children: <Widget>[
+                                Expanded(
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
                                             color: Color(0xff000000),
                                             width: 1,
                                           )),
-                                      /*child: Image.asset(
-                                          'lib/assets/filmbutton1.png',
-                                          fit: BoxFit.cover,
-                                          height: 130,
-                                          width: 50),*/
-                                      child: Image.network(course['image'],
-                                          fit: BoxFit.cover,
-                                          height: 130,
-                                          width: 50),
-                                    ))),
-                            Expanded(
-                                child: Column(children: <Widget>[
+                                          /*child: Image.asset(
+                                            'lib/assets/filmbutton1.png',
+                                            fit: BoxFit.cover,
+                                            height: 130,
+                                            width: 50),*/
+                                          child: Image.network(course['image'],
+                                              fit: BoxFit.cover,
+                                              height: 130,
+                                              width: 50),
+                                        ))),
+                                Expanded(
+                                    child: Column(children: <Widget>[
                                   Padding(padding: const EdgeInsets.all(8.0)),
                                   Padding(
                                       padding: const EdgeInsets.all(2.0),
@@ -202,54 +211,60 @@ class PartySegmentState extends State<PartySegment>{
                                         alignment: Alignment.bottomRight,
                                         child: Text(
                                             DateFormat('EEEE, MMM d, yyyy')
-                                                .format(course['startDate'].toDate()),
+                                                .format(course['startDate']
+                                                    .toDate()),
                                             style: TextStyle(
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.bold)),
                                       )),
                                 ]))
-                          ]),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 1.0),
-                          child: Container(
-                            height: 1.0,
-                            width: 500.0,
-                            color: Colors.grey[300],
-                          ),
-                        ),
-                        Container(
-                            child: Row(
+                              ]),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 1.0),
+                              child: Container(
+                                height: 1.0,
+                                width: 500.0,
+                                color: Colors.grey[300],
+                              ),
+                            ),
+                            Container(
+                                child: Row(
                               children: [
                                 Padding(
-                                    padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        12, 10, 4, 10),
                                     child: CircleAvatar(
                                       radius: 22.0,
                                       backgroundImage:
-                                      NetworkImage(course['profilePic']),
+                                          NetworkImage(course['profilePic']),
                                       backgroundColor: Colors.transparent,
-                                    )
-                                ),
+                                    )),
                                 Container(
                                   child: Column(
                                     //  mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 2.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 2.0),
                                         child: Text(course['userName'],
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
+                                                decoration:
+                                                    TextDecoration.none)),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 2.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 2.0),
                                         child: Text(course['userEmail'],
                                             style: TextStyle(
                                                 fontSize: 12,
                                                 color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
+                                                decoration:
+                                                    TextDecoration.none)),
                                       ),
                                     ],
                                   ),
@@ -261,105 +276,128 @@ class PartySegmentState extends State<PartySegment>{
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(right: 6.0),
+                                        padding:
+                                            const EdgeInsets.only(right: 2.0),
                                         child: IconButton(
                                           icon: (_isPressed)
-                                              ? new Icon(Icons.favorite)
-                                              : new Icon(Icons.favorite_border),
-                                          color: Colors.pink,
-                                          iconSize: 24.0,
-                                          splashColor: Colors.pink,
+                                              ? new Icon(Icons.directions_run, color: Colors.green)
+                                              : new Icon(Icons.directions_walk),
+                                          color: Colors.red,
+                                          iconSize: 30.0,
+                                          splashColor: Colors.green,
                                           //splashRadius: 7.0,
-                                          highlightColor: Colors.pink,
+                                          highlightColor: Colors.green,
                                           onPressed: () {
                                             // Perform action
                                             setState(() {
-                                              List<dynamic> likedArray = course["liked"];
-                                              List<String> uidArray = List<String>();
+                                              List<dynamic> likedArray =
+                                                  course["liked"];
+                                              List<String> uidArray =
+                                                  List<String>();
                                               if (likedArray != null) {
                                                 likeCount = likedArray.length;
-                                                for (int i = 0; i < likeCount; i++){
+                                                for (int i = 0;
+                                                    i < likeCount;
+                                                    i++) {
                                                   var id = likedArray[i]["uid"];
                                                   uidArray.add(id);
                                                 }
                                               }
 
-                                              if (uidArray != null && uidArray.contains(strUserId)) {
-                                                Database().removeLike(strUserId, course.documentID, strUserName, strUserPic);
+                                              if (uidArray != null &&
+                                                  uidArray
+                                                      .contains(strUserId)) {
+                                                Database().removeLike(
+                                                    strUserId,
+                                                    course.documentID,
+                                                    strUserName,
+                                                    strUserPic);
                                               } else {
-                                                Database().sendMessageToChatroom(strUserId, course.documentID, strUserName, strUserPic);
+                                                Database()
+                                                    .sendMessageToChatroom(
+                                                        strUserId,
+                                                        course.documentID,
+                                                        strUserName,
+                                                        strUserPic);
                                               }
-
                                             });
                                           },
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 0, 24.0, 10),
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Text('Going?', style: TextStyle(fontSize: 12),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 24.0, 10),
                                         child: Text('$likeCount',
                                             style: TextStyle(
                                                 fontSize: 12,
                                                 color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
+                                                decoration:
+                                                    TextDecoration.none)),
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
                             )),
-                        /*ButtonBar(
-                        alignment: MainAxisAlignment.end,
-                        children: [
-                          FlatButton(
-                            textColor: const Color(0xFF6200EE),
-                            onPressed: () {
-                              // Perform some action
-                            },
-                            child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Text("WHO'S GOING?",
-                                    style: TextStyle(
-                                        color: Colors.blue[500],
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.left)),
-                          ),
-                          FlatButton(
-                            textColor: const Color(0xFF6200EE),
-                            onPressed: () {
-                              // Perform some action
-                            },
-                            child: IconButton(
-                              icon: (_isPressed)
-                                  ? new Icon(Icons.favorite)
-                                  : new Icon(Icons.favorite_border),
-                              color: Colors.pink,
-                              iconSize: 24.0,
-                              splashColor: Colors.pink,
-                              splashRadius: 7.0,
-                              highlightColor: Colors.pink,
+                            /*ButtonBar(
+                          alignment: MainAxisAlignment.end,
+                          children: [
+                            FlatButton(
+                              textColor: const Color(0xFF6200EE),
                               onPressed: () {
-                                // Perform action
-                                setState(() {
-                                  List<dynamic> likedArray = course["liked"];
-                                  if (likedArray != null && likedArray.contains(strUserId)) {
-                                    Database().removeLike(strUserId, course.documentID);
-                                  } else {
-                                    Database().addLike(strUserId, course.documentID);
-                                  }
-                                  *//*if (_isPressed) {
-                                    Database().removeLike(strUserId, course.documentID);
-                                  } else {
-                                    Database().addLike(strUserId, course.documentID);
-                                  }*//*
-                                });
+                                // Perform some action
                               },
+                              child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Text("WHO'S GOING?",
+                                      style: TextStyle(
+                                          color: Colors.blue[500],
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.left)),
                             ),
-                          )
-                        ],
-                      ),*/
-                      ],
-                    ),
+                            FlatButton(
+                              textColor: const Color(0xFF6200EE),
+                              onPressed: () {
+                                // Perform some action
+                              },
+                              child: IconButton(
+                                icon: (_isPressed)
+                                    ? new Icon(Icons.favorite)
+                                    : new Icon(Icons.favorite_border),
+                                color: Colors.pink,
+                                iconSize: 24.0,
+                                splashColor: Colors.pink,
+                                splashRadius: 7.0,
+                                highlightColor: Colors.pink,
+                                onPressed: () {
+                                  // Perform action
+                                  setState(() {
+                                    List<dynamic> likedArray = course["liked"];
+                                    if (likedArray != null && likedArray.contains(strUserId)) {
+                                      Database().removeLike(strUserId, course.documentID);
+                                    } else {
+                                      Database().addLike(strUserId, course.documentID);
+                                    }
+                                    */ /*if (_isPressed) {
+                                      Database().removeLike(strUserId, course.documentID);
+                                    } else {
+                                      Database().addLike(strUserId, course.documentID);
+                                    }*/ /*
+                                  });
+                                },
+                              ),
+                            )
+                          ],
+                        ),*/
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 );
               },
@@ -390,5 +428,4 @@ class PartySegmentState extends State<PartySegment>{
   }
 
   Widget getChildWidget() => childWidgets[selectedIndex];
-
 }

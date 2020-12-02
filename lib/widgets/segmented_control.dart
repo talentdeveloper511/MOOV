@@ -106,12 +106,11 @@ class SegmentedControlState extends State<SegmentedControl> {
       //       return PostCard(postData: DemoValues.posts[index]);
       //     }),
 
-
       StreamBuilder(
           stream: Firestore.instance
               .collection('food')
               .where("type", isEqualTo: "Food")
-            //.where("featured", isEqualTo: "true")
+              //.where("featured", isEqualTo: "true")
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
@@ -125,11 +124,12 @@ class SegmentedControlState extends State<SegmentedControl> {
                 print(course["featured"]);
                 print("Features");
                 print("dfff11");
-                if(course["featured"]==true){
+                if (course["featured"] == true) {
                   print("dfff");
-                  Firestore.instance.collection("food")
-                     // .where("type", isEqualTo: "Food")
-                    .document(snapshot.data.documents[index]["id"])
+                  Firestore.instance
+                      .collection("food")
+                      // .where("type", isEqualTo: "Food")
+                      .document(snapshot.data.documents[index]["id"])
                       .delete();
                 }
 
@@ -146,18 +146,20 @@ class SegmentedControlState extends State<SegmentedControl> {
                 }
                 if (uidArray != null && uidArray.contains(strUserId)) {
                   _isPressed = true;
-
                 } else {
                   _isPressed = false;
                 }
 
                 return Card(
+                  
                   color: Colors.white,
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: () async {
-                      await Firestore.instance.runTransaction((Transaction myTransaction) async {
-                        await myTransaction.delete(snapshot.data.documents[index].reference);
+                      await Firestore.instance
+                          .runTransaction((Transaction myTransaction) async {
+                        await myTransaction
+                            .delete(snapshot.data.documents[index].reference);
                       });
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => PostDetail(
@@ -181,9 +183,9 @@ class SegmentedControlState extends State<SegmentedControl> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: Color(0xff000000),
-                                            width: 1,
-                                          )),
+                                        color: Color(0xff000000),
+                                        width: 1,
+                                      )),
                                       /*child: Image.asset(
                                           'lib/assets/filmbutton1.png',
                                           fit: BoxFit.cover,
@@ -196,38 +198,39 @@ class SegmentedControlState extends State<SegmentedControl> {
                                     ))),
                             Expanded(
                                 child: Column(children: <Widget>[
-                                  Padding(padding: const EdgeInsets.all(8.0)),
-                                  Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Text(course['title'].toString(),
-                                          style: TextStyle(
-                                              color: Colors.blue[900],
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.center)),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Text(
-                                      course['description'].toString(),
-                                      textAlign: TextAlign.center,
+                              Padding(padding: const EdgeInsets.all(8.0)),
+                              Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Text(course['title'].toString(),
                                       style: TextStyle(
-                                          fontSize: 12.0,
-                                          color: Colors.black.withOpacity(0.6)),
-                                    ),
-                                  ),
-                                  Padding(padding: const EdgeInsets.all(5.0)),
-                                  Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Text(
-                                            DateFormat('EEEE, MMM d, yyyy').format(
+                                          color: Colors.blue[900],
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center)),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  course['description'].toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Colors.black.withOpacity(0.6)),
+                                ),
+                              ),
+                              Padding(padding: const EdgeInsets.all(5.0)),
+                              Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                        DateFormat('jm EEEE, MMM d, yyyy')
+                                            .format(
                                                 course['startDate'].toDate()),
-                                            style: TextStyle(
-                                                fontSize: 12.0,
-                                                fontWeight: FontWeight.bold)),
-                                      )),
-                                ]))
+                                        style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold)),
+                                  )),
+                            ]))
                           ]),
                         ),
                         Padding(
@@ -240,106 +243,106 @@ class SegmentedControlState extends State<SegmentedControl> {
                         ),
                         Container(
                             child: Row(
-                              children: [
-                                Padding(
-                                    padding:
+                          children: [
+                            Padding(
+                                padding:
                                     const EdgeInsets.fromLTRB(12, 10, 4, 10),
-                                    child: CircleAvatar(
-                                      radius: 22.0,
-                                      backgroundImage:
+                                child: CircleAvatar(
+                                  radius: 22.0,
+                                  backgroundImage:
                                       NetworkImage(course['profilePic']),
-                                      backgroundColor: Colors.transparent,
-                                    )),
-                                Container(
-                                  child: Column(
-                                    //  mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 2.0),
-                                        child: Text(course['userName'],
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 2.0),
-                                        child: Text(course['userEmail'],
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
-                                      ),
-                                    ],
+                                  backgroundColor: Colors.transparent,
+                                )),
+                            Container(
+                              child: Column(
+                                //  mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 2.0),
+                                    child: Text(course['userName'],
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: TextThemes.ndBlue,
+                                            decoration: TextDecoration.none)),
                                   ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  child: Column(
-                                    //  mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 6.0),
-                                        child: IconButton(
-                                          icon: (_isPressed)
-                                              ? new Icon(Icons.favorite)
-                                              : new Icon(Icons.favorite_border),
-                                          color: Colors.pink,
-                                          iconSize: 24.0,
-                                          splashColor: Colors.pink,
-                                          //splashRadius: 7.0,
-                                          highlightColor: Colors.pink,
-                                          onPressed: () {
-                                            // Perform action
-                                            setState(() {
-                                              List<dynamic> likedArray =
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 2.0),
+                                    child: Text(course['userEmail'],
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: TextThemes.ndBlue,
+                                            decoration: TextDecoration.none)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Spacer(),
+                            Container(
+                              child: Column(
+                                //  mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 6.0),
+                                    child: IconButton(
+                                      icon: (_isPressed)
+                                          ? new Icon(Icons.favorite)
+                                          : new Icon(Icons.favorite_border),
+                                      color: Colors.pink,
+                                      iconSize: 24.0,
+                                      splashColor: Colors.pink,
+                                      //splashRadius: 7.0,
+                                      highlightColor: Colors.pink,
+                                      onPressed: () {
+                                        // Perform action
+                                        setState(() {
+                                          List<dynamic> likedArray =
                                               course["liked"];
-                                              List<String> uidArray =
+                                          List<String> uidArray =
                                               List<String>();
-                                              if (likedArray != null) {
-                                                likeCount = likedArray.length;
-                                                for (int i = 0;
+                                          if (likedArray != null) {
+                                            likeCount = likedArray.length;
+                                            for (int i = 0;
                                                 i < likeCount;
                                                 i++) {
-                                                  var id = likedArray[i]["uid"];
-                                                  uidArray.add(id);
-                                                }
-                                              }
+                                              var id = likedArray[i]["uid"];
+                                              uidArray.add(id);
+                                            }
+                                          }
 
-                                              if (uidArray != null &&
-                                                  uidArray.contains(strUserId)) {
-                                                Database().removeLike(
-                                                    strUserId,
-                                                    course.documentID,
-                                                    strUserName,
-                                                    strUserPic);
-                                              } else {
-                                                Database().sendMessageToChatroom(
-                                                    strUserId,
-                                                    course.documentID,
-                                                    strUserName,
-                                                    strUserPic);
-                                              }
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 24.0, 10),
-                                        child: Text('$likeCount',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
-                                      ),
-                                    ],
+                                          if (uidArray != null &&
+                                              uidArray.contains(strUserId)) {
+                                            Database().removeLike(
+                                                strUserId,
+                                                course.documentID,
+                                                strUserName,
+                                                strUserPic);
+                                          } else {
+                                            Database().sendMessageToChatroom(
+                                                strUserId,
+                                                course.documentID,
+                                                strUserName,
+                                                strUserPic);
+                                          }
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 0, 24.0, 10),
+                                    child: Text('$likeCount',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: TextThemes.ndBlue,
+                                            decoration: TextDecoration.none)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
                         /*ButtonBar(
                         alignment: MainAxisAlignment.end,
                         children: [
@@ -399,25 +402,11 @@ class SegmentedControlState extends State<SegmentedControl> {
             );
           }),
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       StreamBuilder(
           stream: Firestore.instance
               .collection('food')
               .where("type", isEqualTo: "Food")
-             // .where("featured",  isEqualTo: "true")
+              // .where("featured",  isEqualTo: "true")
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
@@ -442,7 +431,6 @@ class SegmentedControlState extends State<SegmentedControl> {
                 }
                 if (uidArray != null && uidArray.contains(strUserId)) {
                   _isPressed = true;
-
                 } else {
                   _isPressed = false;
                 }
@@ -452,8 +440,10 @@ class SegmentedControlState extends State<SegmentedControl> {
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: () async {
-                      await Firestore.instance.runTransaction((Transaction myTransaction) async {
-                        await myTransaction.delete(snapshot.data.documents[index].reference);
+                      await Firestore.instance
+                          .runTransaction((Transaction myTransaction) async {
+                        await myTransaction
+                            .delete(snapshot.data.documents[index].reference);
                       });
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => PostDetail(
