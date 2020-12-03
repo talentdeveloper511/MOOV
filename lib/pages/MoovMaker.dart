@@ -59,15 +59,10 @@ class _MoovMakerState extends State<MoovMaker> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'lib/assets/moovheader.png',
+                'lib/assets/moovblue.png',
                 fit: BoxFit.cover,
-                height: 45.0,
+                height: 55.0,
               ),
-              Image.asset(
-                'lib/assets/ndlogo.png',
-                fit: BoxFit.cover,
-                height: 25,
-              )
             ],
           ),
         ),
@@ -79,7 +74,7 @@ class _MoovMakerState extends State<MoovMaker> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
-                child: Text("The MOOV Maker", style: TextThemes.headline1),
+                child: Text("MOOV Maker", style: TextThemes.headline1),
               ),
               MoovMakerForm(),
             ]),
