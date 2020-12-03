@@ -207,15 +207,23 @@ class PartySegmentState extends State<PartySegment> {
                                   Padding(padding: const EdgeInsets.all(5.0)),
                                   Padding(
                                       padding: const EdgeInsets.all(3.0),
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Text(
-                                            DateFormat('EEEE, MMM d, yyyy')
-                                                .format(course['startDate']
-                                                    .toDate()),
-                                            style: TextStyle(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Text('START: ',
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text(
+                                              DateFormat('MMMd')
+                                                  .add_jm()
+                                                  .format(course['startDate']
+                                                      .toDate()),
+                                              style: TextStyle(
                                                 fontSize: 12.0,
-                                                fontWeight: FontWeight.bold)),
+                                              )),
+                                        ],
                                       )),
                                 ]))
                               ]),
@@ -280,7 +288,8 @@ class PartySegmentState extends State<PartySegment> {
                                             const EdgeInsets.only(right: 2.0),
                                         child: IconButton(
                                           icon: (_isPressed)
-                                              ? new Icon(Icons.directions_run, color: Colors.green)
+                                              ? new Icon(Icons.directions_run,
+                                                  color: Colors.green)
                                               : new Icon(Icons.directions_walk),
                                           color: Colors.red,
                                           iconSize: 30.0,
@@ -326,7 +335,10 @@ class PartySegmentState extends State<PartySegment> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(4.0),
-                                        child: Text('Going?', style: TextStyle(fontSize: 12),),
+                                        child: Text(
+                                          'Going?',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(

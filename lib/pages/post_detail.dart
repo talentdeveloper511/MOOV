@@ -105,7 +105,7 @@ class _BannerImage extends StatelessWidget {
             ],
           ),
           child: Image.network(bannerImage,
-            fit: BoxFit.fill,
+            fit: BoxFit.fitWidth,
             height: 200,
             width: double.infinity,
           ),
@@ -190,7 +190,7 @@ class PostTimeStamp extends StatelessWidget {
 
     return Padding(
         padding: const EdgeInsets.only(left: 12),
-      child: Text(DateFormat('EEEE, MMM d, yyyy')
+      child: Text(DateFormat('MMMd').add_jm()
           .format(startDate.toDate()), style: timeTheme),
     );
   }
