@@ -151,7 +151,6 @@ class SegmentedControlState extends State<SegmentedControl> {
                 }
 
                 return Card(
-                  
                   color: Colors.white,
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
@@ -167,6 +166,8 @@ class SegmentedControlState extends State<SegmentedControl> {
                               course['title'],
                               course['description'],
                               course['startDate'],
+                              course['location'],
+                              course['address'],
                               course['profilePic'],
                               course['userName'],
                               course['userEmail'],
@@ -451,6 +452,8 @@ class SegmentedControlState extends State<SegmentedControl> {
                               course['title'],
                               course['description'],
                               course['startDate'],
+                              course['location'],
+                              course['address'],
                               course['profilePic'],
                               course['userName'],
                               course['userEmail'],

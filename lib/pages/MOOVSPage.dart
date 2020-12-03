@@ -132,6 +132,8 @@ class _MOOVSPageState extends State<MOOVSPage> {
                               course['title'],
                               course['description'],
                               course['startDate'],
+                              course['location'],
+                              course['address'],
                               course['profilePic'],
                               course['userName'],
                               course['userEmail'],

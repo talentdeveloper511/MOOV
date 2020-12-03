@@ -28,8 +28,8 @@ class PostDepth extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(
           title: Text(
-            'Demo',
-     //   postData.title,
+        'Demo',
+        //   postData.title,
         style: TextThemes.bodyTextWhite,
         textScaleFactor: 1.6,
       )),
@@ -59,7 +59,7 @@ class _NonImageContents extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _Summary(key: PostDepthKeys.summary),
+          _Title(key: PostDepthKeys.summary),
           PostTimeStamp(),
           _MainBody(key: PostDepthKeys.mainBody),
           UserDetailsWithFollow(
@@ -118,8 +118,8 @@ class _BannerImage extends StatelessWidget {
   }
 }
 
-class _Summary extends StatelessWidget {
-  const _Summary({Key key}) : super(key: key);
+class _Title extends StatelessWidget {
+  const _Title({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

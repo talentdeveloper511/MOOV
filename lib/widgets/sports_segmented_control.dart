@@ -11,19 +11,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
-class SportsSegment extends StatefulWidget{
+
+class SportsSegment extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return SportsSegmentState();
   }
-
 }
-class SportsSegmentState extends State<SportsSegment>{
+
+class SportsSegmentState extends State<SportsSegment> {
   Map<int, Widget> map =
-  new Map(); // Cupertino Segmented Control takes children in form of Map.
+      new Map(); // Cupertino Segmented Control takes children in form of Map.
   List<Widget>
-  childWidgets; //The Widgets that has to be loaded when a tab is selected.
+      childWidgets; //The Widgets that has to be loaded when a tab is selected.
   int selectedIndex = 0;
   @override
   void initState() {
@@ -31,6 +32,7 @@ class SportsSegmentState extends State<SportsSegment>{
     loadCupertinoTabs(); //Method to add Tabs to the Segmented Control.
     loadChildWidgets(); //Method to add the Children as user selected.
   }
+
   bool _isPressed; // = false;
 
   @override
@@ -90,7 +92,6 @@ class SportsSegmentState extends State<SportsSegment>{
             ),
           ))
     };
-
   }
 
   void loadChildWidgets() {
@@ -121,11 +122,11 @@ class SportsSegmentState extends State<SportsSegment>{
                 List<String> uidArray = List<String>();
                 if (likedArray != null) {
                   likeCount = likedArray.length;
-                  for (int i = 0; i < likeCount; i++){
+                  for (int i = 0; i < likeCount; i++) {
                     var id = likedArray[i]["uid"];
                     uidArray.add(id);
                   }
-                } else{
+                } else {
                   likeCount = 0;
                 }
 
@@ -140,15 +141,19 @@ class SportsSegmentState extends State<SportsSegment>{
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder:(context)=>PostDetail(course['image'],
-                                  course['title'], course['description'],
-                                  course['startDate'], course['profilePic'],
-                                  course['userName'], course['userEmail'],
-                                  likedArray, course.documentID)
-                          )
-                      );
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => PostDetail(
+                              course['image'],
+                              course['title'],
+                              course['description'],
+                              course['startDate'],
+                              course['location'],
+                              course['address'],
+                              course['profilePic'],
+                              course['userName'],
+                              course['userEmail'],
+                              likedArray,
+                              course.documentID)));
                     },
                     child: Column(
                       children: [
@@ -160,9 +165,9 @@ class SportsSegmentState extends State<SportsSegment>{
                                     child: Container(
                                       decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: Color(0xff000000),
-                                            width: 1,
-                                          )),
+                                        color: Color(0xff000000),
+                                        width: 1,
+                                      )),
                                       /*child: Image.asset(
                                           'lib/assets/filmbutton1.png',
                                           fit: BoxFit.cover,
@@ -175,38 +180,38 @@ class SportsSegmentState extends State<SportsSegment>{
                                     ))),
                             Expanded(
                                 child: Column(children: <Widget>[
-                                  Padding(padding: const EdgeInsets.all(8.0)),
-                                  Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Text(course['title'].toString(),
-                                          style: TextStyle(
-                                              color: Colors.blue[900],
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.center)),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Text(
-                                      course['description'].toString(),
-                                      textAlign: TextAlign.center,
+                              Padding(padding: const EdgeInsets.all(8.0)),
+                              Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Text(course['title'].toString(),
                                       style: TextStyle(
-                                          fontSize: 12.0,
-                                          color: Colors.black.withOpacity(0.6)),
-                                    ),
-                                  ),
-                                  Padding(padding: const EdgeInsets.all(5.0)),
-                                  Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Text(
-                                            DateFormat('EEEE, MMM d, yyyy')
-                                                .format(course['startDate'].toDate()),
-                                            style: TextStyle(
-                                                fontSize: 12.0,
-                                                fontWeight: FontWeight.bold)),
-                                      )),
-                                ]))
+                                          color: Colors.blue[900],
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center)),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  course['description'].toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Colors.black.withOpacity(0.6)),
+                                ),
+                              ),
+                              Padding(padding: const EdgeInsets.all(5.0)),
+                              Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                        DateFormat('EEEE, MMM d, yyyy').format(
+                                            course['startDate'].toDate()),
+                                        style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold)),
+                                  )),
+                            ]))
                           ]),
                         ),
                         Padding(
@@ -219,93 +224,106 @@ class SportsSegmentState extends State<SportsSegment>{
                         ),
                         Container(
                             child: Row(
-                              children: [
-                                Padding(
-                                    padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
-                                    child: CircleAvatar(
-                                      radius: 22.0,
-                                      backgroundImage:
+                          children: [
+                            Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                                child: CircleAvatar(
+                                  radius: 22.0,
+                                  backgroundImage:
                                       NetworkImage(course['profilePic']),
-                                      backgroundColor: Colors.transparent,
-                                    )
-                                ),
-                                Container(
-                                  child: Column(
-                                    //  mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 2.0),
-                                        child: Text(course['userName'],
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 2.0),
-                                        child: Text(course['userEmail'],
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
-                                      ),
-                                    ],
+                                  backgroundColor: Colors.transparent,
+                                )),
+                            Container(
+                              child: Column(
+                                //  mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 2.0),
+                                    child: Text(course['userName'],
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: TextThemes.ndBlue,
+                                            decoration: TextDecoration.none)),
                                   ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  child: Column(
-                                    //  mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 6.0),
-                                        child: IconButton(
-                                          icon: (_isPressed)
-                                              ? new Icon(Icons.favorite)
-                                              : new Icon(Icons.favorite_border),
-                                          color: Colors.pink,
-                                          iconSize: 24.0,
-                                          splashColor: Colors.pink,
-                                          //splashRadius: 7.0,
-                                          highlightColor: Colors.pink,
-                                          onPressed: () {
-                                            // Perform action
-                                            setState(() {
-                                              List<dynamic> likedArray = course["liked"];
-                                              List<String> uidArray = List<String>();
-                                              if (likedArray != null) {
-                                                likeCount = likedArray.length;
-                                                for (int i = 0; i < likeCount; i++){
-                                                  var id = likedArray[i]["uid"];
-                                                  uidArray.add(id);
-                                                }
-                                              }
-
-                                              if (uidArray != null && uidArray.contains(strUserId)) {
-                                                Database().removeLike(strUserId, course.documentID, strUserName, strUserPic);
-                                              } else {
-                                                Database().sendMessageToChatroom(strUserId, course.documentID, strUserName, strUserPic);
-                                              }
-
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 0, 24.0, 10),
-                                        child: Text('$likeCount',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: TextThemes.ndBlue,
-                                                decoration: TextDecoration.none)),
-                                      ),
-                                    ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 2.0),
+                                    child: Text(course['userEmail'],
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: TextThemes.ndBlue,
+                                            decoration: TextDecoration.none)),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              ),
+                            ),
+                            Spacer(),
+                            Container(
+                              child: Column(
+                                //  mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 6.0),
+                                    child: IconButton(
+                                      icon: (_isPressed)
+                                          ? new Icon(Icons.favorite)
+                                          : new Icon(Icons.favorite_border),
+                                      color: Colors.pink,
+                                      iconSize: 24.0,
+                                      splashColor: Colors.pink,
+                                      //splashRadius: 7.0,
+                                      highlightColor: Colors.pink,
+                                      onPressed: () {
+                                        // Perform action
+                                        setState(() {
+                                          List<dynamic> likedArray =
+                                              course["liked"];
+                                          List<String> uidArray =
+                                              List<String>();
+                                          if (likedArray != null) {
+                                            likeCount = likedArray.length;
+                                            for (int i = 0;
+                                                i < likeCount;
+                                                i++) {
+                                              var id = likedArray[i]["uid"];
+                                              uidArray.add(id);
+                                            }
+                                          }
+
+                                          if (uidArray != null &&
+                                              uidArray.contains(strUserId)) {
+                                            Database().removeLike(
+                                                strUserId,
+                                                course.documentID,
+                                                strUserName,
+                                                strUserPic);
+                                          } else {
+                                            Database().sendMessageToChatroom(
+                                                strUserId,
+                                                course.documentID,
+                                                strUserName,
+                                                strUserPic);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 0, 24.0, 10),
+                                    child: Text('$likeCount',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: TextThemes.ndBlue,
+                                            decoration: TextDecoration.none)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
                         /*ButtonBar(
                         alignment: MainAxisAlignment.end,
                         children: [
@@ -346,11 +364,11 @@ class SportsSegmentState extends State<SportsSegment>{
                                   } else {
                                     Database().addLike(strUserId, course.documentID);
                                   }
-                                  *//*if (_isPressed) {
+                                  */ /*if (_isPressed) {
                                     Database().removeLike(strUserId, course.documentID);
                                   } else {
                                     Database().addLike(strUserId, course.documentID);
-                                  }*//*
+                                  }*/ /*
                                 });
                               },
                             ),
