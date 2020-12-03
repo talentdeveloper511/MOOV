@@ -21,7 +21,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-
 import 'home.dart';
 
 final usersRef = Firestore.instance.collection('users');
@@ -189,6 +188,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   }
 
   final _formKey = GlobalKey<FormState>();
+  final privacyList = ["Public", "Friends Only", "Invite Only"];
   final listOfTypes = [
     "Food",
     "Sport",
@@ -241,8 +241,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
   DateTime currentValue = DateTime.now();
   DateTime currentValues;
-  DateTime endTime = DateTime.now().add(Duration(minutes: 120));
-  DateTime endTimes;
+  // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
+  // DateTime endTimes;
+  String privacyDropdownValue = 'Public';
   String typeDropdownValue = 'Party';
   String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
@@ -306,6 +307,36 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               validator: (value) {
                 if (value.isEmpty) {
                   return 'What are we doing?';
+                }
+                return null;
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(20.0),
+            child: DropdownButtonFormField(
+              value: privacyDropdownValue,
+              icon: Icon(Icons.arrow_downward, color: TextThemes.ndGold),
+              decoration: InputDecoration(
+                labelText: "Visibility",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              items: privacyList.map((String value) {
+                return new DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              onChanged: (String newValue) {
+                setState(() {
+                  privacyDropdownValue = newValue;
+                });
+              },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Who can come?';
                 }
                 return null;
               },
@@ -378,7 +409,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               // The validator receives the text that the user has entered.
               validator: (value) {
                 if (value.isEmpty) {
-                  return "Where's it at though?";
+                  return "Where's it at?";
                 }
                 return null;
               },
@@ -451,73 +482,72 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: DateTimeField(
-              format: format,
-              keyboardType: TextInputType.datetime,
-              decoration: InputDecoration(
-                  suffixIcon: Icon(
-                    Icons.arrow_downward,
-                    color: TextThemes.ndGold,
-                  ),
-                  labelText: 'Enter End Time',
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  floatingLabelBehavior: FloatingLabelBehavior.always),
-              onChanged: (DateTime et) {
-                setState(() {
-                  endTime = endTimes;
-                  //    et = endTime;
-                });
-              },
-              onShowPicker: (context, endTime) async {
-                final date = await showDatePicker(
-                  context: context,
-                  firstDate: DateTime(1900),
-                  initialDate: endTime ?? DateTime.now(),
-                  lastDate: DateTime(2100),
-                  builder: (BuildContext context, Widget child) {
-                    return Theme(
-                      data: ThemeData.light().copyWith(
-                        primaryColor: TextThemes.ndGold,
-                        accentColor: TextThemes.ndGold,
-                        colorScheme:
-                            ColorScheme.light(primary: TextThemes.ndBlue),
-                        buttonTheme:
-                            ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                      ),
-                      child: child,
-                    );
-                  },
-                );
-                if (date != null) {
-                  final time = await showTimePicker(
-                    context: context,
-                    initialTime:
-                        TimeOfDay.fromDateTime(endTime ?? DateTime.now()),
-                    builder: (BuildContext context, Widget child) {
-                      return Theme(
-                        data: ThemeData.light().copyWith(
-                          primaryColor: TextThemes.ndGold,
-                          accentColor: TextThemes.ndGold,
-                          colorScheme:
-                              ColorScheme.light(primary: TextThemes.ndBlue),
-                          buttonTheme: ButtonThemeData(
-                              textTheme: ButtonTextTheme.primary),
-                        ),
-                        child: child,
-                      );
-                    },
-                  );
-                  endTimes = DateTimeField.combine(date, time);
-                  return endTimes;
-                } else {
-                  return endTime.add(Duration(days: 18250));
-                }
-              },
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(20.0),
+          //   child: DateTimeField(
+          //     format: format,
+          //     keyboardType: TextInputType.datetime,
+          //     decoration: InputDecoration(
+          //         suffixIcon: Icon(
+          //           Icons.arrow_downward,
+          //           color: TextThemes.ndGold,
+          //         ),
+          //         labelText: 'Enter End Time',
+          //         enabledBorder: OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(10.0)),
+          //         floatingLabelBehavior: FloatingLabelBehavior.always),
+          //     onChanged: (DateTime et) {
+          //       setState(() {
+          //         endTime = endTimes;
+          //       });
+          //     },
+          //     onShowPicker: (context, endTime) async {
+          //       final date = await showDatePicker(
+          //         context: context,
+          //         firstDate: DateTime(1900),
+          //         initialDate: endTime ?? DateTime.now(),
+          //         lastDate: DateTime(2100),
+          //         builder: (BuildContext context, Widget child) {
+          //           return Theme(
+          //             data: ThemeData.light().copyWith(
+          //               primaryColor: TextThemes.ndGold,
+          //               accentColor: TextThemes.ndGold,
+          //               colorScheme:
+          //                   ColorScheme.light(primary: TextThemes.ndBlue),
+          //               buttonTheme:
+          //                   ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          //             ),
+          //             child: child,
+          //           );
+          //         },
+          //       );
+          //       if (date != null) {
+          //         final time = await showTimePicker(
+          //           context: context,
+          //           initialTime:
+          //               TimeOfDay.fromDateTime(endTime ?? DateTime.now()),
+          //           builder: (BuildContext context, Widget child) {
+          //             return Theme(
+          //               data: ThemeData.light().copyWith(
+          //                 primaryColor: TextThemes.ndGold,
+          //                 accentColor: TextThemes.ndGold,
+          //                 colorScheme:
+          //                     ColorScheme.light(primary: TextThemes.ndBlue),
+          //                 buttonTheme: ButtonThemeData(
+          //                     textTheme: ButtonTextTheme.primary),
+          //               ),
+          //               child: child,
+          //             );
+          //           },
+          //         );
+          //         endTimes = DateTimeField.combine(date, time);
+          //         return endTimes;
+          //       } else {
+          //         return endTime.add(Duration(days: 18250));
+          //       }
+          //     },
+          //   ),
+          // ),
           RaisedButton(
               color: TextThemes.ndBlue,
               child: Text('Upload an image',
@@ -582,11 +612,12 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               Database().createPost(
                                 title: titleController.text,
                                 type: typeDropdownValue,
+                                privacy: privacyDropdownValue,
                                 description: descriptionController.text,
                                 location: locationDropdownValue,
                                 address: addressController.text,
                                 startDate: currentValue,
-                                endDate: endTime,
+                                // endDate: endTime,
                                 imageUrl: downloadUrl,
                                 userId: strUserId,
                                 likes: false,
@@ -624,24 +655,24 @@ class DatePicker extends StatefulWidget {
 
 class _DatePickerState extends State<DatePicker> {
   DateTime startDate1 = DateTime.now();
-  DateTime _endDate = DateTime.now().add(Duration(days: 7));
+  // DateTime _endDate = DateTime.now().add(Duration(days: 7));
 
   Future displayDateRangePicker(BuildContext context) async {
     final List<DateTime> picked = await DateRangePicker.showDatePicker(
         context: context,
         initialFirstDate: startDate1,
-        initialLastDate: _endDate,
+        // initialLastDate: _endDate,
         firstDate: new DateTime(DateTime.now().year),
         lastDate: new DateTime(DateTime.now().year + 10));
     if (picked != null && picked.length == 2) {
       setState(() {
         startDate1 = picked[0];
-        _endDate = picked[1];
+        // _endDate = picked[1];
       });
     } else if (picked.length == 1) {
       setState(() {
         startDate1 = picked[0];
-        _endDate = picked[0];
+        // _endDate = picked[0];
       });
     }
   }
@@ -666,25 +697,12 @@ class _DatePickerState extends State<DatePicker> {
               children: <Widget>[
                 Text(
                     "Start Date: ${DateFormat('EEE, MM/dd').format(startDate1).toString()}"),
-                Text(
-                    "End Date: ${DateFormat('EEE, MM/dd').format(_endDate).toString()}"),
+                // Text(
+                //     "End Date: ${DateFormat('EEE, MM/dd').format(_endDate).toString()}"),
               ],
             ),
           ),
         ),
-        // RaisedButton(
-        //   child: Text("Continue"),
-        //   onPressed: () {
-        //     widget.postModel.startDate = _startDate;
-        //     widget.postModel.endDate = _endDate;
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //           builder: (context) =>
-        //               DatePicker(postModel: widget.postModel)),
-        //     );
-        //   },
-        // ),
       ],
     );
   }

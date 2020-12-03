@@ -13,6 +13,7 @@ class Database {
       {title,
       description,
       type,
+      privacy,
       location,
       address,
       likes,
@@ -23,11 +24,12 @@ class Database {
       userName,
       userEmail,
       profilePic,
-        featured}) async {
+      featured}) async {
     DocumentReference ref = await dbRef.collection("food").add({
       'title': title,
       'likes': likes,
       'type': type,
+      'privacy': privacy,
       'description': description,
       'location': location,
       'address': address,
@@ -38,7 +40,7 @@ class Database {
       'userName': userName,
       'userEmail': userEmail,
       'profilePic': profilePic,
-      "featured":featured,
+      "featured": featured,
     });
     // final String postId = ref.documentID;
     print(ref.documentID);
@@ -55,10 +57,8 @@ class Database {
   }
 
   Future<List<String>> getFavorites(String uid) async {
-    DocumentSnapshot querySnapshot = await Firestore.instance
-        .collection('food')
-        .document(uid)
-        .get();
+    DocumentSnapshot querySnapshot =
+        await Firestore.instance.collection('food').document(uid).get();
     if (querySnapshot.exists &&
         querySnapshot.data.containsKey('favorites') &&
         querySnapshot.data['favorites'] is List) {
@@ -87,13 +87,14 @@ class Database {
     }
   }
 
-  Future<void> sendMessageToChatroom(String uid, String moovId, String strName, strPic) async {
+  Future<void> sendMessageToChatroom(
+      String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$moovId');
       Map<String, dynamic> serializedMessage = {
-        "uid" : uid,
-        "strName" : strName,
-        "strPic" : strPic
+        "uid": uid,
+        "strName": strName,
+        "strPic": strPic
       };
       transaction.update(ref, {
         'liked': FieldValue.arrayUnion([serializedMessage]),
@@ -115,14 +116,15 @@ class Database {
       });
     });
   }*/
-  Future<void> sendEventNotification(String senderId, String receiverId, String senderName, String senderPic) async {
+  Future<void> sendEventNotification(String senderId, String receiverId,
+      String senderName, String senderPic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       Map<String, dynamic> serializedMessage = {
-        "uid" : senderId,
-        "strName" : senderName,
-        "strPic" : senderPic,
-        "requestStatus" : "pending"
+        "uid": senderId,
+        "strName": senderName,
+        "strPic": senderPic,
+        "requestStatus": "pending"
       };
       transaction.update(ref, {
         'request': FieldValue.arrayUnion([serializedMessage]),
@@ -130,14 +132,15 @@ class Database {
     });
   }
 
-  Future<void> sendFriendRequest(String senderId, String receiverId, String senderName, String senderPic) async {
+  Future<void> sendFriendRequest(String senderId, String receiverId,
+      String senderName, String senderPic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       Map<String, dynamic> serializedMessage = {
-        "uid" : senderId,
-        "strName" : senderName,
-        "strPic" : senderPic,
-        "requestStatus" : "pending"
+        "uid": senderId,
+        "strName": senderName,
+        "strPic": senderPic,
+        "requestStatus": "pending"
       };
       transaction.update(ref, {
         'request': FieldValue.arrayUnion([serializedMessage]),
@@ -160,10 +163,11 @@ class Database {
         .orderBy("startDate", descending: true);
   }
 
-  Future<void> addLike(String uid, String moovId, String strName, strPic) async {
+  Future<void> addLike(
+      String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
       final int index = Random().nextInt(10);
-    //  final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
+      //  final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
       final DocumentReference ref = dbRef.document('food/$moovId');
       final DocumentSnapshot snapshot = await transaction.get(ref);
       transaction.update(ref, {
@@ -183,34 +187,35 @@ class Database {
     });
   }
 
-  Future<void> removeLike(String uid, String moovId, String strName, strPic) async {
+  Future<void> removeLike(
+      String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
       final Random random = Random();
 
       // todo: remember all the values that were used son we don't use them again
       int index = random.nextInt(10);
       DocumentSnapshot snapshot;
-   //   while (snapshot == null) {
-        final DocumentReference userRef = dbRef.document('food/$moovId');
+      //   while (snapshot == null) {
+      final DocumentReference userRef = dbRef.document('food/$moovId');
       Map<String, dynamic> serializedMessage = {
-        "uid" : uid,
-        "strName" : strName,
-        "strPic" : strPic
+        "uid": uid,
+        "strName": strName,
+        "strPic": strPic
       };
-        transaction.update(userRef, {
-          'liked': FieldValue.arrayRemove([serializedMessage])
-        });
-        /*final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
+      transaction.update(userRef, {
+        'liked': FieldValue.arrayRemove([serializedMessage])
+      });
+      /*final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
         snapshot = await transaction.get(ref);
 
         if (!snapshot.exists) {
           index = random.nextInt(10);
           snapshot = null;
         }*/
-   //   }
+      //   }
 
-  //    transaction.update(snapshot.reference, {'counter': FieldValue.increment(-1)});
-     /* final DocumentReference userRef = dbRef.document('users/$uid');
+      //    transaction.update(snapshot.reference, {'counter': FieldValue.increment(-1)});
+      /* final DocumentReference userRef = dbRef.document('users/$uid');
       transaction.update(userRef, {
         'liked': FieldValue.arrayRemove([moovId])
       });*/
@@ -218,19 +223,18 @@ class Database {
   }
 
   Stream<int> likesForMoov(String moovId) {
-    return dbRef
-        .collection('food/$moovId/likes')
-        .snapshots()
-        .map((snapshot) => snapshot.documents.fold(0, (sum, item) => sum + item['counter']));
+    return dbRef.collection('food/$moovId/likes').snapshots().map((snapshot) =>
+        snapshot.documents.fold(0, (sum, item) => sum + item['counter']));
   }
 
-  Future<void> acceptFriendRequest(String senderId, String receiverId, String strName, String strPic) async {
+  Future<void> acceptFriendRequest(
+      String senderId, String receiverId, String strName, String strPic) async {
     final DocumentReference ref = dbRef.document('users/$senderId');
     Map<String, dynamic> serializedMessage = {
-      "uid" : receiverId,
-      "strName" : strName,
-      "strPic" : strPic,
-      "requestStatus" : "accept"
+      "uid": receiverId,
+      "strName": strName,
+      "strPic": strPic,
+      "requestStatus": "accept"
     };
     ref.setData({
       'request': FieldValue.arrayUnion([serializedMessage]),
@@ -256,14 +260,15 @@ washingtonRef.update("regions", FieldValue.arrayRemove("east_coast"));*/
     });*/
   }
 
-  Future<void> rejectFriendRequest(String senderId, String receiverId, String strName, String strPic) async {
+  Future<void> rejectFriendRequest(
+      String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       Map<String, dynamic> serializedMessage = {
-        "uid" : senderId,
-        "strName" : strName,
-        "strPic" : strPic,
-        "requestStatus" : "rejected"
+        "uid": senderId,
+        "strName": strName,
+        "strPic": strPic,
+        "requestStatus": "rejected"
       };
       transaction.update(ref, {
         'request': FieldValue.arrayUnion([serializedMessage]),
