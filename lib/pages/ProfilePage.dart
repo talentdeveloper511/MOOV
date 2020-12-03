@@ -4,6 +4,9 @@ import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/friend_groups_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:MOOV/pages/notification_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfilePage extends StatefulWidget {
   final Home user;
@@ -16,7 +19,65 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final GoogleSignInAccount user = googleSignIn.currentUser;
+    final strUserId = user.id;
+    final strUserName = user.displayName;
+    final strUserPic = user.photoUrl;
+    dynamic likeCount;
+
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: TextThemes.ndBlue,
+        //pinned: true,
+        actions: <Widget>[
+          IconButton(
+            padding: EdgeInsets.all(5.0),
+            icon: Icon(Icons.insert_chart),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () {
+              // Implement navigation to shopping cart page here...
+              print('Leaderboards clicked');
+            },
+          ),
+          IconButton(
+            padding: EdgeInsets.all(5.0),
+            icon: Icon(Icons.notifications_active),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () {
+              // Implement navigation to notifications page here...
+              List<dynamic> likedArray;
+              Firestore.instance
+                  .collection("users")
+                  .document(strUserId)
+                  .get()
+                  .then((docSnapshot) => {
+                        likedArray = docSnapshot.data['request'],
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NotificationPage(strUserId, likedArray))),
+                      });
+              print('Notifications clicked');
+            },
+          )
+        ],
+        flexibleSpace: FlexibleSpaceBar(
+          titlePadding: EdgeInsets.all(5),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'lib/assets/moovblue.png',
+                fit: BoxFit.cover,
+                height: 55.0,
+              ),
+            ],
+          ),
+        ),
+      ),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

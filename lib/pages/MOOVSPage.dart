@@ -7,7 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
-
+import 'package:MOOV/pages/notification_page.dart';
 import 'PostDepth.dart';
 
 class MOOVSPage extends StatefulWidget {
@@ -35,12 +35,12 @@ class _MOOVSPageState extends State<MOOVSPage> {
         actions: <Widget>[
           IconButton(
             padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.insert_chart),
             color: Colors.white,
             splashColor: Color.fromRGBO(220, 180, 57, 1.0),
             onPressed: () {
               // Implement navigation to shopping cart page here...
-              print('Click Search');
+              print('Leaderboards clicked');
             },
           ),
           IconButton(
@@ -49,8 +49,21 @@ class _MOOVSPageState extends State<MOOVSPage> {
             color: Colors.white,
             splashColor: Color.fromRGBO(220, 180, 57, 1.0),
             onPressed: () {
-              // Implement navigation to shopping cart page here...
-              print('Click Message');
+              // Implement navigation to notifications page here...
+              List<dynamic> likedArray;
+              Firestore.instance
+                  .collection("users")
+                  .document(strUserId)
+                  .get()
+                  .then((docSnapshot) => {
+                        likedArray = docSnapshot.data['request'],
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NotificationPage(strUserId, likedArray))),
+                      });
+              print('Notifications clicked');
             },
           )
         ],
