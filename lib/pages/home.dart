@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: CupertinoTabBar(
           currentIndex: pageIndex,
           onTap: onTap,
-          activeColor: Theme.of(context).primaryColor,
+          activeColor: TextThemes.ndGold,
           items: [
             BottomNavigationBarItem(
                 title: Text("Home"), icon: Icon(Icons.home)),
