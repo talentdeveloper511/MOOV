@@ -116,6 +116,7 @@ flutter:
     - lib/assets/sendmoov.png
     - lib/assets/launchscreen1.png
     - lib/assets/landingpage.png
+    - lib/assets/moovlogo2.png
 
 
     # - lib/assets/google1.png

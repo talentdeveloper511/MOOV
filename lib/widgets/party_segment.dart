@@ -143,7 +143,7 @@ class PartySegmentState extends State<PartySegment> {
                     children: <Widget>[
                       Positioned(
                           child: Image.asset('lib/assets/sendmoov.png',
-                              height: 30),
+                              height: 20),
                           top: 10,
                           right: 10),
                       InkWell(
@@ -154,6 +154,8 @@ class PartySegmentState extends State<PartySegment> {
                                   course['title'],
                                   course['description'],
                                   course['startDate'],
+                                  course['location'],
+                                  course['address'],
                                   course['profilePic'],
                                   course['userName'],
                                   course['userEmail'],
@@ -166,7 +168,8 @@ class PartySegmentState extends State<PartySegment> {
                               title: Row(children: <Widget>[
                                 Expanded(
                                     child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 5.0, right: 5, bottom: 5),
                                         child: Container(
                                           decoration: BoxDecoration(
                                               border: Border.all(
@@ -285,7 +288,7 @@ class PartySegmentState extends State<PartySegment> {
                                     children: [
                                       Padding(
                                         padding:
-                                            const EdgeInsets.only(right: 2.0),
+                                            const EdgeInsets.only(right: 8.0),
                                         child: IconButton(
                                           icon: (_isPressed)
                                               ? new Icon(Icons.directions_run,
@@ -334,7 +337,8 @@ class PartySegmentState extends State<PartySegment> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(4.0),
+                                        padding: const EdgeInsets.only(
+                                            right: 10.0, bottom: 4.0),
                                         child: Text(
                                           'Going?',
                                           style: TextStyle(fontSize: 12),
@@ -342,7 +346,7 @@ class PartySegmentState extends State<PartySegment> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 24.0, 10),
+                                            0, 0, 30.0, 10),
                                         child: Text('$likeCount',
                                             style: TextStyle(
                                                 fontSize: 12,

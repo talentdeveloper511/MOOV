@@ -29,11 +29,10 @@ class GoingPage extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                    color: Colors.grey[300],
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 8),
+                          padding: const EdgeInsets.only(left: 12),
                           child: CircleAvatar(
                               radius: 22,
                               backgroundColor: TextThemes.ndBlue,
@@ -46,7 +45,7 @@ class GoingPage extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 22.0),
+                          padding: const EdgeInsets.only(left: 16.0),
                           child: Text(likedArray[index]['strName'],
                               style: TextStyle(
                                   fontSize: 16,

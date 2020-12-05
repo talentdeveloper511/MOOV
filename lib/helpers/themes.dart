@@ -55,7 +55,7 @@ class TextThemes {
 
   static final TextStyle dateStyle = TextStyle(
     fontFamily: 'Solway',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: FontWeight.w500,
     color: Color.fromRGBO(2, 43, 91, 1.0),
   );

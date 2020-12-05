@@ -132,6 +132,8 @@ class _MOOVSPageState extends State<MOOVSPage> {
                               course['title'],
                               course['description'],
                               course['startDate'],
+                              course['location'],
+                              course['address'],
                               course['profilePic'],
                               course['userName'],
                               course['userEmail'],
@@ -246,7 +248,7 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                     padding: const EdgeInsets.only(right: 6.0),
                                     child: IconButton(
                                       icon: Icon(
-                                        Icons.favorite,
+                                        Icons.directions_run, color: Colors.green,
                                       ),
                                       color: Colors.pink,
                                       iconSize: 26.0,
