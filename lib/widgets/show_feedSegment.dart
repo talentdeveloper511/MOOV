@@ -295,6 +295,7 @@ class ShowSegmentState extends State<ShowSegment> {
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
+                                              course["userId"],
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
@@ -302,6 +303,7 @@ class ShowSegmentState extends State<ShowSegment> {
                                                 );
                                           } else {
                                             Database().addGoing(
+                                              course["userId"],
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,

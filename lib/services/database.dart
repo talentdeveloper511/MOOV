@@ -108,11 +108,11 @@ class Database {
   }
 
   Future<void> addGoing(
-      String uid, String moovId, String strName, strPic) async {
+      String ownerId, String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$moovId');
 
-      addGoingToNotificationFeed(moovId);
+      addGoingToNotificationFeed(ownerId, moovId);
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
         "strName": strName,
@@ -124,32 +124,38 @@ class Database {
     });
   }
 
-  addGoingToNotificationFeed(String moovId) {
-    notificationFeedRef
-        .document(ownerId)
-        .collection("feedItems")
-        .document(moovId)
-        .setData({
-      "type": "going",
-      "username": currentUser.displayName,
-      "userId": currentUser.id,
-      "userProfilePic": currentUser.photoUrl,
-      "postId": moovId,
-      "timestamp": timestamp
-    });
+  addGoingToNotificationFeed(String ownerId, String moovId) {
+    bool isNotPostOwner = strUserId != ownerId;
+    if (isNotPostOwner) {
+      notificationFeedRef
+          .document(ownerId)
+          .collection("feedItems")
+          .document(moovId)
+          .setData({
+        "type": "going",
+        "username": currentUser.displayName,
+        "userId": currentUser.id,
+        "userProfilePic": currentUser.photoUrl,
+        "postId": moovId,
+        "timestamp": timestamp
+      });
+    }
   }
 
-  removeGoingFromNotificationFeed(String moovId) {
-    notificationFeedRef
-        .document(ownerId)
-        .collection("feedItems")
-        .document(moovId)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
+  removeGoingFromNotificationFeed(String ownerId, String moovId) {
+    bool isNotPostOwner = strUserId != ownerId;
+    if (isNotPostOwner) {
+      notificationFeedRef
+          .document(ownerId)
+          .collection("feedItems")
+          .document(moovId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
+    }
   }
 
   /*Future<void> sendFriendRequest(String senderId, String receiverId, String senderName, String senderPic) async {
@@ -239,9 +245,9 @@ class Database {
   // }
 
   Future<void> removeGoing(
-      String uid, String moovId, String strName, strPic) async {
+      String ownerId, String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
-      removeGoingFromNotificationFeed(moovId);
+      removeGoingFromNotificationFeed(ownerId, moovId);
 
       DocumentSnapshot snapshot;
       //   while (snapshot == null) {

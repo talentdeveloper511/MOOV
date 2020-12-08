@@ -295,18 +295,20 @@ class SportsSegmentState extends State<SportsSegment> {
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                );
+                                              course["userId"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                            );
                                           } else {
                                             Database().addGoing(
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                               );
+                                              course["userId"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                            );
                                           }
                                         });
                                       },

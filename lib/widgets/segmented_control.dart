@@ -315,6 +315,7 @@ class SegmentedControlState extends State<SegmentedControl> {
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
+                                              course["userId"],
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
@@ -322,6 +323,7 @@ class SegmentedControlState extends State<SegmentedControl> {
                                                 );
                                           } else {
                                             Database().addGoing(
+                                              course["userId"],
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
@@ -602,6 +604,7 @@ class SegmentedControlState extends State<SegmentedControl> {
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
+                                              course["userId"],
                                               strUserId,
                                               course.documentID,
                                               strUserName,
@@ -610,6 +613,7 @@ class SegmentedControlState extends State<SegmentedControl> {
                                             );
                                           } else {
                                             Database().addGoing(
+                                              course["userId"],
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
