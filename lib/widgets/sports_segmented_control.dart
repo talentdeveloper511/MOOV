@@ -296,6 +296,7 @@ class SportsSegmentState extends State<SportsSegment> {
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
                                               course["userId"],
+                                              course["image"],
                                               strUserId,
                                               course.documentID,
                                               strUserName,
@@ -304,6 +305,7 @@ class SportsSegmentState extends State<SportsSegment> {
                                           } else {
                                             Database().addGoing(
                                               course["userId"],
+                                              course["image"],
                                               strUserId,
                                               course.documentID,
                                               strUserName,

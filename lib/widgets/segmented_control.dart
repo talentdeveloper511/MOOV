@@ -316,19 +316,21 @@ class SegmentedControlState extends State<SegmentedControl> {
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
                                               course["userId"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                );
+                                              course["image"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                            );
                                           } else {
                                             Database().addGoing(
                                               course["userId"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                );
+                                              course["image"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                            );
                                           }
                                         });
                                       },
@@ -604,21 +606,21 @@ class SegmentedControlState extends State<SegmentedControl> {
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
-                                              course["userId"],
-                                              strUserId,
-                                              course.documentID,
-                                              strUserName,
-                                              strUserPic
-                                              
-                                            );
-                                          } else {
-                                            Database().addGoing(
-                                              course["userId"],
+                                                course["userId"],
+                                                course["image"],
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
-                                                strUserPic,
-                                                );
+                                                strUserPic);
+                                          } else {
+                                            Database().addGoing(
+                                              course["userId"],
+                                              course["image"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                            );
                                           }
                                         });
                                       },

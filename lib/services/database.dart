@@ -70,49 +70,12 @@ class Database {
         .orderBy("startDate", descending: true);
   }
 
-  void getData() {
-    dbRef.collection("books").getDocuments().then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print('${f.data}}'));
-    });
-  }
-
-  Future<List<String>> getFavorites(String uid) async {
-    DocumentSnapshot querySnapshot =
-        await Firestore.instance.collection('food').document(uid).get();
-    if (querySnapshot.exists &&
-        querySnapshot.data.containsKey('favorites') &&
-        querySnapshot.data['favorites'] is List) {
-      // Create a new List<String> from List<dynamic>
-      return List<String>.from(querySnapshot.data['favorites']);
-    }
-    return [];
-  }
-
-  void updateData() {
-    try {
-      dbRef
-          .collection('books')
-          .document('1')
-          .updateData({'description': 'Head First Flutter'});
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  void deleteData() {
-    try {
-      dbRef.collection('books').document('1').delete();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
   Future<void> addGoing(
-      String ownerId, String uid, String moovId, String strName, strPic) async {
+      String ownerId, String previewImg, String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$moovId');
 
-      addGoingToNotificationFeed(ownerId, moovId);
+      addGoingToNotificationFeed(ownerId, previewImg, moovId);
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
         "strName": strName,
@@ -124,7 +87,7 @@ class Database {
     });
   }
 
-  addGoingToNotificationFeed(String ownerId, String moovId) {
+  addGoingToNotificationFeed(String ownerId, String previewImg, String moovId) {
     bool isNotPostOwner = strUserId != ownerId;
     if (isNotPostOwner) {
       notificationFeedRef
@@ -136,13 +99,14 @@ class Database {
         "username": currentUser.displayName,
         "userId": currentUser.id,
         "userProfilePic": currentUser.photoUrl,
+        "previewImg": previewImg,
         "postId": moovId,
         "timestamp": timestamp
       });
     }
   }
 
-  removeGoingFromNotificationFeed(String ownerId, String moovId) {
+  removeGoingFromNotificationFeed(String ownerId, String previewImg, String moovId) {
     bool isNotPostOwner = strUserId != ownerId;
     if (isNotPostOwner) {
       notificationFeedRef
@@ -245,9 +209,9 @@ class Database {
   // }
 
   Future<void> removeGoing(
-      String ownerId, String uid, String moovId, String strName, strPic) async {
+      String ownerId, String previewImg, String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
-      removeGoingFromNotificationFeed(ownerId, moovId);
+      removeGoingFromNotificationFeed(ownerId, previewImg, moovId);
 
       DocumentSnapshot snapshot;
       //   while (snapshot == null) {
@@ -260,27 +224,9 @@ class Database {
       transaction.update(userRef, {
         'liked': FieldValue.arrayRemove([serializedMessage])
       });
-      /*final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
-        snapshot = await transaction.get(ref);
-
-        if (!snapshot.exists) {
-          index = random.nextInt(10);
-          snapshot = null;
-        }*/
-      //   }
-
-      //    transaction.update(snapshot.reference, {'counter': FieldValue.increment(-1)});
-      /* final DocumentReference userRef = dbRef.document('users/$uid');
-      transaction.update(userRef, {
-        'liked': FieldValue.arrayRemove([moovId])
-      });*/
+    
     });
   }
-
-  // Stream<int> likesForMoov(String moovId) {
-  //   return dbRef.collection('food/$moovId/likes').snapshots().map((snapshot) =>
-  //       snapshot.documents.fold(0, (sum, item) => sum + item['counter']));
-  // }
 
   Future<void> acceptFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {
@@ -294,25 +240,7 @@ class Database {
     ref.setData({
       'request': FieldValue.arrayUnion([serializedMessage]),
     });
-    /*DocumentReference washingtonRef = db.collection("cities").document("DC");
-
-// Atomically add a new region to the "regions" array field.
-washingtonRef.update("regions", FieldValue.arrayUnion("greater_virginia"));
-
-// Atomically remove a region from the "regions" array field.
-washingtonRef.update("regions", FieldValue.arrayRemove("east_coast"));*/
-    /*return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$senderId');
-      Map<String, dynamic> serializedMessage = {
-        "uid" : receiverId,
-        "strName" : strName,
-        "strPic" : strPic,
-        "requestStatus" : "accepted"
-      };
-      transaction.updateData(ref, {
-        'request': FieldValue.arrayUnion([serializedMessage]),
-      });
-    });*/
+   
   }
 
   Future<void> rejectFriendRequest(
@@ -331,3 +259,57 @@ washingtonRef.update("regions", FieldValue.arrayRemove("east_coast"));*/
     });
   }
 }
+
+
+
+  // void getData() {
+  //   dbRef.collection("books").getDocuments().then((QuerySnapshot snapshot) {
+  //     snapshot.documents.forEach((f) => print('${f.data}}'));
+  //   });
+  // }
+
+  // Future<List<String>> getFavorites(String uid) async {
+  //   DocumentSnapshot querySnapshot =
+  //       await Firestore.instance.collection('food').document(uid).get();
+  //   if (querySnapshot.exists &&
+  //       querySnapshot.data.containsKey('favorites') &&
+  //       querySnapshot.data['favorites'] is List) {
+  //     // Create a new List<String> from List<dynamic>
+  //     return List<String>.from(querySnapshot.data['favorites']);
+  //   }
+  //   return [];
+  // }
+
+  // void updateData() {
+  //   try {
+  //     dbRef
+  //         .collection('books')
+  //         .document('1')
+  //         .updateData({'description': 'Head First Flutter'});
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
+
+  // void deleteData() {
+  //   try {
+  //     dbRef.collection('books').document('1').delete();
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
+
+    /*final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
+        snapshot = await transaction.get(ref);
+
+        if (!snapshot.exists) {
+          index = random.nextInt(10);
+          snapshot = null;
+        }*/
+      //   }
+
+      //    transaction.update(snapshot.reference, {'counter': FieldValue.increment(-1)});
+      /* final DocumentReference userRef = dbRef.document('users/$uid');
+      transaction.update(userRef, {
+        'liked': FieldValue.arrayRemove([moovId])
+      });*/

@@ -320,14 +320,16 @@ class PartySegmentState extends State<PartySegment> {
                                                   uidArray
                                                       .contains(strUserId)) {
                                                 Database().removeGoing(
-                                                  course["userId"],
+                                                    course["userId"],
+                                                    course["image"],
                                                     strUserId,
                                                     course.documentID,
                                                     strUserName,
                                                     strUserPic);
                                               } else {
                                                 Database().addGoing(
-                                                  course["userId"],
+                                                    course["userId"],
+                                                    course["image"],
                                                     strUserId,
                                                     course.documentID,
                                                     strUserName,

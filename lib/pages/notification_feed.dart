@@ -85,7 +85,7 @@ class NotificationFeedItem extends StatelessWidget {
   final String username;
   final String userId;
   final String type; // 'like', 'follow', 'comment'
-  // final String mediaUrl;
+  final String previewImg;
   final String postId;
   final String userProfilePic;
   // final String commentData;
@@ -95,7 +95,7 @@ class NotificationFeedItem extends StatelessWidget {
     this.username,
     this.userId,
     this.type,
-    // this.mediaUrl,
+    this.previewImg,
     this.postId,
     this.userProfilePic,
     // this.commentData,
@@ -111,12 +111,12 @@ class NotificationFeedItem extends StatelessWidget {
       userProfilePic: doc['userProfilePic'],
       // commentData: doc['commentData'],
       timestamp: doc['timestamp'],
-      // mediaUrl: doc['mediaUrl'],
+      previewImg: doc['previewImg'],
     );
   }
 
   configureMediaPreview() {
-    if (type == "like" || type == 'comment') {
+    if (type == "going" || type == 'comment') {
       mediaPreview = GestureDetector(
         onTap: () => print('showing post'),
         child: Container(
@@ -128,7 +128,7 @@ class NotificationFeedItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(userProfilePic),
+                    image: CachedNetworkImageProvider(previewImg),
                   ),
                 ),
               )),
@@ -142,8 +142,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = "is going to your MOOV!";
     } else if (type == 'follow') {
       activityItemText = "is following you";
-    // } else if (type == 'comment') {
-    //   activityItemText = 'replied: $commentData';
+      // } else if (type == 'comment') {
+      //   activityItemText = 'replied: $commentData';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
@@ -164,7 +164,7 @@ class NotificationFeedItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
                   style: TextStyle(
-                    fontSize: 14.0,
+                    fontSize: 13.5,
                     color: Colors.black,
                   ),
                   children: [

@@ -264,6 +264,7 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                           final strUserId = user.id;
                                           Database().removeGoing(
                                             course["userId"],
+                                            course["image"],
                                             strUserId,
                                             course.documentID,
                                             strUserName,

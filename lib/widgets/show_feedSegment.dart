@@ -296,19 +296,21 @@ class ShowSegmentState extends State<ShowSegment> {
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
                                               course["userId"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                );
+                                              course["image"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                            );
                                           } else {
                                             Database().addGoing(
                                               course["userId"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                );
+                                              course["image"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                            );
                                           }
                                         });
                                       },
