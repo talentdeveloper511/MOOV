@@ -18,6 +18,7 @@ import 'MorePage.dart';
 
 import 'friend_finder.dart';
 import 'home.dart';
+import 'notification_feed.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -182,20 +183,11 @@ class _HomePageState extends State<HomePage>
                 icon: Icon(Icons.notifications_active),
                 color: Colors.white,
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  List<dynamic> likedArray;
-                  Firestore.instance
-                      .collection("users")
-                      .document(strUserId)
-                      .get()
-                      .then((docSnapshot) => {
-                            likedArray = docSnapshot.data['request'],
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => NotificationPage(
-                                        strUserId, likedArray))),
-                          });
+                onPressed: () {Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        NotificationFeed()));
                 },
               )
             ],
