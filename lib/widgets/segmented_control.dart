@@ -314,17 +314,19 @@ class SegmentedControlState extends State<SegmentedControl> {
 
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
-                                            Database().removeLike(
+                                            Database().removeGoing(
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
-                                                strUserPic);
+                                                strUserPic,
+                                                );
                                           } else {
-                                            Database().sendMessageToChatroom(
+                                            Database().addGoing(
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
-                                                strUserPic);
+                                                strUserPic,
+                                                );
                                           }
                                         });
                                       },
@@ -380,12 +382,12 @@ class SegmentedControlState extends State<SegmentedControl> {
                                 setState(() {
                                   List<dynamic> likedArray = course["liked"];
                                   if (likedArray != null && likedArray.contains(strUserId)) {
-                                    Database().removeLike(strUserId, course.documentID);
+                                    Database().removeGoing(strUserId, course.documentID);
                                   } else {
                                     Database().addLike(strUserId, course.documentID);
                                   }
                                   */ /*if (_isPressed) {
-                                    Database().removeLike(strUserId, course.documentID);
+                                    Database().removeGoing(strUserId, course.documentID);
                                   } else {
                                     Database().addLike(strUserId, course.documentID);
                                   }*/ /*
@@ -599,17 +601,20 @@ class SegmentedControlState extends State<SegmentedControl> {
 
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
-                                            Database().removeLike(
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic);
+                                            Database().removeGoing(
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic
+                                              
+                                            );
                                           } else {
-                                            Database().sendMessageToChatroom(
+                                            Database().addGoing(
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
-                                                strUserPic);
+                                                strUserPic,
+                                                );
                                           }
                                         });
                                       },
@@ -665,12 +670,12 @@ class SegmentedControlState extends State<SegmentedControl> {
                                 setState(() {
                                   List<dynamic> likedArray = course["liked"];
                                   if (likedArray != null && likedArray.contains(strUserId)) {
-                                    Database().removeLike(strUserId, course.documentID);
+                                    Database().removeGoing(strUserId, course.documentID);
                                   } else {
                                     Database().addLike(strUserId, course.documentID);
                                   }
                                   */ /*if (_isPressed) {
-                                    Database().removeLike(strUserId, course.documentID);
+                                    Database().removeGoing(strUserId, course.documentID);
                                   } else {
                                     Database().addLike(strUserId, course.documentID);
                                   }*/ /*

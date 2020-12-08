@@ -3,10 +3,30 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Database {
   final dbRef = Firestore.instance;
+  var postId;
+  var postPic;
+  var ownerId;
+
+  final GoogleSignInAccount user = googleSignIn.currentUser;
+  final strUserId = googleSignIn.currentUser.id;
+  final strUserName = googleSignIn.currentUser.displayName;
+  final strPic = googleSignIn.currentUser.photoUrl;
+
+  getdata() {
+    Firestore.instance.collection('food').snapshots().listen((snapshot) {
+      for (var i = 0; i < snapshot.documents.length; i++) {
+        DocumentSnapshot course = snapshot.documents[i];
+        ownerId = course["userId"];
+        postId = course.documentID;
+      }
+    });
+  }
   // Map likes
 
   void createPost(
@@ -87,18 +107,48 @@ class Database {
     }
   }
 
-  Future<void> sendMessageToChatroom(
+  Future<void> addGoing(
       String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$moovId');
+
+      addGoingToNotificationFeed(moovId);
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
         "strName": strName,
-        "strPic": strPic
+        "strPic": strPic,
       };
       transaction.update(ref, {
         'liked': FieldValue.arrayUnion([serializedMessage]),
       });
+    });
+  }
+
+  addGoingToNotificationFeed(String moovId) {
+    notificationFeedRef
+        .document(ownerId)
+        .collection("feedItems")
+        .document(moovId)
+        .setData({
+      "type": "going",
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userProfilePic": currentUser.photoUrl,
+      "postId": moovId,
+      "timestamp": timestamp
+    });
+  }
+
+  removeGoingFromNotificationFeed(String moovId) {
+    notificationFeedRef
+        .document(ownerId)
+        .collection("feedItems")
+        .document(moovId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
     });
   }
 
@@ -163,44 +213,43 @@ class Database {
         .orderBy("startDate", descending: true);
   }
 
-  Future<void> addLike(
+  // Future<void> addLike(
+  //     String uid, String moovId, String strName, strPic) async {
+
+  //   return dbRef.runTransaction((transaction) async {
+  //     final int index = Random().nextInt(10);
+  //     //  final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
+  //     final DocumentReference ref = dbRef.document('food/$moovId');
+  //     final DocumentSnapshot snapshot = await transaction.get(ref);
+  //     transaction.update(ref, {
+  //       'liked': FieldValue.arrayUnion([uid, strName, strPic]),
+  //     });
+
+  //     /*if (!snapshot.exists) {
+  //       transaction.set(ref, {'likeCounter': 1});
+  //     } else {
+  //       transaction.update(ref, {'likeCounter': FieldValue.increment(1)});
+  //     }*/
+
+  //     /*final DocumentReference userRef = dbRef.document('users/$uid');
+  //     transaction.update(userRef, {
+  //       'liked': FieldValue.arrayUnion([moovId])
+  //     });*/
+  //   });
+  // }
+
+  Future<void> removeGoing(
       String uid, String moovId, String strName, strPic) async {
     return dbRef.runTransaction((transaction) async {
-      final int index = Random().nextInt(10);
-      //  final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
-      final DocumentReference ref = dbRef.document('food/$moovId');
-      final DocumentSnapshot snapshot = await transaction.get(ref);
-      transaction.update(ref, {
-        'liked': FieldValue.arrayUnion([uid, strName, strPic]),
-      });
+      removeGoingFromNotificationFeed(moovId);
 
-      /*if (!snapshot.exists) {
-        transaction.set(ref, {'likeCounter': 1});
-      } else {
-        transaction.update(ref, {'likeCounter': FieldValue.increment(1)});
-      }*/
-
-      /*final DocumentReference userRef = dbRef.document('users/$uid');
-      transaction.update(userRef, {
-        'liked': FieldValue.arrayUnion([moovId])
-      });*/
-    });
-  }
-
-  Future<void> removeLike(
-      String uid, String moovId, String strName, strPic) async {
-    return dbRef.runTransaction((transaction) async {
-      final Random random = Random();
-
-      // todo: remember all the values that were used son we don't use them again
-      int index = random.nextInt(10);
       DocumentSnapshot snapshot;
       //   while (snapshot == null) {
       final DocumentReference userRef = dbRef.document('food/$moovId');
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
         "strName": strName,
-        "strPic": strPic
+        "strPic": strPic,
       };
       transaction.update(userRef, {
         'liked': FieldValue.arrayRemove([serializedMessage])
@@ -222,10 +271,10 @@ class Database {
     });
   }
 
-  Stream<int> likesForMoov(String moovId) {
-    return dbRef.collection('food/$moovId/likes').snapshots().map((snapshot) =>
-        snapshot.documents.fold(0, (sum, item) => sum + item['counter']));
-  }
+  // Stream<int> likesForMoov(String moovId) {
+  //   return dbRef.collection('food/$moovId/likes').snapshots().map((snapshot) =>
+  //       snapshot.documents.fold(0, (sum, item) => sum + item['counter']));
+  // }
 
   Future<void> acceptFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {

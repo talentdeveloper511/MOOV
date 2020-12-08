@@ -294,17 +294,19 @@ class ShowSegmentState extends State<ShowSegment> {
 
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
-                                            Database().removeLike(
+                                            Database().removeGoing(
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
-                                                strUserPic);
+                                                strUserPic,
+                                                );
                                           } else {
-                                            Database().sendMessageToChatroom(
+                                            Database().addGoing(
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
-                                                strUserPic);
+                                                strUserPic,
+                                                );
                                           }
                                         });
                                       },
@@ -360,12 +362,12 @@ class ShowSegmentState extends State<ShowSegment> {
                                 setState(() {
                                   List<dynamic> likedArray = course["liked"];
                                   if (likedArray != null && likedArray.contains(strUserId)) {
-                                    Database().removeLike(strUserId, course.documentID);
+                                    Database().removeGoing(strUserId, course.documentID);
                                   } else {
                                     Database().addLike(strUserId, course.documentID);
                                   }
                                   */ /*if (_isPressed) {
-                                    Database().removeLike(strUserId, course.documentID);
+                                    Database().removeGoing(strUserId, course.documentID);
                                   } else {
                                     Database().addLike(strUserId, course.documentID);
                                   }*/ /*

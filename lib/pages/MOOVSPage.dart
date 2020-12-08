@@ -248,7 +248,8 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                     padding: const EdgeInsets.only(right: 6.0),
                                     child: IconButton(
                                       icon: Icon(
-                                        Icons.directions_run, color: Colors.green,
+                                        Icons.directions_run,
+                                        color: Colors.green,
                                       ),
                                       color: Colors.pink,
                                       iconSize: 26.0,
@@ -261,11 +262,12 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                           final GoogleSignInAccount user =
                                               googleSignIn.currentUser;
                                           final strUserId = user.id;
-                                          Database().removeLike(
+                                          Database().removeGoing(
                                               strUserId,
                                               course.documentID,
                                               strUserName,
-                                              strUserPic);
+                                              strUserPic,
+                                              );
                                         });
                                       },
                                     ),
@@ -325,7 +327,7 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                 setState(() {
                                   final GoogleSignInAccount user = googleSignIn.currentUser;
                                   final strUserId = user.id;
-                                  Database().removeLike(strUserId, course.documentID);
+                                  Database().removeGoing(strUserId, course.documentID);
                                 });
                               },
                             ),
