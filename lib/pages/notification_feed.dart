@@ -1,4 +1,5 @@
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -88,19 +89,49 @@ class NotificationFeedItem extends StatelessWidget {
   final String previewImg;
   final String postId;
   final String userProfilePic;
+
   // final String commentData;
   final Timestamp timestamp;
+  dynamic startDate, address, moovId;
+  List<dynamic> likedArray;
 
-  NotificationFeedItem({
-    this.username,
-    this.userId,
-    this.type,
-    this.previewImg,
-    this.postId,
-    this.userProfilePic,
-    // this.commentData,
-    this.timestamp,
-  });
+  var ownerName;
+  var ownerEmail;
+  var ownerPic;
+  var title;
+  var description;
+  var location;
+
+  getdata() {
+    Firestore.instance.collection('food').snapshots().listen((snapshot) {
+      for (var i = 0; i < snapshot.documents.length; i++) {
+        DocumentSnapshot course = snapshot.documents[i];
+        ownerName = course["userName"];
+        ownerEmail = course['userEmail'];
+        ownerPic = course['profilePic'];
+        title = course['title'];
+        description = course['description'];
+        startDate = course['startDate'];
+        location = course['location'];
+        address = course['address'];
+        likedArray = course['liked'];
+      }
+    });
+  }
+
+  NotificationFeedItem(
+      {this.title,
+      this.username,
+      this.userId,
+      this.type,
+      this.previewImg,
+      this.postId,
+      this.userProfilePic,
+      // this.commentData,
+      this.timestamp,
+      this.startDate,
+      this.address,
+      this.likedArray});
 
   factory NotificationFeedItem.fromDocument(DocumentSnapshot doc) {
     return NotificationFeedItem(
@@ -115,10 +146,29 @@ class NotificationFeedItem extends StatelessWidget {
     );
   }
 
-  configureMediaPreview() {
+  showPost(context) {
+    getdata();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PostDetail(
+                previewImg,
+                title,
+                description,
+                startDate,
+                location,
+                address,
+                ownerPic,
+                ownerName,
+                ownerEmail,
+                likedArray,
+                userId)));
+  }
+
+  configureMediaPreview(context) {
     if (type == "going" || type == 'comment') {
       mediaPreview = GestureDetector(
-        onTap: () => print('showing post'),
+        onTap: () => showPost(context),
         child: Container(
           height: 50.0,
           width: 50.0,
@@ -151,7 +201,7 @@ class NotificationFeedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    configureMediaPreview();
+    configureMediaPreview(context);
 
     return Padding(
       padding: EdgeInsets.only(bottom: 2.0),
