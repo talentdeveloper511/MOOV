@@ -98,6 +98,7 @@ class Database {
         "type": "going",
         "username": currentUser.displayName,
         "userId": currentUser.id,
+        "userEmail": currentUser.email,
         "userProfilePic": currentUser.photoUrl,
         "previewImg": previewImg,
         "postId": moovId,

@@ -1,4 +1,6 @@
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -89,6 +91,7 @@ class NotificationFeedItem extends StatelessWidget {
   final String previewImg;
   final String postId;
   final String userProfilePic;
+  final String userEmail;
 
   // final String commentData;
   final Timestamp timestamp;
@@ -106,7 +109,7 @@ class NotificationFeedItem extends StatelessWidget {
     Firestore.instance.collection('food').snapshots().listen((snapshot) {
       for (var i = 0; i < snapshot.documents.length; i++) {
         DocumentSnapshot course = snapshot.documents[i];
-        ownerName = course["userName"];
+        ownerName = course['userName'];
         ownerEmail = course['userEmail'];
         ownerPic = course['profilePic'];
         title = course['title'];
@@ -122,6 +125,7 @@ class NotificationFeedItem extends StatelessWidget {
   NotificationFeedItem(
       {this.title,
       this.username,
+      this.userEmail,
       this.userId,
       this.type,
       this.previewImg,
@@ -136,6 +140,7 @@ class NotificationFeedItem extends StatelessWidget {
   factory NotificationFeedItem.fromDocument(DocumentSnapshot doc) {
     return NotificationFeedItem(
       username: doc['username'],
+      userEmail: doc['userEmail'],
       userId: doc['userId'],
       type: doc['type'],
       postId: doc['postId'],
@@ -166,7 +171,7 @@ class NotificationFeedItem extends StatelessWidget {
   }
 
   configureMediaPreview(context) {
-    if (type == "going" || type == 'comment') {
+    if (type == 'going' || type == 'comment') {
       mediaPreview = GestureDetector(
         onTap: () => showPost(context),
         child: Container(
@@ -209,7 +214,7 @@ class NotificationFeedItem extends StatelessWidget {
         color: Colors.white54,
         child: ListTile(
           title: GestureDetector(
-            onTap: () => print('show profile'),
+            onTap: () => showProfile(context),
             child: RichText(
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
@@ -228,8 +233,11 @@ class NotificationFeedItem extends StatelessWidget {
                   ]),
             ),
           ),
-          leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(userProfilePic),
+          leading: GestureDetector(
+            onTap: () => showProfile(context),
+            child: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(userProfilePic),
+            ),
           ),
           subtitle: Text(
             timeago.format(timestamp.toDate()),
@@ -239,5 +247,13 @@ class NotificationFeedItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  showProfile(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => ProfilePage()));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            OtherProfile(userProfilePic, username, userId, userEmail, username)));
   }
 }
