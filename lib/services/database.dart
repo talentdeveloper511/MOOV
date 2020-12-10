@@ -14,6 +14,7 @@ class Database {
   var ownerId;
   dynamic startDate;
   var title;
+  bool featured;
 
   final GoogleSignInAccount user = googleSignIn.currentUser;
   final strUserId = googleSignIn.currentUser.id;
