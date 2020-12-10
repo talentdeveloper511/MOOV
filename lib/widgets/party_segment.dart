@@ -326,7 +326,15 @@ class PartySegmentState extends State<PartySegment> {
                                                     course.documentID,
                                                     strUserName,
                                                     strUserPic,
-                                                    course["startDate"]);
+                                                    course["startDate"],
+                                                    course["title"],
+                                                    course["description"],
+                                                    course["location"],
+                                                    course["address"],
+                                                    course["profilePic"],
+                                                    course["userName"],
+                                                    course["userEmail"],
+                                                    likedArray);
                                               } else {
                                                 Database().addGoing(
                                                     course["userId"],
@@ -335,8 +343,15 @@ class PartySegmentState extends State<PartySegment> {
                                                     course.documentID,
                                                     strUserName,
                                                     strUserPic,
-                                                    course["startDate"]);
-                                                print(course["userId"]);
+                                                    course["startDate"],
+                                                    course["title"],
+                                                    course["description"],
+                                                    course["location"],
+                                                    course["address"],
+                                                    course["profilePic"],
+                                                    course["userName"],
+                                                    course["userEmail"],
+                                                    likedArray);
                                               }
                                             });
                                           },

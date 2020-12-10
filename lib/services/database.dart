@@ -13,6 +13,7 @@ class Database {
   var postPic;
   var ownerId;
   dynamic startDate;
+  var title;
 
   final GoogleSignInAccount user = googleSignIn.currentUser;
   final strUserId = googleSignIn.currentUser.id;
@@ -73,12 +74,38 @@ class Database {
         .orderBy("startDate", descending: true);
   }
 
-  Future<void> addGoing(String ownerId, String previewImg, String uid,
-      String moovId, String strName, strPic, startDate) async {
+  Future<void> addGoing(
+      String ownerId,
+      String previewImg,
+      String uid,
+      String moovId,
+      String strName,
+      strPic,
+      startDate,
+      title,
+      description,
+      location,
+      address,
+      ownerProPic,
+      ownerName,
+      ownerEmail,
+      likedArray) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$moovId');
 
-      addGoingToNotificationFeed(ownerId, previewImg, moovId, startDate);
+      addGoingToNotificationFeed(
+          ownerId,
+          previewImg,
+          moovId,
+          startDate,
+          title,
+          description,
+          location,
+          address,
+          ownerProPic,
+          ownerName,
+          ownerEmail,
+          likedArray);
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
         "strName": strName,
@@ -92,7 +119,18 @@ class Database {
   }
 
   addGoingToNotificationFeed(
-      String ownerId, String previewImg, dynamic moovId, startDate) {
+      String ownerId,
+      String previewImg,
+      dynamic moovId,
+      startDate,
+      String title,
+      String description,
+      String location,
+      address,
+      String ownerProPic,
+      String ownerName,
+      String ownerEmail,
+      List<dynamic> likedArray) {
     bool isNotPostOwner = strUserId != ownerId;
     if (isNotPostOwner) {
       notificationFeedRef
@@ -108,7 +146,15 @@ class Database {
         "previewImg": previewImg,
         "postId": moovId,
         "timestamp": timestamp,
-        "startDate": startDate
+        "startDate": startDate,
+        "title": title,
+        "description": description,
+        "location": location,
+        "address": address,
+        "ownerProPic": ownerProPic,
+        "ownerName": ownerName,
+        "ownerEmail": ownerEmail,
+        "likedArray": likedArray
       });
     }
   }
@@ -216,8 +262,22 @@ class Database {
   //   });
   // }
 
-  Future<void> removeGoing(String ownerId, String previewImg, String uid,
-      String moovId, String strName, strPic, startDate) async {
+  Future<void> removeGoing(
+      String ownerId,
+      String previewImg,
+      String uid,
+      String moovId,
+      String strName,
+      strPic,
+      startDate,
+      title,
+      description,
+      location,
+      address,
+      ownerProPic,
+      ownerName,
+      ownerEmail,
+      likedArray) async {
     return dbRef.runTransaction((transaction) async {
       removeGoingFromNotificationFeed(ownerId, previewImg, moovId);
 

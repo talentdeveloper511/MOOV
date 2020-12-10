@@ -93,55 +93,23 @@ class NotificationFeedItem extends StatelessWidget {
   final String userProfilePic;
   final String userEmail;
 
+  //for redirecting to PostDetail
+  final String title;
+  final String description;
+  final String location;
+  final String ownerProPic;
+  final String ownerName;
+  final String ownerEmail;
+  final dynamic startDate, address, moovId;
+  final List<dynamic> likedArray;
+
   // final String commentData;
   final Timestamp timestamp;
-  dynamic startDate, address, moovId;
-  List<dynamic> likedArray;
-
-  var ownerName;
-  var ownerEmail;
-  var ownerPic;
-  var title;
-  var description;
-  var location;
-
-  getdata() {
-    Firestore.instance.collection('food').snapshots().listen((snapshot) {
-      for (var i = 0; i < snapshot.documents.length; i++) {
-        DocumentSnapshot course = snapshot.documents[i];
-        ownerName = course['userName'];
-        ownerEmail = course['userEmail'];
-        ownerPic = course['profilePic'];
-        title = course['title'];
-        description = course['description'];
-        startDate = course['startDate'];
-        location = course['location'];
-        address = course['address'];
-        likedArray = course['liked'];
-      }
-    });
-  }
-
-  getPostData() async {
-    QuerySnapshot snapshot = await postsRef.getDocuments();
-    List<NotificationFeedItem> postItems = [];
-    snapshot.documents.forEach((doc) {
-      ownerName = doc['userName'];
-      ownerEmail = doc['userEmail'];
-      ownerPic = doc['profilePic'];
-      title = doc['title'];
-      description = doc['description'];
-      startDate = doc['startDate'];
-      location = doc['location'];
-      address = doc['address'];
-      likedArray = doc['liked'];
-      return postItems;
-      // print('Activity Feed Item: ${doc.data}');
-    });
-  }
 
   NotificationFeedItem(
       {this.title,
+      this.description,
+      this.location,
       this.username,
       this.userEmail,
       this.userId,
@@ -150,9 +118,14 @@ class NotificationFeedItem extends StatelessWidget {
       this.postId,
       this.userProfilePic,
       // this.commentData,
+
       this.timestamp,
+      this.ownerProPic,
+      this.ownerName,
+      this.ownerEmail,
       this.startDate,
       this.address,
+      this.moovId,
       this.likedArray});
 
   factory NotificationFeedItem.fromDocument(DocumentSnapshot doc) {
@@ -165,12 +138,21 @@ class NotificationFeedItem extends StatelessWidget {
       userProfilePic: doc['userProfilePic'],
       // commentData: doc['commentData'],
       timestamp: doc['timestamp'],
+      title: doc['title'],
+      description: doc['description'],
+      ownerProPic: doc['ownerProPic'],
+      ownerName: doc['ownerName'],
+      ownerEmail: doc['ownerEmail'],
+      address: doc['address'],
+      location: doc['location'],
+      moovId: doc['moovId'],
+      likedArray: doc['likedArray'],
+      startDate: doc['startDate'],
       previewImg: doc['previewImg'],
     );
   }
 
   showPost(context) {
-    getPostData();
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -181,7 +163,7 @@ class NotificationFeedItem extends StatelessWidget {
                 startDate,
                 location,
                 address,
-                ownerPic,
+                ownerProPic,
                 ownerName,
                 ownerEmail,
                 likedArray,

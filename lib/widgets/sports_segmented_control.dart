@@ -295,24 +295,38 @@ class SportsSegmentState extends State<SportsSegment> {
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
-                                              course["userId"],
-                                              course["image"],
-                                              strUserId,
-                                              course.documentID,
-                                              strUserName,
-                                              strUserPic,
-                                              course["startDate"]
-                                            );
+                                                course["userId"],
+                                                course["image"],
+                                                strUserId,
+                                                course.documentID,
+                                                strUserName,
+                                                strUserPic,
+                                                course["startDate"],
+                                                course["title"],
+                                                course["description"],
+                                                course["location"],
+                                                course["address"],
+                                                course["profilePic"],
+                                                course["userName"],
+                                                course["userEmail"],
+                                                course["liked"]);
                                           } else {
                                             Database().addGoing(
-                                              course["userId"],
-                                              course["image"],
-                                              strUserId,
-                                              course.documentID,
-                                              strUserName,
-                                              strUserPic,
-                                              course["startDate"]
-                                            );
+                                                course["userId"],
+                                                course["image"],
+                                                strUserId,
+                                                course.documentID,
+                                                strUserName,
+                                                strUserPic,
+                                                course["startDate"],
+                                                course["title"],
+                                                course["description"],
+                                                course["location"],
+                                                course["address"],
+                                                course["profilePic"],
+                                                course["userName"],
+                                                course["userEmail"],
+                                                course["liked"]);
                                           }
                                         });
                                       },

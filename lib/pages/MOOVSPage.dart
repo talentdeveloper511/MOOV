@@ -269,7 +269,15 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                               course.documentID,
                                               strUserName,
                                               strUserPic,
-                                              course["startDate"]);
+                                              course["startDate"],
+                                              course["title"],
+                                              course["description"],
+                                              course["location"],
+                                              course["address"],
+                                              course["profilePic"],
+                                              course["userName"],
+                                              course["userEmail"],
+                                              course["liked"]);
                                         });
                                       },
                                     ),
