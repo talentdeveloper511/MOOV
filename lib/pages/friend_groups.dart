@@ -75,7 +75,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
           ),
         ),
       ),
-      body: Center(child: Text('You have no FriendGroups.')),
+      body: Center(child: Text('You have no Friend Groups.')),
     );
   }
 }

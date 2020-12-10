@@ -4,7 +4,7 @@ import 'package:MOOV/pages/create_account.dart';
 import 'package:MOOV/pages/sign_in.dart';
 import 'package:MOOV/pages/upload.dart';
 import 'package:MOOV/widgets/bottom_navigation.dart';
-import 'package:MOOV/widgets/segmented_control.dart';
+import 'package:MOOV/widgets/food_segment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';

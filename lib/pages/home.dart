@@ -22,6 +22,8 @@ final DateTime timestamp = DateTime.now();
 User currentUser;
 
 class Home extends StatefulWidget {
+
+  int score;
   @override
   _HomeState createState() => _HomeState();
 }
@@ -82,7 +84,8 @@ class _HomeState extends State<Home> {
         "email": user.email,
         "displayName": user.displayName,
         "bio": "",
-        "timestamp": timestamp
+        "timestamp": timestamp,
+        "score": 0
       });
       doc = await usersRef.document(user.id).get();
     }
