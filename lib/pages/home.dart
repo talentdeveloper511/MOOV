@@ -22,8 +22,6 @@ final DateTime timestamp = DateTime.now();
 User currentUser;
 
 class Home extends StatefulWidget {
-
-  int score;
   @override
   _HomeState createState() => _HomeState();
 }

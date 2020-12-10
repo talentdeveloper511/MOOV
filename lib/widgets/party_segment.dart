@@ -721,7 +721,7 @@ class PartySegmentState extends State<PartySegment> {
                                           style: TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold)),
-                                      Text(course['location'],
+                                      Text(course['address'],
                                           style: TextStyle(
                                             fontSize: 12.0,
                                           )),

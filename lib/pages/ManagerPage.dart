@@ -82,7 +82,8 @@ class _ManagerPageState extends State<ManagerPage> {
         "email": user.email,
         "displayName": user.displayName,
         "bio": "",
-        "timestamp": timestamp
+        "timestamp": timestamp,
+        "score": 0
       });
       doc = await usersRef.document(user.id).get();
     }
