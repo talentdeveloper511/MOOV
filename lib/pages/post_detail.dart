@@ -311,11 +311,12 @@ class PostTimeAndPlace extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 4.0),
-                  child: Icon(Icons.place, color: TextThemes.ndGold,),
+                  child: Icon(
+                    Icons.place,
+                    color: TextThemes.ndGold,
+                  ),
                 ),
                 Text('WHERE: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(location),
-                Text(' — '),
                 Text(address)
               ],
             ),

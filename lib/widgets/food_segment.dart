@@ -159,58 +159,52 @@ class FoodSegmentState extends State<FoodSegment> {
                     },
                     onDoubleTap: () {
                       setState(() {
-                                          List<dynamic> likedArray =
-                                              course["liked"];
-                                          List<String> uidArray =
-                                              List<String>();
-                                          if (likedArray != null) {
-                                            likeCount = likedArray.length;
-                                            for (int i = 0;
-                                                i < likeCount;
-                                                i++) {
-                                              var id = likedArray[i]["uid"];
-                                              uidArray.add(id);
-                                            }
-                                          }
+                        List<dynamic> likedArray = course["liked"];
+                        List<String> uidArray = List<String>();
+                        if (likedArray != null) {
+                          likeCount = likedArray.length;
+                          for (int i = 0; i < likeCount; i++) {
+                            var id = likedArray[i]["uid"];
+                            uidArray.add(id);
+                          }
+                        }
 
-                                          if (uidArray != null &&
-                                              uidArray.contains(strUserId)) {
-                                            Database().removeGoing(
-                                                course["userId"],
-                                                course["image"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                course["startDate"],
-                                                course["title"],
-                                                course["description"],
-                                                course["location"],
-                                                course["address"],
-                                                course["profilePic"],
-                                                course["userName"],
-                                                course["userEmail"],
-                                                likedArray);
-                                          } else {
-                                            Database().addGoing(
-                                                course["userId"],
-                                                course["image"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                course["startDate"],
-                                                course["title"],
-                                                course["description"],
-                                                course["location"],
-                                                course["address"],
-                                                course["profilePic"],
-                                                course["userName"],
-                                                course["userEmail"],
-                                                likedArray);
-                                          }
-                                        });
-                                     
+                        if (uidArray != null && uidArray.contains(strUserId)) {
+                          Database().removeGoing(
+                              course["userId"],
+                              course["image"],
+                              strUserId,
+                              course.documentID,
+                              strUserName,
+                              strUserPic,
+                              course["startDate"],
+                              course["title"],
+                              course["description"],
+                              course["location"],
+                              course["address"],
+                              course["profilePic"],
+                              course["userName"],
+                              course["userEmail"],
+                              likedArray);
+                        } else {
+                          Database().addGoing(
+                              course["userId"],
+                              course["image"],
+                              strUserId,
+                              course.documentID,
+                              strUserName,
+                              strUserPic,
+                              course["startDate"],
+                              course["title"],
+                              course["description"],
+                              course["location"],
+                              course["address"],
+                              course["profilePic"],
+                              course["userName"],
+                              course["userEmail"],
+                              likedArray);
+                        }
+                      });
                     },
                     child: Column(
                       children: [
@@ -295,7 +289,7 @@ class FoodSegmentState extends State<FoodSegment> {
                                           style: TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold)),
-                                      Text(course['location'],
+                                      Text(course['address'],
                                           style: TextStyle(
                                             fontSize: 12.0,
                                           )),

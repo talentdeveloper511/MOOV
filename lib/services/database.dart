@@ -33,6 +33,7 @@ class Database {
 
   void createPost(
       {title,
+      String uid,
       description,
       type,
       likeCounter,
@@ -72,6 +73,12 @@ class Database {
     Firestore.instance
         .collection("food")
         .orderBy("startDate", descending: true);
+
+    dbRef.runTransaction((transaction) async {
+      final DocumentReference ref2 = dbRef.document('users/$uid');
+      print('$uid');
+      transaction.update(ref2, {'score': FieldValue.increment(20)});
+    });
   }
 
   Future<void> addGoing(
@@ -92,7 +99,9 @@ class Database {
       likedArray) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$moovId');
-      final DocumentReference ref2 = dbRef.document('users/$ownerId');
+      final DocumentReference ref2 = dbRef.document('users/$uid');
+      print('$uid');
+      transaction.update(ref2, {'score': FieldValue.increment(2)});
 
       addGoingToNotificationFeed(
           ownerId,
@@ -116,7 +125,6 @@ class Database {
         'liked': FieldValue.arrayUnion([serializedMessage]),
         'likeCounter': FieldValue.increment(1)
       });
-      transaction.update(ref2, {'score': FieldValue.increment(2)});
     });
   }
 
@@ -246,6 +254,7 @@ class Database {
       DocumentSnapshot snapshot;
       //   while (snapshot == null) {
       final DocumentReference userRef = dbRef.document('food/$moovId');
+      final DocumentReference userRef2 = dbRef.document('users/$uid');
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
         "strName": strName,
@@ -255,6 +264,7 @@ class Database {
         'liked': FieldValue.arrayRemove([serializedMessage]),
         'likeCounter': FieldValue.increment(-1)
       });
+      transaction.update(userRef2, {'score': FieldValue.increment(-2)});
     });
   }
 

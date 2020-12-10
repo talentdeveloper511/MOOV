@@ -21,6 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
+    dynamic userScore = currentUser.score.toString();
     final strUserName = user.displayName;
     final strUserPic = user.photoUrl;
     dynamic likeCount;
@@ -110,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Text(
                 currentUser.displayName != null
                     ? currentUser.displayName
-                    : "Heena-Android",
+                    : "Username not found",
                 style: TextThemes.extraBold,
               ),
             ),
@@ -139,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextThemes.bodyText1,
                 ),
                 Text(
-                  currentUser.score.toString(),
+                  userScore,
                   style: TextThemes.bodyText1,
                 )
               ],
