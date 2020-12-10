@@ -85,7 +85,7 @@ class _FoodFeedState extends State<FoodFeed> {
             ),
           ],
         ),
-        body: SegmentedControl()
+        body: FoodSegment()
         // StreamBuilder(
         //     stream: Firestore.instance
         //         .collection('food')
