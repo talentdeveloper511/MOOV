@@ -131,6 +131,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'MOOV Score: ',
+                  style: TextThemes.bodyText1,
+                ),
+                Text(
+                  currentUser.score.toString(),
+                  style: TextThemes.bodyText1,
+                )
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 7.5, bottom: 30, top: 15.5),
               child: SizedBox(
