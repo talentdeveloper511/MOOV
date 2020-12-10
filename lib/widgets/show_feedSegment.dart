@@ -301,6 +301,7 @@ class ShowSegmentState extends State<ShowSegment> {
                                               course.documentID,
                                               strUserName,
                                               strUserPic,
+                                              course["startDate"]
                                             );
                                           } else {
                                             Database().addGoing(
@@ -310,6 +311,7 @@ class ShowSegmentState extends State<ShowSegment> {
                                               course.documentID,
                                               strUserName,
                                               strUserPic,
+                                              course["startDate"]
                                             );
                                           }
                                         });

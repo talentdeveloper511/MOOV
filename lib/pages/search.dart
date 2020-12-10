@@ -1,7 +1,10 @@
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/widgets/trending_segment.dart';
+import 'package:MOOV/widgets/party_segment.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
+import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +19,10 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
-
+  bool get wantKeepAlive => true;
   handleSearch(String query) {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
@@ -65,7 +68,7 @@ class _SearchState extends State<Search> {
                   fillColor: Colors.white,
                   hintStyle: TextStyle(fontSize: 15),
                   contentPadding: EdgeInsets.only(top: 18, bottom: 10),
-                  hintText: "Search for user or MOOV...",
+                  hintText: "Search for users or MOOVs...",
                   filled: true,
                   prefixIcon: Icon(
                     Icons.account_box,
@@ -85,27 +88,9 @@ class _SearchState extends State<Search> {
     );
   }
 
-  Container buildNoContent() {
+  buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
-    return Container(
-      child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Text(
-              "TRENDING PAGE HERE",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w600,
-                fontSize: 60.0,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return TrendingSegment();
   }
 
   buildSearchResults() {
@@ -130,8 +115,9 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.8),
+      backgroundColor: Colors.white12,
       appBar: buildSearchField(),
       body:
           searchResultsFuture == null ? buildNoContent() : buildSearchResults(),

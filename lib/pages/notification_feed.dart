@@ -122,6 +122,24 @@ class NotificationFeedItem extends StatelessWidget {
     });
   }
 
+  getPostData() async {
+    QuerySnapshot snapshot = await postsRef.getDocuments();
+    List<NotificationFeedItem> postItems = [];
+    snapshot.documents.forEach((doc) {
+      ownerName = doc['userName'];
+      ownerEmail = doc['userEmail'];
+      ownerPic = doc['profilePic'];
+      title = doc['title'];
+      description = doc['description'];
+      startDate = doc['startDate'];
+      location = doc['location'];
+      address = doc['address'];
+      likedArray = doc['liked'];
+      return postItems;
+      // print('Activity Feed Item: ${doc.data}');
+    });
+  }
+
   NotificationFeedItem(
       {this.title,
       this.username,
@@ -152,7 +170,7 @@ class NotificationFeedItem extends StatelessWidget {
   }
 
   showPost(context) {
-    getdata();
+    getPostData();
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -253,7 +271,7 @@ class NotificationFeedItem extends StatelessWidget {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => ProfilePage()));
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            OtherProfile(userProfilePic, username, userId, userEmail, username)));
+        builder: (context) => OtherProfile(
+            userProfilePic, username, userId, userEmail, username)));
   }
 }

@@ -263,13 +263,13 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                               googleSignIn.currentUser;
                                           final strUserId = user.id;
                                           Database().removeGoing(
-                                            course["userId"],
-                                            course["image"],
-                                            strUserId,
-                                            course.documentID,
-                                            strUserName,
-                                            strUserPic,
-                                          );
+                                              course["userId"],
+                                              course["image"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                              course["startDate"]);
                                         });
                                       },
                                     ),

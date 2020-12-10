@@ -315,22 +315,22 @@ class SegmentedControlState extends State<SegmentedControl> {
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
                                             Database().removeGoing(
-                                              course["userId"],
-                                              course["image"],
-                                              strUserId,
-                                              course.documentID,
-                                              strUserName,
-                                              strUserPic,
-                                            );
+                                                course["userId"],
+                                                course["image"],
+                                                strUserId,
+                                                course.documentID,
+                                                strUserName,
+                                                strUserPic,
+                                                course["startDate"]);
                                           } else {
                                             Database().addGoing(
-                                              course["userId"],
-                                              course["image"],
-                                              strUserId,
-                                              course.documentID,
-                                              strUserName,
-                                              strUserPic,
-                                            );
+                                                course["userId"],
+                                                course["image"],
+                                                strUserId,
+                                                course.documentID,
+                                                strUserName,
+                                                strUserPic,
+                                                course["startDate"]);
                                           }
                                         });
                                       },
@@ -611,7 +611,8 @@ class SegmentedControlState extends State<SegmentedControl> {
                                                 strUserId,
                                                 course.documentID,
                                                 strUserName,
-                                                strUserPic);
+                                                strUserPic,
+                                                course["startDate"]);
                                           } else {
                                             Database().addGoing(
                                               course["userId"],
@@ -620,6 +621,7 @@ class SegmentedControlState extends State<SegmentedControl> {
                                               course.documentID,
                                               strUserName,
                                               strUserPic,
+                                              course["startDate"]
                                             );
                                           }
                                         });

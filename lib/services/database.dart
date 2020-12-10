@@ -12,6 +12,7 @@ class Database {
   var postId;
   var postPic;
   var ownerId;
+  dynamic startDate;
 
   final GoogleSignInAccount user = googleSignIn.currentUser;
   final strUserId = googleSignIn.currentUser.id;
@@ -33,6 +34,7 @@ class Database {
       {title,
       description,
       type,
+      likeCounter,
       privacy,
       location,
       address,
@@ -49,6 +51,7 @@ class Database {
       'title': title,
       'likes': likes,
       'type': type,
+      'likeCounter': likeCounter,
       'privacy': privacy,
       'description': description,
       'location': location,
@@ -70,12 +73,12 @@ class Database {
         .orderBy("startDate", descending: true);
   }
 
-  Future<void> addGoing(
-      String ownerId, String previewImg, String uid, String moovId, String strName, strPic) async {
+  Future<void> addGoing(String ownerId, String previewImg, String uid,
+      String moovId, String strName, strPic, startDate) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$moovId');
 
-      addGoingToNotificationFeed(ownerId, previewImg, moovId);
+      addGoingToNotificationFeed(ownerId, previewImg, moovId, startDate);
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
         "strName": strName,
@@ -83,11 +86,13 @@ class Database {
       };
       transaction.update(ref, {
         'liked': FieldValue.arrayUnion([serializedMessage]),
+        'likeCounter': FieldValue.increment(1)
       });
     });
   }
 
-  addGoingToNotificationFeed(String ownerId, String previewImg, String moovId) {
+  addGoingToNotificationFeed(
+      String ownerId, String previewImg, dynamic moovId, startDate) {
     bool isNotPostOwner = strUserId != ownerId;
     if (isNotPostOwner) {
       notificationFeedRef
@@ -102,12 +107,14 @@ class Database {
         "userProfilePic": currentUser.photoUrl,
         "previewImg": previewImg,
         "postId": moovId,
-        "timestamp": timestamp
+        "timestamp": timestamp,
+        "startDate": startDate
       });
     }
   }
 
-  removeGoingFromNotificationFeed(String ownerId, String previewImg, String moovId) {
+  removeGoingFromNotificationFeed(
+      String ownerId, String previewImg, String moovId) {
     bool isNotPostOwner = strUserId != ownerId;
     if (isNotPostOwner) {
       notificationFeedRef
@@ -209,8 +216,8 @@ class Database {
   //   });
   // }
 
-  Future<void> removeGoing(
-      String ownerId, String previewImg, String uid, String moovId, String strName, strPic) async {
+  Future<void> removeGoing(String ownerId, String previewImg, String uid,
+      String moovId, String strName, strPic, startDate) async {
     return dbRef.runTransaction((transaction) async {
       removeGoingFromNotificationFeed(ownerId, previewImg, moovId);
 
@@ -223,9 +230,9 @@ class Database {
         "strPic": strPic,
       };
       transaction.update(userRef, {
-        'liked': FieldValue.arrayRemove([serializedMessage])
+        'liked': FieldValue.arrayRemove([serializedMessage]),
+        'likeCounter': FieldValue.increment(-1)
       });
-    
     });
   }
 
@@ -241,7 +248,6 @@ class Database {
     ref.setData({
       'request': FieldValue.arrayUnion([serializedMessage]),
     });
-   
   }
 
   Future<void> rejectFriendRequest(
@@ -261,56 +267,54 @@ class Database {
   }
 }
 
+// void getData() {
+//   dbRef.collection("books").getDocuments().then((QuerySnapshot snapshot) {
+//     snapshot.documents.forEach((f) => print('${f.data}}'));
+//   });
+// }
 
+// Future<List<String>> getFavorites(String uid) async {
+//   DocumentSnapshot querySnapshot =
+//       await Firestore.instance.collection('food').document(uid).get();
+//   if (querySnapshot.exists &&
+//       querySnapshot.data.containsKey('favorites') &&
+//       querySnapshot.data['favorites'] is List) {
+//     // Create a new List<String> from List<dynamic>
+//     return List<String>.from(querySnapshot.data['favorites']);
+//   }
+//   return [];
+// }
 
-  // void getData() {
-  //   dbRef.collection("books").getDocuments().then((QuerySnapshot snapshot) {
-  //     snapshot.documents.forEach((f) => print('${f.data}}'));
-  //   });
-  // }
+// void updateData() {
+//   try {
+//     dbRef
+//         .collection('books')
+//         .document('1')
+//         .updateData({'description': 'Head First Flutter'});
+//   } catch (e) {
+//     print(e.toString());
+//   }
+// }
 
-  // Future<List<String>> getFavorites(String uid) async {
-  //   DocumentSnapshot querySnapshot =
-  //       await Firestore.instance.collection('food').document(uid).get();
-  //   if (querySnapshot.exists &&
-  //       querySnapshot.data.containsKey('favorites') &&
-  //       querySnapshot.data['favorites'] is List) {
-  //     // Create a new List<String> from List<dynamic>
-  //     return List<String>.from(querySnapshot.data['favorites']);
-  //   }
-  //   return [];
-  // }
+// void deleteData() {
+//   try {
+//     dbRef.collection('books').document('1').delete();
+//   } catch (e) {
+//     print(e.toString());
+//   }
+// }
 
-  // void updateData() {
-  //   try {
-  //     dbRef
-  //         .collection('books')
-  //         .document('1')
-  //         .updateData({'description': 'Head First Flutter'});
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
-
-  // void deleteData() {
-  //   try {
-  //     dbRef.collection('books').document('1').delete();
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
-
-    /*final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
+/*final DocumentReference ref = dbRef.document('food/$moovId/likes/shred-$index');
         snapshot = await transaction.get(ref);
 
         if (!snapshot.exists) {
           index = random.nextInt(10);
           snapshot = null;
         }*/
-      //   }
+//   }
 
-      //    transaction.update(snapshot.reference, {'counter': FieldValue.increment(-1)});
-      /* final DocumentReference userRef = dbRef.document('users/$uid');
+//    transaction.update(snapshot.reference, {'counter': FieldValue.increment(-1)});
+/* final DocumentReference userRef = dbRef.document('users/$uid');
       transaction.update(userRef, {
         'liked': FieldValue.arrayRemove([moovId])
       });*/

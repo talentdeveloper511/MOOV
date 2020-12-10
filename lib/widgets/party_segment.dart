@@ -325,7 +325,8 @@ class PartySegmentState extends State<PartySegment> {
                                                     strUserId,
                                                     course.documentID,
                                                     strUserName,
-                                                    strUserPic);
+                                                    strUserPic,
+                                                    course["startDate"]);
                                               } else {
                                                 Database().addGoing(
                                                     course["userId"],
@@ -333,7 +334,8 @@ class PartySegmentState extends State<PartySegment> {
                                                     strUserId,
                                                     course.documentID,
                                                     strUserName,
-                                                    strUserPic);
+                                                    strUserPic,
+                                                    course["startDate"]);
                                                 print(course["userId"]);
                                               }
                                             });
