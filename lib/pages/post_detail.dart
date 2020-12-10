@@ -296,7 +296,7 @@ class PostTimeAndPlace extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 4.0),
-                child: Icon(Icons.timer, color: TextThemes.ndGold,),
+                child: Icon(Icons.timer, color: TextThemes.ndGold),
               ),
               Text('WHEN: ', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(

@@ -58,6 +58,6 @@ class GoingPage extends StatelessWidget {
             ),
           );
         })
-        : Center(child: Image.asset('lib/assets/chens.jpg', height: 40,));
+        : Center(child: Text(''));
   }
 }

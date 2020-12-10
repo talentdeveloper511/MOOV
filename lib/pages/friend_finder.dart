@@ -1,4 +1,5 @@
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/pages/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -120,10 +121,25 @@ class FriendFinder extends StatelessWidget {
                         ]));
                   })
               : Center(
-                  child: Image.asset(
-                  'lib/assets/chens.jpg',
-                  height: 40,
-                ))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text("No plans right now."),
+                      ),
+                      FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Search()),
+                );
+              },
+              label: const Text("Find some!",
+                  style: TextStyle(fontSize: 16, color: Colors.white)))
+                    ],
+                  ))),
     );
   }
 }

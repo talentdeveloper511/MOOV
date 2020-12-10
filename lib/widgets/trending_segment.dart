@@ -27,6 +27,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
   void initState() {
     super.initState();
     loadCupertinoTabs();
+    
   }
 
   void loadCupertinoTabs() {
