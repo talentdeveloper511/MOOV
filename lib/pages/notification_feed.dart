@@ -34,7 +34,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TextThemes.ndBlue,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(

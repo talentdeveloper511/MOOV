@@ -42,7 +42,7 @@ class SeeContactsButton extends StatelessWidget {
             child: Icon(Icons.contacts, color: TextThemes.ndGold),
           ),
           Container(
-              child: Text('Import Contacts',
+              child: Text('Invite Contacts',
                   style: TextStyle(color: TextThemes.ndBlue))),
         ],
       ),

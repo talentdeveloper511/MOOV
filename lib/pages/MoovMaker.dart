@@ -309,6 +309,26 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           ),
           Padding(
             padding: EdgeInsets.all(20.0),
+            child: TextFormField(
+              controller: addressController,
+              decoration: InputDecoration(
+                icon: Icon(Icons.place, color: TextThemes.ndGold),
+                labelText: "Where's it at?",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "Where's it at?";
+                }
+                return null;
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(20.0),
             child: DropdownButtonFormField(
               value: privacyDropdownValue,
               icon: Icon(Icons.arrow_downward, color: TextThemes.ndGold),
@@ -360,56 +380,37 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               },
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: DropdownButtonFormField(
-              value: locationDropdownValue,
-              icon: Icon(Icons.arrow_downward, color: TextThemes.ndGold),
-              decoration: InputDecoration(
-                labelText: "Select Location",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              items: listOfLocations.map((String value) {
-                return new DropdownMenuItem<String>(
-                  value: value,
-                  child: new Text(value),
-                );
-              }).toList(),
-              onChanged: (String newValue) {
-                setState(() {
-                  locationDropdownValue = newValue;
-                });
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Select Event Type';
-                }
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: TextFormField(
-              controller: addressController,
-              decoration: InputDecoration(
-                icon: Icon(Icons.place, color: TextThemes.ndGold),
-                labelText: "Enter Address or Room Number",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Where's it at?";
-                }
-                return null;
-              },
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.all(20.0),
+          //   child: DropdownButtonFormField(
+          //     value: locationDropdownValue,
+          //     icon: Icon(Icons.arrow_downward, color: TextThemes.ndGold),
+          //     decoration: InputDecoration(
+          //       labelText: "Select Location",
+          //       enabledBorder: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(10.0),
+          //       ),
+          //     ),
+          //     items: listOfLocations.map((String value) {
+          //       return new DropdownMenuItem<String>(
+          //         value: value,
+          //         child: new Text(value),
+          //       );
+          //     }).toList(),
+          //     onChanged: (String newValue) {
+          //       setState(() {
+          //         locationDropdownValue = newValue;
+          //       });
+          //     },
+          //     validator: (value) {
+          //       if (value.isEmpty) {
+          //         return 'Select Event Type';
+          //       }
+          //       return null;
+          //     },
+          //   ),
+          // ),
+
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: DateTimeField(

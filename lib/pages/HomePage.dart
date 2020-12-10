@@ -3,8 +3,10 @@ import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/FoodFeed.dart';
 import 'package:MOOV/pages/SportFeed.dart';
 import 'package:MOOV/pages/ShowFeed.dart';
+import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/PartyFeed.dart';
 import 'package:MOOV/pages/ManagerPage.dart';
+import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/search.dart';
 import 'package:MOOV/pages/notification_page.dart';
@@ -151,8 +153,8 @@ class _HomePageState extends State<HomePage>
                       builder: (context) => MoovMaker(postModel: PostModel())),
                 );
               },
-              label: const Text("Post a MOOV",
-                  style: TextStyle(fontSize: 16, color: Colors.white))),
+              label: const Text("Make a MOOV",
+                  style: TextStyle(fontSize: 20, color: Colors.white))),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -174,8 +176,12 @@ class _HomePageState extends State<HomePage>
                 color: Colors.white,
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                 onPressed: () {
-                  // Implement navigation to shopping cart page here...
-                  print('Click Search');
+                  // Implement navigation to leaderboard page here...
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LeaderBoardPage()));
+                  print('Leaderboards clicked');
                 },
               ),
               IconButton(
@@ -183,11 +189,11 @@ class _HomePageState extends State<HomePage>
                 icon: Icon(Icons.notifications_active),
                 color: Colors.white,
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        NotificationFeed()));
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationFeed()));
                 },
               )
             ],
@@ -294,8 +300,7 @@ class _HomePageState extends State<HomePage>
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => FriendFinder(
-                                        likedArray, eventprofile, title)));
+                                    builder: (context) => FriendGroupsPage()));
                             // Implement navigation to shopping cart page here...
                             print('FRIEND GROUPS CLICKED');
                           },
@@ -303,7 +308,15 @@ class _HomePageState extends State<HomePage>
                         Align(
                             alignment: Alignment.center,
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FriendGroupsPage()));
+                                // Implement navigation to shopping cart page here...
+                                print('FRIEND GROUPS CLICKED');
+                              },
                               child: Card(
                                 borderOnForeground: true,
                                 child: Padding(
