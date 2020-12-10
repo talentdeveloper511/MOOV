@@ -151,8 +151,8 @@ class _HomePageState extends State<HomePage>
                       builder: (context) => MoovMaker(postModel: PostModel())),
                 );
               },
-              label: const Text("Post a MOOV",
-                  style: TextStyle(fontSize: 16, color: Colors.white))),
+              label: const Text("Make a MOOV",
+                  style: TextStyle(fontSize: 20, color: Colors.white))),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -183,11 +183,11 @@ class _HomePageState extends State<HomePage>
                 icon: Icon(Icons.notifications_active),
                 color: Colors.white,
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        NotificationFeed()));
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationFeed()));
                 },
               )
             ],
