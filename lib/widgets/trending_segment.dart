@@ -27,7 +27,6 @@ class TrendingSegmentState extends State<TrendingSegment> {
   void initState() {
     super.initState();
     loadCupertinoTabs();
-    
   }
 
   void loadCupertinoTabs() {
@@ -80,27 +79,32 @@ class TrendingSegmentState extends State<TrendingSegment> {
           return Container(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Image.asset(
-                      //   'lib/assets/fire.png',
-                      //   height: 30,
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: Text(
-                          'TRENDING MOOVs',
-                          style: TextThemes.extraBold,
+                ColoredBox(
+                  color: TextThemes.ndBlue,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Image.asset(
+                        //   'lib/assets/fire.png',
+                        //   height: 30,
+                        // ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 10.0, right: 10.0),
+                          child: Text('TRENDING',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontFamily: 'Pacifico')),
                         ),
-                      ),
-                      // Image.asset(
-                      //   'lib/assets/fire.png',
-                      //   height: 30,
-                      // )
-                    ],
+                        // Image.asset(
+                        //   'lib/assets/fire.png',
+                        //   height: 30,
+                        // )
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
