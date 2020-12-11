@@ -120,7 +120,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                             gradient: LinearGradient(
                                 begin: Alignment.topRight,
                                 end: Alignment(0.9, 0.9),
-                                colors: [Colors.black, TextThemes.ndBlue])),
+                                colors: [Colors.teal, TextThemes.ndBlue])),
                         child: Center(
                             child: Padding(
                           padding: const EdgeInsets.all(15.0),
@@ -143,7 +143,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                           ClipOval(
                             child: Material(
                               child: InkWell(
-                                splashColor: Colors.red, // inkwell color
+                                splashColor: TextThemes.ndGold, // inkwell color
                                 child: SizedBox(
                                     width: 20,
                                     height: 20,
