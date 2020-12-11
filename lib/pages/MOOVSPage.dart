@@ -1,4 +1,6 @@
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/leaderboard.dart';
+import 'package:MOOV/pages/notification_feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV/helpers/themes.dart';
@@ -30,42 +32,39 @@ class _MOOVSPageState extends State<MOOVSPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Image.asset('lib/assets/ndlogo.png', height: 100),
+            ),
         backgroundColor: TextThemes.ndBlue,
         //pinned: true,
         actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.insert_chart),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              // Implement navigation to shopping cart page here...
-              print('Leaderboards clicked');
-            },
-          ),
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.notifications_active),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              // Implement navigation to notifications page here...
-              List<dynamic> likedArray;
-              Firestore.instance
-                  .collection("users")
-                  .document(strUserId)
-                  .get()
-                  .then((docSnapshot) => {
-                        likedArray = docSnapshot.data['request'],
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    NotificationPage(strUserId, likedArray))),
-                      });
-              print('Notifications clicked');
-            },
-          )
+              IconButton(
+                padding: EdgeInsets.all(5.0),
+                icon: Icon(Icons.insert_chart),
+                color: Colors.white,
+                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                onPressed: () {
+                  // Implement navigation to leaderboard page here...
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LeaderBoardPage()));
+                  print('Leaderboards clicked');
+                },
+              ),
+              IconButton(
+                padding: EdgeInsets.all(5.0),
+                icon: Icon(Icons.notifications_active),
+                color: Colors.white,
+                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationFeed()));
+                },
+              )
         ],
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
@@ -140,6 +139,55 @@ class _MOOVSPageState extends State<MOOVSPage> {
                               likedArray,
                               course.documentID)));
                     },
+                    onDoubleTap: () {
+                      setState(() {
+                        List<dynamic> likedArray = course["liked"];
+                        List<String> uidArray = List<String>();
+                        if (likedArray != null) {
+                          likeCount = likedArray.length;
+                          for (int i = 0; i < likeCount; i++) {
+                            var id = likedArray[i]["uid"];
+                            uidArray.add(id);
+                          }
+                        }
+
+                        if (uidArray != null && uidArray.contains(strUserId)) {
+                          Database().removeGoing(
+                              course["userId"],
+                              course["image"],
+                              strUserId,
+                              course.documentID,
+                              strUserName,
+                              strUserPic,
+                              course["startDate"],
+                              course["title"],
+                              course["description"],
+                              course["location"],
+                              course["address"],
+                              course["profilePic"],
+                              course["userName"],
+                              course["userEmail"],
+                              likedArray);
+                        } else {
+                          Database().addGoing(
+                              course["userId"],
+                              course["image"],
+                              strUserId,
+                              course.documentID,
+                              strUserName,
+                              strUserPic,
+                              course["startDate"],
+                              course["title"],
+                              course["description"],
+                              course["location"],
+                              course["address"],
+                              course["profilePic"],
+                              course["userName"],
+                              course["userEmail"],
+                              likedArray);
+                        }
+                      });
+                    },
                     child: Column(
                       children: [
                         ListTile(
@@ -180,17 +228,46 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                 ),
                               ),
                               Padding(padding: const EdgeInsets.all(5.0)),
-                              Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Text(
-                                        DateFormat('EEEE, MMM d, yyyy').format(
-                                            course['startDate'].toDate()),
-                                        style: TextStyle(
+                              Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 4.0),
+                                        child: Icon(Icons.timer,
+                                            color: TextThemes.ndGold, size: 20),
+                                      ),
+                                      Text('WHEN: ',
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                          DateFormat('MMMd').add_jm().format(
+                                              course['startDate'].toDate()),
+                                          style: TextStyle(
                                             fontSize: 12.0,
-                                            fontWeight: FontWeight.bold)),
-                                  )),
+                                          )),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 4.0),
+                                        child: Icon(Icons.place,
+                                            color: TextThemes.ndGold, size: 20),
+                                      ),
+                                      Text('WHERE: ',
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(course['location'],
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                          )),
+                                    ],
+                                  ),
                             ]))
                           ]),
                         ),
@@ -282,6 +359,14 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                       },
                                     ),
                                   ),
+                                 Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 10.0, bottom: 4.0),
+                                    child: Text(
+                                      'Going?',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         right: 10.0, bottom: 4.0),
@@ -292,7 +377,11 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(
+<<<<<<< HEAD
                                         0, 0, 27.0, 10),
+=======
+                                        0, 0, 30.0, 10),
+>>>>>>> ca80c65f3ab9fda25144fd76453cc5d3c87c7dd9
                                     child: Text('$likeCount',
                                         style: TextStyle(
                                             fontSize: 12,

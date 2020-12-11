@@ -1,5 +1,7 @@
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/leaderboard.dart';
+import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:MOOV/widgets/party_segment.dart';
 import 'package:MOOV/utils/themes_styles.dart';
@@ -40,7 +42,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
     return AppBar(
       toolbarHeight: 110,
       leading: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(2.0),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 58.0),
           child: Image.asset('lib/assets/ndlogo.png'),
@@ -48,7 +50,41 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
       ),
       backgroundColor: TextThemes.ndBlue,
       //pinned: true,
-      actions: <Widget>[],
+      actions: <Widget>[
+        
+              IconButton(
+                padding: EdgeInsets.all(5.0),
+                icon: Padding(
+                  padding: const EdgeInsets.only(bottom: 58.0),
+                  child: Icon(Icons.insert_chart),
+                ),
+                color: Colors.white,
+                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                onPressed: () {
+                  // Implement navigation to leaderboard page here...
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LeaderBoardPage()));
+                  print('Leaderboards clicked');
+                },
+              ),
+              IconButton(
+                padding: EdgeInsets.all(5.0),
+                icon: Padding(
+                  padding: const EdgeInsets.only(bottom: 58.0),
+                  child: Icon(Icons.notifications_active),
+                ),
+                color: Colors.white,
+                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationFeed()));
+                },
+              )
+      ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: EdgeInsets.all(5),
         title: Padding(
