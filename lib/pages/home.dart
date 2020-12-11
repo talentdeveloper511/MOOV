@@ -144,7 +144,11 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
                 title: Text("My MOOVs"), icon: Icon(Icons.directions_run)),
             BottomNavigationBarItem(
-                title: Text("Profile"), icon: Icon(Icons.account_circle)),
+                title: Text("Profile"),
+                icon: CircleAvatar(
+                  backgroundImage: NetworkImage(currentUser.photoUrl),
+                  radius: 13,
+                )),
           ]),
     );
     // return RaisedButton(

@@ -167,7 +167,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                   color: Colors.blue[900],
                                                   fontSize: 12.0,
                                                   fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.center),
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,),
                                         ),
                                       ),
                                       Container(

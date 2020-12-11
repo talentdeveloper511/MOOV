@@ -88,15 +88,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   radius: 50,
                   backgroundColor: TextThemes.ndBlue,
                   child: CircleAvatar(
+                    backgroundImage: (currentUser.photoUrl == null)
+                        ? AssetImage('images/user-avatar.png')
+                        : NetworkImage(currentUser.photoUrl),
+                    // backgroundImage: NetworkImage(currentUser.photoUrl),
                     radius: 50,
-                    backgroundColor: TextThemes.ndBlue,
-                    child: CircleAvatar(
-                      backgroundImage: (currentUser.photoUrl == null)
-                          ? AssetImage('images/user-avatar.png')
-                          : NetworkImage(currentUser.photoUrl),
-                      // backgroundImage: NetworkImage(currentUser.photoUrl),
-                      radius: 50,
-                    ),
                   ),
                 ),
               ),
