@@ -44,6 +44,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
 
   @override
   Widget build(BuildContext context) {
+    var score;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -99,22 +100,80 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                 ),
               );
             } else {
-              return ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (_, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Row(
-                        children: [
-                          Text((index + 1).toString()),
-                          Text('. '),
-                          Text(snapshot
-                              .data.documents[index].data['displayName']),
-                        ],
-                      ), // getting the data from firestore
+              return Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset('lib/assets/trophy.png', height: 75),
                     ),
-                  );
-                },
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child:
+                          Text("MOOV Leaderboard", style: TextThemes.headline1),
+                    ),
+                    Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topRight,
+                                end: Alignment(0.9, 0.9),
+                                colors: [Colors.black, TextThemes.ndBlue])),
+                        child: Center(
+                            child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text(
+                            "Do you like free stuff? Well... good, 'cause we like giving it out."
+                            " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Day.",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'Pacifico',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ))),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Your Score: '),
+                          Text(
+                            currentUser.score.toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (_, index) {
+                          score = snapshot.data.documents[index].data['score'];
+                          return Card(
+                            child: ListTile(
+                              title: Row(
+                                children: [
+                                  Text((index + 1).toString()),
+                                  Text('. '),
+                                  Text(snapshot.data.documents[index]
+                                      .data['displayName']),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(snapshot
+                                        .data.documents[index].data['score']
+                                        .toString()),
+                                  ),
+                                ],
+                              ), // getting the data from firestore
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
           },
