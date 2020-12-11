@@ -1,5 +1,7 @@
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/leaderboard.dart';
+import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/friend_groups_button.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Image.asset('lib/assets/ndlogo.png', height: 100),
+        ),
         backgroundColor: TextThemes.ndBlue,
         //pinned: true,
         actions: <Widget>[
@@ -37,7 +43,9 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.white,
             splashColor: Color.fromRGBO(220, 180, 57, 1.0),
             onPressed: () {
-              // Implement navigation to shopping cart page here...
+              // Implement navigation to leaderboard page here...
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
               print('Leaderboards clicked');
             },
           ),
@@ -47,21 +55,8 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.white,
             splashColor: Color.fromRGBO(220, 180, 57, 1.0),
             onPressed: () {
-              // Implement navigation to notifications page here...
-              List<dynamic> likedArray;
-              Firestore.instance
-                  .collection("users")
-                  .document(strUserId)
-                  .get()
-                  .then((docSnapshot) => {
-                        likedArray = docSnapshot.data['request'],
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    NotificationPage(strUserId, likedArray))),
-                      });
-              print('Notifications clicked');
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationFeed()));
             },
           )
         ],

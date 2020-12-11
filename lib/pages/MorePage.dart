@@ -74,131 +74,115 @@ class _MorePageState extends State<MorePage>
     }
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-        ),
-        backgroundColor: TextThemes.ndBlue,
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'lib/assets/moovblue.png',
-                fit: BoxFit.cover,
-                height: 55.0,
-              ),
-            ],
-          ),
+      floatingActionButton: FadeTransition(
+        opacity: _hideFabAnimController,
+        child: ScaleTransition(
+          scale: _hideFabAnimController,
+          child: FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MoovMaker(postModel: PostModel())),
+                );
+              },
+              label: const Text("Post a MOOV",
+                  style: TextStyle(fontSize: 16, color: Colors.white))),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
-          SliverToBoxAdapter(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
+          SliverAppBar(
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
+            ),
+            backgroundColor: TextThemes.ndBlue,
+            //pinned: true,
+            actions: <Widget>[
+              IconButton(
+                padding: EdgeInsets.all(5.0),
+                icon: Icon(Icons.search),
+                color: Colors.white,
+                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                onPressed: () {
+                  // Implement navigation to shopping cart page here...
+                  print('Click Search');
+                },
+              ),
+              IconButton(
+                padding: EdgeInsets.all(5.0),
+                icon: Icon(Icons.message),
+                color: Colors.white,
+                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                onPressed: () {
+                  // Implement navigation to shopping cart page here...
+                  print('Click Message');
+                },
+              )
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.all(5),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    'lib/assets/moovblue.png',
+                    fit: BoxFit.cover,
+                    height: 55.0,
                   ),
                 ],
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) => CupertinoAlertDialog(
-                            title: Text("Join us."),
-                            content: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                  "Our app is run by current students. Would you like to join the team?"),
-                            ),
-                          ),
-                      barrierDismissible: true);
-                },
-                child: Card(
-                  margin: EdgeInsets.all(8),
-                  color: Color.fromRGBO(249, 249, 249, 1.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 25.0, bottom: 2, top: 10),
-                        child: RichText(
-                          textScaleFactor: 1.75,
-                          text:
-                              TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(text: "Made "),
-                            TextSpan(text: "by", style: TextStyle(color: TextThemes.ndGold)),
-                            TextSpan(text: " students"),
-                          ]),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 50.0),
-                        child: Center(
-                          child: RichText(
-                            textScaleFactor: 1.75,
-                            text: TextSpan(
-                                style: TextThemes.mediumbody,
-                                children: [
-                                  TextSpan(
-                                      text: "with", style: TextStyle(color: TextThemes.ndGold)),
-                                  TextSpan(text: " students"),
-                                ]),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 2, right: 35.0, bottom: 10),
-                          child: RichText(
-                            textScaleFactor: 1.75,
-                            text: TextSpan(
-                                style: TextThemes.mediumbody,
-                                children: [
-                                  TextSpan(
-                                      text: "for", style: TextStyle(color: TextThemes.ndGold)),
-                                  TextSpan(text: " students"),
-                                ]),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
               ),
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-            sliver: SliverGrid.extent(
-              maxCrossAxisExtent: 200,
-              mainAxisSpacing: 15.0,
+            padding: EdgeInsets.only(left: 10, right: 10, bottom: 15),
+            sliver: SliverGrid.count(
+              crossAxisCount: 1,
+              mainAxisSpacing: 0.0,
               crossAxisSpacing: 10.0,
-              childAspectRatio: 1.1,
+              childAspectRatio: 2.25,
+              children: <Widget>[],
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            sliver: SliverGrid.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: .75,
               children: <Widget>[
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                          onTap: () {},
+                          child: CategoryButton(asset: 'lib/assets/bag1.png')),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Shopping",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -241,6 +225,28 @@ class _MorePageState extends State<MorePage>
                         ))
                   ],
                 ),
+
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: <Widget>[
+                //     GestureDetector(
+                //         onTap: () {
+                //           navigateToShowFeed(context);
+                //         },
+                //         child: CategoryButton(
+                //             asset: 'lib/assets/filmbutton1.png')),
+                //     Align(
+                //         alignment: Alignment.center,
+                //         child: Text(
+                //           "Shows",
+                //           style: TextStyle(
+                //               fontFamily: 'Open Sans',
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.black,
+                //               fontSize: 16.0),
+                //         ))
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -273,11 +279,262 @@ class _MorePageState extends State<MorePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/otherbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Surprise",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                            title: Text("Join us."),
+                            content: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                  "Our app is run by current students. Would you like to join the team? Email kcamson@nd.edu."),
+                            ),
+                          ),
+                      barrierDismissible: true);
+                },
+                child: Card(
+                  margin: EdgeInsets.all(8),
+                  color: Color.fromRGBO(249, 249, 249, 1.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 25.0, bottom: 2, top: 10),
+                        child: RichText(
+                          textScaleFactor: 1.75,
+                          text:
+                              TextSpan(style: TextThemes.mediumbody, children: [
+                            TextSpan(text: "Made ", style: TextStyle()),
+                            TextSpan(text: "by", style: TextThemes.italic),
+                            TextSpan(text: " students"),
+                          ]),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 50.0),
+                        child: Center(
+                          child: RichText(
+                            textScaleFactor: 1.75,
+                            text: TextSpan(
+                                style: TextThemes.mediumbody,
+                                children: [
+                                  TextSpan(
+                                      text: "with", style: TextThemes.italic),
+                                  TextSpan(text: " students"),
+                                ]),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 2, right: 35.0, bottom: 10),
+                          child: RichText(
+                            textScaleFactor: 1.75,
+                            text: TextSpan(
+                                style: TextThemes.mediumbody,
+                                children: [
+                                  TextSpan(
+                                      text: "for", style: TextThemes.italic),
+                                  TextSpan(text: " students"),
+                                ]),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 20),
+            sliver: SliverGrid.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: .75,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CategoryButton(asset: 'lib/assets/studybutton1.png'),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Study",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/govbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Student Gov",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/massbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Mass",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            sliver: SliverGrid.extent(
+              maxCrossAxisExtent: 200,
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 1.1,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/volunteerbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Volunteer",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
                     CategoryButton(asset: 'lib/assets/charitybutton1.png'),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Service",
+                          "Charity",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            sliver: SliverGrid.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: .75,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CategoryButton(asset: 'lib/assets/tailgatebutton1.png'),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Tailgates",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/gamesbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Games",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/otherbutton2.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Other",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
@@ -292,6 +549,41 @@ class _MorePageState extends State<MorePage>
         ],
       ),
     );
+    // return MaterialApp(
+    //   home: Scaffold(
+    //     backgroundColor: CupertinoColors.lightBackgroundGray,
+    //     appBar: MyAppBar(
+    //         title: Row(
+    //       mainAxisAlignment: MainAxisAlignment.start,
+    //       children: <Widget>[
+    //         Image.asset(
+    //           'lib/assets/moovheader.png',
+    //           fit: BoxFit.cover,
+    //           height: 45.0,
+    //         ),
+    //         Image.asset(
+    //           'lib/assets/ndlogo.png',
+    //           fit: BoxFit.cover,
+    //           height: 25,
+    //         )
+    //       ],
+    //     )),
+    //     body: Container(
+    //       decoration:
+    //           BoxDecoration(color: CupertinoColors.extraLightBackgroundGray),
+    //       child: Column(
+    //         mainAxisAlignment: MainAxisAlignment.start,
+    //         mainAxisSize: MainAxisSize.max,
+    //         children: <Widget>[
+    //           Expanded(flex: 5, child: Motd()),
+    //           Expanded(flex: 5, child: _FirstRow()),
+    //           Expanded(flex: 5, child: _SecondRow()),
+    //           Expanded(flex: 1, child: _HaveMOOVButton()),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }
 

@@ -163,8 +163,8 @@ class _HomePageState extends State<HomePage>
         slivers: <Widget>[
           SliverAppBar(
             leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset('lib/assets/ndlogo.png'),
+              padding: const EdgeInsets.all(2.0),
+              child: Image.asset('lib/assets/ndlogo.png', height: 100),
             ),
             backgroundColor: TextThemes.ndBlue,
             //pinned: true,
