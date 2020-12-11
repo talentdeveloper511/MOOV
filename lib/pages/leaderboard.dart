@@ -73,7 +73,53 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
           ),
         ),
       ),
-      body: Center(child: Text('Leaderboard goes here.')),
+      body: Container(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: Firestore.instance
+              .collection('users')
+              .orderBy('score', descending: true)
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return new Text('Error: ${snapshot.error}');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Loading..."),
+                    SizedBox(
+                      height: 50.0,
+                    ),
+                    CircularProgressIndicator()
+                  ],
+                ),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (_, index) {
+                  return Card(
+                    child: ListTile(
+                      title: Row(
+                        children: [
+                          Text((index + 1).toString()),
+                          Text('. '),
+                          Text(snapshot
+                              .data.documents[index].data['displayName']),
+                        ],
+                      ), // getting the data from firestore
+                    ),
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }

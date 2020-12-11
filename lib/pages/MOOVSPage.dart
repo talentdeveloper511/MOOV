@@ -93,22 +93,21 @@ class _MOOVSPageState extends State<MOOVSPage> {
               child: Column(
                 children: [
                   Container(
-                    
-                    child: Center(
-                        child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text('My Upcoming MOOVs',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold
-                              )),
-                    ))),
+                      child: Center(
+                          child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text('Upcoming MOOVs',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold)),
+                  ))),
                   Expanded(
-                                      child: ListView.builder(
+                    child: ListView.builder(
                       itemCount: snapshot.data.documents.length,
                       itemBuilder: (context, index) {
-                        DocumentSnapshot course = snapshot.data.documents[index];
+                        DocumentSnapshot course =
+                            snapshot.data.documents[index];
                         /*List<dynamic> likedArray = course["liked"];
                         List<String> uidArray = List<String>();
                         if (likedArray != null) {
@@ -163,7 +162,8 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                   }
                                 }
 
-                                if (uidArray != null && uidArray.contains(strUserId)) {
+                                if (uidArray != null &&
+                                    uidArray.contains(strUserId)) {
                                   Database().removeGoing(
                                       course["userId"],
                                       course["image"],
@@ -213,17 +213,20 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                                 color: Color(0xff000000),
                                                 width: 1,
                                               )),
-                                              child: Image.network(course['image'],
+                                              child: Image.network(
+                                                  course['image'],
                                                   fit: BoxFit.cover,
                                                   height: 130,
                                                   width: 50),
                                             ))),
                                     Expanded(
                                         child: Column(children: <Widget>[
-                                      Padding(padding: const EdgeInsets.all(8.0)),
+                                      Padding(
+                                          padding: const EdgeInsets.all(8.0)),
                                       Padding(
                                           padding: const EdgeInsets.all(2.0),
-                                          child: Text(course['title'].toString(),
+                                          child: Text(
+                                              course['title'].toString(),
                                               style: TextStyle(
                                                   color: Colors.blue[900],
                                                   fontSize: 20.0,
@@ -236,55 +239,64 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: 12.0,
-                                              color: Colors.black.withOpacity(0.6)),
+                                              color: Colors.black
+                                                  .withOpacity(0.6)),
                                         ),
                                       ),
-                                      Padding(padding: const EdgeInsets.all(5.0)),
+                                      Padding(
+                                          padding: const EdgeInsets.all(5.0)),
                                       Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.only(right: 4.0),
-                                                child: Icon(Icons.timer,
-                                                    color: TextThemes.ndGold, size: 20),
-                                              ),
-                                              Text('WHEN: ',
-                                                  style: TextStyle(
-                                                      fontSize: 12.0,
-                                                      fontWeight: FontWeight.bold)),
-                                              Text(
-                                                  DateFormat('MMMd').add_jm().format(
-                                                      course['startDate'].toDate()),
-                                                  style: TextStyle(
-                                                    fontSize: 12.0,
-                                                  )),
-                                            ],
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 4.0),
+                                            child: Icon(Icons.timer,
+                                                color: TextThemes.ndGold,
+                                                size: 20),
                                           ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.only(right: 4.0),
-                                                child: Icon(Icons.place,
-                                                    color: TextThemes.ndGold, size: 20),
-                                              ),
-                                              Text('WHERE: ',
-                                                  style: TextStyle(
-                                                      fontSize: 12.0,
-                                                      fontWeight: FontWeight.bold)),
-                                              Text(course['location'],
-                                                  style: TextStyle(
-                                                    fontSize: 12.0,
-                                                  )),
-                                            ],
+                                          Text('WHEN: ',
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text(
+                                              DateFormat('MMMd')
+                                                  .add_jm()
+                                                  .format(course['startDate']
+                                                      .toDate()),
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                              )),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 4.0),
+                                            child: Icon(Icons.place,
+                                                color: TextThemes.ndGold,
+                                                size: 20),
                                           ),
+                                          Text('WHERE: ',
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text(course['address'],
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                              )),
+                                        ],
+                                      ),
                                     ]))
                                   ]),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 1.0),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 1.0),
                                   child: Container(
                                     height: 1.0,
                                     width: 500.0,
@@ -295,34 +307,39 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                     child: Row(
                                   children: [
                                     Padding(
-                                        padding:
-                                            const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            12, 10, 4, 10),
                                         child: CircleAvatar(
                                           radius: 22.0,
-                                          backgroundImage:
-                                              NetworkImage(course['profilePic']),
+                                          backgroundImage: NetworkImage(
+                                              course['profilePic']),
                                           backgroundColor: Colors.transparent,
                                         )),
                                     Container(
                                       child: Column(
                                         //  mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 2.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 2.0),
                                             child: Text(course['userName'],
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     color: TextThemes.ndBlue,
-                                                    decoration: TextDecoration.none)),
+                                                    decoration:
+                                                        TextDecoration.none)),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 2.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 2.0),
                                             child: Text(course['userEmail'],
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                     color: TextThemes.ndBlue,
-                                                    decoration: TextDecoration.none)),
+                                                    decoration:
+                                                        TextDecoration.none)),
                                           ),
                                         ],
                                       ),
@@ -331,10 +348,12 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                     Container(
                                       child: Column(
                                         //  mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(right: 6.0),
+                                            padding: const EdgeInsets.only(
+                                                right: 6.0),
                                             child: IconButton(
                                               icon: Icon(
                                                 Icons.directions_run,
@@ -348,7 +367,8 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                               onPressed: () async {
                                                 // Perform action
                                                 setState(() {
-                                                  final GoogleSignInAccount user =
+                                                  final GoogleSignInAccount
+                                                      user =
                                                       googleSignIn.currentUser;
                                                   final strUserId = user.id;
                                                   Database().removeGoing(
@@ -371,7 +391,7 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                               },
                                             ),
                                           ),
-                                         Padding(
+                                          Padding(
                                             padding: const EdgeInsets.only(
                                                 right: 10.0, bottom: 4.0),
                                             child: Text(
@@ -386,7 +406,8 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                     color: TextThemes.ndBlue,
-                                                    decoration: TextDecoration.none)),
+                                                    decoration:
+                                                        TextDecoration.none)),
                                           ),
                                         ],
                                       ),
