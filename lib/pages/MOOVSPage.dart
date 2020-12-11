@@ -401,7 +401,7 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 30.0, 10),
+                                                0, 0, 27.0, 10),
                                             child: Text('$likeCount',
                                                 style: TextStyle(
                                                     fontSize: 12,
