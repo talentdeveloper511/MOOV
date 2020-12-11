@@ -79,34 +79,21 @@ class TrendingSegmentState extends State<TrendingSegment> {
           return Container(
             child: Column(
               children: [
-                ColoredBox(
-                  color: TextThemes.ndBlue,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Image.asset(
-                        //   'lib/assets/fire.png',
-                        //   height: 30,
-                        // ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 10.0, right: 10.0),
-                          child: Text('TRENDING',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontFamily: 'Pacifico')),
-                        ),
-                        // Image.asset(
-                        //   'lib/assets/fire.png',
-                        //   height: 30,
-                        // )
-                      ],
-                    ),
-                  ),
-                ),
+                Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [Colors.redAccent, TextThemes.ndBlue])),
+                    child: Center(
+                        child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text('TRENDING',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontFamily: 'Pacifico')),
+                    ))),
                 Expanded(
                     child: CustomScrollView(
                   slivers: [
