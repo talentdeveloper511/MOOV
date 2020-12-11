@@ -175,7 +175,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                               course['title'].toString(),
                                               style: TextStyle(
                                                   color: Colors.blue[900],
-                                                  fontSize: 13.0,
+                                                  fontSize: 12.0,
                                                   fontWeight: FontWeight.bold),
                                               textAlign: TextAlign.center),
                                         ),
@@ -575,7 +575,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                               course['title'].toString(),
                                               style: TextStyle(
                                                   color: Colors.blue[900],
-                                                  fontSize: 13.0,
+                                                  fontSize: 12.0,
                                                   fontWeight: FontWeight.bold),
                                               textAlign: TextAlign.center),
                                         ),
