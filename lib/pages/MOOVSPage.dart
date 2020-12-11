@@ -132,7 +132,6 @@ class _MOOVSPageState extends State<MOOVSPage> {
                         } else {
                           likeCount = 0;
                         }
-<<<<<<< HEAD
                         return Card(
                           color: Colors.white,
                           clipBehavior: Clip.antiAlias,
@@ -393,111 +392,6 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                       ),
                                     ),
                                   ],
-=======
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Row(children: <Widget>[
-                            Expanded(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                        color: Color(0xff000000),
-                                        width: 1,
-                                      )),
-                                      child: Image.network(course['image'],
-                                          fit: BoxFit.cover,
-                                          height: 130,
-                                          width: 50),
-                                    ))),
-                            Expanded(
-                                child: Column(children: <Widget>[
-                              Padding(padding: const EdgeInsets.all(8.0)),
-                              Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Text(course['title'].toString(),
-                                      style: TextStyle(
-                                          color: Colors.blue[900],
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center)),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  course['description'].toString(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: Colors.black.withOpacity(0.6)),
-                                ),
-                              ),
-                              Padding(padding: const EdgeInsets.all(5.0)),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 4.0),
-                                    child: Icon(Icons.timer,
-                                        color: TextThemes.ndGold, size: 20),
-                                  ),
-                                  Text('WHEN: ',
-                                      style: TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(
-                                      DateFormat('MMMd')
-                                          .add_jm()
-                                          .format(course['startDate'].toDate()),
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                      )),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 4.0),
-                                    child: Icon(Icons.place,
-                                        color: TextThemes.ndGold, size: 20),
-                                  ),
-                                  Text('WHERE: ',
-                                      style: TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(course['location'],
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                      )),
-                                ],
-                              ),
-                            ]))
-                          ]),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 1.0),
-                          child: Container(
-                            height: 1.0,
-                            width: 500.0,
-                            color: Colors.grey[300],
-                          ),
-                        ),
-                        Container(
-                            child: Row(
-                          children: [
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(12, 10, 4, 10),
-                                child: CircleAvatar(
-                                  radius: 22.0,
-                                  backgroundImage:
-                                      NetworkImage(course['profilePic']),
-                                  backgroundColor: Colors.transparent,
->>>>>>> c49120044e693d316b5cfca490d66d176f290ead
                                 )),
                                 /*ButtonBar(
                                 alignment: MainAxisAlignment.end,
