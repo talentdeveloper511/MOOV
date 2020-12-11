@@ -33,38 +33,34 @@ class _MOOVSPageState extends State<MOOVSPage> {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Image.asset('lib/assets/ndlogo.png', height: 100),
-            ),
+          padding: const EdgeInsets.all(2.0),
+          child: Image.asset('lib/assets/ndlogo.png', height: 100),
+        ),
         backgroundColor: TextThemes.ndBlue,
         //pinned: true,
         actions: <Widget>[
-              IconButton(
-                padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.insert_chart),
-                color: Colors.white,
-                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  // Implement navigation to leaderboard page here...
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LeaderBoardPage()));
-                  print('Leaderboards clicked');
-                },
-              ),
-              IconButton(
-                padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.notifications_active),
-                color: Colors.white,
-                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationFeed()));
-                },
-              )
+          IconButton(
+            padding: EdgeInsets.all(5.0),
+            icon: Icon(Icons.insert_chart),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () {
+              // Implement navigation to leaderboard page here...
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+              print('Leaderboards clicked');
+            },
+          ),
+          IconButton(
+            padding: EdgeInsets.all(5.0),
+            icon: Icon(Icons.notifications_active),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationFeed()));
+            },
+          )
         ],
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
@@ -229,45 +225,44 @@ class _MOOVSPageState extends State<MOOVSPage> {
                               ),
                               Padding(padding: const EdgeInsets.all(5.0)),
                               Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 4.0),
-                                        child: Icon(Icons.timer,
-                                            color: TextThemes.ndGold, size: 20),
-                                      ),
-                                      Text('WHEN: ',
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold)),
-                                      Text(
-                                          DateFormat('MMMd').add_jm().format(
-                                              course['startDate'].toDate()),
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                          )),
-                                    ],
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: Icon(Icons.timer,
+                                        color: TextThemes.ndGold, size: 20),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 4.0),
-                                        child: Icon(Icons.place,
-                                            color: TextThemes.ndGold, size: 20),
-                                      ),
-                                      Text('WHERE: ',
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold)),
-                                      Text(course['location'],
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                          )),
-                                    ],
+                                  Text('WHEN: ',
+                                      style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      DateFormat('MMMd')
+                                          .add_jm()
+                                          .format(course['startDate'].toDate()),
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                      )),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: Icon(Icons.place,
+                                        color: TextThemes.ndGold, size: 20),
                                   ),
+                                  Text('WHERE: ',
+                                      style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(course['location'],
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                      )),
+                                ],
+                              ),
                             ]))
                           ]),
                         ),
@@ -359,14 +354,6 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                       },
                                     ),
                                   ),
-                                 Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 10.0, bottom: 4.0),
-                                    child: Text(
-                                      'Going?',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         right: 10.0, bottom: 4.0),
@@ -377,11 +364,7 @@ class _MOOVSPageState extends State<MOOVSPage> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(
-<<<<<<< HEAD
                                         0, 0, 27.0, 10),
-=======
-                                        0, 0, 30.0, 10),
->>>>>>> ca80c65f3ab9fda25144fd76453cc5d3c87c7dd9
                                     child: Text('$likeCount',
                                         style: TextStyle(
                                             fontSize: 12,

@@ -20,7 +20,26 @@ class LeaderBoardPage extends StatefulWidget {
 class _LeaderBoardState extends State<LeaderBoardPage> {
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
-    
+    return Container(
+      child: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Icon(Icons.search),
+            Text(
+              "",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontSize: 60.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override

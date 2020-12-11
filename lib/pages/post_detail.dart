@@ -296,6 +296,7 @@ class _Description extends StatelessWidget {
         child: Text(
           description,
           textAlign: TextAlign.center,
+          style: TextStyle(fontStyle: FontStyle.italic),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
