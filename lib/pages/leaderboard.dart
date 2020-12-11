@@ -3,6 +3,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -45,6 +46,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
   @override
   Widget build(BuildContext context) {
     var score;
+    var pic;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -138,7 +140,25 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Your Score: '),
+                          ClipOval(
+                            child: Material(
+                              child: InkWell(
+                                splashColor: Colors.red, // inkwell color
+                                child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Icon(
+                                      Icons.info_outline,
+                                      size: 20,
+                                    )),
+                                onTap: () {},
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: Text('Your MOOV Score: '),
+                          ),
                           Text(
                             currentUser.score.toString(),
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -151,19 +171,56 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (_, index) {
                           score = snapshot.data.documents[index].data['score'];
+                          pic = snapshot.data.documents[index].data['photoUrl'];
+
                           return Card(
                             child: ListTile(
                               title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text((index + 1).toString()),
-                                  Text('. '),
-                                  Text(snapshot.data.documents[index]
-                                      .data['displayName']),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(snapshot
-                                        .data.documents[index].data['score']
-                                        .toString()),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        (index + 1).toString() + '   ',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      CircleAvatar(
+                                        radius: 17,
+                                        backgroundColor: TextThemes.ndGold,
+                                        child: CircleAvatar(
+                                          radius: 15,
+                                          backgroundColor: TextThemes.ndBlue,
+                                          child: CircleAvatar(
+                                            backgroundImage: (pic == null)
+                                                ? AssetImage(
+                                                    'images/user-avatar.png')
+                                                : NetworkImage(pic),
+                                            // backgroundImage: NetworkImage(currentUser.photoUrl),
+                                            radius: 15,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          snapshot.data.documents[index]
+                                              .data['displayName'],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      (index == 0) ? Image.asset('lib/assets/trophy2.png',
+                                          height: 25)
+                                          : Text(''),
+                                    ],
+                                  ),
+                                  Text(
+                                    snapshot.data.documents[index].data['score']
+                                        .toString(),
+                                    style: TextStyle(
+                                        color: TextThemes.ndBlue,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ), // getting the data from firestore

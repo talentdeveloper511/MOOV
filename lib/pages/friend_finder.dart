@@ -136,7 +136,7 @@ class FriendFinder extends StatelessWidget {
                       builder: (context) => Search()),
                 );
               },
-              label: const Text("Find some!",
+              label: const Text("Find some friends!",
                   style: TextStyle(fontSize: 16, color: Colors.white)))
                     ],
                   ))),
