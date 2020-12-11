@@ -418,7 +418,7 @@ class _HomePageState extends State<HomePage>
                             TextSpan(
                                 text: "More ",
                                 style: TextStyle(color: Colors.white)),
-                            TextSpan(text: "MOOVs", style: TextThemes.italic),
+                            TextSpan(text: "MOOVs", style: TextStyle(color: TextThemes.ndGold)),
                           ]),
                         ),
                       ),

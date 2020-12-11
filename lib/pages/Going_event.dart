@@ -1,6 +1,5 @@
 
 import 'dart:ui';
-
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
@@ -20,7 +19,7 @@ class GoingPage extends StatelessWidget {
 
     return likedArray != null
         ? ListView.builder(
-        shrinkWrap: true, //MUST TO ADDED
+        shrinkWrap: true, //MUST TO ADDED 
         physics: NeverScrollableScrollPhysics(),
         itemCount: likedArray.length,
         itemBuilder: (context, index) {
