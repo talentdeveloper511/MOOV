@@ -100,21 +100,13 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
               );
             } else {
               return ListView.builder(
-                itemCount: snapshot.data.documents.length == null
-                    ? 1
-                    : snapshot.data.documents.length + 1,
+                itemCount: snapshot.data.documents.length,
                 itemBuilder: (_, index) {
-                  if (index == 0) {
-                    // return the header
-                    return new Column(children: <Widget>[Text('LeaderBoards')]);
-                  }
-                  index -= 1;
-
                   return Card(
                     child: ListTile(
                       title: Row(
                         children: [
-                          Text((index).toString()),
+                          Text((index + 1).toString()),
                           Text('. '),
                           Text(snapshot
                               .data.documents[index].data['displayName']),

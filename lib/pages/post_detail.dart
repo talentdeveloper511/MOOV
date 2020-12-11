@@ -78,92 +78,92 @@ class _PostDetailState extends State<PostDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
           ),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-        ),
-        backgroundColor: TextThemes.ndBlue,
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'lib/assets/moovblue.png',
-                fit: BoxFit.cover,
-                height: 55.0,
-              ),
-            ],
+          backgroundColor: TextThemes.ndBlue,
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.all(5),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 55.0,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
         body: SafeArea(
-      top: false,
-      child: Stack(children: [
-        Container(
-          color: Colors.white,
-          child: ListView(
-            children: <Widget>[
-              _BannerImage(bannerImage),
-              _NonImageContents(
-                  title,
-                  description,
-                  startDate,
-                  address,
-                  location,
-                  profilePic,
-                  userName,
-                  userEmail,
-                  likedArray,
-                  moovId),
-            ],
-          ),
-        ),
-        // FrostedAppBar(
-        //   blurStrengthX: 20,
-        //   blurStrengthY: 20,
-        //   leading: IconButton(
-        //     icon: Icon(
-        //       Icons.arrow_back,
-        //       color: Colors.white,
-        //     ),
-        //     onPressed: () {
-        //       Navigator.pop(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => HomePage()),
-        //       );
-        //     },
-        //   ),
-        //   title: Center(
-        //       child: Image.asset(
-        //     'lib/assets/moovlogo2.png',
-        //     height: 50,
-        //   )),
-        //   actions: [
-        //     Padding(
-        //       padding: const EdgeInsets.all(8.0),
-        //       child: IconButton(
-        //         icon: Icon(
-        //           Icons.list,
-        //           color: Colors.white,
-        //         ),
-        //         onPressed: () {},
-        //       ),
-        //     )
-        //   ],
-        //   height: 120,
-        // ),
-      ]),
-    ));
+          top: false,
+          child: Stack(children: [
+            Container(
+              color: Colors.white,
+              child: ListView(
+                children: <Widget>[
+                  _BannerImage(bannerImage),
+                  _NonImageContents(
+                      title,
+                      description,
+                      startDate,
+                      address,
+                      location,
+                      profilePic,
+                      userName,
+                      userEmail,
+                      likedArray,
+                      moovId),
+                ],
+              ),
+            ),
+            // FrostedAppBar(
+            //   blurStrengthX: 20,
+            //   blurStrengthY: 20,
+            //   leading: IconButton(
+            //     icon: Icon(
+            //       Icons.arrow_back,
+            //       color: Colors.white,
+            //     ),
+            //     onPressed: () {
+            //       Navigator.pop(
+            //         context,
+            //         MaterialPageRoute(builder: (context) => HomePage()),
+            //       );
+            //     },
+            //   ),
+            //   title: Center(
+            //       child: Image.asset(
+            //     'lib/assets/moovlogo2.png',
+            //     height: 50,
+            //   )),
+            //   actions: [
+            //     Padding(
+            //       padding: const EdgeInsets.all(8.0),
+            //       child: IconButton(
+            //         icon: Icon(
+            //           Icons.list,
+            //           color: Colors.white,
+            //         ),
+            //         onPressed: () {},
+            //       ),
+            //     )
+            //   ],
+            //   height: 120,
+            // ),
+          ]),
+        ));
   }
 }
 
@@ -296,7 +296,6 @@ class _Description extends StatelessWidget {
         child: Text(
           description,
           textAlign: TextAlign.center,
-          style: TextStyle(fontStyle: FontStyle.italic),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
