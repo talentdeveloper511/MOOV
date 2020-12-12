@@ -151,7 +151,23 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                       Icons.info_outline,
                                       size: 20,
                                     )),
-                                onTap: () {},
+                                onTap: () {
+                                  showDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                            title: Text("MOOV Score"),
+                            content: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                  "Your score is calculated as follows:"
+                                  "\n"
+                                  "\n2pts: 'Going' to a MOOV"
+                                  "\n4pts: test"
+                                  ),
+                            ),
+                          ),
+                      barrierDismissible: true);
+                                },
                               ),
                             ),
                           ),
