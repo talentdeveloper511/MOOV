@@ -169,7 +169,7 @@ class _EditProfileState extends State<EditProfile> {
             Padding(
               padding: const EdgeInsets.only(top: 30.0, bottom: 15),
               child: Text(
-                "What do you do on the weekends?",
+                "What's your fun fact?",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -178,7 +178,7 @@ class _EditProfileState extends State<EditProfile> {
               child: TextFormField(
                 controller: bioController,
                 decoration: InputDecoration(
-                  labelText: "Go out? Stay in? Spill it.",
+                  labelText: "Got a party trick?",
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
