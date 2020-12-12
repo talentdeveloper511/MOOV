@@ -86,8 +86,8 @@ class _MorePageState extends State<MorePage>
                       builder: (context) => MoovMaker(postModel: PostModel())),
                 );
               },
-              label: const Text("Post a MOOV",
-                  style: TextStyle(fontSize: 16, color: Colors.white))),
+              label: const Text("Make a MOOV",
+                  style: TextStyle(fontSize: 20, color: Colors.white))),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

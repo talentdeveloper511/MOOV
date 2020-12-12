@@ -68,10 +68,11 @@ class TrendingSegmentState extends State<TrendingSegment> {
     final strUserPic = user.photoUrl;
 
     dynamic likeCount;
-    // TODO: implement build
-    return StreamBuilder(
+
+    return StreamBuilder( //food moovs
         stream: Firestore.instance
             .collection('food')
+            // .where('type', isEqualTo: 'food')
             .orderBy('likeCounter', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
@@ -163,6 +164,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         child: Center(
                                           child: Text(
                                               course['title'].toString(),
+                                              maxLines: 1,
                                               style: TextStyle(
                                                   color: Colors.blue[900],
                                                   fontSize: 12.0,
@@ -569,6 +571,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         child: Center(
                                           child: Text(
                                               course['title'].toString(),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   color: Colors.blue[900],
                                                   fontSize: 12.0,
@@ -974,6 +978,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         child: Center(
                                           child: Text(
                                               course['title'].toString(),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   color: Colors.blue[900],
                                                   fontSize: 12.0,

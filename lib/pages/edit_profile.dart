@@ -30,6 +30,7 @@ class _EditProfileState extends State<EditProfile> {
     final strUserName = user.displayName;
     final strUserPic = user.photoUrl;
     dynamic likeCount;
+    final bioController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -136,8 +137,60 @@ class _EditProfileState extends State<EditProfile> {
                 Text(
                   userScore,
                   style: TextThemes.bodyText1,
-                )
+                ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0, bottom: 15),
+              child: Text(
+                "What do you do on the weekends?",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextFormField(
+                controller: bioController,
+                decoration: InputDecoration(
+                  labelText: "Go out? Stay in? Spill it.",
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                // The validator receives the text that the user has entered.
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Enter Event Title';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0, bottom: 15),
+              child: Text(
+                "What do you do on the weekends?",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TextFormField(
+                controller: bioController,
+                decoration: InputDecoration(
+                  labelText: "Go out? Stay in? Spill it.",
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                // The validator receives the text that the user has entered.
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Enter Event Title';
+                  }
+                  return null;
+                },
+              ),
             ),
           ],
         ),
