@@ -1,6 +1,7 @@
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
+import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/friend_groups_button.dart';
@@ -142,7 +143,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 35.0,
                 width: 300,
                 child: FloatingActionButton.extended(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => EditProfile()));
+                  },
                   icon: Icon(Icons.edit),
                   backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
                   label: Text("Edit profile"),
