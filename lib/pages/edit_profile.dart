@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/widgets/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,9 +9,11 @@ import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatefulWidget {
   final Home user;
+
   final usersRef = Firestore.instance.collection('users');
 
   EditProfile({Key key, this.user}) : super(key: key);
@@ -19,6 +24,71 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   get firestoreInstance => null;
+  File _image;
+
+  void openCamera(context) async {
+    File _image;
+    final image = await CustomCamera.openCamera();
+    setState(() {
+      _image = image;
+      //  fileName = p.basename(_image.path);
+    });
+  }
+
+  void openGallery(context) async {
+    final image = await CustomCamera.openGallery();
+    setState(() {
+      File _image;
+      _image = image;
+    });
+  }
+
+  final picker = ImagePicker();
+
+  selectImage(parentContext) {
+    return showDialog(
+      context: parentContext,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text(
+            "Create Post",
+            style: TextStyle(color: Colors.white),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text(
+                "Photo with Camera",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openCamera(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: handleChooseFromGallery),
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: () => openGallery(context)),
+              child: Text(
+                "Image from Gallery",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openGallery(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +156,10 @@ class _EditProfileState extends State<EditProfile> {
                           radius: 50,
                         ),
                       ),
-                      Center(child: Icon(Icons.add_a_photo, size: 50))
+                      Center(
+                          child: IconButton(
+                              icon: Icon(Icons.add_a_photo, size: 50),
+                              onPressed: selectImage(context)))
                     ]),
                   ),
                 ),
