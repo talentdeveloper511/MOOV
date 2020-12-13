@@ -1,4 +1,5 @@
-import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,6 +26,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     final GoogleSignInAccount user = googleSignIn.currentUser;
+    final dorms = MoovMaker.listOfLocations;
     final strUserId = user.id;
     dynamic userScore = currentUser.score.toString();
     final strUserName = user.displayName;
@@ -35,35 +37,19 @@ class _EditProfileState extends State<EditProfile> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Image.asset('lib/assets/ndlogo.png', height: 100),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
+          },
         ),
         backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
-        actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.insert_chart),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              // Implement navigation to leaderboard page here...
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-            },
-          ),
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.notifications_active),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationFeed()));
-            },
-          )
-        ],
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
           title: Row(
@@ -79,7 +65,7 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       body: SingleChildScrollView(
-              child: Container(
+        child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,7 +106,7 @@ class _EditProfileState extends State<EditProfile> {
               Padding(
                 padding: const EdgeInsets.only(top: 30.0, bottom: 15),
                 child: Text(
-                  "What do you do on the weekends?",
+                  "Dorm",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -129,24 +115,17 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextFormField(
                   controller: bioController,
                   decoration: InputDecoration(
-                    labelText: "Go out? Stay in? Spill it.",
+                    labelText: "What dorm are you in?",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter a bio';
-                    }
-                    return null;
-                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 30.0, bottom: 15),
                 child: Text(
-                  "What's your fun fact?",
+                  "Bio",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -155,18 +134,11 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextFormField(
                   controller: factController,
                   decoration: InputDecoration(
-                    labelText: "Got a party trick?",
+                    labelText: "What's your party trick?",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter a fun fact';
-                    }
-                    return null;
-                  },
                 ),
               ),
               Padding(
