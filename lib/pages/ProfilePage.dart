@@ -108,35 +108,60 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
-                  '42 Friends',
-                  style: TextThemes.bodyText1,
+                Column(
+                  children: [
+                    Text(
+                      '2',
+                      style: TextThemes.extraBold,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        'Next MOOVs',
+                        style: TextThemes.bodyText1,
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: Text('•'),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        '42',
+                        style: TextThemes.extraBold,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          'Friends',
+                          style: TextThemes.bodyText1,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  '2 upcoming MOOVS',
-                  style: TextThemes.bodyText1,
-                )
+               
+                Column(
+                  children: [
+                    Text(
+                      userScore,
+                      style: TextThemes.extraBold,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        'MOOV Score',
+                        style: TextThemes.bodyText1,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'MOOV Score: ',
-                  style: TextThemes.bodyText1,
-                ),
-                Text(
-                  userScore,
-                  style: TextThemes.bodyText1,
-                )
-              ],
-            ),
+
             Padding(
               padding: const EdgeInsets.only(right: 7.5, bottom: 30, top: 15.5),
               child: SizedBox(

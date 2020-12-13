@@ -31,6 +31,7 @@ class _EditProfileState extends State<EditProfile> {
     final strUserPic = user.photoUrl;
     dynamic likeCount;
     final bioController = TextEditingController();
+    final factController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +51,6 @@ class _EditProfileState extends State<EditProfile> {
               // Implement navigation to leaderboard page here...
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-              print('Leaderboards clicked');
             },
           ),
           IconButton(
@@ -91,13 +91,19 @@ class _EditProfileState extends State<EditProfile> {
                 child: CircleAvatar(
                   radius: 50,
                   backgroundColor: TextThemes.ndBlue,
-                  child: CircleAvatar(
-                    backgroundImage: (currentUser.photoUrl == null)
-                        ? AssetImage('images/user-avatar.png')
-                        : NetworkImage(currentUser.photoUrl),
-                    // backgroundImage: NetworkImage(currentUser.photoUrl),
-                    radius: 50,
-                  ),
+                  child: Stack(children: [
+                    Opacity(
+                      opacity: .5,
+                      child: CircleAvatar(
+                        backgroundImage: (currentUser.photoUrl == null)
+                            ? AssetImage('images/user-avatar.png')
+                            : NetworkImage(currentUser.photoUrl),
+                        // backgroundImage: NetworkImage(currentUser.photoUrl),
+                        radius: 50,
+                      ),
+                    ),
+                    Center(child: Icon(Icons.add_a_photo, size: 50))
+                  ]),
                 ),
               ),
             ),
@@ -109,36 +115,6 @@ class _EditProfileState extends State<EditProfile> {
                     : "Username not found",
                 style: TextThemes.extraBold,
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '42 Friends',
-                  style: TextThemes.bodyText1,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: Text('•'),
-                ),
-                Text(
-                  '2 upcoming MOOVS',
-                  style: TextThemes.bodyText1,
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'MOOV Score: ',
-                  style: TextThemes.bodyText1,
-                ),
-                Text(
-                  userScore,
-                  style: TextThemes.bodyText1,
-                ),
-              ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 30.0, bottom: 15),
@@ -160,7 +136,7 @@ class _EditProfileState extends State<EditProfile> {
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Enter Event Title';
+                    return 'Enter a bio';
                   }
                   return null;
                 },
@@ -176,7 +152,7 @@ class _EditProfileState extends State<EditProfile> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextFormField(
-                controller: bioController,
+                controller: factController,
                 decoration: InputDecoration(
                   labelText: "Got a party trick?",
                   enabledBorder: OutlineInputBorder(
@@ -186,12 +162,21 @@ class _EditProfileState extends State<EditProfile> {
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Enter Event Title';
+                    return 'Enter a fun fact';
                   }
                   return null;
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: RaisedButton(
+                  color: TextThemes.ndBlue,
+                  child: Text('Save', style: TextStyle(color: Colors.white)),
+                  onPressed: () async {
+                    //DATABASE CODE HERE
+                  }),
+            )
           ],
         ),
       ),
