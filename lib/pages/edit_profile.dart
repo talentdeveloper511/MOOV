@@ -78,106 +78,108 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0, bottom: 10),
-              child: CircleAvatar(
-                radius: 55,
-                backgroundColor: TextThemes.ndGold,
+      body: SingleChildScrollView(
+              child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 50.0, bottom: 10),
                 child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: TextThemes.ndBlue,
-                  child: Stack(children: [
-                    Opacity(
-                      opacity: .5,
-                      child: CircleAvatar(
-                        backgroundImage: (currentUser.photoUrl == null)
-                            ? AssetImage('images/user-avatar.png')
-                            : NetworkImage(currentUser.photoUrl),
-                        // backgroundImage: NetworkImage(currentUser.photoUrl),
-                        radius: 50,
+                  radius: 55,
+                  backgroundColor: TextThemes.ndGold,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: TextThemes.ndBlue,
+                    child: Stack(children: [
+                      Opacity(
+                        opacity: .5,
+                        child: CircleAvatar(
+                          backgroundImage: (currentUser.photoUrl == null)
+                              ? AssetImage('images/user-avatar.png')
+                              : NetworkImage(currentUser.photoUrl),
+                          // backgroundImage: NetworkImage(currentUser.photoUrl),
+                          radius: 50,
+                        ),
                       ),
+                      Center(child: Icon(Icons.add_a_photo, size: 50))
+                    ]),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  currentUser.displayName != null
+                      ? currentUser.displayName
+                      : "Username not found",
+                  style: TextThemes.extraBold,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0, bottom: 15),
+                child: Text(
+                  "What do you do on the weekends?",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: TextFormField(
+                  controller: bioController,
+                  decoration: InputDecoration(
+                    labelText: "Go out? Stay in? Spill it.",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    Center(child: Icon(Icons.add_a_photo, size: 50))
-                  ]),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                currentUser.displayName != null
-                    ? currentUser.displayName
-                    : "Username not found",
-                style: TextThemes.extraBold,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30.0, bottom: 15),
-              child: Text(
-                "What do you do on the weekends?",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: TextFormField(
-                controller: bioController,
-                decoration: InputDecoration(
-                  labelText: "Go out? Stay in? Spill it.",
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
                   ),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter a bio';
+                    }
+                    return null;
+                  },
                 ),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter a bio';
-                  }
-                  return null;
-                },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30.0, bottom: 15),
-              child: Text(
-                "What's your fun fact?",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0, bottom: 15),
+                child: Text(
+                  "What's your fun fact?",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: TextFormField(
-                controller: factController,
-                decoration: InputDecoration(
-                  labelText: "Got a party trick?",
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: TextFormField(
+                  controller: factController,
+                  decoration: InputDecoration(
+                    labelText: "Got a party trick?",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter a fun fact';
+                    }
+                    return null;
+                  },
                 ),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Enter a fun fact';
-                  }
-                  return null;
-                },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: RaisedButton(
-                  color: TextThemes.ndBlue,
-                  child: Text('Save', style: TextStyle(color: Colors.white)),
-                  onPressed: () async {
-                    //DATABASE CODE HERE
-                  }),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: RaisedButton(
+                    color: TextThemes.ndBlue,
+                    child: Text('Save', style: TextStyle(color: Colors.white)),
+                    onPressed: () async {
+                      //DATABASE CODE HERE
+                    }),
+              )
+            ],
+          ),
         ),
       ),
     );
