@@ -37,10 +37,28 @@ class _EditProfileState extends State<EditProfile> {
 
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
             color: Colors.white,
+=======
+        leading: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Image.asset('lib/assets/ndlogo.png', height: 100),
+        ),
+        backgroundColor: TextThemes.ndBlue,
+        actions: <Widget>[
+          IconButton(
+            padding: EdgeInsets.all(5.0),
+            icon: Icon(Icons.insert_chart),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+            },
+>>>>>>> a53770c0baab08b9b115846c55635b23d8627537
           ),
           onPressed: () {
             Navigator.pop(
@@ -85,7 +103,6 @@ class _EditProfileState extends State<EditProfile> {
                           backgroundImage: (currentUser.photoUrl == null)
                               ? AssetImage('images/user-avatar.png')
                               : NetworkImage(currentUser.photoUrl),
-                          // backgroundImage: NetworkImage(currentUser.photoUrl),
                           radius: 50,
                         ),
                       ),
@@ -120,6 +137,15 @@ class _EditProfileState extends State<EditProfile> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+<<<<<<< HEAD
+=======
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter a bio';
+                    }
+                    return null;
+                  },
+>>>>>>> a53770c0baab08b9b115846c55635b23d8627537
                 ),
               ),
               Padding(
@@ -139,6 +165,15 @@ class _EditProfileState extends State<EditProfile> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+<<<<<<< HEAD
+=======
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter a fun fact';
+                    }
+                    return null;
+                  },
+>>>>>>> a53770c0baab08b9b115846c55635b23d8627537
                 ),
               ),
               Padding(
