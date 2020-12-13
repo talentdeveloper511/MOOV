@@ -30,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
     dynamic likeCount;
     final userYear = currentUser.year.toString().toLowerCase().capitalize();
     final userDorm = currentUser.dorm.toString().toLowerCase().capitalize();
+    final userBio = currentUser.bio.toString().toLowerCase().capitalize();
 
     return Scaffold(
       appBar: AppBar(
@@ -101,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8.0),
               child: Text(
                 currentUser.displayName != null
                     ? currentUser.displayName
@@ -113,11 +114,23 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
                   child: Text(
                     currentUser.year != null && currentUser.dorm != null
                         ? userYear + ' in ' + userDorm
                         : "",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    currentUser.bio != null ? "\"" + userBio + "\"" : "",
                     style: TextStyle(fontSize: 15),
                   ),
                 ),
