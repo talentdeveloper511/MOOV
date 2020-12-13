@@ -28,6 +28,8 @@ class _ProfilePageState extends State<ProfilePage> {
     final strUserName = user.displayName;
     final strUserPic = user.photoUrl;
     dynamic likeCount;
+    final userYear = currentUser.year.toString().toLowerCase().capitalize();
+    final userDorm = currentUser.dorm.toString().toLowerCase().capitalize();
 
     return Scaffold(
       appBar: AppBar(
@@ -109,6 +111,20 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    currentUser.year != null && currentUser.dorm != null
+                        ? userYear + ' in ' + userDorm
+                        : "",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Column(
                   children: [
@@ -119,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0),
                       child: Text(
-                        'Next MOOVs',
+                        'Upcoming MOOVs',
                         style: TextThemes.bodyText1,
                       ),
                     ),
@@ -143,17 +159,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                 ),
-               
                 Column(
                   children: [
                     Text(
-                      userScore,
+                      '0',
                       style: TextThemes.extraBold,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0),
                       child: Text(
-                        'MOOV Score',
+                        'Friend Groups',
                         style: TextThemes.bodyText1,
                       ),
                     ),
@@ -163,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
 
             Padding(
-              padding: const EdgeInsets.only(right: 7.5, bottom: 30, top: 15.5),
+              padding: const EdgeInsets.only(right: 7.5, bottom: 15, top: 15.5),
               child: SizedBox(
                 height: 35.0,
                 width: 300,
@@ -183,32 +198,16 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: FriendButton(),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
                 SeeContactsButton(),
-                FriendButton()
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                //   child: Text(''),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: RaisedButton(
-                //     color: Colors.white.withOpacity(0.7),
-                //     onPressed: null,
-                //     child: Row(
-                //       mainAxisSize: MainAxisSize.min,
-                //       children: [
-                //         Padding(
-                //           padding: const EdgeInsets.only(right: 8.0),
-                //           child: Icon(Icons.directions_run,
-                //               color: TextThemes.ndGold),
-                //         ),
-                //         Container(
-                //             child: Text('Previous MOOVs',
-                //                 style: TextStyle(color: TextThemes.ndBlue))),
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ],
             ),
             // Padding(
@@ -411,5 +410,11 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),*/
     );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }

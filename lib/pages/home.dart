@@ -4,7 +4,6 @@ import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/search.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -144,8 +143,7 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(
                 title: Text("My MOOVs"), icon: Icon(Icons.directions_run)),
             BottomNavigationBarItem(
-                title: Text("Profile"),
-                icon: Icon(Icons.person_outline)
+                title: Text("Profile"), icon: Icon(Icons.person_outline)
                 // CircleAvatar(
                 //   backgroundImage: NetworkImage(currentUser.photoUrl),
                 //   radius: 13)

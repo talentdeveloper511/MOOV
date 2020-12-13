@@ -73,8 +73,12 @@ class _NotificationFeedState extends State<NotificationFeed> {
             return circularProgress();
           }
           return ListView(
-            children: snapshot.hasData ? snapshot.data : Text('No Notifications', style: TextThemes.bodyTextWhite,)
-          );
+              children: snapshot.hasData
+                  ? snapshot.data
+                  : Text(
+                      'No Notifications',
+                      style: TextThemes.bodyTextWhite,
+                    ));
         },
       )),
     );
@@ -250,8 +254,6 @@ class NotificationFeedItem extends StatelessWidget {
   }
 
   showProfile(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => ProfilePage()));
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => OtherProfile(
             userProfilePic, username, userId, userEmail, username)));

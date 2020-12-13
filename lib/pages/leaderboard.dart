@@ -125,7 +125,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                             child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
-                            "Do you like free stuff? Well... good, 'cause we like giving it out."
+                            "Do you like free stuff? Well... good, 'cause we like giving."
                             " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Day.",
                             style: TextStyle(
                               color: Colors.white,
@@ -153,20 +153,20 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                     )),
                                 onTap: () {
                                   showDialog(
-                      context: context,
-                      builder: (_) => CupertinoAlertDialog(
-                            title: Text("MOOV Score"),
-                            content: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                  "Your score is calculated as follows:"
-                                  "\n"
-                                  "\n2pts: 'Going' to a MOOV"
-                                  "\n4pts: test"
-                                  ),
-                            ),
-                          ),
-                      barrierDismissible: true);
+                                      context: context,
+                                      builder: (_) => CupertinoAlertDialog(
+                                            title: Text("MOOV Score"),
+                                            content: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Text(
+                                                  "Your score is calculated as follows:"
+                                                  "\n"
+                                                  "\n2pts: 'Going' to a MOOV"
+                                                  "\n4pts: test"),
+                                            ),
+                                          ),
+                                      barrierDismissible: true);
                                 },
                               ),
                             ),
@@ -226,8 +226,10 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      (index == 0) ? Image.asset('lib/assets/trophy2.png',
-                                          height: 25)
+                                      (index == 0)
+                                          ? Image.asset(
+                                              'lib/assets/trophy2.png',
+                                              height: 25)
                                           : Text(''),
                                     ],
                                   ),

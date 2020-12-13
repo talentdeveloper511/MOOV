@@ -7,7 +7,10 @@ class User {
   final String photoUrl;
   final String displayName;
   final String bio;
+  final String year;
   final int score;
+  final String dorm;
+  final String gender;
 
   User(
       {this.id,
@@ -16,7 +19,10 @@ class User {
       this.photoUrl,
       this.displayName,
       this.bio,
-      this.score});
+      this.score,
+      this.year,
+      this.dorm,
+      this.gender});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -26,6 +32,9 @@ class User {
         photoUrl: doc['photoUrl'],
         displayName: doc['displayName'],
         bio: doc['bio'],
-        score: doc['score']);
+        score: doc['score'],
+        dorm: doc['dorm'],
+        year: doc['year'],
+        gender: doc['gender']);
   }
 }

@@ -1,21 +1,16 @@
 import 'package:MOOV/pages/ProfilePage.dart';
-import 'package:MOOV/pages/MoovMaker.dart';
-import 'package:MOOV/widgets/progress.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/leaderboard.dart';
-import 'package:MOOV/pages/edit_profile.dart';
-import 'package:MOOV/pages/notification_feed.dart';
-import 'package:MOOV/widgets/contacts_button.dart';
-import 'package:MOOV/widgets/friend_groups_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:MOOV/pages/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
 class EditProfile extends StatefulWidget {
   final Home user;
+  final usersRef = Firestore.instance.collection('users');
+
   EditProfile({Key key, this.user}) : super(key: key);
 
   @override
@@ -23,42 +18,26 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  get firestoreInstance => null;
+
   @override
   Widget build(BuildContext context) {
     final GoogleSignInAccount user = googleSignIn.currentUser;
-    final dorms = MoovMaker.listOfLocations;
     final strUserId = user.id;
     dynamic userScore = currentUser.score.toString();
     final strUserName = user.displayName;
     final strUserPic = user.photoUrl;
     dynamic likeCount;
+    final dormController = TextEditingController();
+    final genderController = TextEditingController();
     final bioController = TextEditingController();
-    final factController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
-<<<<<<< HEAD
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
             color: Colors.white,
-=======
-        leading: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Image.asset('lib/assets/ndlogo.png', height: 100),
-        ),
-        backgroundColor: TextThemes.ndBlue,
-        actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.insert_chart),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-            },
->>>>>>> a53770c0baab08b9b115846c55635b23d8627537
           ),
           onPressed: () {
             Navigator.pop(
@@ -103,6 +82,7 @@ class _EditProfileState extends State<EditProfile> {
                           backgroundImage: (currentUser.photoUrl == null)
                               ? AssetImage('images/user-avatar.png')
                               : NetworkImage(currentUser.photoUrl),
+                          // backgroundImage: NetworkImage(currentUser.photoUrl),
                           radius: 50,
                         ),
                       ),
@@ -121,10 +101,29 @@ class _EditProfileState extends State<EditProfile> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 30.0, bottom: 15),
+                padding: const EdgeInsets.only(top: 30.0, bottom: 5),
                 child: Text(
                   "Dorm",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: TextFormField(
+                  controller: dormController,
+                  decoration: InputDecoration(
+                    labelText: "Which dorm do you live in?",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0, bottom: 5),
+                child: Text(
+                  "Bio",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
               Padding(
@@ -132,48 +131,11 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextFormField(
                   controller: bioController,
                   decoration: InputDecoration(
-                    labelText: "What dorm are you in?",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-<<<<<<< HEAD
-=======
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter a bio';
-                    }
-                    return null;
-                  },
->>>>>>> a53770c0baab08b9b115846c55635b23d8627537
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30.0, bottom: 15),
-                child: Text(
-                  "Bio",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: TextFormField(
-                  controller: factController,
-                  decoration: InputDecoration(
                     labelText: "What's your party trick?",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-<<<<<<< HEAD
-=======
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Enter a fun fact';
-                    }
-                    return null;
-                  },
->>>>>>> a53770c0baab08b9b115846c55635b23d8627537
                 ),
               ),
               Padding(
@@ -183,6 +145,11 @@ class _EditProfileState extends State<EditProfile> {
                     child: Text('Save', style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       //DATABASE CODE HERE
+                      print(currentUser.id);
+                      usersRef.document(currentUser.id).updateData({
+                        "dorm": dormController.text.toUpperCase(),
+                        "bio": bioController.text.toUpperCase(),
+                      });
                     }),
               )
             ],
