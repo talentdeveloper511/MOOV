@@ -190,6 +190,11 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                           pic = snapshot.data.documents[index].data['photoUrl'];
 
                           return Card(
+                            color: snapshot.data.documents[index]
+                                        .data['displayName'] ==
+                                    currentUser.displayName
+                                ? Colors.green[300]
+                                : Colors.grey[50],
                             child: ListTile(
                               title: Row(
                                 mainAxisAlignment:
