@@ -51,39 +51,34 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
       backgroundColor: TextThemes.ndBlue,
       //pinned: true,
       actions: <Widget>[
-        
-              IconButton(
-                padding: EdgeInsets.all(5.0),
-                icon: Padding(
-                  padding: const EdgeInsets.only(bottom: 58.0),
-                  child: Icon(Icons.insert_chart),
-                ),
-                color: Colors.white,
-                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  // Implement navigation to leaderboard page here...
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LeaderBoardPage()));
-                  print('Leaderboards clicked');
-                },
-              ),
-              IconButton(
-                padding: EdgeInsets.all(5.0),
-                icon: Padding(
-                  padding: const EdgeInsets.only(bottom: 58.0),
-                  child: Icon(Icons.notifications_active),
-                ),
-                color: Colors.white,
-                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationFeed()));
-                },
-              )
+        IconButton(
+          padding: EdgeInsets.all(5.0),
+          icon: Padding(
+            padding: const EdgeInsets.only(bottom: 58.0),
+            child: Icon(Icons.insert_chart),
+          ),
+          color: Colors.white,
+          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+          onPressed: () {
+            // Implement navigation to leaderboard page here...
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+            print('Leaderboards clicked');
+          },
+        ),
+        IconButton(
+          padding: EdgeInsets.all(5.0),
+          icon: Padding(
+            padding: const EdgeInsets.only(bottom: 58.0),
+            child: Icon(Icons.notifications_active),
+          ),
+          color: Colors.white,
+          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NotificationFeed()));
+          },
+        )
       ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: EdgeInsets.all(5),
@@ -186,10 +181,6 @@ class UserResult extends StatelessWidget {
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-              subtitle: Text(
-                user.username == null ? "" : user.username,
-                style: TextStyle(color: Colors.white),
-              ),
               trailing: RaisedButton(
                 padding: const EdgeInsets.all(2.0),
                 color: Colors.grey[600],
@@ -202,11 +193,7 @@ class UserResult extends StatelessWidget {
                   } else {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => OtherProfile(
-                            user.photoUrl,
-                            user.displayName,
-                            user.id,
-                            user.email,
-                            user.username)));
+                            user.photoUrl, user.displayName, user.id)));
                   }
                 },
                 child: Text(

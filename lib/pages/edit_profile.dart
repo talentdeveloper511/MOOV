@@ -25,9 +25,9 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   get firestoreInstance => null;
   File _image;
+  final picker = ImagePicker();
 
   void openCamera(context) async {
-    File _image;
     final image = await CustomCamera.openCamera();
     setState(() {
       _image = image;
@@ -38,12 +38,37 @@ class _EditProfileState extends State<EditProfile> {
   void openGallery(context) async {
     final image = await CustomCamera.openGallery();
     setState(() {
-      File _image;
       _image = image;
     });
   }
 
-  final picker = ImagePicker();
+  Future handleTakePhoto() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.camera,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
+  }
+
+  handleChooseFromGallery() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.gallery,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
+  }
 
   selectImage(parentContext) {
     return showDialog(
@@ -157,9 +182,26 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       Center(
-                          child: IconButton(
-                              icon: Icon(Icons.add_a_photo, size: 50),
-                              onPressed: selectImage(context)))
+                          child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: _image != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Image.file(_image,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.fitHeight),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(4)),
+                                width: 100,
+                                height: 100,
+                                child: IconButton(
+                                    icon: Icon(Icons.add_a_photo, size: 50),
+                                    onPressed: selectImage(context))),
+                      ))
                     ]),
                   ),
                 ),
@@ -218,11 +260,27 @@ class _EditProfileState extends State<EditProfile> {
                     child: Text('Save', style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       //DATABASE CODE HERE
-                      print(currentUser.id);
-                      usersRef.document(currentUser.id).updateData({
-                        "dorm": dormController.text.toUpperCase(),
-                        "bio": bioController.text.toUpperCase(),
-                      });
+                      if (_image != null) {
+                        StorageReference firebaseStorageRef = FirebaseStorage
+                            .instance
+                            .ref()
+                            .child("images/" + currentUser.displayName);
+                        StorageUploadTask uploadTask =
+                            firebaseStorageRef.putFile(_image);
+                        StorageTaskSnapshot taskSnapshot =
+                            await uploadTask.onComplete;
+                        if (taskSnapshot.error == null) {
+                          print("added to Firebase Storage");
+                          final String downloadUrl =
+                              await taskSnapshot.ref.getDownloadURL();
+                          usersRef.document(currentUser.id).updateData({
+                            "dorm": dormController.text.toUpperCase(),
+                            "bio": bioController.text.toUpperCase(),
+                            "photoUrl": downloadUrl,
+                          });
+                        }
+                        Navigator.pop(context);
+                      }
                     }),
               )
             ],

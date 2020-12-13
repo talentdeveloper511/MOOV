@@ -117,11 +117,7 @@ class _NotificationState extends State<NotificationPage> {
                                                     likedArray[index]['strPic'],
                                                     likedArray[index]
                                                         ['strName'],
-                                                    likedArray[index]['uid'],
-                                                    likedArray[index]
-                                                        ['strName'],
-                                                    likedArray[index]
-                                                        ['strName'])));
+                                                    likedArray[index]['uid'])));
                                   }
                                 },
                                 child: Text(
@@ -296,14 +292,10 @@ class _NotificationState extends State<NotificationPage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   NotificationDetails(
-                                                      userList[index]['strPic'],
-                                                      userList[index]
-                                                          ['strName'],
-                                                      userList[index]['uid'],
-                                                      userList[index]
-                                                          ['strName'],
-                                                      userList[index]
-                                                          ['strName'])));
+                                                    userList[index]['strPic'],
+                                                    userList[index]['strName'],
+                                                    userList[index]['uid'],
+                                                  )));
                                     }
                                   },
                                   child: Text(
@@ -352,10 +344,6 @@ class UserResult extends StatelessWidget {
                     color: Colors.black.withOpacity(0.6),
                     fontWeight: FontWeight.bold),
               ),
-              subtitle: Text(
-                user.username,
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
               trailing: RaisedButton(
                 padding: const EdgeInsets.all(2.0),
                 color: TextThemes.ndBlue,
@@ -368,11 +356,10 @@ class UserResult extends StatelessWidget {
                   } else {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => NotificationDetails(
-                            user.photoUrl,
-                            user.displayName,
-                            user.id,
-                            user.email,
-                            user.username)));
+                              user.photoUrl,
+                              user.displayName,
+                              user.id,
+                            )));
                   }
                 },
                 child: Text(

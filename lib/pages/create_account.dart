@@ -12,17 +12,21 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  String username;
+  final _formKey2 = GlobalKey<FormState>();
+  final _formKey3 = GlobalKey<FormState>();
+  String dorm;
+  String gender;
+  String year;
 
   submit() {
     final form = _formKey.currentState;
 
     if (form.validate()) {
       form.save();
-      SnackBar snackbar = SnackBar(content: Text("Welcome $username!"));
+      SnackBar snackbar = SnackBar(content: Text("Welcome to MOOV"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
-      Timer(Duration(seconds: 2), () {
-        Navigator.pop(context, username);
+      Timer(Duration(seconds: 1), () {
+        Navigator.pop(context, [dorm, gender, year]);
       });
     }
   }
@@ -43,15 +47,10 @@ class _CreateAccountState extends State<CreateAccount> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'lib/assets/moovheader.png',
+                'lib/assets/moovblue.png',
                 fit: BoxFit.cover,
-                height: 45.0,
+                height: 55.0,
               ),
-              Image.asset(
-                'lib/assets/ndlogo.png',
-                fit: BoxFit.cover,
-                height: 25,
-              )
             ],
           ),
         ),
@@ -65,7 +64,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   padding: EdgeInsets.only(top: 25.0),
                   child: Center(
                     child: Text(
-                      "Create a username",
+                      "Tell us about you",
                       style: TextStyle(fontSize: 25.0),
                     ),
                   ),
@@ -78,20 +77,73 @@ class _CreateAccountState extends State<CreateAccount> {
                       autovalidate: true,
                       child: TextFormField(
                         validator: (val) {
-                          if (val.trim().length < 3 || val.isEmpty) {
-                            return "Username too short";
-                          } else if (val.trim().length > 12) {
-                            return "Username too long";
+                          if (val.trim().length < 2 || val.isEmpty) {
+                            return "Dorm name is too short";
+                          } else if (val.trim().length > 16) {
+                            return "Dorm name is too long";
                           } else {
                             return null;
                           }
                         },
-                        onSaved: (val) => username = val,
+                        onSaved: (val) => dorm = val,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: "Username",
+                          labelText: "Dorm",
                           labelStyle: TextStyle(fontSize: 15.0),
                           hintText: "Must be at least 3 characters",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Container(
+                    child: Form(
+                      key: _formKey2,
+                      autovalidate: true,
+                      child: TextFormField(
+                        validator: (val) {
+                          if (val.trim().length < 2 || val.isEmpty) {
+                            return "Please enter either Freshman, Sophomore, Junior, or Senior";
+                          } else if (val.trim().length > 16) {
+                            return "Please enter either Freshman, Sophomore, Junior, or Senior";
+                          } else {
+                            return null;
+                          }
+                        },
+                        onSaved: (val) => year = val,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Freshman, Sophomore, Junior, or Senior",
+                          labelStyle: TextStyle(fontSize: 15.0),
+                          hintText: "Freshman, Sophomore, Junior, or Senior",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Container(
+                    child: Form(
+                      key: _formKey3,
+                      autovalidate: true,
+                      child: TextFormField(
+                        validator: (val) {
+                          if (val.trim().length < 2 || val.isEmpty) {
+                            return "Gender should be Male or Female";
+                          } else if (val.trim().length > 7) {
+                            return "Gender should be Male or Female";
+                          } else {
+                            return null;
+                          }
+                        },
+                        onSaved: (val) => gender = val,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Gender",
+                          labelStyle: TextStyle(fontSize: 15.0),
                         ),
                       ),
                     ),

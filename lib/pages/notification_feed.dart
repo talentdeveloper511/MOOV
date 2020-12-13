@@ -255,7 +255,6 @@ class NotificationFeedItem extends StatelessWidget {
 
   showProfile(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => OtherProfile(
-            userProfilePic, username, userId, userEmail, username)));
+        builder: (context) => OtherProfile(userProfilePic, username, userId)));
   }
 }

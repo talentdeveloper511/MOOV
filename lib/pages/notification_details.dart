@@ -14,22 +14,19 @@ import 'package:MOOV/services/database.dart';
 import 'home.dart';
 
 class NotificationDetails extends StatefulWidget {
-  String photoUrl, displayName, id, email, username;
-  NotificationDetails(
-      this.photoUrl, this.displayName, this.id, this.email, this.username);
+  String photoUrl, displayName, id;
+  NotificationDetails(this.photoUrl, this.displayName, this.id);
 
   @override
   State<StatefulWidget> createState() {
-    return _NotificationDetailsState(
-        this.photoUrl, this.displayName, this.id, this.email, this.username);
+    return _NotificationDetailsState(this.photoUrl, this.displayName, this.id);
   }
 }
 
 class _NotificationDetailsState extends State<NotificationDetails> {
-  String photoUrl, displayName, id, email, username;
+  String photoUrl, displayName, id;
   final dbRef = Firestore.instance;
-  _NotificationDetailsState(
-      this.photoUrl, this.displayName, this.id, this.email, this.username);
+  _NotificationDetailsState(this.photoUrl, this.displayName, this.id);
   bool rejectRequest = false;
   bool sendRequest = false;
   bool acceptRequest = false;

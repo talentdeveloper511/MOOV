@@ -15,22 +15,19 @@ import 'package:MOOV/services/database.dart';
 import 'home.dart';
 
 class OtherProfile extends StatefulWidget {
-  String photoUrl, displayName, id, email, username;
-  OtherProfile(
-      this.photoUrl, this.displayName, this.id, this.email, this.username);
+  String photoUrl, displayName, id;
+  OtherProfile(this.photoUrl, this.displayName, this.id);
 
   @override
   State<StatefulWidget> createState() {
-    return _OtherProfileState(
-        this.photoUrl, this.displayName, this.id, this.email, this.username);
+    return _OtherProfileState(this.photoUrl, this.displayName, this.id);
   }
 }
 
 class _OtherProfileState extends State<OtherProfile> {
-  String photoUrl, displayName, id, email, username;
+  String photoUrl, displayName, id;
   final dbRef = Firestore.instance;
-  _OtherProfileState(
-      this.photoUrl, this.displayName, this.id, this.email, this.username);
+  _OtherProfileState(this.photoUrl, this.displayName, this.id);
   bool requestsent = false;
   bool sendRequest = false;
   @override
@@ -97,13 +94,6 @@ class _OtherProfileState extends State<OtherProfile> {
               child: Text(
                 displayName,
                 style: TextThemes.extraBold,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                email,
-                style: TextThemes.subtitle1,
               ),
             ),
             Row(

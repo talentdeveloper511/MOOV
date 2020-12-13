@@ -330,8 +330,6 @@ class PartySegmentState extends State<PartySegment> {
                                                     course['profilePic'],
                                                     course['userName'],
                                                     course['userId'],
-                                                    course['userEmail'],
-                                                    course['userName'],
                                                   )));
                                     }
                                   },
@@ -357,8 +355,6 @@ class PartySegmentState extends State<PartySegment> {
                                                   course['profilePic'],
                                                   course['userName'],
                                                   course['userId'],
-                                                  course['userEmail'],
-                                                  course['userName'],
                                                 )));
                                   }
                                 },
@@ -761,8 +757,6 @@ class PartySegmentState extends State<PartySegment> {
                                                     course['profilePic'],
                                                     course['userName'],
                                                     course['userId'],
-                                                    course['userEmail'],
-                                                    course['userName'],
                                                   )));
                                     }
                                   },
@@ -788,8 +782,6 @@ class PartySegmentState extends State<PartySegment> {
                                                   course['profilePic'],
                                                   course['userName'],
                                                   course['userId'],
-                                                  course['userEmail'],
-                                                  course['userName'],
                                                 )));
                                   }
                                 },

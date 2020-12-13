@@ -329,8 +329,6 @@ class FoodSegmentState extends State<FoodSegment> {
                                                     course['profilePic'],
                                                     course['userName'],
                                                     course['userId'],
-                                                    course['userEmail'],
-                                                    course['userName'],
                                                   )));
                                     }
                                   },
@@ -356,8 +354,6 @@ class FoodSegmentState extends State<FoodSegment> {
                                                   course['profilePic'],
                                                   course['userName'],
                                                   course['userId'],
-                                                  course['userEmail'],
-                                                  course['userName'],
                                                 )));
                                   }
                                 },
