@@ -66,12 +66,11 @@ class TrendingSegmentState extends State<TrendingSegment> {
     final strUserId = user.id;
     final strUserName = user.displayName;
     final strUserPic = user.photoUrl;
-
+    var height = 400;
     dynamic likeCount;
 
     return ListView(children: [
       Container(
-        height: 400,
         child: StreamBuilder(
             stream: Firestore.instance
                 .collection('food')
@@ -81,6 +80,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return Text('Loading data...');
               return Container(
+                height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                 child: Column(
                   children: [
                     Container(
@@ -250,7 +250,6 @@ class TrendingSegmentState extends State<TrendingSegment> {
             }),
       ),
       Container(
-        height: 350,
         child: StreamBuilder(
             stream: Firestore.instance
                 .collection('food')
@@ -260,6 +259,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return Text('Loading data...');
               return Container(
+                height: (snapshot.data.documents.length <= 3) ? 205 : 400,
                 child: Column(
                   children: [
                     Expanded(
@@ -274,8 +274,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                               Image.asset('lib/assets/dance.png', height: 40),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child:
-                                    Text('PARTIES', style: TextThemes.extraBold),
+                                child: Text('PARTIES',
+                                    style: TextThemes.extraBold),
                               ),
                             ],
                           ),
@@ -401,8 +401,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                   ],
                                 ),
                               );
-                            }, 
-                            childCount: snapshot.data.documents.length),
+                            }, childCount: snapshot.data.documents.length),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
@@ -415,7 +414,6 @@ class TrendingSegmentState extends State<TrendingSegment> {
             }),
       ),
       Container(
-        height: 370,
         child: StreamBuilder(
             stream: Firestore.instance
                 .collection('food')
@@ -425,6 +423,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return Text('Loading data...');
               return Container(
+                height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                 child: Column(
                   children: [
                     Expanded(
