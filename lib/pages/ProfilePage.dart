@@ -148,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0),
                       child: Text(
-                        'Upcoming MOOVs',
+                        'Next MOOVs   ',
                         style: TextThemes.bodyText1,
                       ),
                     ),
@@ -159,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     children: [
                       Text(
-                        '42',
+                        '0',
                         style: TextThemes.extraBold,
                       ),
                       Padding(
