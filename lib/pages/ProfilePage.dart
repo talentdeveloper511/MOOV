@@ -31,252 +31,266 @@ class _ProfilePageState extends State<ProfilePage> {
     final userYear = currentUser.year.toString().toLowerCase().capitalize();
     final userDorm = currentUser.dorm.toString().toLowerCase().capitalize();
     final userBio = currentUser.bio.toString().toLowerCase().capitalize();
+    
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Image.asset('lib/assets/ndlogo.png', height: 100),
-        ),
-        backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
-        actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.insert_chart),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              // Implement navigation to leaderboard page here...
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-              print('Leaderboards clicked');
-            },
-          ),
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.notifications_active),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationFeed()));
-            },
-          )
-        ],
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'lib/assets/moovblue.png',
-                fit: BoxFit.cover,
-                height: 55.0,
+    return StreamBuilder(
+        stream: Firestore.instance.collection('users').snapshots(),
+        builder: (context, snapshot) {
+          
+
+          if (!snapshot.hasData) return Text('Loading data...');
+          return Scaffold(
+            appBar: AppBar(
+              leading: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Image.asset('lib/assets/ndlogo.png', height: 100),
               ),
-            ],
-          ),
-        ),
-      ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0, bottom: 10),
-              child: CircleAvatar(
-                radius: 55,
-                backgroundColor: TextThemes.ndGold,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: TextThemes.ndBlue,
-                  child: CircleAvatar(
-                    backgroundImage: (currentUser.photoUrl == null)
-                        ? AssetImage('images/user-avatar.png')
-                        : NetworkImage(currentUser.photoUrl),
-                    // backgroundImage: NetworkImage(currentUser.photoUrl),
-                    radius: 50,
-                  ),
+              backgroundColor: TextThemes.ndBlue,
+              //pinned: true,
+              actions: <Widget>[
+                IconButton(
+                  padding: EdgeInsets.all(5.0),
+                  icon: Icon(Icons.insert_chart),
+                  color: Colors.white,
+                  splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                  onPressed: () {
+                    // Implement navigation to leaderboard page here...
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LeaderBoardPage()));
+                    print('Leaderboards clicked');
+                  },
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                currentUser.displayName != null
-                    ? currentUser.displayName
-                    : "Username not found",
-                style: TextThemes.extraBold,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
-                  child: Text(
-                    currentUser.year != null && currentUser.dorm != null
-                        ? userYear + ' in ' + userDorm
-                        : "",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
+                IconButton(
+                  padding: EdgeInsets.all(5.0),
+                  icon: Icon(Icons.notifications_active),
+                  color: Colors.white,
+                  splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NotificationFeed()));
+                  },
+                )
               ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    currentUser.bio != null ? "\"" + userBio + "\"" : "",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Column(
-                  children: [
-                    Text(
-                      '2',
-                      style: TextThemes.extraBold,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: Text(
-                        'Next MOOVs   ',
-                        style: TextThemes.bodyText1,
-                      ),
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.all(5),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'lib/assets/moovblue.png',
+                      fit: BoxFit.cover,
+                      height: 55.0,
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        '0',
-                        style: TextThemes.extraBold,
+              ),
+            ),
+            body: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50.0, bottom: 10),
+                    child: CircleAvatar(
+                      radius: 55,
+                      backgroundColor: TextThemes.ndGold,
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: TextThemes.ndBlue,
+                        child: CircleAvatar(
+                          backgroundImage: (currentUser.photoUrl == null)
+                              ? AssetImage('images/user-avatar.png')
+                              : NetworkImage(currentUser.photoUrl),
+                          // backgroundImage: NetworkImage(currentUser.photoUrl),
+                          radius: 50,
+                        ),
                       ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      currentUser.displayName != null
+                          ? currentUser.displayName
+                          : "Username not found",
+                      style: TextThemes.extraBold,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
+                        padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
                         child: Text(
-                          'Friends',
-                          style: TextThemes.bodyText1,
+                          currentUser.year != null && currentUser.dorm != null
+                              ? userYear + ' in ' + userDorm
+                              : "",
+                          style: TextStyle(fontSize: 15),
                         ),
                       ),
                     ],
                   ),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      '0',
-                      style: TextThemes.extraBold,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: Text(
-                        'Friend Groups',
-                        style: TextThemes.bodyText1,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          currentUser.bio != null ? "\"" + userBio + "\"" : "",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Column(
+                        children: [
+                          Text(
+                            '2',
+                            style: TextThemes.extraBold,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              'Next MOOVs   ',
+                              style: TextThemes.bodyText1,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              '0',
+                              style: TextThemes.extraBold,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Text(
+                                'Friends',
+                                style: TextThemes.bodyText1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            '0',
+                            style: TextThemes.extraBold,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              'Friend Groups',
+                              style: TextThemes.bodyText1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        right: 7.5, bottom: 15, top: 15.5),
+                    child: SizedBox(
+                      height: 35.0,
+                      width: 300,
+                      child: FloatingActionButton.extended(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfile()));
+                        },
+                        icon: Icon(Icons.edit),
+                        backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
+                        label: Text("Edit profile"),
+                        foregroundColor: Colors.white,
+                        elevation: 15,
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(right: 7.5, bottom: 15, top: 15.5),
-              child: SizedBox(
-                height: 35.0,
-                width: 300,
-                child: FloatingActionButton.extended(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EditProfile()));
-                  },
-                  icon: Icon(Icons.edit),
-                  backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-                  label: Text("Edit profile"),
-                  foregroundColor: Colors.white,
-                  elevation: 15,
-                ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: FriendButton(),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      SeeContactsButton(),
+                    ],
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 45.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [Text('Mountains MOOVed this week')],
+                  //   ),
+                  // ),
+                  //         Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Spacer(flex: 3),
+                  //             Column(
+                  //               children: [
+                  //                 Image.asset('lib/assets/greenmountain.png'),
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.only(top: 10.0),
+                  //                   child: Text(
+                  //                     """One Mountain
+                  // MOOVed!""",
+                  //                     textScaleFactor: .85,
+                  //                     overflow: TextOverflow.ellipsis,
+                  //                     maxLines: 2,
+                  //                     style: TextStyle(color: Colors.green),
+                  //                   ),
+                  //                 )
+                  //               ],
+                  //             ),
+                  //             Spacer(flex: 1),
+                  //             Column(
+                  //               children: [
+                  //                 Image.asset('lib/assets/greymountain.png'),
+                  //               ],
+                  //             ),
+                  //             Spacer(flex: 1),
+                  //             Image.asset('lib/assets/greymountain.png'),
+                  //             Spacer(flex: 3),
+                  //           ],
+                  //         ),
+                  Positioned(
+                    bottom: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 35.0),
+                      child: RaisedButton(
+                          color: TextThemes.ndBlue,
+                          textColor: Colors.white,
+                          child: Text('Sign out'),
+                          onPressed: () => googleSignIn.signOut()),
+                    ),
+                  )
+                ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: FriendButton(),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                SeeContactsButton(),
-              ],
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 45.0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [Text('Mountains MOOVed this week')],
-            //   ),
-            // ),
-            //         Row(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: [
-            //             Spacer(flex: 3),
-            //             Column(
-            //               children: [
-            //                 Image.asset('lib/assets/greenmountain.png'),
-            //                 Padding(
-            //                   padding: const EdgeInsets.only(top: 10.0),
-            //                   child: Text(
-            //                     """One Mountain
-            // MOOVed!""",
-            //                     textScaleFactor: .85,
-            //                     overflow: TextOverflow.ellipsis,
-            //                     maxLines: 2,
-            //                     style: TextStyle(color: Colors.green),
-            //                   ),
-            //                 )
-            //               ],
-            //             ),
-            //             Spacer(flex: 1),
-            //             Column(
-            //               children: [
-            //                 Image.asset('lib/assets/greymountain.png'),
-            //               ],
-            //             ),
-            //             Spacer(flex: 1),
-            //             Image.asset('lib/assets/greymountain.png'),
-            //             Spacer(flex: 3),
-            //           ],
-            //         ),
-            Positioned(
-              bottom: 10,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 35.0),
-                child: RaisedButton(
-                    color: TextThemes.ndBlue,
-                    textColor: Colors.white,
-                    child: Text('Sign out'),
-                    onPressed: () => googleSignIn.signOut()),
-              ),
-            )
-          ],
-        ),
-      ),
-      /*child: Center(
+            /*child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -422,7 +436,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),*/
-    );
+          );
+        });
   }
 }
 

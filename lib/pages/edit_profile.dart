@@ -182,20 +182,18 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       Center(
-                          child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: _image != null
-                            ? CircleAvatar(
-                                child:
-                                    Image.file(_image, width: 100, height: 100),
-                              )
-                            : Container(
-                                width: 100,
-                                height: 100,
-                                child: IconButton(
-                                    icon: Icon(Icons.add_a_photo, size: 50),
-                                    onPressed: () => selectImage(context))),
-                      ))
+                          child: _image != null
+                              ? CircleAvatar(
+                                  backgroundImage:
+                                      FileImage(_image), radius: 200,
+                                      
+                                )
+                              : Container(
+                                  width: 100,
+                                  height: 100,
+                                  child: IconButton(
+                                      icon: Icon(Icons.add_a_photo, size: 50),
+                                      onPressed: () => selectImage(context))))
                     ]),
                   ),
                 ),
@@ -253,7 +251,6 @@ class _EditProfileState extends State<EditProfile> {
                     color: TextThemes.ndBlue,
                     child: Text('Save', style: TextStyle(color: Colors.white)),
                     onPressed: () async {
-                      //DATABASE CODE HERE
                       if (_image != null) {
                         StorageReference firebaseStorageRef = FirebaseStorage
                             .instance
