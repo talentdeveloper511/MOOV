@@ -36,27 +36,40 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
 
   clearSearch() {
     searchController.clear();
+     setState(() {
+      searchResultsFuture = null;
+    });
   }
 
   AppBar buildSearchField() {
     return AppBar(
-      toolbarHeight: 110,
+      toolbarHeight: 100,
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: EdgeInsets.all(2),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50.0),
+              child: Image.asset(
+                'lib/assets/moovblue.png',
+                fit: BoxFit.cover,
+                height: 55.0,
+              ),
+            ),
+          ],
+        ),
+      ),
       leading: Padding(
         padding: const EdgeInsets.all(2.0),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 58.0),
-          child: Image.asset('lib/assets/ndlogo.png'),
-        ),
+        child: Image.asset('lib/assets/ndlogo.png'),
       ),
       backgroundColor: TextThemes.ndBlue,
       //pinned: true,
       actions: <Widget>[
         IconButton(
           padding: EdgeInsets.all(5.0),
-          icon: Padding(
-            padding: const EdgeInsets.only(bottom: 58.0),
-            child: Icon(Icons.insert_chart),
-          ),
+          icon: Icon(Icons.insert_chart),
           color: Colors.white,
           splashColor: Color.fromRGBO(220, 180, 57, 1.0),
           onPressed: () {
@@ -69,7 +82,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
         IconButton(
           padding: EdgeInsets.all(5.0),
           icon: Padding(
-            padding: const EdgeInsets.only(bottom: 58.0),
+            padding: const EdgeInsets.only(bottom: 0.0),
             child: Icon(Icons.notifications_active),
           ),
           color: Colors.white,
@@ -80,40 +93,26 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
           },
         )
       ],
-      flexibleSpace: FlexibleSpaceBar(
-        titlePadding: EdgeInsets.all(5),
-        title: Padding(
-          padding: const EdgeInsets.only(top: 40.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4.0),
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  height: 55,
-                ),
-              ),
-              TextFormField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  hintStyle: TextStyle(fontSize: 15),
-                  contentPadding: EdgeInsets.only(top: 18, bottom: 10),
-                  hintText: "Search for users or MOOVs...",
-                  filled: true,
-                  prefixIcon: Icon(
-                    Icons.account_box,
-                    size: 28.0,
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: clearSearch,
-                  ),
-                ),
-                onFieldSubmitted: handleSearch,
-              ),
-            ],
+      bottom: PreferredSize(
+        preferredSize: null,
+        child: TextFormField(
+          controller: searchController,
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            hintStyle: TextStyle(fontSize: 15),
+            contentPadding: EdgeInsets.only(top: 18, bottom: 10),
+            hintText: "Search for users or MOOVs...",
+            filled: true,
+            prefixIcon: Icon(
+              Icons.account_box,
+              size: 28.0,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: clearSearch,
+            ),
           ),
+          onFieldSubmitted: handleSearch,
         ),
       ),
     );
