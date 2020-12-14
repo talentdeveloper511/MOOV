@@ -76,7 +76,7 @@ class _EditProfileState extends State<EditProfile> {
       builder: (context) {
         return SimpleDialog(
           title: Text(
-            "Create Post",
+            "Upload Profile Pic",
             style: TextStyle(color: Colors.white),
           ),
           children: <Widget>[
@@ -185,22 +185,16 @@ class _EditProfileState extends State<EditProfile> {
                           child: AspectRatio(
                         aspectRatio: 16 / 9,
                         child: _image != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
-                                child: Image.file(_image,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.fitHeight),
+                            ? CircleAvatar(
+                                child:
+                                    Image.file(_image, width: 100, height: 100),
                               )
                             : Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(4)),
                                 width: 100,
                                 height: 100,
                                 child: IconButton(
                                     icon: Icon(Icons.add_a_photo, size: 50),
-                                    onPressed: selectImage(context))),
+                                    onPressed: () => selectImage(context))),
                       ))
                     ]),
                   ),
@@ -274,13 +268,22 @@ class _EditProfileState extends State<EditProfile> {
                           final String downloadUrl =
                               await taskSnapshot.ref.getDownloadURL();
                           usersRef.document(currentUser.id).updateData({
-                            "dorm": dormController.text.toUpperCase(),
-                            "bio": bioController.text.toUpperCase(),
                             "photoUrl": downloadUrl,
                           });
                         }
-                        Navigator.pop(context);
                       }
+                      if (dormController.text != "") {
+                        usersRef.document(currentUser.id).updateData({
+                          "dorm": dormController.text.toUpperCase(),
+                        });
+                      }
+
+                      if (bioController.text != "") {
+                        usersRef.document(currentUser.id).updateData({
+                          "bio": bioController.text.toUpperCase(),
+                        });
+                      }
+                      Navigator.pop(context);
                     }),
               )
             ],
