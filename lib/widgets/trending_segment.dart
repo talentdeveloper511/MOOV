@@ -257,7 +257,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Text('Loading data...');
+              if (!snapshot.hasData) return Text('');
               return Container(
                 height: (snapshot.data.documents.length <= 3) ? 205 : 400,
                 child: Column(
@@ -421,7 +421,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Text('Loading data...');
+              if (!snapshot.hasData) return Text('');
               return Container(
                 height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                 child: Column(
