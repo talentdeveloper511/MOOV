@@ -76,6 +76,7 @@ class _HomeState extends State<Home> {
       final String dorm = result[0];
       final String year = result[2];
       final String gender = result[1];
+      final String referral = result[3];
 
       // 3) get username from create account, use it to make new user document in users collection
       usersRef.document(user.id).setData({
@@ -88,7 +89,8 @@ class _HomeState extends State<Home> {
         "score": 0,
         "gender": gender,
         "year": year,
-        "dorm": dorm
+        "dorm": dorm,
+        "referral": referral
       });
       doc = await usersRef.document(user.id).get();
     }

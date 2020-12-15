@@ -12,6 +12,7 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey0 = GlobalKey<FormState>();
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
@@ -25,26 +26,23 @@ class _CreateAccountState extends State<CreateAccount> {
   String gender;
   String year;
   String referral;
-  String username = currentUser.displayName;
 
   submit() {
+    final form0 = _formKey0.currentState;
     final form = _formKey.currentState;
     final form2 = _formKey2.currentState;
     final form3 = _formKey3.currentState;
-    final user = currentUser;
-    usersRef
-        .document(user.id)
-        .setData({"gender": gender, "year": year, "dorm": dorm});
 
-    if (form.validate() && form2.validate() && form3.validate()) {
+    if (form0.validate() && form.validate() && form2.validate() && form3.validate()) {
+      form0.save();
       form.save();
       form2.save();
       form3.save();
       SnackBar snackbar =
-          SnackBar(content: Text("Welcome to MOOV, $username!"));
+          SnackBar(content: Text("Welcome to MOOV!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
       Timer(Duration(seconds: 1), () {
-        Navigator.pop(context, [dorm, gender, year]);
+        Navigator.pop(context, [dorm, gender, year, referral]);
       });
     }
   }
@@ -79,7 +77,7 @@ class _CreateAccountState extends State<CreateAccount> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: 25.0),
+                  padding: EdgeInsets.only(top: 25.0, bottom: 10),
                   child: Center(
                     child: Text(
                       "Tell us about you",
@@ -186,6 +184,33 @@ class _CreateAccountState extends State<CreateAccount> {
                           return null;
                         },
                         onSaved: (value) => gender = value,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Container(
+                    child: Form(
+                      key: _formKey0,
+                      autovalidate: true,
+                      child: TextFormField(
+                        validator: (val) {
+                          if (val.trim().length > 4 && !val.contains("@nd.edu")) {
+                            return "Enter an @nd.edu address";
+                          } else if (val.trim().length > 16) {
+                            return "Enter an @nd.edu address";
+                          } else {
+                            return null;
+                          }
+                        },
+                        onSaved: (val) => referral = val,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Who referred you?",
+                          labelStyle: TextStyle(fontSize: 15.0),
+                          hintText: "Must be at least 3 characters",
+                        ),
                       ),
                     ),
                   ),
