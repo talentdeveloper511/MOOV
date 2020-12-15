@@ -30,14 +30,11 @@ class _ProfilePageState extends State<ProfilePage> {
     dynamic likeCount;
     final userYear = currentUser.year.toString().toLowerCase().capitalize();
     final userDorm = currentUser.dorm.toString().toLowerCase().capitalize();
-    final userBio = currentUser.bio.toString().toLowerCase().capitalize();
-    
+    final userBio = currentUser.bio;
 
     return StreamBuilder(
         stream: Firestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
-          
-
           if (!snapshot.hasData) return Text('Loading data...');
           return Scaffold(
             appBar: AppBar(

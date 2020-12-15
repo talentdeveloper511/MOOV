@@ -234,7 +234,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
   // DateTime endTimes;
   String privacyDropdownValue = 'Public';
-  String typeDropdownValue = 'Party';
+  String typeDropdownValue = 'Food';
   String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
   final addressController = TextEditingController();

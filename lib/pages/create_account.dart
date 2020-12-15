@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/pages/home.dart';
 // import 'package:MOOV/pages/HomePage.dart';
 import 'package:flutter/material.dart';
 
@@ -14,16 +15,33 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
+  final yearList = ["Freshman", "Sophomore", "Junior", "Senior", "Grad"];
+  final genderList = ["Male", "Female", "Other"];
+
+  String yearDropdownValue = "Freshman";
+  String genderDropdownValue = "Female";
+
   String dorm;
   String gender;
   String year;
+  String referral;
+  String username = currentUser.displayName;
 
   submit() {
     final form = _formKey.currentState;
+    final form2 = _formKey2.currentState;
+    final form3 = _formKey3.currentState;
+    final user = currentUser;
+    usersRef
+        .document(user.id)
+        .setData({"gender": gender, "year": year, "dorm": dorm});
 
-    if (form.validate()) {
+    if (form.validate() && form2.validate() && form3.validate()) {
       form.save();
-      SnackBar snackbar = SnackBar(content: Text("Welcome to MOOV"));
+      form2.save();
+      form3.save();
+      SnackBar snackbar =
+          SnackBar(content: Text("Welcome to MOOV, $username!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
       Timer(Duration(seconds: 1), () {
         Navigator.pop(context, [dorm, gender, year]);
@@ -102,23 +120,34 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: Form(
                       key: _formKey2,
                       autovalidate: true,
-                      child: TextFormField(
-                        validator: (val) {
-                          if (val.trim().length < 2 || val.isEmpty) {
-                            return "Please enter either Freshman, Sophomore, Junior, or Senior";
-                          } else if (val.trim().length > 16) {
-                            return "Please enter either Freshman, Sophomore, Junior, or Senior";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (val) => year = val,
+                      child: DropdownButtonFormField(
+                        value: yearDropdownValue,
+                        icon: Icon(Icons.arrow_downward,
+                            color: TextThemes.ndGold),
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Freshman, Sophomore, Junior, or Senior",
-                          labelStyle: TextStyle(fontSize: 15.0),
-                          hintText: "Freshman, Sophomore, Junior, or Senior",
+                          labelText: "Year",
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
+                        items: yearList.map((String value) {
+                          return new DropdownMenuItem<String>(
+                            value: value,
+                            child: new Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            yearDropdownValue = newValue;
+                          });
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'What year are you?';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => year = value,
                       ),
                     ),
                   ),
@@ -129,22 +158,34 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: Form(
                       key: _formKey3,
                       autovalidate: true,
-                      child: TextFormField(
-                        validator: (val) {
-                          if (val.trim().length < 2 || val.isEmpty) {
-                            return "Gender should be Male or Female";
-                          } else if (val.trim().length > 7) {
-                            return "Gender should be Male or Female";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onSaved: (val) => gender = val,
+                      child: DropdownButtonFormField(
+                        value: genderDropdownValue,
+                        icon: Icon(Icons.arrow_downward,
+                            color: TextThemes.ndGold),
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
                           labelText: "Gender",
-                          labelStyle: TextStyle(fontSize: 15.0),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
+                        items: genderList.map((String value) {
+                          return new DropdownMenuItem<String>(
+                            value: value,
+                            child: new Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            genderDropdownValue = newValue;
+                          });
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'What gender are you?';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => gender = value,
                       ),
                     ),
                   ),
