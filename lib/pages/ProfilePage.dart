@@ -112,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      currentUser.displayName != null
+                      currentUser.displayName != ""
                           ? currentUser.displayName
                           : "Username not found",
                       style: TextThemes.extraBold,
@@ -124,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
                         child: Text(
-                          currentUser.year != null && currentUser.dorm != null
+                          currentUser.year != "" && currentUser.dorm != ""
                               ? userYear + ' in ' + userDorm
                               : "",
                           style: TextStyle(fontSize: 15),
@@ -138,7 +138,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          currentUser.bio != null ? "\"" + userBio + "\"" : "",
+                          currentUser.bio != ""
+                              ? "\"" + userBio + "\""
+                              : "Notre Dame",
                           style: TextStyle(fontSize: 15),
                         ),
                       ),

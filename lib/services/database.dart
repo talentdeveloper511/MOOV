@@ -208,29 +208,12 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       Map<String, dynamic> serializedMessage = {
-        "uid": senderId,
-        "strName": senderName,
-        "strPic": senderPic,
-        "requestStatus": "pending"
+        senderId: 0,
       };
       transaction.update(ref, {
-        'request': FieldValue.arrayUnion([serializedMessage]),
+        'friendArray': FieldValue.arrayUnion([serializedMessage]),
       });
     });
-  }
-
-  void addFriends({uid, strName, strPic, requestStatus}) async {
-    DocumentReference ref = await dbRef.collection("users").add({
-      'uid': uid,
-      'strName': strName,
-      'strPic': strPic,
-      'requestStatus': requestStatus,
-    });
-    print(ref.documentID);
-
-    Firestore.instance
-        .collection("food")
-        .orderBy("startDate", descending: true);
   }
 
   Future<void> removeGoing(
@@ -297,5 +280,12 @@ class Database {
         'request': FieldValue.arrayUnion([serializedMessage]),
       });
     });
+  }
+
+  Future<QuerySnapshot> checkStatus(String senderId, String receiverId) {
+    return Firestore.instance
+        .collection('users')
+        .where('id', isEqualTo: receiverId)
+        .getDocuments();
   }
 }

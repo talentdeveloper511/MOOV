@@ -30,12 +30,29 @@ class _OtherProfileState extends State<OtherProfile> {
   _OtherProfileState(this.photoUrl, this.displayName, this.id);
   bool requestsent = false;
   bool sendRequest = false;
+  bool friends;
+  var userRequested;
+
   @override
   Widget build(BuildContext context) {
     final GoogleSignInAccount userMe = googleSignIn.currentUser;
     final strUserId = userMe.id;
     final strPic = userMe.photoUrl;
     final strUserName = userMe.displayName;
+
+    Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
+          if (docs.documents.isNotEmpty)
+            {userRequested = docs.documents[0].data}
+        });
+
+    // if (userRequested['friendArray'][0][strUserId] == 0) {
+    //   requestsent = true;
+    // } else if (userRequested['friendArray'][0][strUserId] == 1) {
+    //   friends = true;
+    // } else {
+    //   requestsent = false;
+    // }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -169,6 +186,7 @@ class _OtherProfileState extends State<OtherProfile> {
                       setState(() => requestsent = !requestsent);
                       //    Database().sendFriendRequest(strUserId, "115832884538005478119", "Developer Mind", "https://lh4.googleusercontent.com/-WU1Fg5u4Hmo/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclNL2hzvtuvNsFTWAHzUlpVyoos8Q/s96-c/photo.jpg");
 
+                      print(userRequested['friendArray'][0][strUserId]);
                       // Navigator.pop(context);
                     },
                     child: requestsent
