@@ -13,6 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:share/share.dart';
 
 class PartySegment extends StatefulWidget {
   @override
@@ -23,6 +24,8 @@ class PartySegment extends StatefulWidget {
 }
 
 class PartySegmentState extends State<PartySegment> {
+  String text = 'https://moov4.page.link';
+  String subject = 'Check out this MOOV!';
   Map<int, Widget> map =
       new Map(); // Cupertino Segmented Control takes children in form of Map.
   List<Widget>
@@ -94,6 +97,16 @@ class PartySegmentState extends State<PartySegment> {
             ),
           ))
     };
+  }
+
+  _onShare(BuildContext context) async {
+    // A builder is used to retrieve the context immediately
+    // surrounding the RaisedButton.
+    //
+    // The context's `findRenderObject` returns the first
+    // RenderObject in its descendent tree when it's not
+    // a RenderObjectWidget. The RaisedButton's RenderObject
+    // has its position and size after it's built.
   }
 
   void loadChildWidgets() {
@@ -311,10 +324,38 @@ class PartySegmentState extends State<PartySegment> {
                         ),
                         Container(
                             child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                            Row(children: [
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (course['userId'] == strUserId) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfilePage()));
+                                      } else {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    OtherProfile(
+                                                      course['profilePic'],
+                                                      course['userName'],
+                                                      course['userId'],
+                                                    )));
+                                      }
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 22.0,
+                                      backgroundImage:
+                                          NetworkImage(course['profilePic']),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  )),
+                              Container(
                                 child: GestureDetector(
                                   onTap: () {
                                     if (course['userId'] == strUserId) {
@@ -333,140 +374,122 @@ class PartySegmentState extends State<PartySegment> {
                                                   )));
                                     }
                                   },
-                                  child: CircleAvatar(
-                                    radius: 22.0,
-                                    backgroundImage:
-                                        NetworkImage(course['profilePic']),
-                                    backgroundColor: Colors.transparent,
+                                  child: Column(
+                                    //  mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 2.0),
+                                        child: Text(course['userName'],
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: TextThemes.ndBlue,
+                                                decoration:
+                                                    TextDecoration.none)),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 2.0),
+                                        child: Text(course['userEmail'],
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: TextThemes.ndBlue,
+                                                decoration:
+                                                    TextDecoration.none)),
+                                      ),
+                                    ],
                                   ),
-                                )),
-                            Container(
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (course['userId'] == strUserId) {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfilePage()));
-                                  } else {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) => OtherProfile(
-                                                  course['profilePic'],
-                                                  course['userName'],
-                                                  course['userId'],
-                                                )));
-                                  }
-                                },
-                                child: Column(
-                                  //  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 2.0),
-                                      child: Text(course['userName'],
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: TextThemes.ndBlue,
-                                              decoration: TextDecoration.none)),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 2.0),
-                                      child: Text(course['userEmail'],
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: TextThemes.ndBlue,
-                                              decoration: TextDecoration.none)),
-                                    ),
-                                  ],
                                 ),
                               ),
+                            ]),
+                            GestureDetector(
+                              onTap: () {
+                                Share.share(text,
+                                    subject: 'Update the coordinate!',
+                                    sharePositionOrigin:
+                                        Rect.fromLTWH(10, 10, 10, 10));
+                              },
+                              child: Icon(CupertinoIcons.share,
+                                  color: TextThemes.ndBlue, size: 35),
                             ),
-                            Spacer(),
                             Container(
                               child: Column(
                                 //  mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: IconButton(
-                                      icon: (_isPressed)
-                                          ? new Icon(Icons.directions_run,
-                                              color: Colors.green)
-                                          : new Icon(Icons.directions_walk),
-                                      color: Colors.red,
-                                      iconSize: 30.0,
-                                      splashColor: Colors.green,
-                                      //splashRadius: 7.0,
-                                      highlightColor: Colors.green,
-                                      onPressed: () {
-                                        setState(() {
-                                          List<dynamic> likedArray =
-                                              course["liked"];
-                                          List<String> uidArray =
-                                              List<String>();
-                                          if (likedArray != null) {
-                                            likeCount = likedArray.length;
-                                            for (int i = 0;
-                                                i < likeCount;
-                                                i++) {
-                                              var id = likedArray[i]["uid"];
-                                              uidArray.add(id);
-                                            }
+                                  IconButton(
+                                    icon: (_isPressed)
+                                        ? new Icon(Icons.directions_run,
+                                            color: Colors.green)
+                                        : new Icon(Icons.directions_walk),
+                                    color: Colors.red,
+                                    iconSize: 30.0,
+                                    splashColor: Colors.green,
+                                    //splashRadius: 7.0,
+                                    highlightColor: Colors.green,
+                                    onPressed: () {
+                                      setState(() {
+                                        List<dynamic> likedArray =
+                                            course["liked"];
+                                        List<String> uidArray = List<String>();
+                                        if (likedArray != null) {
+                                          likeCount = likedArray.length;
+                                          for (int i = 0; i < likeCount; i++) {
+                                            var id = likedArray[i]["uid"];
+                                            uidArray.add(id);
                                           }
+                                        }
 
-                                          if (uidArray != null &&
-                                              uidArray.contains(strUserId)) {
-                                            Database().removeGoing(
-                                                course["userId"],
-                                                course["image"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                course["startDate"],
-                                                course["title"],
-                                                course["description"],
-                                                course["location"],
-                                                course["address"],
-                                                course["profilePic"],
-                                                course["userName"],
-                                                course["userEmail"],
-                                                likedArray);
-                                          } else {
-                                            Database().addGoing(
-                                                course["userId"],
-                                                course["image"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                course["startDate"],
-                                                course["title"],
-                                                course["description"],
-                                                course["location"],
-                                                course["address"],
-                                                course["profilePic"],
-                                                course["userName"],
-                                                course["userEmail"],
-                                                likedArray);
-                                          }
-                                        });
-                                      },
-                                    ),
+                                        if (uidArray != null &&
+                                            uidArray.contains(strUserId)) {
+                                          Database().removeGoing(
+                                              course["userId"],
+                                              course["image"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                              course["startDate"],
+                                              course["title"],
+                                              course["description"],
+                                              course["location"],
+                                              course["address"],
+                                              course["profilePic"],
+                                              course["userName"],
+                                              course["userEmail"],
+                                              likedArray);
+                                        } else {
+                                          Database().addGoing(
+                                              course["userId"],
+                                              course["image"],
+                                              strUserId,
+                                              course.documentID,
+                                              strUserName,
+                                              strUserPic,
+                                              course["startDate"],
+                                              course["title"],
+                                              course["description"],
+                                              course["location"],
+                                              course["address"],
+                                              course["profilePic"],
+                                              course["userName"],
+                                              course["userEmail"],
+                                              likedArray);
+                                        }
+                                      });
+                                    },
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 10.0, bottom: 4.0),
+                                    padding: const EdgeInsets.only(bottom: 4.0),
                                     child: Text(
                                       'Going?',
                                       style: TextStyle(fontSize: 12),
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0, 0, 30.0, 10),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                     child: Text('$likeCount',
                                         style: TextStyle(
                                             fontSize: 12,
@@ -738,10 +761,38 @@ class PartySegmentState extends State<PartySegment> {
                         ),
                         Container(
                             child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                            Row(children: [
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (course['userId'] == strUserId) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfilePage()));
+                                      } else {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    OtherProfile(
+                                                      course['profilePic'],
+                                                      course['userName'],
+                                                      course['userId'],
+                                                    )));
+                                      }
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 22.0,
+                                      backgroundImage:
+                                          NetworkImage(course['profilePic']),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  )),
+                              Container(
                                 child: GestureDetector(
                                   onTap: () {
                                     if (course['userId'] == strUserId) {
@@ -760,56 +811,46 @@ class PartySegmentState extends State<PartySegment> {
                                                   )));
                                     }
                                   },
-                                  child: CircleAvatar(
-                                    radius: 22.0,
-                                    backgroundImage:
-                                        NetworkImage(course['profilePic']),
-                                    backgroundColor: Colors.transparent,
+                                  child: Column(
+                                    //  mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 2.0),
+                                        child: Text(course['userName'],
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: TextThemes.ndBlue,
+                                                decoration:
+                                                    TextDecoration.none)),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 2.0),
+                                        child: Text(course['userEmail'],
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: TextThemes.ndBlue,
+                                                decoration:
+                                                    TextDecoration.none)),
+                                      ),
+                                    ],
                                   ),
-                                )),
-                            Container(
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (course['userId'] == strUserId) {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfilePage()));
-                                  } else {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) => OtherProfile(
-                                                  course['profilePic'],
-                                                  course['userName'],
-                                                  course['userId'],
-                                                )));
-                                  }
-                                },
-                                child: Column(
-                                  //  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 2.0),
-                                      child: Text(course['userName'],
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: TextThemes.ndBlue,
-                                              decoration: TextDecoration.none)),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 2.0),
-                                      child: Text(course['userEmail'],
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: TextThemes.ndBlue,
-                                              decoration: TextDecoration.none)),
-                                    ),
-                                  ],
                                 ),
-                              ),
+                              )
+                            ]),
+                            GestureDetector(
+                              onTap: () {
+                                Share.share(text,
+                                    subject: 'Update the coordinate!',
+                                    sharePositionOrigin:
+                                        Rect.fromLTWH(10, 10, 10, 10));
+                              },
+                              child: Icon(CupertinoIcons.share,
+                                  color: TextThemes.ndBlue, size: 35),
                             ),
-                            Spacer(),
                             Container(
                               child: Column(
                                 //  mainAxisAlignment: MainAxisAlignment.start,
