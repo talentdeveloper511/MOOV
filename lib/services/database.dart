@@ -187,6 +187,62 @@ class Database {
     }
   }
 
+    addFriendToNotificationFeed(
+      String ownerId,
+      String previewImg,
+      dynamic moovId,
+      startDate,
+      String title,
+      String description,
+      String location,
+      address,
+      String ownerProPic,
+      String ownerName,
+      String ownerEmail,
+      List<dynamic> likedArray) {
+    
+      notificationFeedRef
+          .document(ownerId)
+          .collection("feedItems")
+          .document(moovId)
+          .setData({
+        "type": "friend",
+        "username": currentUser.displayName,
+        "userId": currentUser.id,
+        "userEmail": currentUser.email,
+        "userProfilePic": currentUser.photoUrl,
+        "previewImg": previewImg,
+        "postId": moovId,
+        "timestamp": timestamp,
+        "startDate": startDate,
+        "title": title,
+        "description": description,
+        "location": location,
+        "address": address,
+        "ownerProPic": ownerProPic,
+        "ownerName": ownerName,
+        "ownerEmail": ownerEmail,
+        "likedArray": likedArray
+      });
+    
+  }
+
+  removeFriendFromNotificationFeed(
+      String ownerId, String previewImg, String moovId) {
+    bool isNotPostOwner = strUserId != ownerId;
+      notificationFeedRef
+          .document(ownerId)
+          .collection("feedItems")
+          .document(moovId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
+    
+  }
+
   Future<void> sendEventNotification(String senderId, String receiverId,
       String senderName, String senderPic) async {
     return dbRef.runTransaction((transaction) async {
@@ -252,35 +308,35 @@ class Database {
     });
   }
 
-  Future<void> acceptFriendRequest(
-      String senderId, String receiverId, String strName, String strPic) async {
-    final DocumentReference ref = dbRef.document('users/$senderId');
-    Map<String, dynamic> serializedMessage = {
-      "uid": receiverId,
-      "strName": strName,
-      "strPic": strPic,
-      "requestStatus": "accept"
-    };
-    ref.setData({
-      'request': FieldValue.arrayUnion([serializedMessage]),
-    });
-  }
+  // Future<void> acceptFriendRequest(
+  //     String senderId, String receiverId, String strName, String strPic) async {
+  //   final DocumentReference ref = dbRef.document('users/$senderId');
+  //   Map<String, dynamic> serializedMessage = {
+  //     "uid": receiverId,
+  //     "strName": strName,
+  //     "strPic": strPic,
+  //     "requestStatus": "accept"
+  //   };
+  //   ref.setData({
+  //     'request': FieldValue.arrayUnion([serializedMessage]),
+  //   });
+  // }
 
-  Future<void> rejectFriendRequest(
-      String senderId, String receiverId, String strName, String strPic) async {
-    return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$receiverId');
-      Map<String, dynamic> serializedMessage = {
-        "uid": senderId,
-        "strName": strName,
-        "strPic": strPic,
-        "requestStatus": "rejected"
-      };
-      transaction.update(ref, {
-        'request': FieldValue.arrayUnion([serializedMessage]),
-      });
-    });
-  }
+  // Future<void> rejectFriendRequest(
+  //     String senderId, String receiverId, String strName, String strPic) async {
+  //   return dbRef.runTransaction((transaction) async {
+  //     final DocumentReference ref = dbRef.document('users/$receiverId');
+  //     Map<String, dynamic> serializedMessage = {
+  //       "uid": senderId,
+  //       "strName": strName,
+  //       "strPic": strPic,
+  //       "requestStatus": "rejected"
+  //     };
+  //     transaction.update(ref, {
+  //       'request': FieldValue.arrayUnion([serializedMessage]),
+  //     });
+  //   });
+  // }
 
   Future<QuerySnapshot> checkStatus(String senderId, String receiverId) {
     return Firestore.instance

@@ -206,25 +206,49 @@ class _OtherProfileState extends State<OtherProfile> {
                     padding: const EdgeInsets.only(
                         right: 7.5, bottom: 15, top: 15.5),
                     child: status == 2
-                        ? RaisedButton(
-                            padding: const EdgeInsets.all(12.0),
-                            color: Color.fromRGBO(0, 100, 0, 1.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(3.0))),
-                            onPressed: () {
-                              setState(() {
-                                // Database().sendFriendRequest(
-                                //     strUserId, id, strUserName, strPic);
-                              });
-                            },
-                            child: Text(
-                              "Accept Friend Request",
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 14.0,
-                              ),
-                            ))
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            RaisedButton(
+                                padding: const EdgeInsets.all(12.0),
+                                color: Color.fromRGBO(0, 100, 0, 1.0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(3.0))),
+                                onPressed: () {
+                                  setState(() {
+                                    // Database().sendFriendRequest(
+                                    //     strUserId, id, strUserName, strPic);
+                                  });
+                                },
+                                child: Text(
+                                  "Accept Friend Request",
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                  ),
+                                )),
+                                RaisedButton(
+                                padding: const EdgeInsets.all(12.0),
+                                color: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(3.0))),
+                                onPressed: () {
+                                  setState(() {
+                                    // Database().sendFriendRequest(
+                                    //     strUserId, id, strUserName, strPic);
+                                  });
+                                },
+                                child: Text(
+                                  "Decline Friend Request",
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                  ),
+                                )),
+                          ],
+                        )
                         : RaisedButton(
                             padding: const EdgeInsets.all(12.0),
                             color: Color.fromRGBO(2, 43, 91, 1.0),
