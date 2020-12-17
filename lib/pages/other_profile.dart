@@ -40,63 +40,45 @@ class _OtherProfileState extends State<OtherProfile> {
     final strUserId = userMe.id;
     final strPic = userMe.photoUrl;
     final strUserName = userMe.displayName;
-
     Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
               setState(
-                  () => userRequests = docs.documents[0].data['friendArray'])
+                  () => userRequests = docs.documents[0].data['friendArray']),
+              for (var i = 0; i < userRequests.length; i++)
+                {
+                  if (userRequests[i][strUserId] != null)
+                    {status = userRequests[i][strUserId]}
+                }
             }
         });
 
-    for (var i = 0; i < userRequests.length; i++) {
-      if (userRequests[i][strUserId] != null) {
-        setState(() => status = userRequests[i][strUserId]);
-      }
-    }
-    // print(status);
-
-    // if (userRequested['friendArray'][0][strUserId] == 0) {
-    //   requestsent = true;
-    // } else if (userRequested['friendArray'][0][strUserId] == 1) {
-    //   friends = true;
-    // } else {
-    //   requestsent = false;
-    // }
-
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-        ),
-        backgroundColor: TextThemes.ndBlue,
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'lib/assets/moovblue.png',
-                fit: BoxFit.cover,
-                height: 55.0,
+    return StreamBuilder(
+        stream: Firestore.instance.collection('users').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return Text('Loading data...');
+          return Scaffold(
+            appBar: AppBar(
+              leading: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Image.asset('lib/assets/ndlogo.png', height: 100),
               ),
-            ],
-          ),
-        ),
-      ),
-      body: StreamBuilder<Object>(
-          stream: null,
-          builder: (context, snapshot) {
-            return Container(
+              backgroundColor: TextThemes.ndBlue,
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.all(5),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'lib/assets/moovblue.png',
+                      fit: BoxFit.cover,
+                      height: 55.0,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            body: Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,22 +92,45 @@ class _OtherProfileState extends State<OtherProfile> {
                         radius: 50,
                         backgroundColor: TextThemes.ndBlue,
                         child: CircleAvatar(
+                          backgroundImage: (photoUrl == null)
+                              ? AssetImage('images/user-avatar.png')
+                              : NetworkImage(photoUrl),
+                          // backgroundImage: NetworkImage(currentUser.photoUrl),
                           radius: 50,
-                          backgroundColor: TextThemes.ndBlue,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(photoUrl),
-                            radius: 50,
-                          ),
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      displayName,
+                      displayName != "" ? displayName : "Username not found",
                       style: TextThemes.extraBold,
                     ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
+                        child: Text(
+                          "Female dog in Pangborn",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "This is my bio",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -139,7 +144,7 @@ class _OtherProfileState extends State<OtherProfile> {
                           Padding(
                             padding: const EdgeInsets.only(top: 4.0),
                             child: Text(
-                              'Upcoming MOOVs',
+                              'Next MOOVs   ',
                               style: TextThemes.bodyText1,
                             ),
                           ),
@@ -150,7 +155,7 @@ class _OtherProfileState extends State<OtherProfile> {
                         child: Column(
                           children: [
                             Text(
-                              '42',
+                              '0',
                               style: TextThemes.extraBold,
                             ),
                             Padding(
@@ -180,55 +185,42 @@ class _OtherProfileState extends State<OtherProfile> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 35.0),
-                        child: RaisedButton(
-                          padding: const EdgeInsets.all(12.0),
-                          color: Color.fromRGBO(2, 43, 91, 1.0),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(3.0))),
-                          onPressed: () {
-                            setState(() {
-                              // sendRequest = !sendRequest;
-                              Database().sendFriendRequest(
-                                  strUserId, id, strUserName, strPic);
-                            });
-
-                            // setState(() => requestsent = !requestsent);
-                            // for (var i = 0;
-                            //     i < userRequested['friendArray'].length;
-                            //     i++) {
-                            //   print(userRequested['friendArray'][i][strUserId]);
-                            // }
-                            // Navigator.pop(context);
-                          },
-                          child: status == null
-                              ? Text(
-                                  "Send Friend Request",
-                                  style: new TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                  ),
-                                )
-                              : Text(
-                                  "Request Sent",
-                                  style: new TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        right: 7.5, bottom: 15, top: 15.5),
+                    child: RaisedButton(
+                      padding: const EdgeInsets.all(12.0),
+                      color: Color.fromRGBO(2, 43, 91, 1.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                      onPressed: () {
+                        setState(() {
+                          // sendRequest = !sendRequest;
+                          Database().sendFriendRequest(
+                              strUserId, id, strUserName, strPic);
+                        });
+                      },
+                      child: status == null
+                          ? Text(
+                              "Send Friend Request",
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.0,
+                              ),
+                            )
+                          : Text(
+                              "Request Sent",
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.0,
+                              ),
+                            ),
+                    ),
                   ),
                 ],
               ),
-            );
-          }),
-    );
+            ),
+          );
+        });
   }
 }
