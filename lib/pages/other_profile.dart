@@ -61,20 +61,19 @@ class _OtherProfileState extends State<OtherProfile> {
         });
 
     // if existing request does not exist
-    if (status != 2) {
-      Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
-            if (docs.documents.isNotEmpty)
-              {
-                setState(
-                    () => userRequests = docs.documents[0].data['friendArray']),
-                for (var i = 0; i < userRequests.length; i++)
-                  {
-                    if (userRequests[i][strUserId] != null)
-                      {status = userRequests[i][strUserId]}
-                  }
-              }
-          });
-    }
+    Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
+          if (docs.documents.isNotEmpty)
+            {
+              setState(
+                  () => userRequests = docs.documents[0].data['friendArray']),
+              for (var i = 0; i < userRequests.length; i++)
+                {
+                  if (userRequests[i][strUserId] != null &&
+                      userRequests[i][strUserId] != 2)
+                    {status = userRequests[i][strUserId]}
+                }
+            }
+        });
 
     // print(status);
 
@@ -224,10 +223,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(3.0))),
                                   onPressed: () {
-                                    setState(() {
-                                      Database().acceptFriendRequest(
-                                          id, strUserId, strUserName, strPic);
-                                    });
+                                    Database().acceptFriendRequest(
+                                        id, strUserId, strUserName, strPic);
                                     status = 1;
                                   },
                                   child: Text(
@@ -244,11 +241,9 @@ class _OtherProfileState extends State<OtherProfile> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(3.0))),
                                   onPressed: () {
-                                    setState(() {
-                                      status = null;
-                                      Database().rejectFriendRequest(
-                                          strUserId, id, strUserName, strPic);
-                                    });
+                                    Database().rejectFriendRequest(
+                                        strUserId, id, strUserName, strPic);
+                                    status = null;
                                   },
                                   child: Text(
                                     "Decline Friend Request",
@@ -267,10 +262,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(3.0))),
                                 onPressed: () {
-                                  setState(() {
-                                    Database().sendFriendRequest(
-                                        strUserId, id, strUserName, strPic);
-                                  });
+                                  Database().sendFriendRequest(
+                                      strUserId, id, strUserName, strPic);
                                 },
                                 child: status == null
                                     ? Text(
@@ -295,7 +288,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(3.0))),
                                 onPressed: () {
-                                  // setState(() {}
+                                  // unfriend code here
                                 },
                                 child: Text(
                                   "Friends",
