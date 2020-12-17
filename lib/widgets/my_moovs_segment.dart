@@ -70,7 +70,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
   }
 
   void loadCupertinoTabs() {
-    map = new Map();
+    map = Map();
     map = {
       0: Container(
           width: 100,
@@ -124,12 +124,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
       StreamBuilder(
           stream: Firestore.instance
               .collection('food')
-              .where("liked", arrayContains: {
-                "strName": strUserName,
-                "strPic": strUserPic,
-                "uid": strUserId
-              })
-              .where("userId", isEqualTo: "$strUserId")
+              .where("userId", isEqualTo: user.id)
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
@@ -153,6 +148,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                       itemBuilder: (context, index) {
                         DocumentSnapshot course =
                             snapshot.data.documents[index];
+
                         /*List<dynamic> likedArray = course["liked"];
                         List<String> uidArray = List<String>();
                         if (likedArray != null) {
@@ -176,7 +172,10 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                         } else {
                           likeCount = 0;
                         }
-                        return Card(
+
+                        return 
+                          (strUserId == course["userId"]) ?
+                        Card(
                           color: Colors.white,
                           clipBehavior: Clip.antiAlias,
                           child: new InkWell(
@@ -527,7 +526,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                               ],
                             ),
                           ),
-                        );
+                        ) : Text("");
                       },
                     ),
                   ),

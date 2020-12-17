@@ -355,7 +355,7 @@ class _HomePageState extends State<HomePage>
                           onTap: () {
                             navigateToFoodFeed(context);
                           },
-                          child: CategoryButton(asset: 'lib/assets/food3.png')),
+                          child: CategoryButton(asset: 'lib/assets/food5.png')),
                       Align(
                           alignment: Alignment.center,
                           child: Text(
@@ -479,7 +479,7 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
             sliver: SliverGrid.count(
               crossAxisCount: 3,
               mainAxisSpacing: 0.0,
@@ -618,7 +618,6 @@ class _HomePageState extends State<HomePage>
               ],
             ),
           ),
-          
           SliverPadding(
             padding: EdgeInsets.only(left: 10, right: 10, top: 20),
             sliver: SliverGrid.count(
