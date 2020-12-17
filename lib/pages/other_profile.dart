@@ -40,18 +40,35 @@ class _OtherProfileState extends State<OtherProfile> {
     final strUserId = userMe.id;
     final strPic = userMe.photoUrl;
     final strUserName = userMe.displayName;
-    Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
+
+    // check to see if a request from other user already exists
+    Database().checkStatus(id, strUserId).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
               setState(
                   () => userRequests = docs.documents[0].data['friendArray']),
               for (var i = 0; i < userRequests.length; i++)
                 {
-                  if (userRequests[i][strUserId] != null)
-                    {status = userRequests[i][strUserId]}
+                  if (userRequests[i][id] != null) {status = 2}
                 }
             }
         });
+
+    // if existing request does not exist
+    if (status != 2) {
+      Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
+            if (docs.documents.isNotEmpty)
+              {
+                setState(
+                    () => userRequests = docs.documents[0].data['friendArray']),
+                for (var i = 0; i < userRequests.length; i++)
+                  {
+                    if (userRequests[i][strUserId] != null)
+                      {status = userRequests[i][strUserId]}
+                  }
+              }
+          });
+    }
 
     return StreamBuilder(
         stream: Firestore.instance.collection('users').snapshots(),
@@ -188,34 +205,55 @@ class _OtherProfileState extends State<OtherProfile> {
                   Padding(
                     padding: const EdgeInsets.only(
                         right: 7.5, bottom: 15, top: 15.5),
-                    child: RaisedButton(
-                      padding: const EdgeInsets.all(12.0),
-                      color: Color.fromRGBO(2, 43, 91, 1.0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                      onPressed: () {
-                        setState(() {
-                          // sendRequest = !sendRequest;
-                          Database().sendFriendRequest(
-                              strUserId, id, strUserName, strPic);
-                        });
-                      },
-                      child: status == null
-                          ? Text(
-                              "Send Friend Request",
+                    child: status == 2
+                        ? RaisedButton(
+                            padding: const EdgeInsets.all(12.0),
+                            color: Color.fromRGBO(0, 100, 0, 1.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(3.0))),
+                            onPressed: () {
+                              setState(() {
+                                // Database().sendFriendRequest(
+                                //     strUserId, id, strUserName, strPic);
+                              });
+                            },
+                            child: Text(
+                              "Accept Friend Request",
                               style: new TextStyle(
                                 color: Colors.white,
                                 fontSize: 14.0,
                               ),
-                            )
-                          : Text(
-                              "Request Sent",
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                    ),
+                            ))
+                        : RaisedButton(
+                            padding: const EdgeInsets.all(12.0),
+                            color: Color.fromRGBO(2, 43, 91, 1.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(3.0))),
+                            onPressed: () {
+                              setState(() {
+                                // sendRequest = !sendRequest;
+                                Database().sendFriendRequest(
+                                    strUserId, id, strUserName, strPic);
+                              });
+                            },
+                            child: status == null
+                                ? Text(
+                                    "Send Friend Request",
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.0,
+                                    ),
+                                  )
+                                : Text(
+                                    "Request Sent",
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                          ),
                   ),
                 ],
               ),
