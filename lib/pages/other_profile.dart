@@ -16,6 +16,7 @@ import 'home.dart';
 
 class OtherProfile extends StatefulWidget {
   String photoUrl, displayName, id;
+
   OtherProfile(this.photoUrl, this.displayName, this.id);
 
   @override
@@ -33,21 +34,12 @@ class _OtherProfileState extends State<OtherProfile> {
   bool friends;
   var status;
   var userRequests;
+  final GoogleSignInAccount userMe = googleSignIn.currentUser;
+  final strUserId = currentUser.id;
+  final strPic = currentUser.photoUrl;
+  final strUserName = currentUser.displayName;
 
-  @override
-  Widget build(BuildContext context) {
-    final GoogleSignInAccount userMe = googleSignIn.currentUser;
-    final strUserId = userMe.id;
-    final strPic = userMe.photoUrl;
-    final strUserName = userMe.displayName;
-
-    // status definitions:
-    //    null: no request between either users
-    //    0: friend request was made
-    //    1: users are friends
-    //    2: other user has already requested current user
-
-    // check to see if a request from other user already exists
+  checkFunction() {
     Database().checkStatus(id, strUserId).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
@@ -59,8 +51,9 @@ class _OtherProfileState extends State<OtherProfile> {
                 }
             }
         });
+  }
 
-    // if existing request does not exist
+  checkFunction2() {
     Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
@@ -74,6 +67,19 @@ class _OtherProfileState extends State<OtherProfile> {
                 }
             }
         });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // status definitions:
+    //    null: no request between either users
+    //    0: friend request was made
+    //    1: users are friends
+    //    2: other user has already requested current user
+
+    // check to see if a request from other user already exists
+
+    // if existing request does not exist
 
     // print(status);
 
@@ -81,6 +87,8 @@ class _OtherProfileState extends State<OtherProfile> {
         stream: Firestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
+          checkFunction();
+          checkFunction2();
           return Scaffold(
             appBar: AppBar(
               leading: Padding(
