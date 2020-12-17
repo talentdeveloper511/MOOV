@@ -31,7 +31,8 @@ class _OtherProfileState extends State<OtherProfile> {
   bool requestsent = false;
   bool sendRequest = false;
   bool friends;
-  var userRequested;
+  var status;
+  var userRequests;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,18 @@ class _OtherProfileState extends State<OtherProfile> {
 
     Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
-            {userRequested = docs.documents[0].data}
+            {
+              setState(
+                  () => userRequests = docs.documents[0].data['friendArray'])
+            }
         });
+
+    for (var i = 0; i < userRequests.length; i++) {
+      if (userRequests[i][strUserId] != null) {
+        setState(() => status = userRequests[i][strUserId]);
+      }
+    }
+    // print(status);
 
     // if (userRequested['friendArray'][0][strUserId] == 0) {
     //   requestsent = true;
@@ -82,135 +93,142 @@ class _OtherProfileState extends State<OtherProfile> {
           ),
         ),
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0, bottom: 10),
-              child: CircleAvatar(
-                radius: 55,
-                backgroundColor: TextThemes.ndGold,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: TextThemes.ndBlue,
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: TextThemes.ndBlue,
+      body: StreamBuilder<Object>(
+          stream: null,
+          builder: (context, snapshot) {
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50.0, bottom: 10),
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(photoUrl),
-                      radius: 50,
+                      radius: 55,
+                      backgroundColor: TextThemes.ndGold,
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: TextThemes.ndBlue,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: TextThemes.ndBlue,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(photoUrl),
+                            radius: 50,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                displayName,
-                style: TextThemes.extraBold,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Column(
-                  children: [
-                    Text(
-                      '2',
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      displayName,
                       style: TextThemes.extraBold,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: Text(
-                        'Upcoming MOOVs',
-                        style: TextThemes.bodyText1,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        '42',
-                        style: TextThemes.extraBold,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Column(
+                        children: [
+                          Text(
+                            '2',
+                            style: TextThemes.extraBold,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              'Upcoming MOOVs',
+                              style: TextThemes.bodyText1,
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Text(
-                          'Friends',
-                          style: TextThemes.bodyText1,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              '42',
+                              style: TextThemes.extraBold,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Text(
+                                'Friends',
+                                style: TextThemes.bodyText1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            '0',
+                            style: TextThemes.extraBold,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              'Friend Groups',
+                              style: TextThemes.bodyText1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 35.0),
+                        child: RaisedButton(
+                          padding: const EdgeInsets.all(12.0),
+                          color: Color.fromRGBO(2, 43, 91, 1.0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(3.0))),
+                          onPressed: () {
+                            setState(() {
+                              // sendRequest = !sendRequest;
+                              Database().sendFriendRequest(
+                                  strUserId, id, strUserName, strPic);
+                            });
+
+                            // setState(() => requestsent = !requestsent);
+                            // for (var i = 0;
+                            //     i < userRequested['friendArray'].length;
+                            //     i++) {
+                            //   print(userRequested['friendArray'][i][strUserId]);
+                            // }
+                            // Navigator.pop(context);
+                          },
+                          child: status == null
+                              ? Text(
+                                  "Send Friend Request",
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                  ),
+                                )
+                              : Text(
+                                  "Request Sent",
+                                  style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      '0',
-                      style: TextThemes.extraBold,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: Text(
-                        'Friend Groups',
-                        style: TextThemes.bodyText1,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 35.0),
-                  child: RaisedButton(
-                    padding: const EdgeInsets.all(12.0),
-                    color: Color.fromRGBO(2, 43, 91, 1.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                    onPressed: () {
-                      setState(() {
-                        sendRequest = !sendRequest;
-                        Database().sendFriendRequest(
-                            strUserId, id, strUserName, strPic);
-                      });
-
-                      setState(() => requestsent = !requestsent);
-                      //    Database().sendFriendRequest(strUserId, "115832884538005478119", "Developer Mind", "https://lh4.googleusercontent.com/-WU1Fg5u4Hmo/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclNL2hzvtuvNsFTWAHzUlpVyoos8Q/s96-c/photo.jpg");
-
-                      print(userRequested['friendArray'][0][strUserId]);
-                      // Navigator.pop(context);
-                    },
-                    child: requestsent
-                        ? Text(
-                            "Request Sent",
-                            style: new TextStyle(
-                              color: Colors.white,
-                              fontSize: 14.0,
-                            ),
-                          )
-                        : Text(
-                            "Send Friend Request",
-                            style: new TextStyle(
-                              color: Colors.white,
-                              fontSize: 14.0,
-                            ),
-                          ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+                ],
+              ),
+            );
+          }),
     );
   }
 }
