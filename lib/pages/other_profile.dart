@@ -38,8 +38,10 @@ class _OtherProfileState extends State<OtherProfile> {
   final strUserId = currentUser.id;
   final strPic = currentUser.photoUrl;
   final strUserName = currentUser.displayName;
+  var iter = 1;
 
   checkFunction() {
+    // check to see if a request from other user already exists
     Database().checkStatus(id, strUserId).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
@@ -47,13 +49,14 @@ class _OtherProfileState extends State<OtherProfile> {
                   () => userRequests = docs.documents[0].data['friendArray']),
               for (var i = 0; i < userRequests.length; i++)
                 {
-                  if (userRequests[i][id] == 0) {status = 2}
+                  if (userRequests[i][id] == 0) {status = 2, print('hio')}
                 }
             }
         });
   }
 
   checkFunction2() {
+    // if existing request does not exist
     Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
@@ -63,7 +66,7 @@ class _OtherProfileState extends State<OtherProfile> {
                 {
                   if (userRequests[i][strUserId] != null &&
                       userRequests[i][strUserId] != 2)
-                    {status = userRequests[i][strUserId]}
+                    {status = userRequests[i][strUserId], print('hi')}
                 }
             }
         });
@@ -77,18 +80,15 @@ class _OtherProfileState extends State<OtherProfile> {
     //    1: users are friends
     //    2: other user has already requested current user
 
-    // check to see if a request from other user already exists
-
-    // if existing request does not exist
-
-    // print(status);
-
     return StreamBuilder(
         stream: Firestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
-          checkFunction();
-          checkFunction2();
+          while (iter > 0) {
+            checkFunction();
+            checkFunction2();
+            iter = iter - 1;
+          }
           return Scaffold(
             appBar: AppBar(
               leading: Padding(
@@ -272,6 +272,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                 onPressed: () {
                                   Database().sendFriendRequest(
                                       strUserId, id, strUserName, strPic);
+                                  status = 0;
                                 },
                                 child: status == null
                                     ? Text(
