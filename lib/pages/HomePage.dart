@@ -355,12 +355,11 @@ class _HomePageState extends State<HomePage>
                           onTap: () {
                             navigateToFoodFeed(context);
                           },
-                          child:
-                              CategoryButton(asset: 'lib/assets/foodb2.png')),
+                          child: CategoryButton(asset: 'lib/assets/food3.png')),
                       Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "Food & Drinks",
+                            "Restaurants & Bars",
                             style: TextStyle(
                                 fontFamily: 'Open Sans',
                                 fontWeight: FontWeight.bold,
@@ -381,7 +380,399 @@ class _HomePageState extends State<HomePage>
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Parties & Hangouts",
+                          "Pregames & Parties",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                            title: Text("Join us."),
+                            content: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                  "Our app is run by current students. Would you like to join the team? Email kcamson@nd.edu."),
+                            ),
+                          ),
+                      barrierDismissible: true);
+                },
+                child: Card(
+                  margin: EdgeInsets.only(left: 8, right: 8, bottom: 20),
+                  color: Color.fromRGBO(249, 249, 249, 1.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 25.0, bottom: 2, top: 10),
+                        child: RichText(
+                          textScaleFactor: 1.75,
+                          text:
+                              TextSpan(style: TextThemes.mediumbody, children: [
+                            TextSpan(text: "Made ", style: TextStyle()),
+                            TextSpan(text: "by", style: TextThemes.italic),
+                            TextSpan(text: " students"),
+                          ]),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 50.0),
+                        child: Center(
+                          child: RichText(
+                            textScaleFactor: 1.75,
+                            text: TextSpan(
+                                style: TextThemes.mediumbody,
+                                children: [
+                                  TextSpan(
+                                      text: "with", style: TextThemes.italic),
+                                  TextSpan(text: " students"),
+                                ]),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 2, right: 35.0, bottom: 10),
+                          child: RichText(
+                            textScaleFactor: 1.75,
+                            text: TextSpan(
+                                style: TextThemes.mediumbody,
+                                children: [
+                                  TextSpan(
+                                      text: "for", style: TextThemes.italic),
+                                  TextSpan(text: " students"),
+                                ]),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            sliver: SliverGrid.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: .75,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                          onTap: () {},
+                          child: CategoryButton(asset: 'lib/assets/bag1.png')),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Shopping",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          navigateToSportFeed(context);
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/sportbutton1.png')),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Sports",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          navigateToShowFeed(context);
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/filmbutton1.png')),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Shows",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: <Widget>[
+                //     GestureDetector(
+                //         onTap: () {
+                //           navigateToShowFeed(context);
+                //         },
+                //         child: CategoryButton(
+                //             asset: 'lib/assets/filmbutton1.png')),
+                //     Align(
+                //         alignment: Alignment.center,
+                //         child: Text(
+                //           "Shows",
+                //           style: TextStyle(
+                //               fontFamily: 'Open Sans',
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.black,
+                //               fontSize: 16.0),
+                //         ))
+                //   ],
+                // ),
+              ],
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            sliver: SliverGrid.extent(
+              maxCrossAxisExtent: 200,
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 1.1,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {},
+                        child: CategoryButton(asset: 'lib/assets/club2.png')),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Clubs",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/otherbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Surprise",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 20),
+            sliver: SliverGrid.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: .75,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CategoryButton(asset: 'lib/assets/studybutton1.png'),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Study",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/govbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Student Gov",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/massbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Mass",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            sliver: SliverGrid.extent(
+              maxCrossAxisExtent: 200,
+              mainAxisSpacing: 15.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 1.1,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/volunteerbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Volunteer",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/charitybutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Charity",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            sliver: SliverGrid.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 0.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: .75,
+              children: <Widget>[
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CategoryButton(asset: 'lib/assets/tailgatebutton1.png'),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Tailgates",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/gamesbutton1.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Games",
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CategoryButton(asset: 'lib/assets/otherbutton2.png'),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Other",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
@@ -418,7 +809,9 @@ class _HomePageState extends State<HomePage>
                             TextSpan(
                                 text: "More ",
                                 style: TextStyle(color: Colors.white)),
-                            TextSpan(text: "MOOVs", style: TextStyle(color: TextThemes.ndGold)),
+                            TextSpan(
+                                text: "MOOVs",
+                                style: TextStyle(color: TextThemes.ndGold)),
                           ]),
                         ),
                       ),
