@@ -49,7 +49,7 @@ class _OtherProfileState extends State<OtherProfile> {
                   () => userRequests = docs.documents[0].data['friendArray']),
               for (var i = 0; i < userRequests.length; i++)
                 {
-                  if (userRequests[i][id] == 0) {status = 2, print('hio')}
+                  if (userRequests[i]["status"] == 0) {status = 2, print('hio')}
                 }
             }
         });
@@ -64,9 +64,9 @@ class _OtherProfileState extends State<OtherProfile> {
                   () => userRequests = docs.documents[0].data['friendArray']),
               for (var i = 0; i < userRequests.length; i++)
                 {
-                  if (userRequests[i][strUserId] != null &&
-                      userRequests[i][strUserId] != 2)
-                    {status = userRequests[i][strUserId], print('hi')}
+                  if (userRequests[i]["id"] == strUserId &&
+                      userRequests[i]["status"] != 2)
+                    {status = userRequests[i]["status"], print('hi')}
                 }
             }
         });
