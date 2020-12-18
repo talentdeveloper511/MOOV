@@ -297,8 +297,7 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       Map<String, dynamic> serializedMessage = {
-        "id": senderId,
-        "status": 0,
+        senderId: 0,
       };
       transaction.update(ref, {
         'friendArray': FieldValue.arrayUnion([serializedMessage]),
@@ -312,20 +311,16 @@ class Database {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       final DocumentReference ref2 = dbRef.document('users/$senderId');
       Map<String, dynamic> serializedMessage = {
-        "id": senderId,
-        "status": 1,
+        senderId: 1,
       };
       Map<String, dynamic> serializedMessage2 = {
-        "id": receiverId,
-        "status": 1,
+        receiverId: 1,
       };
       Map<String, dynamic> serializedMessage3 = {
-        "id": senderId,
-        "status": 0,
+        senderId: 0,
       };
       Map<String, dynamic> serializedMessage4 = {
-        "id": receiverId,
-        "status": 0,
+        receiverId: 0,
       };
       transaction.update(ref, {
         'friendArray': FieldValue.arrayRemove([serializedMessage3]),
@@ -347,8 +342,8 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       final DocumentReference ref2 = dbRef.document('users/$senderId');
-      Map<String, dynamic> serializedMessage = {"id": senderId, "status": 0};
-      Map<String, dynamic> serializedMessage2 = {"id": receiverId, "status": 0};
+      Map<String, dynamic> serializedMessage = {senderId: 0};
+      Map<String, dynamic> serializedMessage2 = {receiverId: 0};
       transaction.update(ref, {
         'friendArray': FieldValue.arrayRemove([serializedMessage]),
       });
