@@ -10,6 +10,8 @@ class User {
   final int score;
   final String dorm;
   final String gender;
+  final List<dynamic> friendArray;
+  final postLimit;
 
   User(
       {this.id,
@@ -20,7 +22,9 @@ class User {
       this.score,
       this.year,
       this.dorm,
-      this.gender});
+      this.gender,
+      this.friendArray,
+      this.postLimit});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -32,6 +36,8 @@ class User {
         score: doc['score'],
         dorm: doc['dorm'],
         year: doc['year'],
-        gender: doc['gender']);
+        gender: doc['gender'],
+        friendArray: doc['friendArray'],
+        postLimit: doc['postLimit']);
   }
 }

@@ -6,6 +6,8 @@ import 'package:MOOV/pages/Friends_List.dart';
 class FriendButton extends StatelessWidget {
   List<dynamic> likedArray;
   dynamic moovId;
+  final userFriends;
+  FriendButton({this.userFriends});
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
@@ -13,7 +15,8 @@ class FriendButton extends StatelessWidget {
           .withOpacity(.7), //set this opacity as per your requirement
       onPressed: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => friendsList(likedArray, moovId)));
+            builder: (context) =>
+                friendsList(likedArray, moovId, userFriends: userFriends)));
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -21,12 +24,13 @@ class FriendButton extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: Icon(
-              Icons.people, color: TextThemes.ndGold,
+              Icons.people,
+              color: TextThemes.ndGold,
             ),
           ),
           Container(
               child: Text(
-            'My Friends List', style: TextStyle(color: TextThemes.ndBlue),
+            'Friend Network', style: TextStyle(color: TextThemes.ndBlue),
             //   style: TextStyle(color: TextThemes.ndBlue)
           )),
         ],

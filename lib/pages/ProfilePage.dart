@@ -31,6 +31,9 @@ class _ProfilePageState extends State<ProfilePage> {
     final userYear = currentUser.year.toString().toLowerCase().capitalize();
     final userDorm = currentUser.dorm.toString().toLowerCase().capitalize();
     final userBio = currentUser.bio;
+    final userFriends = currentUser.friendArray;
+    final userFriendsLength = currentUser.friendArray.length.toString();
+    print(userFriendsLength);
 
     return StreamBuilder(
         stream: Firestore.instance.collection('users').snapshots(),
@@ -169,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           children: [
                             Text(
-                              '0',
+                              userFriendsLength,
                               style: TextThemes.extraBold,
                             ),
                             Padding(
@@ -225,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
-                        child: FriendButton(),
+                        child: FriendButton(userFriends: userFriends),
                       )
                     ],
                   ),
