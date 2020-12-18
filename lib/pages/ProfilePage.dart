@@ -1,4 +1,5 @@
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/edit_profile.dart';
@@ -12,7 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfilePage extends StatefulWidget {
-  final Home user;
+  User user;
   ProfilePage({Key key, this.user}) : super(key: key);
 
   @override
@@ -22,20 +23,20 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    final GoogleSignInAccount user = googleSignIn.currentUser;
-    final strUserId = user.id;
     dynamic userScore = currentUser.score.toString();
-    final strUserName = user.displayName;
-    final strUserPic = user.photoUrl;
+    var strUserPic = currentUser.photoUrl;
     dynamic likeCount;
-    final userYear = currentUser.year.toString().toLowerCase().capitalize();
-    final userDorm = currentUser.dorm.toString().toLowerCase().capitalize();
-    final userBio = currentUser.bio;
+    var userYear = currentUser.year.toString().toLowerCase().capitalize();
+    var userDorm = currentUser.dorm.toString().toLowerCase().capitalize();
+    var userBio = currentUser.bio;
 
     return StreamBuilder(
         stream: Firestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
+          userBio = snapshot.data.documents[0]['bio'];
+          strUserPic = snapshot.data.documents[0]['photoUrl'];
           if (!snapshot.hasData) return Text('Loading data...');
+
           return Scaffold(
             appBar: AppBar(
               leading: Padding(
@@ -100,9 +101,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         radius: 50,
                         backgroundColor: TextThemes.ndBlue,
                         child: CircleAvatar(
-                          backgroundImage: (currentUser.photoUrl == null)
+                          backgroundImage: (strUserPic == null)
                               ? AssetImage('images/user-avatar.png')
-                              : NetworkImage(currentUser.photoUrl),
+                              : NetworkImage(strUserPic),
                           // backgroundImage: NetworkImage(currentUser.photoUrl),
                           radius: 50,
                         ),
@@ -124,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
                         child: Text(
-                          currentUser.year != "" && currentUser.dorm != ""
+                          userYear != "" && userDorm != ""
                               ? userYear + ' in ' + userDorm
                               : "",
                           style: TextStyle(fontSize: 15),
@@ -138,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          currentUser.bio != ""
+                          userBio != ""
                               ? "\"" + userBio + "\""
                               : "Notre Dame",
                           style: TextStyle(fontSize: 15),

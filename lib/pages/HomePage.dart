@@ -1,3 +1,4 @@
+import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/FoodFeed.dart';
@@ -24,6 +25,7 @@ import 'notification_feed.dart';
 
 class HomePage extends StatefulWidget {
   @override
+
   _HomePageState createState() => _HomePageState();
   static const IconData leaderboard_outlined =
       IconData(0xe26f, fontFamily: 'MaterialIcons');
@@ -117,6 +119,8 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget build(BuildContext context) {
+     SizeConfig().init(context);
+
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
 
@@ -870,7 +874,7 @@ class Motd extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          height: MediaQuery.of(context).size.height * 0.15,
+          height: SizeConfig.blockSizeVertical * 15,
           child: Stack(children: <Widget>[
             FractionallySizedBox(
               widthFactor: 1,
