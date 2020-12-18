@@ -12,6 +12,7 @@ import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/search.dart';
 import 'package:MOOV/pages/notification_page.dart';
 import 'package:MOOV/pages/upload.dart';
+import 'package:MOOV/widgets/MOTD.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,6 @@ import 'notification_feed.dart';
 
 class HomePage extends StatefulWidget {
   @override
-
   _HomePageState createState() => _HomePageState();
   static const IconData leaderboard_outlined =
       IconData(0xe26f, fontFamily: 'MaterialIcons');
@@ -69,12 +69,7 @@ class _HomePageState extends State<HomePage>
   String eventprofile, title;
 
   _getdata() {
-    Firestore.instance
-        .collection('food')
-        .where("type", isEqualTo: "Sport")
-        .orderBy("startDate")
-        .snapshots()
-        .listen((snapshot) {
+    Firestore.instance.collection('food').snapshots().listen((snapshot) {
       for (var i = 0; i < snapshot.documents.length; i++) {
         DocumentSnapshot course = snapshot.documents[i];
         likedArray = course["liked"];
@@ -119,7 +114,7 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget build(BuildContext context) {
-     SizeConfig().init(context);
+    SizeConfig().init(context);
 
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
@@ -224,7 +219,7 @@ class _HomePageState extends State<HomePage>
               childAspectRatio: 2.25,
               children: <Widget>[
                 Container(
-                  child: Motd(),
+                  child: MOTD(),
                 ),
               ],
             ),
