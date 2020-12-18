@@ -23,18 +23,22 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    dynamic userScore = currentUser.score.toString();
     var strUserPic = currentUser.photoUrl;
-    dynamic likeCount;
-    var userYear = currentUser.year.toString().toLowerCase().capitalize();
-    var userDorm = currentUser.dorm.toString().toLowerCase().capitalize();
+    var userYear = currentUser.year;
+    var userDorm = currentUser.dorm;
     var userBio = currentUser.bio;
+    var userFriends = currentUser.friendArray;
+    var userFriendsLength = currentUser.friendArray.length.toString();
 
     return StreamBuilder(
-        stream: Firestore.instance.collection('users').snapshots(),
+        stream: Firestore.instance
+            .collection('users')
+            .document(currentUser.id)
+            .snapshots(),
         builder: (context, snapshot) {
-          userBio = snapshot.data.documents[0]['bio'];
-          strUserPic = snapshot.data.documents[0]['photoUrl'];
+          userBio = snapshot.data['bio'];
+          userDorm = snapshot.data['dorm'];
+          strUserPic = snapshot.data['photoUrl'];
           if (!snapshot.hasData) return Text('Loading data...');
 
           return Scaffold(
@@ -139,9 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          userBio != ""
-                              ? "\"" + userBio + "\""
-                              : "Notre Dame",
+                          userBio != "" ? "\"" + userBio + "\"" : "",
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
@@ -170,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                           children: [
                             Text(
-                              '0',
+                              userFriendsLength,
                               style: TextThemes.extraBold,
                             ),
                             Padding(
@@ -226,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
-                        child: FriendButton(),
+                        child: FriendButton(userFriends: userFriends),
                       )
                     ],
                   ),
@@ -255,8 +257,3 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1)}";
-  }
-}
