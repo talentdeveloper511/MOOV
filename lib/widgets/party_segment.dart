@@ -848,18 +848,16 @@ class PartySegmentState extends State<PartySegment> {
                                 ),
                               )
                             ]),
-                            course["userId"] == currentUser.id ?
-                            RaisedButton(
-                                color: Colors.red,
-                                onPressed: () {
-                                  print(course['userId']);
-                                  Database().deletePost(
-                                      course['postId'], course['userId']);
-                                },
-                                child: Text(
-                                  "DELETE",
-                                  style: TextStyle(color: Colors.white),
-                                )) : Text(''),
+                            course["userId"] == currentUser.id
+                                ? RaisedButton(
+                                    color: Colors.red,
+                                    onPressed: () => showAlertDialog(context,
+                                        course["postId"], course["userId"]),
+                                    child: Text(
+                                      "DELETE",
+                                      style: TextStyle(color: Colors.white),
+                                    ))
+                                : Text(''),
                             GestureDetector(
                               onTap: () {
                                 Share.share(text,
@@ -1045,6 +1043,29 @@ class PartySegmentState extends State<PartySegment> {
         ),
       )
     ];
+  }
+
+  void showAlertDialog(BuildContext context, postId, userId) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Delete?", style: TextStyle(color: Colors.red)),
+        content: Text("MOOVin' this to the trash can?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yeah", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().deletePost(postId, userId);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, nvm"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 
   Widget getChildWidget() => childWidgets[selectedIndex];
