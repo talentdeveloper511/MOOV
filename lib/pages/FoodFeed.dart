@@ -50,7 +50,7 @@ class _FoodFeedState extends State<FoodFeed> {
         appBar: AppBar(
           backgroundColor: TextThemes.ndBlue,
           title: Text(
-            'FOOD & DRINKS',
+            'RESTAURANTS & BARS',
             style: TextStyle(color: Color(0xffFFFFFF)),
           ),
           leading: InkWell(

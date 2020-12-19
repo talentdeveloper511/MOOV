@@ -249,17 +249,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           right: 7.5, bottom: 15, top: 15.5),
                       child: SizedBox(
                         height: 35.0,
-                        width: 200,
-                        child: FloatingActionButton.extended(
+                        width: 140,
+                        child: FloatingActionButton(
+                          shape: RoundedRectangleBorder(),
                           onPressed: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => EditProfile()));
                           },
-                          icon: Icon(Icons.edit),
                           backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-                          label: Text("Edit profile"),
+                          child: Text("Edit profile"),
                           foregroundColor: Colors.white,
                           elevation: 15,
                         ),
@@ -269,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 0.0, bottom: 15),
                       child: RaisedButton(
-                          color: TextThemes.ndBlue,
+                          color: Colors.red,
                           textColor: Colors.white,
                           child: Text('Sign out'),
                           onPressed: () => googleSignIn.signOut()),

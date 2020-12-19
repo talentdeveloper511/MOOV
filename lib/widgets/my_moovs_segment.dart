@@ -247,7 +247,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                             child: Column(
                               children: [
                                 ListTile(
-                                  title: Row(children: <Widget>[
+                                  title: Row(mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
                                     Expanded(
                                         child: Padding(
                                             padding: const EdgeInsets.all(5.0),

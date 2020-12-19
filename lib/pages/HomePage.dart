@@ -462,7 +462,7 @@ class _HomePageState extends State<HomePage>
                         alignment: Alignment.centerRight,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              top: 2, right: 35.0, bottom: 10),
+                              top: 2, right: 25.0, bottom: 10),
                           child: RichText(
                             textScaleFactor: 1.75,
                             text: TextSpan(

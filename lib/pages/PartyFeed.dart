@@ -28,7 +28,7 @@ class _PartyFeedState extends State<PartyFeed> {
         appBar: AppBar(
           backgroundColor: TextThemes.ndBlue,
           title: Text(
-            'PARTIES & HANGOUTS',
+            'PREGAMES & PARTIES',
             style: TextStyle(color: Color(0xffFFFFFF)),
           ),
           leading: InkWell(
