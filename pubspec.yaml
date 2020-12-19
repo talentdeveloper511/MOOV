@@ -149,17 +149,17 @@ flutter:
   #   - family: Pacifico
   #     fonts:
   #       - asset: assets/Pacifico-Regular.ttf
-
-    - family: Solway
-      fonts:
-        - asset: lib/fonts/Solway-Regular.ttf
-        - asset: lib/fonts/Solway-Bold.ttf
-          weight: 700
+fonts: 
+  - family: Solway
+    fonts:
+    - asset: lib/assets/fonts/Solway-Regular.ttf
+    - asset: lib/assets/fonts/Solway-Bold.ttf
+      weight: 700
           # style: 
 
-    - family: Open Sans
-      fonts:
-        - asset: lib/fonts/OpenSans-Bold.ttf
+  - family: OpenSans-Bold
+    fonts:
+      - asset: lib/assets/fonts/OpenSans-Bold.ttf
 
     # - family: Solway
     #   fonts:

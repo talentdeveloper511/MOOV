@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage>
                       builder: (context) => MoovMaker(postModel: PostModel())),
                 );
               },
-              label: const Text("Make a MOOV",
+              label: const Text("Make the MOOV",
                   style: TextStyle(fontSize: 20, color: Colors.white))),
         ),
       ),
@@ -436,8 +436,9 @@ class _HomePageState extends State<HomePage>
                           textScaleFactor: 1.75,
                           text:
                               TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(text: "No"),
-                            TextSpan(text: " bullshit."),
+                            TextSpan(text: "Stop "),
+                            TextSpan(text: "missing", style: TextThemes.italic),
+                            TextSpan(text: " out."),
                           ]),
                         ),
                       ),
@@ -449,11 +450,11 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
-                                                                    TextSpan(text: "This is "),
-
+                                  TextSpan(text: "Only "),
                                   TextSpan(
-                                      text: "our", style: TextThemes.italic),
-                                  TextSpan(text: " app."),
+                                      text: "friends",
+                                      style: TextThemes.italic),
+                                  TextSpan(text: " see data."),
                                 ]),
                           ),
                         ),
@@ -468,9 +469,10 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
+                                  TextSpan(text: "Your "),
                                   TextSpan(
-                                      text: "Go"),
-                                  TextSpan(text: " Irish."),
+                                      text: "secure", style: TextThemes.italic),
+                                  TextSpan(text: " network."),
                                 ]),
                           ),
                         ),
@@ -495,11 +497,11 @@ class _HomePageState extends State<HomePage>
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {},
-                          child: CategoryButton(asset: 'lib/assets/bag1.png')),
+                          child: CategoryButton(asset: 'lib/assets/club2.png')),
                       Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "Shopping",
+                            "Clubs",
                             style: TextStyle(
                                 fontFamily: 'Open Sans',
                                 fontWeight: FontWeight.bold,
@@ -589,11 +591,12 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {},
-                        child: CategoryButton(asset: 'lib/assets/club2.png')),
+                        child: CategoryButton(
+                            asset: 'lib/assets/charitybutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Clubs",
+                          "Service",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
@@ -609,7 +612,7 @@ class _HomePageState extends State<HomePage>
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Surprise",
+                          "Dorm Life",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
@@ -621,7 +624,6 @@ class _HomePageState extends State<HomePage>
               ],
             ),
           ),
-        
           SliverToBoxAdapter(
             child: Container(
               decoration: BoxDecoration(
@@ -711,8 +713,9 @@ class CategoryButton extends StatelessWidget {
 
     return Container(
       // height:
-      height: isLargePhone ? MediaQuery.of(context).size.height * 0.15 :
-      MediaQuery.of(context).size.height * 0.178,
+      height: isLargePhone
+          ? MediaQuery.of(context).size.height * 0.15
+          : MediaQuery.of(context).size.height * 0.178,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Image.asset(
