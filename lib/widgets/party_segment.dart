@@ -729,8 +729,7 @@ class PartySegmentState extends State<PartySegment> {
                                               course['startDate'].toDate()),
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            
-                                              fontSize: isLargePhone ? 12 : 11,
+                                            fontSize: isLargePhone ? 12 : 11,
                                           )),
                                     ],
                                   ),
@@ -849,6 +848,18 @@ class PartySegmentState extends State<PartySegment> {
                                 ),
                               )
                             ]),
+                            course["userId"] == currentUser.id ?
+                            RaisedButton(
+                                color: Colors.red,
+                                onPressed: () {
+                                  print(course['userId']);
+                                  Database().deletePost(
+                                      course['postId'], course['userId']);
+                                },
+                                child: Text(
+                                  "DELETE",
+                                  style: TextStyle(color: Colors.white),
+                                )) : Text(''),
                             GestureDetector(
                               onTap: () {
                                 Share.share(text,

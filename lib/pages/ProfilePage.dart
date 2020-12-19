@@ -1,4 +1,6 @@
+import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
@@ -27,8 +29,9 @@ class _ProfilePageState extends State<ProfilePage> {
     var userYear = currentUser.year;
     var userDorm = currentUser.dorm;
     var userBio = currentUser.bio;
+    var userHeader = currentUser.header;
     var userFriends = currentUser.friendArray;
-    var userFriendsLength = currentUser.friendArray.length.toString();
+    var userFriendsLength = "0";
 
     return StreamBuilder(
         stream: Firestore.instance
@@ -36,8 +39,11 @@ class _ProfilePageState extends State<ProfilePage> {
             .document(currentUser.id)
             .snapshots(),
         builder: (context, snapshot) {
+          bool isLargePhone = Screen.diagonal(context) > 766;
+
           userBio = snapshot.data['bio'];
           userDorm = snapshot.data['dorm'];
+          userHeader = snapshot.data['header'];
           strUserPic = snapshot.data['photoUrl'];
           if (!snapshot.hasData) return Text('Loading data...');
 
@@ -92,191 +98,267 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             body: SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30.0, bottom: 10),
-                      child: CircleAvatar(
-                        radius: 55,
-                        backgroundColor: TextThemes.ndGold,
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundColor: TextThemes.ndBlue,
-                          child: CircleAvatar(
-                            backgroundImage: (strUserPic == null)
-                                ? AssetImage('images/user-avatar.png')
-                                : NetworkImage(strUserPic),
-                            // backgroundImage: NetworkImage(currentUser.photoUrl),
-                            radius: 50,
+              child: Stack(children: [
+                Container(
+                  height: 145,
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Stack(children: <Widget>[
+                      FractionallySizedBox(
+                        widthFactor: isLargePhone ? 1.17 : 1.34,
+                        child: Container(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: userHeader == null ? null : Image.network(
+                              userHeader,
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        currentUser.displayName != ""
-                            ? currentUser.displayName
-                            : "Username not found",
-                        style: TextThemes.extraBold,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2.0, bottom: 14.0),
-                      child: Text(
-                        userYear != "" && userDorm != ""
-                            ? userYear + ' in ' + userDorm
-                            : "",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
-                    
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Column(
-                          children: [
-                            Text(
-                              '2',
-                              style: TextThemes.extraBold,
+                          margin: EdgeInsets.only(
+                              left: 20, top: 0, right: 20, bottom: 7.5),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(
-                                'Next MOOVs   ',
-                                style: TextThemes.bodyText1,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                userFriendsLength,
-                                style: TextThemes.extraBold,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: Text(
-                                  'Friends',
-                                  style: TextThemes.bodyText1,
-                                ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
                               ),
                             ],
                           ),
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '0',
-                              style: TextThemes.extraBold,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(
-                                'Friend Groups',
-                                style: TextThemes.bodyText1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Card(
-                      margin:
-                          EdgeInsets.only(left: 15, right: 15, bottom: 20, top: 10),
-                      color: TextThemes.ndBlue,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15.0, bottom: 2, top: 8),
-                            child: RichText(
-                              textScaleFactor: 1.75,
-                              text: TextSpan(
-                                  style: TextThemes.mediumbody,
-                                  children: [
-                                    TextSpan(
-                                        text: "bio", style: TextStyle(fontWeight: FontWeight.w200, color: TextThemes.ndGold)),
-                                  ]),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5.0, bottom: 35),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                child: RichText(
-                                  textScaleFactor: 1.3,
-                                  text: TextSpan(
-                                      style: TextThemes.mediumbody,
-                                      children: [
-                                        TextSpan(
-                                            text: userBio,
-                                            style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
-                                      ]),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                    
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: FriendButton(userFriends: userFriends),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        SeeContactsButton(),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          right: 7.5, bottom: 15, top: 15.5),
-                      child: SizedBox(
-                        height: 35.0,
-                        width: 130,
-                        child: FloatingActionButton(
-                          shape: RoundedRectangleBorder(),
-                          onPressed: () {
+                    ]),
+                  ),
+                ),
+                Positioned(
+                    top: 60,
+                    right: 75,
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfile()));
+                        },
+                        child: Icon(
+                          Icons.edit,
+                          size: 35,
+                        ))),
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30.0, bottom: 10),
+                        child: GestureDetector(
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => EditProfile()));
                           },
-                          backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-                          child: Text("Edit profile"),
-                          foregroundColor: Colors.white,
-                          elevation: 15,
+                          child: CircleAvatar(
+                            radius: 55,
+                            backgroundColor: TextThemes.ndGold,
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundColor: TextThemes.ndBlue,
+                              child: CircleAvatar(
+                                backgroundImage: (strUserPic == null)
+                                    ? AssetImage('images/user-avatar.png')
+                                    : NetworkImage(strUserPic),
+                                // backgroundImage: NetworkImage(currentUser.photoUrl),
+                                radius: 50,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0.0, bottom: 15),
-                      child: RaisedButton(
-                          color: Colors.red,
-                          textColor: Colors.white,
-                          child: Text('Sign out'),
-                          onPressed: () => googleSignIn.signOut()),
-                    )
-                  ],
-                ),
-              ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          currentUser.displayName != ""
+                              ? currentUser.displayName
+                              : "Username not found",
+                          style: TextThemes.extraBold,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0, bottom: 14.0),
+                        child: Text(
+                          userYear != "" && userDorm != ""
+                              ? userYear + ' in ' + userDorm
+                              : "",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Column(
+                            children: [
+                              Text(
+                                '2',
+                                style: TextThemes.extraBold,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Text(
+                                  'Next MOOVs   ',
+                                  style: TextThemes.bodyText1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  userFriends.length.toString() == null
+                                      ? "0"
+                                      : userFriends.length.toString(),
+                                  style: TextThemes.extraBold,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Text(
+                                    'Friends',
+                                    style: TextThemes.bodyText1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                '0',
+                                style: TextThemes.extraBold,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Text(
+                                  'Friend Groups',
+                                  style: TextThemes.bodyText1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfile()));
+                        },
+                        child: Card(
+                          margin: EdgeInsets.only(
+                              left: 15, right: 15, bottom: 20, top: 10),
+                          color: TextThemes.ndBlue,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15.0, bottom: 2, top: 8),
+                                child: RichText(
+                                  textScaleFactor: 1.75,
+                                  text: TextSpan(
+                                      style: TextThemes.mediumbody,
+                                      children: [
+                                        TextSpan(
+                                            text: "bio",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                color: TextThemes.ndGold)),
+                                      ]),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 5.0, bottom: 35),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: RichText(
+                                      textScaleFactor: 1.3,
+                                      text: TextSpan(
+                                          style: TextThemes.mediumbody,
+                                          children: [
+                                            TextSpan(
+                                                text: userBio,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontStyle:
+                                                        FontStyle.italic)),
+                                          ]),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: FriendButton(userFriends: userFriends),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          SeeContactsButton(),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 7.5, bottom: 15, top: 100),
+                        child: SizedBox(
+                          height: 35.0,
+                          width: 130,
+                          child: FloatingActionButton(
+                            shape: RoundedRectangleBorder(),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditProfile()));
+                            },
+                            backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
+                            child: Text("Edit profile"),
+                            foregroundColor: Colors.white,
+                            elevation: 15,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0.0, bottom: 15),
+                        child: RaisedButton(
+                            color: Colors.red,
+                            textColor: Colors.white,
+                            child: Text('Sign out'),
+                            onPressed: () => googleSignIn.signOut()),
+                      )
+                    ],
+                  ),
+                )
+              ]),
             ),
           );
         });

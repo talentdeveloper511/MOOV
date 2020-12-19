@@ -286,7 +286,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return Text('Loading data...');
               return Container(
-                height: (snapshot.data.documents.length <= 3) ? 270 : 325,
+                height: (snapshot.data.documents.length <= 3) ? 270 : 345,
                 child: Column(
                   children: [
                     Expanded(

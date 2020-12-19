@@ -16,7 +16,7 @@ import 'create_account.dart';
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final usersRef = Firestore.instance.collection('users');
-final postsRef = Firestore.instance.collection('posts');
+final postsRef = Firestore.instance.collection('food');
 final notificationFeedRef = Firestore.instance.collection('notificationFeed');
 final DateTime timestamp = DateTime.now();
 User currentUser;
@@ -85,7 +85,8 @@ class _HomeState extends State<Home> {
         "photoUrl": user.photoUrl,
         "email": user.email,
         "displayName": user.displayName,
-        "bio": "",
+        "bio": "Create a bio!",
+        "header": "",
         "timestamp": timestamp,
         "score": 0,
         "gender": gender,

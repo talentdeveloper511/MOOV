@@ -49,7 +49,8 @@ class Database {
       userName,
       userEmail,
       profilePic,
-      featured}) async {
+      featured,
+      postId}) async {
     DocumentReference ref = await dbRef.collection("food").add({
       'title': title,
       'likes': likes,
@@ -67,6 +68,7 @@ class Database {
       'userEmail': userEmail,
       'profilePic': profilePic,
       "featured": featured,
+      "postId": postId
     });
     // final String postId = ref.documentID;
     print(ref.documentID);
@@ -178,6 +180,21 @@ class Database {
           .document(ownerId)
           .collection("feedItems")
           .document(moovId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
+    }
+  }
+
+  deletePost(
+      String postId, String ownerId) {
+    bool isPostOwner = strUserId == ownerId;
+    if (isPostOwner) {
+      postsRef
+          .document(postId)
           .get()
           .then((doc) {
         if (doc.exists) {

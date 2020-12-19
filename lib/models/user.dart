@@ -9,6 +9,7 @@ class User {
   final String year;
   final int score;
   final String dorm;
+  final String header;
   final String gender;
   final List<dynamic> friendArray;
   final postLimit;
@@ -22,6 +23,7 @@ class User {
       this.score,
       this.year,
       this.dorm,
+      this.header,
       this.gender,
       this.friendArray,
       this.postLimit});
@@ -35,6 +37,7 @@ class User {
         bio: doc['bio'],
         score: doc['score'],
         dorm: doc['dorm'],
+        header: doc['header'],
         year: doc['year'],
         gender: doc['gender'],
         friendArray: doc['friendArray'],
