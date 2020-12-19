@@ -414,11 +414,11 @@ class _HomePageState extends State<HomePage>
                   showDialog(
                       context: context,
                       builder: (_) => CupertinoAlertDialog(
-                            title: Text("Join us."),
+                            title: Text("No bullshit."),
                             content: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                  "Our app is run by current students. Would you like to join the team? Email kcamson@nd.edu."),
+                                  "Privacy is our #1 priority. Only friends will see your data on this app, so only friend people you know. You are safe. This is your app. You define the experience."),
                             ),
                           ),
                       barrierDismissible: true);
@@ -450,11 +450,10 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
-                                  TextSpan(text: "Only "),
+                                  TextSpan(text: "Friends "),
                                   TextSpan(
-                                      text: "friends",
-                                      style: TextThemes.italic),
-                                  TextSpan(text: " see data."),
+                                      text: "only", style: TextThemes.italic),
+                                  TextSpan(text: " privacy."),
                                 ]),
                           ),
                         ),
