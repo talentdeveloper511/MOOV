@@ -1,3 +1,4 @@
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
@@ -210,6 +211,8 @@ class NotificationFeedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+    
     configureMediaPreview(context);
 
     return Padding(
@@ -223,7 +226,7 @@ class NotificationFeedItem extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
                   style: TextStyle(
-                    fontSize: 13.5,
+                    fontSize: isLargePhone ? 13.5 : 12,
                     color: Colors.black,
                   ),
                   children: [

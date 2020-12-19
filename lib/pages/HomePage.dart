@@ -1,5 +1,6 @@
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/FoodFeed.dart';
 import 'package:MOOV/pages/SportFeed.dart';
@@ -115,6 +116,8 @@ class _HomePageState extends State<HomePage>
 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    bool isLargePhone = Screen.diagonal(context) > 720;
+    bool isNarrow = Screen.widthInches(context) < 3.5;
 
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
@@ -230,7 +233,7 @@ class _HomePageState extends State<HomePage>
               crossAxisCount: 2,
               mainAxisSpacing: 0.0,
               crossAxisSpacing: 0.0,
-              childAspectRatio: 1.55,
+              childAspectRatio: isLargePhone ? 1.48 : 1.5,
               children: <Widget>[
                 Container(
                   child: Padding(
@@ -433,23 +436,24 @@ class _HomePageState extends State<HomePage>
                           textScaleFactor: 1.75,
                           text:
                               TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(text: "Made ", style: TextStyle()),
-                            TextSpan(text: "by", style: TextThemes.italic),
-                            TextSpan(text: " students"),
+                            TextSpan(text: "No"),
+                            TextSpan(text: " bullshit."),
                           ]),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 50.0),
+                        padding: const EdgeInsets.only(left: 0.0),
                         child: Center(
                           child: RichText(
                             textScaleFactor: 1.75,
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
+                                                                    TextSpan(text: "This is "),
+
                                   TextSpan(
-                                      text: "with", style: TextThemes.italic),
-                                  TextSpan(text: " students"),
+                                      text: "our", style: TextThemes.italic),
+                                  TextSpan(text: " app."),
                                 ]),
                           ),
                         ),
@@ -465,8 +469,8 @@ class _HomePageState extends State<HomePage>
                                 style: TextThemes.mediumbody,
                                 children: [
                                   TextSpan(
-                                      text: "for", style: TextThemes.italic),
-                                  TextSpan(text: " students"),
+                                      text: "Go"),
+                                  TextSpan(text: " Irish."),
                                 ]),
                           ),
                         ),
@@ -578,7 +582,7 @@ class _HomePageState extends State<HomePage>
               maxCrossAxisExtent: 200,
               mainAxisSpacing: 15.0,
               crossAxisSpacing: 10.0,
-              childAspectRatio: 1.1,
+              childAspectRatio: isLargePhone ? 1.187 : 1.1,
               children: <Widget>[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -860,123 +864,19 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class Motd extends StatelessWidget {
-  //MOOV Of The Day
-  const Motd({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          height: SizeConfig.blockSizeVertical * 15,
-          child: Stack(children: <Widget>[
-            FractionallySizedBox(
-              widthFactor: 1,
-              child: Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    'lib/assets/bouts.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                margin:
-                    EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 7.5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                alignment: Alignment(0.0, 0.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        Colors.black.withAlpha(0),
-                        Colors.black,
-                        Colors.black12,
-                      ],
-                    ),
-                  ),
-                  child: Text(
-                    "Baraka Bouts",
-                    style: TextStyle(
-                        fontFamily: 'Solway',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
-                  ),
-                ),
-              ),
-            ),
-          ]),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Align(
-              alignment: Alignment.center,
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) => CupertinoAlertDialog(
-                            title: Text("Your MOOV."),
-                            content: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                  "Do you have the MOOV of the Day? Email kcamson@nd.edu."),
-                            ),
-                          ),
-                      barrierDismissible: true);
-                },
-                child: Card(
-                  borderOnForeground: true,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      "MOOV of the Day",
-                      style: TextStyle(
-                          fontFamily: 'Open Sans',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 16.0),
-                    ),
-                  ),
-                ),
-              )),
-        ),
-      ],
-    );
-  }
-}
-
 class CategoryButton extends StatelessWidget {
   CategoryButton({@required this.asset});
   final String asset;
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isNarrow = Screen.widthInches(context) < 3.5;
+
     return Container(
       // height:
-      height: MediaQuery.of(context).size.height * 0.15,
-
+      height: isLargePhone ? MediaQuery.of(context).size.height * 0.15 :
+      MediaQuery.of(context).size.height * 0.178,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Image.asset(

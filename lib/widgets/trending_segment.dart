@@ -1,4 +1,5 @@
 import 'package:MOOV/helpers/demo_values.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
   bool _isPressed; // = false;
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
     final strUserName = user.displayName;
@@ -173,7 +176,9 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 maxLines: 1,
                                                 style: TextStyle(
                                                     color: Colors.blue[900],
-                                                    fontSize: 12.0,
+                                                    fontSize: isLargePhone
+                                                        ? 12.0
+                                                        : 10,
                                                     fontWeight:
                                                         FontWeight.bold),
                                                 textAlign: TextAlign.center,
@@ -188,10 +193,27 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                               width: 1,
                                             )),
                                             child: Image.network(
-                                                course['image'],
-                                                fit: BoxFit.cover,
-                                                height: 75,
-                                                width: 110),
+                                              course['image'],
+                                              fit: BoxFit.cover,
+                                              height: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.08
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.08,
+                                              width: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                            ),
                                           ),
                                           Row(
                                             children: [
@@ -208,10 +230,15 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 ),
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 6.0,
-                                                    left: 12,
-                                                    right: 2),
+                                                padding: isLargePhone
+                                                    ? const EdgeInsets.only(
+                                                        top: 6.0,
+                                                        left: 12,
+                                                        right: 2)
+                                                    : const EdgeInsets.only(
+                                                        top: 6.0,
+                                                        left: 4,
+                                                        right: 2),
                                                 child: Icon(Icons.timer,
                                                     color: TextThemes.ndGold,
                                                     size: 15),
@@ -257,9 +284,9 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Text('');
+              if (!snapshot.hasData) return Text('Loading data...');
               return Container(
-                height: (snapshot.data.documents.length <= 3) ? 205 : 400,
+                height: (snapshot.data.documents.length <= 3) ? 270 : 325,
                 child: Column(
                   children: [
                     Expanded(
@@ -337,7 +364,9 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 maxLines: 1,
                                                 style: TextStyle(
                                                     color: Colors.blue[900],
-                                                    fontSize: 12.0,
+                                                    fontSize: isLargePhone
+                                                        ? 12.0
+                                                        : 10,
                                                     fontWeight:
                                                         FontWeight.bold),
                                                 textAlign: TextAlign.center,
@@ -352,10 +381,27 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                               width: 1,
                                             )),
                                             child: Image.network(
-                                                course['image'],
-                                                fit: BoxFit.cover,
-                                                height: 75,
-                                                width: 110),
+                                              course['image'],
+                                              fit: BoxFit.cover,
+                                              height: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.08
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.08,
+                                              width: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                            ),
                                           ),
                                           Row(
                                             children: [
@@ -372,10 +418,15 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 ),
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 6.0,
-                                                    left: 12,
-                                                    right: 2),
+                                                padding: isLargePhone
+                                                    ? const EdgeInsets.only(
+                                                        top: 6.0,
+                                                        left: 12,
+                                                        right: 2)
+                                                    : const EdgeInsets.only(
+                                                        top: 6.0,
+                                                        left: 4,
+                                                        right: 2),
                                                 child: Icon(Icons.timer,
                                                     color: TextThemes.ndGold,
                                                     size: 15),
@@ -421,7 +472,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Text('');
+              if (!snapshot.hasData) return Text('Loading data...');
               return Container(
                 height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                 child: Column(
@@ -438,8 +489,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                               Image.asset('lib/assets/dance.png', height: 40),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child:
-                                    Text('MORE', style: TextThemes.extraBold),
+                                child: Text('MORE',
+                                    style: TextThemes.extraBold),
                               ),
                             ],
                           ),
@@ -501,7 +552,9 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 maxLines: 1,
                                                 style: TextStyle(
                                                     color: Colors.blue[900],
-                                                    fontSize: 12.0,
+                                                    fontSize: isLargePhone
+                                                        ? 12.0
+                                                        : 10,
                                                     fontWeight:
                                                         FontWeight.bold),
                                                 textAlign: TextAlign.center,
@@ -516,10 +569,27 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                               width: 1,
                                             )),
                                             child: Image.network(
-                                                course['image'],
-                                                fit: BoxFit.cover,
-                                                height: 75,
-                                                width: 110),
+                                              course['image'],
+                                              fit: BoxFit.cover,
+                                              height: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.08
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.08,
+                                              width: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                            ),
                                           ),
                                           Row(
                                             children: [
@@ -536,10 +606,15 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 ),
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 6.0,
-                                                    left: 12,
-                                                    right: 2),
+                                                padding: isLargePhone
+                                                    ? const EdgeInsets.only(
+                                                        top: 6.0,
+                                                        left: 12,
+                                                        right: 2)
+                                                    : const EdgeInsets.only(
+                                                        top: 6.0,
+                                                        left: 4,
+                                                        right: 2),
                                                 child: Icon(Icons.timer,
                                                     color: TextThemes.ndGold,
                                                     size: 15),

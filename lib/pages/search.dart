@@ -55,7 +55,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
               child: Image.asset(
                 'lib/assets/moovblue.png',
                 fit: BoxFit.cover,
-                height: 55.0,
+                height: 50.0,
               ),
             ),
           ],

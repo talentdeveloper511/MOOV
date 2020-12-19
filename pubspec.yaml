@@ -59,6 +59,9 @@ dependencies:
   provider: ^4.3.2
   timeago: ^2.0.17
   share: ^0.6.5+4
+  flutter_screenutil: ^4.0.0
+
+
 
 
 

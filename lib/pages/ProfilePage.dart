@@ -85,175 +85,200 @@ class _ProfilePageState extends State<ProfilePage> {
                     Image.asset(
                       'lib/assets/moovblue.png',
                       fit: BoxFit.cover,
-                      height: 55.0,
+                      height: 50.0,
                     ),
                   ],
                 ),
               ),
             ),
-            body: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50.0, bottom: 10),
-                    child: CircleAvatar(
-                      radius: 55,
-                      backgroundColor: TextThemes.ndGold,
+            body: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30.0, bottom: 10),
                       child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: TextThemes.ndBlue,
+                        radius: 55,
+                        backgroundColor: TextThemes.ndGold,
                         child: CircleAvatar(
-                          backgroundImage: (strUserPic == null)
-                              ? AssetImage('images/user-avatar.png')
-                              : NetworkImage(strUserPic),
-                          // backgroundImage: NetworkImage(currentUser.photoUrl),
                           radius: 50,
+                          backgroundColor: TextThemes.ndBlue,
+                          child: CircleAvatar(
+                            backgroundImage: (strUserPic == null)
+                                ? AssetImage('images/user-avatar.png')
+                                : NetworkImage(strUserPic),
+                            // backgroundImage: NetworkImage(currentUser.photoUrl),
+                            radius: 50,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      currentUser.displayName != ""
-                          ? currentUser.displayName
-                          : "Username not found",
-                      style: TextThemes.extraBold,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        currentUser.displayName != ""
+                            ? currentUser.displayName
+                            : "Username not found",
+                        style: TextThemes.extraBold,
+                      ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
-                        child: Text(
-                          userYear != "" && userDorm != ""
-                              ? userYear + ' in ' + userDorm
-                              : "",
-                          style: TextStyle(fontSize: 15),
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.0, bottom: 14.0),
+                      child: Text(
+                        userYear != "" && userDorm != ""
+                            ? userYear + ' in ' + userDorm
+                            : "",
+                        style: TextStyle(fontSize: 15),
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          userBio != "" ? "\"" + userBio + "\"" : "",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Column(
-                        children: [
-                          Text(
-                            '2',
-                            style: TextThemes.extraBold,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Text(
-                              'Next MOOVs   ',
-                              style: TextThemes.bodyText1,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
+                    ),
+                    
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Column(
                           children: [
                             Text(
-                              userFriendsLength,
+                              '2',
                               style: TextThemes.extraBold,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
                               child: Text(
-                                'Friends',
+                                'Next MOOVs   ',
                                 style: TextThemes.bodyText1,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            '0',
-                            style: TextThemes.extraBold,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                userFriendsLength,
+                                style: TextThemes.extraBold,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Text(
+                                  'Friends',
+                                  style: TextThemes.bodyText1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '0',
+                              style: TextThemes.extraBold,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Text(
+                                'Friend Groups',
+                                style: TextThemes.bodyText1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Card(
+                      margin:
+                          EdgeInsets.only(left: 15, right: 15, bottom: 20, top: 10),
+                      color: TextThemes.ndBlue,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, bottom: 2, top: 8),
+                            child: RichText(
+                              textScaleFactor: 1.75,
+                              text: TextSpan(
+                                  style: TextThemes.mediumbody,
+                                  children: [
+                                    TextSpan(
+                                        text: "bio", style: TextStyle(fontWeight: FontWeight.w200, color: TextThemes.ndGold)),
+                                  ]),
+                            ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Text(
-                              'Friend Groups',
-                              style: TextThemes.bodyText1,
+                            padding: const EdgeInsets.only(top: 5.0, bottom: 35),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                child: RichText(
+                                  textScaleFactor: 1.3,
+                                  text: TextSpan(
+                                      style: TextThemes.mediumbody,
+                                      children: [
+                                        TextSpan(
+                                            text: userBio,
+                                            style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic)),
+                                      ]),
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        right: 7.5, bottom: 15, top: 15.5),
-                    child: SizedBox(
-                      height: 35.0,
-                      width: 300,
-                      child: FloatingActionButton.extended(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile()));
-                        },
-                        icon: Icon(Icons.edit),
-                        backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-                        label: Text("Edit profile"),
-                        foregroundColor: Colors.white,
-                        elevation: 15,
+                    ),
+                    
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: FriendButton(userFriends: userFriends),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        SeeContactsButton(),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: 7.5, bottom: 15, top: 15.5),
+                      child: SizedBox(
+                        height: 35.0,
+                        width: 200,
+                        child: FloatingActionButton.extended(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditProfile()));
+                          },
+                          icon: Icon(Icons.edit),
+                          backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
+                          label: Text("Edit profile"),
+                          foregroundColor: Colors.white,
+                          elevation: 15,
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: FriendButton(userFriends: userFriends),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SeeContactsButton(),
-                    ],
-                  ),
-                  Positioned(
-                    bottom: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 35.0),
+                    
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0.0, bottom: 15),
                       child: RaisedButton(
                           color: TextThemes.ndBlue,
                           textColor: Colors.white,
                           child: Text('Sign out'),
                           onPressed: () => googleSignIn.signOut()),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           );
         });
   }
 }
-
