@@ -5,6 +5,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/friend_groups_button.dart';
 import 'package:flutter/material.dart';
@@ -24,110 +25,146 @@ class _MOTDState extends State<MOTD> {
     var pic;
 
     return StreamBuilder(
-        stream: Firestore.instance.collection('MOTD').document("ARohxuFZnP6fm1bqzMac"
-).snapshots(),
+        stream: Firestore.instance
+            .collection('food')
+            .where("MOTD", isEqualTo: true)
+            .snapshots(),
         builder: (context, snapshot) {
-          title = snapshot.data['title'];
-          pic = snapshot.data['pic'];
+          // title = snapshot.data['title'];
+          // pic = snapshot.data['pic'];
           if (!snapshot.hasData) return Text('Loading data...');
 
-          return Column(
-            children: <Widget>[
-              Container(
-                height: SizeConfig.blockSizeVertical * 15,
-                child: Stack(children: <Widget>[
-                  FractionallySizedBox(
-                    widthFactor: 1,
-                    child: Container(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          pic,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      margin: EdgeInsets.only(
-                          left: 20, top: 10, right: 20, bottom: 7.5),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      alignment: Alignment(0.0, 0.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: <Color>[
-                              Colors.black.withAlpha(0),
-                              Colors.black,
-                              Colors.black12,
-                            ],
-                          ),
-                        ),
-                        child: Text(
-                          title,
-                          style: TextStyle(
-                              fontFamily: 'Solway',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 20.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Align(
-                    alignment: Alignment.center,
-                    child: GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => CupertinoAlertDialog(
-                                  title: Text("Your MOOV."),
-                                  content: Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                        "Do you have the MOOV of the Day? Email kcamson@nd.edu."),
+          return MediaQuery(
+            data: MediaQuery.of(context).removePadding(removeTop: true),
+                      child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot course = snapshot.data.documents[index];
+                  pic = course['image'];
+                  title = course['title'];
+
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          height: SizeConfig.blockSizeVertical * 15,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => PostDetail(
+                                      course['image'],
+                                      course['title'],
+                                      course['description'],
+                                      course['startDate'],
+                                      course['location'],
+                                      course['address'],
+                                      course['profilePic'],
+                                      course['userName'],
+                                      course['userEmail'],
+                                      course['liked'],
+                                      course.documentID)));
+                            },
+                            child: Stack(children: <Widget>[
+                              FractionallySizedBox(
+                                widthFactor: 1,
+                                child: Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      pic,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                      left: 20, top: 0, right: 20, bottom: 7.5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
                                   ),
                                 ),
-                            barrierDismissible: true);
-                      },
-                      child: Card(
-                        borderOnForeground: true,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            "MOOV of the Day",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  alignment: Alignment(0.0, 0.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: <Color>[
+                                          Colors.black.withAlpha(0),
+                                          Colors.black,
+                                          Colors.black12,
+                                        ],
+                                      ),
+                                    ),
+                                    child: Text(
+                                      title,
+                                      style: TextStyle(
+                                          fontFamily: 'Solway',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 20.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
                           ),
                         ),
-                      ),
-                    )),
-              ),
-            ],
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) => CupertinoAlertDialog(
+                                            title: Text("Your MOOV."),
+                                            content: Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 8.0),
+                                              child: Text(
+                                                  "Do you have the MOOV of the Day? Email kcamson@nd.edu."),
+                                            ),
+                                          ),
+                                      barrierDismissible: true);
+                                },
+                                child: Card(
+                                  borderOnForeground: true,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      "MOOV of the Day",
+                                      style: TextStyle(
+                                          fontFamily: 'Open Sans',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontSize: 16.0),
+                                    ),
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
           );
         });
   }
