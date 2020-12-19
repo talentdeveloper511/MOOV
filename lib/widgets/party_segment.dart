@@ -1,4 +1,5 @@
 import 'package:MOOV/helpers/demo_values.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/post_card.dart';
@@ -285,6 +286,7 @@ class PartySegmentState extends State<PartySegment> {
                                       Text(
                                           DateFormat('MMMd').add_jm().format(
                                               course['startDate'].toDate()),
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontSize: 12.0,
                                           )),
@@ -304,6 +306,7 @@ class PartySegmentState extends State<PartySegment> {
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold)),
                                       Text(course['location'],
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontSize: 12.0,
                                           )),
@@ -560,12 +563,15 @@ class PartySegmentState extends State<PartySegment> {
             );
           }),
       StreamBuilder(
+          //all
           stream: Firestore.instance
               .collection('food')
               .where("type", isEqualTo: "Party")
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
+            bool isLargePhone = Screen.diagonal(context) > 766;
+
             if (!snapshot.hasData) return Text('Loading data...');
             return ListView.builder(
               itemCount: snapshot.data.documents.length,
@@ -717,13 +723,14 @@ class PartySegmentState extends State<PartySegment> {
                                       ),
                                       Text('WHEN: ',
                                           style: TextStyle(
-                                              fontSize: 12.0,
                                               fontWeight: FontWeight.bold)),
                                       Text(
                                           DateFormat('MMMd').add_jm().format(
                                               course['startDate'].toDate()),
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            fontSize: 12.0,
+                                            
+                                              fontSize: isLargePhone ? 12 : 11,
                                           )),
                                     ],
                                   ),
@@ -741,9 +748,10 @@ class PartySegmentState extends State<PartySegment> {
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold)),
                                       Text(course['address'],
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            fontSize: 12.0,
-                                          )),
+                                              fontSize:
+                                                  isLargePhone ? 12 : 11)),
                                     ],
                                   ),
                                 ],

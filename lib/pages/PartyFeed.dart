@@ -1,3 +1,4 @@
+import 'package:MOOV/main.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,8 @@ class _PartyFeedState extends State<PartyFeed> {
   bool _isPressed = false;
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
     final strUserName = user.displayName;
@@ -29,7 +32,9 @@ class _PartyFeedState extends State<PartyFeed> {
           backgroundColor: TextThemes.ndBlue,
           title: Text(
             'PREGAMES & PARTIES',
-            style: TextStyle(color: Color(0xffFFFFFF)),
+            style: TextStyle(
+              fontSize: isLargePhone ? 20 : 17,
+              color: Color(0xffFFFFFF)),
           ),
           leading: InkWell(
             onTap: () => Navigator.of(context).pop(),

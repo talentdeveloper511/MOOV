@@ -249,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           right: 7.5, bottom: 15, top: 15.5),
                       child: SizedBox(
                         height: 35.0,
-                        width: 140,
+                        width: 130,
                         child: FloatingActionButton(
                           shape: RoundedRectangleBorder(),
                           onPressed: () {

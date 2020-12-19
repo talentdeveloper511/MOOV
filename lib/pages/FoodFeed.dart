@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,9 @@ class _FoodFeedState extends State<FoodFeed> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
+
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
     final strUserName = user.displayName;
@@ -51,7 +55,9 @@ class _FoodFeedState extends State<FoodFeed> {
           backgroundColor: TextThemes.ndBlue,
           title: Text(
             'RESTAURANTS & BARS',
-            style: TextStyle(color: Color(0xffFFFFFF)),
+            style: TextStyle(
+              fontSize: isLargePhone ? 20 : 16,
+              color: Color(0xffFFFFFF)),
           ),
           leading: InkWell(
             onTap: () => Navigator.of(context).pop(),

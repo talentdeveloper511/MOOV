@@ -1,4 +1,5 @@
 import 'package:MOOV/helpers/demo_values.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/post_card.dart';
@@ -128,6 +129,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
+            bool isLargePhone = Screen.diagonal(context) > 766;
+
             if (!snapshot.hasData) return Text('Loading data...');
             return Container(
               child: Column(
@@ -173,293 +176,344 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                           likeCount = 0;
                         }
 
-                        return 
-                          (strUserId == course["userId"]) ?
-                        Card(
-                          color: Colors.white,
-                          clipBehavior: Clip.antiAlias,
-                          child: new InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PostDetail(
-                                      course['image'],
-                                      course['title'],
-                                      course['description'],
-                                      course['startDate'],
-                                      course['location'],
-                                      course['address'],
-                                      course['profilePic'],
-                                      course['userName'],
-                                      course['userEmail'],
-                                      likedArray,
-                                      course.documentID)));
-                            },
-                            onDoubleTap: () {
-                              setState(() {
-                                List<dynamic> likedArray = course["liked"];
-                                List<String> uidArray = List<String>();
-                                if (likedArray != null) {
-                                  likeCount = likedArray.length;
-                                  for (int i = 0; i < likeCount; i++) {
-                                    var id = likedArray[i]["uid"];
-                                    uidArray.add(id);
-                                  }
-                                }
+                        return (strUserId == course["userId"])
+                            ? Card(
+                                color: Colors.white,
+                                clipBehavior: Clip.antiAlias,
+                                child: new InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => PostDetail(
+                                                course['image'],
+                                                course['title'],
+                                                course['description'],
+                                                course['startDate'],
+                                                course['location'],
+                                                course['address'],
+                                                course['profilePic'],
+                                                course['userName'],
+                                                course['userEmail'],
+                                                likedArray,
+                                                course.documentID)));
+                                  },
+                                  onDoubleTap: () {
+                                    setState(() {
+                                      List<dynamic> likedArray =
+                                          course["liked"];
+                                      List<String> uidArray = List<String>();
+                                      if (likedArray != null) {
+                                        likeCount = likedArray.length;
+                                        for (int i = 0; i < likeCount; i++) {
+                                          var id = likedArray[i]["uid"];
+                                          uidArray.add(id);
+                                        }
+                                      }
 
-                                if (uidArray != null &&
-                                    uidArray.contains(strUserId)) {
-                                  Database().removeGoing(
-                                      course["userId"],
-                                      course["image"],
-                                      strUserId,
-                                      course.documentID,
-                                      strUserName,
-                                      strUserPic,
-                                      course["startDate"],
-                                      course["title"],
-                                      course["description"],
-                                      course["location"],
-                                      course["address"],
-                                      course["profilePic"],
-                                      course["userName"],
-                                      course["userEmail"],
-                                      likedArray);
-                                } else {
-                                  Database().addGoing(
-                                      course["userId"],
-                                      course["image"],
-                                      strUserId,
-                                      course.documentID,
-                                      strUserName,
-                                      strUserPic,
-                                      course["startDate"],
-                                      course["title"],
-                                      course["description"],
-                                      course["location"],
-                                      course["address"],
-                                      course["profilePic"],
-                                      course["userName"],
-                                      course["userEmail"],
-                                      likedArray);
-                                }
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  title: Row(mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                    Expanded(
-                                        child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                color: Color(0xff000000),
-                                                width: 1,
-                                              )),
-                                              child: Image.network(
-                                                  course['image'],
-                                                  fit: BoxFit.cover,
-                                                  height: 130,
-                                                  width: 50),
-                                            ))),
-                                    Expanded(
-                                        child: Column(children: <Widget>[
+                                      if (uidArray != null &&
+                                          uidArray.contains(strUserId)) {
+                                        Database().removeGoing(
+                                            course["userId"],
+                                            course["image"],
+                                            strUserId,
+                                            course.documentID,
+                                            strUserName,
+                                            strUserPic,
+                                            course["startDate"],
+                                            course["title"],
+                                            course["description"],
+                                            course["location"],
+                                            course["address"],
+                                            course["profilePic"],
+                                            course["userName"],
+                                            course["userEmail"],
+                                            likedArray);
+                                      } else {
+                                        Database().addGoing(
+                                            course["userId"],
+                                            course["image"],
+                                            strUserId,
+                                            course.documentID,
+                                            strUserName,
+                                            strUserPic,
+                                            course["startDate"],
+                                            course["title"],
+                                            course["description"],
+                                            course["location"],
+                                            course["address"],
+                                            course["profilePic"],
+                                            course["userName"],
+                                            course["userEmail"],
+                                            likedArray);
+                                      }
+                                    });
+                                  },
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        title: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Expanded(
+                                                  child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5.0),
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                border:
+                                                                    Border.all(
+                                                          color:
+                                                              Color(0xff000000),
+                                                          width: 1,
+                                                        )),
+                                                        child: Image.network(
+                                                            course['image'],
+                                                            fit: BoxFit.cover,
+                                                            height: 130,
+                                                            width: 50),
+                                                      ))),
+                                              Expanded(
+                                                  child:
+                                                      Column(children: <Widget>[
+                                                Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0)),
+                                                Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    child: Text(
+                                                        course['title']
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .blue[900],
+                                                            fontSize: 20.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        textAlign:
+                                                            TextAlign.center)),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Text(
+                                                    course['description']
+                                                        .toString(),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 12.0,
+                                                        color: Colors.black
+                                                            .withOpacity(0.6)),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0)),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 4.0),
+                                                      child: Icon(Icons.timer,
+                                                          color:
+                                                              TextThemes.ndGold,
+                                                          size: 20),
+                                                    ),
+                                                    Text('WHEN: ',
+                                                        style: TextStyle(
+                                                            fontSize: 12.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    Text(
+                                                        DateFormat('MMMd')
+                                                            .add_jm()
+                                                            .format(course[
+                                                                    'startDate']
+                                                                .toDate()),
+                                                        style: TextStyle(
+                                              fontSize: isLargePhone ? 12 : 11,
+                                                        )),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 4.0),
+                                                      child: Icon(Icons.place,
+                                                          color:
+                                                              TextThemes.ndGold,
+                                                          size: 20),
+                                                    ),
+                                                    Text('WHERE: ',
+                                                        style: TextStyle(
+                                                            fontSize: 12.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    Text(course['address'],
+                                                        style: TextStyle(
+                                              fontSize: isLargePhone ? 12 : 11,
+                                                        )),
+                                                  ],
+                                                ),
+                                              ]))
+                                            ]),
+                                      ),
                                       Padding(
-                                          padding: const EdgeInsets.all(8.0)),
-                                      Padding(
-                                          padding: const EdgeInsets.all(2.0),
-                                          child: Text(
-                                              course['title'].toString(),
-                                              style: TextStyle(
-                                                  color: Colors.blue[900],
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.center)),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                          course['description'].toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              color: Colors.black
-                                                  .withOpacity(0.6)),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 1.0),
+                                        child: Container(
+                                          height: 1.0,
+                                          width: 500.0,
+                                          color: Colors.grey[300],
                                         ),
                                       ),
-                                      Padding(
-                                          padding: const EdgeInsets.all(5.0)),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                      Container(
+                                          child: Row(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 4.0),
-                                            child: Icon(Icons.timer,
-                                                color: TextThemes.ndGold,
-                                                size: 20),
-                                          ),
-                                          Text('WHEN: ',
-                                              style: TextStyle(
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.bold)),
-                                          Text(
-                                              DateFormat('MMMd')
-                                                  .add_jm()
-                                                  .format(course['startDate']
-                                                      .toDate()),
-                                              style: TextStyle(
-                                                fontSize: 12.0,
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      12, 10, 4, 10),
+                                              child: CircleAvatar(
+                                                radius: 22.0,
+                                                backgroundImage: NetworkImage(
+                                                    course['profilePic']),
+                                                backgroundColor:
+                                                    Colors.transparent,
                                               )),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 4.0),
-                                            child: Icon(Icons.place,
-                                                color: TextThemes.ndGold,
-                                                size: 20),
-                                          ),
-                                          Text('WHERE: ',
-                                              style: TextStyle(
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.bold)),
-                                          Text(course['address'],
-                                              style: TextStyle(
-                                                fontSize: 12.0,
-                                              )),
-                                        ],
-                                      ),
-                                    ]))
-                                  ]),
-                                ),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 1.0),
-                                  child: Container(
-                                    height: 1.0,
-                                    width: 500.0,
-                                    color: Colors.grey[300],
-                                  ),
-                                ),
-                                Container(
-                                    child: Row(
-                                  children: [
-                                    Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            12, 10, 4, 10),
-                                        child: CircleAvatar(
-                                          radius: 22.0,
-                                          backgroundImage: NetworkImage(
-                                              course['profilePic']),
-                                          backgroundColor: Colors.transparent,
-                                        )),
-                                    Container(
-                                      child: Column(
-                                        //  mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 2.0),
-                                            child: Text(course['userName'],
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: TextThemes.ndBlue,
-                                                    decoration:
-                                                        TextDecoration.none)),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 2.0),
-                                            child: Text(course['userEmail'],
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: TextThemes.ndBlue,
-                                                    decoration:
-                                                        TextDecoration.none)),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Container(
-                                      child: Column(
-                                        //  mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 6.0),
-                                            child: IconButton(
-                                              icon: Icon(
-                                                Icons.directions_run,
-                                                color: Colors.green,
-                                              ),
-                                              color: Colors.pink,
-                                              iconSize: 26.0,
-                                              splashColor: Colors.pink,
-                                              //splashRadius: 7.0,
-                                              highlightColor: Colors.pink,
-                                              onPressed: () async {
-                                                // Perform action
-                                                setState(() {
-                                                  final GoogleSignInAccount
-                                                      user =
-                                                      googleSignIn.currentUser;
-                                                  final strUserId = user.id;
-                                                  Database().removeGoing(
-                                                      course["userId"],
-                                                      course["image"],
-                                                      strUserId,
-                                                      course.documentID,
-                                                      strUserName,
-                                                      strUserPic,
-                                                      course["startDate"],
-                                                      course["title"],
-                                                      course["description"],
-                                                      course["location"],
-                                                      course["address"],
-                                                      course["profilePic"],
-                                                      course["userName"],
-                                                      course["userEmail"],
-                                                      course["liked"]);
-                                                });
-                                              },
+                                          Container(
+                                            child: Column(
+                                              //  mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 2.0),
+                                                  child: Text(
+                                                      course['userName'],
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color:
+                                                              TextThemes.ndBlue,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .none)),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 2.0),
+                                                  child: Text(
+                                                      course['userEmail'],
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              TextThemes.ndBlue,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .none)),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10.0, bottom: 4.0),
-                                            child: Text(
-                                              'Going?',
-                                              style: TextStyle(fontSize: 12),
+                                          Spacer(),
+                                          Container(
+                                            child: Column(
+                                              //  mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 6.0),
+                                                  child: IconButton(
+                                                    icon: Icon(
+                                                      Icons.directions_run,
+                                                      color: Colors.green,
+                                                    ),
+                                                    color: Colors.pink,
+                                                    iconSize: 26.0,
+                                                    splashColor: Colors.pink,
+                                                    //splashRadius: 7.0,
+                                                    highlightColor: Colors.pink,
+                                                    onPressed: () async {
+                                                      // Perform action
+                                                      setState(() {
+                                                        final GoogleSignInAccount
+                                                            user = googleSignIn
+                                                                .currentUser;
+                                                        final strUserId =
+                                                            user.id;
+                                                        Database().removeGoing(
+                                                            course["userId"],
+                                                            course["image"],
+                                                            strUserId,
+                                                            course.documentID,
+                                                            strUserName,
+                                                            strUserPic,
+                                                            course["startDate"],
+                                                            course["title"],
+                                                            course[
+                                                                "description"],
+                                                            course["location"],
+                                                            course["address"],
+                                                            course[
+                                                                "profilePic"],
+                                                            course["userName"],
+                                                            course["userEmail"],
+                                                            course["liked"]);
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 10.0,
+                                                          bottom: 4.0),
+                                                  child: Text(
+                                                    'Going?',
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 0, 27.0, 10),
+                                                  child: Text('$likeCount',
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              TextThemes.ndBlue,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .none)),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 27.0, 10),
-                                            child: Text('$likeCount',
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: TextThemes.ndBlue,
-                                                    decoration:
-                                                        TextDecoration.none)),
-                                          ),
                                         ],
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                                /*ButtonBar(
+                                      )),
+                                      /*ButtonBar(
                                 alignment: MainAxisAlignment.end,
                                 children: [
                                   FlatButton(
@@ -524,10 +578,11 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                   ),
                                 ],
                               ),*/
-                              ],
-                            ),
-                          ),
-                        ) : Text("");
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Text("");
                       },
                     ),
                   ),
@@ -546,6 +601,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
+            bool isLargePhone = Screen.diagonal(context) > 766;
+
             if (!snapshot.hasData) return Text('Loading data...');
             return Container(
               child: Column(
@@ -724,7 +781,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                   .format(course['startDate']
                                                       .toDate()),
                                               style: TextStyle(
-                                                fontSize: 12.0,
+                                              fontSize: isLargePhone ? 12 : 11,
                                               )),
                                         ],
                                       ),
@@ -745,7 +802,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                   fontWeight: FontWeight.bold)),
                                           Text(course['address'],
                                               style: TextStyle(
-                                                fontSize: 12.0,
+                                              fontSize: isLargePhone ? 12 : 11,
                                               )),
                                         ],
                                       ),
