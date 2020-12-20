@@ -350,9 +350,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 0.0, bottom: 15),
                         child: RaisedButton(
+                          
                             color: Colors.red,
                             textColor: Colors.white,
-                            child: Text('Sign out'),
+                            child: Text('     Sign out    '),
                             onPressed: () => googleSignIn.signOut()),
                       )
                     ],
