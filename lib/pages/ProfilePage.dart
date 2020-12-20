@@ -27,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     var strUserPic = currentUser.photoUrl;
     var userYear = currentUser.year;
+    var userVenmo = currentUser.venmo;
     var userDorm = currentUser.dorm;
     var userBio = currentUser.bio;
     var userHeader = currentUser.header;
@@ -43,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
           userBio = snapshot.data['bio'];
           userDorm = snapshot.data['dorm'];
+          userVenmo = snapshot.data['venmo'];
           userHeader = snapshot.data['header'];
           strUserPic = snapshot.data['photoUrl'];
           if (!snapshot.hasData) return Text('Loading data...');
@@ -109,10 +111,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Container(
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: userHeader == null ? null : Image.network(
-                              userHeader,
-                              fit: BoxFit.fitWidth,
-                            ),
+                            child: userHeader == null
+                                ? null
+                                : Image.network(
+                                    userHeader,
+                                    fit: BoxFit.fitWidth,
+                                  ),
                           ),
                           margin: EdgeInsets.only(
                               left: 20, top: 0, right: 20, bottom: 7.5),
@@ -137,8 +141,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 Positioned(
-                    top: 60,
-                    right: 75,
+                  top: 10,
+                  right: 10,
+                  child: Text('Venmo: @' + userVenmo),
+                ),
+                Positioned(
+                    top: 110,
+                    right: 170,
                     child: GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -148,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         child: Icon(
                           Icons.edit,
-                          size: 35,
+                          size: 25,
                         ))),
                 Container(
                   child: Column(
@@ -261,53 +270,49 @@ class _ProfilePageState extends State<ProfilePage> {
                               MaterialPageRoute(
                                   builder: (context) => EditProfile()));
                         },
-                        child: Card(
-                          margin: EdgeInsets.only(
-                              left: 15, right: 15, bottom: 20, top: 10),
-                          color: TextThemes.ndBlue,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15.0, bottom: 2, top: 8),
-                                child: RichText(
-                                  textScaleFactor: 1.75,
-                                  text: TextSpan(
-                                      style: TextThemes.mediumbody,
-                                      children: [
-                                        TextSpan(
-                                            text: "bio",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w200,
-                                                color: TextThemes.ndGold)),
-                                      ]),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 5.0, bottom: 35),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0),
-                                    child: RichText(
-                                      textScaleFactor: 1.3,
-                                      text: TextSpan(
-                                          style: TextThemes.mediumbody,
-                                          children: [
-                                            TextSpan(
-                                                text: userBio,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontStyle:
-                                                        FontStyle.italic)),
-                                          ]),
-                                    ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: RichText(
+                                    textScaleFactor: 1.3,
+                                    text: TextSpan(
+                                        style: TextThemes.mediumbody,
+                                        children: [
+                                          TextSpan(
+                                              text: "\"" + userBio + "\"",
+                                              style: TextStyle(
+                                                  color: Colors.black)),
+                                        ]),
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15, top: 10),
+                        child: SizedBox(
+                          height: 35.0,
+                          width: 170,
+                          child: FloatingActionButton(
+                            shape: RoundedRectangleBorder(),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditProfile()));
+                            },
+                            backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
+                            child: Text("Edit profile"),
+                            foregroundColor: Colors.white,
+                            elevation: 15,
                           ),
                         ),
                       ),
@@ -327,28 +332,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            right: 7.5, bottom: 15, top: 100),
-                        child: SizedBox(
-                          height: 35.0,
-                          width: 130,
-                          child: FloatingActionButton(
-                            shape: RoundedRectangleBorder(),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditProfile()));
-                            },
-                            backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-                            child: Text("Edit profile"),
-                            foregroundColor: Colors.white,
-                            elevation: 15,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0, bottom: 15),
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 15),
                         child: RaisedButton(
                           
                             color: Colors.red,

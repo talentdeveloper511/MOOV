@@ -45,12 +45,13 @@ class _OtherProfileState extends State<OtherProfile> {
     Database().checkStatus(id, strUserId).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
-              setState(
-                  () => userRequests = docs.documents[0].data['friendArray']),
-              for (var i = 0; i < userRequests.length; i++)
-                {
-                  if (userRequests[i][id] == 0) {status = 2, print('hio')}
-                }
+              // setState(
+              //     () => userRequests = docs.documents[0].data['friendRequests']),
+              // for (var i = 0; i < userRequests.length; i++)
+              //   {
+              //     if (userRequests[i][id] == 0) {status = 2, print('hio')}
+              //   }
+              status = 2
             }
         });
   }
@@ -60,14 +61,22 @@ class _OtherProfileState extends State<OtherProfile> {
     Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
+              setState(() =>
+                  userRequests = docs.documents[0].data['friendRequests']),
+              if (userRequests[0] != null) {status = 0}
+            }
+        });
+  }
+
+  checkFunction3() {
+    // if existing request does not exist
+    Database().checkFriends(strUserId, id).then((QuerySnapshot docs) => {
+          if (docs.documents.isNotEmpty)
+            {
               setState(
-                  () => userRequests = docs.documents[0].data['friendArray']),
-              for (var i = 0; i < userRequests.length; i++)
-                {
-                  if (userRequests[i][strUserId] != null &&
-                      userRequests[i][strUserId] != 2)
-                    {status = userRequests[i][strUserId], print('hi')}
-                }
+                () => userRequests = docs.documents[0].data['friendRequests'],
+              ),
+              status = 1
             }
         });
   }
@@ -87,6 +96,7 @@ class _OtherProfileState extends State<OtherProfile> {
           while (iter > 0) {
             checkFunction();
             checkFunction2();
+            checkFunction3();
             iter = iter - 1;
           }
           return Scaffold(

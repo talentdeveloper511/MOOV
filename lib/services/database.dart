@@ -189,14 +189,10 @@ class Database {
     }
   }
 
-  deletePost(
-      String postId, String ownerId) {
+  deletePost(String postId, String ownerId) {
     bool isPostOwner = strUserId == ownerId;
     if (isPostOwner) {
-      postsRef
-          .document(postId)
-          .get()
-          .then((doc) {
+      postsRef.document(postId).get().then((doc) {
         if (doc.exists) {
           doc.reference.delete();
         }
@@ -313,11 +309,9 @@ class Database {
       String senderName, String senderPic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
-      Map<String, dynamic> serializedMessage = {
-        senderId: 0,
-      };
+      String serializedMessage = senderId;
       transaction.update(ref, {
-        'friendArray': FieldValue.arrayUnion([serializedMessage]),
+        'friendRequests': FieldValue.arrayUnion([serializedMessage]),
       });
     });
   }
@@ -327,23 +321,15 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       final DocumentReference ref2 = dbRef.document('users/$senderId');
-      Map<String, dynamic> serializedMessage = {
-        senderId: 1,
-      };
-      Map<String, dynamic> serializedMessage2 = {
-        receiverId: 1,
-      };
-      Map<String, dynamic> serializedMessage3 = {
-        senderId: 0,
-      };
-      Map<String, dynamic> serializedMessage4 = {
-        receiverId: 0,
-      };
+      String serializedMessage = senderId;
+      String serializedMessage2 = receiverId;
+      String serializedMessage3 = senderId;
+      String serializedMessage4 = receiverId;
       transaction.update(ref, {
-        'friendArray': FieldValue.arrayRemove([serializedMessage3]),
+        'friendRequests': FieldValue.arrayRemove([serializedMessage3]),
       });
       transaction.update(ref2, {
-        'friendArray': FieldValue.arrayRemove([serializedMessage4]),
+        'friendRequests': FieldValue.arrayRemove([serializedMessage4]),
       });
       transaction.update(ref, {
         'friendArray': FieldValue.arrayUnion([serializedMessage]),
@@ -359,13 +345,13 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$receiverId');
       final DocumentReference ref2 = dbRef.document('users/$senderId');
-      Map<String, dynamic> serializedMessage = {senderId: 0};
-      Map<String, dynamic> serializedMessage2 = {receiverId: 0};
+      String serializedMessage = senderId;
+      String serializedMessage2 = receiverId;
       transaction.update(ref, {
-        'friendArray': FieldValue.arrayRemove([serializedMessage]),
+        'friendRequests': FieldValue.arrayRemove([serializedMessage]),
       });
       transaction.update(ref2, {
-        'friendArray': FieldValue.arrayRemove([serializedMessage2]),
+        'friendRequests': FieldValue.arrayRemove([serializedMessage2]),
       });
     });
   }
@@ -374,6 +360,15 @@ class Database {
     return Firestore.instance
         .collection('users')
         .where('id', isEqualTo: receiverId)
+        .where('friendRequests', arrayContains: senderId)
+        .getDocuments();
+  }
+
+  Future<QuerySnapshot> checkFriends(String senderId, String receiverId) {
+    return Firestore.instance
+        .collection('users')
+        .where('id', isEqualTo: receiverId)
+        .where('friendArray', arrayContains: senderId)
         .getDocuments();
   }
 }

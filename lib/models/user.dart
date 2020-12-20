@@ -12,7 +12,9 @@ class User {
   final String header;
   final String gender;
   final List<dynamic> friendArray;
+  final List<dynamic> friendRequests;
   final postLimit;
+  final String venmo;
 
   User(
       {this.id,
@@ -26,7 +28,9 @@ class User {
       this.header,
       this.gender,
       this.friendArray,
-      this.postLimit});
+      this.friendRequests,
+      this.postLimit,
+      this.venmo});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -41,6 +45,8 @@ class User {
         year: doc['year'],
         gender: doc['gender'],
         friendArray: doc['friendArray'],
-        postLimit: doc['postLimit']);
+        friendRequests: doc['friendRequests'],
+        postLimit: doc['postLimit'],
+        venmo: doc['venmo']);
   }
 }
