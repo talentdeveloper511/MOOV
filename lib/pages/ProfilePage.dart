@@ -32,7 +32,6 @@ class _ProfilePageState extends State<ProfilePage> {
     var userBio = currentUser.bio;
     var userHeader = currentUser.header;
     var userFriends = currentUser.friendArray;
-    var userFriendsLength = "0";
 
     return StreamBuilder(
         stream: Firestore.instance

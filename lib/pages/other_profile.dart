@@ -51,7 +51,9 @@ class _OtherProfileState extends State<OtherProfile> {
               //   {
               //     if (userRequests[i][id] == 0) {status = 2, print('hio')}
               //   }
-              status = 2
+              setState(() {
+                status = 2;
+              })
             }
         });
   }
