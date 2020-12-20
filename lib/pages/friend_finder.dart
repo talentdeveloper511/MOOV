@@ -1,145 +1,228 @@
-import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/pages/search.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:MOOV/helpers/themes.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:MOOV/pages/SportFeed.dart';
+final usersRef = Firestore.instance.collection('users');
 
-class FriendFinder extends StatelessWidget {
-  dynamic startDate, moovId;
+class FriendFinder extends StatefulWidget {
+  dynamic moovId;
+  TextEditingController searchController = TextEditingController();
   List<dynamic> likedArray;
-  String eventprofile, title;
+  final userFriends;
 
-  FriendFinder(this.likedArray, this.eventprofile, this.title);
+  FriendFinder({this.userFriends});
+
+  @override
+  State<StatefulWidget> createState() {
+    return FriendFinderState(this.userFriends);
+  }
+}
+
+class FriendFinderState extends State<FriendFinder> {
+  dynamic moovId;
+  TextEditingController searchController = TextEditingController();
+  List<dynamic> likedArray;
+  var iter = 0;
+  final userFriends;
+
+  FriendFinderState(this.userFriends);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: TextThemes.ndBlue,
-        title: Text(
-          "Friend Finder",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      body: Container(
-          child: likedArray != null
-              ? ListView.builder(
-                  shrinkWrap: true, //MUST TO ADDED
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: likedArray.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(children: [
-                          Container(
-                            color: Colors.grey[300],
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: CircleAvatar(
-                                      radius: 22,
-                                      backgroundColor: TextThemes.ndBlue,
-                                      child: CircleAvatar(
-                                        radius: 22.0,
-                                        backgroundImage: NetworkImage(
-                                            likedArray[index]['strPic']),
-                                        backgroundColor: Colors.transparent,
-                                      )),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 22.0),
-                                  child: Text(likedArray[index]['strName'],
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: TextThemes.ndBlue,
-                                          decoration: TextDecoration.none)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 3.0, right: 5),
-                                  child: Text('is Going',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: CupertinoColors.activeGreen,
-                                          decoration: TextDecoration.none)),
-                                ),
-                                Text('to',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: CupertinoColors.black,
-                                        decoration: TextDecoration.none)),
-                                Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 32, left: 0.0),
-                                    child: Row(
-                                      children: [
-                                        // Container(
-                                        //   margin: EdgeInsets.only(
-                                        //       bottom: 30, left: 5),
-                                        //   child: CircleAvatar(
-                                        //       radius: 22,
-                                        //       backgroundColor:
-                                        //           TextThemes.ndBlue,
-                                        //       child: CircleAvatar(
-                                        //         radius: 22.0,
-                                        //         backgroundImage:
-                                        //             NetworkImage(eventprofile),
-                                        //         backgroundColor:
-                                        //             Colors.transparent,
-                                        //       )),
-                                        // ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            print("Friend's Event Clicked");
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        SportFeed()));
-                                          },
-                                          child: Container(
-                                            margin: EdgeInsets.only(bottom: 10),
-                                            padding: const EdgeInsets.only(
-                                                top: 0.0, bottom: 22, left: 5),
-                                            child: Text(title,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                    color:
-                                                        CupertinoColors.black,
-                                                    decoration:
-                                                        TextDecoration.none)),
+    // TODO: implement build
+
+    return StreamBuilder(
+        stream: Firestore.instance
+            .collection('users')
+            .where("friendArray", arrayContains: currentUser.id)
+            .snapshots(),
+        builder: (context, snapshot) {
+          // print(snapshot.data.documents.length);
+          return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                    );
+                  },
+                ),
+                backgroundColor: TextThemes.ndBlue,
+                title: Text(
+                  "Friends",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              body: ListView.builder(
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (_, index) => Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Container(
+                            margin: EdgeInsets.all(0.0),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 2.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                      color: Colors.grey[300],
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(builder:
+                                                          (BuildContext
+                                                              context) {
+                                                    return OtherProfile(
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['photoUrl']
+                                                            .toString(),
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['displayName']
+                                                            .toString(),
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['id']
+                                                            .toString());
+                                                  })); //Material
+                                                },
+                                                child: CircleAvatar(
+                                                    radius: 22,
+                                                    child: CircleAvatar(
+                                                        radius: 22.0,
+                                                        backgroundImage:
+                                                            AssetImage(snapshot
+                                                                    .data
+                                                                    .documents[
+                                                                        index]
+                                                                    .data[
+                                                                'photoUrl'])
+
+                                                        // NetworkImage(likedArray[index]['strPic']),
+
+                                                        ))),
                                           ),
-                                        )
-                                      ],
-                                    )),
-                              ],
-                            ),
-                          )
-                        ]));
-                  })
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Text("No plans right now."),
-                      ),
-                      FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Search()),
-                );
-              },
-              label: const Text("Find some friends!",
-                  style: TextStyle(fontSize: 16, color: Colors.white)))
-                    ],
-                  ))),
-    );
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0),
+                                            child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(builder:
+                                                          (BuildContext
+                                                              context) {
+                                                    return OtherProfile(
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['photoUrl']
+                                                            .toString(),
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['displayName']
+                                                            .toString(),
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['id']
+                                                            .toString());
+                                                  })); //Material
+                                                },
+                                                child: Text(
+                                                    snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['displayName']
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color:
+                                                            TextThemes.ndBlue,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .none))),
+                                          ),
+                                          Text(' is ',
+                                              style: TextStyle(fontSize: 16)),
+                                          Text(' Going ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: Colors.green)),
+                                          Text(' to ',
+                                              style: TextStyle(fontSize: 16)),
+                                          Spacer(),
+                                          // Padding(
+                                          //   padding:
+                                          //       const EdgeInsets.only(right: 8),
+                                          //   child: RaisedButton(
+                                          //     padding:
+                                          //         const EdgeInsets.all(2.0),
+                                          //     color: Colors.green,
+                                          //     shape: RoundedRectangleBorder(
+                                          //         borderRadius:
+                                          //             BorderRadius.all(
+                                          //                 Radius.circular(
+                                          //                     3.0))),
+                                          //     onPressed: () {
+                                          //       Navigator.of(context).push(
+                                          //           MaterialPageRoute(
+                                          //               builder: (context) =>
+                                          //                   OtherProfile(
+                                          //                       snapshot
+                                          //                           .data
+                                          //                           .documents[
+                                          //                               index]
+                                          //                           .data[
+                                          //                               'photoUrl']
+                                          //                           .toString(),
+                                          //                       snapshot
+                                          //                           .data
+                                          //                           .documents[
+                                          //                               index]
+                                          //                           .data[
+                                          //                               'displayName']
+                                          //                           .toString(),
+                                          //                       snapshot
+                                          //                           .data
+                                          //                           .documents[
+                                          //                               index]
+                                          //                           .data['id']
+                                          //                           .toString())));
+                                          //     },
+                                          //     child: Text(
+                                          //       "Friends",
+                                          //       style: new TextStyle(
+                                          //         color: Colors.white,
+                                          //         fontSize: 14.0,
+                                          //       ),
+                                          //     ),
+                                          //   ),
+                                          // )
+                                        ],
+                                      )),
+                                ],
+                              ),
+                            )),
+                      )));
+        });
   }
 }

@@ -126,7 +126,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
                             "Do you like free stuff? Well... good, 'cause we like giving."
-                            " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Day.",
+                            " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Friday.",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,

@@ -102,7 +102,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
             fillColor: Colors.white,
             hintStyle: TextStyle(fontSize: 15),
             contentPadding: EdgeInsets.only(top: 18, bottom: 10),
-            hintText: "Search for users or MOOVs...",
+            hintText: "Search for Users or MOOVs...",
             filled: true,
             prefixIcon: Icon(
               Icons.account_box,
@@ -166,24 +166,24 @@ class UserResult extends StatelessWidget {
     final GoogleSignInAccount userMe = googleSignIn.currentUser;
     final strUserId = userMe.id;
     return Container(
-      color: Theme.of(context).primaryColor.withOpacity(0.7),
+      color: Colors.white,
       child: Column(
         children: <Widget>[
           GestureDetector(
             onTap: () => print('tapped'),
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: Colors.grey,
+                backgroundColor: Colors.white,
                 backgroundImage: CachedNetworkImageProvider(user.photoUrl),
               ),
               title: Text(
                 user.displayName == null ? "" : user.displayName,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
               trailing: RaisedButton(
                 padding: const EdgeInsets.all(2.0),
-                color: Colors.grey[600],
+                color: TextThemes.ndBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {

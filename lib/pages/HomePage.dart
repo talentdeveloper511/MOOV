@@ -7,10 +7,10 @@ import 'package:MOOV/pages/SportFeed.dart';
 import 'package:MOOV/pages/ShowFeed.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/PartyFeed.dart';
-import 'package:MOOV/pages/ManagerPage.dart';
+// import 'package:MOOV/pages/ManagerPage.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
-import 'package:MOOV/pages/search.dart';
+import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/notification_page.dart';
 import 'package:MOOV/pages/upload.dart';
 import 'package:MOOV/widgets/MOTD.dart';
@@ -26,6 +26,9 @@ import 'home.dart';
 import 'notification_feed.dart';
 
 class HomePage extends StatefulWidget {
+  User user;
+  HomePage({Key key, this.user}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
   static const IconData leaderboard_outlined =
@@ -119,8 +122,9 @@ class _HomePageState extends State<HomePage>
     bool isLargePhone = Screen.diagonal(context) > 720;
     bool isNarrow = Screen.widthInches(context) < 3.5;
 
-    final GoogleSignInAccount user = googleSignIn.currentUser;
-    final strUserId = user.id;
+    // final GoogleSignInAccount user = googleSignIn.currentUser;
+    // final strUserId = user.id;
+    var userFriends = currentUser.friendArray;
 
     Future navigateToFoodFeed(context) async {
       Navigator.push(
@@ -252,7 +256,7 @@ class _HomePageState extends State<HomePage>
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => FriendFinder(
-                                        likedArray, eventprofile, title)));
+                                        userFriends: userFriends)));
                             // Implement navigation to shopping cart page here...
                             print('FRIEND FINDER CLICKED');
                           },
@@ -265,7 +269,7 @@ class _HomePageState extends State<HomePage>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => FriendFinder(
-                                            likedArray, eventprofile, title)));
+                                            userFriends: userFriends)));
                               },
                               child: Card(
                                 borderOnForeground: true,

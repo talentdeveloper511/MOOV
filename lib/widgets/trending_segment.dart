@@ -91,7 +91,10 @@ class TrendingSegmentState extends State<TrendingSegment> {
                             gradient: LinearGradient(
                                 begin: Alignment.topRight,
                                 end: Alignment.bottomLeft,
-                                colors: [Colors.redAccent, TextThemes.ndBlue])),
+                                colors: [
+                              TextThemes.ndGold,
+                              TextThemes.ndBlue
+                            ])),
                         child: Center(
                             child: Padding(
                           padding: const EdgeInsets.all(15.0),
@@ -99,7 +102,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 30,
-                                  fontFamily: 'Pacifico')),
+                                  fontFamily: 'Open-Sans')),
                         ))),
                     Expanded(
                         child: CustomScrollView(
@@ -489,8 +492,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                               Image.asset('lib/assets/dance.png', height: 40),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child: Text('MORE',
-                                    style: TextThemes.extraBold),
+                                child:
+                                    Text('MORE', style: TextThemes.extraBold),
                               ),
                             ],
                           ),

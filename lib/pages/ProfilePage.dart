@@ -10,9 +10,7 @@ import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/friend_groups_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MOOV/pages/notification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
@@ -32,7 +30,6 @@ class _ProfilePageState extends State<ProfilePage> {
     var userBio = currentUser.bio;
     var userHeader = currentUser.header;
     var userFriends = currentUser.friendArray;
-    var userFriendsLength = "0";
 
     return StreamBuilder(
         stream: Firestore.instance
@@ -42,12 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context, snapshot) {
           bool isLargePhone = Screen.diagonal(context) > 766;
 
-          userBio = snapshot.data['bio'];
-          userDorm = snapshot.data['dorm'];
-          userVenmo = snapshot.data['venmo'];
-          userHeader = snapshot.data['header'];
-          strUserPic = snapshot.data['photoUrl'];
-          if (!snapshot.hasData) return Text('Loading data...');
+          if (!snapshot.hasData) return CircularProgressIndicator();
 
           return Scaffold(
             appBar: AppBar(
