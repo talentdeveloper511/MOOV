@@ -108,7 +108,7 @@ class FriendFinderState extends State<FriendFinder> {
                                                     child: CircleAvatar(
                                                         radius: 22.0,
                                                         backgroundImage:
-                                                            AssetImage(snapshot
+                                                            NetworkImage(snapshot
                                                                     .data
                                                                     .documents[
                                                                         index]
