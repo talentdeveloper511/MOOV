@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/widgets/camera.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -175,8 +176,8 @@ class _EditProfileState extends State<EditProfile> {
                       borderRadius: BorderRadius.circular(10),
                       child: userHeader == null
                           ? null
-                          : Image.network(
-                              userHeader,
+                          : CachedNetworkImage(
+                              imageUrl: userHeader,
                               fit: BoxFit.fitWidth,
                             ),
                     ),
@@ -220,7 +221,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: CircleAvatar(
                             backgroundImage: (currentUser.photoUrl == null)
                                 ? AssetImage('images/user-avatar.png')
-                                : NetworkImage(currentUser.photoUrl),
+                                : CachedNetworkImageProvider(currentUser.photoUrl),
                             // backgroundImage: NetworkImage(currentUser.photoUrl),
                             radius: 50,
                           ),

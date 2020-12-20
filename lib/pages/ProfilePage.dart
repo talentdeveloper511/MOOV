@@ -8,6 +8,7 @@ import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/friend_groups_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV/pages/notification_page.dart';
@@ -111,8 +112,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(10),
                             child: userHeader == null
                                 ? null
-                                : Image.network(
-                                    userHeader,
+                                : CachedNetworkImage(
+                                    imageUrl: userHeader,
                                     fit: BoxFit.fitWidth,
                                   ),
                           ),
@@ -175,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: CircleAvatar(
                                 backgroundImage: (strUserPic == null)
                                     ? AssetImage('images/user-avatar.png')
-                                    : NetworkImage(strUserPic),
+                                    : CachedNetworkImageProvider(strUserPic),
                                 // backgroundImage: NetworkImage(currentUser.photoUrl),
                                 radius: 50,
                               ),
