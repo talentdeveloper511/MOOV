@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage>
 
     // final GoogleSignInAccount user = googleSignIn.currentUser;
     // final strUserId = user.id;
-    var userFriends = currentUser.friendArray;
+    var userFriends;
 
     Future navigateToFoodFeed(context) async {
       Navigator.push(
@@ -440,9 +440,9 @@ class _HomePageState extends State<HomePage>
                           textScaleFactor: 1.75,
                           text:
                               TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(text: "Stop "),
-                            TextSpan(text: "missing", style: TextThemes.italic),
-                            TextSpan(text: " out."),
+                            TextSpan(text: "Fuck "),
+                            TextSpan(text: "me", style: TextThemes.italic),
+                            TextSpan(text: " hard."),
                           ]),
                         ),
                       ),
@@ -454,10 +454,10 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
-                                  TextSpan(text: "Friends "),
+                                  TextSpan(text: "Don't "),
                                   TextSpan(
-                                      text: "only", style: TextThemes.italic),
-                                  TextSpan(text: " privacy."),
+                                      text: "ever", style: TextThemes.italic),
+                                  TextSpan(text: " stop."),
                                 ]),
                           ),
                         ),
@@ -472,10 +472,10 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
-                                  TextSpan(text: "Your "),
+                                  TextSpan(text: "Until "),
                                   TextSpan(
-                                      text: "secure", style: TextThemes.italic),
-                                  TextSpan(text: " network."),
+                                      text: "I", style: TextThemes.italic),
+                                  TextSpan(text: " nut."),
                                 ]),
                           ),
                         ),

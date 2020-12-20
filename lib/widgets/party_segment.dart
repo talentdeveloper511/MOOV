@@ -816,36 +816,37 @@ class PartySegmentState extends State<PartySegment> {
                                       style: TextStyle(color: Colors.white),
                                     ))
                                 : Text(''),
-                            Container(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 110.0, bottom: 10.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Share.share(
-                                          text,
-                                          subject: 'Update the coordinate!',
-                                        );
-                                      },
-                                      child: Icon(Icons.send_rounded,
-                                          color: Colors.blue[500], size: 30),
+                            Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 0.0, bottom: 10.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Share.share(
+                                            text,
+                                            subject: 'Update the coordinate!',
+                                          );
+                                        },
+                                        child: Icon(Icons.send_rounded,
+                                            color: Colors.blue[500], size: 30),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 110, bottom: 20.0),
-                                    child: Text(
-                                      'Send',
-                                      style: TextStyle(fontSize: 12),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 0, bottom: 20.0),
+                                      child: Text(
+                                        'Send',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              child: Column(
+                              Column(
                                 //  mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
@@ -936,7 +937,7 @@ class PartySegmentState extends State<PartySegment> {
                                   ),
                                 ],
                               ),
-                            ),
+                            ])
                           ],
                         )),
                       ],

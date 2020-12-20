@@ -38,6 +38,7 @@ class _OtherProfileState extends State<OtherProfile> {
   final strUserId = currentUser.id;
   final strPic = currentUser.photoUrl;
   final strUserName = currentUser.displayName;
+  bool isAmbassador;
   var iter = 1;
 
   checkFunction() {
@@ -86,8 +87,9 @@ class _OtherProfileState extends State<OtherProfile> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: Firestore.instance.collection('users').snapshots(),
+        stream: Firestore.instance.collection('users').document(id).snapshots(),
         builder: (context, snapshot) {
+          isAmbassador = snapshot.data['isAmbassador'];
           if (!snapshot.hasData) return Text('Loading data...');
           while (iter > 0) {
             checkFunction();
@@ -149,9 +151,20 @@ class _OtherProfileState extends State<OtherProfile> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      displayName != "" ? displayName : "Username not found",
-                      style: TextThemes.extraBold,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          displayName != ""
+                              ? displayName
+                              : "Username not found",
+                          style: TextThemes.extraBold,
+                        ),
+                        isAmbassador
+                            ? Image.asset('lib/assets/verif.png', height: 35)
+                            : Text("")
+                      ],
                     ),
                   ),
                   Row(

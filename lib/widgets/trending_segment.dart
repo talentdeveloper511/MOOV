@@ -93,7 +93,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                 begin: Alignment.topRight,
                                 end: Alignment.bottomLeft,
                                 colors: [
-                              TextThemes.ndGold,
+                              Colors.purpleAccent,
                               TextThemes.ndBlue
                             ])),
                         child: Center(
