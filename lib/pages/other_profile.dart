@@ -59,7 +59,7 @@ class _OtherProfileState extends State<OtherProfile> {
   }
 
   checkFunction2() {
-    // if existing request does not exist
+    // checks to see if current user has sent request already
     Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
@@ -71,7 +71,7 @@ class _OtherProfileState extends State<OtherProfile> {
   }
 
   checkFunction3() {
-    // if existing request does not exist
+    // users are already friends
     Database().checkFriends(strUserId, id).then((QuerySnapshot docs) => {
           if (docs.documents.isNotEmpty)
             {
@@ -85,12 +85,6 @@ class _OtherProfileState extends State<OtherProfile> {
 
   @override
   Widget build(BuildContext context) {
-    // status definitions:
-    //    null: no request between either users
-    //    0: friend request was made
-    //    1: users are friends
-    //    2: other user has already requested current user
-
     return StreamBuilder(
         stream: Firestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
@@ -103,9 +97,17 @@ class _OtherProfileState extends State<OtherProfile> {
           }
           return Scaffold(
             appBar: AppBar(
-              leading: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Image.asset('lib/assets/ndlogo.png', height: 100),
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
               ),
               backgroundColor: TextThemes.ndBlue,
               flexibleSpace: FlexibleSpaceBar(
@@ -166,18 +168,6 @@ class _OtherProfileState extends State<OtherProfile> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "This is my bio",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Column(
                         children: [
@@ -226,6 +216,30 @@ class _OtherProfileState extends State<OtherProfile> {
                             ),
                           ),
                         ],
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Center(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: RichText(
+                              textScaleFactor: 1.3,
+                              text: TextSpan(
+                                  style: TextThemes.mediumbody,
+                                  children: [
+                                    TextSpan(
+                                        text: "\"" + "This my bio" + "\"",
+                                        style: TextStyle(color: Colors.black)),
+                                  ]),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
