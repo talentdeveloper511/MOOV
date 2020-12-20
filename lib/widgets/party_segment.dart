@@ -100,21 +100,12 @@ class PartySegmentState extends State<PartySegment> {
     };
   }
 
-  _onShare(BuildContext context) async {
-    // A builder is used to retrieve the context immediately
-    // surrounding the RaisedButton.
-    //
-    // The context's `findRenderObject` returns the first
-    // RenderObject in its descendent tree when it's not
-    // a RenderObjectWidget. The RaisedButton's RenderObject
-    // has its position and size after it's built.
-  }
-
   void loadChildWidgets() {
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
     final strUserName = user.displayName;
     final strUserPic = user.photoUrl;
+    final party = "Party";
     dynamic likeCount;
     childWidgets = [
       // ListView.builder(
@@ -125,7 +116,7 @@ class PartySegmentState extends State<PartySegment> {
       StreamBuilder(
           stream: Firestore.instance
               .collection('food')
-              .where("type", isEqualTo: "Party")
+              .where("type", isEqualTo: party)
               .where("featured", isEqualTo: true)
               .orderBy("startDate")
               .snapshots(),

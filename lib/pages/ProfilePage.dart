@@ -318,7 +318,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
-                            child: FriendButton(userFriends: userFriends),
+                            child: userFriends == null ? Text("") : FriendButton(userFriends: userFriends),
                           )
                         ],
                       ),

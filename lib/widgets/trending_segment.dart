@@ -1,6 +1,7 @@
 import 'package:MOOV/helpers/demo_values.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/post_detail.dart';
@@ -195,8 +196,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                               color: Color(0xff000000),
                                               width: 1,
                                             )),
-                                            child: Image.network(
-                                              course['image'],
+                                            child: CachedNetworkImage(
+                                              imageUrl: course['image'],
                                               fit: BoxFit.cover,
                                               height: isLargePhone
                                                   ? MediaQuery.of(context)
@@ -383,8 +384,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                               color: Color(0xff000000),
                                               width: 1,
                                             )),
-                                            child: Image.network(
-                                              course['image'],
+                                            child: CachedNetworkImage(
+                                              imageUrl: course['image'],
                                               fit: BoxFit.cover,
                                               height: isLargePhone
                                                   ? MediaQuery.of(context)
@@ -413,7 +414,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                     left: 4.0, top: 4.0),
                                                 child: CircleAvatar(
                                                   radius: 8.0,
-                                                  backgroundImage: NetworkImage(
+                                                  backgroundImage: CachedNetworkImageProvider(
                                                     course['profilePic'],
                                                   ),
                                                   backgroundColor:
@@ -571,8 +572,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                               color: Color(0xff000000),
                                               width: 1,
                                             )),
-                                            child: Image.network(
-                                              course['image'],
+                                            child: CachedNetworkImage(
+                                              imageUrl: course['image'],
                                               fit: BoxFit.cover,
                                               height: isLargePhone
                                                   ? MediaQuery.of(context)
@@ -601,7 +602,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                     left: 4.0, top: 4.0),
                                                 child: CircleAvatar(
                                                   radius: 8.0,
-                                                  backgroundImage: NetworkImage(
+                                                  backgroundImage: CachedNetworkImageProvider(
                                                     course['profilePic'],
                                                   ),
                                                   backgroundColor:

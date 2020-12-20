@@ -3,6 +3,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/post_card.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/post_detail.dart';
@@ -269,8 +270,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                               Color(0xff000000),
                                                           width: 1,
                                                         )),
-                                                        child: Image.network(
-                                                            course['image'],
+                                                        child: CachedNetworkImage(
+                                                            imageUrl: course['image'],
                                                             fit: BoxFit.cover,
                                                             height: 130,
                                                             width: 50),
@@ -395,7 +396,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                       12, 10, 4, 10),
                                               child: CircleAvatar(
                                                 radius: 22.0,
-                                                backgroundImage: NetworkImage(
+                                                backgroundImage: CachedNetworkImageProvider(
                                                     course['profilePic']),
                                                 backgroundColor:
                                                     Colors.transparent,
@@ -732,8 +733,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                 color: Color(0xff000000),
                                                 width: 1,
                                               )),
-                                              child: Image.network(
-                                                  course['image'],
+                                              child: CachedNetworkImage(
+                                                  imageUrl: course['image'],
                                                   fit: BoxFit.cover,
                                                   height: 130,
                                                   width: 50),
@@ -832,7 +833,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                             12, 10, 4, 10),
                                         child: CircleAvatar(
                                           radius: 22.0,
-                                          backgroundImage: NetworkImage(
+                                          backgroundImage: CachedNetworkImageProvider(
                                               course['profilePic']),
                                           backgroundColor: Colors.transparent,
                                         )),
