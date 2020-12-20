@@ -818,16 +818,22 @@ class PartySegmentState extends State<PartySegment> {
                             course["userId"] == currentUser.id
                                 ? RaisedButton(
                                     color: Colors.red,
+<<<<<<< HEAD
                                     onPressed: () {
                                       print(course['userId']);
                                       Database().deletePost(
                                           course['postId'], course['userId']);
                                     },
+=======
+                                    onPressed: () => showAlertDialog(context,
+                                        course["postId"], course["userId"]),
+>>>>>>> 3ffbb3a7319b9ff5302ca04e4ea7a6797450eb3a
                                     child: Text(
                                       "DELETE",
                                       style: TextStyle(color: Colors.white),
                                     ))
                                 : Text(''),
+<<<<<<< HEAD
                             Container(
                               child: Column(
                                 children: [
@@ -855,6 +861,17 @@ class PartySegmentState extends State<PartySegment> {
                                   ),
                                 ],
                               ),
+=======
+                            GestureDetector(
+                              onTap: () {
+                                Share.share(text,
+                                    subject: 'Update the coordinate!',
+                                    sharePositionOrigin:
+                                        Rect.fromLTWH(10, 10, 10, 10));
+                              },
+                              child: Icon(CupertinoIcons.share,
+                                  color: TextThemes.ndBlue, size: 35),
+>>>>>>> 3ffbb3a7319b9ff5302ca04e4ea7a6797450eb3a
                             ),
                             Container(
                               child: Column(
@@ -980,6 +997,29 @@ class PartySegmentState extends State<PartySegment> {
         ),
       )
     ];
+  }
+
+  void showAlertDialog(BuildContext context, postId, userId) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Delete?", style: TextStyle(color: Colors.red)),
+        content: Text("MOOVin' this to the trash can?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yeah", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().deletePost(postId, userId);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, nvm"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 
   Widget getChildWidget() => childWidgets[selectedIndex];
