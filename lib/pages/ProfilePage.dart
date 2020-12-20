@@ -41,11 +41,11 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context, snapshot) {
           bool isLargePhone = Screen.diagonal(context) > 766;
 
-          userBio = snapshot.data['bio'];
-          userDorm = snapshot.data['dorm'];
-          userHeader = snapshot.data['header'];
-          strUserPic = snapshot.data['photoUrl'];
-          if (!snapshot.hasData) return Text('Loading data...');
+          // userBio = snapshot.data['bio'];
+          // userDorm = snapshot.data['dorm'];
+          // userHeader = snapshot.data['header'];
+          // strUserPic = snapshot.data['photoUrl'];
+          if (!snapshot.hasData) return CircularProgressIndicator();
 
           return Scaffold(
             appBar: AppBar(
@@ -318,7 +318,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
-                            child: userFriends == null ? Text("") : FriendButton(userFriends: userFriends),
+                            child: userFriends == null
+                                ? Text("")
+                                : FriendButton(userFriends: userFriends),
                           )
                         ],
                       ),

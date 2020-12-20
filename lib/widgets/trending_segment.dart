@@ -82,7 +82,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Text('Loading data...');
+              if (!snapshot.hasData) return Text('');
               return Container(
                 height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                 child: Column(
@@ -288,7 +288,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Text('Loading data...');
+              if (!snapshot.hasData) return Text('');
               return Container(
                 height: (snapshot.data.documents.length <= 3) ? 270 : 345,
                 child: Column(
@@ -414,7 +414,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                     left: 4.0, top: 4.0),
                                                 child: CircleAvatar(
                                                   radius: 8.0,
-                                                  backgroundImage: CachedNetworkImageProvider(
+                                                  backgroundImage:
+                                                      CachedNetworkImageProvider(
                                                     course['profilePic'],
                                                   ),
                                                   backgroundColor:
@@ -476,7 +477,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return Text('Loading data...');
+              if (!snapshot.hasData) return Text('');
               return Container(
                 height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                 child: Column(
@@ -602,7 +603,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                     left: 4.0, top: 4.0),
                                                 child: CircleAvatar(
                                                   radius: 8.0,
-                                                  backgroundImage: CachedNetworkImageProvider(
+                                                  backgroundImage:
+                                                      CachedNetworkImageProvider(
                                                     course['profilePic'],
                                                   ),
                                                   backgroundColor:
