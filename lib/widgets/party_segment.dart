@@ -25,7 +25,7 @@ class PartySegment extends StatefulWidget {
 }
 
 class PartySegmentState extends State<PartySegment> {
-  String text = 'https://moov4.page.link';
+  String text = 'https://www.whatsthemoov.com';
   String subject = 'Check out this MOOV!';
   Map<int, Widget> map =
       new Map(); // Cupertino Segmented Control takes children in form of Map.
@@ -407,15 +407,33 @@ class PartySegmentState extends State<PartySegment> {
                                 ),
                               ),
                             ]),
-                            GestureDetector(
-                              onTap: () {
-                                Share.share(text,
-                                    subject: 'Update the coordinate!',
-                                    sharePositionOrigin:
-                                        Rect.fromLTWH(10, 10, 10, 10));
-                              },
-                              child: Icon(CupertinoIcons.share,
-                                  color: TextThemes.ndBlue, size: 35),
+                            Container(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 110.0, bottom: 10.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Share.share(
+                                          text,
+                                          subject: 'Update the coordinate!',
+                                        );
+                                      },
+                                      child: Icon(Icons.send_rounded,
+                                          color: Colors.blue[500], size: 30),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 110, bottom: 20.0),
+                                    child: Text(
+                                      'Send',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Container(
                               child: Column(
@@ -504,57 +522,6 @@ class PartySegmentState extends State<PartySegment> {
                             ),
                           ],
                         )),
-                        /*ButtonBar(
-                      alignment: MainAxisAlignment.end,
-                      children: [
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            // Perform some action
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text("WHO'S GOING?",
-                                  style: TextStyle(
-                                      color: Colors.blue[500],
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left)),
-                        ),
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            // Perform some action
-                          },
-                          child: IconButton(
-                            icon: (_isPressed)
-                                ? new Icon(Icons.favorite)
-                                : new Icon(Icons.favorite_border),
-                            color: Colors.pink,
-                            iconSize: 24.0,
-                            splashColor: Colors.pink,
-                            splashRadius: 7.0,
-                            highlightColor: Colors.pink,
-                            onPressed: () {
-                              // Perform action
-                              setState(() {
-                                List<dynamic> likedArray = course["liked"];
-                                if (likedArray != null && likedArray.contains(strUserId)) {
-                                  Database().removeGoing(strUserId, course.documentID);
-                                } else {
-                                  Database().addLike(strUserId, course.documentID);
-                                }
-                                */ /*if (_isPressed) {
-                                  Database().removeGoing(strUserId, course.documentID);
-                                } else {
-                                  Database().addLike(strUserId, course.documentID);
-                                }*/ /*
-                              });
-                            },
-                          ),
-                        )
-                      ],
-                    ),*/
                       ],
                     ),
                   ),
@@ -848,27 +815,46 @@ class PartySegmentState extends State<PartySegment> {
                                 ),
                               )
                             ]),
-                            course["userId"] == currentUser.id ?
-                            RaisedButton(
-                                color: Colors.red,
-                                onPressed: () {
-                                  print(course['userId']);
-                                  Database().deletePost(
-                                      course['postId'], course['userId']);
-                                },
-                                child: Text(
-                                  "DELETE",
-                                  style: TextStyle(color: Colors.white),
-                                )) : Text(''),
-                            GestureDetector(
-                              onTap: () {
-                                Share.share(text,
-                                    subject: 'Update the coordinate!',
-                                    sharePositionOrigin:
-                                        Rect.fromLTWH(10, 10, 10, 10));
-                              },
-                              child: Icon(CupertinoIcons.share,
-                                  color: TextThemes.ndBlue, size: 35),
+                            course["userId"] == currentUser.id
+                                ? RaisedButton(
+                                    color: Colors.red,
+                                    onPressed: () {
+                                      print(course['userId']);
+                                      Database().deletePost(
+                                          course['postId'], course['userId']);
+                                    },
+                                    child: Text(
+                                      "DELETE",
+                                      style: TextStyle(color: Colors.white),
+                                    ))
+                                : Text(''),
+                            Container(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 110.0, bottom: 10.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Share.share(
+                                          text,
+                                          subject: 'Update the coordinate!',
+                                        );
+                                      },
+                                      child: Icon(Icons.send_rounded,
+                                          color: Colors.blue[500], size: 30),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 110, bottom: 20.0),
+                                    child: Text(
+                                      'Send',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Container(
                               child: Column(
@@ -965,57 +951,6 @@ class PartySegmentState extends State<PartySegment> {
                             ),
                           ],
                         )),
-                        /*ButtonBar(
-                      alignment: MainAxisAlignment.end,
-                      children: [
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            // Perform some action
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text("WHO'S GOING?",
-                                  style: TextStyle(
-                                      color: Colors.blue[500],
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left)),
-                        ),
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            // Perform some action
-                          },
-                          child: IconButton(
-                            icon: (_isPressed)
-                                ? new Icon(Icons.favorite)
-                                : new Icon(Icons.favorite_border),
-                            color: Colors.pink,
-                            iconSize: 24.0,
-                            splashColor: Colors.pink,
-                            splashRadius: 7.0,
-                            highlightColor: Colors.pink,
-                            onPressed: () {
-                              // Perform action
-                              setState(() {
-                                List<dynamic> likedArray = course["liked"];
-                                if (likedArray != null && likedArray.contains(strUserId)) {
-                                  Database().removeGoing(strUserId, course.documentID);
-                                } else {
-                                  Database().addLike(strUserId, course.documentID);
-                                }
-                                */ /*if (_isPressed) {
-                                  Database().removeGoing(strUserId, course.documentID);
-                                } else {
-                                  Database().addLike(strUserId, course.documentID);
-                                }*/ /*
-                              });
-                            },
-                          ),
-                        )
-                      ],
-                    ),*/
                       ],
                     ),
                   ),

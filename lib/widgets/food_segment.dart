@@ -13,16 +13,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:share/share.dart';
 
 class FoodSegment extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return FoodSegmentState();
   }
 }
 
 class FoodSegmentState extends State<FoodSegment> {
+  String text = 'https://www.whatsthemoov.com';
+  String subject = 'Check out MOOV. You get paid to download!';
   Map<int, Widget> map =
       new Map(); // Cupertino Segmented Control takes children in form of Map.
   List<Widget>
@@ -382,6 +384,34 @@ class FoodSegmentState extends State<FoodSegment> {
                               ),
                             ),
                             Spacer(),
+                            Container(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 50.0, bottom: 10.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Share.share(
+                                          text,
+                                          subject: 'Update the coordinate!',
+                                        );
+                                      },
+                                      child: Icon(Icons.send_rounded,
+                                          color: Colors.blue[500], size: 30),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 50.0, bottom: 20.0),
+                                    child: Text(
+                                      'Send',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             Container(
                               child: Column(
                                 //  mainAxisAlignment: MainAxisAlignment.start,
