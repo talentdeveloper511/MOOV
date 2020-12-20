@@ -31,7 +31,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
       new Map(); // Cupertino Segmented Control takes children in form of Map.
   List<Widget>
       childWidgets; //The Widgets that has to be loaded when a tab is selected.
-  int selectedIndex = 0;
+  int selectedIndex = 1;
   @override
   void initState() {
     super.initState();
@@ -77,7 +77,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
           width: 100,
           child: Center(
             child: Text(
-              "My Own",
+              "My Posts",
               style: TextStyle(color: Colors.white),
             ),
           )),
@@ -85,7 +85,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
           width: 100,
           child: Center(
             child: Text(
-              "Next MOOVs",
+              "Going",
               style: TextStyle(color: Colors.white),
             ),
           )),
@@ -93,7 +93,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
           width: 100,
           child: Center(
             child: Text(
-              "Friends",
+              "Friends Posts",
               style: TextStyle(color: Colors.white),
             ),
           ))
@@ -341,7 +341,9 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                                     'startDate']
                                                                 .toDate()),
                                                         style: TextStyle(
-                                              fontSize: isLargePhone ? 12 : 11,
+                                                          fontSize: isLargePhone
+                                                              ? 12
+                                                              : 11,
                                                         )),
                                                   ],
                                                 ),
@@ -366,7 +368,9 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                                     .bold)),
                                                     Text(course['address'],
                                                         style: TextStyle(
-                                              fontSize: isLargePhone ? 12 : 11,
+                                                          fontSize: isLargePhone
+                                                              ? 12
+                                                              : 11,
                                                         )),
                                                   ],
                                                 ),
@@ -781,7 +785,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                   .format(course['startDate']
                                                       .toDate()),
                                               style: TextStyle(
-                                              fontSize: isLargePhone ? 12 : 11,
+                                                fontSize:
+                                                    isLargePhone ? 12 : 11,
                                               )),
                                         ],
                                       ),
@@ -802,7 +807,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                   fontWeight: FontWeight.bold)),
                                           Text(course['address'],
                                               style: TextStyle(
-                                              fontSize: isLargePhone ? 12 : 11,
+                                                fontSize:
+                                                    isLargePhone ? 12 : 11,
                                               )),
                                         ],
                                       ),

@@ -155,7 +155,7 @@ fonts:
     - asset: lib/assets/fonts/Solway-Regular.ttf
     - asset: lib/assets/fonts/Solway-Bold.ttf
       weight: 700
-          # style: 
+      style: italic
 
   - family: OpenSans-Bold
     fonts:

@@ -181,17 +181,12 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   final privacyList = ["Public", "Friends Only", "Invite Only"];
   final listOfTypes = [
     "Food",
-    "Sport",
-    "Show",
     "Party",
-    "Study",
-    "Gov",
-    "Mass",
-    "Volunteer",
-    "Charity",
-    "Tailgate",
-    "Game",
-    "Other"
+    "Clubs",
+    "Sports",
+    "Dorm Life",
+    "Service",
+    "Shows"
   ];
   final listOfLocations = [
     "Off Campus",
@@ -233,8 +228,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   DateTime currentValues;
   // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
   // DateTime endTimes;
-  String privacyDropdownValue = 'Public';
-  String typeDropdownValue = 'Food';
+  String privacyDropdownValue = 'Friends Only';
+  String typeDropdownValue = 'Party';
   String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
   final addressController = TextEditingController();
