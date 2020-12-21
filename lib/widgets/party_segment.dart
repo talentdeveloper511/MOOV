@@ -430,9 +430,9 @@ class PartySegmentState extends State<PartySegment> {
                                 children: [
                                   IconButton(
                                     icon: (_isPressed)
-                                        ? new Icon(Icons.directions_run,
+                                        ? Icon(Icons.directions_run,
                                             color: Colors.green)
-                                        : new Icon(Icons.directions_walk),
+                                        : Icon(Icons.directions_walk),
                                     color: Colors.red,
                                     iconSize: 30.0,
                                     splashColor: Colors.green,
