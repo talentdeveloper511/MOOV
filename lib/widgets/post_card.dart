@@ -3,7 +3,6 @@ import 'package:MOOV/helpers/common.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/PostDepth.dart';
 import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
-import 'package:MOOV/widgets/post_stats.dart';
 import 'package:MOOV/widgets/post_time_stamp.dart';
 import 'package:MOOV/widgets/user_details.dart';
 import 'package:MOOV/helpers/themes.dart';
@@ -135,7 +134,7 @@ class _PostDetails extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(flex: 3, child: UserDetails(userData: postData.author)),
-        Expanded(flex: 1, child: PostStats()),
+        // Expanded(flex: 1, child: PostStats()),
       ],
     );
   }

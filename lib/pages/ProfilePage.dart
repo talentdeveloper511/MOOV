@@ -291,7 +291,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       style: TextThemes.mediumbody,
                                       children: [
                                         TextSpan(
-                                            text: "bio",
+                                            text: "",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w200,
                                                 color: TextThemes.ndGold)),
@@ -311,7 +311,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           style: TextThemes.mediumbody,
                                           children: [
                                             TextSpan(
-                                                text: userBio,
+                                                text: "\"" + userBio + "\"",
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontStyle:
@@ -342,7 +342,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                            right: 7.5, bottom: 15, top: 100),
+                            right: 7.5, bottom: 15, top: 70),
                         child: SizedBox(
                           height: 35.0,
                           width: 130,

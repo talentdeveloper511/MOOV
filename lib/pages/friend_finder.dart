@@ -66,7 +66,7 @@ class FriendFinderState extends State<FriendFinder> {
                     moovId = snapshot.data.documents[0].data['likedMoovs'][0];
                     moovRef = Firestore.instance
                         .collection('food')
-                        .where('id', isEqualTo: moovId)
+                        .where('postId', isEqualTo: moovId) // add document id
                         .getDocuments()
                         .then((QuerySnapshot docs) => {
                               if (docs.documents.isNotEmpty)
@@ -74,11 +74,11 @@ class FriendFinderState extends State<FriendFinder> {
                                   setState(() {
                                     empty = false;
                                     moov = docs.documents[0].data['title'];
-                                    print(moov);
+                                    // print(moov);
                                   })
                                 }
                             });
-                    print(moovId);
+                    // print(moovId);
                     return
                         // moov == null
                         //     ? Text('') :
@@ -169,49 +169,46 @@ class FriendFinderState extends State<FriendFinder> {
                                                       decoration: TextDecoration
                                                           .none))),
                                         ),
-                                        Text(' is ',
+                                        Text(' is',
                                             style: TextStyle(fontSize: 16)),
                                         Text(' Going ',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
                                                 color: Colors.green)),
-                                        Text(' to ',
+                                        Text('to ',
                                             style: TextStyle(fontSize: 16)),
                                         Spacer(),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10.0),
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(builder:
-                                                        (BuildContext context) {
-                                                  return OtherProfile(
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['photoUrl']
-                                                          .toString(),
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['displayName']
-                                                          .toString(),
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['id']
-                                                          .toString());
-                                                })); //Material
-                                              },
-                                              child: Text(moov.toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: TextThemes.ndBlue,
-                                                      decoration: TextDecoration
-                                                          .none))),
-                                        ),
+                                        GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(builder:
+                                                      (BuildContext context) {
+                                                return OtherProfile(
+                                                    snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['photoUrl']
+                                                        .toString(),
+                                                    snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['displayName']
+                                                        .toString(),
+                                                    snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['id']
+                                                        .toString());
+                                              })); //Material
+                                            },
+                                            child: Text(moov.toString(),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: TextThemes.ndBlue,
+                                                    decoration:
+                                                        TextDecoration.none))),
                                         // Padding(
                                         //   padding:
                                         //       const EdgeInsets.only(right: 8),
