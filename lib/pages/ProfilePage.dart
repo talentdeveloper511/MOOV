@@ -8,7 +8,6 @@ import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/friend_groups_button.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV/pages/notification_page.dart';
@@ -29,10 +28,11 @@ class _ProfilePageState extends State<ProfilePage> {
     var strUserPic = currentUser.photoUrl;
     var userYear = currentUser.year;
     var userDorm = currentUser.dorm;
-    var userBio = currentUser.bio;
+    var userBio;
     var userHeader = currentUser.header;
     var userFriends = currentUser.friendArray;
     var userFriendsLength = "0";
+    bool isAmbassador;
 
     return StreamBuilder(
         stream: Firestore.instance
@@ -42,11 +42,12 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context, snapshot) {
           bool isLargePhone = Screen.diagonal(context) > 766;
 
-          // userBio = snapshot.data['bio'];
-          // userDorm = snapshot.data['dorm'];
-          // userHeader = snapshot.data['header'];
-          // strUserPic = snapshot.data['photoUrl'];
-          if (!snapshot.hasData) return CircularProgressIndicator();
+          userBio = snapshot.data['bio'];
+          userDorm = snapshot.data['dorm'];
+          userHeader = snapshot.data['header'];
+          strUserPic = snapshot.data['photoUrl'];
+          isAmbassador = snapshot.data['isAmbassador'];
+          if (!snapshot.hasData) return Text('Loading data...');
 
           return Scaffold(
             appBar: AppBar(
@@ -112,8 +113,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(10),
                             child: userHeader == null
                                 ? null
-                                : CachedNetworkImage(
-                                    imageUrl: userHeader,
+                                : Image.network(
+                                    userHeader,
                                     fit: BoxFit.fitWidth,
                                   ),
                           ),
@@ -176,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: CircleAvatar(
                                 backgroundImage: (strUserPic == null)
                                     ? AssetImage('images/user-avatar.png')
-                                    : CachedNetworkImageProvider(strUserPic),
+                                    : NetworkImage(strUserPic),
                                 // backgroundImage: NetworkImage(currentUser.photoUrl),
                                 radius: 50,
                               ),
@@ -186,11 +187,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          currentUser.displayName != ""
-                              ? currentUser.displayName
-                              : "Username not found",
-                          style: TextThemes.extraBold,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentUser.displayName != ""
+                                  ? currentUser.displayName
+                                  : "Username not found",
+                              style: TextThemes.extraBold,
+                            ),
+                            isAmbassador
+                                ? Image.asset('lib/assets/verif.png',
+                                    height: 35)
+                                : Text("")
+                          ],
                         ),
                       ),
                       Padding(
@@ -319,9 +330,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10.0),
-                            child: userFriends == null
-                                ? Text("")
-                                : FriendButton(userFriends: userFriends),
+                            child: FriendButton(userFriends: userFriends),
                           )
                         ],
                       ),
