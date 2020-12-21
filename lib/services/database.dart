@@ -371,4 +371,14 @@ class Database {
         .where('friendArray', arrayContains: senderId)
         .getDocuments();
   }
+
+  Future<void> addLikedMoovs(String likerId, String moovId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('users/$likerId');
+      String serializedMessage = moovId;
+      transaction.update(ref, {
+        'likedMoovs': FieldValue.arrayUnion([serializedMessage]),
+      });
+    });
+  }
 }

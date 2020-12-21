@@ -6,7 +6,6 @@ import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/widgets/comments_list.dart';
 import 'package:MOOV/widgets/inherited_widgets/inherited_post_model.dart';
-import 'package:MOOV/widgets/post_stats.dart';
 import 'package:MOOV/widgets/post_time_stamp.dart';
 import 'package:MOOV/widgets/user_details_with_follow.dart';
 import 'HomePage.dart';
@@ -66,7 +65,6 @@ class _NonImageContents extends StatelessWidget {
             userData: postData.author,
           ),
           SizedBox(height: 8.0),
-          PostStats(),
           GoingStatus(),
           CommentsList(),
         ],
