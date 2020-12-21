@@ -163,7 +163,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                                   "Your score is calculated as follows:"
                                                   "\n"
                                                   "\n2pts: 'Going' to a MOOV"
-                                                  "\n4pts: test"),
+                                                  "\n\n30pts: Posting a MOOV"),
                                             ),
                                           ),
                                       barrierDismissible: true);

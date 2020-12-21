@@ -910,6 +910,9 @@ class PartySegmentState extends State<PartySegment> {
                                                 course["userEmail"],
                                                 likedArray);
                                           }
+
+                                          Database().addLikedMoovs(
+                                              strUserId, course.documentID);
                                         });
                                       },
                                     ),

@@ -13,6 +13,7 @@ class User {
   final String gender;
   final List<dynamic> friendArray;
   final List<dynamic> friendRequests;
+  final List<dynamic> likedMoovs;
   final postLimit;
   final String venmo;
 
@@ -29,6 +30,7 @@ class User {
       this.gender,
       this.friendArray,
       this.friendRequests,
+      this.likedMoovs,
       this.postLimit,
       this.venmo});
 
@@ -46,6 +48,7 @@ class User {
         gender: doc['gender'],
         friendArray: doc['friendArray'],
         friendRequests: doc['friendRequests'],
+        likedMoovs: doc['likedMoovs'],
         postLimit: doc['postLimit'],
         venmo: doc['venmo']);
   }

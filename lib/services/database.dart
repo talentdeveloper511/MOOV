@@ -1,8 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:MOOV/pages/HomePage.dart';
-import 'dart:io';
-import 'dart:math';
-
 import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -30,7 +25,6 @@ class Database {
       }
     });
   }
-  // Map likes
 
   void createPost(
       {title,
@@ -70,7 +64,6 @@ class Database {
       "featured": featured,
       "postId": postId
     });
-    // final String postId = ref.documentID;
     print(ref.documentID);
 
     Firestore.instance
@@ -78,9 +71,10 @@ class Database {
         .orderBy("startDate", descending: true);
 
     dbRef.runTransaction((transaction) async {
-      final DocumentReference ref2 = dbRef.document('users/$uid');
-      print('$uid');
-      transaction.update(ref2, {'score': FieldValue.increment(20)});
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      print('$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(30)});
+      transaction.update(ref, {'postId': ref.documentID});
     });
   }
 
@@ -370,5 +364,15 @@ class Database {
         .where('id', isEqualTo: receiverId)
         .where('friendArray', arrayContains: senderId)
         .getDocuments();
+  }
+
+  Future<void> addLikedMoovs(String likerId, String moovId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('users/$likerId');
+      String serializedMessage = moovId;
+      transaction.update(ref, {
+        'likedMoovs': FieldValue.arrayUnion([serializedMessage]),
+      });
+    });
   }
 }

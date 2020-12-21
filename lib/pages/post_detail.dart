@@ -313,7 +313,6 @@ class PostTimeAndPlace extends StatelessWidget {
   }
 }
 
-
 class _AuthorContent extends StatelessWidget {
   String userId;
   var course;
@@ -321,17 +320,12 @@ class _AuthorContent extends StatelessWidget {
   var data;
   _AuthorContent(this.userId);
 
-
-
   @override
   Widget build(BuildContext context) {
-
-
     return FutureBuilder<DocumentSnapshot>(
       future: usersRef.document(userId).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-
         if (snapshot.hasError) {
           return Text("Something went wrong");
         }
@@ -339,69 +333,63 @@ class _AuthorContent extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> course = snapshot.data.data;
 
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: GestureDetector(
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: GestureDetector(
               child: Container(
-            child: Row(
-          children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
-                child: CircleAvatar(
-                  radius: 22.0,
-                  backgroundImage: NetworkImage(course['photoUrl']),
-                  backgroundColor: Colors.transparent,
-                )),
-            Container(
-              child: Column(
-                //  mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Text(course['displayName'],
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: TextThemes.ndBlue,
-                            decoration: TextDecoration.none)),
+                      padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                      child: CircleAvatar(
+                        radius: 22.0,
+                        backgroundImage: NetworkImage(course['photoUrl']),
+                        backgroundColor: Colors.transparent,
+                      )),
+                  Container(
+                    child: Column(
+                      //  mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(course['displayName'],
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: TextThemes.ndBlue,
+                                  decoration: TextDecoration.none)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(course['email'],
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: TextThemes.ndBlue,
+                                  decoration: TextDecoration.none)),
+                        ),
+                      ],
+                    ),
                   ),
+                  Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Text(course['email'],
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: TextThemes.ndBlue,
-                            decoration: TextDecoration.none)),
-                  ),
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Icon(Icons.group_add, color: TextThemes.ndBlue),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
-              ),
+              )),
             ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Icon(Icons.group_add, color: TextThemes.ndBlue),
-                  ],
-                ),
-              ),
-            )
-          ],
-        )),
-      ),
-    );
-
-
+          );
         }
 
         return Text("loading");
       },
     );
   }
-
-
-  }
-
+}
