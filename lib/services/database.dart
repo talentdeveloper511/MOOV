@@ -291,8 +291,11 @@ class Database {
         "strName": strName,
         "strPic": strPic,
       };
+      String serialUser = uid;
+
       transaction.update(userRef, {
         'liked': FieldValue.arrayRemove([serializedMessage]),
+        'liker': FieldValue.arrayRemove([serializedMessage]),
         'likeCounter': FieldValue.increment(-1)
       });
       transaction.update(userRef2, {'score': FieldValue.increment(-2)});
@@ -366,23 +369,23 @@ class Database {
         .getDocuments();
   }
 
-  Future<void> addLikedMoovs(String likerId, String moovId) async {
-    return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$likerId');
-      String serializedMessage = moovId;
-      transaction.update(ref, {
-        'likedMoovs': FieldValue.arrayUnion([serializedMessage]),
-      });
-    });
-  }
+  // Future<void> addLikedMoovs(String likerId, String moovId) async {
+  //   return dbRef.runTransaction((transaction) async {
+  //     final DocumentReference ref = dbRef.document('users/$likerId');
+  //     String serializedMessage = moovId;
+  //     transaction.update(ref, {
+  //       'likedMoovs': FieldValue.arrayUnion([serializedMessage]),
+  //     });
+  //   });
+  // }
 
-  Future<void> removeLikedMoovs(String likerId, String moovId) async {
-    return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$likerId');
-      String serializedMessage = moovId;
-      transaction.update(ref, {
-        'likedMoovs': FieldValue.arrayRemove([serializedMessage]),
-      });
-    });
-  }
+  // Future<void> removeLikedMoovs(String likerId, String moovId) async {
+  //   return dbRef.runTransaction((transaction) async {
+  //     final DocumentReference ref = dbRef.document('users/$likerId');
+  //     String serializedMessage = moovId;
+  //     transaction.update(ref, {
+  //       'likedMoovs': FieldValue.arrayRemove([serializedMessage]),
+  //     });
+  //   });
+  // }
 }

@@ -65,29 +65,28 @@ class FriendFinderState extends State<FriendFinder> {
               body: ListView.builder(
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (_, index) {
-                    moovArray =
-                        snapshot.data.documents[index].data['likedMoovs'];
+                    // moovArray =
+                    // snapshot.data.documents[index].data['likedMoovs'];
                     // if (moovArray.length == 0) {
                     //   return Container();
                     // }
 
                     moovRef = Firestore.instance
                         .collection('food')
-                        .where('postId',
-                            arrayContains: moovArray[0]) // add document id
+                        .where('liked',
+                            arrayContains: snapshot.data.documents[index]
+                                .data['id']) // add document id
                         .orderBy("startDate")
                         .getDocuments()
                         .then((QuerySnapshot docs) => {
                               if (docs.documents.isNotEmpty)
                                 {
                                   setState(() {
-                                    empty = false;
                                     moov = docs.documents[0].data['title'];
-                                    // print(moov);
                                   })
                                 }
                             });
-                    // print(moovId);
+
                     return moov == null
                         ? Container(color: Colors.white)
                         : Padding(

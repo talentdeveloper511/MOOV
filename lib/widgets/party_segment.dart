@@ -877,8 +877,8 @@ class PartySegmentState extends State<PartySegment> {
 
                                           if (uidArray != null &&
                                               uidArray.contains(strUserId)) {
-                                            Database().removeLikedMoovs(
-                                                strUserId, course.documentID);
+                                            // Database().removeLikedMoovs(
+                                            //     strUserId, course.documentID);
                                             Database().removeGoing(
                                                 course["userId"],
                                                 course["image"],
@@ -896,8 +896,8 @@ class PartySegmentState extends State<PartySegment> {
                                                 course["userEmail"],
                                                 likedArray);
                                           } else {
-                                            Database().addLikedMoovs(
-                                                strUserId, course.documentID);
+                                            // Database().addLikedMoovs(
+                                            //     strUserId, course.documentID);
                                             Database().addGoing(
                                                 course["userId"],
                                                 course["image"],
