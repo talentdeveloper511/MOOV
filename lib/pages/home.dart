@@ -93,7 +93,8 @@ class _HomeState extends State<Home> {
         "year": year,
         "dorm": dorm,
         "referral": referral,
-        "postLimit": 3
+        "postLimit": 3,
+        "isAmbassador": false
       });
       doc = await usersRef.document(user.id).get();
     }

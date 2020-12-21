@@ -4,7 +4,10 @@ import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/widgets/frosted_appbar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,27 +16,11 @@ import 'package:intl/intl.dart';
 import 'package:MOOV/pages/Going_event.dart';
 
 class PostDetail extends StatefulWidget {
-  String bannerImage,
-      title,
-      description,
-      location,
-      profilePic,
-      userName,
-      userEmail;
+  String bannerImage, title, description, location, userId;
   dynamic startDate, address, moovId;
   List<dynamic> likedArray;
-  PostDetail(
-      this.bannerImage,
-      this.title,
-      this.description,
-      this.startDate,
-      this.location,
-      this.address,
-      this.profilePic,
-      this.userName,
-      this.userEmail,
-      this.likedArray,
-      this.moovId);
+  PostDetail(this.bannerImage, this.title, this.description, this.startDate,
+      this.location, this.address, this.userId, this.likedArray, this.moovId);
 
   @override
   State<StatefulWidget> createState() {
@@ -44,22 +31,14 @@ class PostDetail extends StatefulWidget {
         this.startDate,
         this.location,
         this.address,
-        this.profilePic,
-        this.userName,
-        this.userEmail,
+        this.userId,
         this.likedArray,
         this.moovId);
   }
 }
 
 class _PostDetailState extends State<PostDetail> {
-  String bannerImage,
-      title,
-      description,
-      location,
-      profilePic,
-      userName,
-      userEmail;
+  String bannerImage, title, description, location, userId;
   dynamic startDate, address, moovId;
   List<dynamic> likedArray;
   _PostDetailState(
@@ -69,9 +48,7 @@ class _PostDetailState extends State<PostDetail> {
       this.startDate,
       this.location,
       this.address,
-      this.profilePic,
-      this.userName,
-      this.userEmail,
+      this.userId,
       this.likedArray,
       this.moovId);
 
@@ -114,17 +91,8 @@ class _PostDetailState extends State<PostDetail> {
               child: ListView(
                 children: <Widget>[
                   _BannerImage(bannerImage),
-                  _NonImageContents(
-                      title,
-                      description,
-                      startDate,
-                      address,
-                      location,
-                      profilePic,
-                      userName,
-                      userEmail,
-                      likedArray,
-                      moovId),
+                  _NonImageContents(title, description, startDate, address,
+                      location, userId, likedArray, moovId),
                 ],
               ),
             ),
@@ -189,8 +157,8 @@ class _BannerImage extends StatelessWidget {
               ),
             ],
           ),
-          child: Image.network(
-            bannerImage,
+          child: CachedNetworkImage(
+            imageUrl: bannerImage,
             fit: BoxFit.fitWidth,
             height: 200,
             width: double.infinity,
@@ -202,21 +170,12 @@ class _BannerImage extends StatelessWidget {
 }
 
 class _NonImageContents extends StatelessWidget {
-  String title, description, location, profilePic, userName, userEmail;
+  String title, description, location, userId;
   dynamic startDate, address, moovId;
   List<dynamic> likedArray;
 
-  _NonImageContents(
-      this.title,
-      this.description,
-      this.startDate,
-      this.location,
-      this.address,
-      this.profilePic,
-      this.userName,
-      this.userEmail,
-      this.likedArray,
-      this.moovId);
+  _NonImageContents(this.title, this.description, this.startDate, this.location,
+      this.address, this.userId, this.likedArray, this.moovId);
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +187,7 @@ class _NonImageContents extends StatelessWidget {
           _Title(title),
           _Description(description),
           PostTimeAndPlace(startDate, address, location),
-          _AuthorContent(profilePic, userName, userEmail),
+          _AuthorContent(userId),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.0),
             child: Container(
@@ -354,62 +313,95 @@ class PostTimeAndPlace extends StatelessWidget {
   }
 }
 
+
 class _AuthorContent extends StatelessWidget {
-  String profilePic, userName, userEmail;
-  _AuthorContent(this.profilePic, this.userName, this.userEmail);
+  String userId;
+  var course;
+  var snapshot;
+  var data;
+  _AuthorContent(this.userId);
+
+
 
   @override
   Widget build(BuildContext context) {
+
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: usersRef.document(userId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> course = snapshot.data.data;
+
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Container(
-          child: Row(
-        children: [
-          Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
-              child: CircleAvatar(
-                radius: 22.0,
-                backgroundImage: NetworkImage(profilePic),
-                backgroundColor: Colors.transparent,
-              )),
-          Container(
-            child: Column(
-              //  mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Text(userName,
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: TextThemes.ndBlue,
-                          decoration: TextDecoration.none)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Text(userEmail,
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: TextThemes.ndBlue,
-                          decoration: TextDecoration.none)),
-                ),
-              ],
-            ),
-          ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: Container(
+      child: GestureDetector(
+              child: Container(
+            child: Row(
+          children: [
+            Padding(
+                padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
+                child: CircleAvatar(
+                  radius: 22.0,
+                  backgroundImage: NetworkImage(course['photoUrl']),
+                  backgroundColor: Colors.transparent,
+                )),
+            Container(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                //  mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.group_add, color: TextThemes.ndBlue),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Text(course['displayName'],
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: TextThemes.ndBlue,
+                            decoration: TextDecoration.none)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Text(course['email'],
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: TextThemes.ndBlue,
+                            decoration: TextDecoration.none)),
+                  ),
                 ],
               ),
             ),
-          )
-        ],
-      )),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Icon(Icons.group_add, color: TextThemes.ndBlue),
+                  ],
+                ),
+              ),
+            )
+          ],
+        )),
+      ),
+    );
+
+
+        }
+
+        return Text("loading");
+      },
     );
   }
-}
+
+
+  }
+

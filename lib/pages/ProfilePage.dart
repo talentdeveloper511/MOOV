@@ -102,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
             body: SingleChildScrollView(
               child: Stack(children: [
                 Container(
-                  height: 145,
+                  height: 130,
                   child: GestureDetector(
                     onTap: () {},
                     child: Stack(children: <Widget>[

@@ -168,9 +168,7 @@ class NotificationFeedItem extends StatelessWidget {
                 startDate,
                 location,
                 address,
-                ownerProPic,
-                ownerName,
-                ownerEmail,
+                userId,
                 likedArray,
                 userId)));
   }

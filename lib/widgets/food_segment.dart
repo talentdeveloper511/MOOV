@@ -153,9 +153,7 @@ class FoodSegmentState extends State<FoodSegment> {
                               course['startDate'],
                               course['location'],
                               course['address'],
-                              course['profilePic'],
-                              course['userName'],
-                              course['userEmail'],
+                              course['userId'],
                               likedArray,
                               course.documentID)));
                     },

@@ -61,9 +61,7 @@ class _MOTDState extends State<MOTD> {
                                       course['startDate'],
                                       course['location'],
                                       course['address'],
-                                      course['profilePic'],
-                                      course['userName'],
-                                      course['userEmail'],
+                                      course['userId'],
                                       course['liked'],
                                       course.documentID)));
                             },

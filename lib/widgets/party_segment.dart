@@ -157,9 +157,7 @@ class PartySegmentState extends State<PartySegment> {
                               course['startDate'],
                               course['location'],
                               course['address'],
-                              course['profilePic'],
-                              course['userName'],
-                              course['userEmail'],
+                              course['userId'],
                               likedArray,
                               course.documentID)));
                     },
@@ -566,9 +564,7 @@ class PartySegmentState extends State<PartySegment> {
                               course['startDate'],
                               course['location'],
                               course['address'],
-                              course['profilePic'],
-                              course['userName'],
-                              course['userEmail'],
+                              course['userId'],
                               likedArray,
                               course.documentID)));
                     },
