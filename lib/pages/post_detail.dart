@@ -5,6 +5,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/frosted_appbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -336,6 +337,9 @@ class _AuthorContent extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: GestureDetector(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => OtherProfile(course['photoUrl'],
+                      course['displayName'], course['id']))),
               child: Container(
                   child: Row(
                 children: [
@@ -343,7 +347,8 @@ class _AuthorContent extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
                       child: CircleAvatar(
                         radius: 22.0,
-                        backgroundImage: NetworkImage(course['photoUrl']),
+                        backgroundImage:
+                            CachedNetworkImageProvider(course['photoUrl']),
                         backgroundColor: Colors.transparent,
                       )),
                   Container(
