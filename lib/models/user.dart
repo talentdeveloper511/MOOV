@@ -16,6 +16,8 @@ class User {
   final List<dynamic> likedMoovs;
   final postLimit;
   final String venmo;
+    final bool isAmbassador;
+  final String referral;
 
   User(
       {this.id,
@@ -32,7 +34,9 @@ class User {
       this.friendRequests,
       this.likedMoovs,
       this.postLimit,
-      this.venmo});
+      this.venmo,
+      this.isAmbassador,
+      this.referral});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -50,6 +54,8 @@ class User {
         friendRequests: doc['friendRequests'],
         likedMoovs: doc['likedMoovs'],
         postLimit: doc['postLimit'],
-        venmo: doc['venmo']);
+        venmo: doc['venmo'],
+        isAmbassador: doc['isAmbassador'],
+        referral: doc['referral']);
   }
 }

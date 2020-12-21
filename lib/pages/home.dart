@@ -94,7 +94,11 @@ class _HomeState extends State<Home> {
         "dorm": dorm,
         "referral": referral,
         "postLimit": 3,
-        "isAmbassador": false
+        "isAmbassador": false,
+        "friendArray": [],
+        "friendRequests": [],
+        "venmo": "",
+        "likedMoovs": []
       });
       doc = await usersRef.document(user.id).get();
     }
