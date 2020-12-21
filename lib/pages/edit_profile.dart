@@ -27,6 +27,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   get firestoreInstance => null;
   File _image;
+  File _image2;
   final picker = ImagePicker();
 
   void openCamera(context) async {
@@ -117,6 +118,94 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
+ void openCamera2(context) async {
+    final image2 = await CustomCamera.openCamera();
+    setState(() {
+      _image2 = image2;
+      //  fileName = p.basename(_image.path);
+    });
+  }
+
+  void openGallery2(context) async {
+    final image2 = await CustomCamera.openGallery();
+    setState(() {
+      _image2 = image2;
+    });
+  }
+
+  Future handleTakePhoto2() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.camera,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image2 != null) {
+        _image2 = File(file.path);
+      }
+    });
+  }
+
+  handleChooseFromGallery2() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.gallery,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image2 != null) {
+        _image2 = File(file.path);
+      }
+    });
+  }
+
+  selectImage2(parentContext) {
+    return showDialog(
+      context: parentContext,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text(
+            "Upload Header",
+            style: TextStyle(color: Colors.white),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text(
+                "Photo with Camera",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openCamera2(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: handleChooseFromGallery),
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: () => openGallery(context)),
+              child: Text(
+                "Image from Gallery",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openGallery2(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
@@ -167,7 +256,7 @@ class _EditProfileState extends State<EditProfile> {
           Container(
             height: 145,
             child: GestureDetector(
-              onTap: () => selectImage(context),
+              onTap: () => selectImage2(context),
               child: Stack(children: <Widget>[
                 FractionallySizedBox(
                   widthFactor: isLargePhone ? 1.17 : 1.34,
@@ -221,7 +310,8 @@ class _EditProfileState extends State<EditProfile> {
                           child: CircleAvatar(
                             backgroundImage: (currentUser.photoUrl == null)
                                 ? AssetImage('images/user-avatar.png')
-                                : CachedNetworkImageProvider(currentUser.photoUrl),
+                                : CachedNetworkImageProvider(
+                                    currentUser.photoUrl),
                             // backgroundImage: NetworkImage(currentUser.photoUrl),
                             radius: 50,
                           ),
@@ -292,6 +382,24 @@ class _EditProfileState extends State<EditProfile> {
                                 await taskSnapshot.ref.getDownloadURL();
                             usersRef.document(currentUser.id).updateData({
                               "photoUrl": downloadUrl,
+                            });
+                          }
+                        }
+                        if (_image2 != null) {
+                          StorageReference firebaseStorageRef = FirebaseStorage
+                              .instance
+                              .ref()
+                              .child("images/header" + currentUser.displayName);
+                          StorageUploadTask uploadTask =
+                              firebaseStorageRef.putFile(_image2);
+                          StorageTaskSnapshot taskSnapshot =
+                              await uploadTask.onComplete;
+                          if (taskSnapshot.error == null) {
+                            print("added to Firebase Storage");
+                            final String headerUrl =
+                                await taskSnapshot.ref.getDownloadURL();
+                            usersRef.document(currentUser.id).updateData({
+                              "header": headerUrl,
                             });
                           }
                         }
