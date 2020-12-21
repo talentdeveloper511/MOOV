@@ -375,4 +375,14 @@ class Database {
       });
     });
   }
+
+  Future<void> removeLikedMoovs(String likerId, String moovId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('users/$likerId');
+      String serializedMessage = moovId;
+      transaction.update(ref, {
+        'likedMoovs': FieldValue.arrayRemove([serializedMessage]),
+      });
+    });
+  }
 }

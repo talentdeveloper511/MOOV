@@ -31,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     var userBio;
     var userHeader = currentUser.header;
     var userFriends = currentUser.friendArray;
-    var userFriendsLength = "0";
+    // var userFriendsLength = "0";
     bool isAmbassador;
 
     return StreamBuilder(

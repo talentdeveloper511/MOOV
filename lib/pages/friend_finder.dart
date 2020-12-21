@@ -7,7 +7,8 @@ import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FriendFinder extends StatefulWidget {
-  dynamic moovId;
+  String moovId;
+  var moovArray;
   TextEditingController searchController = TextEditingController();
   List<dynamic> likedArray;
   final userFriends;
@@ -22,7 +23,8 @@ class FriendFinder extends StatefulWidget {
 }
 
 class FriendFinderState extends State<FriendFinder> {
-  dynamic moovId;
+  String moovId;
+  var moovArray;
   var moovRef;
   TextEditingController searchController = TextEditingController();
   List<dynamic> likedArray;
@@ -63,10 +65,17 @@ class FriendFinderState extends State<FriendFinder> {
               body: ListView.builder(
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (_, index) {
-                    moovId = snapshot.data.documents[0].data['likedMoovs'][0];
+                    moovArray =
+                        snapshot.data.documents[index].data['likedMoovs'];
+                    // if (moovArray.length == 0) {
+                    //   return Container();
+                    // }
+
                     moovRef = Firestore.instance
                         .collection('food')
-                        .where('postId', isEqualTo: moovId) // add document id
+                        .where('postId',
+                            arrayContains: moovArray[0]) // add document id
+                        .orderBy("startDate")
                         .getDocuments()
                         .then((QuerySnapshot docs) => {
                               if (docs.documents.isNotEmpty)
@@ -79,189 +88,219 @@ class FriendFinderState extends State<FriendFinder> {
                                 }
                             });
                     // print(moovId);
-                    return
-                        // moov == null
-                        //     ? Text('') :
-                        Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Container(
-                          margin: EdgeInsets.all(0.0),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.0),
-                            child: Column(
-                              children: [
-                                Container(
-                                    color: Colors.grey[300],
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(builder:
-                                                        (BuildContext context) {
-                                                  return OtherProfile(
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['photoUrl']
-                                                          .toString(),
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['displayName']
-                                                          .toString(),
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['id']
-                                                          .toString());
-                                                })); //Material
-                                              },
-                                              child: CircleAvatar(
-                                                  radius: 22,
-                                                  child: CircleAvatar(
-                                                      radius: 22.0,
-                                                      backgroundImage:
-                                                          NetworkImage(snapshot
+                    return moov == null
+                        ? Container(color: Colors.white)
+                        : Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Container(
+                                margin: EdgeInsets.all(0.0),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 2.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                          color: Colors.grey[300],
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                        return OtherProfile(
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .data[
+                                                                    'photoUrl']
+                                                                .toString(),
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .data[
+                                                                    'displayName']
+                                                                .toString(),
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .data['id']
+                                                                .toString());
+                                                      })); //Material
+                                                    },
+                                                    child: CircleAvatar(
+                                                        radius: 22,
+                                                        child: CircleAvatar(
+                                                            radius: 22.0,
+                                                            backgroundImage:
+                                                                NetworkImage(snapshot
+                                                                        .data
+                                                                        .documents[
+                                                                            index]
+                                                                        .data[
+                                                                    'photoUrl'])
+
+                                                            // NetworkImage(likedArray[index]['strPic']),
+
+                                                            ))),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                        return OtherProfile(
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .data[
+                                                                    'photoUrl']
+                                                                .toString(),
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .data[
+                                                                    'displayName']
+                                                                .toString(),
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .data['id']
+                                                                .toString());
+                                                      })); //Material
+                                                    },
+                                                    child: Text(
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['displayName']
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: TextThemes
+                                                                .ndBlue,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .none))),
+                                              ),
+                                              Text(' is',
+                                                  style:
+                                                      TextStyle(fontSize: 16)),
+                                              Text(' Going ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Colors.green)),
+                                              Text('to ',
+                                                  style:
+                                                      TextStyle(fontSize: 16)),
+                                              Spacer(),
+                                              GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                      return OtherProfile(
+                                                          snapshot
                                                               .data
                                                               .documents[index]
-                                                              .data['photoUrl'])
-
-                                                      // NetworkImage(likedArray[index]['strPic']),
-
-                                                      ))),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10.0),
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(builder:
-                                                        (BuildContext context) {
-                                                  return OtherProfile(
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['photoUrl']
-                                                          .toString(),
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['displayName']
-                                                          .toString(),
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['id']
-                                                          .toString());
-                                                })); //Material
-                                              },
-                                              child: Text(
-                                                  snapshot.data.documents[index]
-                                                      .data['displayName']
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: TextThemes.ndBlue,
-                                                      decoration: TextDecoration
-                                                          .none))),
-                                        ),
-                                        Text(' is',
-                                            style: TextStyle(fontSize: 16)),
-                                        Text(' Going ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.green)),
-                                        Text('to ',
-                                            style: TextStyle(fontSize: 16)),
-                                        Spacer(),
-                                        GestureDetector(
-                                            onTap: () {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(builder:
-                                                      (BuildContext context) {
-                                                return OtherProfile(
-                                                    snapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .data['photoUrl']
-                                                        .toString(),
-                                                    snapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .data['displayName']
-                                                        .toString(),
-                                                    snapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .data['id']
-                                                        .toString());
-                                              })); //Material
-                                            },
-                                            child: Text(moov.toString(),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                    color: TextThemes.ndBlue,
-                                                    decoration:
-                                                        TextDecoration.none))),
-                                        // Padding(
-                                        //   padding:
-                                        //       const EdgeInsets.only(right: 8),
-                                        //   child: RaisedButton(
-                                        //     padding:
-                                        //         const EdgeInsets.all(2.0),
-                                        //     color: Colors.green,
-                                        //     shape: RoundedRectangleBorder(
-                                        //         borderRadius:
-                                        //             BorderRadius.all(
-                                        //                 Radius.circular(
-                                        //                     3.0))),
-                                        //     onPressed: () {
-                                        //       Navigator.of(context).push(
-                                        //           MaterialPageRoute(
-                                        //               builder: (context) =>
-                                        //                   OtherProfile(
-                                        //                       snapshot
-                                        //                           .data
-                                        //                           .documents[
-                                        //                               index]
-                                        //                           .data[
-                                        //                               'photoUrl']
-                                        //                           .toString(),
-                                        //                       snapshot
-                                        //                           .data
-                                        //                           .documents[
-                                        //                               index]
-                                        //                           .data[
-                                        //                               'displayName']
-                                        //                           .toString(),
-                                        //                       snapshot
-                                        //                           .data
-                                        //                           .documents[
-                                        //                               index]
-                                        //                           .data['id']
-                                        //                           .toString())));
-                                        //     },
-                                        //     child: Text(
-                                        //       "Friends",
-                                        //       style: new TextStyle(
-                                        //         color: Colors.white,
-                                        //         fontSize: 14.0,
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // )
-                                      ],
-                                    )),
-                              ],
-                            ),
-                          )),
-                    );
+                                                              .data['photoUrl']
+                                                              .toString(),
+                                                          snapshot
+                                                              .data
+                                                              .documents[index]
+                                                              .data[
+                                                                  'displayName']
+                                                              .toString(),
+                                                          snapshot
+                                                              .data
+                                                              .documents[index]
+                                                              .data['id']
+                                                              .toString());
+                                                    })); //Material
+                                                  },
+                                                  child: Text(moov.toString(),
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 16,
+                                                          color:
+                                                              TextThemes.ndBlue,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .none))),
+                                              // Padding(
+                                              //   padding:
+                                              //       const EdgeInsets.only(right: 8),
+                                              //   child: RaisedButton(
+                                              //     padding:
+                                              //         const EdgeInsets.all(2.0),
+                                              //     color: Colors.green,
+                                              //     shape: RoundedRectangleBorder(
+                                              //         borderRadius:
+                                              //             BorderRadius.all(
+                                              //                 Radius.circular(
+                                              //                     3.0))),
+                                              //     onPressed: () {
+                                              //       Navigator.of(context).push(
+                                              //           MaterialPageRoute(
+                                              //               builder: (context) =>
+                                              //                   OtherProfile(
+                                              //                       snapshot
+                                              //                           .data
+                                              //                           .documents[
+                                              //                               index]
+                                              //                           .data[
+                                              //                               'photoUrl']
+                                              //                           .toString(),
+                                              //                       snapshot
+                                              //                           .data
+                                              //                           .documents[
+                                              //                               index]
+                                              //                           .data[
+                                              //                               'displayName']
+                                              //                           .toString(),
+                                              //                       snapshot
+                                              //                           .data
+                                              //                           .documents[
+                                              //                               index]
+                                              //                           .data['id']
+                                              //                           .toString())));
+                                              //     },
+                                              //     child: Text(
+                                              //       "Friends",
+                                              //       style: new TextStyle(
+                                              //         color: Colors.white,
+                                              //         fontSize: 14.0,
+                                              //       ),
+                                              //     ),
+                                              //   ),
+                                              // )
+                                            ],
+                                          )),
+                                    ],
+                                  ),
+                                )),
+                          );
                   }));
         });
   }
