@@ -118,8 +118,10 @@ class Database {
         "strName": strName,
         "strPic": strPic,
       };
+      String serialUser = uid;
       transaction.update(ref, {
         'liked': FieldValue.arrayUnion([serializedMessage]),
+        'liker': FieldValue.arrayUnion([serialUser]),
         'likeCounter': FieldValue.increment(1)
       });
     });
@@ -295,7 +297,7 @@ class Database {
 
       transaction.update(userRef, {
         'liked': FieldValue.arrayRemove([serializedMessage]),
-        'liker': FieldValue.arrayRemove([serializedMessage]),
+        'liker': FieldValue.arrayRemove([serialUser]),
         'likeCounter': FieldValue.increment(-1)
       });
       transaction.update(userRef2, {'score': FieldValue.increment(-2)});

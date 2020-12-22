@@ -8,12 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FriendFinder extends StatefulWidget {
   String moovId;
-  var moovArray;
   TextEditingController searchController = TextEditingController();
   List<dynamic> likedArray;
   final userFriends;
-  var moovRef;
-
+  // var moovRef;
   FriendFinder({this.userFriends});
 
   @override
@@ -26,11 +24,27 @@ class FriendFinderState extends State<FriendFinder> {
   String moovId;
   var moovArray;
   var moovRef;
+  var moov;
   TextEditingController searchController = TextEditingController();
   List<dynamic> likedArray;
-  var empty = true;
-  var moov;
   final userFriends;
+
+  friendFind(arr) {
+    moovRef = Firestore.instance
+        .collection('food')
+        .where('liker', arrayContains: arr) // add document id
+        .orderBy("startDate")
+        .getDocuments()
+        .then((QuerySnapshot docs) => {
+              if (docs.documents.isNotEmpty)
+                {
+                  // setState(() {
+                  moov = docs.documents[0].data['title']
+                  // })
+                }
+            });
+    print(moov);
+  }
 
   FriendFinderState(this.userFriends);
 
@@ -62,31 +76,20 @@ class FriendFinderState extends State<FriendFinder> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+              // body: Column(children: <Widget>[
+              //   // Text(friendFind(snapshot.data.documents[0].data).toString()),
+              //   Text(friendFind(snapshot.data.documents[1].data).toString()),
+              //   Text(friendFind(snapshot.data.documents[2].data).toString()),
+              // ])
               body: ListView.builder(
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (_, index) {
-                    // moovArray =
-                    // snapshot.data.documents[index].data['likedMoovs'];
-                    // if (moovArray.length == 0) {
-                    //   return Container();
-                    // }
-
-                    moovRef = Firestore.instance
-                        .collection('food')
-                        .where('liked',
-                            arrayContains: snapshot.data.documents[index]
-                                .data['id']) // add document id
-                        .orderBy("startDate")
-                        .getDocuments()
-                        .then((QuerySnapshot docs) => {
-                              if (docs.documents.isNotEmpty)
-                                {
-                                  setState(() {
-                                    moov = docs.documents[0].data['title'];
-                                  })
-                                }
-                            });
-
+                    var iter = 0;
+                    while (iter == 0) {
+                      print(snapshot.data.documents[index].data['id']);
+                      friendFind(snapshot.data.documents[index].data['id']);
+                      iter = iter + 1;
+                    }
                     return moov == null
                         ? Container(color: Colors.white)
                         : Padding(
@@ -247,53 +250,6 @@ class FriendFinderState extends State<FriendFinder> {
                                                           decoration:
                                                               TextDecoration
                                                                   .none))),
-                                              // Padding(
-                                              //   padding:
-                                              //       const EdgeInsets.only(right: 8),
-                                              //   child: RaisedButton(
-                                              //     padding:
-                                              //         const EdgeInsets.all(2.0),
-                                              //     color: Colors.green,
-                                              //     shape: RoundedRectangleBorder(
-                                              //         borderRadius:
-                                              //             BorderRadius.all(
-                                              //                 Radius.circular(
-                                              //                     3.0))),
-                                              //     onPressed: () {
-                                              //       Navigator.of(context).push(
-                                              //           MaterialPageRoute(
-                                              //               builder: (context) =>
-                                              //                   OtherProfile(
-                                              //                       snapshot
-                                              //                           .data
-                                              //                           .documents[
-                                              //                               index]
-                                              //                           .data[
-                                              //                               'photoUrl']
-                                              //                           .toString(),
-                                              //                       snapshot
-                                              //                           .data
-                                              //                           .documents[
-                                              //                               index]
-                                              //                           .data[
-                                              //                               'displayName']
-                                              //                           .toString(),
-                                              //                       snapshot
-                                              //                           .data
-                                              //                           .documents[
-                                              //                               index]
-                                              //                           .data['id']
-                                              //                           .toString())));
-                                              //     },
-                                              //     child: Text(
-                                              //       "Friends",
-                                              //       style: new TextStyle(
-                                              //         color: Colors.white,
-                                              //         fontSize: 14.0,
-                                              //       ),
-                                              //     ),
-                                              //   ),
-                                              // )
                                             ],
                                           )),
                                     ],
