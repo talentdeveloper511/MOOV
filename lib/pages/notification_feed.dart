@@ -170,7 +170,7 @@ class NotificationFeedItem extends StatelessWidget {
                 address,
                 userId,
                 likedArray,
-                userId)));
+                postId)));
   }
 
   configureMediaPreview(context) {
