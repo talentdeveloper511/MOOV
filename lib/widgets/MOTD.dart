@@ -101,6 +101,7 @@ class _MOTDState extends State<MOTD> {
                                   alignment: Alignment(0.0, 0.0),
                                   child: Container(
                                     decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
                                       gradient: LinearGradient(
                                         begin: Alignment.topCenter,
                                         end: Alignment.bottomCenter,
@@ -111,13 +112,16 @@ class _MOTDState extends State<MOTD> {
                                         ],
                                       ),
                                     ),
-                                    child: Text(
-                                      title,
-                                      style: TextStyle(
-                                          fontFamily: 'Solway',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 20.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        title,
+                                        style: TextStyle(
+                                            fontFamily: 'Solway',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 20.0),
+                                      ),
                                     ),
                                   ),
                                 ),
