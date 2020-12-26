@@ -87,6 +87,9 @@ class FriendFinderState extends State<FriendFinder> {
                     var iter = 0;
                     while (iter == 0) {
                       print(snapshot.data.documents[index].data['id']);
+                                            print(snapshot.data.documents[index].data['id']);
+                      print(snapshot.data.documents[index].data['id']);
+
                       friendFind(snapshot.data.documents[index].data['id']);
                       iter = iter + 1;
                     }

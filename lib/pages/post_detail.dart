@@ -479,7 +479,11 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
                   ),
                   // Sign Up View
                   Center(
-                    child: Text("SignUp"),
+                    child: ListView.builder(
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return GoingPageFriends(likedArray, moovId);
+                        }),
                   )
                 ]),
           )

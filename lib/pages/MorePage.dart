@@ -86,7 +86,7 @@ class _MorePageState extends State<MorePage>
                       builder: (context) => MoovMaker(postModel: PostModel())),
                 );
               },
-              label: const Text("Make a MOOV",
+              label: const Text("Post a MOOV",
                   style: TextStyle(fontSize: 20, color: Colors.white))),
         ),
       ),
