@@ -60,6 +60,8 @@ dependencies:
   timeago: ^2.0.17
   share: ^0.6.5+4
   flutter_screenutil: ^4.0.0
+  google_fonts: ^1.1.1
+
 
 
 

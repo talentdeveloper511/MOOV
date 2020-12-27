@@ -208,11 +208,11 @@ class PostsList extends StatelessWidget {
             children: [
               likedArray != null
                   ? ListView.builder(
-                    itemCount: likedArray.length,
+                      itemCount: likedArray.length,
                       shrinkWrap: true, //MUST TO ADDED
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        
+                        print(index++);
                         List<dynamic> likerArray = course["liker"];
                         // print(likedArray[index]['uid'] + " this is likedarray");
                         // print(friendsArray);
