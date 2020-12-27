@@ -90,7 +90,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                         color: Colors.white,
                         fontSize: 30,
                       )),
+                      
                 ),
+                
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -105,7 +107,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                       Text("MAKE",
                           style: GoogleFonts.robotoSlab(
                             color: Colors.white,
-                            fontSize: 30,
+                            fontSize: 25,
                           )),
                     ],
                   ),
@@ -119,7 +121,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                       Text("JOIN",
                           style: GoogleFonts.robotoSlab(
                             color: Colors.white,
-                            fontSize: 30,
+                            fontSize: 25,
                           )),
                     ],
                   ),

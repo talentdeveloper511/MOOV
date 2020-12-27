@@ -3,7 +3,6 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
-import 'package:MOOV/widgets/party_segment.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';

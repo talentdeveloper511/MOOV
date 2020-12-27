@@ -2,27 +2,20 @@ import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/pages/FoodFeed.dart';
-import 'package:MOOV/pages/SportFeed.dart';
-import 'package:MOOV/pages/ShowFeed.dart';
+import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/leaderboard.dart';
-import 'package:MOOV/pages/PartyFeed.dart';
-// import 'package:MOOV/pages/ManagerPage.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/notification_page.dart';
-import 'package:MOOV/pages/upload.dart';
 import 'package:MOOV/widgets/MOTD.dart';
+import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'MorePage.dart';
 
 import 'friend_finder.dart';
-import 'home.dart';
 import 'notification_feed.dart';
 
 class HomePage extends StatefulWidget {
@@ -72,17 +65,6 @@ class _HomePageState extends State<HomePage>
   List<dynamic> likedArray;
   String eventprofile, title;
 
-  _getdata() {
-    Firestore.instance.collection('food').snapshots().listen((snapshot) {
-      for (var i = 0; i < snapshot.documents.length; i++) {
-        DocumentSnapshot course = snapshot.documents[i];
-        likedArray = course["liked"];
-        eventprofile = course["image"];
-        title = course["title"];
-      }
-    });
-  }
-
   @override
   void dispose() {
     _scrollController.dispose();
@@ -93,7 +75,6 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _getdata();
     _hideFabAnimController = AnimationController(
       vsync: this,
       duration: kThemeAnimationDuration,
@@ -126,24 +107,9 @@ class _HomePageState extends State<HomePage>
     // final strUserId = user.id;
     var userFriends;
 
-    Future navigateToFoodFeed(context) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => FoodFeed()));
-    }
-
-    Future navigateToSportFeed(context) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => SportFeed()));
-    }
-
-    Future navigateToShowFeed(context) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ShowFeed()));
-    }
-
-    Future navigateToPartyFeed(context) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => PartyFeed()));
+    Future navigateToCategoryFeed(context, type) async {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
     }
 
     return Scaffold(
@@ -359,7 +325,7 @@ class _HomePageState extends State<HomePage>
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {
-                            navigateToFoodFeed(context);
+                            navigateToCategoryFeed(context, "Food");
                           },
                           child: CategoryButton(asset: 'lib/assets/food5.png')),
                       Align(
@@ -380,7 +346,7 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToPartyFeed(context);
+                          navigateToCategoryFeed(context, "Party");
                         },
                         child: CategoryButton(asset: 'lib/assets/party2.png')),
                     Align(
@@ -454,13 +420,19 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
-                                  TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(text: "Only"),
-                            TextSpan(text: " us ", style: TextThemes.italic),
-                            TextSpan(text: "and"),
-                            TextSpan(text: " our ", style: TextThemes.italic),
-                            TextSpan(text: "local biz"),
-                          ]),
+                                  TextSpan(
+                                      style: TextThemes.mediumbody,
+                                      children: [
+                                        TextSpan(text: "Only"),
+                                        TextSpan(
+                                            text: " us ",
+                                            style: TextThemes.italic),
+                                        TextSpan(text: "and"),
+                                        TextSpan(
+                                            text: " our ",
+                                            style: TextThemes.italic),
+                                        TextSpan(text: "local biz"),
+                                      ]),
                                 ]),
                           ),
                         ),
@@ -476,8 +448,8 @@ class _HomePageState extends State<HomePage>
                                 style: TextThemes.mediumbody,
                                 children: [
                                   TextSpan(text: "Go "),
-                                  TextSpan(text: "Irish", style: TextThemes.italic),
-
+                                  TextSpan(
+                                      text: "Irish", style: TextThemes.italic),
                                 ]),
                           ),
                         ),
@@ -501,7 +473,9 @@ class _HomePageState extends State<HomePage>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            navigateToCategoryFeed(context, "Club");
+                          },
                           child: CategoryButton(asset: 'lib/assets/club2.png')),
                       Align(
                           alignment: Alignment.center,
@@ -521,7 +495,7 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToSportFeed(context);
+                          navigateToCategoryFeed(context, "Sport");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/sportbutton1.png')),
@@ -542,7 +516,7 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToShowFeed(context);
+                          navigateToCategoryFeed(context, "Show");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/filmbutton1.png')),
@@ -595,7 +569,9 @@ class _HomePageState extends State<HomePage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          navigateToCategoryFeed(context, "Service");
+                        },
                         child: CategoryButton(
                             asset: 'lib/assets/charitybutton1.png')),
                     Align(
@@ -613,7 +589,12 @@ class _HomePageState extends State<HomePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/otherbutton1.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToCategoryFeed(context, "Dorm Life");
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/otherbutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(

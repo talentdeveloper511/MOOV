@@ -75,7 +75,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
     map = Map();
     map = {
       0: Container(
-          width: 100,
+          width: 110,
           child: Center(
             child: Text(
               "My Posts",
@@ -83,7 +83,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
             ),
           )),
       1: Container(
-          width: 100,
+          width: 110,
           child: Center(
             child: Text(
               "Going",
@@ -91,10 +91,10 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
             ),
           )),
       2: Container(
-          width: 100,
+          width: 110,
           child: Center(
             child: Text(
-              "Friends Posts",
+              "Friends' Posts",
               style: TextStyle(color: Colors.white),
             ),
           ))

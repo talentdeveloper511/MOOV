@@ -1,10 +1,7 @@
 import 'HomePage.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/models/post_model.dart';
-import 'FoodFeed.dart';
-import 'SportFeed.dart';
-import 'ShowFeed.dart';
-import 'package:MOOV/pages/PartyFeed.dart';
+import 'CategoryFeed.dart';
 import 'MoovMaker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,24 +50,9 @@ class _MorePageState extends State<MorePage>
   }
 
   Widget build(BuildContext context) {
-    Future navigateToFoodFeed(context) async {
+    Future navigateToCategoryFeed(context, type) async {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => FoodFeed()));
-    }
-
-    Future navigateToSportFeed(context) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => SportFeed()));
-    }
-
-    Future navigateToShowFeed(context) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ShowFeed()));
-    }
-
-    Future navigateToPartyFeed(context) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => PartyFeed()));
+          context, MaterialPageRoute(builder: (context) => CategoryFeed(type: "Food")));
     }
 
     return Scaffold(
@@ -188,7 +170,7 @@ class _MorePageState extends State<MorePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToSportFeed(context);
+                          navigateToCategoryFeed(context, "Sport");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/sportbutton1.png')),
@@ -209,7 +191,7 @@ class _MorePageState extends State<MorePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToShowFeed(context);
+                          navigateToCategoryFeed(context, "Film");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/filmbutton1.png')),

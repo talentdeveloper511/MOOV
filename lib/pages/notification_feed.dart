@@ -78,7 +78,6 @@ class _NotificationFeedState extends State<NotificationFeed> {
                   ? snapshot.data
                   : Text(
                       'No Notifications',
-                      style: TextThemes.bodyTextWhite,
                     ));
         },
       )),
@@ -161,16 +160,8 @@ class NotificationFeedItem extends StatelessWidget {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => PostDetail(
-                previewImg,
-                title,
-                description,
-                startDate,
-                location,
-                address,
-                userId,
-                likedArray,
-                postId)));
+            builder: (context) => PostDetail(previewImg, title, description,
+                startDate, location, address, userId, likedArray, postId)));
   }
 
   configureMediaPreview(context) {
@@ -210,7 +201,7 @@ class NotificationFeedItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
-    
+
     configureMediaPreview(context);
 
     return Padding(

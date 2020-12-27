@@ -1,13 +1,9 @@
-import 'dart:developer';
 import 'dart:ui';
-
 import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/models/going.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
-import 'package:MOOV/widgets/frosted_appbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

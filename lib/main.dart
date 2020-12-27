@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:MOOV/pages/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:MOOV/pages/ManagerPage.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/LoginPage.dart';
 import 'package:flutter/services.dart';
