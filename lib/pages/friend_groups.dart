@@ -74,52 +74,76 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                 .where('members', arrayContains: currentUser.id)
                 .snapshots(),
             builder: (context, snapshot) {
-              return Container(
-                color: TextThemes.ndBlue,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: RaisedButton(
-                                  color: TextThemes.ndGold,
-                                  textColor: TextThemes.ndBlue,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side:
-                                          BorderSide(color: TextThemes.ndGold)),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CreateGroup()));
-                                  },
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20.0,
-                                          right: 20.0,
-                                          top: 10.0,
-                                          bottom: 10.0),
-                                      child: Text('Create New Friend Group',
-                                          style: TextStyle(
-                                              color: TextThemes.ndBlue,
-                                              fontSize: 22)))),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                    Text(
-                        snapshot.data.documents[0].data['groupName'].toString(),
-                        style: TextStyle(color: Colors.white))
-                  ],
-                ),
-              );
+              return Scaffold(
+                  backgroundColor: TextThemes.ndBlue,
+                  body: ListView.builder(
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (_, index) {
+                        if (index == 0) {
+                          return Container(
+                            color: TextThemes.ndBlue,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: RaisedButton(
+                                              color: TextThemes.ndGold,
+                                              textColor: TextThemes.ndBlue,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  side: BorderSide(
+                                                      color:
+                                                          TextThemes.ndGold)),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CreateGroup()));
+                                              },
+                                              child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20.0,
+                                                          right: 20.0,
+                                                          top: 10.0,
+                                                          bottom: 10.0),
+                                                  child: Text(
+                                                      'Create New Friend Group',
+                                                      style: TextStyle(
+                                                          color:
+                                                              TextThemes.ndBlue,
+                                                          fontSize: 22)))),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        return Container(
+                          color: TextThemes.ndBlue,
+                          child: Column(
+                            children: [
+                              Text(
+                                  snapshot
+                                      .data.documents[index].data['groupName']
+                                      .toString(),
+                                  style: TextStyle(color: Colors.white))
+                            ],
+                          ),
+                        );
+                      }));
             }));
   }
 }
