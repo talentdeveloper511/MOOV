@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
         "photoUrl": user.photoUrl,
         "email": user.email,
         "displayName": user.displayName,
-        "bio": "Create a bio!",
+        "bio": "Create a bio here",
         "header": "",
         "timestamp": timestamp,
         "score": 0,

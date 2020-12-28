@@ -405,7 +405,6 @@ class _HomePageState extends State<HomePage>
                           textScaleFactor: 1.75,
                           text:
                               TextSpan(style: TextThemes.mediumbody, children: [
-<<<<<<< HEAD
                             TextSpan(
                                 text: "This is",
                                 style: TextStyle(fontWeight: FontWeight.w400)),
@@ -413,12 +412,6 @@ class _HomePageState extends State<HomePage>
                             TextSpan(
                                 text: "app",
                                 style: TextStyle(fontWeight: FontWeight.w400)),
-=======
-                            TextSpan(text: "This"),
-                            TextSpan(
-                                text: " your mom's ", style: TextThemes.italic),
-                            TextSpan(text: "app"),
->>>>>>> 6438270ed28b5ac087779024d10bce42e9b7bad0
                           ]),
                         ),
                       ),
@@ -438,27 +431,19 @@ class _HomePageState extends State<HomePage>
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
-                                            text: " hoes ",
+                                            text: " us ",
                                             style: TextThemes.italic),
-<<<<<<< HEAD
                                         TextSpan(
                                             text: "and",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
-=======
-                                        TextSpan(text: "'n"),
->>>>>>> 6438270ed28b5ac087779024d10bce42e9b7bad0
                                         TextSpan(
-                                            text: " shows ",
+                                            text: " our ",
                                             style: TextThemes.italic),
-<<<<<<< HEAD
                                         TextSpan(
                                             text: "local biz",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400))
-=======
-                                        TextSpan(text: "here"),
->>>>>>> 6438270ed28b5ac087779024d10bce42e9b7bad0
                                       ]),
                                 ]),
                           ),
@@ -473,14 +458,10 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
-<<<<<<< HEAD
                                   TextSpan(
                                       text: "Go ",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400)),
-=======
-                                  TextSpan(text: "Go muhfuckin' "),
->>>>>>> 6438270ed28b5ac087779024d10bce42e9b7bad0
                                   TextSpan(
                                       text: "Irish", style: TextThemes.italic),
                                 ]),
