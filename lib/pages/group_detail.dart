@@ -108,8 +108,6 @@ class _GroupDetailState extends State<GroupDetail> {
                                       radius: 50,
                                       backgroundColor: TextThemes.ndBlue,
                                       child: CircleAvatar(
-                                        // backgroundImage: snapshot.data
-                                        //     .documents[index].data['photoUrl'],
                                         backgroundImage: NetworkImage(snapshot
                                             .data
                                             .documents[index]
