@@ -397,18 +397,21 @@ class _HomePageState extends State<HomePage>
                   margin: EdgeInsets.only(left: 8, right: 8, bottom: 20),
                   color: Color.fromRGBO(249, 249, 249, 1.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(
-                            left: 25.0, bottom: 2, top: 10),
+                        padding: const EdgeInsets.only(bottom: 2, top: 10),
                         child: RichText(
                           textScaleFactor: 1.75,
                           text:
                               TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(text: "This is"),
+                            TextSpan(
+                                text: "This is",
+                                style: TextStyle(fontWeight: FontWeight.w400)),
                             TextSpan(text: " our ", style: TextThemes.italic),
-                            TextSpan(text: "app"),
+                            TextSpan(
+                                text: "app",
+                                style: TextStyle(fontWeight: FontWeight.w400)),
                           ]),
                         ),
                       ),
@@ -423,31 +426,42 @@ class _HomePageState extends State<HomePage>
                                   TextSpan(
                                       style: TextThemes.mediumbody,
                                       children: [
-                                        TextSpan(text: "Only"),
+                                        TextSpan(
+                                            text: "Only",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400)),
                                         TextSpan(
                                             text: " us ",
                                             style: TextThemes.italic),
-                                        TextSpan(text: "and"),
+                                        TextSpan(
+                                            text: "and",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400)),
                                         TextSpan(
                                             text: " our ",
                                             style: TextThemes.italic),
-                                        TextSpan(text: "local biz"),
+                                        TextSpan(
+                                            text: "local biz",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400))
                                       ]),
                                 ]),
                           ),
                         ),
                       ),
                       Align(
-                        alignment: Alignment.centerRight,
+                        alignment: Alignment.center,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 2, right: 25.0, bottom: 10),
+                          padding: const EdgeInsets.only(top: 2, bottom: 10),
                           child: RichText(
                             textScaleFactor: 1.75,
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
-                                  TextSpan(text: "Go "),
+                                  TextSpan(
+                                      text: "Go ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400)),
                                   TextSpan(
                                       text: "Irish", style: TextThemes.italic),
                                 ]),

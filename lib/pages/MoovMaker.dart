@@ -536,8 +536,11 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           // ),
           RaisedButton(
               color: TextThemes.ndBlue,
-              child: Text('Upload an image',
-                  style: TextStyle(color: Colors.white, fontSize: 22)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Upload an image',
+                    style: TextStyle(color: Colors.white, fontSize: 22)),
+              ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () => selectImage(context)),
@@ -554,15 +557,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               width: 100, height: 100, fit: BoxFit.fitHeight),
                         )
                       : Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(4)),
-                          width: 100,
-                          height: 100,
-                          child: Icon(
-                            Icons.camera_alt,
-                            color: Colors.grey[800],
-                          ),
+                          
                         )),
             ),
           ),
@@ -572,8 +567,15 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RaisedButton(
-                      color: Colors.amber[300],
-                      child: Text('Post!'),
+                      color: TextThemes.ndBlue,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Post!',
+                         style: TextStyle(color: Colors.white, fontSize: 22)),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0)),
+                      
                       onPressed: () async {
                         final GoogleSignInAccount user =
                             googleSignIn.currentUser;
