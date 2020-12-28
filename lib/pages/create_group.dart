@@ -42,6 +42,16 @@ class _CreateGroupState extends State<CreateGroup> {
     });
   }
 
+  Future<bool> doesNameAlreadyExist(String name) async {
+    final QuerySnapshot result = await Firestore.instance
+        .collection('friendgroups')
+        .where('groupName', isEqualTo: name)
+        .limit(1)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    return documents.length == 1;
+  }
+
   Future handleTakePhoto() async {
     Navigator.pop(context);
     final file = await picker.getImage(
@@ -194,6 +204,12 @@ class _CreateGroupState extends State<CreateGroup> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: TextFormField(
+                    //                   validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return 'Group name is already taken';
+                    //   }
+                    //   return null;
+                    // },
                     controller: bioController,
                     decoration: InputDecoration(
                       labelText: "What do we call you guys?",
@@ -213,48 +229,11 @@ class _CreateGroupState extends State<CreateGroup> {
                       child: Text('Create Friend Group',
                           style: TextStyle(color: Colors.white)),
                       onPressed: () async {
-                        if (_image != null) {
-                          StorageReference firebaseStorageRef = FirebaseStorage
-                              .instance
-                              .ref()
-                              .child("images/" + currentUser.displayName);
-                          StorageUploadTask uploadTask =
-                              firebaseStorageRef.putFile(_image);
-                          StorageTaskSnapshot taskSnapshot =
-                              await uploadTask.onComplete;
-                          if (taskSnapshot.error == null) {
-                            print("added to Firebase Storage");
-                            final String downloadUrl =
-                                await taskSnapshot.ref.getDownloadURL();
-                            usersRef.document(currentUser.id).updateData({
-                              "photoUrl": downloadUrl,
-                            });
-                          }
-                        }
-                        if (_image2 != null) {
-                          StorageReference firebaseStorageRef = FirebaseStorage
-                              .instance
-                              .ref()
-                              .child("images/header" + currentUser.displayName);
-                          StorageUploadTask uploadTask =
-                              firebaseStorageRef.putFile(_image2);
-                          StorageTaskSnapshot taskSnapshot =
-                              await uploadTask.onComplete;
-                          if (taskSnapshot.error == null) {
-                            print("added to Firebase Storage");
-                            final String headerUrl =
-                                await taskSnapshot.ref.getDownloadURL();
-                            usersRef.document(currentUser.id).updateData({
-                              "header": headerUrl,
-                            });
-                          }
-                        }
-
-                        if (bioController.text != "") {
+                        if (bioController.text.isEmpty == false) {
                           createGroupInFirestore(
                               bioController.text, currentUser.id);
+                          Navigator.pop(context);
                         }
-                        Navigator.pop(context);
                       }),
                 )
               ],
