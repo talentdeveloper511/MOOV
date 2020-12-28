@@ -253,6 +253,46 @@ class _GroupDetailState extends State<GroupDetail> {
                         ],
                       ),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: RaisedButton(
+                      onPressed: () {},
+                    color: TextThemes.ndBlue,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                      
+                        children: [
+                          Icon(Icons.edit, color: TextThemes.ndGold),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('Set the MOOV',
+                             style: TextStyle(color: Colors.white, fontSize: 22)),
+                          ),
+                        ],
+                      ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0)),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text("CHAT", style: TextStyle(fontSize: 20),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 300,
+  decoration: BoxDecoration(
+    border: Border.all(
+      color: TextThemes.ndBlue,
+    ),
+    borderRadius: BorderRadius.all(Radius.circular(20))
+  ),
+  
+)
                   )
                 ],
               ),
