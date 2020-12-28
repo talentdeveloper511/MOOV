@@ -42,13 +42,12 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context, snapshot) {
           bool isLargePhone = Screen.diagonal(context) > 766;
 
+          if (!snapshot.hasData) return CircularProgressIndicator();
           userBio = snapshot.data['bio'];
           userDorm = snapshot.data['dorm'];
           userHeader = snapshot.data['header'];
           strUserPic = snapshot.data['photoUrl'];
           isAmbassador = snapshot.data['isAmbassador'];
-          if (!snapshot.hasData) return Text('Loading data...');
-
           return Scaffold(
             appBar: AppBar(
               leading: Padding(

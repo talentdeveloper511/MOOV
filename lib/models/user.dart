@@ -15,8 +15,9 @@ class User {
   final List<dynamic> friendRequests;
   final List<dynamic> likedMoovs;
   final postLimit;
+  final List<dynamic> friendGroups;
   final String venmo;
-    final bool isAmbassador;
+  final bool isAmbassador;
   final String referral;
 
   User(
@@ -36,6 +37,7 @@ class User {
       this.postLimit,
       this.venmo,
       this.isAmbassador,
+      this.friendGroups,
       this.referral});
 
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -56,6 +58,7 @@ class User {
         postLimit: doc['postLimit'],
         venmo: doc['venmo'],
         isAmbassador: doc['isAmbassador'],
+        friendGroups: doc['friendGroups'],
         referral: doc['referral']);
   }
 }

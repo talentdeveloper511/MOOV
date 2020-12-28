@@ -388,7 +388,7 @@ class _HomePageState extends State<HomePage>
                             content: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                  "Created by two students (ND '22 and ND '23), MOOV is our app.\n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
+                                  "Created by two students (ND '22 and ND '23). \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
                             ),
                           ),
                       barrierDismissible: true);
@@ -405,6 +405,7 @@ class _HomePageState extends State<HomePage>
                           textScaleFactor: 1.75,
                           text:
                               TextSpan(style: TextThemes.mediumbody, children: [
+<<<<<<< HEAD
                             TextSpan(
                                 text: "This is",
                                 style: TextStyle(fontWeight: FontWeight.w400)),
@@ -412,6 +413,12 @@ class _HomePageState extends State<HomePage>
                             TextSpan(
                                 text: "app",
                                 style: TextStyle(fontWeight: FontWeight.w400)),
+=======
+                            TextSpan(text: "This"),
+                            TextSpan(
+                                text: " your mom's ", style: TextThemes.italic),
+                            TextSpan(text: "app"),
+>>>>>>> 6438270ed28b5ac087779024d10bce42e9b7bad0
                           ]),
                         ),
                       ),
@@ -431,19 +438,27 @@ class _HomePageState extends State<HomePage>
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
-                                            text: " us ",
+                                            text: " hoes ",
                                             style: TextThemes.italic),
+<<<<<<< HEAD
                                         TextSpan(
                                             text: "and",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
+=======
+                                        TextSpan(text: "'n"),
+>>>>>>> 6438270ed28b5ac087779024d10bce42e9b7bad0
                                         TextSpan(
-                                            text: " our ",
+                                            text: " shows ",
                                             style: TextThemes.italic),
+<<<<<<< HEAD
                                         TextSpan(
                                             text: "local biz",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400))
+=======
+                                        TextSpan(text: "here"),
+>>>>>>> 6438270ed28b5ac087779024d10bce42e9b7bad0
                                       ]),
                                 ]),
                           ),
@@ -458,10 +473,14 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
+<<<<<<< HEAD
                                   TextSpan(
                                       text: "Go ",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400)),
+=======
+                                  TextSpan(text: "Go muhfuckin' "),
+>>>>>>> 6438270ed28b5ac087779024d10bce42e9b7bad0
                                   TextSpan(
                                       text: "Irish", style: TextThemes.italic),
                                 ]),

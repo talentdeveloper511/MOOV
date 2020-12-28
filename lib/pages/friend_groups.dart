@@ -1,4 +1,5 @@
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -6,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'create_group.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/helpers/themes.dart';
@@ -58,77 +59,145 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
             onPressed: () {
               Navigator.pop(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) => ProfilePage()),
               );
             },
           ),
           backgroundColor: TextThemes.ndBlue,
-          flexibleSpace: FlexibleSpaceBar(
-            titlePadding: EdgeInsets.all(5),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 55.0,
-                ),
-              ],
-            ),
+          title: Text(
+            "Friend Groups",
+            style: TextStyle(color: Colors.white, fontSize: 25),
           ),
         ),
-        body: Container(
-          color: TextThemes.ndBlue,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 75),
-                child: Center(
-                  child: Text('Make or join a \nFriend Group.',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.robotoSlab(
-                        color: Colors.white,
-                        fontSize: 30,
-                      )),
-                      
-                ),
-                
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.add_circle_outline,
-                        size: 150,
-                        color: Colors.white,
-                      ),
-                      Text("MAKE",
-                          style: GoogleFonts.robotoSlab(
-                            color: Colors.white,
-                            fontSize: 25,
-                          )),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.people,
-                        size: 150,
-                        color: Colors.white,
-                      ),
-                      Text("JOIN",
-                          style: GoogleFonts.robotoSlab(
-                            color: Colors.white,
-                            fontSize: 25,
-                          )),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+        body: StreamBuilder(
+            stream: Firestore.instance
+                .collection('friendgroups')
+                .where('members', arrayContains: currentUser.id)
+                .snapshots(),
+            builder: (context, snapshot) {
+              return Scaffold(
+                  backgroundColor: TextThemes.ndBlue,
+                  body: ListView.builder(
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (_, index) {
+                        if (index == 0) {
+                          return Container(
+                            color: TextThemes.ndBlue,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: RaisedButton(
+                                              color: TextThemes.ndGold,
+                                              textColor: TextThemes.ndBlue,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  side: BorderSide(
+                                                      color:
+                                                          TextThemes.ndGold)),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CreateGroup()));
+                                              },
+                                              child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20.0,
+                                                          right: 20.0,
+                                                          top: 10.0,
+                                                          bottom: 10.0),
+                                                  child: Text(
+                                                      'Create New Friend Group',
+                                                      style: TextStyle(
+                                                          color:
+                                                              TextThemes.ndBlue,
+                                                          fontSize: 22)))),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: RaisedButton(
+                                      color: Colors.amber[800],
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    GroupDetail(
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['groupPic'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['groupName'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['members'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .documentID)));
+                                      },
+                                      child: Text(
+                                          snapshot.data.documents[index]
+                                              .data['groupName']
+                                              .toString(),
+                                          style:
+                                              TextStyle(color: Colors.black))),
+                                )
+                              ],
+                            ),
+                          );
+                        }
+                        return Container(
+                          color: TextThemes.ndBlue,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: RaisedButton(
+                                    color: Colors.amber[800],
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => GroupDetail(
+                                                  snapshot.data.documents[index]
+                                                      .data['groupPic'],
+                                                  snapshot.data.documents[index]
+                                                      .data['groupName'],
+                                                  snapshot.data.documents[index]
+                                                      .data['members'],
+                                                  snapshot.data.documents[index]
+                                                      .documentID)));
+                                    },
+                                    child: Text(
+                                        snapshot.data.documents[index]
+                                            .data['groupName']
+                                            .toString(),
+                                        style: TextStyle(color: Colors.black))),
+                              )
+                            ],
+                          ),
+                        );
+                      }));
+            }));
   }
 }
