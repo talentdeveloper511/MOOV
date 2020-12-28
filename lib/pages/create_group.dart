@@ -64,6 +64,14 @@ class _CreateGroupState extends State<CreateGroup> {
       "members": [cid],
       "groupPic": "",
     });
+    return Firestore.instance.runTransaction((transaction) async {
+      final DocumentReference userRefs =
+          Firestore.instance.document('users/$cid');
+
+      transaction.update(userRefs, {
+        'friendGroups': FieldValue.arrayUnion([gname]),
+      });
+    });
   }
 
   handleChooseFromGallery() async {
