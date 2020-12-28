@@ -15,23 +15,22 @@ import 'package:MOOV/services/database.dart';
 import 'home.dart';
 
 class GroupDetail extends StatefulWidget {
-  String photoUrl, displayName, gid;
+  String photoUrl, displayName;
   List<dynamic> members;
 
-  GroupDetail(this.photoUrl, this.displayName, this.members, this.gid);
+  GroupDetail(this.photoUrl, this.displayName, this.members);
 
   @override
   State<StatefulWidget> createState() {
-    return _GroupDetailState(
-        this.photoUrl, this.displayName, this.members, this.gid);
+    return _GroupDetailState(this.photoUrl, this.displayName, this.members);
   }
 }
 
 class _GroupDetailState extends State<GroupDetail> {
-  String photoUrl, displayName, gid;
+  String photoUrl, displayName;
   List<dynamic> members;
   final dbRef = Firestore.instance;
-  _GroupDetailState(this.photoUrl, this.displayName, this.members, this.gid);
+  _GroupDetailState(this.photoUrl, this.displayName, this.members);
   bool requestsent = false;
   bool sendRequest = false;
   bool friends;
@@ -48,7 +47,7 @@ class _GroupDetailState extends State<GroupDetail> {
     return StreamBuilder(
         stream: Firestore.instance
             .collection('users')
-            .where('friendGroups', arrayContains: gid)
+            .where('friendGroups', arrayContains: displayName)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
@@ -87,35 +86,69 @@ class _GroupDetailState extends State<GroupDetail> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  child: RichText(
-                                    textScaleFactor: 1.3,
-                                    text: TextSpan(
-                                        style: TextThemes.mediumbody,
-                                        children: [
-                                          TextSpan(
-                                              text: "\"" +
-                                                  snapshot.data.documents[index]
-                                                      .data['displayName']
-                                                      .toString() +
-                                                  "\"",
-                                              style: TextStyle(
-                                                  color: Colors.black)),
-                                        ]),
+                        Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 30.0, bottom: 10),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => OtherProfile()));
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 55,
+                                    backgroundColor: TextThemes.ndGold,
+                                    child: CircleAvatar(
+                                      radius: 50,
+                                      backgroundColor: TextThemes.ndBlue,
+                                      child: CircleAvatar(
+                                        // backgroundImage: snapshot.data
+                                        //     .documents[index].data['photoUrl'],
+                                        backgroundImage: NetworkImage(snapshot
+                                            .data
+                                            .documents[index]
+                                            .data['photoUrl']),
+                                        radius: 50,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: RichText(
+                                      textScaleFactor: 1.3,
+                                      text: TextSpan(
+                                          style: TextThemes.mediumbody,
+                                          children: [
+                                            TextSpan(
+                                                text: "\"" +
+                                                    snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['displayName']
+                                                        .toString() +
+                                                    "\"",
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                          ]),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   );
