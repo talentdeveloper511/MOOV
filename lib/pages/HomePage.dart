@@ -388,7 +388,7 @@ class _HomePageState extends State<HomePage>
                             content: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                  "Created by two students (ND '22 and ND '23), MOOV is our app.\n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
+                                  "Created by two students (ND '22 and ND '23). \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
                             ),
                           ),
                       barrierDismissible: true);
@@ -406,8 +406,9 @@ class _HomePageState extends State<HomePage>
                           textScaleFactor: 1.75,
                           text:
                               TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(text: "This is"),
-                            TextSpan(text: " our ", style: TextThemes.italic),
+                            TextSpan(text: "This"),
+                            TextSpan(
+                                text: " your mom's ", style: TextThemes.italic),
                             TextSpan(text: "app"),
                           ]),
                         ),
@@ -425,13 +426,13 @@ class _HomePageState extends State<HomePage>
                                       children: [
                                         TextSpan(text: "Only"),
                                         TextSpan(
-                                            text: " us ",
+                                            text: " hoes ",
                                             style: TextThemes.italic),
-                                        TextSpan(text: "and"),
+                                        TextSpan(text: "'n"),
                                         TextSpan(
-                                            text: " our ",
+                                            text: " shows ",
                                             style: TextThemes.italic),
-                                        TextSpan(text: "local biz"),
+                                        TextSpan(text: "here"),
                                       ]),
                                 ]),
                           ),
@@ -447,7 +448,7 @@ class _HomePageState extends State<HomePage>
                             text: TextSpan(
                                 style: TextThemes.mediumbody,
                                 children: [
-                                  TextSpan(text: "Go "),
+                                  TextSpan(text: "Go muhfuckin' "),
                                   TextSpan(
                                       text: "Irish", style: TextThemes.italic),
                                 ]),

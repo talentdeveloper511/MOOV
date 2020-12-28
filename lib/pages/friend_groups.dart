@@ -1,4 +1,5 @@
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -127,6 +128,40 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                     ),
                                   ],
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: RaisedButton(
+                                      color: Colors.amber[800],
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    GroupDetail(
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['groupPic'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['groupName'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['members'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .documentID)));
+                                      },
+                                      child: Text(
+                                          snapshot.data.documents[index]
+                                              .data['groupName']
+                                              .toString(),
+                                          style:
+                                              TextStyle(color: Colors.black))),
+                                )
                               ],
                             ),
                           );
@@ -135,11 +170,30 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                           color: TextThemes.ndBlue,
                           child: Column(
                             children: [
-                              Text(
-                                  snapshot
-                                      .data.documents[index].data['groupName']
-                                      .toString(),
-                                  style: TextStyle(color: Colors.white))
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: RaisedButton(
+                                    color: Colors.amber[800],
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => GroupDetail(
+                                                  snapshot.data.documents[index]
+                                                      .data['groupPic'],
+                                                  snapshot.data.documents[index]
+                                                      .data['groupName'],
+                                                  snapshot.data.documents[index]
+                                                      .data['members'],
+                                                  snapshot.data.documents[index]
+                                                      .documentID)));
+                                    },
+                                    child: Text(
+                                        snapshot.data.documents[index]
+                                            .data['groupName']
+                                            .toString(),
+                                        style: TextStyle(color: Colors.black))),
+                              )
                             ],
                           ),
                         );

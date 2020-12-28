@@ -62,6 +62,7 @@ class _CreateGroupState extends State<CreateGroup> {
     Firestore.instance.collection('friendgroups').add({
       "groupName": groupName,
       "members": [cid],
+      "groupPic": "",
     });
   }
 
