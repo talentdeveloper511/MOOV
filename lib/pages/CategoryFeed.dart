@@ -81,7 +81,7 @@ class _CategoryFeedState extends State<CategoryFeed>
 
     return Scaffold(
         appBar: AppBar(
-             leading: IconButton(
+          leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
               color: Colors.white,
@@ -93,49 +93,45 @@ class _CategoryFeedState extends State<CategoryFeed>
               );
             },
           ),
-              backgroundColor: TextThemes.ndBlue,
-              //pinned: true,
-              actions: <Widget>[
-                IconButton(
-                  padding: EdgeInsets.all(5.0),
-                  icon: Icon(Icons.insert_chart),
-                  color: Colors.white,
-                  splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                  onPressed: () {
-                    // Implement navigation to leaderboard page here...
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LeaderBoardPage()));
-                    print('Leaderboards clicked');
-                  },
-                ),
-                IconButton(
-                  padding: EdgeInsets.all(5.0),
-                  icon: Icon(Icons.notifications_active),
-                  color: Colors.white,
-                  splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NotificationFeed()));
-                  },
-                )
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                titlePadding: EdgeInsets.all(15),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(type, style: GoogleFonts.robotoSlab(
-                      color: Colors.white
-                    ))
-                  ],
-                ),
-              ),
+          backgroundColor: TextThemes.ndBlue,
+          //pinned: true,
+          actions: <Widget>[
+            IconButton(
+              padding: EdgeInsets.all(5.0),
+              icon: Icon(Icons.insert_chart),
+              color: Colors.white,
+              splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+              onPressed: () {
+                // Implement navigation to leaderboard page here...
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+                print('Leaderboards clicked');
+              },
             ),
+            IconButton(
+              padding: EdgeInsets.all(5.0),
+              icon: Icon(Icons.notifications_active),
+              color: Colors.white,
+              splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationFeed()));
+              },
+            )
+          ],
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.all(15),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(type, style: GoogleFonts.robotoSlab(color: Colors.white))
+              ],
+            ),
+          ),
+        ),
         body: Container(
           height: MediaQuery.of(context).size.height * 0.90,
           child: Column(
@@ -201,8 +197,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 .orderBy("startDate")
                                 .snapshots(),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData)
-                                return Text('No featured MOOVs!');
+                              if (!snapshot.hasData) return Text('No Featured MOOVs!');
                               return ListView.builder(
                                 itemCount: snapshot.data.documents.length,
                                 itemBuilder: (context, index) {
@@ -320,11 +315,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               Color(0xff000000),
                                                           width: 1,
                                                         )),
-                                                        /*child: Image.asset(
-                                        'lib/assets/filmbutton1.png',
-                                        fit: BoxFit.cover,
-                                        height: 130,
-                                        width: 50),*/
                                                         child: Image.network(
                                                             course['image'],
                                                             fit: BoxFit.cover,
@@ -452,110 +442,138 @@ class _CategoryFeedState extends State<CategoryFeed>
                                           ),
                                           Container(
                                               child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
                                                           12, 10, 4, 10),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      if (course['userId'] ==
-                                                          strUserId) {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        ProfilePage()));
-                                                      } else {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        OtherProfile(
-                                                                          course[
-                                                                              'profilePic'],
-                                                                          course[
-                                                                              'userName'],
-                                                                          course[
-                                                                              'userId'],
-                                                                        )));
-                                                      }
-                                                    },
-                                                    child: CircleAvatar(
-                                                      radius: 22.0,
-                                                      backgroundImage:
-                                                          NetworkImage(course[
-                                                              'profilePic']),
-                                                      backgroundColor:
-                                                          Colors.transparent,
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          if (course[
+                                                                  'userId'] ==
+                                                              strUserId) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            ProfilePage()));
+                                                          } else {
+                                                            Navigator.of(context).push(
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            OtherProfile(
+                                                                              course['profilePic'],
+                                                                              course['userName'],
+                                                                              course['userId'],
+                                                                            )));
+                                                          }
+                                                        },
+                                                        child: CircleAvatar(
+                                                          radius: 22.0,
+                                                          backgroundImage:
+                                                              NetworkImage(course[
+                                                                  'profilePic']),
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                        ),
+                                                      )),
+                                                  Container(
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        if (course['userId'] ==
+                                                            strUserId) {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          ProfilePage()));
+                                                        } else {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          OtherProfile(
+                                                                            course['profilePic'],
+                                                                            course['userName'],
+                                                                            course['userId'],
+                                                                          )));
+                                                        }
+                                                      },
+                                                      child: Column(
+                                                        //  mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 2.0),
+                                                            child: Text(
+                                                                course[
+                                                                    'userName'],
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: TextThemes
+                                                                        .ndBlue,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .none)),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 2.0),
+                                                            child: Text(
+                                                                course[
+                                                                    'userEmail'],
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: TextThemes
+                                                                        .ndBlue,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .none)),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  )),
-                                              Container(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    if (course['userId'] ==
-                                                        strUserId) {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ProfilePage()));
-                                                    } else {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  OtherProfile(
-                                                                    course[
-                                                                        'profilePic'],
-                                                                    course[
-                                                                        'userName'],
-                                                                    course[
-                                                                        'userId'],
-                                                                  )));
-                                                    }
-                                                  },
-                                                  child: Column(
-                                                    //  mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 2.0),
-                                                        child: Text(
-                                                            course['userName'],
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color:
-                                                                    TextThemes
-                                                                        .ndBlue,
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none)),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 2.0),
-                                                        child: Text(
-                                                            course['userEmail'],
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color:
-                                                                    TextThemes
-                                                                        .ndBlue,
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none)),
-                                                      ),
-                                                    ],
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                              Spacer(),
+                                              course["userId"] == currentUser.id
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 28.0),
+                                                      child: RaisedButton(
+                                                          color: Colors.red,
+                                                          onPressed: () =>
+                                                              showAlertDialog(
+                                                                  context,
+                                                                  course[
+                                                                      "postId"],
+                                                                  course[
+                                                                      "userId"]),
+                                                          child: Text(
+                                                            "DELETE",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          )),
+                                                    )
+                                                  : Text(''),
                                               Container(
                                                 child: Column(
                                                   children: [
@@ -737,57 +755,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                               ),
                                             ],
                                           )),
-                                          /*ButtonBar(
-                      alignment: MainAxisAlignment.end,
-                      children: [
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            // Perform some action
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text("WHO'S GOING?",
-                                  style: TextStyle(
-                                      color: Colors.blue[500],
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left)),
-                        ),
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            // Perform some action
-                          },
-                          child: IconButton(
-                            icon: (_isPressed)
-                                ? new Icon(Icons.favorite)
-                                : new Icon(Icons.favorite_border),
-                            color: Colors.pink,
-                            iconSize: 24.0,
-                            splashColor: Colors.pink,
-                            splashRadius: 7.0,
-                            highlightColor: Colors.pink,
-                            onPressed: () {
-                              // Perform action
-                              setState(() {
-                                List<dynamic> likedArray = course["liked"];
-                                if (likedArray != null && likedArray.contains(strUserId)) {
-                                  Database().removeGoing(strUserId, course.documentID);
-                                } else {
-                                  Database().addLike(strUserId, course.documentID);
-                                }
-                                */ /*if (_isPressed) {
-                                  Database().removeGoing(strUserId, course.documentID);
-                                } else {
-                                  Database().addLike(strUserId, course.documentID);
-                                }*/ /*
-                              });
-                            },
-                          ),
-                        )
-                      ],
-                    ),*/
                                         ],
                                       ),
                                     ),
@@ -796,7 +763,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                               );
                             }),
                       ),
-                      // Sign Up View
                       Center(
                         child: StreamBuilder(
                             stream: Firestore.instance
@@ -805,8 +771,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 .orderBy("startDate")
                                 .snapshots(),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData)
-                                return Text('No MOOVs!');
+                              if (!snapshot.hasData) return Text('No MOOVs!');
                               return ListView.builder(
                                 itemCount: snapshot.data.documents.length,
                                 itemBuilder: (context, index) {
@@ -924,11 +889,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               Color(0xff000000),
                                                           width: 1,
                                                         )),
-                                                        /*child: Image.asset(
-                                        'lib/assets/filmbutton1.png',
-                                        fit: BoxFit.cover,
-                                        height: 130,
-                                        width: 50),*/
                                                         child: Image.network(
                                                             course['image'],
                                                             fit: BoxFit.cover,
@@ -1056,110 +1016,138 @@ class _CategoryFeedState extends State<CategoryFeed>
                                           ),
                                           Container(
                                               child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
                                                           12, 10, 4, 10),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      if (course['userId'] ==
-                                                          strUserId) {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        ProfilePage()));
-                                                      } else {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        OtherProfile(
-                                                                          course[
-                                                                              'profilePic'],
-                                                                          course[
-                                                                              'userName'],
-                                                                          course[
-                                                                              'userId'],
-                                                                        )));
-                                                      }
-                                                    },
-                                                    child: CircleAvatar(
-                                                      radius: 22.0,
-                                                      backgroundImage:
-                                                          NetworkImage(course[
-                                                              'profilePic']),
-                                                      backgroundColor:
-                                                          Colors.transparent,
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          if (course[
+                                                                  'userId'] ==
+                                                              strUserId) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            ProfilePage()));
+                                                          } else {
+                                                            Navigator.of(context).push(
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            OtherProfile(
+                                                                              course['profilePic'],
+                                                                              course['userName'],
+                                                                              course['userId'],
+                                                                            )));
+                                                          }
+                                                        },
+                                                        child: CircleAvatar(
+                                                          radius: 22.0,
+                                                          backgroundImage:
+                                                              NetworkImage(course[
+                                                                  'profilePic']),
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                        ),
+                                                      )),
+                                                  Container(
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        if (course['userId'] ==
+                                                            strUserId) {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          ProfilePage()));
+                                                        } else {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          OtherProfile(
+                                                                            course['profilePic'],
+                                                                            course['userName'],
+                                                                            course['userId'],
+                                                                          )));
+                                                        }
+                                                      },
+                                                      child: Column(
+                                                        //  mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 2.0),
+                                                            child: Text(
+                                                                course[
+                                                                    'userName'],
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: TextThemes
+                                                                        .ndBlue,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .none)),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 2.0),
+                                                            child: Text(
+                                                                course[
+                                                                    'userEmail'],
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: TextThemes
+                                                                        .ndBlue,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .none)),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  )),
-                                              Container(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    if (course['userId'] ==
-                                                        strUserId) {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ProfilePage()));
-                                                    } else {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  OtherProfile(
-                                                                    course[
-                                                                        'profilePic'],
-                                                                    course[
-                                                                        'userName'],
-                                                                    course[
-                                                                        'userId'],
-                                                                  )));
-                                                    }
-                                                  },
-                                                  child: Column(
-                                                    //  mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 2.0),
-                                                        child: Text(
-                                                            course['userName'],
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color:
-                                                                    TextThemes
-                                                                        .ndBlue,
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none)),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 2.0),
-                                                        child: Text(
-                                                            course['userEmail'],
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color:
-                                                                    TextThemes
-                                                                        .ndBlue,
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none)),
-                                                      ),
-                                                    ],
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                              Spacer(),
+                                              course["userId"] == currentUser.id
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 28.0),
+                                                      child: RaisedButton(
+                                                          color: Colors.red,
+                                                          onPressed: () =>
+                                                              showAlertDialog(
+                                                                  context,
+                                                                  course[
+                                                                      "postId"],
+                                                                  course[
+                                                                      "userId"]),
+                                                          child: Text(
+                                                            "DELETE",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          )),
+                                                    )
+                                                  : Text(''),
                                               Container(
                                                 child: Column(
                                                   children: [
@@ -1341,57 +1329,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                               ),
                                             ],
                                           )),
-                                          /*ButtonBar(
-                      alignment: MainAxisAlignment.end,
-                      children: [
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            // Perform some action
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text("WHO'S GOING?",
-                                  style: TextStyle(
-                                      color: Colors.blue[500],
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left)),
-                        ),
-                        FlatButton(
-                          textColor: const Color(0xFF6200EE),
-                          onPressed: () {
-                            // Perform some action
-                          },
-                          child: IconButton(
-                            icon: (_isPressed)
-                                ? new Icon(Icons.favorite)
-                                : new Icon(Icons.favorite_border),
-                            color: Colors.pink,
-                            iconSize: 24.0,
-                            splashColor: Colors.pink,
-                            splashRadius: 7.0,
-                            highlightColor: Colors.pink,
-                            onPressed: () {
-                              // Perform action
-                              setState(() {
-                                List<dynamic> likedArray = course["liked"];
-                                if (likedArray != null && likedArray.contains(strUserId)) {
-                                  Database().removeGoing(strUserId, course.documentID);
-                                } else {
-                                  Database().addLike(strUserId, course.documentID);
-                                }
-                                */ /*if (_isPressed) {
-                                  Database().removeGoing(strUserId, course.documentID);
-                                } else {
-                                  Database().addLike(strUserId, course.documentID);
-                                }*/ /*
-                              });
-                            },
-                          ),
-                        )
-                      ],
-                    ),*/
                                         ],
                                       ),
                                     ),
@@ -1405,5 +1342,28 @@ class _CategoryFeedState extends State<CategoryFeed>
             ],
           ),
         ));
+  }
+
+  void showAlertDialog(BuildContext context, postId, userId) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Delete?", style: TextStyle(color: Colors.red)),
+        content: Text("MOOVin' this to the trash can?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yeah", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().deletePost(postId, userId);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, nvm"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 }

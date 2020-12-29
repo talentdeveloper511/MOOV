@@ -118,12 +118,6 @@ class _GroupDetailState extends State<GroupDetail> {
                     color: Colors.white,
                     splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                     onPressed: () {
-                      Database().leaveGroup(currentUser.id, displayName, gid);
-
-                      Navigator.pop(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
                     },
                   ),
                 ]),
