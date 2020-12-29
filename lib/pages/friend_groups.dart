@@ -189,67 +189,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                 ),
                                               ),
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Stack(children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            4.0),
-                                                    child: CircleAvatar(
-                                                      radius: 20.0,
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        course['groupPic'],
-                                                      ),
-                                                      backgroundColor:
-                                                          Colors.red,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 4, left: 20.0),
-                                                    child: CircleAvatar(
-                                                      radius: 20.0,
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        course['groupPic'],
-                                                      ),
-                                                      backgroundColor:
-                                                          Colors.red,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 4, left: 40.0),
-                                                    child: CircleAvatar(
-                                                      radius: 20.0,
-                                                      child: Text(
-                                                        "+" +
-                                                            course['members']
-                                                                .length
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            color: TextThemes
-                                                                .ndGold,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      ),
-                                                      backgroundColor:
-                                                          TextThemes.ndBlue,
-                                                    ),
-                                                  ),
-                                                ])
-                                              ],
-                                            ),
                                             Padding(
                                               padding:
-                                                  const EdgeInsets.all(8.0),
+                                                  const EdgeInsets.all(22.5),
                                               child: Center(
                                                 child: Text(
                                                   course['groupName']
@@ -270,7 +212,61 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                             ),
                                           ],
                                         ),
-                                      )
+                                      ),
+                                      Positioned(
+                                        bottom: 95,
+                                        right: 40,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Stack(children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: CircleAvatar(
+                                                  radius: 20.0,
+                                                  backgroundImage: NetworkImage(
+                                                    course['groupPic'],
+                                                  ),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 4, left: 20.0),
+                                                child: CircleAvatar(
+                                                  radius: 20.0,
+                                                  backgroundImage: NetworkImage(
+                                                    course['groupPic'],
+                                                  ),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 4, left: 40.0),
+                                                child: CircleAvatar(
+                                                  radius: 20.0,
+                                                  child: Text(
+                                                    "+" +
+                                                        course['members']
+                                                            .length
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                        color:
+                                                            TextThemes.ndGold,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  backgroundColor:
+                                                      TextThemes.ndBlue,
+                                                ),
+                                              ),
+                                            ])
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
