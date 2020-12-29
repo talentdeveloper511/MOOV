@@ -383,4 +383,17 @@ class Database {
       });
     });
   }
+
+  Future<void> addUser(id, gname, gid) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('users/$id');
+      final DocumentReference ref2 = dbRef.document('friendgroups/$gid');
+      transaction.update(ref, {
+        'friendGroups': FieldValue.arrayUnion([gname]),
+      });
+      transaction.update(ref2, {
+        'members': FieldValue.arrayUnion([id]),
+      });
+    });
+  }
 }

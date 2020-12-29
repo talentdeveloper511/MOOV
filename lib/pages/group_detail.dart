@@ -13,7 +13,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
-
+import 'package:page_transition/page_transition.dart';
+import 'add_users.dart';
 import 'home.dart';
 
 class GroupDetail extends StatefulWidget {
@@ -76,23 +77,51 @@ class _GroupDetailState extends State<GroupDetail> {
                       style: TextStyle(fontSize: 30.0, color: Colors.white)),
                 ),
                 actions: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FlatButton(
-                        onPressed: () {
-                          Database()
-                              .leaveGroup(currentUser.id, displayName, gid);
+                  // Padding(
+                  //   padding: const EdgeInsets.all(4.0),
+                  //   child: FlatButton(
+                  //       onPressed: () {
+                  //         Database()
+                  //             .leaveGroup(currentUser.id, displayName, gid);
 
-                          Navigator.pop(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        },
-                        child: Text(
-                          "LEAVE",
-                          style: TextStyle(color: Colors.red),
-                        )),
-                  )
+                  //         Navigator.pop(
+                  //           context,
+                  //           MaterialPageRoute(builder: (context) => HomePage()),
+                  //         );
+                  //       },
+                  //       child: Text(
+                  //         "LEAVE",
+                  //         style: TextStyle(color: Colors.red),
+                  //       )),
+                  // ),
+                  IconButton(
+                    padding: EdgeInsets.all(5.0),
+                    icon: Icon(Icons.person_add),
+                    color: Colors.white,
+                    splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                    onPressed: () {
+                      // Implement navigation to leaderboard page here...
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.bottomToTop,
+                              child: AddUsers(displayName, gid)));
+                    },
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.all(3.0),
+                    icon: Icon(Icons.more_vert),
+                    color: Colors.white,
+                    splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                    onPressed: () {
+                      Database().leaveGroup(currentUser.id, displayName, gid);
+
+                      Navigator.pop(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    },
+                  ),
                 ]),
             body: Container(
               child: Column(
@@ -174,16 +203,17 @@ class _GroupDetailState extends State<GroupDetail> {
                           );
                         }),
                   ),
+                  Text(
+                    "NEXT MOOV",
+                    style: GoogleFonts.robotoSlab(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
-                            "NEXT \nMOOV:",
-                            style: GoogleFonts.robotoSlab(fontSize: 20),
-                          ),
                           Stack(children: <Widget>[
                             SizedBox(
                               height: 120,
@@ -251,14 +281,14 @@ class _GroupDetailState extends State<GroupDetail> {
                                   ),
                                 ),
                               ),
-                            )
+                            ),
                           ]),
                         ],
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(25.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: RaisedButton(
                       onPressed: () {},
                       color: TextThemes.ndBlue,
