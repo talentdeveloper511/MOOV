@@ -384,6 +384,12 @@ class Database {
     });
   }
 
+  Future<void> destroyGroup(gid) async {
+    return dbRef.runTransaction((transaction) async {
+      dbRef.document('friendgroups/$gid').delete();
+    });
+  }
+
   Future<void> addUser(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$id');
