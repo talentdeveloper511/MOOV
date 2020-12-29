@@ -29,6 +29,7 @@ class _EditProfileState extends State<EditProfile> {
   File _image;
   File _image2;
   final picker = ImagePicker();
+  final picker2 = ImagePicker();
 
   void openCamera(context) async {
     final image = await CustomCamera.openCamera();
@@ -118,7 +119,7 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
- void openCamera2(context) async {
+  void openCamera2(context) async {
     final image2 = await CustomCamera.openCamera();
     setState(() {
       _image2 = image2;
@@ -135,28 +136,28 @@ class _EditProfileState extends State<EditProfile> {
 
   Future handleTakePhoto2() async {
     Navigator.pop(context);
-    final file = await picker.getImage(
+    final file2 = await picker2.getImage(
       source: ImageSource.camera,
       maxHeight: 675,
       maxWidth: 960,
     );
     setState(() {
       if (_image2 != null) {
-        _image2 = File(file.path);
+        _image2 = File(file2.path);
       }
     });
   }
 
   handleChooseFromGallery2() async {
     Navigator.pop(context);
-    final file = await picker.getImage(
+    final file2 = await picker2.getImage(
       source: ImageSource.gallery,
       maxHeight: 675,
       maxWidth: 960,
     );
     setState(() {
       if (_image2 != null) {
-        _image2 = File(file.path);
+        _image2 = File(file2.path);
       }
     });
   }
@@ -259,14 +260,14 @@ class _EditProfileState extends State<EditProfile> {
               onTap: () => selectImage2(context),
               child: Stack(children: <Widget>[
                 FractionallySizedBox(
-                  widthFactor: isLargePhone ? 1.17 : 1.34,
+                  widthFactor: isLargePhone ? 1.15 : 1.34,
                   child: Container(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: userHeader == null
-                          ? null
+                      child: currentUser.header == null
+                          ? AssetImage('images/user-avatar.png')
                           : CachedNetworkImage(
-                              imageUrl: userHeader,
+                              imageUrl: currentUser.header,
                               fit: BoxFit.fitWidth,
                             ),
                     ),
@@ -288,6 +289,29 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                 ),
+                FractionallySizedBox(
+                  widthFactor: isLargePhone ? 1.15 : 1.34,
+                  child: _image2 != null ?
+                   Container(
+                    child: Image.file(_image2, fit: BoxFit.fitWidth),
+                    margin: EdgeInsets.only(
+                        left: 20, top: 0, right: 20, bottom: 7.5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                  ) : Text("")
+              ),
               ]),
             ),
           ),

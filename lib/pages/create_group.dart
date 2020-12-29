@@ -25,7 +25,6 @@ class CreateGroup extends StatefulWidget {
 class _CreateGroupState extends State<CreateGroup> {
   get firestoreInstance => null;
   File _image;
-  File _image2;
   final picker = ImagePicker();
 
   void openCamera(context) async {
@@ -179,86 +178,106 @@ class _CreateGroupState extends State<CreateGroup> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Stack(children: [
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(children: [
+                    _image != null ?
+                    Container(
+                    child: Image.file(_image, fit: BoxFit.fitWidth),
+                    margin: EdgeInsets.only(
+                        left: 20, top: 0, right: 20, bottom: 7.5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                  ) :
+                  Container(
                       width: 100,
                       height: 100,
                       child: IconButton(
                           icon: Icon(Icons.add_a_photo, size: 50),
                           onPressed: () => selectImage(context))),
+                ]),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 50.0, bottom: 5),
+                child: Text(
+                  "Group Name",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 50.0, bottom: 5),
-                  child: Text(
-                    "Group Name",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: TextFormField(
-                    //                   validator: (value) {
-                    //   if (value.isEmpty) {
-                    //     return 'Group name is already taken';
-                    //   }
-                    //   return null;
-                    // },
-                    controller: bioController,
-                    decoration: InputDecoration(
-                      labelText: "What do we call you guys?",
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: TextFormField(
+                  //                   validator: (value) {
+                  //   if (value.isEmpty) {
+                  //     return 'Group name is already taken';
+                  //   }
+                  //   return null;
+                  // },
+                  controller: bioController,
+                  decoration: InputDecoration(
+                    labelText: "What do we call you guys?",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Text('You can add users after you create the group.'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          side: BorderSide(color: TextThemes.ndGold)),
-                      color: TextThemes.ndBlue,
-                      child: Text('Create Friend Group',
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () async {
-                        if (bioController.text.isEmpty == false &&
-                            _image != null) {
-                          StorageReference firebaseStorageRef = FirebaseStorage
-                              .instance
-                              .ref()
-                              .child("images/group" + bioController.text);
-                          StorageUploadTask uploadTask =
-                              firebaseStorageRef.putFile(_image);
-                          StorageTaskSnapshot taskSnapshot =
-                              await uploadTask.onComplete;
-                          if (taskSnapshot.error == null) {
-                            print("added to Firebase Storage");
-                            final String downloadUrl =
-                                await taskSnapshot.ref.getDownloadURL();
-                            createGroupInFirestore(bioController.text,
-                                currentUser.id, downloadUrl);
-                          }
-
-                          Navigator.pop(context);
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text('You can add users after you create the group.'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(color: TextThemes.ndGold)),
+                    color: TextThemes.ndBlue,
+                    child: Text('Create Friend Group',
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () async {
+                      if (bioController.text.isEmpty == false &&
+                          _image != null) {
+                        StorageReference firebaseStorageRef = FirebaseStorage
+                            .instance
+                            .ref()
+                            .child("images/group" + bioController.text);
+                        StorageUploadTask uploadTask =
+                            firebaseStorageRef.putFile(_image);
+                        StorageTaskSnapshot taskSnapshot =
+                            await uploadTask.onComplete;
+                        if (taskSnapshot.error == null) {
+                          print("added to Firebase Storage");
+                          final String downloadUrl =
+                              await taskSnapshot.ref.getDownloadURL();
+                          createGroupInFirestore(
+                              bioController.text, currentUser.id, downloadUrl);
                         }
-                      }),
-                )
-              ],
-            ),
-          )
-        ]),
+
+                        Navigator.pop(context);
+                      }
+                    }),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
