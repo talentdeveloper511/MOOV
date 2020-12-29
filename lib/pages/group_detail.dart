@@ -118,6 +118,7 @@ class _GroupDetailState extends State<GroupDetail> {
                     color: Colors.white,
                     splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                     onPressed: () {
+                      showAlertDialog(context);
                     },
                   ),
                 ]),
@@ -133,7 +134,8 @@ class _GroupDetailState extends State<GroupDetail> {
                         itemBuilder: (_, index) {
                           profilePic =
                               snapshot.data.documents[index].data['photoUrl'];
-                          otherDisplay = snapshot.data.documents[index].data['displayName'];
+                          otherDisplay = snapshot
+                              .data.documents[index].data['displayName'];
                           id = snapshot.data.documents[index].data['id'];
                           return Container(
                             height: 100,
@@ -338,6 +340,38 @@ class _GroupDetailState extends State<GroupDetail> {
             ),
           );
         });
+  }
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Leave the group?", style: TextStyle(color: Colors.red)),
+        content: Text("MOOVin' on from this group?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yeah", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              leaveGroup();
+              Navigator.of(context).pop(true);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, nvm"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
+  }
+
+  leaveGroup() {
+    Database().leaveGroup(currentUser.id, displayName, gid);
+    Navigator.pop(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
   }
 }
 
