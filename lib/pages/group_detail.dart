@@ -31,12 +31,17 @@ class GroupDetail extends StatefulWidget {
   }
 }
 
+sendChat(user, message, groupid) {
+  Database().sendChat(user, message, groupid);
+}
+
 class _GroupDetailState extends State<GroupDetail> {
   String photoUrl, displayName, gid;
   List<dynamic> members;
   final dbRef = Firestore.instance;
   _GroupDetailState(this.photoUrl, this.displayName, this.members, this.gid);
   bool requestsent = false;
+  TextEditingController chatController = TextEditingController();
   bool sendRequest = false;
   bool friends;
   var status;
@@ -117,9 +122,7 @@ class _GroupDetailState extends State<GroupDetail> {
                     icon: Icon(Icons.more_vert),
                     color: Colors.white,
                     splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                    onPressed: () {
-                      showAlertDialog(context);
-                    },
+                    onPressed: () {},
                   ),
                 ]),
             body: Container(
@@ -327,6 +330,28 @@ class _GroupDetailState extends State<GroupDetail> {
                   Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
+                        child: TextFormField(
+                          controller: chatController,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            hintStyle: TextStyle(fontSize: 15),
+                            contentPadding:
+                                EdgeInsets.only(top: 18, bottom: 10),
+                            hintText: "What's the MOOV tonight guys...",
+                            filled: true,
+                            prefixIcon: Icon(
+                              Icons.account_box,
+                              size: 28.0,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.send),
+                              onPressed: sendChat(currentUser.displayName,
+                                  chatController.text, gid),
+                            ),
+                          ),
+                          onFieldSubmitted: sendChat(currentUser.displayName,
+                              chatController.text, gid),
+                        ),
                         height: 300,
                         decoration: BoxDecoration(
                             border: Border.all(
@@ -340,38 +365,6 @@ class _GroupDetailState extends State<GroupDetail> {
             ),
           );
         });
-  }
-
-  void showAlertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      child: CupertinoAlertDialog(
-        title: Text("Leave the group?", style: TextStyle(color: Colors.red)),
-        content: Text("MOOVin' on from this group?"),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text("Yeah", style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              leaveGroup();
-              Navigator.of(context).pop(true);
-            },
-          ),
-          CupertinoDialogAction(
-            child: Text("Nah, nvm"),
-            onPressed: () => Navigator.of(context).pop(true),
-          )
-        ],
-      ),
-    );
-  }
-
-  leaveGroup() {
-    Database().leaveGroup(currentUser.id, displayName, gid);
-    Navigator.pop(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
   }
 }
 

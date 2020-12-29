@@ -390,6 +390,16 @@ class Database {
     });
   }
 
+  Future<void> sendChat(user, message, gid) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('friendgroups/$gid');
+      final Map<String, dynamic> chat = {'sender': user, 'message': message};
+      transaction.update(ref, {
+        'chat': FieldValue.arrayUnion([chat]),
+      });
+    });
+  }
+
   Future<void> addUser(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$id');

@@ -72,6 +72,7 @@ class _CreateGroupState extends State<CreateGroup> {
       "groupName": groupName,
       "members": [cid],
       "groupPic": pic,
+      "chat": {}
     });
     return Firestore.instance.runTransaction((transaction) async {
       final DocumentReference userRefs =
@@ -186,32 +187,33 @@ class _CreateGroupState extends State<CreateGroup> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Stack(children: [
-                    _image != null ?
-                    Container(
-                    child: Image.file(_image, fit: BoxFit.fitWidth),
-                    margin: EdgeInsets.only(
-                        left: 20, top: 0, right: 20, bottom: 7.5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                  ) :
-                  Container(
-                      width: 100,
-                      height: 100,
-                      child: IconButton(
-                          icon: Icon(Icons.add_a_photo, size: 50),
-                          onPressed: () => selectImage(context))),
+                  _image != null
+                      ? Container(
+                          child: Image.file(_image, fit: BoxFit.fitWidth),
+                          margin: EdgeInsets.only(
+                              left: 20, top: 0, right: 20, bottom: 7.5),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          width: 100,
+                          height: 100,
+                          child: IconButton(
+                              icon: Icon(Icons.add_a_photo, size: 50),
+                              onPressed: () => selectImage(context))),
                 ]),
               ),
               Padding(
