@@ -78,6 +78,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                 .where('members', arrayContains: currentUser.id)
                 .snapshots(),
             builder: (context, snapshot) {
+              if (!snapshot.hasData) return CircularProgressIndicator();
+
               return Container(
                 // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                 child: Column(
@@ -119,6 +121,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                         SliverGrid(
                             delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
+                              if (!snapshot.hasData)
+                                return CircularProgressIndicator();
+
                               DocumentSnapshot course =
                                   snapshot.data.documents[index];
 
