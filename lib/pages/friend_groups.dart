@@ -138,23 +138,22 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     GroupDetail(
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['groupPic'],
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['groupName'],
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['members'],
-                                                      // snapshot
-                                                      //     .data
-                                                      //     .documents[index]
-                                                      //     .documentID
-                                                    )));
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['groupPic'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['groupName'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['members'],
+                                                        snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .documentID)));
                                       },
                                       child: Text(
                                           snapshot.data.documents[index]
@@ -180,21 +179,14 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => GroupDetail(
-                                                    snapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .data['groupPic'],
-                                                    snapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .data['groupName'],
-                                                    snapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .data['members'],
-                                                    // snapshot.data.documents[index]
-                                                    //     .documentID
-                                                  )));
+                                                  snapshot.data.documents[index]
+                                                      .data['groupPic'],
+                                                  snapshot.data.documents[index]
+                                                      .data['groupName'],
+                                                  snapshot.data.documents[index]
+                                                      .data['members'],
+                                                  snapshot.data.documents[index]
+                                                      .documentID)));
                                     },
                                     child: Text(
                                         snapshot.data.documents[index]

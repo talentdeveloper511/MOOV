@@ -371,23 +371,16 @@ class Database {
         .getDocuments();
   }
 
-  // Future<void> addLikedMoovs(String likerId, String moovId) async {
-  //   return dbRef.runTransaction((transaction) async {
-  //     final DocumentReference ref = dbRef.document('users/$likerId');
-  //     String serializedMessage = moovId;
-  //     transaction.update(ref, {
-  //       'likedMoovs': FieldValue.arrayUnion([serializedMessage]),
-  //     });
-  //   });
-  // }
-
-  // Future<void> removeLikedMoovs(String likerId, String moovId) async {
-  //   return dbRef.runTransaction((transaction) async {
-  //     final DocumentReference ref = dbRef.document('users/$likerId');
-  //     String serializedMessage = moovId;
-  //     transaction.update(ref, {
-  //       'likedMoovs': FieldValue.arrayRemove([serializedMessage]),
-  //     });
-  //   });
-  // }
+  Future<void> leaveGroup(id, gname, gid) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('users/$id');
+      final DocumentReference ref2 = dbRef.document('friendgroups/$gid');
+      transaction.update(ref, {
+        'friendGroups': FieldValue.arrayRemove([gname]),
+      });
+      transaction.update(ref2, {
+        'members': FieldValue.arrayRemove([id]),
+      });
+    });
+  }
 }

@@ -17,22 +17,23 @@ import 'package:MOOV/services/database.dart';
 import 'home.dart';
 
 class GroupDetail extends StatefulWidget {
-  String photoUrl, displayName;
+  String photoUrl, displayName, gid;
   List<dynamic> members;
 
-  GroupDetail(this.photoUrl, this.displayName, this.members);
+  GroupDetail(this.photoUrl, this.displayName, this.members, this.gid);
 
   @override
   State<StatefulWidget> createState() {
-    return _GroupDetailState(this.photoUrl, this.displayName, this.members);
+    return _GroupDetailState(
+        this.photoUrl, this.displayName, this.members, this.gid);
   }
 }
 
 class _GroupDetailState extends State<GroupDetail> {
-  String photoUrl, displayName;
+  String photoUrl, displayName, gid;
   List<dynamic> members;
   final dbRef = Firestore.instance;
-  _GroupDetailState(this.photoUrl, this.displayName, this.members);
+  _GroupDetailState(this.photoUrl, this.displayName, this.members, this.gid);
   bool requestsent = false;
   bool sendRequest = false;
   bool friends;
@@ -79,6 +80,9 @@ class _GroupDetailState extends State<GroupDetail> {
                     padding: const EdgeInsets.all(4.0),
                     child: FlatButton(
                         onPressed: () {
+                          Database()
+                              .leaveGroup(currentUser.id, displayName, gid);
+
                           Navigator.pop(
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),
