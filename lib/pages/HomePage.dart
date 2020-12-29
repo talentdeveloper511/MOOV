@@ -13,6 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:page_transition/page_transition.dart';
 import 'MorePage.dart';
 
 import 'friend_finder.dart';
@@ -120,10 +121,10 @@ class _HomePageState extends State<HomePage>
           child: FloatingActionButton.extended(
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MoovMaker(postModel: PostModel())),
-                );
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: MoovMaker(postModel: PostModel())));
               },
               label: const Text("Post the MOOV",
                   style: TextStyle(fontSize: 20, color: Colors.white))),

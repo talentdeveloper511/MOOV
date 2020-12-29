@@ -66,13 +66,13 @@ class _CreateGroupState extends State<CreateGroup> {
     });
   }
 
-  createGroupInFirestore(gname, cid) async {
+  createGroupInFirestore(gname, cid, pic) async {
     final String groupName = gname;
 
     Firestore.instance.collection('friendgroups').add({
       "groupName": groupName,
       "members": [cid],
-      "groupPic": "",
+      "groupPic": pic,
     });
     return Firestore.instance.runTransaction((transaction) async {
       final DocumentReference userRefs =
@@ -220,6 +220,10 @@ class _CreateGroupState extends State<CreateGroup> {
                   ),
                 ),
                 Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text('You can add users after you create the group.'),
+                ),
+                Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: RaisedButton(
                       shape: RoundedRectangleBorder(
@@ -229,9 +233,24 @@ class _CreateGroupState extends State<CreateGroup> {
                       child: Text('Create Friend Group',
                           style: TextStyle(color: Colors.white)),
                       onPressed: () async {
-                        if (bioController.text.isEmpty == false) {
-                          createGroupInFirestore(
-                              bioController.text, currentUser.id);
+                        if (bioController.text.isEmpty == false &&
+                            _image != null) {
+                          StorageReference firebaseStorageRef = FirebaseStorage
+                              .instance
+                              .ref()
+                              .child("images/group" + bioController.text);
+                          StorageUploadTask uploadTask =
+                              firebaseStorageRef.putFile(_image);
+                          StorageTaskSnapshot taskSnapshot =
+                              await uploadTask.onComplete;
+                          if (taskSnapshot.error == null) {
+                            print("added to Firebase Storage");
+                            final String downloadUrl =
+                                await taskSnapshot.ref.getDownloadURL();
+                            createGroupInFirestore(bioController.text,
+                                currentUser.id, downloadUrl);
+                          }
+
                           Navigator.pop(context);
                         }
                       }),

@@ -299,10 +299,10 @@ class _GroupDetailState extends State<GroupDetail> {
                           children: [
                             Icon(Icons.edit, color: TextThemes.ndGold),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(2.0),
                               child: Text('Set the MOOV',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 22)),
+                                      color: Colors.white, fontSize: 18)),
                             ),
                           ],
                         ),
