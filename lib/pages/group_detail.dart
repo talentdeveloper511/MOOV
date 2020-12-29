@@ -77,18 +77,13 @@ class _GroupDetailState extends State<GroupDetail> {
                 actions: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: OutlineButton(
-                        borderSide: BorderSide(
-                            color: Colors.red,
-                            width: 5,
-                            style: BorderStyle.solid),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Colors.red,
-                                width: 5,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: null,
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.pop(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                        },
                         child: Text(
                           "LEAVE",
                           style: TextStyle(color: Colors.red),
