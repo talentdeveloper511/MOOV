@@ -5,6 +5,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,9 @@ class _GroupDetailState extends State<GroupDetail> {
   final strUserId = currentUser.id;
   final strPic = currentUser.photoUrl;
   final strUserName = currentUser.displayName;
+  var profilePic;
+  var otherDisplay;
+  var id;
   var iter = 1;
 
   @override
@@ -133,6 +137,10 @@ class _GroupDetailState extends State<GroupDetail> {
                         physics: AlwaysScrollableScrollPhysics(),
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (_, index) {
+                          profilePic =
+                              snapshot.data.documents[index].data['photoUrl'];
+                          otherDisplay = snapshot.data.documents[index].data['displayName'];
+                          id = snapshot.data.documents[index].data['id'];
                           return Container(
                             height: 100,
                             child: Column(
@@ -144,10 +152,12 @@ class _GroupDetailState extends State<GroupDetail> {
                                       top: 30.0, bottom: 10),
                                   child: GestureDetector(
                                     onTap: () {
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) => OtherProfile()));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OtherProfile(profilePic,
+                                                      otherDisplay, id)));
                                     },
                                     child: CircleAvatar(
                                       radius: 54,

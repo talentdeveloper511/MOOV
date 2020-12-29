@@ -142,7 +142,7 @@ class _OtherProfileState extends State<OtherProfile> {
                         child: CircleAvatar(
                           backgroundImage: (photoUrl == null)
                               ? AssetImage('images/user-avatar.png')
-                              : NetworkImage(photoUrl),
+                              : NetworkImage(snapshot.data['photoUrl']),
                           // backgroundImage: NetworkImage(currentUser.photoUrl),
                           radius: 50,
                         ),
