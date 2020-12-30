@@ -987,12 +987,17 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold)),
-                                                      Text(course['address'],
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                          style: TextStyle(
-                                                            fontSize: 12.0,
-                                                          )),
+                                                      Expanded(
+                                                        child: Text(
+                                                            course['address'],
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                                    maxLines: 1,
+                                                            style: TextStyle(
+                                                              fontSize: 12.0,
+                                                            )),
+                                                      ),
                                                     ],
                                                   ),
                                                 ],
@@ -1189,7 +1194,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              right: 2.0, left: 8),
+                                                              right: 2.0,
+                                                              left: 8),
                                                       child: IconButton(
                                                         icon: (_isPressed)
                                                             ? new Icon(

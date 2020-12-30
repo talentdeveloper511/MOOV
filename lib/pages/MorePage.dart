@@ -52,7 +52,7 @@ class _MorePageState extends State<MorePage>
   Widget build(BuildContext context) {
     Future navigateToCategoryFeed(context, type) async {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => CategoryFeed(type: "Food")));
+          context, MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
     }
 
     return Scaffold(
@@ -150,7 +150,10 @@ class _MorePageState extends State<MorePage>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                      navigateToCategoryFeed(context, "Shopping");
+
+                          },
                           child: CategoryButton(asset: 'lib/assets/bag1.png')),
                       Align(
                           alignment: Alignment.center,
@@ -177,7 +180,7 @@ class _MorePageState extends State<MorePage>
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Sports",
+                          "Games",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
@@ -191,14 +194,14 @@ class _MorePageState extends State<MorePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "Film");
+                          navigateToCategoryFeed(context, "Music");
                         },
                         child: CategoryButton(
-                            asset: 'lib/assets/filmbutton1.png')),
+                            asset: 'lib/assets/music1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Shows",
+                          "Music",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
@@ -245,11 +248,11 @@ class _MorePageState extends State<MorePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {},
-                        child: CategoryButton(asset: 'lib/assets/club2.png')),
+                        child: CategoryButton(asset: 'lib/assets/bm1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Clubs",
+                          "The Black Market",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
