@@ -222,8 +222,7 @@ class _HomePageState extends State<HomePage>
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => FriendFinder(
-                                        userFriends: userFriends)));
+                                    builder: (context) => FriendFinder()));
                             // Implement navigation to shopping cart page here...
                             print('FRIEND FINDER CLICKED');
                           },
@@ -236,7 +235,7 @@ class _HomePageState extends State<HomePage>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => FriendFinder(
-                                            userFriends: userFriends)));
+                                            )));
                               },
                               child: Card(
                                 borderOnForeground: true,
