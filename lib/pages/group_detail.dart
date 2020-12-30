@@ -40,6 +40,45 @@ class _GroupDetailState extends State<GroupDetail> {
   List<dynamic> members;
   final dbRef = Firestore.instance;
   _GroupDetailState(this.photoUrl, this.displayName, this.members, this.gid);
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Leave the group?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nTime to MOOV on?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yes get me out", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              leaveGroup();
+              Navigator.of(context).pop(true);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, my mistake"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
+  }
+
+  leaveGroup() {
+    if (members.length == 1) {
+      Database().leaveGroup(currentUser.id, displayName, gid);
+      Database().destroyGroup(gid);
+    } else {
+      Database().leaveGroup(currentUser.id, displayName, gid);
+    }
+    Navigator.pop(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
+  }
+
   bool requestsent = false;
   TextEditingController chatController = TextEditingController();
   bool sendRequest = false;
@@ -122,7 +161,9 @@ class _GroupDetailState extends State<GroupDetail> {
                     icon: Icon(Icons.more_vert),
                     color: Colors.white,
                     splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                    onPressed: () {},
+                    onPressed: () {
+                      showAlertDialog(context);
+                    },
                   ),
                 ]),
             body: Container(
@@ -340,7 +381,7 @@ class _GroupDetailState extends State<GroupDetail> {
                             hintText: "What's the MOOV tonight guys...",
                             filled: true,
                             prefixIcon: Icon(
-                              Icons.account_box,
+                              Icons.message,
                               size: 28.0,
                             ),
                             suffixIcon: IconButton(
