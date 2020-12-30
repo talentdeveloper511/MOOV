@@ -234,21 +234,17 @@ class _HomePageState extends State<HomePage>
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => FriendFinder(
-                                            )));
+                                        builder: (context) => FriendFinder()));
                               },
-                              child: Card(
-                                borderOnForeground: true,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                    "Friend Finder",
-                                    style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16.0),
-                                  ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Friend Finder",
+                                  style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16.0),
                                 ),
                               ),
                             )),
@@ -289,18 +285,15 @@ class _HomePageState extends State<HomePage>
                                 // Implement navigation to shopping cart page here...
                                 print('FRIEND GROUPS CLICKED');
                               },
-                              child: Card(
-                                borderOnForeground: true,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                    "Friend Groups",
-                                    style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16.0),
-                                  ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Friend Groups",
+                                  style: TextStyle(
+                                      fontFamily: 'Open Sans',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16.0),
                                 ),
                               ),
                             )),

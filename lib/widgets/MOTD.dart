@@ -37,8 +37,8 @@ class _MOTDState extends State<MOTD> {
 
           return MediaQuery(
             data: MediaQuery.of(context).removePadding(removeTop: true),
-                      child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+            child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: 1,
                 itemBuilder: (context, index) {
                   DocumentSnapshot course = snapshot.data.documents[index];
@@ -101,7 +101,8 @@ class _MOTDState extends State<MOTD> {
                                   alignment: Alignment(0.0, 0.0),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
                                       gradient: LinearGradient(
                                         begin: Alignment.topCenter,
                                         end: Alignment.bottomCenter,
@@ -140,26 +141,23 @@ class _MOTDState extends State<MOTD> {
                                       builder: (_) => CupertinoAlertDialog(
                                             title: Text("Your MOOV."),
                                             content: Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
                                               child: Text(
                                                   "Do you have the MOOV of the Day? Email kcamson@nd.edu."),
                                             ),
                                           ),
                                       barrierDismissible: true);
                                 },
-                                child: Card(
-                                  borderOnForeground: true,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      "MOOV of the Day",
-                                      style: TextStyle(
-                                          fontFamily: 'Open Sans',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                          fontSize: 16.0),
-                                    ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "MOOV of the Day",
+                                    style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16.0),
                                   ),
                                 ),
                               )),
