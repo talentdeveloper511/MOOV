@@ -197,7 +197,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 .orderBy("startDate")
                                 .snapshots(),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData) return Text('No Featured MOOVs!');
+                              if (!snapshot.hasData)
+                                return Text('No Featured MOOVs!');
                               return ListView.builder(
                                 itemCount: snapshot.data.documents.length,
                                 itemBuilder: (context, index) {
@@ -1348,8 +1349,9 @@ class _CategoryFeedState extends State<CategoryFeed>
     showDialog(
       context: context,
       child: CupertinoAlertDialog(
-        title: Text("Delete?", style: TextStyle(color: Colors.red)),
-        content: Text("MOOVin' this to the trash can?"),
+        title: Text("Delete?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nMOOV to trash can?"),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,
@@ -1359,7 +1361,7 @@ class _CategoryFeedState extends State<CategoryFeed>
             },
           ),
           CupertinoDialogAction(
-            child: Text("Nah, nvm"),
+            child: Text("Cancel"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],

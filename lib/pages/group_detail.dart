@@ -31,15 +31,15 @@ class GroupDetail extends StatefulWidget {
   }
 }
 
-sendChat(user, message, groupid) {
-  Database().sendChat(user, message, groupid);
-}
-
 class _GroupDetailState extends State<GroupDetail> {
   String photoUrl, displayName, gid;
   List<dynamic> members;
   final dbRef = Firestore.instance;
   _GroupDetailState(this.photoUrl, this.displayName, this.members, this.gid);
+
+  sendChat() {
+    Database().sendChat(currentUser.displayName, chatController.text, gid);
+  }
 
   void showAlertDialog(BuildContext context) {
     showDialog(
@@ -386,12 +386,11 @@ class _GroupDetailState extends State<GroupDetail> {
                             ),
                             suffixIcon: IconButton(
                               icon: Icon(Icons.send),
-                              onPressed: sendChat(currentUser.displayName,
-                                  chatController.text, gid),
+                              onPressed: sendChat,
                             ),
                           ),
-                          onFieldSubmitted: sendChat(currentUser.displayName,
-                              chatController.text, gid),
+                          // onFieldSubmitted: sendChat(currentUser.displayName,
+                          //     chatController.text, gid),
                         ),
                         height: 300,
                         decoration: BoxDecoration(

@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage>
                 Navigator.push(
                     context,
                     PageTransition(
-                        type: PageTransitionType.bottomToTop,
+                        type: PageTransitionType.topToBottom,
                         child: MoovMaker(postModel: PostModel())));
               },
               label: const Text("Post the MOOV",
