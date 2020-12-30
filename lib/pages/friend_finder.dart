@@ -137,13 +137,24 @@ class _FriendFinderState extends State<FriendFinder>
     );
   }
 
+  buildNoContent() {
+    return Scaffold(
+        body: Center(
+            child: Text(
+      "We're still working on this!",
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 50),
+    )));
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.white12,
       appBar: buildSearchField(),
-      body: buildSearchResults(),
+      body:
+          searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
     );
   }
 }
@@ -158,100 +169,102 @@ class UserResult extends StatelessWidget {
     final GoogleSignInAccount userMe = googleSignIn.currentUser;
     final strUserId = userMe.id;
     return Container(
-      height: 150,
+      height: 140,
       color: Colors.white,
       child: Column(
         children: <Widget>[
           GestureDetector(
             onTap: () => print('tapped'),
             child: Card(
+                color: Colors.white,
                 child: Row(children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.white,
-                      backgroundImage:
-                          CachedNetworkImageProvider(user.photoUrl),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        user.displayName == null ? "" : user.displayName,
-                        style: TextStyle(
-                            color: TextThemes.ndBlue,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Text("is going to"),
-              Stack(children: <Widget>[
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.51,
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  child: Container(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        'lib/assets/bouts.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    margin: EdgeInsets.only(
-                        left: 20, top: 0, right: 20, bottom: 7.5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          backgroundImage:
+                              CachedNetworkImageProvider(user.photoUrl),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            user.displayName == null ? "" : user.displayName,
+                            style: TextStyle(
+                                color: TextThemes.ndBlue,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 35,
-                  right: 80,
-                  child: Container(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: <Color>[
-                            Colors.black.withAlpha(0),
-                            Colors.black,
-                            Colors.black12,
+                  Text("is going to"),
+                  Stack(children: <Widget>[
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.51,
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      child: Container(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            'lib/assets/bouts.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        margin: EdgeInsets.only(
+                            left: 20, top: 0, right: 20, bottom: 7.5),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
                           ],
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(
-                          "THIS",
-                          style: TextStyle(
-                              fontFamily: 'Solway',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 20.0),
+                    ),
+                    Positioned(
+                      bottom: 35,
+                      right: 80,
+                      child: Container(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: <Color>[
+                                Colors.black.withAlpha(0),
+                                Colors.black,
+                                Colors.black12,
+                              ],
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "THIS",
+                              style: TextStyle(
+                                  fontFamily: 'Solway',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20.0),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ]),
-            ])),
+                  ]),
+                ])),
           ),
           Divider(
             height: 2.0,

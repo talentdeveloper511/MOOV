@@ -981,7 +981,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                 .ndGold,
                                                             size: 20),
                                                       ),
-                                                      Text('WHERE: ',
+                                                      Text(' WHERE: ',
                                                           style: TextStyle(
                                                               fontSize: 12.0,
                                                               fontWeight:
@@ -1145,43 +1145,41 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                 : Text(''),
                                             Row(
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets.only(
-                                                                left: 50.0,
-                                                                bottom: 10.0,),
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            Share.share(
-                                                              "MOOV",
-                                                              subject:
-                                                                  'Update the coordinate!',
-                                                            );
-                                                          },
-                                                          child: Icon(
-                                                              Icons.send_rounded,
-                                                              color:
-                                                                  Colors.blue[500],
-                                                              size: 30),
-                                                        ),
+                                                Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        left: 50.0,
+                                                        bottom: 10.0,
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets.only(
-                                                                left: 50.0,
-                                                                bottom: 20.0),
-                                                        child: Text(
-                                                          'Send',
-                                                          style: TextStyle(
-                                                              fontSize: 12),
-                                                        ),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          Share.share(
+                                                            "MOOV",
+                                                            subject:
+                                                                'Update the coordinate!',
+                                                          );
+                                                        },
+                                                        child: Icon(
+                                                            Icons.send_rounded,
+                                                            color: Colors
+                                                                .blue[500],
+                                                            size: 30),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 50.0,
+                                                              bottom: 20.0),
+                                                      child: Text(
+                                                        'Send',
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                                 Column(
                                                   //  mainAxisAlignment: MainAxisAlignment.start,
@@ -1191,19 +1189,20 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              right: 8.0),
+                                                              right: 2.0, left: 8),
                                                       child: IconButton(
                                                         icon: (_isPressed)
                                                             ? new Icon(
                                                                 Icons
                                                                     .directions_run,
-                                                                color:
-                                                                    Colors.green)
+                                                                color: Colors
+                                                                    .green)
                                                             : new Icon(Icons
                                                                 .directions_walk),
                                                         color: Colors.red,
                                                         iconSize: 30.0,
-                                                        splashColor: Colors.green,
+                                                        splashColor:
+                                                            Colors.green,
                                                         //splashRadius: 7.0,
                                                         highlightColor:
                                                             Colors.green,
@@ -1224,9 +1223,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                   i < likeCount;
                                                                   i++) {
                                                                 var id =
-                                                                    likedArray[i]
+                                                                    likedArray[
+                                                                            i]
                                                                         ["uid"];
-                                                                uidArray.add(id);
+                                                                uidArray
+                                                                    .add(id);
                                                               }
                                                             }
 
@@ -1237,7 +1238,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               Database().removeGoing(
                                                                   course[
                                                                       "userId"],
-                                                                  course["image"],
+                                                                  course[
+                                                                      "image"],
                                                                   strUserId,
                                                                   course
                                                                       .documentID,
@@ -1245,7 +1247,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                   strUserPic,
                                                                   course[
                                                                       "startDate"],
-                                                                  course["title"],
+                                                                  course[
+                                                                      "title"],
                                                                   course[
                                                                       "description"],
                                                                   course[
@@ -1263,7 +1266,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               Database().addGoing(
                                                                   course[
                                                                       "userId"],
-                                                                  course["image"],
+                                                                  course[
+                                                                      "image"],
                                                                   strUserId,
                                                                   course
                                                                       .documentID,
@@ -1271,7 +1275,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                   strUserPic,
                                                                   course[
                                                                       "startDate"],
-                                                                  course["title"],
+                                                                  course[
+                                                                      "title"],
                                                                   course[
                                                                       "description"],
                                                                   course[
@@ -1293,7 +1298,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              right: 10.0,
+                                                              right: 6.0,
                                                               bottom: 4.0),
                                                       child: Text(
                                                         'Going?',
@@ -1304,7 +1309,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     Padding(
                                                       padding: const EdgeInsets
                                                               .fromLTRB(
-                                                          0, 0, 30.0, 10),
+                                                          0, 0, 22.0, 10),
                                                       child: Text('$likeCount',
                                                           style: TextStyle(
                                                               fontSize: 12,

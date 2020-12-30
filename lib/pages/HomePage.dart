@@ -388,7 +388,7 @@ class _HomePageState extends State<HomePage>
                             content: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                  "Created by two students (ND '22 and ND '23). \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
+                                  "Created by two students (ND '22 and ND '23), MOOV is ND's app \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
                             ),
                           ),
                       barrierDismissible: true);
