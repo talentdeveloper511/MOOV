@@ -1,6 +1,7 @@
 import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 
 class Database {
   final dbRef = Firestore.instance;
@@ -393,9 +394,13 @@ class Database {
   Future<void> sendChat(user, message, gid) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('friendgroups/$gid');
-      final String chat = user.toString() + ': ' message.toString();
+      final Map<String, dynamic> chat = {
+        'sender': user,
+        'message': message,
+        'timestamp': DateTime.now()
+      };
       transaction.update(ref, {
-        'chat': FieldValue.arrayUnion([chat]),
+        'chat': chat,
       });
     });
   }
