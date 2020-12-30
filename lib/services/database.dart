@@ -393,7 +393,8 @@ class Database {
   Future<void> sendChat(user, message, gid) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('friendgroups/$gid');
-      final String chat = user.toString() + ': ' message.toString();
+      final String chat = user.toString() + ': ';
+      message.toString();
       transaction.update(ref, {
         'chat': FieldValue.arrayUnion([chat]),
       });

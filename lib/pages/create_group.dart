@@ -49,9 +49,11 @@ class _GroupFormState extends State<GroupForm> {
       groupNames.add(result.documents[i].data['groupName']);
     }
     if (groupNames.contains(groupName))
-      return true;
+      // return true;
+      print("Yes, this name exists already!");
     else
-      return false;
+      // return false;
+      print("No, this name does not exist, we're good to go.");
   }
 
   Future handleTakePhoto() async {
@@ -186,7 +188,6 @@ class _GroupFormState extends State<GroupForm> {
       ),
       body: Column(
         children: [
-          Text("Create a Friend Group"),
           Container(
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -263,6 +264,7 @@ class _GroupFormState extends State<GroupForm> {
   }
 
   String _validateGroupName(String value) {
+    doesNameAlreadyExist(value);
     if (value.isEmpty) {
       // The form is empty
       return "Enter group name";
@@ -281,16 +283,13 @@ class _GroupFormState extends State<GroupForm> {
     // The pattern of the email didn't match the regex above.
   }
 
-
-
   void _validateInputs() {
     final form = _formKey.currentState;
     if (form.validate()) {
       if (!_termsChecked) {
         // The checkbox wasn't checked
         _showSnackBar("Please accept our terms");
-      }
-      else {
+      } else {
         // Every of the data in the form are valid at this point
         form.save();
         _saveFirebase();
