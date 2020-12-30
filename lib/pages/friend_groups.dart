@@ -96,7 +96,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => CreateGroup()));
+                                      builder: (context) => GroupForm()));
                             },
                             color: TextThemes.ndBlue,
                             child: Padding(
