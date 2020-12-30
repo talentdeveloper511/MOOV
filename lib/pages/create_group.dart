@@ -283,6 +283,11 @@ class _GroupFormState extends State<GroupForm> {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            'You can add friends after you create the group.'),
+                      ),
                     ],
                   ))),
         ],
