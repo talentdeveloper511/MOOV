@@ -51,8 +51,8 @@ class _MorePageState extends State<MorePage>
 
   Widget build(BuildContext context) {
     Future navigateToCategoryFeed(context, type) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => CategoryFeed(type: "Food")));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CategoryFeed(type: "Food")));
     }
 
     return Scaffold(
@@ -656,7 +656,7 @@ class Motd extends StatelessWidget {
                       barrierDismissible: true);
                 },
                 child: Card(
-                  borderOnForeground: true,
+                  // borderOnForeground: true,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 4.0),
                     child: Text(
