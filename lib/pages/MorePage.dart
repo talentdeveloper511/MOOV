@@ -52,7 +52,7 @@ class _MorePageState extends State<MorePage>
   Widget build(BuildContext context) {
     Future navigateToCategoryFeed(context, type) async {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CategoryFeed(type: "Food")));
+          MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
     }
 
     return Scaffold(
