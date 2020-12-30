@@ -125,6 +125,9 @@ class Database {
         'liker': FieldValue.arrayUnion([serialUser]),
         'likeCounter': FieldValue.increment(1)
       });
+      transaction.update(ref2, {
+        'likedMoovs': FieldValue.arrayUnion([moovId])
+      });
     });
   }
 
