@@ -51,13 +51,8 @@ class _MorePageState extends State<MorePage>
 
   Widget build(BuildContext context) {
     Future navigateToCategoryFeed(context, type) async {
-<<<<<<< HEAD
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
-=======
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => CategoryFeed(type: "Food")));
->>>>>>> a37b35b1274fb9179a77e64810c4c3fcd750fe4b
     }
 
     return Scaffold(
@@ -156,8 +151,7 @@ class _MorePageState extends State<MorePage>
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {
-                      navigateToCategoryFeed(context, "Shopping");
-
+                            navigateToCategoryFeed(context, "Shopping");
                           },
                           child: CategoryButton(asset: 'lib/assets/bag1.png')),
                       Align(
@@ -201,8 +195,7 @@ class _MorePageState extends State<MorePage>
                         onTap: () {
                           navigateToCategoryFeed(context, "Music");
                         },
-                        child: CategoryButton(
-                            asset: 'lib/assets/music1.png')),
+                        child: CategoryButton(asset: 'lib/assets/music1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
