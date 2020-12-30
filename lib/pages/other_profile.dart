@@ -132,7 +132,7 @@ class _OtherProfileState extends State<OtherProfile> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 50.0, bottom: 10),
+                    padding: const EdgeInsets.only(top: 30.0, bottom: 10),
                     child: CircleAvatar(
                       radius: 55,
                       backgroundColor: TextThemes.ndGold,
@@ -172,8 +172,7 @@ class _OtherProfileState extends State<OtherProfile> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
-                        child: Text(
-                          "Female dog in Pangborn",
+                        child: Text(snapshot.data['year'] + " in " + snapshot.data['dorm'],
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
@@ -232,30 +231,55 @@ class _OtherProfileState extends State<OtherProfile> {
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Center(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: RichText(
-                              textScaleFactor: 1.3,
-                              text: TextSpan(
-                                  style: TextThemes.mediumbody,
-                                  children: [
-                                    TextSpan(
-                                        text: "\"" + "This my bio" + "\"",
-                                        style: TextStyle(color: Colors.black)),
-                                  ]),
-                            ),
+                  Card(
+                          margin: EdgeInsets.only(
+                              left: 15, right: 15, bottom: 20, top: 10),
+                          color: TextThemes.ndBlue,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15.0, bottom: 2, top: 8),
+                                child: RichText(
+                                  textScaleFactor: 1.75,
+                                  text: TextSpan(
+                                      style: TextThemes.mediumbody,
+                                      children: [
+                                        TextSpan(
+                                            text: "",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                color: TextThemes.ndGold)),
+                                      ]),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 5.0, bottom: 40),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: RichText(
+                                      textScaleFactor: 1.3,
+                                      text: TextSpan(
+                                          style: TextThemes.mediumbody,
+                                          children: [
+                                            TextSpan(
+                                                text: "\"" + snapshot.data['bio'] + "\"",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontStyle:
+                                                        FontStyle.italic)),
+                                          ]),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(
                         right: 7.5, bottom: 15, top: 15.5),

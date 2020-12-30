@@ -86,7 +86,6 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                   children: [
                     Expanded(
                         child: CustomScrollView(
-                      physics: NeverScrollableScrollPhysics(),
                       slivers: [
                         SliverToBoxAdapter(
                             child: Padding(
@@ -176,16 +175,16 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                         ? MediaQuery.of(context)
                                                                 .size
                                                                 .height *
-                                                            0.08
+                                                            0.1
                                                         : MediaQuery.of(context)
                                                                 .size
                                                                 .height *
-                                                            0.08,
+                                                            0.13,
                                                     width: isLargePhone
                                                         ? MediaQuery.of(context)
                                                                 .size
                                                                 .width *
-                                                            0.25
+                                                            0.3
                                                         : MediaQuery.of(context)
                                                                 .size
                                                                 .width *
@@ -206,7 +205,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                       color: Colors.black,
                                                       fontSize: isLargePhone
                                                           ? 20.0
-                                                          : 14,
+                                                          : 18,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                   textAlign: TextAlign.center,
@@ -219,8 +218,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                         ),
                                       ),
                                       Positioned(
-                                        bottom: 95,
-                                        right: 40,
+                                        bottom: isLargePhone? 85 : 60,
+                                        right: 30,
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,

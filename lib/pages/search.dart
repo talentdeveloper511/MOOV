@@ -27,7 +27,6 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   handleSearch(String query) {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
-        .limit(5)
         .getDocuments();
     setState(() {
       searchResultsFuture = users;

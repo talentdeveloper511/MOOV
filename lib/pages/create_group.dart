@@ -49,9 +49,11 @@ class _GroupFormState extends State<GroupForm> {
       groupNames.add(result.documents[i].data['groupName']);
     }
     if (groupNames.contains(groupName))
-      return true;
+      // return true;
+      print("Yes, this name exists already!");
     else
-      return false;
+      // return false;
+      print("No, this name does not exist, we're good to go.");
   }
 
   Future handleTakePhoto() async {
@@ -250,12 +252,37 @@ class _GroupFormState extends State<GroupForm> {
                       new SizedBox(
                         height: 30.0,
                       ),
-                      Text('You can add friends after you create the group.'),
-                      new RaisedButton(
-                        color: TextThemes.ndGold,
-                        onPressed: _validateInputs,
-                        child: new Text('Create Group'),
-                      )
+                      Container(
+                        height: 50.0,
+                        child: RaisedButton(
+                          onPressed: _validateInputs,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(80.0)),
+                          padding: EdgeInsets.all(0.0),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    TextThemes.ndBlue,
+                                    Color(0xff64B6FF)
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0)),
+                            child: Container(
+                              constraints: BoxConstraints(
+                                  maxWidth: 300.0, minHeight: 50.0),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Create Friend Group",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ))),
         ],
@@ -264,6 +291,7 @@ class _GroupFormState extends State<GroupForm> {
   }
 
   String _validateGroupName(String value) {
+    doesNameAlreadyExist(value);
     if (value.isEmpty) {
       // The form is empty
       return "Enter group name";
