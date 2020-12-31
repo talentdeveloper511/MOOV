@@ -51,8 +51,8 @@ class _MorePageState extends State<MorePage>
 
   Widget build(BuildContext context) {
     Future navigateToCategoryFeed(context, type) async {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
     }
 
     return Scaffold(
@@ -151,8 +151,7 @@ class _MorePageState extends State<MorePage>
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {
-                      navigateToCategoryFeed(context, "Shopping");
-
+                            navigateToCategoryFeed(context, "Shopping");
                           },
                           child: CategoryButton(asset: 'lib/assets/bag1.png')),
                       Align(
@@ -176,7 +175,7 @@ class _MorePageState extends State<MorePage>
                           navigateToCategoryFeed(context, "Sport");
                         },
                         child: CategoryButton(
-                            asset: 'lib/assets/sportbutton1.png')),
+                            asset: 'lib/assets/gamesbutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -196,8 +195,7 @@ class _MorePageState extends State<MorePage>
                         onTap: () {
                           navigateToCategoryFeed(context, "Music");
                         },
-                        child: CategoryButton(
-                            asset: 'lib/assets/music1.png')),
+                        child: CategoryButton(asset: 'lib/assets/music1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -247,7 +245,9 @@ class _MorePageState extends State<MorePage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          navigateToCategoryFeed(context, "The Black Market");
+                        },
                         child: CategoryButton(asset: 'lib/assets/bm1.png')),
                     Align(
                         alignment: Alignment.center,
@@ -438,72 +438,11 @@ class _MorePageState extends State<MorePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/volunteerbutton1.png'),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Volunteer",
-                          style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16.0),
-                        ))
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
                     CategoryButton(asset: 'lib/assets/charitybutton1.png'),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Charity",
-                          style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16.0),
-                        ))
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-            sliver: SliverGrid.count(
-              crossAxisCount: 3,
-              mainAxisSpacing: 0.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: .75,
-              children: <Widget>[
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      CategoryButton(asset: 'lib/assets/tailgatebutton1.png'),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Tailgates",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
-                          ))
-                    ],
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/gamesbutton1.png'),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Games",
+                          "Service",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
@@ -531,6 +470,67 @@ class _MorePageState extends State<MorePage>
               ],
             ),
           ),
+          // SliverPadding(
+          //   padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          //   sliver: SliverGrid.count(
+          //     crossAxisCount: 3,
+          //     mainAxisSpacing: 0.0,
+          //     crossAxisSpacing: 10.0,
+          //     childAspectRatio: .75,
+          //     children: <Widget>[
+          //       Container(
+          //         child: Column(
+          //           crossAxisAlignment: CrossAxisAlignment.center,
+          //           children: <Widget>[
+          //             CategoryButton(asset: 'lib/assets/tailgatebutton1.png'),
+          //             Align(
+          //                 alignment: Alignment.center,
+          //                 child: Text(
+          //                   "Tailgates",
+          //                   style: TextStyle(
+          //                       fontFamily: 'Open Sans',
+          //                       fontWeight: FontWeight.bold,
+          //                       color: Colors.black,
+          //                       fontSize: 16.0),
+          //                 ))
+          //           ],
+          //         ),
+          //       ),
+          //       Column(
+          //         crossAxisAlignment: CrossAxisAlignment.center,
+          //         children: <Widget>[
+          //           CategoryButton(asset: 'lib/assets/gamesbutton1.png'),
+          //           Align(
+          //               alignment: Alignment.center,
+          //               child: Text(
+          //                 "Games",
+          //                 style: TextStyle(
+          //                     fontFamily: 'Open Sans',
+          //                     fontWeight: FontWeight.bold,
+          //                     color: Colors.black,
+          //                     fontSize: 16.0),
+          //               ))
+          //         ],
+          //       ),
+          //       Column(
+          //         crossAxisAlignment: CrossAxisAlignment.center,
+          //         children: <Widget>[
+          //           CategoryButton(asset: 'lib/assets/otherbutton2.png'),
+          //           Align(
+          //               alignment: Alignment.center,
+          //               child: Text(
+          //                 "Other",
+          //                 style: TextStyle(
+          //                     fontFamily: 'Open Sans',
+          //                     fontWeight: FontWeight.bold,
+          //                     color: Colors.black,
+          //                     fontSize: 16.0),
+          //               ))
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

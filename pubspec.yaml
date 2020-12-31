@@ -110,7 +110,7 @@ flutter:
     - lib/assets/studybutton1.png
     - lib/assets/govbutton1.png
     - lib/assets/massbutton1.png
-    - lib/assets/volunteerbutton1.png
+    - lib/assets/dorm1.png
     - lib/assets/charitybutton1.png
     - lib/assets/tailgatebutton1.png
     - lib/assets/gamesbutton1.png
@@ -137,6 +137,7 @@ flutter:
     - lib/assets/verif.png
     - lib/assets/music1.png
     - lib/assets/bm1.png
+    - lib/assets/virtual1.png
 
 
 

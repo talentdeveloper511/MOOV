@@ -577,14 +577,14 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "Service");
+                          navigateToCategoryFeed(context, "Virtual");
                         },
-                        child: CategoryButton(
-                            asset: 'lib/assets/charitybutton1.png')),
+                        child:
+                            CategoryButton(asset: 'lib/assets/virtual1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Service",
+                          "Virtual",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
@@ -600,8 +600,7 @@ class _HomePageState extends State<HomePage>
                         onTap: () {
                           navigateToCategoryFeed(context, "Dorm Life");
                         },
-                        child: CategoryButton(
-                            asset: 'lib/assets/otherbutton1.png')),
+                        child: CategoryButton(asset: 'lib/assets/dorm1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
