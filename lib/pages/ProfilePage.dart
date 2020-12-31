@@ -32,6 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
     var userHeader = currentUser.header;
     var userFriends = currentUser.friendArray;
     var userMoovs = currentUser.likedMoovs;
+    var userGroups = currentUser.friendGroups;
     // var userFriendsLength = "0";
     bool isAmbassador;
 
@@ -256,7 +257,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           Column(
                             children: [
                               Text(
-                                '0',
+                                userGroups.length.toString() == null
+                                    ? "0"
+                                    : userGroups.length.toString(),
                                 style: TextThemes.extraBold,
                               ),
                               Padding(
