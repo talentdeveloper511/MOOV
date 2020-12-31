@@ -6,6 +6,7 @@ import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
+import 'package:MOOV/widgets/set_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
-import 'add_users.dart';
+import '../widgets/add_users.dart';
 import 'home.dart';
 
 class GroupDetail extends StatefulWidget {
@@ -148,7 +149,6 @@ class _GroupDetailState extends State<GroupDetail> {
                     color: Colors.white,
                     splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                     onPressed: () {
-                      // Implement navigation to leaderboard page here...
                       Navigator.push(
                           context,
                           PageTransition(
@@ -253,98 +253,103 @@ class _GroupDetailState extends State<GroupDetail> {
                           );
                         }),
                   ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          "NEXT \nMOOV:",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                  Row(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        "NEXT \nMOOV:",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                   
-                  SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Stack(children: <Widget>[
-                          SizedBox(
-                            height: 120,
-                            width: 320,
-                            child: Container(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  'lib/assets/bouts.jpg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              margin: EdgeInsets.only(
-                                  left: 20, top: 0, right: 5, bottom: 7.5),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 3), // changes position of shadow
+                    ),
+                    SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Stack(children: <Widget>[
+                            SizedBox(
+                              height: 120,
+                              width: 320,
+                              child: Container(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.asset(
+                                    'lib/assets/bouts.jpg',
+                                    fit: BoxFit.cover,
                                   ),
-                                ],
+                                ),
+                                margin: EdgeInsets.only(
+                                    left: 20, top: 0, right: 5, bottom: 7.5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: Offset(
+                                          0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            top: 40,
-                            left: 70,
-                            right: 50,
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: <Color>[
-                                      Colors.black.withAlpha(0),
-                                      Colors.black,
-                                      Colors.black12,
-                                    ],
+                            Positioned(
+                              top: 40,
+                              left: 70,
+                              right: 50,
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: <Color>[
+                                        Colors.black.withAlpha(0),
+                                        Colors.black,
+                                        Colors.black12,
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Baraka Bouts",
-                                      style: TextStyle(
-                                          fontFamily: 'Solway',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 20.0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Baraka Bouts",
+                                        style: TextStyle(
+                                            fontFamily: 'Solway',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 20.0),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ]),
-                      ],
+                          ]),
+                        ],
+                      ),
                     ),
-                  ),]),
+                  ]),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.bottomToTop,
+                                child: SetMOOV(displayName, gid)));
+                      },
                       color: TextThemes.ndBlue,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

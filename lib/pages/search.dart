@@ -23,13 +23,17 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
+  Future<QuerySnapshot> searchResultsEvents;
   bool get wantKeepAlive => true;
   handleSearch(String query) {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
         .getDocuments();
+    Future<QuerySnapshot> events =
+        postsRef.where("title", isGreaterThanOrEqualTo: query).getDocuments();
     setState(() {
       searchResultsFuture = users;
+      searchResultsEvents = events;
     });
   }
 
@@ -37,6 +41,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
     searchController.clear();
     setState(() {
       searchResultsFuture = null;
+      searchResultsEvents = null;
     });
   }
 
@@ -123,6 +128,25 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   }
 
   buildSearchResults() {
+    // List<Widget> results = [];
+    // return FutureBuilder(
+    //   future: searchResultsEvents,
+    //   builder: (context, snapshot) {
+    //     if (!snapshot.hasData) {
+    //       return circularProgress();
+    //     }
+    //     // List<EventResult> searchResults = [];
+    //     snapshot.data.documents.forEach((doc) {
+    //       print(doc);
+    //       var moov = doc;
+    //       EventResult searchResult = EventResult(moov);
+    //       results.add(searchResult);
+    //     });
+    //     return ListView(
+    //       children: results,
+    //     );
+    //   },
+    // );
     return FutureBuilder(
       future: searchResultsFuture,
       builder: (context, snapshot) {
@@ -196,6 +220,62 @@ class UserResult extends StatelessWidget {
                 },
                 child: Text(
                   "View Profile",
+                  style: new TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.0,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Divider(
+            height: 2.0,
+            color: Colors.white54,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EventResult extends StatelessWidget {
+  final moov;
+
+  EventResult(this.moov);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () => print('moov tapped'),
+            child: ListTile(
+              leading: Image.network(moov.data['image'],
+                  fit: BoxFit.cover, height: 50, width: 70),
+              title: Text(
+                moov.data['title'] == null ? "" : moov.data['title'],
+                style: TextStyle(
+                    color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
+              ),
+              trailing: RaisedButton(
+                padding: const EdgeInsets.all(2.0),
+                color: TextThemes.ndBlue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                onPressed: () {
+                  // if (moov.id == strUserId) {
+                  //   Navigator.of(context).push(
+                  //       MaterialPageRoute(builder: (context) => ProfilePage()));
+                  // } else {
+                  //   Navigator.of(context).push(MaterialPageRoute(
+                  //       builder: (context) => OtherProfile(
+                  //           user.photoUrl, user.displayName, user.id)));
+                  // }
+                },
+                child: Text(
+                  "View MOOV",
                   style: new TextStyle(
                     color: Colors.white,
                     fontSize: 10.0,

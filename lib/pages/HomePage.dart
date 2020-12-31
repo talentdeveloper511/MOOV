@@ -315,7 +315,8 @@ class _HomePageState extends State<HomePage>
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {
-                            navigateToCategoryFeed(context, "Restaurants & Bars");
+                            navigateToCategoryFeed(
+                                context, "Restaurants & Bars");
                           },
                           child: CategoryButton(asset: 'lib/assets/food5.png')),
                       Align(
@@ -417,21 +418,18 @@ class _HomePageState extends State<HomePage>
                                       style: TextThemes.mediumbody,
                                       children: [
                                         TextSpan(
-                                            text: "Only",
+                                            text: "Bringing",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
-                                            text: " us ",
-                                            style: TextThemes.italic),
-                                        TextSpan(
-                                            text: "and",
+                                            text: " the",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
-                                            text: " our ",
+                                            text: " MOOV ",
                                             style: TextThemes.italic),
                                         TextSpan(
-                                            text: "local biz",
+                                            text: "on demand",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400))
                                       ]),
