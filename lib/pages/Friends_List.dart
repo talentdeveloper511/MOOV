@@ -109,7 +109,7 @@ class friendsListState extends State<friendsList> {
                                                     child: CircleAvatar(
                                                         radius: 22.0,
                                                         backgroundImage:
-                                                            AssetImage(snapshot
+                                                            NetworkImage(snapshot
                                                                     .data
                                                                     .documents[
                                                                         index]
