@@ -253,93 +253,94 @@ class _GroupDetailState extends State<GroupDetail> {
                           );
                         }),
                   ),
-                  Row(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Text(
-                        "NEXT \nMOOV:",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Stack(children: <Widget>[
-                            SizedBox(
-                              height: 120,
-                              width: 320,
-                              child: Container(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.asset(
-                                    'lib/assets/bouts.jpg',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                margin: EdgeInsets.only(
-                                    left: 20, top: 0, right: 5, bottom: 7.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
+                  Text(
+                    "NEXT MOOV",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Stack(children: <Widget>[
+                                SizedBox(
+                                  height: 120,
+                                  width: 320,
+                                  child: Container(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        'lib/assets/bouts.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 40,
-                              left: 70,
-                              right: 50,
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: <Color>[
-                                        Colors.black.withAlpha(0),
-                                        Colors.black,
-                                        Colors.black12,
+                                    margin: EdgeInsets.only(
+                                        left: 20,
+                                        top: 0,
+                                        right: 5,
+                                        bottom: 7.5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 5,
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
+                                        ),
                                       ],
                                     ),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Baraka Bouts",
-                                        style: TextStyle(
-                                            fontFamily: 'Solway',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 20.0),
+                                ),
+                                Positioned(
+                                  top: 40,
+                                  left: 70,
+                                  right: 50,
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: <Color>[
+                                            Colors.black.withAlpha(0),
+                                            Colors.black,
+                                            Colors.black12,
+                                          ],
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "Baraka Bouts",
+                                            style: TextStyle(
+                                                fontFamily: 'Solway',
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: 20.0),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ]),
-                        ],
-                      ),
-                    ),
-                  ]),
+                              ]),
+                            ],
+                          ),
+                        ),
+                      ]),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: RaisedButton(

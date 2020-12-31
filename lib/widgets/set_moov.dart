@@ -244,10 +244,10 @@ class EventResult extends StatelessWidget {
                   // }
                 },
                 child: Text(
-                  "View MOOV",
+                  "Set MOOV",
                   style: new TextStyle(
                     color: Colors.white,
-                    fontSize: 10.0,
+                    fontSize: 12.0,
                   ),
                 ),
               ),
