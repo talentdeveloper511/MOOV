@@ -34,17 +34,11 @@ class _MoovMakerState extends State<MoovMaker> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-        ),
+            icon: Icon(Icons.arrow_drop_up_outlined,
+                color: Colors.white, size: 35),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
         backgroundColor: TextThemes.ndBlue,
         //pinned: true,
 
@@ -99,7 +93,6 @@ class _MoovMakerState extends State<MoovMaker> {
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(top: 44.0),
                       child: Text(
@@ -453,7 +446,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           // ),
 
           Padding(
-            padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20, bottom: 10),
+            padding: const EdgeInsets.only(
+                top: 20.0, left: 20, right: 20, bottom: 10),
             child: DateTimeField(
               format: format,
               keyboardType: TextInputType.datetime,

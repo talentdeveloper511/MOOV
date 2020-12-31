@@ -10,6 +10,7 @@ import 'package:MOOV/services/database.dart';
 import 'package:MOOV/helpers/themes.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
@@ -98,12 +99,10 @@ class TrendingSegmentState extends State<TrendingSegment> {
                             ])),
                         child: Center(
                             child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text('TRENDING',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontFamily: 'Open-Sans')),
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text('T R E N D I N G',
+                              style: GoogleFonts.meriendaOne(
+                                  color: Colors.white, fontSize: 30)),
                         ))),
                     Expanded(
                         child: CustomScrollView(
