@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
@@ -313,8 +314,8 @@ class _AuthorContent extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => OtherProfile(course['photoUrl'],
-                      course['displayName'], course['id']))),
+                  builder: (context) => course['id'] != currentUser.id ? OtherProfile(course['photoUrl'],
+                      course['displayName'], course['id']) : ProfilePage())),
               child: Container(
                   child: Row(
                 children: [

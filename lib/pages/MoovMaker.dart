@@ -67,10 +67,53 @@ class _MoovMakerState extends State<MoovMaker> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Text("MOOV Maker", style: TextThemes.headline1),
-              ),
+              Stack(children: <Widget>[
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  width: MediaQuery.of(context).size.width,
+                  child: Container(
+                    child: ClipRRect(
+                      child: Image.asset(
+                        'lib/assets/motd.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    margin:
+                        EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 7.5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 44.0),
+                      child: Text(
+                        "MOOV Maker",
+                        style: TextStyle(
+                            fontFamily: 'Solway',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 25.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
               MoovMakerForm(),
             ]),
       )),
@@ -180,13 +223,21 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   final _formKey = GlobalKey<FormState>();
   final privacyList = ["Public", "Friends Only", "Invite Only"];
   final listOfTypes = [
-    "Food",
-    "Party",
+    "Restaurants & Bars",
+    "Pregames & Parties",
     "Clubs",
     "Sports",
+    "Shows",
+    "Virtual",
     "Dorm Life",
-    "Service",
-    "Shows"
+    "Shopping",
+    "Games",
+    "Music",
+    "The Black Market",
+    "Study",
+    "Student Gov",
+    "Mass",
+    "Service"
   ];
   final listOfLocations = [
     "Off Campus",
@@ -228,8 +279,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   DateTime currentValues;
   // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
   // DateTime endTimes;
-  String privacyDropdownValue = 'Friends Only';
-  String typeDropdownValue = 'Party';
+  String privacyDropdownValue = 'Public';
+  String typeDropdownValue = 'Pregames & Parties';
   String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
   final addressController = TextEditingController();
@@ -402,7 +453,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           // ),
 
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20, bottom: 10),
             child: DateTimeField(
               format: format,
               keyboardType: TextInputType.datetime,
@@ -544,38 +595,48 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0)),
               onPressed: () => selectImage(context)),
-          Container(
-            height: 220,
-            width: MediaQuery.of(context).size.width * .8,
-            child: Center(
-              child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: _image != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Image.file(_image,
-                              width: 100, height: 100, fit: BoxFit.fitHeight),
-                        )
-                      : Container(
-                          
-                        )),
-            ),
-          ),
+          _image != null
+              ? Container(
+                  height: 220,
+                  width: MediaQuery.of(context).size.width * .8,
+                  child: Center(
+                      child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: Image.file(_image,
+                                width: 100, height: 100, fit: BoxFit.fitHeight),
+                          ))),
+                )
+              : Container(),
           Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.only(bottom: 20.0, top: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RaisedButton(
-                      color: TextThemes.ndBlue,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Post!',
-                         style: TextStyle(color: Colors.white, fontSize: 22)),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0)),
-                      
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80.0)),
+                      padding: EdgeInsets.all(0.0),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [TextThemes.ndBlue, Color(0xff64B6FF)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            borderRadius: BorderRadius.circular(30.0)),
+                        child: Container(
+                          constraints:
+                              BoxConstraints(maxWidth: 125.0, minHeight: 50.0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Post!",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                        ),
+                      ),
                       onPressed: () async {
                         final GoogleSignInAccount user =
                             googleSignIn.currentUser;

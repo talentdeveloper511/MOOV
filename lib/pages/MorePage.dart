@@ -1,3 +1,6 @@
+import 'package:MOOV/pages/leaderboard.dart';
+import 'package:MOOV/pages/notification_feed.dart';
+
 import 'HomePage.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/models/post_model.dart';
@@ -68,7 +71,7 @@ class _MorePageState extends State<MorePage>
                       builder: (context) => MoovMaker(postModel: PostModel())),
                 );
               },
-              label: const Text("Post a MOOV",
+              label: const Text("Post the MOOV",
                   style: TextStyle(fontSize: 20, color: Colors.white))),
         ),
       ),
@@ -94,22 +97,28 @@ class _MorePageState extends State<MorePage>
             actions: <Widget>[
               IconButton(
                 padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.search),
+                icon: Icon(Icons.insert_chart),
                 color: Colors.white,
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                 onPressed: () {
-                  // Implement navigation to shopping cart page here...
-                  print('Click Search');
+                  // Implement navigation to leaderboard page here...
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LeaderBoardPage()));
+                  print('Leaderboards clicked');
                 },
               ),
               IconButton(
                 padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.message),
+                icon: Icon(Icons.notifications_active),
                 color: Colors.white,
                 splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                 onPressed: () {
-                  // Implement navigation to shopping cart page here...
-                  print('Click Message');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationFeed()));
                 },
               )
             ],
@@ -172,7 +181,7 @@ class _MorePageState extends State<MorePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "Sport");
+                          navigateToCategoryFeed(context, "Games");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/gamesbutton1.png')),
@@ -264,7 +273,12 @@ class _MorePageState extends State<MorePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/otherbutton1.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToCategoryFeed(context, "Surprise");
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/otherbutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -378,7 +392,12 @@ class _MorePageState extends State<MorePage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      CategoryButton(asset: 'lib/assets/studybutton1.png'),
+                      GestureDetector(
+                          onTap: () {
+                            navigateToCategoryFeed(context, "Study");
+                          },
+                          child: CategoryButton(
+                              asset: 'lib/assets/studybutton1.png')),
                       Align(
                           alignment: Alignment.center,
                           child: Text(
@@ -395,7 +414,12 @@ class _MorePageState extends State<MorePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/govbutton1.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToCategoryFeed(context, "Student Gov");
+                        },
+                        child:
+                            CategoryButton(asset: 'lib/assets/govbutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -411,7 +435,12 @@ class _MorePageState extends State<MorePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/massbutton1.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToCategoryFeed(context, "Mass");
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/massbutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -438,7 +467,12 @@ class _MorePageState extends State<MorePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/charitybutton1.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToCategoryFeed(context, "Service");
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/charitybutton1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -454,7 +488,12 @@ class _MorePageState extends State<MorePage>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CategoryButton(asset: 'lib/assets/otherbutton2.png'),
+                    GestureDetector(
+                        onTap: () {
+                          navigateToCategoryFeed(context, "Other");
+                        },
+                        child: CategoryButton(
+                            asset: 'lib/assets/otherbutton2.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(

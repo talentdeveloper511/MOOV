@@ -1127,26 +1127,21 @@ class _CategoryFeedState extends State<CategoryFeed>
                                               ],
                                             ),
                                             course["userId"] == currentUser.id
-                                                ? Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 28.0),
-                                                    child: RaisedButton(
-                                                        color: Colors.red,
-                                                        onPressed: () =>
-                                                            showAlertDialog(
-                                                                context,
-                                                                course[
-                                                                    "postId"],
-                                                                course[
-                                                                    "userId"]),
-                                                        child: Text(
-                                                          "DELETE",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        )),
-                                                  )
+                                                ? RaisedButton(
+                                                    color: Colors.red,
+                                                    onPressed: () =>
+                                                        showAlertDialog(
+                                                            context,
+                                                            course[
+                                                                "postId"],
+                                                            course[
+                                                                "userId"]),
+                                                    child: Text(
+                                                      "DELETE",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.white),
+                                                    ))
                                                 : Text(''),
                                             Row(
                                               children: [

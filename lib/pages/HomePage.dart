@@ -262,7 +262,6 @@ class _HomePageState extends State<HomePage>
                         IconButton(
                           padding: EdgeInsets.all(5.0),
                           icon: Image.asset('lib/assets/fg1.png'),
-                          color: Colors.white,
                           splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                           onPressed: () {
                             Navigator.push(
@@ -270,7 +269,6 @@ class _HomePageState extends State<HomePage>
                                 MaterialPageRoute(
                                     builder: (context) => FriendGroupsPage()));
                             // Implement navigation to shopping cart page here...
-                            print('FRIEND GROUPS CLICKED');
                           },
                         ),
                         Align(
@@ -283,7 +281,6 @@ class _HomePageState extends State<HomePage>
                                         builder: (context) =>
                                             FriendGroupsPage()));
                                 // Implement navigation to shopping cart page here...
-                                print('FRIEND GROUPS CLICKED');
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -318,7 +315,7 @@ class _HomePageState extends State<HomePage>
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {
-                            navigateToCategoryFeed(context, "Food");
+                            navigateToCategoryFeed(context, "Restaurants & Bars");
                           },
                           child: CategoryButton(asset: 'lib/assets/food5.png')),
                       Align(
@@ -339,7 +336,7 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "Party");
+                          navigateToCategoryFeed(context, "Pregames & Parties");
                         },
                         child: CategoryButton(asset: 'lib/assets/party2.png')),
                     Align(
@@ -381,7 +378,7 @@ class _HomePageState extends State<HomePage>
                             content: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                  "Created by two students (ND '22 and ND '23), MOOV is ND's app \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
+                                  "Created by two students (ND '22 and ND '23), MOOV is ND's app. \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
                             ),
                           ),
                       barrierDismissible: true);
