@@ -137,7 +137,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                         snapshot2.data.documents[index];
 
                                     var rng = new Random();
-                                    var l = rng.nextInt(course['members'].length);
+                                    var l =
+                                        rng.nextInt(course['members'].length);
                                     print(l);
 
                                     return StreamBuilder(

@@ -59,9 +59,17 @@ class _FriendFinderState extends State<FriendFinder>
           ],
         ),
       ),
-      leading: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Image.asset('lib/assets/ndlogo.png'),
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          Navigator.pop(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
+        },
       ),
       backgroundColor: TextThemes.ndBlue,
       //pinned: true,
