@@ -140,6 +140,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                     var l =
                                         rng.nextInt(course['members'].length);
                                     print(l);
+                                    print(course['groupName']);
 
                                     return StreamBuilder(
                                         stream: Firestore.instance
@@ -151,9 +152,6 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                         builder: (context, snapshot3) {
                                           if (!snapshot3.hasData)
                                             return CircularProgressIndicator();
-
-                                          print(snapshot3.data.documents[index]
-                                              .data['photoUrl']);
 
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -278,18 +276,21 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                               padding:
                                                                   const EdgeInsets
                                                                       .all(4.0),
-                                                              child:
-                                                                  CircleAvatar(
-                                                                radius: 20.0,
-                                                                backgroundImage:
-                                                                    NetworkImage(
-                                                                  snapshot3
-                                                                          .data[
-                                                                      'photoUrl'],
-                                                                ),
-                                                                backgroundColor:
-                                                                    Colors.red,
-                                                              )),
+                                                              child: course['members']
+                                                                          .length >
+                                                                      1
+                                                                  ? CircleAvatar(
+                                                                      radius:
+                                                                          20.0,
+                                                                      backgroundImage:
+                                                                          NetworkImage(
+                                                                        snapshot3
+                                                                            .data
+                                                                            .documents[1]
+                                                                            .data['photoUrl'],
+                                                                      ),
+                                                                    )
+                                                                  : Container()),
                                                           Padding(
                                                               padding:
                                                                   const EdgeInsets
@@ -303,11 +304,11 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                 backgroundImage:
                                                                     NetworkImage(
                                                                   snapshot3
-                                                                          .data[
-                                                                      'photoUrl'],
+                                                                      .data
+                                                                      .documents[
+                                                                          0]
+                                                                      .data['photoUrl'],
                                                                 ),
-                                                                backgroundColor:
-                                                                    Colors.red,
                                                               )),
                                                           Padding(
                                                             padding:
