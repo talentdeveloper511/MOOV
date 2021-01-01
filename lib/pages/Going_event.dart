@@ -212,7 +212,7 @@ class PostsList extends StatelessWidget {
                       shrinkWrap: true, //MUST TO ADDED
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        print(index++);
+                        // print(index++);
                         List<dynamic> likerArray = course["liker"];
                         // print(likedArray[index]['uid'] + " this is likedarray");
                         // print(friendsArray);

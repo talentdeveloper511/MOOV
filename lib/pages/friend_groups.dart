@@ -81,11 +81,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
-              return StreamBuilder(
-                  stream: Firestore.instance.collection('users').snapshots(),
-                  builder: (context, snapshot2) {
-                    if (!snapshot2.hasData) return CircularProgressIndicator();
-
+              
                     return Container(
                       // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                       child: Column(
@@ -133,8 +129,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
 
                                     DocumentSnapshot course =
                                         snapshot.data.documents[index];
-                                    DocumentSnapshot course2 =
-                                        snapshot2.data.documents[index];
+                                   
 
                                     var rng = new Random();
                                     var l =
@@ -356,7 +351,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                         ],
                       ),
                     );
-                  });
+                  
             }));
   }
 }
