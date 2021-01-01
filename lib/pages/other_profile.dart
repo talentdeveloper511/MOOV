@@ -35,11 +35,10 @@ class _OtherProfileState extends State<OtherProfile> {
   bool friends;
   var status;
   var userRequests;
-  final GoogleSignInAccount userMe = googleSignIn.currentUser;
   final strUserId = currentUser.id;
   final strPic = currentUser.photoUrl;
   final strUserName = currentUser.displayName;
-  bool isAmbassador;
+  bool isAmbassador = currentUser.isAmbassador;
   var iter = 1;
 
   checkFunction() {
@@ -276,56 +275,58 @@ class _OtherProfileState extends State<OtherProfile> {
                         ),
                       ],
                     ),
-                    Card(
-                      margin: EdgeInsets.only(
-                          left: 15, right: 15, bottom: 20, top: 10),
-                      color: TextThemes.ndBlue,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15.0, bottom: 2, top: 8),
-                            child: RichText(
-                              textScaleFactor: 1.75,
-                              text: TextSpan(
-                                  style: TextThemes.mediumbody,
-                                  children: [
-                                    TextSpan(
-                                        text: "",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w200,
-                                            color: TextThemes.ndGold)),
-                                  ]),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 5.0, bottom: 40),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                child: RichText(
-                                  textScaleFactor: 1.3,
-                                  text: TextSpan(
-                                      style: TextThemes.mediumbody,
-                                      children: [
-                                        TextSpan(
-                                            text: "\"" +
-                                                snapshot.data['bio'] +
-                                                "\"",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontStyle: FontStyle.italic)),
-                                      ]),
+                    snapshot.data['bio'] != "Create a bio here"
+                        ? Card(
+                            margin: EdgeInsets.only(
+                                left: 15, right: 15, bottom: 20, top: 10),
+                            color: TextThemes.ndBlue,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0, bottom: 2, top: 8),
+                                  child: RichText(
+                                    textScaleFactor: 1.75,
+                                    text: TextSpan(
+                                        style: TextThemes.mediumbody,
+                                        children: [
+                                          TextSpan(
+                                              text: "",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w200,
+                                                  color: TextThemes.ndGold)),
+                                        ]),
+                                  ),
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0, bottom: 40),
+                                  child: Center(
+                                    child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: RichText(
+                                          textScaleFactor: 1.3,
+                                          text: TextSpan(
+                                              style: TextThemes.mediumbody,
+                                              children: [
+                                                TextSpan(
+                                                    text: "\"" +
+                                                        snapshot.data['bio'] +
+                                                        "\"",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontStyle:
+                                                            FontStyle.italic)),
+                                              ]),
+                                        )),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+                          )
+                        : Text(""),
                     Padding(
                       padding: const EdgeInsets.only(
                           right: 7.5, bottom: 15, top: 15.5),

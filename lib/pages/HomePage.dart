@@ -268,10 +268,6 @@ class _HomePageState extends State<HomePage>
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => friendGroupsPage()));
-<<<<<<< HEAD
-                            // Implement navigation to shopping cart page here...
-=======
->>>>>>> dfc398761b29e533ccfff966098e9234190fc1c5
                           },
                         ),
                         Align(

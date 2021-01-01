@@ -5,6 +5,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/set_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -176,11 +177,14 @@ class _GroupDetailState extends State<GroupDetail> {
                         physics: AlwaysScrollableScrollPhysics(),
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (_, index) {
+                          DocumentSnapshot course =
+                              snapshot.data.documents[index];
                           profilePic =
                               snapshot.data.documents[index].data['photoUrl'];
                           otherDisplay = snapshot
                               .data.documents[index].data['displayName'];
                           id = snapshot.data.documents[index].data['id'];
+                          print(id);
                           return Container(
                             height: 100,
                             child: Column(
@@ -192,12 +196,21 @@ class _GroupDetailState extends State<GroupDetail> {
                                       top: 30.0, bottom: 10),
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  OtherProfile(profilePic,
-                                                      otherDisplay, id)));
+                                      if (course['id'] == strUserId) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfilePage()));
+                                      } else {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    OtherProfile(
+                                                      course['photoUrl'],
+                                                      course['displayName'],
+                                                      course['id'],
+                                                    )));
+                                      }
                                     },
                                     child: CircleAvatar(
                                       radius: 54,

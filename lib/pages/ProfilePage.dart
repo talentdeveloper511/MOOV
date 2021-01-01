@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
     var userMoovs = currentUser.likedMoovs;
     var userGroups = currentUser.friendGroups;
     // var userFriendsLength = "0";
-    bool isAmbassador;
+    bool isAmbassador = currentUser.isAmbassador;
 
     return StreamBuilder(
         stream: Firestore.instance
