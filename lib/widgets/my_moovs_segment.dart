@@ -125,7 +125,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
       //     }),
       StreamBuilder(
           stream: Firestore.instance
-              .collection('food')
+              .collection('posts')
               .where("userId", isEqualTo: user.id)
               .orderBy("startDate")
               .snapshots(),
@@ -268,11 +268,14 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                               Color(0xff000000),
                                                           width: 1,
                                                         )),
-                                                        child: CachedNetworkImage(
-                                                            imageUrl: course['image'],
-                                                            fit: BoxFit.cover,
-                                                            height: 130,
-                                                            width: 50),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                                imageUrl: course[
+                                                                    'image'],
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                height: 130,
+                                                                width: 50),
                                                       ))),
                                               Expanded(
                                                   child:
@@ -394,8 +397,9 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                       12, 10, 4, 10),
                                               child: CircleAvatar(
                                                 radius: 22.0,
-                                                backgroundImage: CachedNetworkImageProvider(
-                                                    course['profilePic']),
+                                                backgroundImage:
+                                                    CachedNetworkImageProvider(
+                                                        course['profilePic']),
                                                 backgroundColor:
                                                     Colors.transparent,
                                               )),
@@ -595,10 +599,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
           }),
       StreamBuilder(
           stream: Firestore.instance
-              .collection('food')
+              .collection('posts')
               .where("liked", arrayContains: {
-                "strName": strUserName,
-                "strPic": strUserPic,
                 "uid": strUserId
               })
               .orderBy("startDate")
@@ -829,8 +831,9 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                             12, 10, 4, 10),
                                         child: CircleAvatar(
                                           radius: 22.0,
-                                          backgroundImage: CachedNetworkImageProvider(
-                                              course['profilePic']),
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                                  course['profilePic']),
                                           backgroundColor: Colors.transparent,
                                         )),
                                     Container(

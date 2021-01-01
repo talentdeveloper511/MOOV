@@ -10,13 +10,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-// import 'package:MOOV/pages/FoodFeed.dart';
 import 'create_account.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final usersRef = Firestore.instance.collection('users');
-final postsRef = Firestore.instance.collection('food');
+final postsRef = Firestore.instance.collection('posts');
 final notificationFeedRef = Firestore.instance.collection('notificationFeed');
 final DateTime timestamp = DateTime.now();
 User currentUser;
@@ -98,7 +97,8 @@ class _HomeState extends State<Home> {
         "friendArray": [],
         "friendRequests": [],
         "venmo": "",
-        "likedMoovs": []
+        "likedMoovs": [],
+        "friendGroups": []
       });
       doc = await usersRef.document(user.id).get();
     }

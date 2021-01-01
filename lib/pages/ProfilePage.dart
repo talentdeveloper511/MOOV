@@ -50,6 +50,8 @@ class _ProfilePageState extends State<ProfilePage> {
           userHeader = snapshot.data['header'];
           strUserPic = snapshot.data['photoUrl'];
           isAmbassador = snapshot.data['isAmbassador'];
+          userFriends = snapshot.data['friendArray'];
+
           return Scaffold(
             appBar: AppBar(
               leading: Padding(
@@ -70,7 +72,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => LeaderBoardPage()));
-                    print('Leaderboards clicked');
                   },
                 ),
                 IconButton(
@@ -220,7 +221,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Column(
                             children: [
                               Text(
-                                userMoovs.length.toString() == null
+                                userMoovs.length == null
                                     ? "0"
                                     : userMoovs.length.toString(),
                                 style: TextThemes.extraBold,
@@ -239,7 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Column(
                               children: [
                                 Text(
-                                  userFriends.length.toString() == null
+                                  userFriends.length == null
                                       ? "0"
                                       : userFriends.length.toString(),
                                   style: TextThemes.extraBold,
@@ -257,7 +258,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Column(
                             children: [
                               Text(
-                                userGroups.length.toString() == null
+                                userGroups.length == null
                                     ? "0"
                                     : userGroups.length.toString(),
                                 style: TextThemes.extraBold,

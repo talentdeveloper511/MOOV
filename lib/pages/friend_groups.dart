@@ -137,19 +137,23 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                         snapshot2.data.documents[index];
 
                                     var rng = new Random();
-                                    var l = rng.nextInt(course['members'].length);
+                                    var l =
+                                        rng.nextInt(course['members'].length);
                                     print(l);
 
                                     return StreamBuilder(
                                         stream: Firestore.instance
                                             .collection('users')
-                                            .document(course['members'][l])
+                                            .where('friendGroups',
+                                                arrayContains:
+                                                    course['groupName'])
                                             .snapshots(),
                                         builder: (context, snapshot3) {
                                           if (!snapshot3.hasData)
                                             return CircularProgressIndicator();
 
-                                          print(snapshot3.data['id']);
+                                          print(snapshot3.data.documents[index]
+                                              .data['photoUrl']);
 
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),

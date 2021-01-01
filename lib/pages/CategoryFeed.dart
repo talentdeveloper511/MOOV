@@ -192,7 +192,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                       Center(
                         child: StreamBuilder(
                             stream: Firestore.instance
-                                .collection('food')
+                                .collection('posts')
                                 .where("type", isEqualTo: type)
                                 .where("featured", isEqualTo: true)
                                 .orderBy("startDate")
@@ -772,7 +772,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                       ),
                       StreamBuilder(
                           stream: Firestore.instance
-                              .collection('food')
+                              .collection('posts')
                               .where("type", isEqualTo: type)
                               .orderBy("startDate")
                               .snapshots(),

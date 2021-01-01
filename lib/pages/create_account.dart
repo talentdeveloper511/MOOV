@@ -33,13 +33,16 @@ class _CreateAccountState extends State<CreateAccount> {
     final form2 = _formKey2.currentState;
     final form3 = _formKey3.currentState;
 
-    if (form0.validate() && form.validate() && form2.validate() && form3.validate()) {
+    if (form0.validate() &&
+        form.validate() &&
+        form2.validate() &&
+        form3.validate()) {
       form0.save();
       form.save();
       form2.save();
       form3.save();
-      SnackBar snackbar =
-          SnackBar(content: Text("Welcome to MOOV!"));
+      SnackBar snackbar = SnackBar(
+          content: Text("Welcome to MOOV, ${currentUser.displayName}!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
       Timer(Duration(seconds: 1), () {
         Navigator.pop(context, [dorm, gender, year, referral]);
@@ -196,7 +199,8 @@ class _CreateAccountState extends State<CreateAccount> {
                       autovalidate: true,
                       child: TextFormField(
                         validator: (val) {
-                          if (val.trim().length > 4 && !val.contains("@nd.edu")) {
+                          if (val.trim().length > 4 &&
+                              !val.contains("@nd.edu")) {
                             return "Enter an @nd.edu address";
                           } else if (val.trim().length > 16) {
                             return "Enter an @nd.edu address";

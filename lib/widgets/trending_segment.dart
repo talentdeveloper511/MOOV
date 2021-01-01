@@ -78,8 +78,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
       Container(
         child: StreamBuilder(
             stream: Firestore.instance
-                .collection('food')
-                .where('type', isEqualTo: 'Food')
+                .collection('posts')
+                .where('type', isEqualTo: 'Restaurants & Bars')
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
@@ -117,7 +117,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child:
-                                    Text('FOOD', style: TextThemes.extraBold),
+                                    Text('Restaurants & Bars', style: TextThemes.extraBold),
                               ),
                             ],
                           ),
@@ -280,7 +280,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
       Container(
         child: StreamBuilder(
             stream: Firestore.instance
-                .collection('food')
+                .collection('posts')
                 .where('type', isEqualTo: 'Party')
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
@@ -467,7 +467,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
       Container(
         child: StreamBuilder(
             stream: Firestore.instance
-                .collection('food')
+                .collection('posts')
                 .where('type', isEqualTo: 'Sport')
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
