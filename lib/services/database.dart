@@ -378,7 +378,7 @@ class Database {
   Future<void> leaveGroup(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$id');
-      final DocumentReference ref2 = dbRef.document('friendgroups/$gid');
+      final DocumentReference ref2 = dbRef.document('friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayRemove([gname]),
       });
@@ -390,13 +390,13 @@ class Database {
 
   Future<void> destroyGroup(gid) async {
     return dbRef.runTransaction((transaction) async {
-      dbRef.document('friendgroups/$gid').delete();
+      dbRef.document('friendGroups/$gid').delete();
     });
   }
 
   Future<void> sendChat(user, message, gid) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('friendgroups/$gid');
+      final DocumentReference ref = dbRef.document('friendGroups/$gid');
       final Map<String, dynamic> chat = {
         'sender': user,
         'message': message,
@@ -411,7 +411,7 @@ class Database {
   Future<void> addUser(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('users/$id');
-      final DocumentReference ref2 = dbRef.document('friendgroups/$gid');
+      final DocumentReference ref2 = dbRef.document('friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayUnion([gname]),
       });

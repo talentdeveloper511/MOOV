@@ -42,7 +42,7 @@ class _GroupFormState extends State<GroupForm> {
     List<String> groupNames = [];
 
     final QuerySnapshot result = await Firestore.instance
-        .collection('friendgroups')
+        .collection('friendGroups')
         .where('groupName', isEqualTo: groupName)
         .getDocuments();
     for (int i = 0; i < result.documents.length; i++) {
@@ -73,7 +73,7 @@ class _GroupFormState extends State<GroupForm> {
   createGroupInFirestore(gname, cid, pic) async {
     final String groupName = gname;
 
-    Firestore.instance.collection('friendgroups').add({
+    Firestore.instance.collection('friendGroups').add({
       "groupName": groupName,
       "members": [cid],
       "groupPic": pic,
@@ -167,7 +167,7 @@ class _GroupFormState extends State<GroupForm> {
           onPressed: () {
             Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => FriendGroupsPage()),
+              MaterialPageRoute(builder: (context) => friendGroupsPage()),
             );
           },
         ),
@@ -398,7 +398,7 @@ class _GroupFormState extends State<GroupForm> {
 
 //   Future<bool> doesNameAlreadyExist(String name) async {
 //     final QuerySnapshot result = await Firestore.instance
-//         .collection('friendgroups')
+//         .collection('friendGroups')
 //         .where('groupName', isEqualTo: name)
 //         .limit(1)
 //         .getDocuments();
@@ -423,7 +423,7 @@ class _GroupFormState extends State<GroupForm> {
 //   createGroupInFirestore(gname, cid, pic) async {
 //     final String groupName = gname;
 
-//     Firestore.instance.collection('friendgroups').add({
+//     Firestore.instance.collection('friendGroups').add({
 //       "groupName": groupName,
 //       "members": [cid],
 //       "groupPic": pic,
