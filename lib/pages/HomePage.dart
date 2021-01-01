@@ -267,12 +267,8 @@ class _HomePageState extends State<HomePage>
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-<<<<<<< HEAD
                                     builder: (context) => friendGroupsPage()));
                             // Implement navigation to shopping cart page here...
-=======
-                                    builder: (context) => FriendGroupsPage()));
->>>>>>> f4bd0796b8cdcfb4305455db68d17e749963be9a
                           },
                         ),
                         Align(

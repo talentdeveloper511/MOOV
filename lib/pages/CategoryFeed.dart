@@ -217,9 +217,9 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   List<String> uidArray = List<String>();
                                   var strUserPic = currentUser.photoUrl;
 
-                                  bool isAmbassador = currentUser.isAmbassador;
-                                  var userYear = currentUser.year;
-                                  var userDorm = currentUser.dorm;
+                                  bool isAmbassador;
+                                  var userYear;
+                                  var userDorm;
                                   if (likedArray != null) {
                                     likeCount = likedArray.length;
                                     for (int i = 0; i < likeCount; i++) {
@@ -431,7 +431,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                   .ndGold,
                                                               size: 20),
                                                         ),
-                                                        Text('WHERE: ',
+                                                        Text(' WHERE: ',
                                                             style: TextStyle(
                                                                 fontSize: 12.0,
                                                                 fontWeight:
@@ -463,7 +463,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                           StreamBuilder(
                                               stream: Firestore.instance
                                                   .collection('users')
-                                                  .document(currentUser.id)
+                                                  .document(course['userId'])
                                                   .snapshots(),
                                               builder: (context, snapshot2) {
                                                 bool isLargePhone =
@@ -472,6 +472,7 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                                 if (!snapshot.hasData)
                                                   return CircularProgressIndicator();
+                                                print(snapshot2.data['dorm']);
                                                 userDorm =
                                                     snapshot2.data['dorm'];
                                                 strUserPic =
@@ -882,9 +883,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 List<dynamic> likedArray = course["liked"];
                                 List<String> uidArray = List<String>();
                                 var strUserPic = currentUser.photoUrl;
-                                bool isAmbassador = currentUser.isAmbassador;
-                                var userYear = currentUser.year;
-                                var userDorm = currentUser.dorm;
+
+                                bool isAmbassador;
+                                var userYear;
+                                var userDorm;
                                 if (likedArray != null) {
                                   likeCount = likedArray.length;
                                   for (int i = 0; i < likeCount; i++) {
@@ -904,6 +906,7 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                 return Card(
                                   color: Colors.white,
+                                  clipBehavior: Clip.antiAlias,
                                   child: InkWell(
                                     onTap: () {
                                       Navigator.of(context).push(
@@ -973,8 +976,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                     child: Column(
                                       children: [
                                         Card(
-                                          color: Colors.white,
                                           shadowColor: Colors.white,
+                                          color: Colors.white,
                                           child: Row(children: <Widget>[
                                             Expanded(
                                                 child: Padding(
@@ -982,9 +985,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                         const EdgeInsets.only(
                                                             top: 0.0,
                                                             right: 5,
-                                                            bottom: 0),
+                                                            bottom: 5),
                                                     child: Container(
-                                                      height: 140,
                                                       decoration: BoxDecoration(
                                                           border: Border.all(
                                                         color:
@@ -994,6 +996,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                       child: Image.network(
                                                           course['image'],
                                                           fit: BoxFit.cover,
+                                                          height: 130,
                                                           width: 50),
                                                     ))),
                                             Expanded(
@@ -1001,7 +1004,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     Column(children: <Widget>[
                                               Padding(
                                                   padding: const EdgeInsets.all(
-                                                      0.0)),
+                                                      8.0)),
                                               Padding(
                                                   padding:
                                                       const EdgeInsets.all(2.0),
@@ -1087,17 +1090,12 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold)),
-                                                      Expanded(
-                                                        child: Text(
-                                                            course['address'],
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            maxLines: 1,
-                                                            style: TextStyle(
-                                                              fontSize: 12.0,
-                                                            )),
-                                                      ),
+                                                      Text(course['address'],
+                                                          overflow:
+                                                              TextOverflow.fade,
+                                                          style: TextStyle(
+                                                            fontSize: 12.0,
+                                                          )),
                                                     ],
                                                   ),
                                                 ],
@@ -1117,7 +1115,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                         StreamBuilder(
                                             stream: Firestore.instance
                                                 .collection('users')
-                                                .document(currentUser.id)
+                                                .document(course['userId'])
                                                 .snapshots(),
                                             builder: (context, snapshot2) {
                                               bool isLargePhone =
@@ -1126,6 +1124,7 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                               if (!snapshot.hasData)
                                                 return CircularProgressIndicator();
+                                              print(snapshot2.data['dorm']);
                                               userDorm = snapshot2.data['dorm'];
                                               strUserPic =
                                                   snapshot2.data['photoUrl'];

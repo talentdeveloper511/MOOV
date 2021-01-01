@@ -401,7 +401,8 @@ class _ProfilePageState extends State<ProfilePage> {
               isDefaultAction: true,
               child:
                   Text("I'm outie 5000", style: TextStyle(color: Colors.red)),
-              onPressed: () => () => googleSignIn.signOut()),
+              onPressed: () => googleSignIn.signOut()
+              ),
           CupertinoDialogAction(
             child: Text("Nah, my mistake"),
             onPressed: () => Navigator.of(context).pop(true),
