@@ -180,7 +180,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                       builder: (context, snapshot) {
                         if (!snapshot.hasData)
                           return Center(
-                              child: Text("You haven't posted yet! Hella lame.",
+                              child: Text(
+                                  "You have no posts. Go post the MOOV!",
                                   style: TextStyle(fontSize: 20)));
                         return ListView.builder(
                           itemCount: snapshot.data.documents.length,
