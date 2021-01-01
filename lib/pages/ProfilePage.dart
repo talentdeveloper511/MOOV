@@ -2,6 +2,7 @@ import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/edit_profile.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:MOOV/pages/notification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'friend_groups.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
