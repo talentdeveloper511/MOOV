@@ -179,7 +179,9 @@ class _MOOVSPageState extends State<MOOVSPage>
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData)
-                          return Text('No Featured MOOVs!');
+                          return Center(
+                              child: Text("You haven't posted yet! Hella lame.",
+                                  style: TextStyle(fontSize: 20)));
                         return ListView.builder(
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {
@@ -676,11 +678,18 @@ class _MOOVSPageState extends State<MOOVSPage>
                           .where("liked", arrayContains: {
                             "strName": strUserName,
                             "strPic": strUserPic,
-                            "uid": strUserId})
+                            "uid": strUserId
+                          })
                           .orderBy("startDate")
                           .snapshots(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) return Text('No MOOVs!');
+                        if (!snapshot.hasData)
+                          return Center(
+                            child: Text(
+                                "You're not going to any MOOVs! \nHella lame.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20)),
+                          );
                         return ListView.builder(
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {

@@ -373,7 +373,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.red,
                             textColor: Colors.white,
                             child: Text('Sign out'),
-                            onPressed: () => googleSignIn.signOut()),
+                            onPressed: () {
+                              showAlertDialog(context);
+                            }),
                       )
                     ],
                   ),
@@ -382,5 +384,27 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           );
         });
+  }
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Sign out?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nWhere you goin'?"),
+        actions: [
+          CupertinoDialogAction(
+              isDefaultAction: true,
+              child:
+                  Text("I'm outie 5000", style: TextStyle(color: Colors.red)),
+              onPressed: () => () => googleSignIn.signOut()),
+          CupertinoDialogAction(
+            child: Text("Nah, my mistake"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 }

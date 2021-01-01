@@ -42,7 +42,7 @@ class _CreateAccountState extends State<CreateAccount> {
       form2.save();
       form3.save();
       SnackBar snackbar = SnackBar(
-          content: Text("Welcome to MOOV, ${currentUser.displayName}!"));
+          content: Text("Welcome to MOOV!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
       Timer(Duration(seconds: 1), () {
         Navigator.pop(context, [dorm, gender, year, referral]);

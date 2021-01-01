@@ -313,11 +313,23 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                     left: 40.0),
                                                             child: CircleAvatar(
                                                               radius: 20.0,
-                                                              child: Text(
+                                                              child: course['members']
+                                                                        .length > 2 ? Text(
                                                                 "+" +
-                                                                    course['members']
+                                                                    (course['members']
                                                                         .length
-                                                                        .toString(),
+                                                                        -2),
+                                                                style: TextStyle(
+                                                                    color: TextThemes
+                                                                        .ndGold,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                              ) :
+                                                              Text(
+                                                                (course['members']
+                                                                        .length.toString()
+                                                                        ),
                                                                 style: TextStyle(
                                                                     color: TextThemes
                                                                         .ndGold,

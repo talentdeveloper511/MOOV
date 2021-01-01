@@ -1,6 +1,8 @@
 import 'package:MOOV/helpers/demo_values.dart';
 import 'package:MOOV/main.dart';
+import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
@@ -19,6 +21,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
 
 class CategoryFeed extends StatefulWidget {
@@ -199,7 +202,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
-                                return Text('No Featured MOOVs!');
+                                return Center(
+                                  child: Text("No featured MOOVs.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20)),
+                                );
                               return ListView.builder(
                                 itemCount: snapshot.data.documents.length,
                                 itemBuilder: (context, index) {
@@ -777,7 +784,34 @@ class _CategoryFeedState extends State<CategoryFeed>
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData) return Text('No MOOVs!');
+                            if (!snapshot.hasData)
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Text("No MOOVs! Why not post one?",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 20)),
+                                    ),
+                                    FloatingActionButton.extended(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  type: PageTransitionType
+                                                      .topToBottom,
+                                                  child: MoovMaker(
+                                                      postModel: PostModel())));
+                                        },
+                                        label: const Text("Post the MOOV",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white))),
+                                  ],
+                                ),
+                              );
                             return ListView.builder(
                               itemCount: snapshot.data.documents.length,
                               itemBuilder: (context, index) {
@@ -993,7 +1027,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
-                                                                    maxLines: 1,
+                                                            maxLines: 1,
                                                             style: TextStyle(
                                                               fontSize: 12.0,
                                                             )),
@@ -1132,15 +1166,12 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     onPressed: () =>
                                                         showAlertDialog(
                                                             context,
-                                                            course[
-                                                                "postId"],
-                                                            course[
-                                                                "userId"]),
+                                                            course["postId"],
+                                                            course["userId"]),
                                                     child: Text(
                                                       "DELETE",
                                                       style: TextStyle(
-                                                          color:
-                                                              Colors.white),
+                                                          color: Colors.white),
                                                     ))
                                                 : Text(''),
                                             Row(

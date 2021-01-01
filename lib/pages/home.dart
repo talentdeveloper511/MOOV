@@ -85,7 +85,8 @@ class _HomeState extends State<Home> {
         "email": user.email,
         "displayName": user.displayName,
         "bio": "Create a bio here",
-        "header": "",
+        "header":
+            "https://firebasestorage.googleapis.com/v0/b/moov4-4d3c4.appspot.com/o/images%2Fheadermoosekev%201?alt=media&token=61dc4828-8eca-4d1f-8078-3a837cb95fef",
         "timestamp": timestamp,
         "score": 0,
         "gender": gender,
