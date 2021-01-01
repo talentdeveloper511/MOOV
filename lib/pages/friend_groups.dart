@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/group_detail.dart';
@@ -79,212 +81,277 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
+              return StreamBuilder(
+                  stream: Firestore.instance.collection('users').snapshots(),
+                  builder: (context, snapshot2) {
+                    if (!snapshot2.hasData) return CircularProgressIndicator();
 
-              return Container(
-                // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: CustomScrollView(
-                      slivers: [
-                        SliverToBoxAdapter(
-                            child: Padding(
-                          padding: const EdgeInsets.all(25.0),
-                          child: RaisedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => GroupForm()));
-                            },
-                            color: TextThemes.ndBlue,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.people, color: TextThemes.ndGold),
-                                  Padding(
+                    return Container(
+                      // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
+                      child: Column(
+                        children: [
+                          Expanded(
+                              child: CustomScrollView(
+                            slivers: [
+                              SliverToBoxAdapter(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(25.0),
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => GroupForm()));
+                                  },
+                                  color: TextThemes.ndBlue,
+                                  child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text('Create Friend Group',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 22)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                          ),
-                        )),
-                        SliverGrid(
-                            delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                              if (!snapshot.hasData)
-                                return CircularProgressIndicator();
-
-                              DocumentSnapshot course =
-                                  snapshot.data.documents[index];
-
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  // color: Colors.white,
-                                  clipBehavior: Clip.none,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      GroupDetail(
-                                                          course['groupPic'],
-                                                          course['groupName'],
-                                                          course['members'],
-                                                          snapshot
-                                                              .data
-                                                              .documents[index]
-                                                              .documentID)));
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 5.0),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20)),
-                                                    border: Border.all(
-                                                      color: TextThemes.ndBlue,
-                                                      width: 3,
-                                                    )),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(15)),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        course['groupPic'],
-                                                    fit: BoxFit.fill,
-                                                    height: isLargePhone
-                                                        ? MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.1
-                                                        : MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.13,
-                                                    width: isLargePhone
-                                                        ? MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.3
-                                                        : MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.25,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(22.5),
-                                              child: Center(
-                                                child: Text(
-                                                  course['groupName']
-                                                      .toString(),
-                                                  maxLines: 1,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: isLargePhone
-                                                          ? 20.0
-                                                          : 18,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.center,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.people,
+                                            color: TextThemes.ndGold),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('Create Friend Group',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 22)),
                                         ),
-                                      ),
-                                      Positioned(
-                                        bottom: isLargePhone? 85 : 60,
-                                        right: 30,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Stack(children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: CircleAvatar(
-                                                  radius: 20.0,
-                                                  backgroundImage: NetworkImage(
-                                                    course['groupPic'],
-                                                  ),
-                                                  backgroundColor: Colors.red,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 4, left: 20.0),
-                                                child: CircleAvatar(
-                                                  radius: 20.0,
-                                                  backgroundImage: NetworkImage(
-                                                    course['groupPic'],
-                                                  ),
-                                                  backgroundColor: Colors.red,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 4, left: 40.0),
-                                                child: CircleAvatar(
-                                                  radius: 20.0,
-                                                  child: Text(
-                                                    "+" +
-                                                        course['members']
-                                                            .length
-                                                            .toString(),
-                                                    style: TextStyle(
-                                                        color:
-                                                            TextThemes.ndGold,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                  backgroundColor:
-                                                      TextThemes.ndBlue,
-                                                ),
-                                              ),
-                                            ])
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0)),
                                 ),
-                              );
-                            }, childCount: snapshot.data.documents.length),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                            )),
-                      ],
-                    )),
-                  ],
-                ),
-              );
+                              )),
+                              SliverGrid(
+                                  delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                    if (!snapshot.hasData)
+                                      return CircularProgressIndicator();
+
+                                    DocumentSnapshot course =
+                                        snapshot.data.documents[index];
+                                    DocumentSnapshot course2 =
+                                        snapshot2.data.documents[index];
+
+                                    var rng = new Random();
+                                    var l = rng.nextInt(course['members'].length);
+                                    print(l);
+
+                                    return StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('users')
+                                            .document(course['members'][l])
+                                            .snapshots(),
+                                        builder: (context, snapshot3) {
+                                          if (!snapshot3.hasData)
+                                            return CircularProgressIndicator();
+
+                                          print(snapshot3.data['id']);
+
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              // color: Colors.white,
+                                              clipBehavior: Clip.none,
+                                              child: Stack(
+                                                children: <Widget>[
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => GroupDetail(
+                                                                  course[
+                                                                      'groupPic'],
+                                                                  course[
+                                                                      'groupName'],
+                                                                  course[
+                                                                      'members'],
+                                                                  snapshot
+                                                                      .data
+                                                                      .documents[
+                                                                          index]
+                                                                      .documentID)));
+                                                    },
+                                                    child: Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  bottom: 5.0),
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(Radius.circular(
+                                                                            20)),
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color: TextThemes
+                                                                          .ndBlue,
+                                                                      width: 3,
+                                                                    )),
+                                                            child: ClipRRect(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          15)),
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: course[
+                                                                    'groupPic'],
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                                height: isLargePhone
+                                                                    ? MediaQuery.of(context)
+                                                                            .size
+                                                                            .height *
+                                                                        0.1
+                                                                    : MediaQuery.of(context)
+                                                                            .size
+                                                                            .height *
+                                                                        0.13,
+                                                                width: isLargePhone
+                                                                    ? MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.3
+                                                                    : MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.25,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(22.5),
+                                                          child: Center(
+                                                            child: Text(
+                                                              course['groupName']
+                                                                  .toString(),
+                                                              maxLines: 1,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      isLargePhone
+                                                                          ? 20.0
+                                                                          : 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    bottom:
+                                                        isLargePhone ? 85 : 60,
+                                                    right: 30,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Stack(children: [
+                                                          Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(4.0),
+                                                              child:
+                                                                  CircleAvatar(
+                                                                radius: 20.0,
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                  snapshot3
+                                                                          .data[
+                                                                      'photoUrl'],
+                                                                ),
+                                                                backgroundColor:
+                                                                    Colors.red,
+                                                              )),
+                                                          Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 4,
+                                                                      left:
+                                                                          20.0),
+                                                              child:
+                                                                  CircleAvatar(
+                                                                radius: 20.0,
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                  snapshot3
+                                                                          .data[
+                                                                      'photoUrl'],
+                                                                ),
+                                                                backgroundColor:
+                                                                    Colors.red,
+                                                              )),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 4,
+                                                                    left: 40.0),
+                                                            child: CircleAvatar(
+                                                              radius: 20.0,
+                                                              child: Text(
+                                                                "+" +
+                                                                    course['members']
+                                                                        .length
+                                                                        .toString(),
+                                                                style: TextStyle(
+                                                                    color: TextThemes
+                                                                        .ndGold,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                              ),
+                                                              backgroundColor:
+                                                                  TextThemes
+                                                                      .ndBlue,
+                                                            ),
+                                                          ),
+                                                        ])
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  },
+                                      childCount:
+                                          snapshot.data.documents.length),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                  )),
+                            ],
+                          )),
+                        ],
+                      ),
+                    );
+                  });
             }));
   }
 }
