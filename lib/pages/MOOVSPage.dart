@@ -187,6 +187,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                         return ListView.builder(
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {
+                            if (!snapshot.hasData)
+                              return CircularProgressIndicator();
                             DocumentSnapshot course =
                                 snapshot.data.documents[index];
                             List<dynamic> likedArray = course["liked"];
