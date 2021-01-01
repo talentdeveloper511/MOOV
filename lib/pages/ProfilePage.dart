@@ -53,6 +53,8 @@ class _ProfilePageState extends State<ProfilePage> {
           userHeader = snapshot.data['header'];
           strUserPic = snapshot.data['photoUrl'];
           isAmbassador = snapshot.data['isAmbassador'];
+          userFriends = snapshot.data['friendArray'];
+
           return Scaffold(
             appBar: AppBar(
               leading: Padding(
@@ -73,7 +75,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => LeaderBoardPage()));
-                    print('Leaderboards clicked');
                   },
                 ),
                 IconButton(
@@ -223,7 +224,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Column(
                             children: [
                               Text(
-                                userMoovs.length.toString() == null
+                                userMoovs.length == null
                                     ? "0"
                                     : userMoovs.length.toString(),
                                 style: TextThemes.extraBold,
@@ -241,22 +242,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             FriendButton(
-                                      //                 userFriends:
-                                      //                     userFriends)));
-                                    },
-                                    child: Text(
-                                      userFriends.length.toString() == null
-                                          ? "0"
-                                          : userFriends.length.toString(),
-                                      style: TextThemes.extraBold,
-                                    )),
+                                Text(
+                                  userFriends.length == null
+                                      ? "0"
+                                      : userFriends.length.toString(),
+                                  style: TextThemes.extraBold,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 4.0),
                                   child: Text(
@@ -269,20 +260,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Column(
                             children: [
-                              GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                FriendGroupsPage()));
-                                  },
-                                  child: Text(
-                                    userGroups.length.toString() == null
-                                        ? "0"
-                                        : userGroups.length.toString(),
-                                    style: TextThemes.extraBold,
-                                  )),
+                              Text(
+                                userGroups.length == null
+                                    ? "0"
+                                    : userGroups.length.toString(),
+                                style: TextThemes.extraBold,
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 4.0),
                                 child: Text(
@@ -393,7 +376,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.red,
                             textColor: Colors.white,
                             child: Text('Sign out'),
-                            onPressed: () => googleSignIn.signOut()),
+                            onPressed: () {
+                              showAlertDialog(context);
+                            }),
                       )
                     ],
                   ),
@@ -402,5 +387,27 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           );
         });
+  }
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Sign out?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nWhere you goin'?"),
+        actions: [
+          CupertinoDialogAction(
+              isDefaultAction: true,
+              child:
+                  Text("I'm outie 5000", style: TextStyle(color: Colors.red)),
+              onPressed: () => () => googleSignIn.signOut()),
+          CupertinoDialogAction(
+            child: Text("Nah, my mistake"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 }

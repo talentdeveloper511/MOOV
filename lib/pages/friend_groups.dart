@@ -81,12 +81,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
-              return StreamBuilder(
-                  stream: Firestore.instance.collection('users').snapshots(),
-                  builder: (context, snapshot2) {
-                    if (!snapshot2.hasData) return CircularProgressIndicator();
-
-                    return Container(
+              
+                    return 
+                    Container(
                       // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                       child: Column(
                         children: [
@@ -133,24 +130,24 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
 
                                     DocumentSnapshot course =
                                         snapshot.data.documents[index];
-                                    DocumentSnapshot course2 =
-                                        snapshot2.data.documents[index];
+                                   
 
                                     var rng = new Random();
                                     var l =
                                         rng.nextInt(course['members'].length);
                                     print(l);
+                                    print(course['groupName']);
 
                                     return StreamBuilder(
                                         stream: Firestore.instance
                                             .collection('users')
-                                            .document(course['members'][l])
+                                            .where('friendGroups',
+                                                arrayContains:
+                                                    course['groupName'])
                                             .snapshots(),
                                         builder: (context, snapshot3) {
                                           if (!snapshot3.hasData)
                                             return CircularProgressIndicator();
-
-                                          print(snapshot3.data['id']);
 
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -275,18 +272,21 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                               padding:
                                                                   const EdgeInsets
                                                                       .all(4.0),
-                                                              child:
-                                                                  CircleAvatar(
-                                                                radius: 20.0,
-                                                                backgroundImage:
-                                                                    NetworkImage(
-                                                                  snapshot3
-                                                                          .data[
-                                                                      'photoUrl'],
-                                                                ),
-                                                                backgroundColor:
-                                                                    Colors.red,
-                                                              )),
+                                                              child: course['members']
+                                                                          .length >
+                                                                      1
+                                                                  ? CircleAvatar(
+                                                                      radius:
+                                                                          20.0,
+                                                                      backgroundImage:
+                                                                          NetworkImage(
+                                                                        snapshot3
+                                                                            .data
+                                                                            .documents[1]
+                                                                            .data['photoUrl'],
+                                                                      ),
+                                                                    )
+                                                                  : Container()),
                                                           Padding(
                                                               padding:
                                                                   const EdgeInsets
@@ -300,11 +300,11 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                 backgroundImage:
                                                                     NetworkImage(
                                                                   snapshot3
-                                                                          .data[
-                                                                      'photoUrl'],
+                                                                      .data
+                                                                      .documents[
+                                                                          0]
+                                                                      .data['photoUrl'],
                                                                 ),
-                                                                backgroundColor:
-                                                                    Colors.red,
                                                               )),
                                                           Padding(
                                                             padding:
@@ -314,11 +314,23 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                     left: 40.0),
                                                             child: CircleAvatar(
                                                               radius: 20.0,
-                                                              child: Text(
+                                                              child: course['members']
+                                                                        .length > 2 ? Text(
                                                                 "+" +
-                                                                    course['members']
+                                                                    (course['members']
                                                                         .length
-                                                                        .toString(),
+                                                                        -2),
+                                                                style: TextStyle(
+                                                                    color: TextThemes
+                                                                        .ndGold,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                              ) :
+                                                              Text(
+                                                                (course['members']
+                                                                        .length.toString()
+                                                                        ),
                                                                 style: TextStyle(
                                                                     color: TextThemes
                                                                         .ndGold,
@@ -352,7 +364,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                         ],
                       ),
                     );
-                  });
+                  
             }));
   }
 }

@@ -220,7 +220,6 @@ class _EditProfileState extends State<EditProfile> {
 
     dynamic likeCount;
     final dormController = TextEditingController();
-    final genderController = TextEditingController();
     final bioController = TextEditingController();
 
     return Scaffold(
@@ -435,7 +434,7 @@ class _EditProfileState extends State<EditProfile> {
 
                         if (bioController.text != "") {
                           usersRef.document(currentUser.id).updateData({
-                            "bio": bioController.text.toUpperCase(),
+                            "bio": bioController.text,
                           });
                         }
                         Navigator.pop(context);
