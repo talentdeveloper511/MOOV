@@ -18,7 +18,7 @@ class Database {
   final strPic = googleSignIn.currentUser.photoUrl;
 
   getdata() {
-    Firestore.instance.collection('posts').snapshots().listen((snapshot) {
+    Firestore.instance.collection('food').snapshots().listen((snapshot) {
       for (var i = 0; i < snapshot.documents.length; i++) {
         DocumentSnapshot course = snapshot.documents[i];
         ownerId = course["userId"];
@@ -46,7 +46,7 @@ class Database {
       profilePic,
       featured,
       postId}) async {
-    DocumentReference ref = await dbRef.collection("posts").add({
+    DocumentReference ref = await dbRef.collection("food").add({
       'title': title,
       'likes': likes,
       'type': type,
@@ -68,7 +68,7 @@ class Database {
     print(ref.documentID);
 
     Firestore.instance
-        .collection("posts")
+        .collection("food")
         .orderBy("startDate", descending: true);
 
     dbRef.runTransaction((transaction) async {
@@ -96,7 +96,7 @@ class Database {
       ownerEmail,
       likedArray) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('posts/$moovId');
+      final DocumentReference ref = dbRef.document('food/$moovId');
       final DocumentReference ref2 = dbRef.document('users/$uid');
       print('$uid');
       transaction.update(ref2, {'score': FieldValue.increment(2)});
@@ -290,7 +290,7 @@ class Database {
 
       DocumentSnapshot snapshot;
       //   while (snapshot == null) {
-      final DocumentReference userRef = dbRef.document('posts/$moovId');
+      final DocumentReference userRef = dbRef.document('food/$moovId');
       final DocumentReference userRef2 = dbRef.document('users/$uid');
       Map<String, dynamic> serializedMessage = {
         "uid": uid,

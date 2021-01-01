@@ -78,7 +78,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
       Container(
         child: StreamBuilder(
             stream: Firestore.instance
-                .collection('posts')
+                .collection('food')
                 .where('type', isEqualTo: 'Restaurants & Bars')
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
@@ -280,7 +280,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
       Container(
         child: StreamBuilder(
             stream: Firestore.instance
-                .collection('posts')
+                .collection('food')
                 .where('type', isEqualTo: 'Party')
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
@@ -467,7 +467,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
       Container(
         child: StreamBuilder(
             stream: Firestore.instance
-                .collection('posts')
+                .collection('food')
                 .where('type', isEqualTo: 'Sport')
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),

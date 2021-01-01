@@ -125,7 +125,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
       //     }),
       StreamBuilder(
           stream: Firestore.instance
-              .collection('posts')
+              .collection('food')
               .where("userId", isEqualTo: user.id)
               .orderBy("startDate")
               .snapshots(),

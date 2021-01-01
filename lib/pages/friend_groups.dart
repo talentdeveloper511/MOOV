@@ -82,7 +82,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
               
-                    return Container(
+                    return 
+                    Container(
                       // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                       child: Column(
                         children: [

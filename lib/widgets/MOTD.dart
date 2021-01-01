@@ -27,7 +27,7 @@ class _MOTDState extends State<MOTD> {
 
     return StreamBuilder(
         stream: Firestore.instance
-            .collection('posts')
+            .collection('food')
             .where("MOTD", isEqualTo: true)
             .snapshots(),
         builder: (context, snapshot) {

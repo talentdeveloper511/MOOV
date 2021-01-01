@@ -173,7 +173,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                     children: [
                   StreamBuilder(
                       stream: Firestore.instance
-                          .collection('posts')
+                          .collection('food')
                           .where("userId", isEqualTo: user.id)
                           .orderBy("startDate")
                           .snapshots(),
@@ -674,7 +674,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                       }),
                   StreamBuilder(
                       stream: Firestore.instance
-                          .collection('posts')
+                          .collection('food')
                           .where("liked", arrayContains: {
                             "strName": strUserName,
                             "strPic": strUserPic,

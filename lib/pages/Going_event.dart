@@ -21,7 +21,7 @@ class GoingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream:
-            Firestore.instance.collection('posts').document(moovId).snapshots(),
+            Firestore.instance.collection('food').document(moovId).snapshots(),
         builder: (context, snapshot) {
           // title = snapshot.data['title'];
           // pic = snapshot.data['pic'];
@@ -179,7 +179,7 @@ class PostsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream:
-            Firestore.instance.collection('posts').document(moovId).snapshots(),
+            Firestore.instance.collection('food').document(moovId).snapshots(),
         builder: (context, snapshot) {
           // title = snapshot.data['title'];
           // pic = snapshot.data['pic'];
