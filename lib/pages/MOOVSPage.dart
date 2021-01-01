@@ -1015,6 +1015,8 @@ class _MOOVSPageState extends State<MOOVSPage>
 
                                           if (!snapshot.hasData)
                                             return CircularProgressIndicator();
+                                          if (!snapshot2.hasData)
+                                            return CircularProgressIndicator();
                                           print(snapshot2.data['dorm']);
                                           userDorm = snapshot2.data['dorm'];
                                           strUserPic =
