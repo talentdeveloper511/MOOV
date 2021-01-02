@@ -229,12 +229,11 @@ class _Description extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 15.0),
       child: Center(
-        child: Text(
-          description,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
+        child: Text(description,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontStyle: FontStyle.italic)),
       ),
     );
   }
@@ -314,8 +313,10 @@ class _AuthorContent extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => course['id'] != currentUser.id ? OtherProfile(course['photoUrl'],
-                      course['displayName'], course['id']) : ProfilePage())),
+                  builder: (context) => course['id'] != currentUser.id
+                      ? OtherProfile(course['photoUrl'], course['displayName'],
+                          course['id'])
+                      : ProfilePage())),
               child: Container(
                   child: Row(
                 children: [
