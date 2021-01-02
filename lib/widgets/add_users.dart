@@ -150,9 +150,8 @@ class _UserResultState extends State<UserResult> {
 
   @override
   Widget build(BuildContext context) {
-
     user.friendGroups.contains(gname) ? status = true : false;
-    
+
     return Container(
       color: Colors.white,
       child: Column(
@@ -172,7 +171,7 @@ class _UserResultState extends State<UserResult> {
               trailing: status
                   ? RaisedButton(
                       padding: const EdgeInsets.all(2.0),
-                      color: Colors.red,
+                      color: Colors.green,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
@@ -183,7 +182,7 @@ class _UserResultState extends State<UserResult> {
                         });
                       },
                       child: Text(
-                        "Remove",
+                        "Added",
                         style: new TextStyle(
                           color: Colors.white,
                           fontSize: 12.0,
