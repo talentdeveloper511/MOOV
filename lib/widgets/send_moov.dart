@@ -16,19 +16,19 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../pages/ProfilePage.dart';
 import '../pages/other_profile.dart';
 
-class AddUsers extends StatefulWidget {
-  String gname, gid;
+class SendMOOV extends StatefulWidget {
+  String mid;
 
-  AddUsers(this.gname, this.gid);
+  SendMOOV(this.mid);
 
   @override
-  _AddUsersState createState() => _AddUsersState(this.gname, this.gid);
+  _SendMOOVState createState() => _SendMOOVState(this.mid);
 }
 
-class _AddUsersState extends State<AddUsers> {
-  String gname, gid;
+class _SendMOOVState extends State<SendMOOV> {
+  String mid;
 
-  _AddUsersState(this.gname, this.gid);
+  _SendMOOVState(this.mid);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   handleSearch(String query) {
@@ -109,7 +109,7 @@ class _AddUsersState extends State<AddUsers> {
         List<UserResult> searchResults = [];
         snapshot.data.documents.forEach((doc) {
           User user = User.fromDocument(doc);
-          UserResult searchResult = UserResult(user, gname, gid);
+          UserResult searchResult = UserResult(user);
           searchResults.add(searchResult);
         });
         return ListView(
@@ -132,26 +132,21 @@ class _AddUsersState extends State<AddUsers> {
 
 class UserResult extends StatefulWidget {
   User user;
-  String gname, gid;
 
-  UserResult(this.user, this.gname, this.gid);
+  UserResult(this.user);
 
   @override
-  _UserResultState createState() =>
-      _UserResultState(this.user, this.gname, this.gid);
+  _UserResultState createState() => _UserResultState(this.user);
 }
 
 class _UserResultState extends State<UserResult> {
   User user;
-  String gname, gid;
   bool status = false;
 
-  _UserResultState(this.user, this.gname, this.gid);
+  _UserResultState(this.user);
 
   @override
   Widget build(BuildContext context) {
-    user.friendGroups.contains(gname) ? status = true : false;
-
     return Container(
       color: Colors.white,
       child: Column(
@@ -180,7 +175,7 @@ class _UserResultState extends State<UserResult> {
                         });
                       },
                       child: Text(
-                        "Added",
+                        "Sent",
                         style: new TextStyle(
                           color: Colors.white,
                           fontSize: 12.0,
@@ -192,13 +187,12 @@ class _UserResultState extends State<UserResult> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
-                        Database().addUser(user.id, gname, gid);
                         setState(() {
                           status = true;
                         });
                       },
                       child: Text(
-                        "Add to Group",
+                        "Send MOOV",
                         style: new TextStyle(
                           color: Colors.white,
                           fontSize: 12.0,

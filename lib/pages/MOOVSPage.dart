@@ -5,6 +5,7 @@ import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/my_moovs_segment.dart';
+import 'package:MOOV/widgets/send_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/pages/notification_page.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
 import 'PostDepth.dart';
 
@@ -573,11 +575,14 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                         ),
                                                         child: GestureDetector(
                                                           onTap: () {
-                                                            Share.share(
-                                                              "MOOV",
-                                                              subject:
-                                                                  'Update the coordinate!',
-                                                            );
+                                                            Navigator.push(
+                                                                context,
+                                                                PageTransition(
+                                                                    type: PageTransitionType
+                                                                        .bottomToTop,
+                                                                    child: SendMOOV(
+                                                                        course[
+                                                                            'postId'])));
                                                           },
                                                           child: Icon(
                                                               Icons
@@ -1170,11 +1175,14 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                         ),
                                                         child: GestureDetector(
                                                           onTap: () {
-                                                            Share.share(
-                                                              "MOOV",
-                                                              subject:
-                                                                  'Update the coordinate!',
-                                                            );
+                                                            Navigator.push(
+                                                                context,
+                                                                PageTransition(
+                                                                    type: PageTransitionType
+                                                                        .bottomToTop,
+                                                                    child: SendMOOV(
+                                                                        course[
+                                                                            'postId'])));
                                                           },
                                                           child: Icon(
                                                               Icons

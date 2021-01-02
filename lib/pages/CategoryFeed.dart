@@ -8,6 +8,7 @@ import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/post_card.dart';
+import 'package:MOOV/widgets/send_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -469,7 +470,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     Screen.diagonal(context) >
                                                         766;
 
-                                                if (!snapshot.hasData)
+                                                if (snapshot2.hasError)
                                                   return CircularProgressIndicator();
                                                 userDorm =
                                                     snapshot2.data['dorm'];
@@ -637,11 +638,13 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               child:
                                                                   GestureDetector(
                                                                 onTap: () {
-                                                                  Share.share(
-                                                                    "MOOV",
-                                                                    subject:
-                                                                        'Update the coordinate!',
-                                                                  );
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      PageTransition(
+                                                                          type: PageTransitionType
+                                                                              .bottomToTop,
+                                                                          child:
+                                                                              SendMOOV(course['postId'])));
                                                                 },
                                                                 child: Icon(
                                                                     Icons
@@ -845,7 +848,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData || snapshot.data.documents.length == 0)
+                            if (!snapshot.hasData ||
+                                snapshot.data.documents.length == 0)
                               return Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -1120,7 +1124,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                   Screen.diagonal(context) >
                                                       766;
 
-                                              if (!snapshot.hasData)
+                                              if (!snapshot2.hasData)
                                                 return CircularProgressIndicator();
                                               userDorm = snapshot2.data['dorm'];
                                               strUserPic =
@@ -1287,11 +1291,13 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                             child:
                                                                 GestureDetector(
                                                               onTap: () {
-                                                                Share.share(
-                                                                  "MOOV",
-                                                                  subject:
-                                                                      'Update the coordinate!',
-                                                                );
+                                                                Navigator.push(
+                                                                    context,
+                                                                    PageTransition(
+                                                                        type: PageTransitionType
+                                                                            .bottomToTop,
+                                                                        child: SendMOOV(
+                                                                            course['postId'])));
                                                               },
                                                               child: Icon(
                                                                   Icons
