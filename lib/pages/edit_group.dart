@@ -161,19 +161,10 @@ class _EditGroupState extends State<EditGroup> {
                                   child: GestureDetector(
                                     onTap: () {
                                       if (course['id'] == strUserId) {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage()));
+                                        // what do we do in this case?
                                       } else {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    OtherProfile(
-                                                      course['photoUrl'],
-                                                      course['displayName'],
-                                                      course['id'],
-                                                    )));
+                                        Database().leaveGroup(
+                                            course['id'], displayName, gid);
                                       }
                                     },
                                     child: CircleAvatar(
