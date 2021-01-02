@@ -193,11 +193,11 @@ class _GroupDetailState extends State<GroupDetail> {
                           title: Text("Edit Group"),
                           trailingIcon: Icon(Icons.edit),
                           onPressed: () {
-                             Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditGroup(
-                                    photoUrl, displayName, members, gid)));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditGroup(
+                                        photoUrl, displayName, members, gid)));
                           }),
                       FocusedMenuItem(
                           title: Text(
@@ -360,36 +360,7 @@ class _GroupDetailState extends State<GroupDetail> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditGroup(
-                                    photoUrl, displayName, members, gid)));
-                      },
-                      color: Colors.red,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text('Edit Group',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.only(top: 25.0),
                     child: Text(
                       "CHAT",
                       style: TextStyle(fontSize: 20),
