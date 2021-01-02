@@ -21,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:share/share.dart';
 import '../widgets/add_users.dart';
 import 'edit_group.dart';
 import 'home.dart';
@@ -188,7 +189,10 @@ class _GroupDetailState extends State<GroupDetail> {
                       FocusedMenuItem(
                           title: Text("Share"),
                           trailingIcon: Icon(Icons.send),
-                          onPressed: () {}),
+                          onPressed: () {
+                            Share.share(
+                                "Hey let's put our friend group on MOOV.");
+                          }),
                       FocusedMenuItem(
                           title: Text("Edit Group"),
                           trailingIcon: Icon(Icons.edit),
