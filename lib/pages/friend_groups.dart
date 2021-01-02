@@ -143,6 +143,8 @@ class _friendGroupsState extends State<friendGroupsPage> {
                                   builder: (context, snapshot3) {
                                     if (!snapshot3.hasData)
                                       return CircularProgressIndicator();
+                                    if (snapshot3.hasError)
+                                      return CircularProgressIndicator();
 
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),

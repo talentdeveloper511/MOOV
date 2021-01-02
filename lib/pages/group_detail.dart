@@ -18,6 +18,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
 import '../widgets/add_users.dart';
+import 'edit_group.dart';
 import 'home.dart';
 
 class GroupDetail extends StatefulWidget {
@@ -386,6 +387,36 @@ class _GroupDetailState extends State<GroupDetail> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditGroup(
+                                    photoUrl, displayName, members, gid)));
+                      },
+                      color: TextThemes.ndBlue,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.edit, color: TextThemes.ndGold),
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Text('Edit Group',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
                     child: Text(
                       "CHAT",
                       style: TextStyle(fontSize: 20),
@@ -415,13 +446,12 @@ class _GroupDetailState extends State<GroupDetail> {
                           // onFieldSubmitted: sendChat(currentUser.displayName,
                           //     chatController.text, gid),
                         ),
-                        height: 300,
+                        height: 150,
                         decoration: BoxDecoration(
                             border: Border.all(
                               color: TextThemes.ndBlue,
                             ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
                       ))
                 ],
               ),

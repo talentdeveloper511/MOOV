@@ -420,4 +420,20 @@ class Database {
       });
     });
   }
+
+  Future<void> updateGroupNames(members, newName, gid, old) async {
+    return dbRef.runTransaction((transaction) async {
+      for (var i = 0; i < members.length; i++) {
+        final use = members[i];
+        print('yes ' + use);
+        final DocumentReference ref = dbRef.document('users/$use');
+        transaction.update(ref, {
+          'friendGroups': FieldValue.arrayRemove([old]),
+        });
+        transaction.update(ref, {
+          'friendGroups': FieldValue.arrayUnion([newName]),
+        });
+      }
+    });
+  }
 }
