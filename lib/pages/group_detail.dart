@@ -7,6 +7,7 @@ import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
+import 'package:MOOV/widgets/NextMOOV.dart';
 import 'package:MOOV/widgets/set_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,23 +23,25 @@ import 'edit_group.dart';
 import 'home.dart';
 
 class GroupDetail extends StatefulWidget {
-  String photoUrl, displayName, gid;
+  String photoUrl, displayName, gid, next;
   List<dynamic> members;
 
-  GroupDetail(this.photoUrl, this.displayName, this.members, this.gid);
+  GroupDetail(
+      this.photoUrl, this.displayName, this.members, this.gid, this.next);
 
   @override
   State<StatefulWidget> createState() {
     return _GroupDetailState(
-        this.photoUrl, this.displayName, this.members, this.gid);
+        this.photoUrl, this.displayName, this.members, this.gid, this.next);
   }
 }
 
 class _GroupDetailState extends State<GroupDetail> {
-  String photoUrl, displayName, gid;
+  String photoUrl, displayName, gid, next;
   List<dynamic> members;
   final dbRef = Firestore.instance;
-  _GroupDetailState(this.photoUrl, this.displayName, this.members, this.gid);
+  _GroupDetailState(
+      this.photoUrl, this.displayName, this.members, this.gid, this.next);
 
   sendChat() {
     Database().sendChat(currentUser.displayName, chatController.text, gid);
@@ -272,91 +275,11 @@ class _GroupDetailState extends State<GroupDetail> {
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Stack(children: <Widget>[
-                                SizedBox(
-                                  height: 120,
-                                  width: 320,
-                                  child: Container(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.asset(
-                                        'lib/assets/bouts.jpg',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    margin: EdgeInsets.only(
-                                        left: 20,
-                                        top: 0,
-                                        right: 5,
-                                        bottom: 7.5),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 40,
-                                  left: 70,
-                                  right: 50,
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: <Color>[
-                                            Colors.black.withAlpha(0),
-                                            Colors.black,
-                                            Colors.black12,
-                                          ],
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "Baraka Bouts",
-                                            style: TextStyle(
-                                                fontFamily: 'Solway',
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize: 20.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                            ],
-                          ),
-                        ),
-                      ]),
+                  Container(
+                    child: next != null ? NextMOOV(next) : Text(''),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(1.0),
                     child: RaisedButton(
                       onPressed: () {
                         Navigator.push(
@@ -367,7 +290,7 @@ class _GroupDetailState extends State<GroupDetail> {
                       },
                       color: TextThemes.ndBlue,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(2.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -395,13 +318,12 @@ class _GroupDetailState extends State<GroupDetail> {
                                 builder: (context) => EditGroup(
                                     photoUrl, displayName, members, gid)));
                       },
-                      color: TextThemes.ndBlue,
+                      color: Colors.red,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.edit, color: TextThemes.ndGold),
                             Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: Text('Edit Group',
@@ -416,7 +338,7 @@ class _GroupDetailState extends State<GroupDetail> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: Text(
                       "CHAT",
                       style: TextStyle(fontSize: 20),

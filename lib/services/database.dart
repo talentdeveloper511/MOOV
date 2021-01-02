@@ -425,7 +425,7 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('friendGroups/$gid');
       transaction.update(ref, {
-        'nextMOOV': FieldValue.arrayUnion([moovId]),
+        'nextMOOV': moovId,
       });
     });
   }

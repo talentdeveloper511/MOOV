@@ -170,7 +170,9 @@ class _friendGroupsState extends State<friendGroupsPage> {
                                                                     .data
                                                                     .documents[
                                                                         index]
-                                                                    .documentID)));
+                                                                    .documentID,
+                                                                course[
+                                                                    'nextMOOV'])));
                                               },
                                               child: Column(
                                                 children: [
