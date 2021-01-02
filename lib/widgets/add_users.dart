@@ -18,17 +18,20 @@ import '../pages/other_profile.dart';
 
 class AddUsers extends StatefulWidget {
   String gname, gid;
+  bool status;
 
-  AddUsers(this.gname, this.gid);
+  AddUsers(this.gname, this.gid, status);
 
   @override
-  _AddUsersState createState() => _AddUsersState(this.gname, this.gid);
+  _AddUsersState createState() =>
+      _AddUsersState(this.gname, this.gid, this.status);
 }
 
 class _AddUsersState extends State<AddUsers> {
   String gname, gid;
+  bool member;
 
-  _AddUsersState(this.gname, this.gid);
+  _AddUsersState(this.gname, this.gid, this.member);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   handleSearch(String query) {
@@ -133,6 +136,7 @@ class _AddUsersState extends State<AddUsers> {
 class UserResult extends StatelessWidget {
   final User user;
   String gname, gid;
+  bool status;
 
   UserResult(this.user, this.gname, this.gid);
 
@@ -154,22 +158,39 @@ class UserResult extends StatelessWidget {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: RaisedButton(
-                padding: const EdgeInsets.all(2.0),
-                color: TextThemes.ndBlue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                onPressed: () {
-                  Database().addUser(user.id, gname, gid);
-                },
-                child: Text(
-                  "Add to Group",
-                  style: new TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.0,
-                  ),
-                ),
-              ),
+              trailing: status
+                  ? RaisedButton(
+                      padding: const EdgeInsets.all(2.0),
+                      color: Colors.red,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                      onPressed: () {
+                        Database().addUser(user.id, gname, gid);
+                        status = true;
+                      },
+                      child: Text(
+                        "Remove",
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),
+                      ))
+                  : RaisedButton(
+                      padding: const EdgeInsets.all(2.0),
+                      color: TextThemes.ndBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                      onPressed: () {
+                        Database().addUser(user.id, gname, gid);
+                        status = true;
+                      },
+                      child: Text(
+                        "Add to Group",
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),
+                      )),
             ),
           ),
           Divider(

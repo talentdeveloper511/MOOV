@@ -281,7 +281,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
         child: StreamBuilder(
             stream: Firestore.instance
                 .collection('food')
-                .where('type', isEqualTo: 'Party')
+                .where('type', isEqualTo: "Pregames & Parties")
                 .orderBy('likeCounter', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {

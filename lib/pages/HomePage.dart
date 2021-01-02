@@ -136,8 +136,8 @@ class _HomePageState extends State<HomePage>
         slivers: <Widget>[
           SliverAppBar(
             leading: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Image.asset('lib/assets/ndlogo.png', height: 100),
+              padding: const EdgeInsets.all(10.0),
+              child: Image.asset('lib/assets/ndlogo.png', height: 70),
             ),
             backgroundColor: TextThemes.ndBlue,
             //pinned: true,
@@ -398,7 +398,12 @@ class _HomePageState extends State<HomePage>
                             TextSpan(
                                 text: "This is",
                                 style: TextStyle(fontWeight: FontWeight.w400)),
-                            TextSpan(text: " our ", style: TextThemes.italic),
+                            TextSpan(
+                                text: " our ",
+                                style: TextStyle(
+                                    color: TextThemes.ndGold,
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FontStyle.italic)),
                             TextSpan(
                                 text: "app",
                                 style: TextStyle(fontWeight: FontWeight.w400)),
@@ -417,20 +422,19 @@ class _HomePageState extends State<HomePage>
                                       style: TextThemes.mediumbody,
                                       children: [
                                         TextSpan(
-                                            text: "Bringing",
+                                            text: "Always",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
-                                            text: " the",
+                                            text: " know the ",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
-                                            text: " MOOV ",
-                                            style: TextThemes.italic),
-                                        TextSpan(
-                                            text: "on demand",
+                                            text: "MOOV",
                                             style: TextStyle(
-                                                fontWeight: FontWeight.w400))
+                                                color: TextThemes.ndGold,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle: FontStyle.italic)),
                                       ]),
                                 ]),
                           ),
@@ -450,7 +454,11 @@ class _HomePageState extends State<HomePage>
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400)),
                                   TextSpan(
-                                      text: "Irish", style: TextThemes.italic),
+                                      text: "Irish",
+                                      style: TextStyle(
+                                          color: TextThemes.ndGold,
+                                          fontWeight: FontWeight.w600,
+                                          fontStyle: FontStyle.italic)),
                                 ]),
                           ),
                         ),

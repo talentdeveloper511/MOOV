@@ -65,7 +65,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
         ),
       ),
       leading: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: const EdgeInsets.all(10.0),
         child: Image.asset('lib/assets/ndlogo.png'),
       ),
       backgroundColor: TextThemes.ndBlue,

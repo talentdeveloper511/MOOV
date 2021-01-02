@@ -58,8 +58,8 @@ class _ProfilePageState extends State<ProfilePage> {
           return Scaffold(
             appBar: AppBar(
               leading: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Image.asset('lib/assets/ndlogo.png', height: 100),
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset('lib/assets/ndlogo.png', height: 70),
               ),
               backgroundColor: TextThemes.ndBlue,
               //pinned: true,
@@ -401,8 +401,10 @@ class _ProfilePageState extends State<ProfilePage> {
               isDefaultAction: true,
               child:
                   Text("I'm outie 5000", style: TextStyle(color: Colors.red)),
-              onPressed: () => googleSignIn.signOut()
-              ),
+              onPressed: () {
+                googleSignIn.signOut();
+                Navigator.of(context).pop(true);
+              }),
           CupertinoDialogAction(
             child: Text("Nah, my mistake"),
             onPressed: () => Navigator.of(context).pop(true),

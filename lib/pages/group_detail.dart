@@ -22,9 +22,11 @@ import 'home.dart';
 
 class GroupDetail extends StatefulWidget {
   String photoUrl, displayName, gid;
+  bool member;
   List<dynamic> members;
 
-  GroupDetail(this.photoUrl, this.displayName, this.members, this.gid);
+  GroupDetail(
+      this.photoUrl, this.displayName, this.members, this.gid);
 
   @override
   State<StatefulWidget> createState() {
@@ -36,6 +38,7 @@ class GroupDetail extends StatefulWidget {
 class _GroupDetailState extends State<GroupDetail> {
   String photoUrl, displayName, gid;
   List<dynamic> members;
+  bool member;
   final dbRef = Firestore.instance;
   _GroupDetailState(this.photoUrl, this.displayName, this.members, this.gid);
 
@@ -85,6 +88,7 @@ class _GroupDetailState extends State<GroupDetail> {
   TextEditingController chatController = TextEditingController();
   bool sendRequest = false;
   bool friends;
+
   var status;
   var userRequests;
   final GoogleSignInAccount userMe = googleSignIn.currentUser;
@@ -154,7 +158,7 @@ class _GroupDetailState extends State<GroupDetail> {
                           context,
                           PageTransition(
                               type: PageTransitionType.bottomToTop,
-                              child: AddUsers(displayName, gid)));
+                              child: AddUsers(displayName, gid, status)));
                     },
                   ),
                   IconButton(
@@ -184,7 +188,7 @@ class _GroupDetailState extends State<GroupDetail> {
                           otherDisplay = snapshot
                               .data.documents[index].data['displayName'];
                           id = snapshot.data.documents[index].data['id'];
-                          print(id);
+
                           return Container(
                             height: 100,
                             child: Column(

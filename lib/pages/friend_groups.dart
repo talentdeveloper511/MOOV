@@ -129,10 +129,10 @@ class _friendGroupsState extends State<friendGroupsPage> {
                                   snapshot.data.documents[index];
                               var length = course['members'].length - 2;
 
-                              var rng = new Random();
-                              var l = rng.nextInt(course['members'].length);
-                              print(l);
-                              print(course['groupName']);
+                              // var rng = new Random();
+                              // var l = rng.nextInt(course['members'].length);
+                              // print(l);
+                              // print(course['groupName']);
 
                               return StreamBuilder(
                                   stream: Firestore.instance

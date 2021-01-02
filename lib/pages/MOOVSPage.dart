@@ -74,8 +74,8 @@ class _MOOVSPageState extends State<MOOVSPage>
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Image.asset('lib/assets/ndlogo.png', height: 100),
+          padding: const EdgeInsets.all(10.0),
+          child: Image.asset('lib/assets/ndlogo.png', height: 70),
         ),
         backgroundColor: TextThemes.ndBlue,
         //pinned: true,
@@ -89,7 +89,6 @@ class _MOOVSPageState extends State<MOOVSPage>
               // Implement navigation to leaderboard page here...
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-              print('Leaderboards clicked');
             },
           ),
           IconButton(
@@ -413,18 +412,18 @@ class _MOOVSPageState extends State<MOOVSPage>
                                             .document(course['userId'])
                                             .snapshots(),
                                         builder: (context, snapshot2) {
-                                          bool isLargePhone =
-                                              Screen.diagonal(context) > 766;
-
-                                          if (!snapshot.hasData)
-                                            return CircularProgressIndicator();
-                                          print(snapshot2.data['dorm']);
                                           userDorm = snapshot2.data['dorm'];
                                           strUserPic =
                                               snapshot2.data['photoUrl'];
                                           isAmbassador =
                                               snapshot2.data['isAmbassador'];
                                           userYear = snapshot2.data['year'];
+                                          bool isLargePhone =
+                                              Screen.diagonal(context) > 766;
+
+                                          if (!snapshot.hasData)
+                                            return CircularProgressIndicator();
+                                          
 
                                           return Container(
                                               child: Row(
@@ -1013,7 +1012,6 @@ class _MOOVSPageState extends State<MOOVSPage>
 
                                           if (!snapshot.hasData)
                                             return CircularProgressIndicator();
-                                          print(snapshot2.data['dorm']);
                                           userDorm = snapshot2.data['dorm'];
                                           strUserPic =
                                               snapshot2.data['photoUrl'];

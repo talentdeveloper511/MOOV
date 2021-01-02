@@ -110,7 +110,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                 // Implement navigation to leaderboard page here...
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-                print('Leaderboards clicked');
               },
             ),
             IconButton(
@@ -472,7 +471,6 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                                 if (!snapshot.hasData)
                                                   return CircularProgressIndicator();
-                                                print(snapshot2.data['dorm']);
                                                 userDorm =
                                                     snapshot2.data['dorm'];
                                                 strUserPic =
@@ -847,7 +845,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData)
+                            if (!snapshot.hasData || snapshot.data.documents.length == 0)
                               return Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -1124,7 +1122,6 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                               if (!snapshot.hasData)
                                                 return CircularProgressIndicator();
-                                              print(snapshot2.data['dorm']);
                                               userDorm = snapshot2.data['dorm'];
                                               strUserPic =
                                                   snapshot2.data['photoUrl'];
