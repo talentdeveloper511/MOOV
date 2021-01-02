@@ -17,14 +17,14 @@ import 'package:MOOV/helpers/themes.dart';
 import 'HomePage.dart';
 import 'ProfilePage.dart';
 
-class friendGroupsPage extends StatefulWidget {
+class FriendGroupsPage extends StatefulWidget {
   @override
-  _friendGroupsState createState() {
-    return _friendGroupsState();
+  _FriendGroupsState createState() {
+    return _FriendGroupsState();
   }
 }
 
-class _friendGroupsState extends State<friendGroupsPage> {
+class _FriendGroupsState extends State<FriendGroupsPage> {
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(

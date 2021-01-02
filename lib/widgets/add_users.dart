@@ -18,20 +18,17 @@ import '../pages/other_profile.dart';
 
 class AddUsers extends StatefulWidget {
   String gname, gid;
-  bool status;
 
-  AddUsers(this.gname, this.gid, status);
+  AddUsers(this.gname, this.gid);
 
   @override
-  _AddUsersState createState() =>
-      _AddUsersState(this.gname, this.gid, this.status);
+  _AddUsersState createState() => _AddUsersState(this.gname, this.gid);
 }
 
 class _AddUsersState extends State<AddUsers> {
   String gname, gid;
-  bool member;
 
-  _AddUsersState(this.gname, this.gid, this.member);
+  _AddUsersState(this.gname, this.gid);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   handleSearch(String query) {
@@ -133,21 +130,35 @@ class _AddUsersState extends State<AddUsers> {
   }
 }
 
-class UserResult extends StatelessWidget {
-  final User user;
+class UserResult extends StatefulWidget {
+  User user;
   String gname, gid;
-  bool status;
 
   UserResult(this.user, this.gname, this.gid);
 
   @override
+  _UserResultState createState() =>
+      _UserResultState(this.user, this.gname, this.gid);
+}
+
+class _UserResultState extends State<UserResult> {
+  User user;
+  String gname, gid;
+  bool status = false;
+
+  _UserResultState(this.user, this.gname, this.gid);
+
+  @override
   Widget build(BuildContext context) {
+
+    user.friendGroups.contains(gname) ? status = true : false;
+    
     return Container(
       color: Colors.white,
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () => print('tapped'),
+            onTap: () => print(user.dorm),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.white,
@@ -165,8 +176,11 @@ class UserResult extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
-                        Database().addUser(user.id, gname, gid);
-                        status = true;
+                        //remove user code here
+
+                        setState(() {
+                          status = false;
+                        });
                       },
                       child: Text(
                         "Remove",
@@ -182,7 +196,9 @@ class UserResult extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
                         Database().addUser(user.id, gname, gid);
-                        status = true;
+                        setState(() {
+                          status = true;
+                        });
                       },
                       child: Text(
                         "Add to Group",

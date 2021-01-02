@@ -168,7 +168,7 @@ class _GroupFormState extends State<GroupForm> {
           onPressed: () {
             Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => friendGroupsPage()),
+              MaterialPageRoute(builder: (context) => FriendGroupsPage()),
             );
           },
         ),

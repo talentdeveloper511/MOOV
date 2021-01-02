@@ -277,7 +277,7 @@ class _EditGroupState extends State<EditGroup> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => friendGroupsPage()));
+                                  builder: (context) => FriendGroupsPage()));
                         }),
                   )
                 ],

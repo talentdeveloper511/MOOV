@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage>
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => friendGroupsPage()));
+                                    builder: (context) => FriendGroupsPage()));
                           },
                         ),
                         Align(
@@ -278,7 +278,7 @@ class _HomePageState extends State<HomePage>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            friendGroupsPage()));
+                                            FriendGroupsPage()));
                                 // Implement navigation to shopping cart page here...
                               },
                               child: Padding(

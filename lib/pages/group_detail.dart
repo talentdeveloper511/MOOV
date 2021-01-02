@@ -160,7 +160,7 @@ class _GroupDetailState extends State<GroupDetail> {
                           context,
                           PageTransition(
                               type: PageTransitionType.bottomToTop,
-                              child: AddUsers(displayName, gid, status)));
+                              child: AddUsers(displayName, gid)));
                     },
                   ),
                   IconButton(
