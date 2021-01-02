@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/helpers/utils.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
@@ -12,6 +13,8 @@ import 'package:MOOV/widgets/set_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -163,14 +166,60 @@ class _GroupDetailState extends State<GroupDetail> {
                               child: AddUsers(displayName, gid)));
                     },
                   ),
-                  IconButton(
-                    padding: EdgeInsets.all(3.0),
-                    icon: Icon(Icons.more_vert),
-                    color: Colors.white,
-                    splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                    onPressed: () {
-                      showAlertDialog(context);
-                    },
+                  FocusedMenuHolder(
+                    menuWidth: MediaQuery.of(context).size.width * 0.50,
+                    blurSize: 5.0,
+                    menuItemExtent: 45,
+                    menuBoxDecoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    duration: Duration(milliseconds: 100),
+                    animateMenuItems: true,
+                    blurBackgroundColor: Colors.black54,
+                    openWithTap:
+                        true, // Open Focused-Menu on Tap rather than Long Press
+                    menuOffset:
+                        10.0, // Offset value to show menuItem from the selected item
+                    bottomOffsetHeight:
+                        80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                    menuItems: <FocusedMenuItem>[
+                      // Add Each FocusedMenuItem  for Menu Options
+
+                      FocusedMenuItem(
+                          title: Text("Share"),
+                          trailingIcon: Icon(Icons.send),
+                          onPressed: () {}),
+                      FocusedMenuItem(
+                          title: Text("Edit Group"),
+                          trailingIcon: Icon(Icons.edit),
+                          onPressed: () {
+                             Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditGroup(
+                                    photoUrl, displayName, members, gid)));
+                          }),
+                      FocusedMenuItem(
+                          title: Text(
+                            "Leave Group",
+                            style: TextStyle(color: Colors.redAccent),
+                          ),
+                          trailingIcon: Icon(
+                            Icons.directions_walk,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () {
+                            showAlertDialog(context);
+                          }),
+                    ],
+                    onPressed: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ]),
             body: Container(
