@@ -77,7 +77,8 @@ class _GroupFormState extends State<GroupForm> {
       "groupName": groupName,
       "members": [cid],
       "groupPic": pic,
-      "chat": {'messages': []}
+      "chat": {'messages': []},
+      "nextMOOV": ""
     });
     return Firestore.instance.runTransaction((transaction) async {
       final DocumentReference userRefs =

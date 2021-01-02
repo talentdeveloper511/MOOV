@@ -117,7 +117,7 @@ class _SetMOOVState extends State<SetMOOV> {
         snapshot.data.documents.forEach((doc) {
           print(doc);
           var moov = doc;
-          EventResult searchResult = EventResult(moov);
+          EventResult searchResult = EventResult(moov, gid);
           results.add(searchResult);
         });
         return ListView(
@@ -125,23 +125,6 @@ class _SetMOOVState extends State<SetMOOV> {
         );
       },
     );
-    // return FutureBuilder(
-    //   future: searchResultsFuture,
-    //   builder: (context, snapshot) {
-    //     if (!snapshot.hasData) {
-    //       return circularProgress();
-    //     }
-    //     List<UserResult> searchResults = [];
-    //     snapshot.data.documents.forEach((doc) {
-    //       User user = User.fromDocument(doc);
-    //       UserResult searchResult = UserResult(user);
-    //       searchResults.add(searchResult);
-    //     });
-    //     return ListView(
-    //       children: searchResults,
-    //     );
-    //   },
-    // );
   }
 
   @override
@@ -155,62 +138,10 @@ class _SetMOOVState extends State<SetMOOV> {
   }
 }
 
-class UserResult extends StatelessWidget {
-  final User user;
-  String gname, gid;
-
-  UserResult(this.user, this.gname, this.gid);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          GestureDetector(
-            onTap: () => print('tapped'),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.white,
-                backgroundImage: CachedNetworkImageProvider(user.photoUrl),
-              ),
-              title: Text(
-                user.displayName == null ? "" : user.displayName,
-                style: TextStyle(
-                    color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
-              ),
-              trailing: RaisedButton(
-                padding: const EdgeInsets.all(2.0),
-                color: TextThemes.ndBlue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                onPressed: () {
-                  Database().addUser(user.id, gname, gid);
-                },
-                child: Text(
-                  "Add to Group",
-                  style: new TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.0,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Divider(
-            height: 2.0,
-            color: Colors.white54,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class EventResult extends StatelessWidget {
-  final moov;
+  final moov, gid;
 
-  EventResult(this.moov);
+  EventResult(this.moov, this.gid);
 
   @override
   Widget build(BuildContext context) {
@@ -234,14 +165,7 @@ class EventResult extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
-                  // if (moov.id == strUserId) {
-                  //   Navigator.of(context).push(
-                  //       MaterialPageRoute(builder: (context) => ProfilePage()));
-                  // } else {
-                  //   Navigator.of(context).push(MaterialPageRoute(
-                  //       builder: (context) => OtherProfile(
-                  //           user.photoUrl, user.displayName, user.id)));
-                  // }
+                  Database().setMOOV(gid, moov.data['postId']);
                 },
                 child: Text(
                   "Set MOOV",

@@ -6,8 +6,8 @@ import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/widgets/NextMOOV.dart';
 import 'package:MOOV/widgets/set_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,27 +22,24 @@ import '../widgets/add_users.dart';
 import 'edit_group.dart';
 import 'home.dart';
 
-class GroupDetail extends StatefulWidget {
-  String photoUrl, displayName, gid, next;
+class EditGroup extends StatefulWidget {
+  String photoUrl, displayName, gid;
   List<dynamic> members;
 
-  GroupDetail(
-      this.photoUrl, this.displayName, this.members, this.gid, this.next);
+  EditGroup(this.photoUrl, this.displayName, this.members, this.gid);
 
   @override
   State<StatefulWidget> createState() {
-    return _GroupDetailState(
-        this.photoUrl, this.displayName, this.members, this.gid, this.next);
+    return _EditGroupState(
+        this.photoUrl, this.displayName, this.members, this.gid);
   }
 }
 
-class _GroupDetailState extends State<GroupDetail> {
-  String photoUrl, displayName, gid, next;
+class _EditGroupState extends State<EditGroup> {
+  String photoUrl, displayName, gid;
   List<dynamic> members;
-  bool member;
   final dbRef = Firestore.instance;
-  _GroupDetailState(
-      this.photoUrl, this.displayName, this.members, this.gid, this.next);
+  _EditGroupState(this.photoUrl, this.displayName, this.members, this.gid);
 
   sendChat() {
     Database().sendChat(currentUser.displayName, chatController.text, gid);
@@ -90,7 +87,6 @@ class _GroupDetailState extends State<GroupDetail> {
   TextEditingController chatController = TextEditingController();
   bool sendRequest = false;
   bool friends;
-
   var status;
   var userRequests;
   final GoogleSignInAccount userMe = googleSignIn.currentUser;
@@ -104,6 +100,8 @@ class _GroupDetailState extends State<GroupDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final groupNameController = TextEditingController();
+
     return StreamBuilder(
         stream: Firestore.instance
             .collection('users')
@@ -114,65 +112,25 @@ class _GroupDetailState extends State<GroupDetail> {
 
           return Scaffold(
             appBar: AppBar(
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
                 ),
-                backgroundColor: TextThemes.ndBlue,
-                flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.all(15),
-                  title: Text(displayName,
-                      style: TextStyle(fontSize: 30.0, color: Colors.white)),
-                ),
-                actions: <Widget>[
-                  // Padding(
-                  //   padding: const EdgeInsets.all(4.0),
-                  //   child: FlatButton(
-                  //       onPressed: () {
-                  //         Database()
-                  //             .leaveGroup(currentUser.id, displayName, gid);
-
-                  //         Navigator.pop(
-                  //           context,
-                  //           MaterialPageRoute(builder: (context) => HomePage()),
-                  //         );
-                  //       },
-                  //       child: Text(
-                  //         "LEAVE",
-                  //         style: TextStyle(color: Colors.red),
-                  //       )),
-                  // ),
-                  IconButton(
-                    padding: EdgeInsets.all(5.0),
-                    icon: Icon(Icons.person_add),
-                    color: Colors.white,
-                    splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              child: AddUsers(displayName, gid, status)));
-                    },
-                  ),
-                  IconButton(
-                    padding: EdgeInsets.all(3.0),
-                    icon: Icon(Icons.more_vert),
-                    color: Colors.white,
-                    splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                    onPressed: () {
-                      showAlertDialog(context);
-                    },
-                  ),
-                ]),
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+              ),
+              backgroundColor: TextThemes.ndBlue,
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.all(15),
+                title: Text('Edit Group',
+                    style: TextStyle(fontSize: 25.0, color: Colors.white)),
+              ),
+            ),
             body: Container(
               child: Column(
                 children: [
@@ -190,7 +148,7 @@ class _GroupDetailState extends State<GroupDetail> {
                           otherDisplay = snapshot
                               .data.documents[index].data['displayName'];
                           id = snapshot.data.documents[index].data['id'];
-
+                          print(id);
                           return Container(
                             height: 100,
                             child: Column(
@@ -203,19 +161,10 @@ class _GroupDetailState extends State<GroupDetail> {
                                   child: GestureDetector(
                                     onTap: () {
                                       if (course['id'] == strUserId) {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage()));
+                                        // what do we do in this case?
                                       } else {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    OtherProfile(
-                                                      course['photoUrl'],
-                                                      course['displayName'],
-                                                      course['id'],
-                                                    )));
+                                        Database().leaveGroup(
+                                            course['id'], displayName, gid);
                                       }
                                     },
                                     child: CircleAvatar(
@@ -272,111 +221,65 @@ class _GroupDetailState extends State<GroupDetail> {
                           );
                         }),
                   ),
-                  Text(
-                    "NEXT MOOV",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    child: next != null ? NextMOOV(next) : Text(''),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.all(1.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.bottomToTop,
-                                child: SetMOOV(displayName, gid)));
-                      },
-                      color: TextThemes.ndBlue,
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.edit, color: TextThemes.ndGold),
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text('Set the MOOV',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
-                            ),
-                          ],
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: TextFormField(
+                      controller: groupNameController,
+                      decoration: InputDecoration(
+                        labelText: displayName,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Container(
+                        child: CachedNetworkImage(imageUrl: photoUrl)),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditGroup(
-                                    photoUrl, displayName, members, gid)));
-                      },
-                      color: Colors.red,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text('Edit Group',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      "CHAT",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: TextFormField(
-                          controller: chatController,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            hintStyle: TextStyle(fontSize: 15),
-                            contentPadding:
-                                EdgeInsets.only(top: 18, bottom: 10),
-                            hintText: "What's the MOOV tonight guys...",
-                            filled: true,
-                            prefixIcon: Icon(
-                              Icons.message,
-                              size: 28.0,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.send),
-                              onPressed: sendChat,
-                            ),
-                          ),
-                          // onFieldSubmitted: sendChat(currentUser.displayName,
-                          //     chatController.text, gid),
-                        ),
-                        height: 150,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: TextThemes.ndBlue,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                      ))
+                        color: TextThemes.ndBlue,
+                        child:
+                            Text('Save', style: TextStyle(color: Colors.white)),
+                        onPressed: () async {
+                          // if (_image != null) {
+                          //   StorageReference firebaseStorageRef = FirebaseStorage
+                          //       .instance
+                          //       .ref()
+                          //       .child("images/" + currentUser.displayName);
+                          //   StorageUploadTask uploadTask =
+                          //       firebaseStorageRef.putFile(_image);
+                          //   StorageTaskSnapshot taskSnapshot =
+                          //       await uploadTask.onComplete;
+                          //   if (taskSnapshot.error == null) {
+                          //     print("added to Firebase Storage");
+                          //     final String downloadUrl =
+                          //         await taskSnapshot.ref.getDownloadURL();
+                          //     usersRef.document(currentUser.id).updateData({
+                          //       "photoUrl": downloadUrl,
+                          //     });
+                          //   }
+                          // }
+
+                          if (groupNameController.text != "") {
+                            Database().updateGroupNames(members,
+                                groupNameController.text, gid, displayName);
+                            Firestore.instance
+                                .collection('friendGroups')
+                                .document(gid)
+                                .updateData({
+                              "groupName": groupNameController.text,
+                            });
+                          }
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => friendGroupsPage()));
+                        }),
+                  )
                 ],
               ),
             ),

@@ -186,6 +186,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                         return ListView.builder(
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {
+                            if (!snapshot.hasData)
+                              return CircularProgressIndicator();
                             DocumentSnapshot course =
                                 snapshot.data.documents[index];
                             List<dynamic> likedArray = course["liked"];
@@ -423,7 +425,6 @@ class _MOOVSPageState extends State<MOOVSPage>
 
                                           if (!snapshot.hasData)
                                             return CircularProgressIndicator();
-                                          
 
                                           return Container(
                                               child: Row(
@@ -1012,6 +1013,9 @@ class _MOOVSPageState extends State<MOOVSPage>
 
                                           if (!snapshot.hasData)
                                             return CircularProgressIndicator();
+                                          if (!snapshot2.hasData)
+                                            return CircularProgressIndicator();
+                                          print(snapshot2.data['dorm']);
                                           userDorm = snapshot2.data['dorm'];
                                           strUserPic =
                                               snapshot2.data['photoUrl'];
