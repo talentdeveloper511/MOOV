@@ -168,7 +168,7 @@ class _EditGroupState extends State<EditGroup> {
                                             ShakeAnimatedWidget(
                                               enabled: true,
                                               duration:
-                                                  Duration(milliseconds: 10),
+                                                  Duration(milliseconds: 500),
                                               shakeAngle: Rotation.deg(z: 10),
                                               curve: Curves.linear,
                                               child: CircleAvatar(
