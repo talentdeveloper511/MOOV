@@ -17,19 +17,21 @@ import '../pages/ProfilePage.dart';
 import '../pages/other_profile.dart';
 
 class AddUsers extends StatefulWidget {
-  String gname, gid, pic;
+  String gname, gid, pic, moov;
+  List<dynamic> members;
 
-  AddUsers(this.gname, this.gid, this.pic);
+  AddUsers(this.gname, this.gid, this.pic, this.members, this.moov);
 
   @override
   _AddUsersState createState() =>
-      _AddUsersState(this.gname, this.gid, this.pic);
+      _AddUsersState(this.gname, this.gid, this.pic, this.members, this.moov);
 }
 
 class _AddUsersState extends State<AddUsers> {
-  String gname, gid, pic;
+  String gname, gid, pic, moov;
+  List<dynamic> members;
 
-  _AddUsersState(this.gname, this.gid, this.pic);
+  _AddUsersState(this.gname, this.gid, this.pic, this.members, this.moov);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   handleSearch(String query) {
@@ -110,7 +112,8 @@ class _AddUsersState extends State<AddUsers> {
         List<UserResult> searchResults = [];
         snapshot.data.documents.forEach((doc) {
           User user = User.fromDocument(doc);
-          UserResult searchResult = UserResult(user, gname, gid, pic);
+          UserResult searchResult =
+              UserResult(user, gname, gid, pic, members, moov);
           searchResults.add(searchResult);
         });
         return ListView(
@@ -133,21 +136,25 @@ class _AddUsersState extends State<AddUsers> {
 
 class UserResult extends StatefulWidget {
   User user;
-  String gname, gid, pic;
+  String gname, gid, pic, moov;
+  List<dynamic> members;
 
-  UserResult(this.user, this.gname, this.gid, this.pic);
+  UserResult(
+      this.user, this.gname, this.gid, this.pic, this.members, this.moov);
 
   @override
-  _UserResultState createState() =>
-      _UserResultState(this.user, this.gname, this.gid, this.pic);
+  _UserResultState createState() => _UserResultState(
+      this.user, this.gname, this.gid, this.pic, this.members, this.moov);
 }
 
 class _UserResultState extends State<UserResult> {
   User user;
-  String gname, gid, pic;
+  String gname, gid, pic, moov;
+  List<dynamic> members;
   bool status = false;
 
-  _UserResultState(this.user, this.gname, this.gid, this.pic);
+  _UserResultState(
+      this.user, this.gname, this.gid, this.pic, this.members, this.moov);
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +201,8 @@ class _UserResultState extends State<UserResult> {
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
                         Database().addUser(user.id, gname, gid);
-                        Database().addedToGroup(user.id, gid, pic);
+                        Database().addedToGroup(
+                            user.id, gname, gid, pic, members, moov);
                         setState(() {
                           status = true;
                         });

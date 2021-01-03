@@ -172,7 +172,8 @@ class Database {
     }
   }
 
-  addedToGroup(String addee, String gid, String groupPic) {
+  addedToGroup(String addee, String gname, String gid, String groupPic,
+      List<dynamic> members, String moov) {
     notificationFeedRef
         .document(addee)
         .collection("feedItems")
@@ -185,16 +186,9 @@ class Database {
       "userProfilePic": currentUser.photoUrl,
       "previewImg": groupPic,
       "postId": gid,
-      "timestamp": "",
-      "startDate": "",
-      "title": "",
-      "description": "",
-      "location": "",
-      "address": "",
-      "ownerProPic": "",
-      "ownerName": addee,
-      "ownerEmail": "",
-      "likedArray": ""
+      "title": gname,
+      "likedArray": members,
+      "address": moov
     });
   }
 

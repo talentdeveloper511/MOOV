@@ -164,7 +164,8 @@ class _GroupDetailState extends State<GroupDetail> {
                           context,
                           PageTransition(
                               type: PageTransitionType.bottomToTop,
-                              child: AddUsers(displayName, gid, photoUrl)));
+                              child: AddUsers(
+                                  displayName, gid, photoUrl, members, next)));
                     },
                   ),
                   FocusedMenuHolder(

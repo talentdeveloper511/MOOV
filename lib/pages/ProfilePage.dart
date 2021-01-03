@@ -400,7 +400,7 @@ class _ProfilePageState extends State<ProfilePage> {
           CupertinoDialogAction(
               isDefaultAction: true,
               child:
-                  Text("I'm outie 5000", style: TextStyle(color: Colors.red)),
+                  Text("Yes, sign me out", style: TextStyle(color: Colors.red)),
               onPressed: () {
                 googleSignIn.signOut();
                 Navigator.of(context).pop(true);

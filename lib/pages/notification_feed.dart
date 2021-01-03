@@ -8,6 +8,7 @@ import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'group_detail.dart';
 import 'home.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -27,7 +28,6 @@ class _NotificationFeedState extends State<NotificationFeed> {
     List<NotificationFeedItem> feedItems = [];
     snapshot.documents.forEach((doc) {
       feedItems.add(NotificationFeedItem.fromDocument(doc));
-      // print('Activity Feed Item: ${doc.data}');
     });
     return feedItems;
   }
@@ -91,7 +91,7 @@ String activityItemText;
 class NotificationFeedItem extends StatelessWidget {
   final String username;
   final String userId;
-  final String type; // 'like', 'follow', 'comment'
+  final String type; // 'like', 'follow', 'friendgroup'
   final String previewImg;
   final String postId;
   final String userProfilePic;
@@ -121,8 +121,6 @@ class NotificationFeedItem extends StatelessWidget {
       this.previewImg,
       this.postId,
       this.userProfilePic,
-      // this.commentData,
-
       this.timestamp,
       this.ownerProPic,
       this.ownerName,
@@ -140,7 +138,6 @@ class NotificationFeedItem extends StatelessWidget {
       type: doc['type'],
       postId: doc['postId'],
       userProfilePic: doc['userProfilePic'],
-      // commentData: doc['commentData'],
       timestamp: doc['timestamp'],
       title: doc['title'],
       description: doc['description'],
@@ -164,10 +161,36 @@ class NotificationFeedItem extends StatelessWidget {
                 startDate, location, address, userId, likedArray, postId)));
   }
 
+  showGroup(context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                GroupDetail(previewImg, title, likedArray, postId, address)));
+  }
+
   configureMediaPreview(context) {
     if (type == 'going' || type == 'comment') {
       mediaPreview = GestureDetector(
         onTap: () => showPost(context),
+        child: Container(
+          height: 50.0,
+          width: 50.0,
+          child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: CachedNetworkImageProvider(previewImg),
+                  ),
+                ),
+              )),
+        ),
+      );
+    } else if (type == 'friendgroup') {
+      mediaPreview = GestureDetector(
+        onTap: () => showGroup(context),
         child: Container(
           height: 50.0,
           width: 50.0,
@@ -189,10 +212,12 @@ class NotificationFeedItem extends StatelessWidget {
 
     if (type == 'going') {
       activityItemText = "is going to your MOOV!";
-    } else if (type == 'follow') {
-      activityItemText = "is following you";
-      // } else if (type == 'comment') {
-      //   activityItemText = 'replied: $commentData';
+    } else if (type == 'request') {
+      activityItemText = "has sent you a friend request.";
+    } else if (type == 'accept') {
+      activityItemText = "has accepted your friend request.";
+    } else if (type == 'friendgroup') {
+      activityItemText = 'has added you to their friend group!';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
