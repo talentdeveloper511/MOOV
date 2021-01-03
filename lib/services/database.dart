@@ -172,6 +172,32 @@ class Database {
     }
   }
 
+  addedToGroup(String addee, String gid, String groupPic) {
+    notificationFeedRef
+        .document(addee)
+        .collection("feedItems")
+        .document(gid)
+        .setData({
+      "type": "friendgroup",
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userEmail": currentUser.email,
+      "userProfilePic": currentUser.photoUrl,
+      "previewImg": groupPic,
+      "postId": gid,
+      "timestamp": "",
+      "startDate": "",
+      "title": "",
+      "description": "",
+      "location": "",
+      "address": "",
+      "ownerProPic": "",
+      "ownerName": addee,
+      "ownerEmail": "",
+      "likedArray": ""
+    });
+  }
+
   removeGoingFromNotificationFeed(
       String ownerId, String previewImg, String moovId) {
     bool isNotPostOwner = strUserId != ownerId;
@@ -250,22 +276,6 @@ class Database {
       if (doc.exists) {
         doc.reference.delete();
       }
-    });
-  }
-
-  Future<void> sendEventNotification(String senderId, String receiverId,
-      String senderName, String senderPic) async {
-    return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$receiverId');
-      Map<String, dynamic> serializedMessage = {
-        "uid": senderId,
-        "strName": senderName,
-        "strPic": senderPic,
-        "requestStatus": "pending"
-      };
-      transaction.update(ref, {
-        'request': FieldValue.arrayUnion([serializedMessage]),
-      });
     });
   }
 
