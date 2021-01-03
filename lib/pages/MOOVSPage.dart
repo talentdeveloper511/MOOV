@@ -582,7 +582,31 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         .bottomToTop,
                                                                     child: SendMOOV(
                                                                         course[
-                                                                            'postId'])));
+                                                                            'postId'],
+                                                                        course[
+                                                                            'ownerId'],
+                                                                        course[
+                                                                            'previewImg'],
+                                                                        course[
+                                                                            'moovId'],
+                                                                        course[
+                                                                            'startDate'],
+                                                                        course[
+                                                                            'title'],
+                                                                        course[
+                                                                            'description'],
+                                                                        course[
+                                                                            'location'],
+                                                                        course[
+                                                                            'address'],
+                                                                        course[
+                                                                            'ownerProPic'],
+                                                                        course[
+                                                                            'ownerName'],
+                                                                        course[
+                                                                            'ownerEmail'],
+                                                                        course[
+                                                                            'likedArray'])));
                                                           },
                                                           child: Icon(
                                                               Icons
@@ -1182,7 +1206,31 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         .bottomToTop,
                                                                     child: SendMOOV(
                                                                         course[
-                                                                            'postId'])));
+                                                                            'postId'],
+                                                                        course[
+                                                                            'ownerId'],
+                                                                        course[
+                                                                            'previewImg'],
+                                                                        course[
+                                                                            'moovId'],
+                                                                        course[
+                                                                            'startDate'],
+                                                                        course[
+                                                                            'title'],
+                                                                        course[
+                                                                            'description'],
+                                                                        course[
+                                                                            'location'],
+                                                                        course[
+                                                                            'address'],
+                                                                        course[
+                                                                            'ownerProPic'],
+                                                                        course[
+                                                                            'ownerName'],
+                                                                        course[
+                                                                            'ownerEmail'],
+                                                                        course[
+                                                                            'likedArray'])));
                                                           },
                                                           child: Icon(
                                                               Icons

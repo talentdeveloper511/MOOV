@@ -28,6 +28,8 @@ class GoingPage extends StatelessWidget {
           if (!snapshot.hasData) return Text('Loading data...');
 
           DocumentSnapshot course = snapshot.data;
+          if (snapshot.hasError) return CircularProgressIndicator();
+
           List<dynamic> likedArray = course["liked"];
           List<String> uidArray = List<String>();
           if (likedArray != null) {
@@ -186,6 +188,8 @@ class PostsList extends StatelessWidget {
           if (!snapshot.hasData) return Text('Loading data...');
 
           DocumentSnapshot course = snapshot.data;
+          if (snapshot.hasError) return CircularProgressIndicator();
+
           List<dynamic> likedArray = course["liked"];
           List<String> uidArray = List<String>();
           if (likedArray != null) {

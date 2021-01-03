@@ -643,8 +643,20 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                       PageTransition(
                                                                           type: PageTransitionType
                                                                               .bottomToTop,
-                                                                          child:
-                                                                              SendMOOV(course['postId'])));
+                                                                          child: SendMOOV(
+                                                                              course['postId'],
+                                                                              course['ownerId'],
+                                                                              course['previewImg'],
+                                                                              course['moovId'],
+                                                                              course['startDate'],
+                                                                              course['title'],
+                                                                              course['description'],
+                                                                              course['location'],
+                                                                              course['address'],
+                                                                              course['ownerProPic'],
+                                                                              course['ownerName'],
+                                                                              course['ownerEmail'],
+                                                                              course['likedArray'])));
                                                                 },
                                                                 child: Icon(
                                                                     Icons
@@ -1297,7 +1309,19 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                         type: PageTransitionType
                                                                             .bottomToTop,
                                                                         child: SendMOOV(
-                                                                            course['postId'])));
+                                                                            course['postId'],
+                                                                            course['ownerId'],
+                                                                            course['previewImg'],
+                                                                            course['moovId'],
+                                                                            course['startDate'],
+                                                                            course['title'],
+                                                                            course['description'],
+                                                                            course['location'],
+                                                                            course['address'],
+                                                                            course['ownerProPic'],
+                                                                            course['ownerName'],
+                                                                            course['ownerEmail'],
+                                                                            course['likedArray'])));
                                                               },
                                                               child: Icon(
                                                                   Icons

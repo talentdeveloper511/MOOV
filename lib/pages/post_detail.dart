@@ -624,7 +624,20 @@ class Buttons extends StatelessWidget {
                           context,
                           PageTransition(
                               type: PageTransitionType.bottomToTop,
-                              child: SendMOOV(course['postId'])));
+                              child: SendMOOV(
+                                  course['postId'],
+                                  course['ownerId'],
+                                  course['previewImg'],
+                                  course['moovId'],
+                                  course['startDate'],
+                                  course['title'],
+                                  course['description'],
+                                  course['location'],
+                                  course['address'],
+                                  course['ownerProPic'],
+                                  course['ownerName'],
+                                  course['ownerEmail'],
+                                  course['likedArray'])));
                     },
                     color: Colors.white,
                     padding: EdgeInsets.all(5.0),
