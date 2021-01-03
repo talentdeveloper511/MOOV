@@ -17,18 +17,19 @@ import '../pages/ProfilePage.dart';
 import '../pages/other_profile.dart';
 
 class AddUsers extends StatefulWidget {
-  String gname, gid;
+  String gname, gid, pic;
 
-  AddUsers(this.gname, this.gid);
+  AddUsers(this.gname, this.gid, this.pic);
 
   @override
-  _AddUsersState createState() => _AddUsersState(this.gname, this.gid);
+  _AddUsersState createState() =>
+      _AddUsersState(this.gname, this.gid, this.pic);
 }
 
 class _AddUsersState extends State<AddUsers> {
-  String gname, gid;
+  String gname, gid, pic;
 
-  _AddUsersState(this.gname, this.gid);
+  _AddUsersState(this.gname, this.gid, this.pic);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   handleSearch(String query) {
@@ -109,7 +110,7 @@ class _AddUsersState extends State<AddUsers> {
         List<UserResult> searchResults = [];
         snapshot.data.documents.forEach((doc) {
           User user = User.fromDocument(doc);
-          UserResult searchResult = UserResult(user, gname, gid);
+          UserResult searchResult = UserResult(user, gname, gid, pic);
           searchResults.add(searchResult);
         });
         return ListView(
@@ -132,21 +133,21 @@ class _AddUsersState extends State<AddUsers> {
 
 class UserResult extends StatefulWidget {
   User user;
-  String gname, gid;
+  String gname, gid, pic;
 
-  UserResult(this.user, this.gname, this.gid);
+  UserResult(this.user, this.gname, this.gid, this.pic);
 
   @override
   _UserResultState createState() =>
-      _UserResultState(this.user, this.gname, this.gid);
+      _UserResultState(this.user, this.gname, this.gid, this.pic);
 }
 
 class _UserResultState extends State<UserResult> {
   User user;
-  String gname, gid;
+  String gname, gid, pic;
   bool status = false;
 
-  _UserResultState(this.user, this.gname, this.gid);
+  _UserResultState(this.user, this.gname, this.gid, this.pic);
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +194,7 @@ class _UserResultState extends State<UserResult> {
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
                         Database().addUser(user.id, gname, gid);
+                        Database().addedToGroup(user.id, gid, pic);
                         setState(() {
                           status = true;
                         });
