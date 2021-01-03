@@ -326,7 +326,7 @@ class _GroupDetailState extends State<GroupDetail> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Container(
-                    child: next != null ? NextMOOV(next) : Text(''),
+                    child: next != "" ? NextMOOV(next) : buildNoContent(),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(1.0),
@@ -401,5 +401,74 @@ class _GroupDetailState extends State<GroupDetail> {
             ),
           );
         });
+  }
+
+  buildNoContent() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Stack(children: <Widget>[
+        FractionallySizedBox(
+          widthFactor: 1,
+          child: Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset('lib/assets/bouts.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+            margin: EdgeInsets.only(left: 20, top: 0, right: 20, bottom: 7.5),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 50,
+          left: 120,
+                child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              alignment: Alignment(0.0, 0.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Colors.black.withAlpha(15),
+                      Colors.black,
+                      Colors.black12,
+                    ],
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    "SET YOUR MOOV",
+                    style: TextStyle(
+                        fontFamily: 'Solway',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ]),
+    );
   }
 }
