@@ -170,7 +170,7 @@ class NotificationFeedItem extends StatelessWidget {
   }
 
   configureMediaPreview(context) {
-    if (type == 'going' || type == 'comment') {
+    if (type == 'going') {
       mediaPreview = GestureDetector(
         onTap: () => showPost(context),
         child: Container(

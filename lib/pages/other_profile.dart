@@ -344,6 +344,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                       Database().acceptFriendRequest(
                                           id, strUserId, strUserName, strPic);
                                       status = 1;
+                                      Database().friendAcceptNotification(
+                                          id, photoUrl, displayName, strUserId);
                                     },
                                     child: Text(
                                       "Accept Friend Request",
@@ -383,6 +385,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                     Database().sendFriendRequest(
                                         strUserId, id, strUserName, strPic);
                                     status = 0;
+                                    Database().friendRequestNotification(
+                                        id, photoUrl, displayName, strUserId);
                                   },
                                   child: status == null
                                       ? Text(

@@ -327,9 +327,9 @@ class _EditGroupState extends State<EditGroup> {
     showDialog(
       context: context,
       child: CupertinoAlertDialog(
-        title: Text("They fuck up?",
+        title: Text("Crew get smaller?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nKickin' this dude to the curb?"),
+        content: Text("\nKick user out of the group?"),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,

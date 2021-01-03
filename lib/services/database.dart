@@ -193,6 +193,42 @@ class Database {
     });
   }
 
+  friendRequestNotification(
+      String ownerId, String ownerProPic, String ownerName, String sender) {
+    notificationFeedRef
+        .document(ownerId)
+        .collection("feedItems")
+        .document(sender)
+        .setData({
+      "type": "request",
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userEmail": currentUser.email,
+      "userProfilePic": currentUser.photoUrl,
+      "timestamp": timestamp,
+      "ownerProPic": ownerProPic,
+      "ownerName": ownerName,
+    });
+  }
+
+  friendAcceptNotification(
+      String ownerId, String ownerProPic, String ownerName, String sender) {
+    notificationFeedRef
+        .document(ownerId)
+        .collection("feedItems")
+        .document(sender)
+        .setData({
+      "type": "accept",
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userEmail": currentUser.email,
+      "userProfilePic": currentUser.photoUrl,
+      "timestamp": timestamp,
+      "ownerProPic": ownerProPic,
+      "ownerName": ownerName,
+    });
+  }
+
   removeGoingFromNotificationFeed(
       String ownerId, String previewImg, String moovId) {
     bool isNotPostOwner = strUserId != ownerId;
