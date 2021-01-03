@@ -627,7 +627,7 @@ class Buttons extends StatelessWidget {
                               child: SendMOOV(
                                   course['postId'],
                                   course['userId'],
-                                  course['photoUrl'],
+                                  course['image'],
                                   course['postId'],
                                   course['startDate'],
                                   course['title'],

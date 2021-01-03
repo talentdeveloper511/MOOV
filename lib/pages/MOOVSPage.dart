@@ -586,7 +586,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         course[
                                                                             'userId'],
                                                                         course[
-                                                                            'photoUrl'],
+                                                                            'image'],
                                                                         course[
                                                                             'postId'],
                                                                         course[
@@ -1210,7 +1210,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         course[
                                                                             'userId'],
                                                                         course[
-                                                                            'photoUrl'],
+                                                                            'image'],
                                                                         course[
                                                                             'postId'],
                                                                         course[
