@@ -188,7 +188,8 @@ class Database {
       "postId": gid,
       "title": gname,
       "likedArray": members,
-      "address": moov
+      "address": moov,
+      "timestamp": DateTime.now()
     });
   }
 

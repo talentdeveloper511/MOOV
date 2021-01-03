@@ -211,13 +211,13 @@ class NotificationFeedItem extends StatelessWidget {
     }
 
     if (type == 'going') {
-      activityItemText = "is going to your MOOV!";
+      activityItemText = "is going to ";
     } else if (type == 'request') {
       activityItemText = "has sent you a friend request.";
     } else if (type == 'accept') {
       activityItemText = "has accepted your friend request.";
     } else if (type == 'friendgroup') {
-      activityItemText = 'has added you to their friend group!';
+      activityItemText = 'has added you to ';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
@@ -251,6 +251,9 @@ class NotificationFeedItem extends StatelessWidget {
                     TextSpan(
                       text: ' $activityItemText',
                     ),
+                    TextSpan(
+                        text: title,
+                        style: TextStyle(fontStyle: FontStyle.italic)),
                   ]),
             ),
           ),
