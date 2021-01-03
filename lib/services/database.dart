@@ -205,7 +205,7 @@ class Database {
       "userId": currentUser.id,
       "userEmail": currentUser.email,
       "userProfilePic": currentUser.photoUrl,
-      "timestamp": timestamp,
+      "timestamp": DateTime.now(),
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
@@ -223,7 +223,7 @@ class Database {
       "userId": currentUser.id,
       "userEmail": currentUser.email,
       "userProfilePic": currentUser.photoUrl,
-      "timestamp": timestamp,
+      "timestamp": DateTime.now(),
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
