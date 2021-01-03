@@ -321,82 +321,88 @@ class _GroupDetailState extends State<GroupDetail> {
                           );
                         }),
                   ),
-                  Text(
-                    "NEXT MOOV",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    child: next != "" ? NextMOOV(next) : buildNoContent(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(1.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.bottomToTop,
-                                child: SetMOOV(displayName, gid)));
-                      },
-                      color: TextThemes.ndBlue,
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.edit, color: TextThemes.ndGold),
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text('Set the MOOV',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
-                            ),
-                          ],
-                        ),
+                  SingleChildScrollView(
+                    child: Column(children: [
+                      Text(
+                        "NEXT MOOV",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 25.0),
-                    child: Text(
-                      "CHAT",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: TextFormField(
-                          controller: chatController,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            hintStyle: TextStyle(fontSize: 15),
-                            contentPadding:
-                                EdgeInsets.only(top: 18, bottom: 10),
-                            hintText: "What's the MOOV tonight guys...",
-                            filled: true,
-                            prefixIcon: Icon(
-                              Icons.message,
-                              size: 28.0,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.send),
-                              onPressed: sendChat,
+                      Container(
+                        child: next != "" ? NextMOOV(next) : buildNoContent(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.bottomToTop,
+                                    child: SetMOOV(displayName, gid)));
+                          },
+                          color: TextThemes.ndBlue,
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.edit, color: TextThemes.ndGold),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text('Set the MOOV',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20)),
+                                ),
+                              ],
                             ),
                           ),
-                          // onFieldSubmitted: sendChat(currentUser.displayName,
-                          //     chatController.text, gid),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0)),
                         ),
-                        height: 150,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: TextThemes.ndBlue,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 25.0),
+                        child: Text(
+                          "CHAT",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            child: TextFormField(
+                              controller: chatController,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                hintStyle: TextStyle(fontSize: 15),
+                                contentPadding:
+                                    EdgeInsets.only(top: 18, bottom: 10),
+                                hintText: "What's the MOOV tonight guys...",
+                                filled: true,
+                                prefixIcon: Icon(
+                                  Icons.message,
+                                  size: 28.0,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.send),
+                                  onPressed: sendChat,
+                                ),
+                              ),
+                              // onFieldSubmitted: sendChat(currentUser.displayName,
+                              //     chatController.text, gid),
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                      ))
+                            height: 150,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: TextThemes.ndBlue,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                          ))
+                    ]),
+                  )
                 ],
               ),
             ),
@@ -407,7 +413,7 @@ class _GroupDetailState extends State<GroupDetail> {
   buildNoContent() {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Stack(children: <Widget>[
+      child: Stack(alignment: Alignment.center, children: <Widget>[
         FractionallySizedBox(
           widthFactor: 1,
           child: Container(
@@ -435,36 +441,32 @@ class _GroupDetailState extends State<GroupDetail> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 50,
-          left: 120,
-          child: Align(
-            alignment: Alignment.bottomCenter,
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+            alignment: Alignment(0.0, 0.0),
             child: Container(
-              alignment: Alignment(0.0, 0.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: <Color>[
-                      Colors.black.withAlpha(15),
-                      Colors.black,
-                      Colors.black12,
-                    ],
-                  ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[
+                    Colors.black.withAlpha(15),
+                    Colors.black,
+                    Colors.black12,
+                  ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    "No Upcoming MOOVs",
-                    style: TextStyle(
-                        fontFamily: 'Solway',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
-                  ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  "No Upcoming MOOVs",
+                  style: TextStyle(
+                      fontFamily: 'Solway',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20.0),
                 ),
               ),
             ),

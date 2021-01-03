@@ -1,4 +1,5 @@
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
@@ -166,6 +167,11 @@ class EventResult extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
                   Database().setMOOV(gid, moov.data['postId']);
+                   Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FriendGroupsPage()));
+
                 },
                 child: Text(
                   "Set MOOV",

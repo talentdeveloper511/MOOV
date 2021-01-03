@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV/pages/notification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'friend_groups.dart';
@@ -342,6 +344,84 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: FriendButton(userFriends: userFriends),
                           )
                         ],
+                      ),
+                      FocusedMenuHolder(
+                        menuWidth: MediaQuery.of(context).size.width * 0.50,
+                        blurSize: 5.0,
+                        menuItemExtent: 45,
+                        menuBoxDecoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0))),
+                        duration: Duration(milliseconds: 100),
+                        animateMenuItems: true,
+                        blurBackgroundColor: Colors.black54,
+                        openWithTap:
+                            true, // Open Focused-Menu on Tap rather than Long Press
+                        menuOffset:
+                            10.0, // Offset value to show menuItem from the selected item
+                        bottomOffsetHeight:
+                            80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                        menuItems: <FocusedMenuItem>[
+                          // Add Each FocusedMenuItem  for Menu Options
+
+                          FocusedMenuItem(
+                              title: Text("Share"),
+                              trailingIcon: Icon(Icons.send),
+                              onPressed: () {}),
+                          FocusedMenuItem(
+                              title: Text("Edit Group"),
+                              trailingIcon: Icon(Icons.edit),
+                              onPressed: () {}),
+                          FocusedMenuItem(
+                              title: Text(
+                                "Leave Group",
+                                style: TextStyle(color: Colors.redAccent),
+                              ),
+                              trailingIcon: Icon(
+                                Icons.directions_walk,
+                                color: Colors.redAccent,
+                              ),
+                              onPressed: () {
+                                showAlertDialog(context);
+                              }),
+                        ],
+                        onPressed: () {},
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: Center(
+                                  child: Text(
+                                "Options",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white
+                                ),
+                              )),
+                              width: MediaQuery.of(context).size.width * .3,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                gradient: LinearGradient(
+                                  colors: [Colors.pink[300], Colors.pink[200]],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                              ),
+                            )),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
