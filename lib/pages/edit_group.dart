@@ -9,6 +9,7 @@ import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/set_moov.dart';
+import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -148,7 +149,6 @@ class _EditGroupState extends State<EditGroup> {
                           otherDisplay = snapshot
                               .data.documents[index].data['displayName'];
                           id = snapshot.data.documents[index].data['id'];
-                          print(id);
                           return Container(
                             height: 100,
                             child: Column(
@@ -158,37 +158,73 @@ class _EditGroupState extends State<EditGroup> {
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       top: 30.0, bottom: 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (course['id'] == strUserId) {
-                                        // what do we do in this case?
-                                      } else {
-                                        Database().leaveGroup(
-                                            course['id'], displayName, gid);
-                                      }
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 54,
-                                      backgroundColor: TextThemes.ndGold,
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage(snapshot
-                                            .data
-                                            .documents[index]
-                                            .data['photoUrl']),
-                                        radius: 50,
-                                        backgroundColor: TextThemes.ndBlue,
-                                        child: CircleAvatar(
-                                          // backgroundImage: snapshot.data
-                                          //     .documents[index].data['photoUrl'],
-                                          backgroundImage: NetworkImage(snapshot
-                                              .data
-                                              .documents[index]
-                                              .data['photoUrl']),
-                                          radius: 50,
+                                  child: course['id'] != strUserId
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            showAlertDialog2(
+                                                context, course['id']);
+                                          },
+                                          child: Stack(children: [
+                                            ShakeAnimatedWidget(
+                                              enabled: true,
+                                              duration:
+                                                  Duration(milliseconds: 10),
+                                              shakeAngle: Rotation.deg(z: 10),
+                                              curve: Curves.linear,
+                                              child: CircleAvatar(
+                                                radius: 54,
+                                                backgroundColor: Colors.red,
+                                                child: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      snapshot
+                                                          .data
+                                                          .documents[index]
+                                                          .data['photoUrl']),
+                                                  radius: 50,
+                                                  backgroundColor:
+                                                      TextThemes.ndBlue,
+                                                  child: CircleAvatar(
+                                                    // backgroundImage: snapshot.data
+                                                    //     .documents[index].data['photoUrl'],
+                                                    backgroundImage:
+                                                        NetworkImage(snapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .data['photoUrl']),
+                                                    radius: 50,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                                right: -10,
+                                                top: -7.5,
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                  size: 50,
+                                                )),
+                                          ]),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 54,
+                                          backgroundColor: TextThemes.ndGold,
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                snapshot.data.documents[index]
+                                                    .data['photoUrl']),
+                                            radius: 50,
+                                            backgroundColor: TextThemes.ndBlue,
+                                            child: CircleAvatar(
+                                              // backgroundImage: snapshot.data
+                                              //     .documents[index].data['photoUrl'],
+                                              backgroundImage: NetworkImage(
+                                                  snapshot.data.documents[index]
+                                                      .data['photoUrl']),
+                                              radius: 50,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(5.0),
@@ -286,50 +322,29 @@ class _EditGroupState extends State<EditGroup> {
           );
         });
   }
-}
 
-class CircleImages extends StatefulWidget {
-  var image = "";
-
-  CircleImages({this.image});
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return CircleWidgets(image: image);
-  }
-}
-
-class CircleWidgets extends State<CircleImages> {
-  var image;
-  CircleWidgets({this.image});
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> widgets = [];
-    for (var x = 0; x < 10; x++) {
-      widgets.add(Container(
-          height: 60.0,
-          width: 60.0,
-          margin: EdgeInsets.all(6.0),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100.0),
-              boxShadow: [
-                new BoxShadow(
-                    color: Color.fromARGB(100, 0, 0, 0),
-                    blurRadius: 5.0,
-                    offset: Offset(5.0, 5.0))
-              ],
-              border: Border.all(
-                  width: 2.0,
-                  style: BorderStyle.solid,
-                  color: Color.fromARGB(255, 0, 0, 0)),
-              image: DecorationImage(
-                  fit: BoxFit.cover, image: NetworkImage(image)))));
-    }
-    return Container(
-        height: 80.0,
-        child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.all(5.0),
-            children: widgets));
+  void showAlertDialog2(BuildContext context, id) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("They fuck up?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nKickin' this dude to the curb?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yup", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().leaveGroup(id, displayName, gid);
+              Navigator.of(context).pop(true);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, my mistake"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 }
