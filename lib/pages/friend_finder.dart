@@ -2,6 +2,7 @@ import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -148,12 +149,41 @@ class _FriendFinderState extends State<FriendFinder>
 
   buildNoContent() {
     return Scaffold(
-        body: Center(
-            child: Text(
-      "We're still working on this!",
-      textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 50),
-    )));
+        body: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.pink[300], Colors.pink[200]],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(style: TextThemes.mediumbody, children: [
+                      TextSpan(
+                          text: "Fuck FOMO. \n Find your friends",
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.w300)),
+                      TextSpan(
+                          text: " now",
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.w600)),
+                      TextSpan(
+                          text: ".",
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.w300))
+                    ]))),
+            Image.asset('lib/assets/ff.png')
+          ],
+        ),
+      ),
+    ));
   }
 
   @override
@@ -183,117 +213,156 @@ class UserResult extends StatelessWidget {
         onTap: () => print('tapped'),
         child: Card(
             color: Colors.white,
-            child: Row(children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
+            child: Container(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.white,
-                      backgroundImage:
-                          CachedNetworkImageProvider(user.photoUrl),
-                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        user.displayName == null ? "" : user.displayName,
-                        style: TextStyle(
-                            color: TextThemes.ndBlue,
-                            fontWeight: FontWeight.bold),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (user.id == currentUser.id) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ProfilePage()));
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => OtherProfile(
+                                      user.photoUrl,
+                                      user.displayName,
+                                      user.id,
+                                    )));
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundColor: Colors.white,
+                              backgroundImage:
+                                  CachedNetworkImageProvider(user.photoUrl),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                user.displayName == null
+                                    ? ""
+                                    : user.displayName,
+                                style: TextStyle(
+                                    color: TextThemes.ndBlue,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Text("is going to"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                      child: StreamBuilder(
-                          stream: Firestore.instance
-                              .collection('food')
-                              .where('liker', arrayContains: user.id)
-                              .orderBy('startDate')
-                              .limit(1)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData)
-                              return CircularProgressIndicator();
-                            if (!snapshot.hasData ||
-                                snapshot.data.documents.length == 0)
-                              return Container();
+                    Container(child: Text("is going to")),
+                    Container(
+                        child: StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('food')
+                                .where('liker', arrayContains: user.id)
+                                .orderBy('startDate')
+                                .limit(1)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData)
+                                return CircularProgressIndicator();
+                              if (!snapshot.hasData ||
+                                  snapshot.data.documents.length == 0)
+                                return Container();
+                              var course = snapshot.data.documents[0];
 
-                            return Stack(children: <Widget>[
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.51,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.1,
-                                child: Container(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      snapshot.data.documents[0]['image'],
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      left: 20, top: 0, right: 20, bottom: 7.5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 5,
-                                        blurRadius: 7,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => (PostDetail(
+                                          course['image'],
+                                          course['title'],
+                                          course['description'],
+                                          course['startDate'],
+                                          course['location'],
+                                          course['address'],
+                                          course['userId'],
+                                          course['liked'],
+                                          course['postId']))));
+                                },
+                                child: Stack(
+                                    alignment: Alignment.center,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.52,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.15,
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Container(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: CachedNetworkImage(
+                                                imageUrl: course['image'],
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            margin: EdgeInsets.only(
+                                                left: 20,
+                                                top: 0,
+                                                right: 20,
+                                                bottom: 7.5),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 5,
+                                                  blurRadius: 7,
+                                                  offset: Offset(0,
+                                                      3), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 35,
-                                right: 80,
-                                child: Container(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: <Color>[
-                                          Colors.black.withAlpha(0),
-                                          Colors.black,
-                                          Colors.black12,
-                                        ],
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: <Color>[
+                                              Colors.black.withAlpha(0),
+                                              Colors.black,
+                                              Colors.black12,
+                                            ],
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            snapshot.data.documents[0]['title'],
+                                            style: TextStyle(
+                                                fontFamily: 'Solway',
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: 17.0),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        snapshot.data.documents[0]['title'],
-                                        style: TextStyle(
-                                            fontFamily: 'Solway',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 20.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]);
-                          })),
-                ],
-              )
-            ])),
+                                    ]),
+                              );
+                            }))
+                  ]),
+            )),
       ),
     );
   }
