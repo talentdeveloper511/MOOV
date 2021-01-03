@@ -21,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:share/share.dart';
 import '../widgets/add_users.dart';
 import 'edit_group.dart';
 import 'home.dart';
@@ -188,7 +189,10 @@ class _GroupDetailState extends State<GroupDetail> {
                       FocusedMenuItem(
                           title: Text("Share"),
                           trailingIcon: Icon(Icons.send),
-                          onPressed: () {}),
+                          onPressed: () {
+                            Share.share(
+                                "Hey let's put our friend group on MOOV.");
+                          }),
                       FocusedMenuItem(
                           title: Text("Edit Group"),
                           trailingIcon: Icon(Icons.edit),
@@ -355,36 +359,7 @@ class _GroupDetailState extends State<GroupDetail> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditGroup(
-                                    photoUrl, displayName, members, gid)));
-                      },
-                      color: Colors.red,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Text('Edit Group',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.only(top: 25.0),
                     child: Text(
                       "CHAT",
                       style: TextStyle(fontSize: 20),
