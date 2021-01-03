@@ -131,44 +131,6 @@ class Database {
     });
   }
 
-  sendMOOVNotification(
-      String ownerId,
-      String previewImg,
-      dynamic moovId,
-      startDate,
-      String title,
-      String description,
-      String location,
-      address,
-      String ownerProPic,
-      String ownerName,
-      String ownerEmail,
-      List<dynamic> likedArray) {
-    notificationFeedRef
-        .document(ownerId)
-        .collection("feedItems")
-        .document(title)
-        .setData({
-      "type": "invite",
-      "username": currentUser.displayName,
-      "userId": currentUser.id,
-      "userEmail": currentUser.email,
-      "userProfilePic": currentUser.photoUrl,
-      "previewImg": previewImg,
-      "postId": moovId,
-      "timestamp": timestamp,
-      "startDate": startDate,
-      "title": title,
-      "description": description,
-      "location": location,
-      "address": address,
-      "ownerProPic": ownerProPic,
-      "ownerName": ownerName,
-      "ownerEmail": ownerEmail,
-      "likedArray": likedArray
-    });
-  }
-
   addGoingToNotificationFeed(
       String ownerId,
       String previewImg,
@@ -246,6 +208,44 @@ class Database {
       "timestamp": DateTime.now(),
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
+    });
+  }
+
+  sendMOOVNotification(
+      String ownerId,
+      String previewImg,
+      dynamic moovId,
+      startDate,
+      String title,
+      String description,
+      String location,
+      address,
+      String ownerProPic,
+      String ownerName,
+      String ownerEmail,
+      List<dynamic> likedArray) {
+    notificationFeedRef
+        .document(ownerId)
+        .collection("feedItems")
+        .document(moovId)
+        .setData({
+      "type": "invite",
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userEmail": currentUser.email,
+      "userProfilePic": currentUser.photoUrl,
+      "previewImg": previewImg,
+      "postId": moovId,
+      "timestamp": timestamp,
+      "startDate": startDate,
+      "title": title,
+      "description": description,
+      "location": location,
+      "address": address,
+      "ownerProPic": ownerProPic,
+      "ownerName": ownerName,
+      "ownerEmail": ownerEmail,
+      "likedArray": likedArray
     });
   }
 

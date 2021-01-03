@@ -645,18 +645,18 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                               .bottomToTop,
                                                                           child: SendMOOV(
                                                                               course['postId'],
-                                                                              course['ownerId'],
-                                                                              course['previewImg'],
-                                                                              course['moovId'],
+                                                                              course['userId'],
+                                                                              course['photoUrl'],
+                                                                              course['postId'],
                                                                               course['startDate'],
                                                                               course['title'],
                                                                               course['description'],
                                                                               course['location'],
                                                                               course['address'],
-                                                                              course['ownerProPic'],
-                                                                              course['ownerName'],
-                                                                              course['ownerEmail'],
-                                                                              course['likedArray'])));
+                                                                              course['profilePic'],
+                                                                              course['userName'],
+                                                                              course['userEmail'],
+                                                                              course['liked'])));
                                                                 },
                                                                 child: Icon(
                                                                     Icons
@@ -1310,18 +1310,18 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                             .bottomToTop,
                                                                         child: SendMOOV(
                                                                             course['postId'],
-                                                                            course['ownerId'],
-                                                                            course['previewImg'],
-                                                                            course['moovId'],
+                                                                            course['userId'],
+                                                                            course['photoUrl'],
+                                                                            course['postId'],
                                                                             course['startDate'],
                                                                             course['title'],
                                                                             course['description'],
                                                                             course['location'],
                                                                             course['address'],
-                                                                            course['ownerProPic'],
-                                                                            course['ownerName'],
-                                                                            course['ownerEmail'],
-                                                                            course['likedArray'])));
+                                                                            course['profilePic'],
+                                                                            course['userName'],
+                                                                            course['userEmail'],
+                                                                            course['liked'])));
                                                               },
                                                               child: Icon(
                                                                   Icons

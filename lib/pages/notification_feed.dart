@@ -167,7 +167,7 @@ class NotificationFeedItem extends StatelessWidget {
   }
 
   configureMediaPreview(context) {
-    if (type == 'going' || type == 'invite') {
+    if (type == 'going') {
       mediaPreview = GestureDetector(
         onTap: () => showPost(context),
         child: Container(
@@ -186,6 +186,24 @@ class NotificationFeedItem extends StatelessWidget {
         ),
       );
     } else if (type == 'friendgroup') {
+      mediaPreview = GestureDetector(
+        onTap: () => showGroup(context),
+        child: Container(
+          height: 50.0,
+          width: 50.0,
+          child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: CachedNetworkImageProvider(previewImg),
+                  ),
+                ),
+              )),
+        ),
+      );
+    } else if (type == 'invite') {
       mediaPreview = GestureDetector(
         onTap: () => showGroup(context),
         child: Container(

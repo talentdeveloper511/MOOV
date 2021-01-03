@@ -584,11 +584,11 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         course[
                                                                             'postId'],
                                                                         course[
-                                                                            'ownerId'],
+                                                                            'userId'],
                                                                         course[
-                                                                            'previewImg'],
+                                                                            'photoUrl'],
                                                                         course[
-                                                                            'moovId'],
+                                                                            'postId'],
                                                                         course[
                                                                             'startDate'],
                                                                         course[
@@ -600,13 +600,13 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         course[
                                                                             'address'],
                                                                         course[
-                                                                            'ownerProPic'],
+                                                                            'profilePic'],
                                                                         course[
-                                                                            'ownerName'],
+                                                                            'userName'],
                                                                         course[
-                                                                            'ownerEmail'],
+                                                                            'userEmail'],
                                                                         course[
-                                                                            'likedArray'])));
+                                                                            'liked'])));
                                                           },
                                                           child: Icon(
                                                               Icons
@@ -1208,11 +1208,11 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         course[
                                                                             'postId'],
                                                                         course[
-                                                                            'ownerId'],
+                                                                            'userId'],
                                                                         course[
-                                                                            'previewImg'],
+                                                                            'photoUrl'],
                                                                         course[
-                                                                            'moovId'],
+                                                                            'postId'],
                                                                         course[
                                                                             'startDate'],
                                                                         course[
@@ -1224,13 +1224,13 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         course[
                                                                             'address'],
                                                                         course[
-                                                                            'ownerProPic'],
+                                                                            'profilePic'],
                                                                         course[
-                                                                            'ownerName'],
+                                                                            'userName'],
                                                                         course[
-                                                                            'ownerEmail'],
+                                                                            'userEmail'],
                                                                         course[
-                                                                            'likedArray'])));
+                                                                            'liked'])));
                                                           },
                                                           child: Icon(
                                                               Icons

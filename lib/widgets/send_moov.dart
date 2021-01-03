@@ -18,8 +18,8 @@ import '../pages/other_profile.dart';
 
 class SendMOOV extends StatefulWidget {
   String mid;
-  String ownerId, previewImg, moovId;
-  dynamic startDate;
+  String ownerId, previewImg;
+  dynamic startDate, moovId;
   String title,
       description,
       location,
@@ -63,8 +63,8 @@ class SendMOOV extends StatefulWidget {
 
 class _SendMOOVState extends State<SendMOOV> {
   String mid;
-  String ownerId, previewImg, moovId;
-  dynamic startDate;
+  String ownerId, previewImg;
+  dynamic startDate, moovId;
   String title,
       description,
       location,
@@ -204,8 +204,8 @@ class _SendMOOVState extends State<SendMOOV> {
 
 class UserResult extends StatefulWidget {
   User user;
-  String ownerId, previewImg, moovId;
-  dynamic startDate;
+  String ownerId, previewImg;
+  dynamic startDate, moovId;
   String title,
       description,
       location,
@@ -249,8 +249,8 @@ class UserResult extends StatefulWidget {
 
 class _UserResultState extends State<UserResult> {
   User user;
-  String ownerId, previewImg, moovId;
-  dynamic startDate;
+  String ownerId, previewImg;
+  dynamic startDate, moovId;
   String title,
       description,
       location,
@@ -318,21 +318,21 @@ class _UserResultState extends State<UserResult> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
+                        Database().sendMOOVNotification(
+                            user.id,
+                            previewImg,
+                            moovId,
+                            startDate,
+                            title,
+                            description,
+                            location,
+                            address,
+                            ownerProPic,
+                            ownerName,
+                            ownerEmail,
+                            likedArray);
                         setState(() {
                           status = true;
-                          Database().sendMOOVNotification(
-                              ownerId,
-                              previewImg,
-                              moovId,
-                              startDate,
-                              title,
-                              description,
-                              location,
-                              address,
-                              ownerProPic,
-                              ownerName,
-                              ownerEmail,
-                              likedArray);
                         });
                       },
                       child: Text(
