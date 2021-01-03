@@ -217,42 +217,50 @@ class UserResult extends StatelessWidget {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          if (user.id == currentUser.id) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ProfilePage()));
-                          } else {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => OtherProfile(
-                                      user.photoUrl,
-                                      user.displayName,
-                                      user.id,
-                                    )));
-                          }
-                        },
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundColor: Colors.white,
-                              backgroundImage:
-                                  CachedNetworkImageProvider(user.photoUrl),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                user.displayName == null
-                                    ? ""
-                                    : user.displayName,
-                                style: TextStyle(
-                                    color: TextThemes.ndBlue,
-                                    fontWeight: FontWeight.bold),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (user.id == currentUser.id) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ProfilePage()));
+                            } else {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => OtherProfile(
+                                        user.photoUrl,
+                                        user.displayName,
+                                        user.id,
+                                      )));
+                            }
+                          },
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 40,
+                                backgroundColor: Colors.white,
+                                backgroundImage:
+                                    CachedNetworkImageProvider(user.photoUrl),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Expanded(
+                                  child: Text(
+                                    
+                                    
+                                    user.displayName == null
+                                        ? ""
+                                        : user.displayName,
+                                        overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: TextThemes.ndBlue,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
