@@ -205,7 +205,7 @@ class NotificationFeedItem extends StatelessWidget {
       );
     } else if (type == 'invite') {
       mediaPreview = GestureDetector(
-        onTap: () => showGroup(context),
+        onTap: () => showProfile(context),
         child: Container(
           height: 50.0,
           width: 50.0,
