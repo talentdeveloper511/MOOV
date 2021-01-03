@@ -148,8 +148,9 @@ class _FriendFinderState extends State<FriendFinder>
   }
 
   buildNoContent() {
-    return Scaffold(
-        body: Container(
+    return SingleChildScrollView(
+        child: Container(
+      height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.pink[300], Colors.pink[200]],
