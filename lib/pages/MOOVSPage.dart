@@ -34,7 +34,7 @@ class _MOOVSPageState extends State<MOOVSPage>
   String type;
 
   // Current Index of tab
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   String text = 'https://www.whatsthemoov.com';
   String subject = 'Check out MOOV. You get paid to download!';
