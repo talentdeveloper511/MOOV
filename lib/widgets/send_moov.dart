@@ -318,21 +318,21 @@ class _UserResultState extends State<UserResult> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
-                        Database().sendMOOVNotification(
-                            ownerId,
-                            previewImg,
-                            moovId,
-                            startDate,
-                            title,
-                            description,
-                            location,
-                            address,
-                            ownerProPic,
-                            ownerName,
-                            ownerEmail,
-                            likedArray);
                         setState(() {
                           status = true;
+                          Database().sendMOOVNotification(
+                              ownerId,
+                              previewImg,
+                              moovId,
+                              startDate,
+                              title,
+                              description,
+                              location,
+                              address,
+                              ownerProPic,
+                              ownerName,
+                              ownerEmail,
+                              likedArray);
                         });
                       },
                       child: Text(
