@@ -50,8 +50,6 @@ class _NotificationFeedState extends State<NotificationFeed> {
           },
         ),
         backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
-
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
           title: Row(
@@ -107,7 +105,6 @@ class NotificationFeedItem extends StatelessWidget {
   final dynamic startDate, address, moovId;
   final List<dynamic> likedArray;
 
-  // final String commentData;
   final Timestamp timestamp;
 
   NotificationFeedItem(
@@ -170,7 +167,7 @@ class NotificationFeedItem extends StatelessWidget {
   }
 
   configureMediaPreview(context) {
-    if (type == 'going') {
+    if (type == 'going' || type == 'invite') {
       mediaPreview = GestureDetector(
         onTap: () => showPost(context),
         child: Container(
@@ -218,6 +215,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = "has accepted your friend request.";
     } else if (type == 'friendgroup') {
       activityItemText = 'has added you to ';
+    } else if (type == 'invite') {
+      activityItemText = 'has invited you to ';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
@@ -253,7 +252,8 @@ class NotificationFeedItem extends StatelessWidget {
                     ),
                     TextSpan(
                         text: title,
-                        style: TextStyle(fontStyle: FontStyle.italic)),
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, color: Colors.blue)),
                   ]),
             ),
           ),

@@ -18,17 +18,76 @@ import '../pages/other_profile.dart';
 
 class SendMOOV extends StatefulWidget {
   String mid;
+  String ownerId, previewImg, moovId;
+  dynamic startDate;
+  String title,
+      description,
+      location,
+      address,
+      ownerProPic,
+      ownerName,
+      ownerEmail;
+  List<dynamic> likedArray;
 
-  SendMOOV(this.mid);
+  SendMOOV(
+      this.mid,
+      this.ownerId,
+      this.previewImg,
+      this.moovId,
+      this.startDate,
+      this.title,
+      this.description,
+      this.location,
+      this.address,
+      this.ownerProPic,
+      this.ownerName,
+      this.ownerEmail,
+      this.likedArray);
 
   @override
-  _SendMOOVState createState() => _SendMOOVState(this.mid);
+  _SendMOOVState createState() => _SendMOOVState(
+      this.mid,
+      this.ownerId,
+      this.previewImg,
+      this.moovId,
+      this.startDate,
+      this.title,
+      this.description,
+      this.location,
+      this.address,
+      this.ownerProPic,
+      this.ownerName,
+      this.ownerEmail,
+      this.likedArray);
 }
 
 class _SendMOOVState extends State<SendMOOV> {
   String mid;
+  String ownerId, previewImg, moovId;
+  dynamic startDate;
+  String title,
+      description,
+      location,
+      address,
+      ownerProPic,
+      ownerName,
+      ownerEmail;
+  List<dynamic> likedArray;
 
-  _SendMOOVState(this.mid);
+  _SendMOOVState(
+      this.mid,
+      this.ownerId,
+      this.previewImg,
+      this.moovId,
+      this.startDate,
+      this.title,
+      this.description,
+      this.location,
+      this.address,
+      this.ownerProPic,
+      this.ownerName,
+      this.ownerEmail,
+      this.likedArray);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   handleSearch(String query) {
@@ -109,7 +168,20 @@ class _SendMOOVState extends State<SendMOOV> {
         List<UserResult> searchResults = [];
         snapshot.data.documents.forEach((doc) {
           User user = User.fromDocument(doc);
-          UserResult searchResult = UserResult(user);
+          UserResult searchResult = UserResult(
+              user,
+              ownerId,
+              previewImg,
+              moovId,
+              startDate,
+              title,
+              description,
+              location,
+              address,
+              ownerProPic,
+              ownerName,
+              ownerEmail,
+              likedArray);
           searchResults.add(searchResult);
         });
         return ListView(
@@ -132,18 +204,77 @@ class _SendMOOVState extends State<SendMOOV> {
 
 class UserResult extends StatefulWidget {
   User user;
+  String ownerId, previewImg, moovId;
+  dynamic startDate;
+  String title,
+      description,
+      location,
+      address,
+      ownerProPic,
+      ownerName,
+      ownerEmail;
+  List<dynamic> likedArray;
 
-  UserResult(this.user);
+  UserResult(
+      this.user,
+      this.ownerId,
+      this.previewImg,
+      this.moovId,
+      this.startDate,
+      this.title,
+      this.description,
+      this.location,
+      this.address,
+      this.ownerProPic,
+      this.ownerName,
+      this.ownerEmail,
+      this.likedArray);
 
   @override
-  _UserResultState createState() => _UserResultState(this.user);
+  _UserResultState createState() => _UserResultState(
+      this.user,
+      this.ownerId,
+      this.previewImg,
+      this.moovId,
+      this.startDate,
+      this.title,
+      this.description,
+      this.location,
+      this.address,
+      this.ownerProPic,
+      this.ownerName,
+      this.ownerEmail,
+      this.likedArray);
 }
 
 class _UserResultState extends State<UserResult> {
   User user;
+  String ownerId, previewImg, moovId;
+  dynamic startDate;
+  String title,
+      description,
+      location,
+      address,
+      ownerProPic,
+      ownerName,
+      ownerEmail;
+  List<dynamic> likedArray;
   bool status = false;
 
-  _UserResultState(this.user);
+  _UserResultState(
+      this.user,
+      this.ownerId,
+      this.previewImg,
+      this.moovId,
+      this.startDate,
+      this.title,
+      this.description,
+      this.location,
+      this.address,
+      this.ownerProPic,
+      this.ownerName,
+      this.ownerEmail,
+      this.likedArray);
 
   @override
   Widget build(BuildContext context) {
@@ -187,6 +318,19 @@ class _UserResultState extends State<UserResult> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
+                        Database().sendMOOVNotification(
+                            ownerId,
+                            previewImg,
+                            moovId,
+                            startDate,
+                            title,
+                            description,
+                            location,
+                            address,
+                            ownerProPic,
+                            ownerName,
+                            ownerEmail,
+                            likedArray);
                         setState(() {
                           status = true;
                         });
