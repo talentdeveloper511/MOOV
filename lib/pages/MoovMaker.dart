@@ -61,7 +61,9 @@ class _MoovMakerState extends State<MoovMaker> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Stack(children: <Widget>[
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.12,
                   width: MediaQuery.of(context).size.width,
@@ -90,20 +92,14 @@ class _MoovMakerState extends State<MoovMaker> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 44.0),
-                      child: Text(
-                        "MOOV Maker",
-                        style: TextStyle(
-                            fontFamily: 'Solway',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 25.0),
-                      ),
-                    ),
+                Container(
+                  child: Text(
+                    "MOOV Maker",
+                    style: TextStyle(
+                        fontFamily: 'Solway',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 25.0),
                   ),
                 ),
               ]),

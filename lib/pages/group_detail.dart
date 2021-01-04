@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/helpers/utils.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
@@ -108,6 +109,8 @@ class _GroupDetailState extends State<GroupDetail> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return StreamBuilder(
         stream: Firestore.instance
             .collection('users')
@@ -133,8 +136,16 @@ class _GroupDetailState extends State<GroupDetail> {
                 backgroundColor: TextThemes.ndBlue,
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: EdgeInsets.all(15),
-                  title: Text(displayName,
-                      style: TextStyle(fontSize: 30.0, color: Colors.white)),
+                  title: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 210),
+                    child: Text(
+                      displayName,
+                      style: TextStyle(
+                          fontSize: isLargePhone ? 30.0 : 22,
+                          color: Colors.white),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
                 actions: <Widget>[
                   // Padding(
@@ -227,114 +238,116 @@ class _GroupDetailState extends State<GroupDetail> {
                     ),
                   ),
                 ]),
-            body: Container(
-              child: Column(
-                children: [
-                  Container(
-                    height: 200,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: AlwaysScrollableScrollPhysics(),
-                        itemCount: snapshot.data.documents.length,
-                        itemBuilder: (_, index) {
-                          DocumentSnapshot course =
-                              snapshot.data.documents[index];
+            body: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: [
+                    Container(
+                      height: 200,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (_, index) {
+                            DocumentSnapshot course =
+                                snapshot.data.documents[index];
 
-                          return Container(
-                            height: 100,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 30.0, bottom: 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (course['id'] == strUserId) {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage()));
-                                      } else {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    OtherProfile(
-                                                      course['photoUrl'],
-                                                      course['displayName'],
-                                                      course['id'],
-                                                    )));
-                                      }
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 54,
-                                      backgroundColor: TextThemes.ndGold,
+                            return Container(
+                              height: 100,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 30.0, bottom: 10),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        if (course['id'] == strUserId) {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfilePage()));
+                                        } else {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      OtherProfile(
+                                                        course['photoUrl'],
+                                                        course['displayName'],
+                                                        course['id'],
+                                                      )));
+                                        }
+                                      },
                                       child: CircleAvatar(
-                                        backgroundImage: NetworkImage(snapshot
-                                            .data
-                                            .documents[index]
-                                            .data['photoUrl']),
-                                        radius: 50,
-                                        backgroundColor: TextThemes.ndBlue,
+                                        radius: 54,
+                                        backgroundColor: TextThemes.ndGold,
                                         child: CircleAvatar(
-                                          // backgroundImage: snapshot.data
-                                          //     .documents[index].data['photoUrl'],
                                           backgroundImage: NetworkImage(snapshot
                                               .data
                                               .documents[index]
                                               .data['photoUrl']),
                                           radius: 50,
+                                          backgroundColor: TextThemes.ndBlue,
+                                          child: CircleAvatar(
+                                            // backgroundImage: snapshot.data
+                                            //     .documents[index].data['photoUrl'],
+                                            backgroundImage: NetworkImage(
+                                                snapshot.data.documents[index]
+                                                    .data['photoUrl']),
+                                            radius: 50,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: RichText(
-                                        textScaleFactor: 1.1,
-                                        text: TextSpan(
-                                            style: TextThemes.mediumbody,
-                                            children: [
-                                              TextSpan(
-                                                  text: snapshot
-                                                      .data
-                                                      .documents[index]
-                                                      .data['displayName']
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ]),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: RichText(
+                                          textScaleFactor: 1.1,
+                                          text: TextSpan(
+                                              style: TextThemes.mediumbody,
+                                              children: [
+                                                TextSpan(
+                                                    text: snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['displayName']
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ]),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(children: [
-                      Text(
-                        "NEXT MOOV",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        child: next != "" ? NextMOOV(next) : buildNoContent(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(1.0),
-                        child: RaisedButton(
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                    SingleChildScrollView(
+                      child: Column(children: [
+                        Text(
+                          "NEXT MOOV",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0, bottom: 15),
+                          child: Container(
+                            child:
+                                next != "" ? NextMOOV(next) : buildNoContent(),
+                          ),
+                        ),
+                        RaisedButton(
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -361,49 +374,49 @@ class _GroupDetailState extends State<GroupDetail> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0)),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 25.0),
-                        child: Text(
-                          "CHAT",
-                          style: TextStyle(fontSize: 20),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 35.0),
+                          child: Text(
+                            "CHAT",
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            child: TextFormField(
-                              controller: chatController,
-                              decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                hintStyle: TextStyle(fontSize: 15),
-                                contentPadding:
-                                    EdgeInsets.only(top: 18, bottom: 10),
-                                hintText: "What's the MOOV tonight guys...",
-                                filled: true,
-                                prefixIcon: Icon(
-                                  Icons.message,
-                                  size: 28.0,
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: TextFormField(
+                                controller: chatController,
+                                decoration: InputDecoration(
+                                  fillColor: Colors.white,
+                                  hintStyle: TextStyle(fontSize: 15),
+                                  contentPadding:
+                                      EdgeInsets.only(top: 18, bottom: 10),
+                                  hintText: "What's the MOOV tonight guys...",
+                                  filled: true,
+                                  prefixIcon: Icon(
+                                    Icons.message,
+                                    size: 28.0,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(Icons.send),
+                                    onPressed: sendChat,
+                                  ),
                                 ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(Icons.send),
-                                  onPressed: sendChat,
-                                ),
+                                // onFieldSubmitted: sendChat(currentUser.displayName,
+                                //     chatController.text, gid),
                               ),
-                              // onFieldSubmitted: sendChat(currentUser.displayName,
-                              //     chatController.text, gid),
-                            ),
-                            height: 150,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: TextThemes.ndBlue,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
-                          ))
-                    ]),
-                  )
-                ],
+                              height: 150,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: TextThemes.ndBlue,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                            ))
+                      ]),
+                    )
+                  ],
+                ),
               ),
             ),
           );

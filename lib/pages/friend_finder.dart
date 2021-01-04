@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
@@ -151,9 +152,6 @@ class _FriendFinderState extends State<FriendFinder>
 
   buildNoContent() {
     Timer(Duration(seconds: 1), () {
-      
-      
-
       handleSearch("");
     });
     return SingleChildScrollView(
@@ -214,6 +212,8 @@ class UserResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Container(
       height: 140,
       color: Colors.white,
@@ -307,9 +307,15 @@ class UserResult extends StatelessWidget {
                                     alignment: Alignment.center,
                                     children: <Widget>[
                                       SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.52,
+                                        width: isLargePhone
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.52
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.49,
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.15,
@@ -349,6 +355,15 @@ class UserResult extends StatelessWidget {
                                         ),
                                       ),
                                       Container(
+                                        width: isLargePhone
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.52
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.35,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(20)),
@@ -366,11 +381,14 @@ class UserResult extends StatelessWidget {
                                           padding: const EdgeInsets.all(4.0),
                                           child: Text(
                                             snapshot.data.documents[0]['title'],
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.fade,
                                             style: TextStyle(
                                                 fontFamily: 'Solway',
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white,
-                                                fontSize: 17.0),
+                                                fontSize:
+                                                    isLargePhone ? 17.0 : 14),
                                           ),
                                         ),
                                       ),

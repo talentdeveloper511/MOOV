@@ -265,8 +265,8 @@ class _EditProfileState extends State<EditProfile> {
                       borderRadius: BorderRadius.circular(10),
                       child: currentUser.header == null
                           ? AssetImage('images/user-avatar.png')
-                          : CachedNetworkImage(
-                              imageUrl: currentUser.header,
+                          : Image.network(
+                              currentUser.header,
                               fit: BoxFit.fitWidth,
                             ),
                     ),
@@ -333,7 +333,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: CircleAvatar(
                             backgroundImage: (currentUser.photoUrl == null)
                                 ? AssetImage('images/user-avatar.png')
-                                : CachedNetworkImageProvider(
+                                : NetworkImage(
                                     currentUser.photoUrl),
                             // backgroundImage: NetworkImage(currentUser.photoUrl),
                             radius: 50,

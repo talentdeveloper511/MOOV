@@ -42,7 +42,7 @@ class _NextMOOVState extends State<NextMOOV> {
           if (!snapshot.hasData) return Text('Loading data...');
 
           return MediaQuery(
-            data: MediaQuery.of(context).removePadding(removeTop: true),
+            data: MediaQuery.of(context).removePadding(removeTop: true, removeBottom: true),
             child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),

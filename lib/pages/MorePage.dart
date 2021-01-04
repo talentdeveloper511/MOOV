@@ -1,3 +1,4 @@
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 
@@ -722,11 +723,16 @@ class CategoryButton extends StatelessWidget {
   CategoryButton({@required this.asset});
   final String asset;
 
-  @override
+@override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isNarrow = Screen.widthInches(context) < 3.5;
+
     return Container(
       // height:
-      height: MediaQuery.of(context).size.height * 0.15,
+      height: isLargePhone
+          ? MediaQuery.of(context).size.height * 0.15
+          : MediaQuery.of(context).size.height * 0.178,
 
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),

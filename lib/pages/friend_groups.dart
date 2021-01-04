@@ -233,23 +233,26 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                         const EdgeInsets.all(
                                                             22.5),
                                                     child: Center(
-                                                      child: Text(
-                                                        course['groupName']
-                                                            .toString(),
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize:
-                                                                isLargePhone
-                                                                    ? 20.0
-                                                                    : 18,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
+                                                      child: FittedBox(
+                                                        child: Text(
+                                                          course['groupName']
+                                                              .toString(),
+                                                          maxLines: 2,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize:
+                                                                  isLargePhone
+                                                                      ? 20.0
+                                                                      : 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),

@@ -224,211 +224,215 @@ class _EditGroupState extends State<EditGroup> {
                     style: TextStyle(fontSize: 25.0, color: Colors.white)),
               ),
             ),
-            body: Container(
-              child: Column(
-                children: [
-                  Container(
-                    height: 200,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: AlwaysScrollableScrollPhysics(),
-                        itemCount: snapshot.data.documents.length,
-                        itemBuilder: (_, index) {
-                          DocumentSnapshot course =
-                              snapshot.data.documents[index];
-                          profilePic =
-                              snapshot.data.documents[index].data['photoUrl'];
-                          otherDisplay = snapshot
-                              .data.documents[index].data['displayName'];
-                          id = snapshot.data.documents[index].data['id'];
-                          return Container(
-                            height: 100,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 30.0, bottom: 10),
-                                  child: course['id'] != strUserId
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            showAlertDialog2(
-                                                context, course['id']);
-                                          },
-                                          child: Stack(children: [
-                                            ShakeAnimatedWidget(
-                                              enabled: true,
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              shakeAngle: Rotation.deg(z: 10),
-                                              curve: Curves.linear,
-                                              child: CircleAvatar(
-                                                radius: 54,
-                                                backgroundColor: Colors.red,
+            body: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: [
+                    Container(
+                      height: 200,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (_, index) {
+                            DocumentSnapshot course =
+                                snapshot.data.documents[index];
+                            profilePic =
+                                snapshot.data.documents[index].data['photoUrl'];
+                            otherDisplay = snapshot
+                                .data.documents[index].data['displayName'];
+                            id = snapshot.data.documents[index].data['id'];
+                            return Container(
+                              height: 100,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 30.0, bottom: 10),
+                                    child: course['id'] != strUserId
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              showAlertDialog2(
+                                                  context, course['id']);
+                                            },
+                                            child: Stack(children: [
+                                              ShakeAnimatedWidget(
+                                                enabled: true,
+                                                duration:
+                                                    Duration(milliseconds: 500),
+                                                shakeAngle: Rotation.deg(z: 10),
+                                                curve: Curves.linear,
                                                 child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .data['photoUrl']),
-                                                  radius: 50,
-                                                  backgroundColor:
-                                                      TextThemes.ndBlue,
+                                                  radius: 54,
+                                                  backgroundColor: Colors.red,
                                                   child: CircleAvatar(
-                                                    // backgroundImage: snapshot.data
-                                                    //     .documents[index].data['photoUrl'],
                                                     backgroundImage:
                                                         NetworkImage(snapshot
                                                             .data
                                                             .documents[index]
                                                             .data['photoUrl']),
                                                     radius: 50,
+                                                    backgroundColor:
+                                                        TextThemes.ndBlue,
+                                                    child: CircleAvatar(
+                                                      // backgroundImage: snapshot.data
+                                                      //     .documents[index].data['photoUrl'],
+                                                      backgroundImage:
+                                                          NetworkImage(snapshot
+                                                              .data
+                                                              .documents[index]
+                                                              .data['photoUrl']),
+                                                      radius: 50,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Positioned(
-                                                right: -10,
-                                                top: -7.5,
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  color: Colors.red,
-                                                  size: 50,
-                                                )),
-                                          ]),
-                                        )
-                                      : CircleAvatar(
-                                          radius: 54,
-                                          backgroundColor: TextThemes.ndGold,
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                snapshot.data.documents[index]
-                                                    .data['photoUrl']),
-                                            radius: 50,
-                                            backgroundColor: TextThemes.ndBlue,
+                                              Positioned(
+                                                  right: -10,
+                                                  top: -7.5,
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                    size: 50,
+                                                  )),
+                                            ]),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 54,
+                                            backgroundColor: TextThemes.ndGold,
                                             child: CircleAvatar(
-                                              // backgroundImage: snapshot.data
-                                              //     .documents[index].data['photoUrl'],
                                               backgroundImage: NetworkImage(
                                                   snapshot.data.documents[index]
                                                       .data['photoUrl']),
                                               radius: 50,
+                                              backgroundColor:
+                                                  TextThemes.ndBlue,
+                                              child: CircleAvatar(
+                                                // backgroundImage: snapshot.data
+                                                //     .documents[index].data['photoUrl'],
+                                                backgroundImage: NetworkImage(
+                                                    snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['photoUrl']),
+                                                radius: 50,
+                                              ),
                                             ),
                                           ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: RichText(
+                                          textScaleFactor: 1.1,
+                                          text: TextSpan(
+                                              style: TextThemes.mediumbody,
+                                              children: [
+                                                TextSpan(
+                                                    text: snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['displayName']
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ]),
                                         ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: RichText(
-                                        textScaleFactor: 1.1,
-                                        text: TextSpan(
-                                            style: TextThemes.mediumbody,
-                                            children: [
-                                              TextSpan(
-                                                  text: snapshot
-                                                      .data
-                                                      .documents[index]
-                                                      .data['displayName']
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                            ]),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: TextFormField(
-                      controller: groupNameController,
-                      decoration: InputDecoration(
-                        labelText: displayName,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: TextFormField(
+                        controller: groupNameController,
+                        decoration: InputDecoration(
+                          labelText: displayName,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                      Opacity(
-                        opacity: .5,
-                        child: Container(
-                          child: (currentUser.photoUrl == null)
-                              ? AssetImage('images/user-avatar.png')
-                              : CachedNetworkImage(imageUrl: photoUrl),
-                          // backgroundImage: NetworkImage(currentUser.photoUrl),
+                    Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: Stack(alignment: Alignment.center, children: [
+                        Opacity(
+                          opacity: .5,
+                          child: Container(
+                            child: (currentUser.photoUrl == null)
+                                ? AssetImage('images/user-avatar.png')
+                                : CachedNetworkImage(imageUrl: photoUrl),
+                            // backgroundImage: NetworkImage(currentUser.photoUrl),
+                          ),
                         ),
-                      ),
-                      _image != null
-                          ? Container(
-                              child: Image.file(_image),
-                            )
-                          : Container(
-                              width: 100,
-                              height: 100,
-                              child: IconButton(
-                                  icon: Icon(Icons.add_a_photo, size: 50),
-                                  onPressed: () => selectImage(context)))
-                    ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: RaisedButton(
-                        color: TextThemes.ndBlue,
-                        child:
-                            Text('Save', style: TextStyle(color: Colors.white)),
-                        onPressed: () async {
-                          if (_image != null) {
-                                    
+                        _image != null
+                            ? Container(
+                                child: Image.file(_image),
+                              )
+                            : Container(
+                                width: 100,
+                                height: 100,
+                                child: IconButton(
+                                    icon: Icon(Icons.add_a_photo, size: 50),
+                                    onPressed: () => selectImage(context)))
+                      ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: RaisedButton(
+                          color: TextThemes.ndBlue,
+                          child: Text('Save',
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: () async {
+                            if (_image != null) {
+                              StorageReference firebaseStorageRef =
+                                  FirebaseStorage.instance
+                                      .ref()
+                                      .child("images/group" + gid);
+                              StorageUploadTask uploadTask =
+                                  firebaseStorageRef.putFile(_image);
+                              StorageTaskSnapshot taskSnapshot =
+                                  await uploadTask.onComplete;
+                              if (taskSnapshot.error == null) {
+                                print("added to Firebase Storage");
+                                final String downloadUrl =
+                                    await taskSnapshot.ref.getDownloadURL();
+                                groupsRef.document(gid).updateData({
+                                  "groupPic": downloadUrl,
+                                });
+                              }
+                            }
 
-                            StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("images/group" + gid);
-                            StorageUploadTask uploadTask =
-                                firebaseStorageRef.putFile(_image);
-                            StorageTaskSnapshot taskSnapshot =
-                                await uploadTask.onComplete;
-                            if (taskSnapshot.error == null) {
-                              print("added to Firebase Storage");
-                              final String downloadUrl =
-                                  await taskSnapshot.ref.getDownloadURL();
-                              groupsRef.document(gid).updateData({
-                                "groupPic": downloadUrl,
+                            if (groupNameController.text != "") {
+                              Database().updateGroupNames(members,
+                                  groupNameController.text, gid, displayName);
+                              Firestore.instance
+                                  .collection('friendGroups')
+                                  .document(gid)
+                                  .updateData({
+                                "groupName": groupNameController.text,
                               });
                             }
-                          }
-
-                          if (groupNameController.text != "") {
-                            Database().updateGroupNames(members,
-                                groupNameController.text, gid, displayName);
-                            Firestore.instance
-                                .collection('friendGroups')
-                                .document(gid)
-                                .updateData({
-                              "groupName": groupNameController.text,
-                            });
-                          }
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FriendGroupsPage()));
-                        }),
-                  )
-                ],
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FriendGroupsPage()));
+                          }),
+                    )
+                  ],
+                ),
               ),
             ),
           );
