@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
+
 import 'dart:ui';
 
 import 'package:MOOV/helpers/themes.dart';
@@ -7,15 +9,14 @@ import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/friend_groups.dart';
-import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/widgets/set_moov.dart';
+import 'package:MOOV/widgets/camera.dart';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
@@ -37,6 +38,97 @@ class EditGroup extends StatefulWidget {
 }
 
 class _EditGroupState extends State<EditGroup> {
+  File _image;
+  final picker = ImagePicker();
+
+  void openCamera(context) async {
+    final image = await CustomCamera.openCamera();
+    setState(() {
+      _image = image;
+      //  fileName = p.basename(_image.path);
+    });
+  }
+
+  void openGallery(context) async {
+    final image = await CustomCamera.openGallery();
+    setState(() {
+      _image = image;
+    });
+  }
+
+  Future handleTakePhoto() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.camera,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
+  }
+
+  handleChooseFromGallery() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.gallery,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
+  }
+
+  selectImage(parentContext) {
+    return showDialog(
+      context: parentContext,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text(
+            "Upload Profile Pic",
+            style: TextStyle(color: Colors.white),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text(
+                "Photo with Camera",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openCamera(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: handleChooseFromGallery),
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: () => openGallery(context)),
+              child: Text(
+                "Image from Gallery",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openGallery(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   String photoUrl, displayName, gid;
   List<dynamic> members;
   final dbRef = Firestore.instance;
@@ -271,8 +363,29 @@ class _EditGroupState extends State<EditGroup> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(25.0),
-                    child: Container(
-                        child: CachedNetworkImage(imageUrl: photoUrl)),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                      Opacity(
+                        opacity: .5,
+                        child: Container(
+                          child: (currentUser.photoUrl == null)
+                              ? AssetImage('images/user-avatar.png')
+                              : CachedNetworkImage(imageUrl: photoUrl),
+                          // backgroundImage: NetworkImage(currentUser.photoUrl),
+                        ),
+                      ),
+                      _image != null
+                          ? Container(
+                              child: Image.file(_image),
+                            )
+                          : Container(
+                              width: 100,
+                              height: 100,
+                              child: IconButton(
+                                  icon: Icon(Icons.add_a_photo, size: 50),
+                                  onPressed: () => selectImage(context)))
+                    ]),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
@@ -281,24 +394,23 @@ class _EditGroupState extends State<EditGroup> {
                         child:
                             Text('Save', style: TextStyle(color: Colors.white)),
                         onPressed: () async {
-                          // if (_image != null) {
-                          //   StorageReference firebaseStorageRef = FirebaseStorage
-                          //       .instance
-                          //       .ref()
-                          //       .child("images/" + currentUser.displayName);
-                          //   StorageUploadTask uploadTask =
-                          //       firebaseStorageRef.putFile(_image);
-                          //   StorageTaskSnapshot taskSnapshot =
-                          //       await uploadTask.onComplete;
-                          //   if (taskSnapshot.error == null) {
-                          //     print("added to Firebase Storage");
-                          //     final String downloadUrl =
-                          //         await taskSnapshot.ref.getDownloadURL();
-                          //     usersRef.document(currentUser.id).updateData({
-                          //       "photoUrl": downloadUrl,
-                          //     });
-                          //   }
-                          // }
+                          if (_image != null) {
+                                    
+
+                            StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child("images/group" + gid);
+                            StorageUploadTask uploadTask =
+                                firebaseStorageRef.putFile(_image);
+                            StorageTaskSnapshot taskSnapshot =
+                                await uploadTask.onComplete;
+                            if (taskSnapshot.error == null) {
+                              print("added to Firebase Storage");
+                              final String downloadUrl =
+                                  await taskSnapshot.ref.getDownloadURL();
+                              groupsRef.document(gid).updateData({
+                                "groupPic": downloadUrl,
+                              });
+                            }
+                          }
 
                           if (groupNameController.text != "") {
                             Database().updateGroupNames(members,
