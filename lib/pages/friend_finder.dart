@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
@@ -148,6 +150,12 @@ class _FriendFinderState extends State<FriendFinder>
   }
 
   buildNoContent() {
+    Timer(Duration(seconds: 1), () {
+      
+      
+
+      handleSearch("");
+    });
     return SingleChildScrollView(
         child: Container(
       height: MediaQuery.of(context).size.height,
@@ -206,7 +214,6 @@ class UserResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GoogleSignInAccount userMe = googleSignIn.currentUser;
     return Container(
       height: 140,
       color: Colors.white,
