@@ -1,5 +1,6 @@
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
@@ -28,6 +29,8 @@ class _NextMOOVState extends State<NextMOOV> {
   _NextMOOVState(this.selected);
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     var title;
     var pic;
 
@@ -57,7 +60,7 @@ class _NextMOOVState extends State<NextMOOV> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          height: SizeConfig.blockSizeVertical * 15,
+                          height: isLargePhone ? SizeConfig.blockSizeVertical * 15 : SizeConfig.blockSizeVertical * 18,
                           child: GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(

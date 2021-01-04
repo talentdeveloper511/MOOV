@@ -531,7 +531,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               ),
                                                             )),
                                                         Container(
-                                                          width: 120,
+                                                          width: isLargePhone ? 120 : 80,
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
@@ -610,7 +610,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     course["userId"] ==
                                                             currentUser.id
                                                         ? RaisedButton(
-                                                            color: Colors.red,
+                                                            color:
+                                                                Colors.red,
                                                             onPressed: () =>
                                                                 showAlertDialog(
                                                                     context,
@@ -1195,7 +1196,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                             ),
                                                           )),
                                                       Container(
-                                                        width: 120,
+                                                        width: isLargePhone ? 120 : 80,
                                                         child: GestureDetector(
                                                           onTap: () {
                                                             if (course[

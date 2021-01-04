@@ -80,7 +80,55 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                 .where('members', arrayContains: currentUser.id)
                 .snapshots(),
             builder: (context, snapshot) {
+              print(snapshot.data.documents.length);
               if (!snapshot.hasData) return CircularProgressIndicator();
+              if (snapshot.data.documents.length == 0) {
+                return Container(
+                  child: Center(
+                      child: Padding(
+                    padding: const EdgeInsets.all(40.0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 50.0),
+                          child: RaisedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => GroupForm()));
+                              },
+                              color: TextThemes.ndBlue,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.people, color: TextThemes.ndGold),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text('Create Friend Group',
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 20)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0)),
+                            ),
+                        ),
+                        Text(
+                          "When added to a Friend Group,\n it will appear here.",
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                        ),
+                      ],
+                    ),
+                  )),
+                );
+              }
 
               return Container(
                 // height: (snapshot.data.documents.length <= 3) ? 270 : 400,

@@ -1,4 +1,5 @@
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
@@ -53,20 +54,38 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
-              child: Image.asset(
-                'lib/assets/moovblue.png',
-                fit: BoxFit.cover,
-                height: 50.0,
+            GestureDetector(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                  (Route<dynamic> route) => false,
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 50.0),
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
               ),
             ),
           ],
         ),
       ),
-      leading: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Image.asset('lib/assets/ndlogo.png'),
+      leading: GestureDetector(
+        onTap: () {
+         Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                  (Route<dynamic> route) => false,
+                );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Image.asset('lib/assets/ndlogo.png'),
+        ),
       ),
       backgroundColor: TextThemes.ndBlue,
       //pinned: true,
@@ -80,7 +99,6 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
             // Implement navigation to leaderboard page here...
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-            print('Leaderboards clicked');
           },
         ),
         IconButton(

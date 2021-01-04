@@ -6,6 +6,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/post_detail.dart';
+import 'package:MOOV/pages/search.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -137,6 +138,7 @@ class _FriendFinderState extends State<FriendFinder>
         if (!snapshot.hasData) {
           return circularProgress();
         }
+
         List<UserResult> searchResults = [];
         snapshot.data.documents.forEach((doc) {
           User user = User.fromDocument(doc);
@@ -151,9 +153,12 @@ class _FriendFinderState extends State<FriendFinder>
   }
 
   buildNoContent() {
-    Timer(Duration(seconds: 1), () {
-      handleSearch("");
-    });
+    currentUser.friendArray.length != 0
+        ? Timer(Duration(seconds: 1), () {
+            handleSearch("");
+          })
+        : null;
+
     return SingleChildScrollView(
         child: Container(
       height: MediaQuery.of(context).size.height,
@@ -198,9 +203,110 @@ class _FriendFinderState extends State<FriendFinder>
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.white12,
-      appBar: buildSearchField(),
-      body:
-          searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
+      appBar: currentUser.friendArray.isNotEmpty
+          ? buildSearchField()
+          : AppBar(
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_drop_up_outlined,
+                      color: Colors.white, size: 35),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              backgroundColor: TextThemes.ndBlue,
+              //pinned: true,
+
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.all(5),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'lib/assets/moovblue.png',
+                      fit: BoxFit.cover,
+                      height: 55.0,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+      body: currentUser.friendArray.isEmpty
+          ? StreamBuilder(
+              stream: Firestore.instance
+                  .collection('users')
+                  .document(currentUser.id)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                List<dynamic> friendArray;
+
+                bool isLargePhone = Screen.diagonal(context) > 766;
+
+                if (!snapshot.hasData) return CircularProgressIndicator();
+                friendArray = snapshot.data['friendArray'];
+                if (snapshot.data["friendArray"].isEmpty) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.pink[300], Colors.pink[200]],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.all(50.0),
+                              child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                      style: TextThemes.mediumbody,
+                                      children: [
+                                        TextSpan(
+                                            text: "Aw, no friends? Add some",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w300)),
+                                        TextSpan(
+                                            text: " now",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w600)),
+                                        TextSpan(
+                                            text: ".",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w300))
+                                      ]))),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 35.0),
+                            child: FloatingActionButton.extended(
+                                backgroundColor: Colors.pinkAccent[100],
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Search()),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                },
+                                label: const Text("Find friends",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white))),
+                          ),
+                          Image.asset('lib/assets/ff.png')
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  buildNoContent();
+                }
+              })
+          : searchResultsFuture == null
+              ? buildNoContent()
+              : buildSearchResults(),
     );
   }
 }
@@ -319,51 +425,39 @@ class UserResult extends StatelessWidget {
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.15,
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: Container(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: CachedNetworkImage(
-                                                imageUrl: course['image'],
-                                                fit: BoxFit.cover,
-                                              ),
+                                        child: Container(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: CachedNetworkImage(
+                                              imageUrl: course['image'],
+                                              fit: BoxFit.fill,
                                             ),
-                                            margin: EdgeInsets.only(
-                                                left: 20,
-                                                top: 0,
-                                                right: 20,
-                                                bottom: 7.5),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 5,
-                                                  blurRadius: 7,
-                                                  offset: Offset(0,
-                                                      3), // changes position of shadow
-                                                ),
-                                              ],
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              left: 20,
+                                              top: 0,
+                                              right: 20,
+                                              bottom: 7.5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
                                             ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 5,
+                                                blurRadius: 7,
+                                                offset: Offset(0,
+                                                    3), // changes position of shadow
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
                                       Container(
-                                        width: isLargePhone
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.52
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.35,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(20)),

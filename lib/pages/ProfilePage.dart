@@ -341,6 +341,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [SeeContactsButton()],
+                        ),
+                      ),
                       FocusedMenuHolder(
                         menuWidth: MediaQuery.of(context).size.width * 0.5,
                         blurSize: 5.0,
@@ -405,19 +412,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
-                                    child: Icon(Icons.more_vert, color: Colors.white),
+                                    child: Icon(Icons.more_vert,
+                                        color: Colors.white),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10.0),
                                     child: Text(
-                                      "More",
+                                      "Settings",
                                       style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                          fontSize: 20, color: Colors.white),
                                     ),
                                   ),
                                 ],
                               ),
-                              width: MediaQuery.of(context).size.width * .3,
+                              width: MediaQuery.of(context).size.width * .4,
                               height: 50,
                               decoration: BoxDecoration(
                                 boxShadow: [

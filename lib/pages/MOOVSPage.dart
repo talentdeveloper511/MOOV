@@ -473,7 +473,11 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                         ),
                                                       )),
                                                   Container(
-                                                    width: 120,
+                                                    width: isLargePhone &&
+                                                            course['userId'] ==
+                                                                strUserId
+                                                        ? 120
+                                                        : 80,
                                                     child: GestureDetector(
                                                       onTap: () {
                                                         if (course['userId'] ==
@@ -1097,7 +1101,11 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                         ),
                                                       )),
                                                   Container(
-                                                    width: 120,
+                                                    width: isLargePhone &&
+                                                            course['userId'] ==
+                                                                strUserId
+                                                        ? 120
+                                                        : 80,
                                                     child: GestureDetector(
                                                       onTap: () {
                                                         if (course['userId'] ==

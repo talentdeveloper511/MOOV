@@ -1,5 +1,6 @@
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
@@ -40,6 +41,8 @@ class _MOTDState extends State<MOTD> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: 1,
                 itemBuilder: (context, index) {
+                      bool isLargePhone = Screen.diagonal(context) > 766;
+
                   DocumentSnapshot course = snapshot.data.documents[index];
                   pic = course['image'];
                   title = course['title'];
@@ -49,7 +52,7 @@ class _MOTDState extends State<MOTD> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          height: SizeConfig.blockSizeVertical * 15,
+                          height: isLargePhone ? SizeConfig.blockSizeVertical * 15 : SizeConfig.blockSizeVertical * 18,
                           child: GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
