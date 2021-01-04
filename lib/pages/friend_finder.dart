@@ -417,7 +417,7 @@ class UserResult extends StatelessWidget {
                                             ? MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.52
+                                                0.51
                                             : MediaQuery.of(context)
                                                     .size
                                                     .width *

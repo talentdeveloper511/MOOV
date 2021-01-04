@@ -294,7 +294,8 @@ class _UserResultState extends State<UserResult> {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: status
+              trailing: user.id == currentUser.id ? null :
+              status
                   ? RaisedButton(
                       padding: const EdgeInsets.all(2.0),
                       color: Colors.green,

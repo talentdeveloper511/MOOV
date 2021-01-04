@@ -13,8 +13,7 @@ class SeeContactsButton extends StatelessWidget {
       onTap: () async {
         final PermissionStatus permissionStatus = await _getPermission();
         if (permissionStatus == PermissionStatus.granted) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ContactsPage()));
+          showAlertDialog(context);
         } else {
           showDialog(
               context: context,
@@ -92,6 +91,31 @@ class SeeContactsButton extends StatelessWidget {
     } else {
       return permission;
     }
+  }
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Do you like money?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text(
+            "\nEarn \$3 for every user you bring on, \$5 if your're an ambassador. \n\n Just have them refer you when creating an account."),
+        actions: [
+          CupertinoDialogAction(
+            child: Text("I hate money.", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+          ),
+          CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text("I love money."),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ContactsPage())))
+        ],
+      ),
+    );
   }
 
 //   static String getValidPhoneNumber(Iterable phoneNumbers) {

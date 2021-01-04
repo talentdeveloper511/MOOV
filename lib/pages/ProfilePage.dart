@@ -2,12 +2,15 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/Friends_List.dart';
+import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/contactsPage.dart';
+import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
+import 'package:MOOV/widgets/my_moovs_segment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -220,22 +223,28 @@ class _ProfilePageState extends State<ProfilePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Column(
-                            children: [
-                              Text(
-                                userMoovs.length == null
-                                    ? "0"
-                                    : userMoovs.length.toString(),
-                                style: TextThemes.extraBold,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: Text(
-                                  'Next MOOVs   ',
-                                  style: TextThemes.bodyText1,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => MOOVSPage()));
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  userMoovs.length == null
+                                      ? "0"
+                                      : userMoovs.length.toString(),
+                                  style: TextThemes.extraBold,
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Text(
+                                    'Next MOOVs   ',
+                                    style: TextThemes.bodyText1,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -265,22 +274,28 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                userGroups.length == null
-                                    ? "0"
-                                    : userGroups.length.toString(),
-                                style: TextThemes.extraBold,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: Text(
-                                  'Friend Groups',
-                                  style: TextThemes.bodyText1,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => FriendGroupsPage()));
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  userGroups.length == null
+                                      ? "0"
+                                      : userGroups.length.toString(),
+                                  style: TextThemes.extraBold,
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Text(
+                                    'Friend Groups',
+                                    style: TextThemes.bodyText1,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -376,7 +391,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => EditProfile()));
+                                            builder: (context) =>
+                                                EditProfile()));
                                   }),
                               // FocusedMenuItem(
                               //     title: Text("Invite Contacts"),
@@ -415,18 +431,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: Icon(Icons.more_vert,
                                             color: Colors.white),
                                       ),
                                       Expanded(
                                         child: Center(
                                           child: Padding(
-                                            padding: const EdgeInsets.only(right: 15.0),
+                                            padding: const EdgeInsets.only(
+                                                right: 15.0),
                                             child: Text(
                                               "Settings",
                                               style: TextStyle(
-                                                  fontSize: 20, color: Colors.white),
+                                                  fontSize: 20,
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -451,7 +470,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                         bottomLeft: Radius.circular(10),
                                         bottomRight: Radius.circular(10)),
                                     gradient: LinearGradient(
-                                      colors: [Colors.pink[300], Colors.pink[200]],
+                                      colors: [
+                                        Colors.pink[300],
+                                        Colors.pink[200]
+                                      ],
                                       begin: Alignment.centerLeft,
                                       end: Alignment.centerRight,
                                     ),
