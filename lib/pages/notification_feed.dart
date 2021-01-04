@@ -230,7 +230,7 @@ class NotificationFeedItem extends StatelessWidget {
     } else if (type == 'request') {
       activityItemText = "has sent you a friend request.";
     } else if (type == 'accept') {
-      activityItemText = "has accepted your friend request.";
+      activityItemText = "accepted your friend request.";
     } else if (type == 'friendgroup') {
       activityItemText = 'has added you to ';
     } else if (type == 'invite') {
@@ -253,26 +253,37 @@ class NotificationFeedItem extends StatelessWidget {
         child: ListTile(
           title: GestureDetector(
             onTap: () => showProfile(context),
-            child: RichText(
-              overflow: TextOverflow.ellipsis,
-              text: TextSpan(
-                  style: TextStyle(
-                    fontSize: isLargePhone ? 13.5 : 12,
-                    color: Colors.black,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: username,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text: ' $activityItemText',
-                    ),
-                    TextSpan(
-                        text: title,
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic, color: Colors.blue)),
-                  ]),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                      style: TextStyle(
+                        fontSize: isLargePhone ? 13.5 : 12,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: username,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: ' $activityItemText',
+                        ),
+                      ]),
+                ),
+                title != null
+                    ? RichText(
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                            text: title,
+                            style: TextStyle(
+                                color: TextThemes.ndBlue,
+                                fontWeight: FontWeight.bold)))
+                    : Container()
+              ],
             ),
           ),
           leading: GestureDetector(
