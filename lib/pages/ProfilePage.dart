@@ -1,23 +1,18 @@
-import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/Friends_List.dart';
+import 'package:MOOV/pages/contactsPage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
-import 'package:MOOV/widgets/friend_groups_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MOOV/pages/notification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-import 'friend_groups.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
@@ -47,6 +42,8 @@ class _ProfilePageState extends State<ProfilePage> {
             .document(currentUser.id)
             .snapshots(),
         builder: (context, snapshot) {
+          List<dynamic> likedArray;
+          dynamic moovId;
           bool isLargePhone = Screen.diagonal(context) > 766;
 
           if (!snapshot.hasData) return CircularProgressIndicator();
@@ -242,22 +239,30 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  userFriends.length == null
-                                      ? "0"
-                                      : userFriends.length.toString(),
-                                  style: TextThemes.extraBold,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4.0),
-                                  child: Text(
-                                    'Friends',
-                                    style: TextThemes.bodyText1,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => friendsList(
+                                        likedArray, moovId,
+                                        userFriends: userFriends)));
+                              },
+                              child: Column(
+                                children: [
+                                  Text(
+                                    userFriends.length == null
+                                        ? "0"
+                                        : userFriends.length.toString(),
+                                    style: TextThemes.extraBold,
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Text(
+                                      'Friends',
+                                      style: TextThemes.bodyText1,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Column(
@@ -336,17 +341,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: FriendButton(userFriends: userFriends),
-                          )
-                        ],
-                      ),
                       FocusedMenuHolder(
-                        menuWidth: MediaQuery.of(context).size.width * 0.50,
+                        menuWidth: MediaQuery.of(context).size.width * 0.5,
                         blurSize: 5.0,
                         menuItemExtent: 45,
                         menuBoxDecoration: BoxDecoration(
@@ -366,16 +362,31 @@ class _ProfilePageState extends State<ProfilePage> {
                           // Add Each FocusedMenuItem  for Menu Options
 
                           FocusedMenuItem(
-                              title: Text("Share"),
+                              title: Text("Edit Profile"),
+                              trailingIcon: Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditProfile()));
+                              }),
+                          FocusedMenuItem(
+                              title: Text("Invite Contacts"),
+                              trailingIcon: Icon(Icons.contact_mail),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ContactsPage()));
+                              }),
+                          FocusedMenuItem(
+                              title: Text("Share MOOV"),
                               trailingIcon: Icon(Icons.send),
                               onPressed: () {}),
-                          FocusedMenuItem(
-                              title: Text("Edit Group"),
-                              trailingIcon: Icon(Icons.edit),
-                              onPressed: () {}),
+
                           FocusedMenuItem(
                               title: Text(
-                                "Leave Group",
+                                "Sign Out",
                                 style: TextStyle(color: Colors.redAccent),
                               ),
                               trailingIcon: Icon(
@@ -390,14 +401,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              child: Center(
-                                  child: Text(
-                                "Options",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white
-                                ),
-                              )),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.more_vert, color: Colors.white),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Text(
+                                      "More",
+                                      style: TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               width: MediaQuery.of(context).size.width * .3,
                               height: 50,
                               decoration: BoxDecoration(
@@ -423,43 +439,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             )),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          SeeContactsButton(),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            right: 7.5, bottom: 15, top: 70),
-                        child: SizedBox(
-                          height: 35.0,
-                          width: 130,
-                          child: FloatingActionButton(
-                            shape: RoundedRectangleBorder(),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditProfile()));
-                            },
-                            backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-                            child: Text("Edit profile"),
-                            foregroundColor: Colors.white,
-                            elevation: 15,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0, bottom: 15),
-                        child: RaisedButton(
-                            color: Colors.red,
-                            textColor: Colors.white,
-                            child: Text('Sign out'),
-                            onPressed: () {
-                              showAlertDialog(context);
-                            }),
-                      )
                     ],
                   ),
                 )

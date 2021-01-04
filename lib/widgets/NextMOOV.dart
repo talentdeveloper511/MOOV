@@ -7,7 +7,6 @@ import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
-import 'package:MOOV/widgets/friend_groups_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
