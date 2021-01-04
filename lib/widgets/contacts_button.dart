@@ -9,11 +9,8 @@ import 'package:MOOV/pages/contactsPage.dart';
 class SeeContactsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      color: Colors.white
-          .withOpacity(.7), //set this opacity as per your requirement
-
-      onPressed: () async {
+    return GestureDetector(
+      onTap: () async {
         final PermissionStatus permissionStatus = await _getPermission();
         if (permissionStatus == PermissionStatus.granted) {
           Navigator.push(
@@ -34,18 +31,52 @@ class SeeContactsButton extends StatelessWidget {
                   ));
         }
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Icon(Icons.contacts, color: TextThemes.ndGold),
-          ),
-          Container(
-              child: Text('Invite Contacts',
-                  style: TextStyle(color: TextThemes.ndBlue))),
-        ],
-      ),
+      child: Padding(
+          padding: const EdgeInsets.only(bottom: 18.0, top: 8),
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Icon(Icons.contact_mail, color: Colors.white),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 15.0),
+                      child: Text(
+                        "Share MOOV",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            width: MediaQuery.of(context).size.width * .4,
+            height: 50,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
+              gradient: LinearGradient(
+                colors: [Colors.blue[200], Colors.blue[300]],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+          )),
     );
   }
 

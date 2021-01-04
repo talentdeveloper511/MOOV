@@ -209,52 +209,54 @@ class _HomePageState extends State<HomePage>
                 Container(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.all(5.0),
-                          icon: Image.asset('lib/assets/ff.png'),
-                          color: Colors.white,
-                          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FriendFinder()));
-                            // Implement navigation to shopping cart page here...
-                            print('FRIEND FINDER CLICKED');
-                          },
-                        ),
-                        Align(
-                            alignment: Alignment.center,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FriendFinder()));
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  "Friend Finder",
-                                  style: TextStyle(
-                                      fontFamily: 'Open Sans',
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 16.0),
+                    child: Card(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            padding: EdgeInsets.all(5.0),
+                            icon: Image.asset('lib/assets/ff.png'),
+                            color: Colors.white,
+                            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FriendFinder()));
+                              // Implement navigation to shopping cart page here...
+                            },
+                          ),
+                          Align(
+                              alignment: Alignment.center,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              FriendFinder()));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "Friend Finder",
+                                    style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16.0),
+                                  ),
                                 ),
-                              ),
-                            )),
-                      ],
+                              )),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 30),
+                  child: Card(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
