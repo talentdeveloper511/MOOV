@@ -210,36 +210,35 @@ class _HomePageState extends State<HomePage>
                 Container(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 30),
-                    child: Card(
-                      elevation: 10,
-                      color: Colors.pink[50],
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            padding: EdgeInsets.all(5.0),
-                            icon: Image.asset('lib/assets/ff.png'),
-                            color: Colors.white,
-                            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => FriendFinder()));
-                              // Implement navigation to shopping cart page here...
-                            },
-                          ),
-                          Align(
-                              alignment: Alignment.center,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              FriendFinder()));
-                                },
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FriendFinder()));
+                      },
+                      child: Card(
+                        elevation: 10,
+                        color: Colors.pink[50],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              padding: EdgeInsets.all(5.0),
+                              icon: Image.asset('lib/assets/ff.png'),
+                              color: Colors.white,
+                              splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FriendFinder()));
+                                // Implement navigation to shopping cart page here...
+                              },
+                            ),
+                            Align(
+                                alignment: Alignment.center,
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
@@ -250,44 +249,43 @@ class _HomePageState extends State<HomePage>
                                         color: Colors.black,
                                         fontSize: 16.0),
                                   ),
-                                ),
-                              )),
-                        ],
+                                )),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30),
-                  child: Card(
-                    elevation: 10,
-                    color: Colors.purple[50],
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.all(5.0),
-                          icon: Image.asset('lib/assets/fg1.png'),
-                          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FriendGroupsPage()));
-                          },
-                        ),
-                        Align(
-                            alignment: Alignment.center,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            FriendGroupsPage()));
-                                // Implement navigation to shopping cart page here...
-                              },
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FriendGroupsPage()));
+                    },
+                    child: Card(
+                      elevation: 10,
+                      color: Colors.purple[50],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            padding: EdgeInsets.all(5.0),
+                            icon: Image.asset('lib/assets/fg1.png'),
+                            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          FriendGroupsPage()));
+                            },
+                          ),
+                          Align(
+                              alignment: Alignment.center,
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(
@@ -298,9 +296,9 @@ class _HomePageState extends State<HomePage>
                                       color: Colors.black,
                                       fontSize: 16.0),
                                 ),
-                              ),
-                            )),
-                      ],
+                              )),
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -490,7 +488,7 @@ class _HomePageState extends State<HomePage>
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {
-                            navigateToCategoryFeed(context, "Club");
+                            navigateToCategoryFeed(context, "Clubs");
                           },
                           child: CategoryButton(asset: 'lib/assets/club2.png')),
                       Align(
@@ -511,7 +509,7 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "Sport");
+                          navigateToCategoryFeed(context, "Sports");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/sportbutton1.png')),
@@ -532,7 +530,7 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "Show");
+                          navigateToCategoryFeed(context, "Shows");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/filmbutton1.png')),

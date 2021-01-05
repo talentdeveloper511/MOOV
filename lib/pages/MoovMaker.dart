@@ -4,6 +4,7 @@ import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/camera.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -61,9 +62,7 @@ class _MoovMakerState extends State<MoovMaker> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
+              Stack(alignment: Alignment.center, children: <Widget>[
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.12,
                   width: MediaQuery.of(context).size.width,
@@ -118,6 +117,8 @@ class MoovMakerForm extends StatefulWidget {
 }
 
 class _MoovMakerFormState extends State<MoovMakerForm> {
+  bool isUploading = false;
+
   File _image;
   final picker = ImagePicker();
 
@@ -247,7 +248,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: SingleChildScrollView(
+      child: isUploading ? linearProgress() :
+      
+      SingleChildScrollView(
         child: Column(children: <Widget>[
           Padding(
             padding: EdgeInsets.all(20.0),
@@ -593,6 +596,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         ),
                       ),
                       onPressed: () async {
+                        setState(() {
+                          isUploading = true;
+                        });
                         final GoogleSignInAccount user =
                             googleSignIn.currentUser;
                         final strUserId = user.id;
@@ -629,6 +635,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                 userEmail: userEmail,
                                 profilePic: profilePic,
                               );
+                              setState(() {
+                                isUploading = false;
+                              });
                             }
                             Navigator.pop(context);
                           }
