@@ -312,7 +312,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                             20),
                                                     child: Image.network(
                                                         course['image'],
-                                                        fit: BoxFit.fill,
+                                                        fit: BoxFit.cover,
                                                         height: 140,
                                                         width: 50),
                                                   ),
@@ -954,7 +954,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                               20),
                                                       child: Image.network(
                                                           course['image'],
-                                                          fit: BoxFit.fill,
+                                                          fit: BoxFit.cover,
                                                           height: 140,
                                                           width: 50),
                                                     ),

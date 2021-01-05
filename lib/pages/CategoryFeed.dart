@@ -342,7 +342,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                   .circular(20),
                                                           child: Image.network(
                                                               course['image'],
-                                                              fit: BoxFit.fill,
+                                                              fit: BoxFit.cover,
                                                               height: 140,
                                                               width: 50),
                                                         ),
@@ -1045,7 +1045,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                   .circular(20),
                                                           child: Image.network(
                                                               course['image'],
-                                                              fit: BoxFit.fill,
+                                                              fit: BoxFit.cover,
                                                               height: 140,
                                                               width: 50),
                                                         ),
