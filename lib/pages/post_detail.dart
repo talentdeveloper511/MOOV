@@ -358,13 +358,11 @@ class _AuthorContent extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 12),
                     child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Icon(Icons.group_add, color: TextThemes.ndBlue),
-                        ],
-                      ),
-                    ),
+                        child: Text("Score: ${course['score']}",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: TextThemes.ndBlue,
+                                decoration: TextDecoration.none))),
                   )
                 ],
               )),

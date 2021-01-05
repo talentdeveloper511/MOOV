@@ -294,10 +294,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                             Database().addGoing(
                                                 course["userId"],
                                                 course["image"],
-                                                currentUser.id,
+                                                strUserId,
                                                 course.documentID,
-                                                currentUser.displayName,
-                                                currentUser.photoUrl,
+                                                strUserName,
+                                                strUserPic,
                                                 course["startDate"],
                                                 course["title"],
                                                 course["description"],
@@ -531,9 +531,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               ),
                                                             )),
                                                         Container(
-                                                          width: isLargePhone
-                                                              ? 120
-                                                              : 80,
+                                                          width: 120,
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
@@ -647,8 +645,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                               .bottomToTop,
                                                                           child: SendMOOV(
                                                                               course['postId'],
-                                                                              course['userId'],
-                                                                              course['image'],
+                                                                              course['ownerId'],
+                                                                              course['photoUrl'],
                                                                               course['postId'],
                                                                               course['startDate'],
                                                                               course['title'],
@@ -779,14 +777,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                               "userId"],
                                                                           course[
                                                                               "image"],
-                                                                          currentUser
-                                                                              .id,
+                                                                          strUserId,
                                                                           course
                                                                               .documentID,
-                                                                          currentUser
-                                                                              .displayName,
-                                                                          currentUser
-                                                                              .photoUrl,
+                                                                          strUserName,
+                                                                          strUserPic,
                                                                           course[
                                                                               "startDate"],
                                                                           course[
@@ -976,10 +971,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                           Database().addGoing(
                                               course["userId"],
                                               course["image"],
-                                              currentUser.id,
+                                              strUserId,
                                               course.documentID,
-                                              currentUser.displayName,
-                                              currentUser.photoUrl,
+                                              strUserName,
+                                              strUserPic,
                                               course["startDate"],
                                               course["title"],
                                               course["description"],
@@ -1200,9 +1195,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                             ),
                                                           )),
                                                       Container(
-                                                        width: isLargePhone
-                                                            ? 120
-                                                            : 80,
+                                                        width: 120,
                                                         child: GestureDetector(
                                                           onTap: () {
                                                             if (course[
@@ -1317,18 +1310,18 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                             .bottomToTop,
                                                                         child: SendMOOV(
                                                                             course['postId'],
-                                                                            course['userId'],
-                                                                            course['image'],
-                                                                            course['postId'],
+                                                                            course['ownerId'],
+                                                                            course['previewImg'],
+                                                                            course['moovId'],
                                                                             course['startDate'],
                                                                             course['title'],
                                                                             course['description'],
                                                                             course['location'],
                                                                             course['address'],
-                                                                            course['profilePic'],
-                                                                            course['userName'],
-                                                                            course['userEmail'],
-                                                                            course['liked'])));
+                                                                            course['ownerProPic'],
+                                                                            course['ownerName'],
+                                                                            course['ownerEmail'],
+                                                                            course['likedArray'])));
                                                               },
                                                               child: Icon(
                                                                   Icons
@@ -1447,14 +1440,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                             "userId"],
                                                                         course[
                                                                             "image"],
-                                                                        currentUser
-                                                                            .id,
+                                                                        strUserId,
                                                                         course
                                                                             .documentID,
-                                                                        currentUser
-                                                                            .displayName,
-                                                                        currentUser
-                                                                            .photoUrl,
+                                                                        strUserName,
+                                                                        strUserPic,
                                                                         course[
                                                                             "startDate"],
                                                                         course[

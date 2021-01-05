@@ -76,11 +76,11 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
       ),
       leading: GestureDetector(
         onTap: () {
-         Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                  (Route<dynamic> route) => false,
-                );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => Home()),
+            (Route<dynamic> route) => false,
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -210,7 +210,16 @@ class UserResult extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () => print('tapped'),
+            onTap: () {
+              if (user.id == strUserId) {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ProfilePage()));
+              } else {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => OtherProfile(
+                        user.photoUrl, user.displayName, user.id)));
+              }
+            },
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.white,
@@ -221,26 +230,16 @@ class UserResult extends StatelessWidget {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: RaisedButton(
-                padding: const EdgeInsets.all(2.0),
-                color: TextThemes.ndBlue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                onPressed: () {
-                  if (user.id == strUserId) {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => ProfilePage()));
-                  } else {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OtherProfile(
-                            user.photoUrl, user.displayName, user.id)));
-                  }
+              trailing: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => LeaderBoardPage()));
                 },
                 child: Text(
-                  "View Profile",
+                  "Score: ${user.score}",
                   style: new TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.0,
+                    color: TextThemes.ndBlue,
+                    fontSize: 14.0,
                   ),
                 ),
               ),

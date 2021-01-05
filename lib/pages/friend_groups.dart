@@ -80,7 +80,6 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                 .where('members', arrayContains: currentUser.id)
                 .snapshots(),
             builder: (context, snapshot) {
-              print(snapshot.data.documents.length);
               if (!snapshot.hasData) return CircularProgressIndicator();
               if (snapshot.data.documents.length == 0) {
                 return Container(
