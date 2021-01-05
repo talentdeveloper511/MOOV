@@ -56,47 +56,68 @@ class GoingPage extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: likedArray.length,
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => OtherProfile(
-                                            likedArray[index]['strPic'],
-                                            likedArray[index]['strName'],
-                                            likedArray[index]['uid']))),
-                                child: Container(
-                                    child: Row(
+                        print(likedArray[index]['uid']);
+                        return StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('users')
+                                .document(likedArray[index]['uid'])
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              var pic = snapshot.data['photoUrl'];
+                              var name = snapshot.data['displayName'];
+
+                              if (!snapshot.hasData)
+                                return CircularProgressIndicator();
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 12),
-                                      child: CircleAvatar(
-                                          radius: 22,
-                                          backgroundColor: TextThemes.ndBlue,
-                                          child: CircleAvatar(
-                                            radius: 22.0,
-                                            backgroundImage: NetworkImage(
-                                                likedArray[index]['strPic']),
-                                            backgroundColor: Colors.transparent,
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 16.0),
-                                      child: Text(likedArray[index]['strName'],
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: TextThemes.ndBlue,
-                                              decoration: TextDecoration.none)),
+                                    GestureDetector(
+                                      onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OtherProfile(
+                                                      pic,
+                                                      name,
+                                                      likedArray[index]
+                                                          ['uid']))),
+                                      child: Container(
+                                          child: Row(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 12),
+                                            child: CircleAvatar(
+                                                radius: 22,
+                                                backgroundColor:
+                                                    TextThemes.ndBlue,
+                                                child: CircleAvatar(
+                                                  radius: 22.0,
+                                                  backgroundImage: NetworkImage(
+                                                      pic),
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                )),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 16.0),
+                                            child: Text(
+                                                name,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: TextThemes.ndBlue,
+                                                    decoration:
+                                                        TextDecoration.none)),
+                                          ),
+                                        ],
+                                      )),
                                     ),
                                   ],
-                                )),
-                              ),
-                            ],
-                          ),
-                        );
+                                ),
+                              );
+                            });
                       })
                   : Center(child: Text('')),
             ],
@@ -216,6 +237,7 @@ class PostsList extends StatelessWidget {
                       shrinkWrap: true, //MUST TO ADDED
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
+                        print("HI");
                         // print(index++);
                         List<dynamic> likerArray = course["liker"];
                         // print(likedArray[index]['uid'] + " this is likedarray");
