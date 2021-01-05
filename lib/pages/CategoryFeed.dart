@@ -473,11 +473,11 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                                 if (snapshot2.hasError)
                                                   return CircularProgressIndicator();
-                                                if (!snapshot2.hasData)
+                                                  if (!snapshot2.hasData)
                                                   return CircularProgressIndicator();
-                                                else
-                                                  userDorm =
-                                                      snapshot2.data['dorm'];
+                                                  else
+                                                userDorm =
+                                                    snapshot2.data['dorm'];
                                                 strUserPic =
                                                     snapshot2.data['photoUrl'];
                                                 isAmbassador = snapshot2
@@ -1141,8 +1141,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                       766;
 
                                               if (!snapshot2.hasData)
-                                                return CircularProgressIndicator();
-                                              if (snapshot2.hasError)
                                                 return CircularProgressIndicator();
                                               userDorm = snapshot2.data['dorm'];
                                               strUserPic =
