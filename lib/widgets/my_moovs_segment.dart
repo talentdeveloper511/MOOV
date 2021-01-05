@@ -132,7 +132,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
           builder: (context, snapshot) {
             bool isLargePhone = Screen.diagonal(context) > 766;
 
-            if (!snapshot.hasData) return Text('Loading data...');
+            if (!snapshot.hasData) return CircularProgressIndicator();
+            if (snapshot.hasError) return CircularProgressIndicator();
             return Container(
               child: Column(
                 children: [
@@ -150,6 +151,10 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                     child: ListView.builder(
                       itemCount: snapshot.data.documents.length,
                       itemBuilder: (context, index) {
+                        if (!snapshot.hasData)
+                          return CircularProgressIndicator();
+                        if (snapshot.hasError)
+                          return CircularProgressIndicator();
                         DocumentSnapshot course =
                             snapshot.data.documents[index];
 
@@ -606,7 +611,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
           builder: (context, snapshot) {
             bool isLargePhone = Screen.diagonal(context) > 766;
 
-            if (!snapshot.hasData) return Text('Loading data...');
+            if (!snapshot.hasData) return CircularProgressIndicator();
+            if (snapshot.hasError) return CircularProgressIndicator();
             return Container(
               child: Column(
                 children: [

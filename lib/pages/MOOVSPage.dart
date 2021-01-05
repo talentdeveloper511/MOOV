@@ -417,6 +417,10 @@ class _MOOVSPageState extends State<MOOVSPage>
                                             .document(course['userId'])
                                             .snapshots(),
                                         builder: (context, snapshot2) {
+                                          if (!snapshot2.hasData)
+                                            return CircularProgressIndicator();
+                                          if (snapshot2.hasError)
+                                            return CircularProgressIndicator();
                                           userDorm = snapshot2.data['dorm'];
                                           strUserPic =
                                               snapshot2.data['photoUrl'];
@@ -1045,7 +1049,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                           bool isLargePhone =
                                               Screen.diagonal(context) > 766;
 
-                                          if (!snapshot.hasData)
+                                          if (!snapshot2.hasData)
                                             return CircularProgressIndicator();
                                           if (!snapshot2.hasData)
                                             return CircularProgressIndicator();
