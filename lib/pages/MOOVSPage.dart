@@ -198,8 +198,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                             var strUserPic = currentUser.photoUrl;
 
                             bool isAmbassador;
-                            var userYear;
-                            var userDorm;
+
                             if (likedArray != null) {
                               likeCount = likedArray.length;
                               for (int i = 0; i < likeCount; i++) {
@@ -432,6 +431,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                                             .document(course['userId'])
                                             .snapshots(),
                                         builder: (context, snapshot2) {
+                                          var userYear;
+                                          var userDorm;
                                           bool isLargePhone =
                                               Screen.diagonal(context) > 766;
 
@@ -836,8 +837,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                             var strUserPic = currentUser.photoUrl;
 
                             bool isAmbassador;
-                            var userYear;
-                            var userDorm;
+
                             if (likedArray != null) {
                               likeCount = likedArray.length;
                               for (int i = 0; i < likeCount; i++) {
@@ -1079,6 +1079,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                                               .document(course['userId'])
                                               .snapshots(),
                                           builder: (context, snapshot2) {
+                                            var userYear;
+                                            var userDorm;
                                             bool isLargePhone =
                                                 Screen.diagonal(context) > 766;
 

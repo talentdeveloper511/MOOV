@@ -8,16 +8,18 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/LoginPage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.blue, // navigation bar color
-    statusBarColor: TextThemes.ndBlue, // status bar color
-  ));
-
-  runApp(MOOV());
+    statusBarColor: TextThemes.ndBlue));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+    .then((_) {
+      runApp(MOOV());
+    });
 }
+
+
 
 class MOOV extends StatelessWidget {
   const MOOV({Key key}) : super(key: key);
