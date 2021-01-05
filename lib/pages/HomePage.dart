@@ -210,6 +210,7 @@ class _HomePageState extends State<HomePage>
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 30),
                     child: Card(
+                      color: Colors.yellow[200],
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -257,6 +258,7 @@ class _HomePageState extends State<HomePage>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30),
                   child: Card(
+                    color: Colors.blue[200],
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
