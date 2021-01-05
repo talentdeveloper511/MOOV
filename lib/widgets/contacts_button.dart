@@ -1,4 +1,5 @@
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/main.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,8 @@ import 'package:MOOV/pages/contactsPage.dart';
 class SeeContactsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     return GestureDetector(
       onTap: () async {
         final PermissionStatus permissionStatus = await _getPermission();
@@ -38,7 +41,7 @@ class SeeContactsButton extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.contact_mail, color: Colors.white),
+                  child: Icon(Icons.contact_mail, color: Colors.white, size: 20,),
                 ),
                 Expanded(
                   child: Center(
@@ -46,7 +49,7 @@ class SeeContactsButton extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 15.0),
                       child: Text(
                         "Share MOOV",
-                        style: TextStyle(fontSize: 18, color: Colors.white),
+                        style: TextStyle(fontSize: isLargePhone ? 18 : 16, color: Colors.white),
                       ),
                     ),
                   ),
