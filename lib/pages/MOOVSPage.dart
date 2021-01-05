@@ -822,8 +822,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                         if (!snapshot.hasData ||
                             snapshot.data.documents.length == 0)
                           return Center(
-                            child: Text(
-                                "You're not going to any MOOVs! \nHella lame.",
+                            child: Text("You're not going to any MOOVs!",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 20)),
                           );
