@@ -349,6 +349,7 @@ class _GroupFormState extends State<GroupForm> {
 
   void _showSnackBar(message) {
     final snackBar = new SnackBar(
+      backgroundColor: Colors.red,
       content: new Text(message),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
