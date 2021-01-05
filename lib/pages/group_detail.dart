@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/helpers/utils.dart';
 import 'package:MOOV/main.dart';
@@ -120,6 +121,7 @@ class _GroupDetailState extends State<GroupDetail> {
           if (!snapshot.hasData) return CircularProgressIndicator();
 
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
                 leading: IconButton(
                   icon: Icon(
@@ -424,68 +426,75 @@ class _GroupDetailState extends State<GroupDetail> {
   }
 
   buildNoContent() {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Stack(alignment: Alignment.center, children: <Widget>[
-        FractionallySizedBox(
-          widthFactor: 1,
-          child: Container(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'lib/assets/bouts.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-            margin: EdgeInsets.only(left: 20, top: 0, right: 20, bottom: 7.5),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Container(
-            alignment: Alignment(0.0, 0.0),
+      padding: const EdgeInsets.all(0.0),
+      child: Container(
+        height: isLargePhone
+            ? SizeConfig.blockSizeVertical * 15
+            : SizeConfig.blockSizeVertical * 18,
+        child: Stack(alignment: Alignment.center, children: <Widget>[
+          FractionallySizedBox(
+            widthFactor: 1,
             child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    Colors.black.withAlpha(15),
-                    Colors.black,
-                    Colors.black12,
-                  ],
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  'lib/assets/bouts.jpg',
+                  fit: BoxFit.cover,
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  "No Upcoming MOOVs",
-                  style: TextStyle(
-                      fontFamily: 'Solway',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 20.0),
+              margin: EdgeInsets.only(left: 20, top: 0, right: 20, bottom: 7.5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              alignment: Alignment(0.0, 0.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Colors.black.withAlpha(15),
+                      Colors.black,
+                      Colors.black12,
+                    ],
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    "No Upcoming MOOVs",
+                    style: TextStyle(
+                        fontFamily: 'Solway',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }

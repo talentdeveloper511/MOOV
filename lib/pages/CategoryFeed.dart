@@ -86,6 +86,7 @@ class _CategoryFeedState extends State<CategoryFeed>
     dynamic likeCount;
 
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
@@ -239,6 +240,7 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                   return Card(
                                     color: Colors.white,
+                                    shadowColor: Colors.grey[200],
                                     clipBehavior: Clip.antiAlias,
                                     child: InkWell(
                                       onTap: () {
@@ -313,7 +315,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                       child: Column(
                                         children: [
                                           Card(
-                                            shadowColor: Colors.white,
                                             color: Colors.white,
                                             child: Row(children: <Widget>[
                                               Expanded(
@@ -472,6 +473,9 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                                 if (snapshot2.hasError)
                                                   return CircularProgressIndicator();
+                                                  if (!snapshot2.hasData)
+                                                  return CircularProgressIndicator();
+                                                  else
                                                 userDorm =
                                                     snapshot2.data['dorm'];
                                                 strUserPic =

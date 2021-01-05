@@ -188,7 +188,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Colors.white12,
+      backgroundColor: Colors.white,
       appBar: buildSearchField(),
       body:
           searchResultsFuture == null ? buildNoContent() : buildSearchResults(),

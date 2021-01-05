@@ -55,6 +55,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(

@@ -158,6 +158,7 @@ class _GroupFormState extends State<GroupForm> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: Colors.white,
       key: _scaffoldKey,
       appBar: AppBar(
         leading: IconButton(

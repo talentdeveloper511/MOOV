@@ -74,6 +74,7 @@ class _MOOVSPageState extends State<MOOVSPage>
     dynamic likeCount;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -1048,7 +1049,6 @@ class _MOOVSPageState extends State<MOOVSPage>
                                             return CircularProgressIndicator();
                                           if (!snapshot2.hasData)
                                             return CircularProgressIndicator();
-                                          print(snapshot2.data['dorm']);
                                           userDorm = snapshot2.data['dorm'];
                                           strUserPic =
                                               snapshot2.data['photoUrl'];
@@ -1101,11 +1101,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                         ),
                                                       )),
                                                   Container(
-                                                    width: isLargePhone &&
-                                                            course['userId'] ==
-                                                                strUserId
-                                                        ? 120
-                                                        : 80,
+                                                    width: 120,
                                                     child: GestureDetector(
                                                       onTap: () {
                                                         if (course['userId'] ==

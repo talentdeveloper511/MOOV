@@ -48,6 +48,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
     var score;
     var pic;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(

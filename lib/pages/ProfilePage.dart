@@ -58,6 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
           userFriends = snapshot.data['friendArray'];
 
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               leading: Padding(
                 padding: const EdgeInsets.all(10.0),

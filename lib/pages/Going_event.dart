@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
@@ -70,14 +71,24 @@ class GoingPage extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     GestureDetector(
-                                      onTap: () => Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  OtherProfile(
-                                                      pic,
-                                                      name,
-                                                      likedArray[index]
-                                                          ['uid']))),
+                                      onTap: () {
+                                        if (likedArray[index]['uid'] ==
+                                            currentUser.id) {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfilePage()));
+                                        } else {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      OtherProfile(
+                                                          pic,
+                                                          name,
+                                                          likedArray[index]
+                                                              ['uid'])));
+                                        }
+                                      },
                                       child: Container(
                                           child: Row(
                                         children: [
