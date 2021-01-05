@@ -725,11 +725,14 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         "userId"],
                                                                     course[
                                                                         "image"],
-                                                                    strUserId,
+                                                                    currentUser
+                                                                        .id,
                                                                     course
                                                                         .documentID,
-                                                                    strUserName,
-                                                                    strUserPic,
+                                                                    currentUser
+                                                                        .displayName,
+                                                                    currentUser
+                                                                        .photoUrl,
                                                                     course[
                                                                         "startDate"],
                                                                     course[
@@ -797,11 +800,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                   StreamBuilder(
                       stream: Firestore.instance
                           .collection('food')
-                          .where("liked", arrayContains: {
-                            "strName": currentUser.displayName,
-                            "strPic": currentUser.photoUrl,
-                            "uid": currentUser.id
-                          })
+                          .where("liked",
+                              arrayContains: {"uid": currentUser.id})
                           .orderBy("startDate")
                           .snapshots(),
                       builder: (context, snapshot) {
@@ -892,10 +892,10 @@ class _MOOVSPageState extends State<MOOVSPage>
                                       Database().addGoing(
                                           course["userId"],
                                           course["image"],
-                                          strUserId,
+                                          currentUser.id,
                                           course.documentID,
-                                          strUserName,
-                                          strUserPic,
+                                          currentUser.displayName,
+                                          currentUser.photoUrl,
                                           course["startDate"],
                                           course["title"],
                                           course["description"],
@@ -1353,11 +1353,14 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         "userId"],
                                                                     course[
                                                                         "image"],
-                                                                    strUserId,
+                                                                    currentUser
+                                                                        .id,
                                                                     course
                                                                         .documentID,
-                                                                    strUserName,
-                                                                    strUserPic,
+                                                                    currentUser
+                                                                        .displayName,
+                                                                    currentUser
+                                                                        .photoUrl,
                                                                     course[
                                                                         "startDate"],
                                                                     course[

@@ -294,10 +294,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                             Database().addGoing(
                                                 course["userId"],
                                                 course["image"],
-                                                strUserId,
+                                                currentUser.id,
                                                 course.documentID,
-                                                strUserName,
-                                                strUserPic,
+                                                currentUser.displayName,
+                                                currentUser.photoUrl,
                                                 course["startDate"],
                                                 course["title"],
                                                 course["description"],
@@ -531,7 +531,9 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               ),
                                                             )),
                                                         Container(
-                                                          width: isLargePhone ? 120 : 80,
+                                                          width: isLargePhone
+                                                              ? 120
+                                                              : 80,
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
@@ -610,8 +612,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                     course["userId"] ==
                                                             currentUser.id
                                                         ? RaisedButton(
-                                                            color:
-                                                                Colors.red,
+                                                            color: Colors.red,
                                                             onPressed: () =>
                                                                 showAlertDialog(
                                                                     context,
@@ -778,11 +779,14 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                               "userId"],
                                                                           course[
                                                                               "image"],
-                                                                          strUserId,
+                                                                          currentUser
+                                                                              .id,
                                                                           course
                                                                               .documentID,
-                                                                          strUserName,
-                                                                          strUserPic,
+                                                                          currentUser
+                                                                              .displayName,
+                                                                          currentUser
+                                                                              .photoUrl,
                                                                           course[
                                                                               "startDate"],
                                                                           course[
@@ -972,10 +976,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                           Database().addGoing(
                                               course["userId"],
                                               course["image"],
-                                              strUserId,
+                                              currentUser.id,
                                               course.documentID,
-                                              strUserName,
-                                              strUserPic,
+                                              currentUser.displayName,
+                                              currentUser.photoUrl,
                                               course["startDate"],
                                               course["title"],
                                               course["description"],
@@ -1196,7 +1200,9 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                             ),
                                                           )),
                                                       Container(
-                                                        width: isLargePhone ? 120 : 80,
+                                                        width: isLargePhone
+                                                            ? 120
+                                                            : 80,
                                                         child: GestureDetector(
                                                           onTap: () {
                                                             if (course[
@@ -1441,11 +1447,14 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                             "userId"],
                                                                         course[
                                                                             "image"],
-                                                                        strUserId,
+                                                                        currentUser
+                                                                            .id,
                                                                         course
                                                                             .documentID,
-                                                                        strUserName,
-                                                                        strUserPic,
+                                                                        currentUser
+                                                                            .displayName,
+                                                                        currentUser
+                                                                            .photoUrl,
                                                                         course[
                                                                             "startDate"],
                                                                         course[

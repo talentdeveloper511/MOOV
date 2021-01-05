@@ -210,14 +210,14 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                       }
 
                                       if (uidArray != null &&
-                                          uidArray.contains(strUserId)) {
+                                          uidArray.contains(currentUser.id)) {
                                         Database().removeGoing(
                                             course["userId"],
                                             course["image"],
-                                            strUserId,
+                                            currentUser.id,
                                             course.documentID,
-                                            strUserName,
-                                            strUserPic,
+                                            currentUser.displayName,
+                                            currentUser.photoUrl,
                                             course["startDate"],
                                             course["title"],
                                             course["description"],
@@ -231,10 +231,10 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                         Database().addGoing(
                                             course["userId"],
                                             course["image"],
-                                            strUserId,
+                                            currentUser.id,
                                             course.documentID,
-                                            strUserName,
-                                            strUserPic,
+                                            currentUser.displayName,
+                                            currentUser.photoUrl,
                                             course["startDate"],
                                             course["title"],
                                             course["description"],
@@ -599,10 +599,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
           }),
       StreamBuilder(
           stream: Firestore.instance
-              .collection('posts')
-              .where("liked", arrayContains: {
-                "uid": strUserId
-              })
+              .collection('food')
+              .where("liked", arrayContains: {"uid": strUserId})
               .orderBy("startDate")
               .snapshots(),
           builder: (context, snapshot) {
@@ -681,14 +679,14 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                 }
 
                                 if (uidArray != null &&
-                                    uidArray.contains(strUserId)) {
+                                    uidArray.contains(currentUser.id)) {
                                   Database().removeGoing(
                                       course["userId"],
                                       course["image"],
-                                      strUserId,
+                                      currentUser.id,
                                       course.documentID,
-                                      strUserName,
-                                      strUserPic,
+                                      currentUser.displayName,
+                                      currentUser.photoUrl,
                                       course["startDate"],
                                       course["title"],
                                       course["description"],
@@ -702,10 +700,10 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                   Database().addGoing(
                                       course["userId"],
                                       course["image"],
-                                      strUserId,
+                                      currentUser.id,
                                       course.documentID,
-                                      strUserName,
-                                      strUserPic,
+                                      currentUser.displayName,
+                                      currentUser.photoUrl,
                                       course["startDate"],
                                       course["title"],
                                       course["description"],

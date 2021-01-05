@@ -116,8 +116,6 @@ class Database {
           likedArray);
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
-        "strName": strName,
-        "strPic": strPic,
       };
       String serialUser = uid;
       transaction.update(ref, {
@@ -373,8 +371,6 @@ class Database {
       final DocumentReference userRef2 = dbRef.document('users/$uid');
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
-        "strName": strName,
-        "strPic": strPic,
       };
       String serialUser = uid;
 
@@ -383,7 +379,10 @@ class Database {
         'liker': FieldValue.arrayRemove([serialUser]),
         'likeCounter': FieldValue.increment(-1)
       });
-      transaction.update(userRef2, {'score': FieldValue.increment(-2)});
+      transaction.update(userRef2, {
+        'score': FieldValue.increment(-2),
+        'likedMoovs': FieldValue.arrayRemove([moovId])
+      });
     });
   }
 
