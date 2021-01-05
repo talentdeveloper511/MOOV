@@ -114,6 +114,7 @@ class _HomePageState extends State<HomePage>
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButton: FadeTransition(
         opacity: _hideFabAnimController,
         child: ScaleTransition(
@@ -210,6 +211,8 @@ class _HomePageState extends State<HomePage>
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 30),
                     child: Card(
+                      elevation: 10,
+                      color: Colors.pink[50],
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -257,6 +260,8 @@ class _HomePageState extends State<HomePage>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30),
                   child: Card(
+                    elevation: 10,
+                    color: Colors.purple[50],
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
