@@ -56,6 +56,9 @@ class _ProfilePageState extends State<ProfilePage> {
           strUserPic = snapshot.data['photoUrl'];
           isAmbassador = snapshot.data['isAmbassador'];
           userFriends = snapshot.data['friendArray'];
+          userMoovs = snapshot.data['likedMoovs'];
+          userGroups = snapshot.data['friendGroups'];
+
 
           return Scaffold(
             backgroundColor: Colors.white,
@@ -232,7 +235,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Column(
                               children: [
                                 Text(
-                                  userMoovs.length == null
+                                  userMoovs.length == null ||
+                                          userMoovs.length == 0
                                       ? "0"
                                       : userMoovs.length.toString(),
                                   style: TextThemes.extraBold,
@@ -259,7 +263,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Column(
                                 children: [
                                   Text(
-                                    userFriends.length == null
+                                    userFriends.length == null ||
+                                            userFriends.length == 0
                                         ? "0"
                                         : userFriends.length.toString(),
                                     style: TextThemes.extraBold,
@@ -283,7 +288,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Column(
                               children: [
                                 Text(
-                                  userGroups.length == null
+                                  userGroups.length == null ||
+                                          userGroups.length == 0
                                       ? "0"
                                       : userGroups.length.toString(),
                                   style: TextThemes.extraBold,

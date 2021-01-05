@@ -488,7 +488,7 @@ class _HomePageState extends State<HomePage>
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {
-                            navigateToCategoryFeed(context, "Club");
+                            navigateToCategoryFeed(context, "Clubs");
                           },
                           child: CategoryButton(asset: 'lib/assets/club2.png')),
                       Align(
@@ -509,7 +509,7 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "Sport");
+                          navigateToCategoryFeed(context, "Sports");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/sportbutton1.png')),
@@ -530,7 +530,7 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "Show");
+                          navigateToCategoryFeed(context, "Shows");
                         },
                         child: CategoryButton(
                             asset: 'lib/assets/filmbutton1.png')),

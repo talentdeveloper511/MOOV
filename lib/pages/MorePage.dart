@@ -256,13 +256,13 @@ class _MorePageState extends State<MorePage>
                   children: <Widget>[
                     GestureDetector(
                         onTap: () {
-                          navigateToCategoryFeed(context, "The Black Market");
+                          navigateToCategoryFeed(context, "Black Market");
                         },
                         child: CategoryButton(asset: 'lib/assets/bm1.png')),
                     Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "The Black Market",
+                          "Black Market",
                           style: TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.bold,
