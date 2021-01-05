@@ -392,7 +392,17 @@ class UserResult extends StatelessWidget {
                                 return CircularProgressIndicator();
                               if (!snapshot.hasData ||
                                   snapshot.data.documents.length == 0)
-                                return Container();
+                                return SizedBox(
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                        child: Text("nothing, right now.")),
+                                    width: isLargePhone
+                                        ? MediaQuery.of(context).size.width *
+                                            0.51
+                                        : MediaQuery.of(context).size.width *
+                                            0.49,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.15);
                               var course = snapshot.data.documents[0];
 
                               return GestureDetector(
