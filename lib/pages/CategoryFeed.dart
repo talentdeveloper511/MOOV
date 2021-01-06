@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
+import 'dart:math';
 
 import 'package:MOOV/helpers/themes.dart';
 
@@ -24,7 +25,6 @@ import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:share/share.dart';
 
 class CategoryFeed extends StatefulWidget {
   List<dynamic> likedArray;
@@ -219,6 +219,17 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   var strUserPic = currentUser.photoUrl;
 
                                   bool isAmbassador;
+
+                                  var sd1 = course['startDate'].toDate();
+                                  var sd = DateFormat('MMMd')
+                                      .add_jm()
+                                      .format(course['startDate'].toDate());
+                                  var now = DateFormat('MMMd')
+                                      .add_jm()
+                                      .format(DateTime.now());
+                                  print(sd1.isAfter(DateTime.now()));
+                                  print(sd1);
+                                  print(DateTime.now());
 
                                   if (likedArray != null) {
                                     likeCount = likedArray.length;
@@ -554,7 +565,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                             )),
                                                         Container(
                                                           width: 120,
-                                                          height: 40,
+                                                          height: 30,
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
@@ -605,24 +616,22 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                           .only(
                                                                       left:
                                                                           2.0),
-                                                                  child:
-                                                                      Expanded(
-                                                                    child: Text(
-                                                                        userYear +
-                                                                            " in " +
-                                                                            userDorm,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        maxLines:
-                                                                            2,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                11,
-                                                                            color:
-                                                                                TextThemes.ndBlue,
-                                                                            decoration: TextDecoration.none)),
-                                                                  ),
+                                                                  child: Text(
+                                                                      userYear +
+                                                                          " in " +
+                                                                          userDorm,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      maxLines:
+                                                                          2,
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              11,
+                                                                          color: TextThemes
+                                                                              .ndBlue,
+                                                                          decoration:
+                                                                              TextDecoration.none)),
                                                                 ),
                                                               ],
                                                             ),
@@ -1257,7 +1266,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                             )),
                                                         Container(
                                                           width: 120,
-                                                          height: 40,
+                                                          height: 30,
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
@@ -1308,24 +1317,22 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                           .only(
                                                                       left:
                                                                           2.0),
-                                                                  child:
-                                                                      Expanded(
-                                                                    child: Text(
-                                                                        userYear +
-                                                                            " in " +
-                                                                            userDorm,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        maxLines:
-                                                                            2,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                11,
-                                                                            color:
-                                                                                TextThemes.ndBlue,
-                                                                            decoration: TextDecoration.none)),
-                                                                  ),
+                                                                  child: Text(
+                                                                      userYear +
+                                                                          " in " +
+                                                                          userDorm,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      maxLines:
+                                                                          2,
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              11,
+                                                                          color: TextThemes
+                                                                              .ndBlue,
+                                                                          decoration:
+                                                                              TextDecoration.none)),
                                                                 ),
                                                               ],
                                                             ),

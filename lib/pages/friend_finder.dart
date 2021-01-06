@@ -359,17 +359,15 @@ class UserResult extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Expanded(
-                                  child: FittedBox(
-                                    child: Text(
-                                      user.displayName == null
-                                          ? ""
-                                          : user.displayName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: TextThemes.ndBlue,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                child: FittedBox(
+                                  child: Text(
+                                    user.displayName == null
+                                        ? ""
+                                        : user.displayName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: TextThemes.ndBlue,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),

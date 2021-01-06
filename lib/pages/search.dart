@@ -40,10 +40,26 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
 
   clearSearch() {
     searchController.clear();
+    
+
     setState(() {
       searchResultsFuture = null;
       searchResultsEvents = null;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Simple declarations
+    TextEditingController searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.dispose();
   }
 
   AppBar buildSearchField() {
@@ -131,7 +147,9 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
             ),
             suffixIcon: IconButton(
               icon: Icon(Icons.clear),
-              onPressed: clearSearch,
+              onPressed: () {
+                clearSearch();
+              },
             ),
           ),
           onFieldSubmitted: handleSearch,

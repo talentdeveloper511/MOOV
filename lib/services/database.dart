@@ -1,5 +1,6 @@
 import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
@@ -283,11 +284,16 @@ class Database {
   }
 
   deletePost(String postId, String ownerId) {
+    final FirebaseStorage _storage =
+        FirebaseStorage(storageBucket: 'gs://moov4-4d3c4.appspot.com');
+    String filePath = 'images/${DateTime.now()}.png';
+
     bool isPostOwner = strUserId == ownerId;
     if (isPostOwner) {
       postsRef.document(postId).get().then((doc) {
         if (doc.exists) {
           doc.reference.delete();
+          _storage.ref().child(filePath).delete();
         }
       });
     }

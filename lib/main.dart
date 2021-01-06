@@ -8,18 +8,17 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/LoginPage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.blue, // navigation bar color
-    statusBarColor: TextThemes.ndBlue));
+      systemNavigationBarColor: Colors.blue, // navigation bar color
+      statusBarColor: TextThemes.ndBlue));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-    .then((_) {
-      runApp(MOOV());
-    });
+      .then((_) {
+    runApp(MOOV());
+  });
 }
-
-
 
 class MOOV extends StatelessWidget {
   const MOOV({Key key}) : super(key: key);
@@ -29,25 +28,59 @@ class MOOV extends StatelessWidget {
     return ScreenUtilInit(
       designSize: Size(1284, 2778),
       allowFontScaling: false,
-      child: MaterialApp(
-        title: 'Whats the MOOV?',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          appBarTheme: Theme.of(context)
-              .appBarTheme
-              .copyWith(brightness: Brightness.dark),
-          scaffoldBackgroundColor: CupertinoColors.lightBackgroundGray,
-          dialogBackgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-          primarySwatch: Colors.grey,
-          cardColor: Colors.white70,
-          accentColor: Color.fromRGBO(220, 180, 57, 1.0),
-          textTheme: TextTheme(
-              headline1: TextThemes.headline1,
-              subtitle1: TextThemes.subtitle1,
-              bodyText1: TextThemes.bodyText1),
-          fontFamily: 'Solway',
+      child: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          print("object");
+        },
+        onPanUpdate: (details) {
+          if (details.delta.dx > 0) {
+            print("swipe");
+            FocusScopeNode currentFocus = FocusScope.of(context);
+
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus.unfocus();
+            }
+            // swiping in right direction
+          }
+          if (details.delta.dx < 0) {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus.unfocus();
+            }
+            // swiping in right direction
+          }
+        },
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
+        },
+        child: MaterialApp(
+          title: 'Whats the MOOV?',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            appBarTheme: Theme.of(context)
+                .appBarTheme
+                .copyWith(brightness: Brightness.dark),
+            scaffoldBackgroundColor: CupertinoColors.lightBackgroundGray,
+            dialogBackgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
+            primarySwatch: Colors.grey,
+            cardColor: Colors.white70,
+            accentColor: Color.fromRGBO(220, 180, 57, 1.0),
+            textTheme: TextTheme(
+                headline1: TextThemes.headline1,
+                subtitle1: TextThemes.subtitle1,
+                bodyText1: TextThemes.bodyText1),
+            fontFamily: 'Solway',
+          ),
+          home: Home(),
         ),
-        home: Home(),
       ),
     );
   }

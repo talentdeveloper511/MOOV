@@ -140,16 +140,16 @@ class _HomeState extends State<Home> {
     // Upload(currentUser: currentUser);
     return Scaffold(
       body: PageView(
-        children: <Widget>[
-          // Timeline(),
-          HomePage(),
-          Search(),
-          MOOVSPage(),
-          ProfilePage()
-        ],
-        controller: pageController,
-        onPageChanged: onPageChanged,
-      ),
+          children: <Widget>[
+            // Timeline(),
+            HomePage(),
+            Search(),
+            MOOVSPage(),
+            ProfilePage()
+          ],
+          controller: pageController,
+          onPageChanged: onPageChanged,
+        ),
       bottomNavigationBar: CupertinoTabBar(
           currentIndex: pageIndex,
           onTap: onTap,

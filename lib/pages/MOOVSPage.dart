@@ -494,7 +494,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                       )),
                                                   Container(
                                                     width: 120,
-                                                    height: 40,
+                                                    height: 30,
                                                     child: GestureDetector(
                                                       onTap: () {
                                                         if (course['userId'] ==
@@ -544,24 +544,22 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                 const EdgeInsets
                                                                         .only(
                                                                     left: 2.0),
-                                                            child: Expanded(
-                                                              child: Text(
-                                                                  userYear +
-                                                                      " in " +
-                                                                      userDorm,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  maxLines: 2,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          11,
-                                                                      color: TextThemes
-                                                                          .ndBlue,
-                                                                      decoration:
-                                                                          TextDecoration
-                                                                              .none)),
-                                                            ),
+                                                            child: Text(
+                                                                userYear +
+                                                                    " in " +
+                                                                    userDorm,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                maxLines: 2,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        11,
+                                                                    color: TextThemes
+                                                                        .ndBlue,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .none)),
                                                           ),
                                                         ],
                                                       ),
@@ -1143,7 +1141,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                         )),
                                                     Container(
                                                       width: 120,
-                                                      height: 40,
+                                                      height: 30,
                                                       child: GestureDetector(
                                                         onTap: () {
                                                           if (course[
@@ -1197,23 +1195,21 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                           .only(
                                                                       left:
                                                                           2.0),
-                                                              child: Expanded(
-                                                                child: Text(
-                                                                    userYear +
-                                                                        " in " +
-                                                                        userDorm,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    maxLines: 2,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: TextThemes
-                                                                            .ndBlue,
-                                                                        decoration:
-                                                                            TextDecoration.none)),
-                                                              ),
+                                                              child: Text(
+                                                                  userYear +
+                                                                      " in " +
+                                                                      userDorm,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 2,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          11,
+                                                                      color: TextThemes
+                                                                          .ndBlue,
+                                                                      decoration:
+                                                                          TextDecoration.none)),
                                                             ),
                                                           ],
                                                         ),
