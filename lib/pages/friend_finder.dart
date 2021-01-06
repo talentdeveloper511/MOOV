@@ -376,13 +376,7 @@ class UserResult extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(child: Text("is")),
-                    Container(
-                        child: Text("Going",
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold))),
-                    Container(child: Text("to")),
+                    Container(child: Text("is going to")),
                     Container(
                         child: StreamBuilder(
                             stream: Firestore.instance
@@ -398,13 +392,13 @@ class UserResult extends StatelessWidget {
                                   snapshot.data.documents.length == 0)
                                 return SizedBox(
                                     child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("nothing, for now.")),
+                                      alignment: Alignment.centerLeft,
+                                        child: Text("nothing, right now.")),
                                     width: isLargePhone
                                         ? MediaQuery.of(context).size.width *
-                                            0.47
+                                            0.51
                                         : MediaQuery.of(context).size.width *
-                                            0.44,
+                                            0.49,
                                     height: MediaQuery.of(context).size.height *
                                         0.15);
                               var course = snapshot.data.documents[0];
@@ -431,11 +425,11 @@ class UserResult extends StatelessWidget {
                                             ? MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.47
+                                                0.51
                                             : MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.44,
+                                                0.49,
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.15,
