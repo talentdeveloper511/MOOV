@@ -59,57 +59,8 @@ class _ProfilePageState extends State<ProfilePage> {
           userMoovs = snapshot.data['likedMoovs'];
           userGroups = snapshot.data['friendGroups'];
 
-
           return Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBar(
-              leading: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Image.asset('lib/assets/ndlogo.png', height: 70),
-              ),
-              backgroundColor: TextThemes.ndBlue,
-              //pinned: true,
-              actions: <Widget>[
-                IconButton(
-                  padding: EdgeInsets.all(5.0),
-                  icon: Icon(Icons.insert_chart),
-                  color: Colors.white,
-                  splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                  onPressed: () {
-                    // Implement navigation to leaderboard page here...
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LeaderBoardPage()));
-                  },
-                ),
-                IconButton(
-                  padding: EdgeInsets.all(5.0),
-                  icon: Icon(Icons.notifications_active),
-                  color: Colors.white,
-                  splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NotificationFeed()));
-                  },
-                )
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                titlePadding: EdgeInsets.all(5),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      'lib/assets/moovblue.png',
-                      fit: BoxFit.cover,
-                      height: 50.0,
-                    ),
-                  ],
-                ),
-              ),
-            ),
             body: SingleChildScrollView(
               child: Stack(children: [
                 Container(

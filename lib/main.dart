@@ -29,30 +29,6 @@ class MOOV extends StatelessWidget {
       designSize: Size(1284, 2778),
       allowFontScaling: false,
       child: GestureDetector(
-        onHorizontalDragEnd: (details) {
-          print("object");
-        },
-        onPanUpdate: (details) {
-          if (details.delta.dx > 0) {
-            print("swipe");
-            FocusScopeNode currentFocus = FocusScope.of(context);
-
-            if (!currentFocus.hasPrimaryFocus &&
-                currentFocus.focusedChild != null) {
-              FocusManager.instance.primaryFocus.unfocus();
-            }
-            // swiping in right direction
-          }
-          if (details.delta.dx < 0) {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-
-            if (!currentFocus.hasPrimaryFocus &&
-                currentFocus.focusedChild != null) {
-              FocusManager.instance.primaryFocus.unfocus();
-            }
-            // swiping in right direction
-          }
-        },
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
 

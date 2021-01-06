@@ -64,73 +64,8 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
 
   AppBar buildSearchField() {
     return AppBar(
-      toolbarHeight: 100,
-      flexibleSpace: FlexibleSpaceBar(
-        titlePadding: EdgeInsets.all(2),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                  (Route<dynamic> route) => false,
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 50.0),
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 50.0,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Home()),
-            (Route<dynamic> route) => false,
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Image.asset('lib/assets/ndlogo.png'),
-        ),
-      ),
-      backgroundColor: TextThemes.ndBlue,
-      //pinned: true,
-      actions: <Widget>[
-        IconButton(
-          padding: EdgeInsets.all(5.0),
-          icon: Icon(Icons.insert_chart),
-          color: Colors.white,
-          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-          onPressed: () {
-            // Implement navigation to leaderboard page here...
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-          },
-        ),
-        IconButton(
-          padding: EdgeInsets.all(5.0),
-          icon: Padding(
-            padding: const EdgeInsets.only(bottom: 0.0),
-            child: Icon(Icons.notifications_active),
-          ),
-          color: Colors.white,
-          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NotificationFeed()));
-          },
-        )
-      ],
+     toolbarHeight: 50,
+      
       bottom: PreferredSize(
         preferredSize: null,
         child: TextFormField(

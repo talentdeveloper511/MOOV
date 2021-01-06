@@ -18,7 +18,6 @@ import 'package:MOOV/services/database.dart';
 import 'package:MOOV/pages/notification_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
-import 'PostDepth.dart';
 
 class MOOVSPage extends StatefulWidget {
   @override
@@ -75,51 +74,6 @@ class _MOOVSPageState extends State<MOOVSPage>
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Image.asset('lib/assets/ndlogo.png', height: 70),
-        ),
-        backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
-        actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.insert_chart),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              // Implement navigation to leaderboard page here...
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-            },
-          ),
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.notifications_active),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationFeed()));
-            },
-          )
-        ],
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'lib/assets/moovblue.png',
-                fit: BoxFit.cover,
-                height: 55.0,
-              ),
-            ],
-          ),
-        ),
-      ),
-// .where("liked", arrayContains: strUserId)
       body: Container(
           height: MediaQuery.of(context).size.height * 0.90,
           child: Column(children: <Widget>[
@@ -1208,7 +1162,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                       color: TextThemes
                                                                           .ndBlue,
                                                                       decoration:
-                                                                          TextDecoration.none)),
+                                                                          TextDecoration
+                                                                              .none)),
                                                             ),
                                                           ],
                                                         ),

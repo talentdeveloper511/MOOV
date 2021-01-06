@@ -29,36 +29,6 @@ class HomePage extends StatefulWidget {
       IconData(0xe26f, fontFamily: 'MaterialIcons');
 }
 
-class MyAppBar extends AppBar {
-  MyAppBar({Key key, Widget title})
-      : super(
-            key: key,
-            title: title,
-            backgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-            actions: <Widget>[
-              IconButton(
-                padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.search),
-                color: Colors.white,
-                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  // Implement navigation to shopping cart page here...
-                  print('Click Search');
-                },
-              ),
-              IconButton(
-                padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.message),
-                color: Colors.white,
-                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  // Implement navigation to shopping cart page here...
-                  print('Click Message');
-                },
-              )
-            ]);
-}
-
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   ScrollController _scrollController;
@@ -135,56 +105,7 @@ class _HomePageState extends State<HomePage>
       body: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
-          SliverAppBar(
-            leading: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Image.asset('lib/assets/ndlogo.png', height: 70),
-            ),
-            backgroundColor: TextThemes.ndBlue,
-            //pinned: true,
-            floating: true,
-            actions: <Widget>[
-              IconButton(
-                padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.insert_chart),
-                color: Colors.white,
-                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  // Implement navigation to leaderboard page here...
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LeaderBoardPage()));
-                  print('Leaderboards clicked');
-                },
-              ),
-              IconButton(
-                padding: EdgeInsets.all(5.0),
-                icon: Icon(Icons.notifications_active),
-                color: Colors.white,
-                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationFeed()));
-                },
-              )
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: EdgeInsets.all(5),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(
-                    'lib/assets/moovblue.png',
-                    fit: BoxFit.cover,
-                    height: 55.0,
-                  ),
-                ],
-              ),
-            ),
-          ),
+        
           SliverPadding(
             padding: EdgeInsets.only(left: 0, right: 0),
             sliver: SliverGrid.count(

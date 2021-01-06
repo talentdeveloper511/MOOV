@@ -4,7 +4,10 @@ import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/leaderboard.dart';
+import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/search.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -139,17 +142,125 @@ class _HomeState extends State<Home> {
   Scaffold buildAuthScreen() {
     // Upload(currentUser: currentUser);
     return Scaffold(
-      body: PageView(
-          children: <Widget>[
-            // Timeline(),
-            HomePage(),
-            Search(),
-            MOOVSPage(),
-            ProfilePage()
-          ],
-          controller: pageController,
-          onPageChanged: onPageChanged,
+      appBar: AppBar(
+        leadingWidth: 100,
+        leading: CarouselSlider(
+          options: CarouselOptions(
+            height: 400,
+            aspectRatio: 16 / 9,
+            viewportFraction: 1,
+            initialPage: 0,
+            enableInfiniteScroll: true,
+            scrollPhysics: NeverScrollableScrollPhysics(),
+            pauseAutoPlayOnTouch: false,
+            reverse: false,
+            autoPlay: true,
+            autoPlayInterval: Duration(seconds: 2),
+            autoPlayAnimationDuration: Duration(milliseconds: 800),
+            autoPlayCurve: Curves.fastOutSlowIn,
+            enlargeCenterPage: true,
+            // onPageChanged: callbackFunction,
+            scrollDirection: Axis.horizontal,
+          ),
+          items: [
+            Image.asset('lib/assets/ndlogo.png', height: 35),
+            Text(
+              " What's the MOOV?",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16.0, color: Colors.white),
+            ),
+            Container(
+              margin: const EdgeInsets.all(7.0),
+              padding: const EdgeInsets.all(7.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(7)),
+              child: Text(
+                "Surprise",
+                style: TextStyle(fontSize: 14.0, color: Colors.white),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(7.0),
+              padding: const EdgeInsets.all(7.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(7)),
+              child: Text(
+                "Mood",
+                style: TextStyle(fontSize: 14.0, color: Colors.white),
+              ),
+            ),
+          ].map((i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                    width: MediaQuery.of(context).size.width * 3,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(),
+                    child: Center(
+                      child: i,
+                    ));
+              },
+            );
+          }).toList(),
         ),
+
+        // child: Padding(
+        //   padding: const EdgeInsets.all(10.0),
+        //   child: Image.asset('lib/assets/ndlogo.png', height: 70),
+        // ),
+
+        backgroundColor: TextThemes.ndBlue,
+        //pinned: true,
+        actions: <Widget>[
+          IconButton(
+            padding: EdgeInsets.all(5.0),
+            icon: Icon(Icons.insert_chart),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () {
+              // Implement navigation to leaderboard page here...
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+            },
+          ),
+          IconButton(
+            padding: EdgeInsets.all(5.0),
+            icon: Icon(Icons.notifications_active),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationFeed()));
+            },
+          )
+        ],
+        flexibleSpace: FlexibleSpaceBar(
+          titlePadding: EdgeInsets.all(5),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'lib/assets/moovblue.png',
+                fit: BoxFit.cover,
+                height: 50.0,
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: PageView(
+        children: <Widget>[
+          // Timeline(),
+          HomePage(),
+          Search(),
+          MOOVSPage(),
+          ProfilePage()
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged,
+      ),
       bottomNavigationBar: CupertinoTabBar(
           currentIndex: pageIndex,
           onTap: onTap,
