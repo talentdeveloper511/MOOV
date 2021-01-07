@@ -178,14 +178,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => PostDetail(
-                                          course['image'],
-                                          course['title'],
-                                          course['description'],
-                                          course['startDate'],
-                                          course['location'],
-                                          course['address'],
-                                          course['userId'],
-                                          likedArray,
+                                          
                                           course.documentID)));
                                 },
                                 onDoubleTap: () {
@@ -815,14 +808,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) => PostDetail(
-                                                course['image'],
-                                                course['title'],
-                                                course['description'],
-                                                course['startDate'],
-                                                course['location'],
-                                                course['address'],
-                                                course['userId'],
-                                                likedArray,
+                                                
                                                 course.documentID)));
                                   },
                                   onDoubleTap: () {

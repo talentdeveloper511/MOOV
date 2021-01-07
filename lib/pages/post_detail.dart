@@ -18,41 +18,18 @@ import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
 
 class PostDetail extends StatefulWidget {
-  String bannerImage, title, description, location, userId;
-  dynamic startDate, address, moovId;
-  List<dynamic> likedArray;
-  PostDetail(this.bannerImage, this.title, this.description, this.startDate,
-      this.location, this.address, this.userId, this.likedArray, this.moovId);
+  String postId;
+  PostDetail(this.postId);
 
   @override
   State<StatefulWidget> createState() {
-    return _PostDetailState(
-        this.bannerImage,
-        this.title,
-        this.description,
-        this.startDate,
-        this.location,
-        this.address,
-        this.userId,
-        this.likedArray,
-        this.moovId);
+    return _PostDetailState(this.postId);
   }
 }
 
 class _PostDetailState extends State<PostDetail> {
-  String bannerImage, title, description, location, userId;
-  dynamic startDate, address, moovId;
-  List<dynamic> likedArray;
-  _PostDetailState(
-      this.bannerImage,
-      this.title,
-      this.description,
-      this.startDate,
-      this.location,
-      this.address,
-      this.userId,
-      this.likedArray,
-      this.moovId);
+  String postId;
+  _PostDetailState(this.postId);
 
   int segmentedControlValue = 0;
 
@@ -90,16 +67,43 @@ class _PostDetailState extends State<PostDetail> {
         body: SafeArea(
           top: false,
           child: Stack(children: [
-            Container(
-              color: Colors.white,
-              child: ListView(
-                children: <Widget>[
-                  _BannerImage(bannerImage),
-                  _NonImageContents(title, description, startDate, address,
-                      location, userId, likedArray, moovId),
-                ],
-              ),
-            ),
+            StreamBuilder(
+                stream: Firestore.instance
+                    .collection('food')
+                    .document(postId)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  String title,
+                      description,
+                      bannerImage,
+                      address,
+                      location,
+                      userId,
+                      postId;
+                  dynamic startDate;
+                  List<dynamic> likedArray;
+
+                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  title = snapshot.data['title'];
+                  bannerImage = snapshot.data['image'];
+                  description = snapshot.data['description'];
+                  startDate = snapshot.data['startDate'];
+                  address = snapshot.data['address'];
+                  location = snapshot.data['location'];
+                  userId = snapshot.data['userId'];
+                  likedArray = snapshot.data['likedArray'];
+                  postId = snapshot.data['postId'];
+                  return Container(
+                    color: Colors.white,
+                    child: ListView(
+                      children: <Widget>[
+                        _BannerImage(bannerImage),
+                        _NonImageContents(title, description, startDate,
+                            address, location, userId, likedArray, postId),
+                      ],
+                    ),
+                  );
+                }),
           ]),
         ));
   }

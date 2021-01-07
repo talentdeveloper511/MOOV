@@ -67,6 +67,7 @@ dependencies:
   animated_widgets: ^1.0.6
   swipedetector: ^1.2.0
   carousel_slider: ^2.3.1
+  random_string: ^2.1.0
 
 
 

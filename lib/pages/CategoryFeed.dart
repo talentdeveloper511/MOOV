@@ -209,9 +209,12 @@ class _CategoryFeedState extends State<CategoryFeed>
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 20)),
                                 );
+
+                                
                               return ListView.builder(
                                 itemCount: snapshot.data.documents.length,
                                 itemBuilder: (context, index) {
+                                  
                                   DocumentSnapshot course =
                                       snapshot.data.documents[index];
                                   List<dynamic> likedArray = course["liked"];
@@ -258,14 +261,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     PostDetail(
-                                                        course['image'],
-                                                        course['title'],
-                                                        course['description'],
-                                                        course['startDate'],
-                                                        course['location'],
-                                                        course['address'],
-                                                        course['userId'],
-                                                        likedArray,
+                                                     
                                                         course.documentID)));
                                       },
                                       onDoubleTap: () {
@@ -959,14 +955,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     PostDetail(
-                                                        course['image'],
-                                                        course['title'],
-                                                        course['description'],
-                                                        course['startDate'],
-                                                        course['location'],
-                                                        course['address'],
-                                                        course['userId'],
-                                                        likedArray,
+                                                      
                                                         course.documentID)));
                                       },
                                       onDoubleTap: () {

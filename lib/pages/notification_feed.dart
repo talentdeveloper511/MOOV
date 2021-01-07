@@ -154,8 +154,7 @@ class NotificationFeedItem extends StatelessWidget {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => PostDetail(previewImg, title, description,
-                startDate, location, address, userId, likedArray, postId)));
+            builder: (context) => PostDetail(postId)));
   }
 
   showGroup(context) {
@@ -215,7 +214,7 @@ class NotificationFeedItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(previewImg),
+                    image: previewImg != null ? CachedNetworkImageProvider(previewImg) : AssetImage("lib/assets/otherbutton1.png"),
                   ),
                 ),
               )),

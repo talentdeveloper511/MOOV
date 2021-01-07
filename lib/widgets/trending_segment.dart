@@ -163,14 +163,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             PostDetail(
-                                                                course['image'],
-                                                                course['title'],
-                                                                course['description'],
-                                                                course['startDate'],
-                                                                course['location'],
-                                                                course['address'],
-                                                                course['userId'],
-                                                                likedArray,
+                                                              
                                                                 course.documentID)));
                                               },
                                               child: Column(
@@ -349,14 +342,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             PostDetail(
-                                                                course['image'],
-                                                                course['title'],
-                                                                course['description'],
-                                                                course['startDate'],
-                                                                course['location'],
-                                                                course['address'],
-                                                                course['userId'],
-                                                                likedArray,
+                                                              
                                                                 course.documentID)));
                                               },
                                               child: Column(
@@ -536,14 +522,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             PostDetail(
-                                                                course['image'],
-                                                                course['title'],
-                                                                course['description'],
-                                                                course['startDate'],
-                                                                course['location'],
-                                                                course['address'],
-                                                                course['userId'],
-                                                                likedArray,
+                                                              
                                                                 course.documentID)));
                                               },
                                               child: Column(

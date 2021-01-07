@@ -324,6 +324,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           FocusedMenuHolder(
                             menuWidth: MediaQuery.of(context).size.width * 0.5,
+                            
                             blurSize: 5.0,
                             menuItemExtent: 45,
                             menuBoxDecoration: BoxDecoration(

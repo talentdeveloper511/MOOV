@@ -116,7 +116,6 @@ class _SetMOOVState extends State<SetMOOV> {
         }
         // List<EventResult> searchResults = [];
         snapshot.data.documents.forEach((doc) {
-          print(doc);
           var moov = doc;
           EventResult searchResult = EventResult(moov, gid);
           results.add(searchResult);

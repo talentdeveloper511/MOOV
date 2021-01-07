@@ -1,18 +1,26 @@
+import 'dart:math';
+
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/pages/search.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:random_string/random_string.dart';
 import 'create_account.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -140,6 +148,35 @@ class _HomeState extends State<Home> {
   }
 
   Scaffold buildAuthScreen() {
+    Future<String> randomPostMaker() async {
+      String randomPost;
+      print(randomAlpha(1));
+
+      final QuerySnapshot result = await postsRef
+          .where("postId", isGreaterThanOrEqualTo: randomAlpha(1))
+          .orderBy("postId")
+          .limit(1)
+          .getDocuments();
+      if (result.documents != null)
+        randomPost = await result.documents.first['postId'];
+
+      if (result.documents == null) {
+        final QuerySnapshot result2 = await postsRef
+            .where("postId", isGreaterThanOrEqualTo: "")
+            .orderBy("postId")
+            .limit(1)
+            .getDocuments();
+        randomPost = await result.documents.first['postId'];
+      }
+      // print(randomPost);
+      return randomPost;
+    }
+
+    Future navigateToCategoryFeed(context, type) async {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
+    }
+
     // Upload(currentUser: currentUser);
     return Scaffold(
       appBar: AppBar(
@@ -169,26 +206,77 @@ class _HomeState extends State<Home> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16.0, color: Colors.white),
             ),
-            Container(
-              margin: const EdgeInsets.all(7.0),
-              padding: const EdgeInsets.all(7.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Text(
-                "Surprise",
-                style: TextStyle(fontSize: 14.0, color: Colors.white),
+            GestureDetector(
+              onTap: () async {
+                var randomPost = await randomPostMaker();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PostDetail(randomPost)));
+              },
+              child: Container(
+                margin: const EdgeInsets.all(7.0),
+                padding: const EdgeInsets.all(7.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(7)),
+                child: Text(
+                  "Surprise",
+                  style: TextStyle(fontSize: 14.0, color: Colors.white),
+                ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.all(7.0),
-              padding: const EdgeInsets.all(7.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(7)),
-              child: Text(
-                "Mood",
-                style: TextStyle(fontSize: 14.0, color: Colors.white),
+            FocusedMenuHolder(
+              menuWidth: MediaQuery.of(context).size.width * .95,
+
+              blurSize: 5.0,
+              menuItemExtent: 200,
+              menuBoxDecoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              duration: Duration(milliseconds: 100),
+              animateMenuItems: true,
+              blurBackgroundColor: Colors.black54,
+              openWithTap:
+                  true, // Open Focused-Menu on Tap rather than Long Press
+              menuOffset:
+                  10.0, // Offset value to show menuItem from the selected item
+              bottomOffsetHeight:
+                  80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+              menuItems: <FocusedMenuItem>[
+                // Add Each FocusedMenuItem  for Menu Options
+
+                FocusedMenuItem(
+                    title: Center(
+                        child: Text(
+                      "     Lowkey / Chill",
+                      style: GoogleFonts.robotoSlab(fontSize: 40),
+                    )),
+                    // trailingIcon: Icon(Icons.edit),
+                    onPressed: () {
+                                            navigateToCategoryFeed(context, "Shows");
+
+                    }),
+                FocusedMenuItem(
+                    backgroundColor: Colors.red[50],
+                    title: Text("          Rage",
+                        style: GoogleFonts.yeonSung(
+                            fontSize: 50, color: Colors.red)),
+                    onPressed: () {
+                      navigateToCategoryFeed(context, "Pregames & Parties");
+                    }),
+              ],
+              onPressed: () {},
+              child: Container(
+                margin: const EdgeInsets.all(7.0),
+                padding: const EdgeInsets.all(7.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(7)),
+                child: Text(
+                  "Mood",
+                  style: TextStyle(fontSize: 14.0, color: Colors.white),
+                ),
               ),
             ),
           ].map((i) {

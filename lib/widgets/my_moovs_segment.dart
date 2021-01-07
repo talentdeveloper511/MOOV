@@ -186,14 +186,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) => PostDetail(
-                                                course['image'],
-                                                course['title'],
-                                                course['description'],
-                                                course['startDate'],
-                                                course['location'],
-                                                course['address'],
-                                                course['userId'],
-                                                likedArray,
+                                                
                                                 course.documentID)));
                                   },
                                   onDoubleTap: () {
@@ -656,14 +649,6 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => PostDetail(
-                                      course['image'],
-                                      course['title'],
-                                      course['description'],
-                                      course['startDate'],
-                                      course['location'],
-                                      course['address'],
-                                      course['userId'],
-                                      likedArray,
                                       course.documentID)));
                             },
                             onDoubleTap: () {
