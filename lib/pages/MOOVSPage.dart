@@ -125,7 +125,8 @@ class _MOOVSPageState extends State<MOOVSPage>
               ),
             ),
             Expanded(
-                child: TabBarView(controller: _tabController,
+                child: TabBarView(physics: NeverScrollableScrollPhysics(),
+                  controller: _tabController,
                     // Restrict scroll by user
                     children: [
                   StreamBuilder(

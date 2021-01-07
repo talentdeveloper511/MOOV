@@ -65,6 +65,14 @@ class _CategoryFeedState extends State<CategoryFeed>
     super.initState();
     _tabController =
         new TabController(vsync: this, length: 2, initialIndex: _currentIndex);
+         _tabController.animation
+      ..addListener(() {
+        setState(() {
+          _currentIndex = (_tabController.animation.value).round(); //_tabController.animation.value returns double
+          print('_tabController.animation.value: ${_tabController.animation.value}');
+          print('_currentIndex: $_currentIndex');
+        });
+      });
   }
 
   @override
@@ -142,7 +150,7 @@ class _CategoryFeedState extends State<CategoryFeed>
           height: MediaQuery.of(context).size.height * 0.90,
           child: Column(
             children: <Widget>[
-              new Padding(
+              Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Container(
                   height: 40,
@@ -153,9 +161,9 @@ class _CategoryFeedState extends State<CategoryFeed>
                     ),
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
-                      new BoxShadow(
+                      BoxShadow(
                         color: Colors.grey,
-                        offset: new Offset(1.0, 1.0),
+                        offset: Offset(1.0, 1.0),
                       ),
                     ],
                   ),
@@ -169,10 +177,12 @@ class _CategoryFeedState extends State<CategoryFeed>
                         onPressed: () {
                           _tabController.animateTo(0);
                           setState(() {
+                            _currentIndex = (_tabController.animation.value).round(); //_tabController.animation.value returns double
+
                             _currentIndex = 0;
                           });
                         },
-                        child: new Text("Featured"),
+                        child: Text("Featured"),
                       ),
                       // Sign Up Button
                       new FlatButton(
@@ -183,7 +193,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                             _currentIndex = 1;
                           });
                         },
-                        child: new Text("All"),
+                        child: Text("All"),
                       )
                     ],
                   ),

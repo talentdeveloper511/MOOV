@@ -415,6 +415,12 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
     super.initState();
     _tabController =
         new TabController(vsync: this, length: 2, initialIndex: _currentIndex);
+          _tabController.animation
+      ..addListener(() {
+        setState(() {
+          _currentIndex = (_tabController.animation.value).round(); //_tabController.animation.value returns double
+        });
+      });
   }
 
   @override
