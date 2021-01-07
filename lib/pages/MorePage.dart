@@ -1,4 +1,5 @@
 import 'package:MOOV/main.dart';
+import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 
@@ -128,11 +129,20 @@ class _MorePageState extends State<MorePage>
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset(
-                    'lib/assets/moovblue.png',
-                    fit: BoxFit.cover,
-                    height: 55.0,
-                  ),
+             GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
+              ),
                 ],
               ),
             ),

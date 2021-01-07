@@ -119,11 +119,20 @@ class _OtherProfileState extends State<OtherProfile> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Image.asset(
-                        'lib/assets/moovblue.png',
-                        fit: BoxFit.cover,
-                        height: 55.0,
-                      ),
+                       GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
+              ),
                     ],
                   ),
                 ),

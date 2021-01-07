@@ -249,7 +249,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                             CachedNetworkImage(
                                                           imageUrl: course[
                                                               'groupPic'],
-                                                          fit: BoxFit.fill,
+                                                          fit: BoxFit.cover,
                                                           height: isLargePhone
                                                               ? MediaQuery.of(
                                                                           context)

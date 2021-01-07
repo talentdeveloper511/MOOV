@@ -242,10 +242,19 @@ class _EditProfileState extends State<EditProfile> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                'lib/assets/moovblue.png',
-                fit: BoxFit.cover,
-                height: 55.0,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 55.0,
+                ),
               ),
             ],
           ),
@@ -289,28 +298,29 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
                 FractionallySizedBox(
-                  widthFactor: isLargePhone ? 1.15 : 1.34,
-                  child: _image2 != null ?
-                   Container(
-                    child: Image.file(_image2, fit: BoxFit.fitWidth),
-                    margin: EdgeInsets.only(
-                        left: 20, top: 0, right: 20, bottom: 7.5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                  ) : Text("")
-              ),
+                    widthFactor: isLargePhone ? 1.15 : 1.34,
+                    child: _image2 != null
+                        ? Container(
+                            child: Image.file(_image2, fit: BoxFit.fitWidth),
+                            margin: EdgeInsets.only(
+                                left: 20, top: 0, right: 20, bottom: 7.5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                          )
+                        : Text("")),
               ]),
             ),
           ),
@@ -333,8 +343,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: CircleAvatar(
                             backgroundImage: (currentUser.photoUrl == null)
                                 ? AssetImage('images/user-avatar.png')
-                                : NetworkImage(
-                                    currentUser.photoUrl),
+                                : NetworkImage(currentUser.photoUrl),
                             // backgroundImage: NetworkImage(currentUser.photoUrl),
                             radius: 50,
                           ),

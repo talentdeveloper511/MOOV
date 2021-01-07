@@ -56,10 +56,19 @@ class _FriendFinderState extends State<FriendFinder>
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: 50.0),
+              child: GestureDetector(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                  (Route<dynamic> route) => false,
+                );
+              },
               child: Image.asset(
                 'lib/assets/moovblue.png',
                 fit: BoxFit.cover,
                 height: 50.0,
+              ),
               ),
             ),
           ],
@@ -220,11 +229,20 @@ class _FriendFinderState extends State<FriendFinder>
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Image.asset(
-                      'lib/assets/moovblue.png',
-                      fit: BoxFit.cover,
-                      height: 55.0,
-                    ),
+                   GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
+              ),
                   ],
                 ),
               ),
@@ -392,7 +410,7 @@ class UserResult extends StatelessWidget {
                                   snapshot.data.documents.length == 0)
                                 return SizedBox(
                                     child: Align(
-                                      alignment: Alignment.centerLeft,
+                                        alignment: Alignment.centerLeft,
                                         child: Text("nothing, right now.")),
                                     width: isLargePhone
                                         ? MediaQuery.of(context).size.width *
@@ -406,9 +424,8 @@ class UserResult extends StatelessWidget {
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => (PostDetail(
-                                        
-                                          course['postId']))));
+                                      builder: (context) =>
+                                          (PostDetail(course['postId']))));
                                 },
                                 child: Stack(
                                     alignment: Alignment.center,
@@ -432,7 +449,7 @@ class UserResult extends StatelessWidget {
                                                 BorderRadius.circular(10),
                                             child: CachedNetworkImage(
                                               imageUrl: course['image'],
-                                              fit: BoxFit.fill,
+                                              fit: BoxFit.cover,
                                             ),
                                           ),
                                           margin: EdgeInsets.only(
