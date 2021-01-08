@@ -661,7 +661,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                       left: 8),
                                                               child: LikeButton(
                                                                 onTap:
-                                                                    onLikeButtonTapped,
+                                                                    onLikeButtonTapped, //this is where the trouble is
                                                                 size: 30,
                                                                 circleColor: CircleColor(
                                                                     start: Color(
@@ -1427,6 +1427,14 @@ class _CategoryFeedState extends State<CategoryFeed>
     );
   }
 
+
+
+
+
+///this is me trying to get the liking function to work.
+///if you pass "postId" into this function below it throws an error, i dont
+///see how we could have a liking function without having the posts id.
+///this package is very popular so i must be stupid
   Future<bool> onLikeButtonTapped(bool isLiked) async {
     print(isLiked);
 
