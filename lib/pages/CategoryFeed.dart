@@ -23,29 +23,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:like_button/like_button.dart';
 import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:page_transition/page_transition.dart';
 
 class CategoryFeed extends StatefulWidget {
-  List<dynamic> likedArray;
   dynamic moovId;
   final String type;
-  CategoryFeed({this.likedArray, this.moovId, @required this.type});
+  CategoryFeed({this.moovId, @required this.type});
 
   @override
-  _CategoryFeedState createState() =>
-      _CategoryFeedState(likedArray, moovId, type);
+  _CategoryFeedState createState() => _CategoryFeedState(moovId, type);
 }
 
 class _CategoryFeedState extends State<CategoryFeed>
     with SingleTickerProviderStateMixin {
   // TabController to control and switch tabs
   TabController _tabController;
-  List<dynamic> likedArray;
   dynamic moovId;
   String type;
 
-  _CategoryFeedState(this.likedArray, this.moovId, this.type);
+  _CategoryFeedState(this.moovId, this.type);
 
   // Current Index of tab
   int _currentIndex = 0;
@@ -88,8 +86,6 @@ class _CategoryFeedState extends State<CategoryFeed>
 
     final GoogleSignInAccount user = googleSignIn.currentUser;
     final strUserId = user.id;
-    final strUserName = user.displayName;
-    final strUserPic = user.photoUrl;
     dynamic likeCount;
 
     return Scaffold(
@@ -225,8 +221,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 itemBuilder: (context, index) {
                                   DocumentSnapshot course =
                                       snapshot.data.documents[index];
-                                  List<dynamic> likedArray = course["liked"];
-                                  List<String> uidArray = List<String>();
                                   var strUserPic = currentUser.photoUrl;
 
                                   bool isAmbassador;
@@ -247,23 +241,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   // var z = (1610057148668);
                                   // print(y > z);
 
-                                  if (likedArray != null) {
-                                    likeCount = likedArray.length;
-                                    for (int i = 0; i < likeCount; i++) {
-                                      var id = likedArray[i]["uid"];
-                                      uidArray.add(id);
-                                    }
-                                  } else {
-                                    likeCount = 0;
-                                  }
-
-                                  if (uidArray != null &&
-                                      uidArray.contains(strUserId)) {
-                                    _isPressed = true;
-                                  } else {
-                                    _isPressed = false;
-                                  }
-
                                   return Card(
                                     color: Colors.white,
                                     shadowColor: Colors.grey[200],
@@ -275,60 +252,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                 builder: (context) =>
                                                     PostDetail(
                                                         course.documentID)));
-                                      },
-                                      onDoubleTap: () {
-                                        setState(() {
-                                          List<dynamic> likedArray =
-                                              course["liked"];
-                                          List<String> uidArray =
-                                              List<String>();
-                                          if (likedArray != null) {
-                                            likeCount = likedArray.length;
-                                            for (int i = 0;
-                                                i < likeCount;
-                                                i++) {
-                                              var id = likedArray[i]["uid"];
-                                              uidArray.add(id);
-                                            }
-                                          }
-
-                                          if (uidArray != null &&
-                                              uidArray.contains(strUserId)) {
-                                            Database().removeGoing(
-                                                course["userId"],
-                                                course["image"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                course["startDate"],
-                                                course["title"],
-                                                course["description"],
-                                                course["location"],
-                                                course["address"],
-                                                course["profilePic"],
-                                                course["userName"],
-                                                course["userEmail"],
-                                                likedArray);
-                                          } else {
-                                            Database().addGoing(
-                                                course["userId"],
-                                                course["image"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                course["startDate"],
-                                                course["title"],
-                                                course["description"],
-                                                course["location"],
-                                                course["address"],
-                                                course["profilePic"],
-                                                course["userName"],
-                                                course["userEmail"],
-                                                likedArray);
-                                          }
-                                        });
                                       },
                                       child: Column(
                                         children: [
@@ -732,121 +655,83 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                               padding:
                                                                   const EdgeInsets
                                                                           .only(
+                                                                      top: 10,
                                                                       right:
                                                                           2.0,
                                                                       left: 8),
-                                                              child: IconButton(
-                                                                 onPressed: () {
-                                                                  setState(() {
-                                                                    !_isPressed;
-                                                                    List<dynamic>
-                                                                        likedArray =
-                                                                        course[
-                                                                            "liked"];
-                                                                    
-                                                                    if (likedArray !=
-                                                                        null) {
-                                                                      likeCount =
-                                                                          likedArray
-                                                                              .length;
-                                                                      for (int i =
-                                                                              0;
-                                                                          i < likeCount;
-                                                                          i++) {
-                                                                        var id =
-                                                                            likedArray[i]["uid"];
-                                                                        uidArray
-                                                                            .add(id);
-                                                                      }
-                                                                    }
-
-                                                                    if (uidArray !=
-                                                                            null &&
-                                                                        uidArray
-                                                                            .contains(strUserId)) {
-                                                                      Database().removeGoing(
-                                                                          course[
-                                                                              "userId"],
-                                                                          course[
-                                                                              "image"],
-                                                                          strUserId,
-                                                                          course
-                                                                              .documentID,
-                                                                          strUserName,
-                                                                          strUserPic,
-                                                                          course[
-                                                                              "startDate"],
-                                                                          course[
-                                                                              "title"],
-                                                                          course[
-                                                                              "description"],
-                                                                          course[
-                                                                              "location"],
-                                                                          course[
-                                                                              "address"],
-                                                                          course[
-                                                                              "profilePic"],
-                                                                          course[
-                                                                              "userName"],
-                                                                          course[
-                                                                              "userEmail"],
-                                                                          likedArray);
-                                                                    } else {
-                                                                      Database().addGoing(
-                                                                          course[
-                                                                              "userId"],
-                                                                          course[
-                                                                              "image"],
-                                                                          strUserId,
-                                                                          course
-                                                                              .documentID,
-                                                                          strUserName,
-                                                                          strUserPic,
-                                                                          course[
-                                                                              "startDate"],
-                                                                          course[
-                                                                              "title"],
-                                                                          course[
-                                                                              "description"],
-                                                                          course[
-                                                                              "location"],
-                                                                          course[
-                                                                              "address"],
-                                                                          course[
-                                                                              "profilePic"],
-                                                                          course[
-                                                                              "userName"],
-                                                                          course[
-                                                                              "userEmail"],
-                                                                          likedArray);
-                                                                    }
-                                                                  });
+                                                              child: LikeButton(
+                                                                onTap:
+                                                                    onLikeButtonTapped,
+                                                                size: 30,
+                                                                circleColor: CircleColor(
+                                                                    start: Color(
+                                                                        0xff00ddff),
+                                                                    end: Color(
+                                                                        0xff0099cc)),
+                                                                bubblesColor: BubblesColor(
+                                                                    dotPrimaryColor:
+                                                                        TextThemes
+                                                                            .ndGold,
+                                                                    dotSecondaryColor:
+                                                                        TextThemes
+                                                                            .ndGold),
+                                                                likeBuilder: (bool
+                                                                    isLiked) {
+                                                                  return Icon(
+                                                                    Icons
+                                                                        .directions_run,
+                                                                    color: isLiked
+                                                                        ? Colors
+                                                                            .green
+                                                                        : Colors
+                                                                            .grey,
+                                                                    size: 30,
+                                                                  );
                                                                 },
-                                                                icon: _isPressed
-                                                                    ? Icon(
-                                                                        Icons
-                                                                            .directions_run,
-                                                                        color: Colors
-                                                                            .green)
-                                                                    : Icon(Icons
-                                                                        .directions_walk),
-                                                                color:
-                                                                    Colors.red,
-                                                                iconSize: 30.0,
-                                                                splashColor:
-                                                                    Colors
-                                                                        .green,
-                                                                //splashRadius: 7.0,
-                                                                highlightColor:
-                                                                    Colors
-                                                                        .green,
-                                                               
+                                                                likeCount: course[
+                                                                        'liker']
+                                                                    .length,
+                                                                countPostion:
+                                                                    CountPostion
+                                                                        .bottom,
+                                                                countBuilder: (int
+                                                                        count,
+                                                                    bool
+                                                                        isLiked,
+                                                                    String
+                                                                        text) {
+                                                                  var color = isLiked
+                                                                      ? TextThemes
+                                                                          .ndGold
+                                                                      : Colors
+                                                                          .grey;
+                                                                  Widget result;
+                                                                  if (count ==
+                                                                      0) {
+                                                                    result =
+                                                                        Text(
+                                                                      "love",
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              color),
+                                                                    );
+                                                                  } else
+                                                                    result =
+                                                                        Text(
+                                                                      text,
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              color),
+                                                                    );
+                                                                  return result;
+                                                                },
                                                               ),
                                                             ),
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                           .only(
+                                                                      left: 5,
                                                                       right:
                                                                           6.0,
                                                                       bottom:
@@ -857,25 +742,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                     fontSize:
                                                                         12),
                                                               ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .fromLTRB(
-                                                                      0,
-                                                                      0,
-                                                                      22.0,
-                                                                      10),
-                                                              child: Text(
-                                                                  '$likeCount',
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      color: TextThemes
-                                                                          .ndBlue,
-                                                                      decoration:
-                                                                          TextDecoration
-                                                                              .none)),
                                                             ),
                                                           ],
                                                         ),
@@ -934,7 +800,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 DocumentSnapshot course =
                                     snapshot.data.documents[index];
                                 List<dynamic> likedArray = course["liked"];
-                                List<String> uidArray = List<String>();
                                 var strUserPic = currentUser.photoUrl;
 
                                 bool isAmbassador;
@@ -943,14 +808,14 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   likeCount = likedArray.length;
                                   for (int i = 0; i < likeCount; i++) {
                                     var id = likedArray[i]["uid"];
-                                    uidArray.add(id);
+                                    likedArray.add(id);
                                   }
                                 } else {
                                   likeCount = 0;
                                 }
 
-                                if (uidArray != null &&
-                                    uidArray.contains(strUserId)) {
+                                if (likedArray != null &&
+                                    likedArray.contains(strUserId)) {
                                   _isPressed = true;
                                 } else {
                                   _isPressed = false;
@@ -967,60 +832,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                 builder: (context) =>
                                                     PostDetail(
                                                         course.documentID)));
-                                      },
-                                      onDoubleTap: () {
-                                        setState(() {
-                                          List<dynamic> likedArray =
-                                              course["liked"];
-                                          List<String> uidArray =
-                                              List<String>();
-                                          if (likedArray != null) {
-                                            likeCount = likedArray.length;
-                                            for (int i = 0;
-                                                i < likeCount;
-                                                i++) {
-                                              var id = likedArray[i]["uid"];
-                                              uidArray.add(id);
-                                            }
-                                          }
-
-                                          if (uidArray != null &&
-                                              uidArray.contains(strUserId)) {
-                                            Database().removeGoing(
-                                                course["userId"],
-                                                course["image"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                course["startDate"],
-                                                course["title"],
-                                                course["description"],
-                                                course["location"],
-                                                course["address"],
-                                                course["profilePic"],
-                                                course["userName"],
-                                                course["userEmail"],
-                                                likedArray);
-                                          } else {
-                                            Database().addGoing(
-                                                course["userId"],
-                                                course["image"],
-                                                strUserId,
-                                                course.documentID,
-                                                strUserName,
-                                                strUserPic,
-                                                course["startDate"],
-                                                course["title"],
-                                                course["description"],
-                                                course["location"],
-                                                course["address"],
-                                                course["profilePic"],
-                                                course["userName"],
-                                                course["userEmail"],
-                                                likedArray);
-                                          }
-                                        });
                                       },
                                       child: Column(
                                         children: [
@@ -1484,7 +1295,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                           strUserId,
                                                                           course
                                                                               .documentID,
-                                                                          strUserName,
+                                                                          currentUser
+                                                                              .displayName,
                                                                           strUserPic,
                                                                           course[
                                                                               "startDate"],
@@ -1512,7 +1324,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                           strUserId,
                                                                           course
                                                                               .documentID,
-                                                                          strUserName,
+                                                                          currentUser
+                                                                              .displayName,
                                                                           strUserPic,
                                                                           course[
                                                                               "startDate"],
@@ -1613,4 +1426,46 @@ class _CategoryFeedState extends State<CategoryFeed>
       ),
     );
   }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    print(isLiked);
+
+    /// send your request here
+    // final bool success = await likePost();
+
+    /// if failed, you can do nothing
+    // return success? !isLiked:isLiked;
+
+    return !isLiked;
+  }
+
+  Future likePost() async {
+    Future<DocumentSnapshot> docSnapshot =
+        Firestore.instance.collection('food').document().get(); // i need to get the postId here, but cant pass it in
+    DocumentSnapshot doc = await docSnapshot;
+    List<dynamic> likerArray = doc['liker'];
+    if (doc['liker'].contains(currentUser.id)) {
+      likerArray.remove(currentUser.id);
+    } else {
+      likerArray.add(currentUser.id);
+    }
+  }
+
+//  Future<bool> onLikeButtonTapped(List<String> likerArray, bool isLiked, String id) async{
+
+//                 if (isLiked) {
+//                      likerArray.remove(id);
+//                   } else {
+//                      likerArray.add(id);
+//                   }
+
+//     /// send your request here
+//     // final bool success= await sendRequest();
+
+//     /// if failed, you can do nothing
+//     // return success? !isLiked:isLiked;
+
+//     return !isLiked;
+//   }
+
 }

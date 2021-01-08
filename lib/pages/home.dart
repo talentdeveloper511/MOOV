@@ -192,7 +192,7 @@ class _HomeState extends State<Home> {
             pauseAutoPlayOnTouch: false,
             reverse: false,
             autoPlay: true,
-            autoPlayInterval: Duration(seconds: 2),
+            autoPlayInterval: Duration(seconds: 3),
             autoPlayAnimationDuration: Duration(milliseconds: 800),
             autoPlayCurve: Curves.fastOutSlowIn,
             enlargeCenterPage: true,
