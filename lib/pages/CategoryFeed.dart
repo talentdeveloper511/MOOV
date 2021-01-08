@@ -65,12 +65,11 @@ class _CategoryFeedState extends State<CategoryFeed>
     super.initState();
     _tabController =
         new TabController(vsync: this, length: 2, initialIndex: _currentIndex);
-         _tabController.animation
+    _tabController.animation
       ..addListener(() {
         setState(() {
-          _currentIndex = (_tabController.animation.value).round(); //_tabController.animation.value returns double
-          print('_tabController.animation.value: ${_tabController.animation.value}');
-          print('_currentIndex: $_currentIndex');
+          _currentIndex = (_tabController.animation.value).round();
+          _isPressed; //_tabController.animation.value returns double
         });
       });
   }
@@ -177,7 +176,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                         onPressed: () {
                           _tabController.animateTo(0);
                           setState(() {
-                            _currentIndex = (_tabController.animation.value).round(); //_tabController.animation.value returns double
+                            _currentIndex = (_tabController.animation.value)
+                                .round(); //_tabController.animation.value returns double
 
                             _currentIndex = 0;
                           });
@@ -220,11 +220,9 @@ class _CategoryFeedState extends State<CategoryFeed>
                                       style: TextStyle(fontSize: 20)),
                                 );
 
-                                
                               return ListView.builder(
                                 itemCount: snapshot.data.documents.length,
                                 itemBuilder: (context, index) {
-                                  
                                   DocumentSnapshot course =
                                       snapshot.data.documents[index];
                                   List<dynamic> likedArray = course["liked"];
@@ -233,16 +231,21 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                   bool isAmbassador;
 
-                                  var sd1 = course['startDate'].toDate();
-                                  var sd = DateFormat('MMMd')
-                                      .add_jm()
-                                      .format(course['startDate'].toDate());
-                                  var now = DateFormat('MMMd')
-                                      .add_jm()
-                                      .format(DateTime.now());
-                                  print(sd1.isAfter(DateTime.now()));
-                                  print(sd1);
-                                  print(DateTime.now());
+                                  // var sd1 = course['startDate'].toDate();
+                                  // var sd = DateFormat('MMMd')
+                                  //     .add_jm()
+                                  //     .format(course['startDate'].toDate());
+                                  // var now = DateFormat('MMMd')
+                                  //     .add_jm()
+                                  //     .format(DateTime.now());
+                                  // var x = (course['startDate']);
+                                  // var y =
+                                  //     (Timestamp.now().millisecondsSinceEpoch);
+
+                                  // print(x);
+                                  // print(y);
+                                  // var z = (1610057148668);
+                                  // print(y > z);
 
                                   if (likedArray != null) {
                                     likeCount = likedArray.length;
@@ -271,7 +274,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     PostDetail(
-                                                     
                                                         course.documentID)));
                                       },
                                       onDoubleTap: () {
@@ -734,34 +736,14 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                           2.0,
                                                                       left: 8),
                                                               child: IconButton(
-                                                                icon: (_isPressed)
-                                                                    ? new Icon(
-                                                                        Icons
-                                                                            .directions_run,
-                                                                        color: Colors
-                                                                            .green)
-                                                                    : new Icon(Icons
-                                                                        .directions_walk),
-                                                                color:
-                                                                    Colors.red,
-                                                                iconSize: 30.0,
-                                                                splashColor:
-                                                                    Colors
-                                                                        .green,
-                                                                //splashRadius: 7.0,
-                                                                highlightColor:
-                                                                    Colors
-                                                                        .green,
-                                                                onPressed: () {
+                                                                 onPressed: () {
                                                                   setState(() {
+                                                                    !_isPressed;
                                                                     List<dynamic>
                                                                         likedArray =
                                                                         course[
                                                                             "liked"];
-                                                                    List<String>
-                                                                        uidArray =
-                                                                        List<
-                                                                            String>();
+                                                                    
                                                                     if (likedArray !=
                                                                         null) {
                                                                       likeCount =
@@ -840,6 +822,25 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                     }
                                                                   });
                                                                 },
+                                                                icon: _isPressed
+                                                                    ? Icon(
+                                                                        Icons
+                                                                            .directions_run,
+                                                                        color: Colors
+                                                                            .green)
+                                                                    : Icon(Icons
+                                                                        .directions_walk),
+                                                                color:
+                                                                    Colors.red,
+                                                                iconSize: 30.0,
+                                                                splashColor:
+                                                                    Colors
+                                                                        .green,
+                                                                //splashRadius: 7.0,
+                                                                highlightColor:
+                                                                    Colors
+                                                                        .green,
+                                                               
                                                               ),
                                                             ),
                                                             Padding(
@@ -965,7 +966,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     PostDetail(
-                                                      
                                                         course.documentID)));
                                       },
                                       onDoubleTap: () {

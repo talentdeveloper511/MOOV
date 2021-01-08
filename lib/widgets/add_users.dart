@@ -158,6 +158,10 @@ class _UserResultState extends State<UserResult> {
 
   @override
   Widget build(BuildContext context) {
+    print(currentUser.friendGroups);
+    if (user.friendGroups == null) {
+      return Container();
+    }
     user.friendGroups.contains(gname) ? status = true : false;
 
     return Container(

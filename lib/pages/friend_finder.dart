@@ -162,7 +162,7 @@ class _FriendFinderState extends State<FriendFinder>
   }
 
   buildNoContent() {
-    currentUser.friendArray.length != 0
+    currentUser.friendArray.length != 0 && currentUser.friendArray != null
         ? Timer(Duration(seconds: 1), () {
             handleSearch("");
           })

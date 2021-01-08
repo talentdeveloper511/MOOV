@@ -301,7 +301,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                       Image.asset('lib/assets/dance.png', height: 40),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
-                                        child: Text('PARTIES',
+                                        child: Text('Pregames & Parties',
                                             style: TextThemes.extraBold),
                                       ),
                                     ],

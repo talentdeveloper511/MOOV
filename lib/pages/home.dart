@@ -254,8 +254,7 @@ class _HomeState extends State<Home> {
                     )),
                     // trailingIcon: Icon(Icons.edit),
                     onPressed: () {
-                                            navigateToCategoryFeed(context, "Shows");
-
+                      navigateToCategoryFeed(context, "Shows");
                     }),
                 FocusedMenuItem(
                     backgroundColor: Colors.red[50],
