@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
+import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/widgets/camera.dart';
@@ -213,7 +214,8 @@ class _EditPostState extends State<EditPost> {
           String description = snapshot.data['description'];
           dynamic startDate = snapshot.data['startDate'];
           String image = snapshot.data['image'];
-          String newTitle;
+          privacyDropdownValue = snapshot.data['privacy'];
+          
 
           return Scaffold(
               appBar: AppBar(
@@ -338,25 +340,24 @@ class _EditPostState extends State<EditPost> {
                                       : Text("")),
                             ]),
                           ),
-                          Padding(
-                            //title
-                            padding: const EdgeInsets.only(top: 5.0),
-                            child: Center(
-                              child: Text(
-                                title,
-                                textAlign: TextAlign.center,
-                                style: TextThemes.headline1,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   //title
+                          //   padding: const EdgeInsets.only(top: 5.0),
+                          //   child: Center(
+                          //     child: Text(
+                          //       title,
+                          //       textAlign: TextAlign.center,
+                          //       style: TextThemes.headline1,
+                          //       maxLines: 2,
+                          //       overflow: TextOverflow.ellipsis,
+                          //     ),
+                          //   ),
+                          // ),
                           Padding(
                             padding: EdgeInsets.all(10),
                             child: TextFormField(
                               onChanged: (text) {
                                 setState(() {
-                                  newTitle = text;
                                 });
                               },
 
@@ -520,7 +521,7 @@ class _EditPostState extends State<EditPost> {
                                       return currentValues;
                                     } else {
                                       return currentValue
-                                          .add(Duration(days: 18250));
+                                          ;
                                     }
                                   },
                                 ),
@@ -602,8 +603,43 @@ class _EditPostState extends State<EditPost> {
                                       "startDate": currentValue,
                                     });
                                   }
-                                  Navigator.pop(context);
+                                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
                                 }),
+                                
+                          ),
+                           Padding(
+                            padding: const EdgeInsets.only(top: 70.0),
+                            child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(80.0)),
+                                padding: EdgeInsets.all(0.0),
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.red[200],
+                                          Colors.red
+                                        ],
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                      ),
+                                      borderRadius:
+                                          BorderRadius.circular(30.0)),
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                        maxWidth: 125.0, minHeight: 50.0),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Delete",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 22),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () => showAlertDialog2(context, postId, currentUser.id)),
+                                
                           ),
                         ],
                       ),
@@ -648,6 +684,29 @@ class _BannerImage extends StatelessWidget {
     ]);
   }
 }
+void showAlertDialog2(BuildContext context, postId, userId) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Delete?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nMOOV to trash can?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yeah", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().deletePost(postId, userId);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Cancel"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
+  }
 
 // class _NonImageContents extends StatelessWidget {
 //   String title, description, visibility, type, postId;

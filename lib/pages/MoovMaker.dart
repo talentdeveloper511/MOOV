@@ -442,7 +442,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               onShowPicker: (context, currentValue) async {
                 final date = await showDatePicker(
                   context: context,
-                  firstDate: DateTime.now(),
+                  firstDate: DateTime(1970),
                   initialDate: currentValue ?? DateTime.now(),
                   lastDate: DateTime(2100),
                   builder: (BuildContext context, Widget child) {
@@ -481,7 +481,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                   currentValues = DateTimeField.combine(date, time);
                   return currentValues;
                 } else {
-                  return currentValue.add(Duration(days: 18250));
+                  return currentValue;
                 }
               },
             ),
