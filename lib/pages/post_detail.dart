@@ -86,7 +86,6 @@ class _PostDetailState extends State<PostDetail> {
                       description,
                       bannerImage,
                       address,
-                      location,
                       userId,
                       postId;
                   dynamic startDate;
@@ -98,7 +97,6 @@ class _PostDetailState extends State<PostDetail> {
                   description = snapshot.data['description'];
                   startDate = snapshot.data['startDate'];
                   address = snapshot.data['address'];
-                  location = snapshot.data['location'];
                   userId = snapshot.data['userId'];
                   likedArray = snapshot.data['likedArray'];
                   postId = snapshot.data['postId'];
@@ -108,7 +106,7 @@ class _PostDetailState extends State<PostDetail> {
                       children: <Widget>[
                         _BannerImage(bannerImage),
                         _NonImageContents(title, description, startDate,
-                            address, location, userId, likedArray, postId),
+                            address, userId, likedArray, postId),
                       ],
                     ),
                   );
@@ -153,11 +151,11 @@ class _BannerImage extends StatelessWidget {
 }
 
 class _NonImageContents extends StatelessWidget {
-  String title, description, location, userId;
+  String title, description, userId;
   dynamic startDate, address, moovId;
   List<dynamic> likedArray;
 
-  _NonImageContents(this.title, this.description, this.startDate, this.location,
+  _NonImageContents(this.title, this.description, this.startDate, 
       this.address, this.userId, this.likedArray, this.moovId);
 
   @override
@@ -169,7 +167,7 @@ class _NonImageContents extends StatelessWidget {
         children: <Widget>[
           _Title(title),
           _Description(description),
-          PostTimeAndPlace(startDate, address, location),
+          PostTimeAndPlace(startDate, address),
           _AuthorContent(userId),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.0),
@@ -256,9 +254,8 @@ class _Description extends StatelessWidget {
 
 class PostTimeAndPlace extends StatelessWidget {
   dynamic startDate, address;
-  String location;
 
-  PostTimeAndPlace(this.startDate, this.location, this.address);
+  PostTimeAndPlace(this.startDate, this.address);
 
   @override
   Widget build(BuildContext context) {
@@ -649,7 +646,6 @@ class Buttons extends StatelessWidget {
                                   course['startDate'],
                                   course['title'],
                                   course['description'],
-                                  course['location'],
                                   course['address'],
                                   course['profilePic'],
                                   course['userName'],

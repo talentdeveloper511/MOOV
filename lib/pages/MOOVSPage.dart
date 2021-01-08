@@ -562,8 +562,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                             'title'],
                                                                         course[
                                                                             'description'],
-                                                                        course[
-                                                                            'location'],
+                                                                      
                                                                         course[
                                                                             'address'],
                                                                         course[
@@ -1209,8 +1208,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                               'title'],
                                                                           course[
                                                                               'description'],
-                                                                          course[
-                                                                              'location'],
+                                                                       
                                                                           course[
                                                                               'address'],
                                                                           course[

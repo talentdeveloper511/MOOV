@@ -245,7 +245,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   // DateTime endTimes;
   String privacyDropdownValue = 'Public';
   String typeDropdownValue = 'Pregames & Parties';
-  String locationDropdownValue = 'Off Campus';
+  // String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
   final addressController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -442,7 +442,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               onShowPicker: (context, currentValue) async {
                 final date = await showDatePicker(
                   context: context,
-                  firstDate: DateTime(1900),
+                  firstDate: DateTime.now(),
                   initialDate: currentValue ?? DateTime.now(),
                   lastDate: DateTime(2100),
                   builder: (BuildContext context, Widget child) {
@@ -633,7 +633,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                 type: typeDropdownValue,
                                 privacy: privacyDropdownValue,
                                 description: descriptionController.text,
-                                location: locationDropdownValue,
+                                // location: locationDropdownValue,
                                 address: addressController.text,
                                 startDate: currentValue,
                                 // endDate: endTime,
