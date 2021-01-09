@@ -68,7 +68,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-           GestureDetector(
+              GestureDetector(
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
                     context,
@@ -91,6 +91,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
           stream: Firestore.instance
               .collection('users')
               .orderBy('score', descending: true)
+              .limit(50)
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
