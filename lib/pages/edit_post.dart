@@ -4,10 +4,9 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/HomePage.dart';
-import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/date_picker.dart';
-import 'package:animated_widgets/animated_widgets.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -58,7 +57,6 @@ class _EditPostState extends State<EditPost> {
   // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
   // DateTime endTimes;
   String privacyDropdownValue = 'Public';
-  String typeDropdownValue = 'Pregames & Parties';
   // String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
   final addressController = TextEditingController();
@@ -214,8 +212,8 @@ class _EditPostState extends State<EditPost> {
           String description = snapshot.data['description'];
           dynamic startDate = snapshot.data['startDate'];
           String image = snapshot.data['image'];
-          privacyDropdownValue = snapshot.data['privacy'];
-          
+          privacyDropdownValue;
+          String typeDropdownValue = snapshot.data['type'];
 
           return Scaffold(
               appBar: AppBar(
@@ -260,392 +258,510 @@ class _EditPostState extends State<EditPost> {
               ),
               body: Form(
                 key: _formKey,
-                child: SingleChildScrollView(
-                  child: Container(
-                      child: Column(children: [
-                    Container(
-                      child: Column(
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => selectImage(context),
-                            child: Stack(children: <Widget>[
-                              SizedBox(
-                                height: 200,
-                                width: double.infinity,
-                                child: Container(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: currentUser.header == null
-                                        ? AssetImage('images/user-avatar.png')
-                                        : Image.network(
-                                            image,
-                                            fit: BoxFit.fitWidth,
-                                          ),
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      left: 20,
-                                      top: 7.5,
-                                      right: 20,
-                                      bottom: 7.5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 5,
-                                        blurRadius: 7,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                  height: 200,
-                                  width: double.infinity,
-                                  child: _image != null
-                                      ? ClipRRect(
+                child: isUploading
+                    ? linearProgress()
+                    : SingleChildScrollView(
+                        child: Container(
+                            child: Column(children: [
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () => selectImage(context),
+                                  child: Stack(children: <Widget>[
+                                    SizedBox(
+                                      height: 200,
+                                      width: double.infinity,
+                                      child: Container(
+                                        child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          child: Container(
-                                            child: Image.file(_image,
-                                                fit: BoxFit.fitWidth),
-                                            margin: EdgeInsets.only(
-                                                left: 20,
-                                                top: 7.5,
-                                                right: 20,
-                                                bottom: 7.5),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 5,
-                                                  blurRadius: 7,
-                                                  offset: Offset(0,
-                                                      3), // changes position of shadow
+                                          child: image == null
+                                              ? AssetImage(
+                                                  'images/user-avatar.png')
+                                              : Image.network(
+                                                  image,
+                                                  fit: BoxFit.cover,
                                                 ),
-                                              ],
-                                            ),
+                                        ),
+                                        margin: EdgeInsets.only(
+                                            left: 20,
+                                            top: 7.5,
+                                            right: 20,
+                                            bottom: 7.5),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10),
                                           ),
-                                        )
-                                      : Text("")),
-                            ]),
-                          ),
-                          // Padding(
-                          //   //title
-                          //   padding: const EdgeInsets.only(top: 5.0),
-                          //   child: Center(
-                          //     child: Text(
-                          //       title,
-                          //       textAlign: TextAlign.center,
-                          //       style: TextThemes.headline1,
-                          //       maxLines: 2,
-                          //       overflow: TextOverflow.ellipsis,
-                          //     ),
-                          //   ),
-                          // ),
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: TextFormField(
-                              onChanged: (text) {
-                                setState(() {
-                                });
-                              },
-
-                              controller: titleController,
-                              decoration: InputDecoration(
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.never,
-                                icon: Text("New \nTitle"),
-                                labelStyle: TextThemes.mediumbody,
-                                labelText: title,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 5,
+                                              blurRadius: 7,
+                                              offset: Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        height: 200,
+                                        width: double.infinity,
+                                        child: _image != null
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Container(
+                                                  child: Image.file(_image,
+                                                      fit: BoxFit.cover),
+                                                  margin: EdgeInsets.only(
+                                                      left: 20,
+                                                      top: 7.5,
+                                                      right: 20,
+                                                      bottom: 7.5),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(10),
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.5),
+                                                        spreadRadius: 5,
+                                                        blurRadius: 7,
+                                                        offset: Offset(0,
+                                                            3), // changes position of shadow
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            : Text("")),
+                                  ]),
                                 ),
-                              ),
-                              // The validator receives the text that the user has entered.
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Enter Event Title';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: 8, right: 10, top: 10),
-                            child: TextFormField(
-                              onChanged: (text) {
-                                setState(() {
-                                  description = text;
-                                });
-                              },
+                                // Padding(
+                                //   //title
+                                //   padding: const EdgeInsets.only(top: 5.0),
+                                //   child: Center(
+                                //     child: Text(
+                                //       title,
+                                //       textAlign: TextAlign.center,
+                                //       style: TextThemes.headline1,
+                                //       maxLines: 2,
+                                //       overflow: TextOverflow.ellipsis,
+                                //     ),
+                                //   ),
+                                // ),
+                                Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: TextFormField(
+                                    onChanged: (text) {
+                                      setState(() {});
+                                    },
 
-                              controller: descriptionController,
-                              decoration: InputDecoration(
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.never,
-                                icon: Text("New \nDesc."),
-                                labelStyle: TextThemes.mediumbody,
-                                labelText: description,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                              ),
-                              // The validator receives the text that the user has entered.
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Enter Event Title';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: Container(
-                                width: 250,
-                                child: ButtonTheme(
-                                  alignedDropdown: true,
-                                  child: DropdownButtonFormField(
-                                    value: privacyDropdownValue,
-                                    icon: Icon(Icons.arrow_downward,
-                                        color: TextThemes.ndGold),
+                                    controller: titleController,
                                     decoration: InputDecoration(
-                                      labelText: "Privacy",
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.never,
+                                      icon: Text("New \nTitle"),
+                                      labelStyle: TextThemes.mediumbody,
+                                      labelText: title,
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                       ),
                                     ),
-                                    items: privacyList.map((String value) {
-                                      return new DropdownMenuItem<String>(
-                                        value: value,
-                                        child: new Text(value),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        privacyDropdownValue = newValue;
-                                      });
-                                    },
+                                    // The validator receives the text that the user has entered.
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return 'Who can come?';
+                                        return 'Enter Event Title';
                                       }
                                       return null;
                                     },
                                   ),
                                 ),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 0.0, left: 20, right: 20, bottom: 10),
-                            child: Container(
-                              width: 250,
-                                                          child: ButtonTheme(
-                                                            child: DateTimeField(
-                                  format: format,
-                                  keyboardType: TextInputType.datetime,
-                                  decoration: InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.arrow_downward,
-                                        color: TextThemes.ndGold,
-                                      ),
-                                      labelText: 'Enter Start Time',
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0)),
-                                      floatingLabelBehavior:
-                                          FloatingLabelBehavior.always),
-                                  onChanged: (DateTime newValue) {
-                                    setState(() {
-                                      currentValue = currentValues; // = newValue;
-                                      //   newValue = currentValue;
-                                    });
-                                  },
-                                  onShowPicker: (context, currentValue) async {
-                                    final date = await showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(1970),
-                                      initialDate: currentValue ?? DateTime.now(),
-                                      lastDate: DateTime(2100),
-                                      builder:
-                                          (BuildContext context, Widget child) {
-                                        return Theme(
-                                          data: ThemeData.light().copyWith(
-                                            primaryColor: TextThemes.ndGold,
-                                            accentColor: TextThemes.ndGold,
-                                            colorScheme: ColorScheme.light(
-                                                primary: TextThemes.ndBlue),
-                                            buttonTheme: ButtonThemeData(
-                                                textTheme: ButtonTextTheme.primary),
-                                          ),
-                                          child: child,
-                                        );
-                                      },
-                                    );
-                                    if (date != null) {
-                                      final time = await showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.fromDateTime(
-                                            currentValue ?? DateTime.now()),
-                                        builder:
-                                            (BuildContext context, Widget child) {
-                                          return Theme(
-                                            data: ThemeData.light().copyWith(
-                                              primaryColor: TextThemes.ndGold,
-                                              accentColor: TextThemes.ndGold,
-                                              colorScheme: ColorScheme.light(
-                                                  primary: TextThemes.ndBlue),
-                                              buttonTheme: ButtonThemeData(
-                                                  textTheme:
-                                                      ButtonTextTheme.primary),
-                                            ),
-                                            child: child,
-                                          );
-                                        },
-                                      );
-                                      currentValues =
-                                          DateTimeField.combine(date, time);
-                                      return currentValues;
-                                    } else {
-                                      return currentValue
-                                          ;
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(80.0)),
-                                padding: EdgeInsets.all(0.0),
-                                child: Ink(
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          TextThemes.ndBlue,
-                                          Color(0xff64B6FF)
-                                        ],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
-                                  child: Container(
-                                    constraints: BoxConstraints(
-                                        maxWidth: 125.0, minHeight: 50.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Save",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 22),
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  if (_image != null) {
-                                    StorageReference firebaseStorageRef =
-                                        FirebaseStorage.instance.ref().child(
-                                            "images/" + titleController.text);
-                                    StorageUploadTask uploadTask =
-                                        firebaseStorageRef.putFile(_image);
-                                    StorageTaskSnapshot taskSnapshot =
-                                        await uploadTask.onComplete;
-                                    if (taskSnapshot.error == null) {
-                                      print("added to Firebase Storage");
-                                      final String downloadUrl =
-                                          await taskSnapshot.ref
-                                              .getDownloadURL();
-                                      postsRef
-                                          .document(postId)
-                                          .updateData({
-                                        "image": downloadUrl,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, right: 10, top: 10),
+                                  child: TextFormField(
+                                    onChanged: (text) {
+                                      setState(() {
+                                        description = text;
                                       });
-                                    }
-                                  }
-                               
-                                  if (titleController.text != "") {
-                                    postsRef.document(postId).updateData({
-                                      "title": titleController.text,
-                                    });
-                                  }
+                                    },
 
-                                  if (descriptionController.text != "") {
-                                    postsRef.document(postId).updateData({
-                                      "description": descriptionController.text,
-                                    });
-                                  }
-
-                                  if (privacyDropdownValue != null) {
-                                    postsRef.document(postId).updateData({
-                                      "privacy": privacyDropdownValue,
-                                    });
-                                  }
-
-                                  if (startDateController != null) {
-                                    postsRef.document(postId).updateData({
-                                      "startDate": currentValue,
-                                    });
-                                  }
-                                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
-                                }),
-                                
-                          ),
-                           Padding(
-                            padding: const EdgeInsets.only(top: 70.0),
-                            child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(80.0)),
-                                padding: EdgeInsets.all(0.0),
-                                child: Ink(
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Colors.red[200],
-                                          Colors.red
-                                        ],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
+                                    controller: descriptionController,
+                                    decoration: InputDecoration(
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.never,
+                                      icon: Text("New \nDesc."),
+                                      labelStyle: TextThemes.mediumbody,
+                                      labelText: description,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
+                                    ),
+                                    // The validator receives the text that the user has entered.
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Enter Event Title';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(top: 20),
+                                    child: Container(
+                                      width: 250,
+                                      child: ButtonTheme(
+                                        alignedDropdown: true,
+                                        child: DropdownButtonFormField(
+                                          value: typeDropdownValue,
+                                          icon: Icon(Icons.arrow_downward,
+                                              color: TextThemes.ndGold),
+                                          decoration: InputDecoration(
+                                            labelText: "Type",
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                            ),
+                                          ),
+                                          items:
+                                              listOfTypes.map((String value) {
+                                            return new DropdownMenuItem<String>(
+                                              value: value,
+                                              child: new Text(value),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String newValue) {
+                                            setState(() {
+                                              typeDropdownValue = newValue;
+                                            });
+                                          },
+                                          validator: (value) {
+                                            if (value.isEmpty) {
+                                              return 'What type?';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                    )),
+                                Padding(
+                                    padding: EdgeInsets.all(20.0),
+                                    child: Container(
+                                      width: 250,
+                                      child: ButtonTheme(
+                                        alignedDropdown: true,
+                                        child: DropdownButtonFormField(
+                                          icon: Icon(Icons.arrow_downward,
+                                              color: TextThemes.ndGold),
+                                          decoration: InputDecoration(
+                                            labelText: "Privacy",
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                            ),
+                                          ),
+                                          items:
+                                              privacyList.map((String value) {
+                                            return new DropdownMenuItem<String>(
+                                              value: value,
+                                              child: new Text(value),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String newValue) {
+                                            setState(() {
+                                              privacyDropdownValue = newValue;
+                                            });
+                                          },
+                                          validator: (value) {
+                                            if (value.isEmpty) {
+                                              return 'Who can come?';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 0.0,
+                                      left: 20,
+                                      right: 20,
+                                      bottom: 10),
                                   child: Container(
-                                    constraints: BoxConstraints(
-                                        maxWidth: 125.0, minHeight: 50.0),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Delete",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 22),
+                                    width: 250,
+                                    child: ButtonTheme(
+                                      child: DateTimeField(
+                                        format: format,
+                                        keyboardType: TextInputType.datetime,
+                                        decoration: InputDecoration(
+                                            suffixIcon: Icon(
+                                              Icons.arrow_downward,
+                                              color: TextThemes.ndGold,
+                                            ),
+                                            labelText: 'Enter Start Time',
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10.0)),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always),
+                                        onChanged: (DateTime newValue) {
+                                          setState(() {
+                                            currentValue =
+                                                currentValues; // = newValue;
+                                            //   newValue = currentValue;
+                                          });
+                                        },
+                                        onShowPicker:
+                                            (context, currentValue) async {
+                                          final date = await showDatePicker(
+                                            context: context,
+                                            firstDate: DateTime(1970),
+                                            currentDate: startDate.toDate(),
+                                            initialDate: startDate.toDate(),
+                                            lastDate: DateTime(2100),
+                                            builder: (BuildContext context,
+                                                Widget child) {
+                                              return Theme(
+                                                data:
+                                                    ThemeData.light().copyWith(
+                                                  primaryColor:
+                                                      TextThemes.ndGold,
+                                                  accentColor:
+                                                      TextThemes.ndGold,
+                                                  colorScheme:
+                                                      ColorScheme.light(
+                                                          primary: TextThemes
+                                                              .ndBlue),
+                                                  buttonTheme: ButtonThemeData(
+                                                      textTheme: ButtonTextTheme
+                                                          .primary),
+                                                ),
+                                                child: child,
+                                              );
+                                            },
+                                          );
+                                          if (date != null) {
+                                            final time = await showTimePicker(
+                                              context: context,
+                                              initialTime:
+                                                  TimeOfDay.fromDateTime(
+                                                      currentValue ??
+                                                          DateTime.now()),
+                                              builder: (BuildContext context,
+                                                  Widget child) {
+                                                return Theme(
+                                                  data: ThemeData.light()
+                                                      .copyWith(
+                                                    primaryColor:
+                                                        TextThemes.ndGold,
+                                                    accentColor:
+                                                        TextThemes.ndGold,
+                                                    colorScheme:
+                                                        ColorScheme.light(
+                                                            primary: TextThemes
+                                                                .ndBlue),
+                                                    buttonTheme:
+                                                        ButtonThemeData(
+                                                            textTheme:
+                                                                ButtonTextTheme
+                                                                    .primary),
+                                                  ),
+                                                  child: child,
+                                                );
+                                              },
+                                            );
+                                            currentValues =
+                                                DateTimeField.combine(
+                                                    date, time);
+                                            return currentValues;
+                                          } else {
+                                            return currentValue;
+                                          }
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
-                                onPressed: () => showAlertDialog2(context, postId, currentUser.id)),
-                                
-                          ),
-                        ],
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(80.0)),
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Ink(
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                TextThemes.ndBlue,
+                                                Color(0xff64B6FF)
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                        child: Container(
+                                          constraints: BoxConstraints(
+                                              maxWidth: 125.0, minHeight: 50.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "Save",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22),
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          isUploading = true;
+                                        });
+                                        if (_formKey.currentState != null) {
+                                          
+                                          if (_image != null) {
+                                            StorageReference
+                                                firebaseStorageRef =
+                                                FirebaseStorage.instance
+                                                    .ref()
+                                                    .child("images/" +
+                                                        titleController.text);
+                                            StorageUploadTask uploadTask =
+                                                firebaseStorageRef
+                                                    .putFile(_image);
+                                            StorageTaskSnapshot taskSnapshot =
+                                                await uploadTask.onComplete;
+                                            if (taskSnapshot.error == null) {
+                                              print(
+                                                  "added to Firebase Storage");
+                                              final String downloadUrl =
+                                                  await taskSnapshot.ref
+                                                      .getDownloadURL();
+                                              postsRef
+                                                  .document(postId)
+                                                  .updateData({
+                                                "image": downloadUrl,
+                                              });
+                                            }
+                                          }
+
+                                          if (titleController.text != "") {
+                                            postsRef
+                                                .document(postId)
+                                                .updateData({
+                                              "title": titleController.text,
+                                            });
+                                          }
+
+                                          if (descriptionController.text !=
+                                              "") {
+                                            postsRef
+                                                .document(postId)
+                                                .updateData({
+                                              "description":
+                                                  descriptionController.text,
+                                            });
+                                          }
+
+                                          if (typeDropdownValue != null) {
+                                            postsRef
+                                                .document(postId)
+                                                .updateData({
+                                              "type": typeDropdownValue,
+                                            });
+                                          }
+                                        
+
+                                          if (privacyDropdownValue != "") {
+                                            print(privacyDropdownValue);
+                                            postsRef
+                                                .document(postId)
+                                                .updateData({
+                                              "privacy": privacyDropdownValue,
+                                            });
+                                          }
+
+                                          if (currentValues != null) {
+                                            print(currentValue);
+                                            print(startDate);
+                                            print(DateFormat('MMMd')
+                                                .add_jm()
+                                                .format(currentValue));
+
+                                            print(DateFormat('MMMd')
+                                                .add_jm()
+                                                .format(startDate.toDate()));
+
+                                            postsRef
+                                                .document(postId)
+                                                .updateData({
+                                              "startDate": currentValue,
+                                            });
+                                          }
+                                          setState(() {
+                                            isUploading = false;
+                                          });
+                                        }
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Home()),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      }),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 70.0),
+                                  child: RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(80.0)),
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Ink(
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.red[200],
+                                                Colors.red
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(30.0)),
+                                        child: Container(
+                                          constraints: BoxConstraints(
+                                              maxWidth: 125.0, minHeight: 50.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "Delete",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22),
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () => showAlertDialog2(
+                                          context, postId, currentUser.id)),
+                                ),
+                              ],
+                            ),
+                          )
+                        ])),
                       ),
-                    )
-                  ])),
-                ),
               ));
         });
   }
@@ -684,29 +800,30 @@ class _BannerImage extends StatelessWidget {
     ]);
   }
 }
+
 void showAlertDialog2(BuildContext context, postId, userId) {
-    showDialog(
-      context: context,
-      child: CupertinoAlertDialog(
-        title: Text("Delete?",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nMOOV to trash can?"),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text("Yeah", style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              Database().deletePost(postId, userId);
-            },
-          ),
-          CupertinoDialogAction(
-            child: Text("Cancel"),
-            onPressed: () => Navigator.of(context).pop(true),
-          )
-        ],
-      ),
-    );
-  }
+  showDialog(
+    context: context,
+    child: CupertinoAlertDialog(
+      title: Text("Delete?",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+      content: Text("\nMOOV to trash can?"),
+      actions: [
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          child: Text("Yeah", style: TextStyle(color: Colors.red)),
+          onPressed: () {
+            Database().deletePost(postId, userId);
+          },
+        ),
+        CupertinoDialogAction(
+          child: Text("Cancel"),
+          onPressed: () => Navigator.of(context).pop(true),
+        )
+      ],
+    ),
+  );
+}
 
 // class _NonImageContents extends StatelessWidget {
 //   String title, description, visibility, type, postId;

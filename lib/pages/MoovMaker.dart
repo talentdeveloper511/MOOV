@@ -605,9 +605,13 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         ),
                       ),
                       onPressed: () async {
+                        if  (_formKey.currentState.validate()){
+
                         setState(() {
                           isUploading = true;
                         });
+                        }
+
                         final GoogleSignInAccount user =
                             googleSignIn.currentUser;
                         final strUserId = user.id;
