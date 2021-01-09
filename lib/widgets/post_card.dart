@@ -178,6 +178,38 @@ class _PostCardState extends State<PostCard> {
                     .document(userId)
                     .snapshots(),
                 builder: (context, snapshot2) {
+                  Future<bool> likePost() async {
+                    Future<DocumentSnapshot> docSnapshot = Firestore.instance
+                        .collection('food')
+                        .document(postId)
+                        .get(); // i need to get the postId here, but cant pass it in
+                    DocumentSnapshot doc = await docSnapshot;
+                    likerArray = doc['liker'];
+                    if (doc['liker'].contains(currentUser.id)) {
+                      Database().removeLike(userId, postId);
+
+                      return Future.value(true);
+                    } else if (!doc['liker'].contains(currentUser.id)) {
+                      Database().addLike(userId, postId);
+
+                      return Future.value(false);
+                    }
+                  }
+
+                  Future<bool> onLikeButtonTapped(bool isLiked) async {
+                    await likePost();
+
+                    /// send your request here
+                    // final bool success = await likePost();
+
+                    /// if failed, you can do nothing
+                    // return success? !isLiked:isLiked;
+                    if (await likePost() == true)
+                      return !isLiked;
+                    else
+                      return !isLiked;
+                  }
+
                   var userYear;
                   var userDorm;
                   var userPic;
@@ -273,13 +305,11 @@ class _PostCardState extends State<PostCard> {
                       userId == currentUser.id
                           ? RaisedButton(
                               color: Colors.red,
-                              onPressed: () =>
-                                Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                   EditPost(postId))),
-                             
-                                  // showAlertDialog(context, postId, userId),
+                              onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => EditPost(postId))),
+
+                              // showAlertDialog(context, postId, userId),
                               child: Text(
                                 "Edit",
                                 style: TextStyle(color: Colors.white),
@@ -394,7 +424,7 @@ class _PostCardState extends State<PostCard> {
       ),
     ));
   }
-  
+
   void showAlertDialog(BuildContext context, postId, userId) {
     showDialog(
       context: context,
@@ -418,18 +448,4 @@ class _PostCardState extends State<PostCard> {
       ),
     );
   }
-
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    print(isLiked);
-    // likePost();
-
-    /// send your request here
-    // final bool success = await likePost();
-
-    /// if failed, you can do nothing
-    // return success? !isLiked:isLiked;
-
-    return !isLiked;
-  }
-
 }

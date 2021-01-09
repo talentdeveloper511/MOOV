@@ -317,6 +317,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   _isPressed = false;
                                 }
 
+                              
+
                                 return Card(
                                     color: Colors.white,
                                     shadowColor: Colors.grey[200],
@@ -926,34 +928,6 @@ class _CategoryFeedState extends State<CategoryFeed>
   ///if you pass "postId" into this function below it throws an error, i dont
   ///see how we could have a liking function without having the posts id.
   ///this package is very popular so i must be stupid
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    print(isLiked);
-    // likePost();
-
-    /// send your request here
-    // final bool success = await likePost();
-
-    /// if failed, you can do nothing
-    // return success? !isLiked:isLiked;
-
-    return !isLiked;
-  }
-
-  Future<bool> likePost(postId) async {
-    Future<DocumentSnapshot> docSnapshot = Firestore.instance
-        .collection('food')
-        .document(postId)
-        .get(); // i need to get the postId here, but cant pass it in
-    DocumentSnapshot doc = await docSnapshot;
-    List<dynamic> likerArray = doc['liker'];
-    if (doc['liker'].contains(currentUser.id)) {
-      likerArray.remove(currentUser.id);
-      return false;
-    } else {
-      likerArray.add(currentUser.id);
-      return true;
-    }
-  }
 
 //  Future<bool> onLikeButtonTapped(List<String> likerArray, bool isLiked, String id) async{
 

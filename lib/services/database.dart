@@ -80,6 +80,60 @@ class Database {
     });
   }
 
+Future<void> addLike(
+      userId,
+      postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('food/$postId');
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(2)});
+
+      // addGoingToNotificationFeed(
+      //     userId,
+      //     postId
+      //     );
+      Map<String, dynamic> serializedMessage = {
+        "uid": userId,
+      };
+      String serialUser = userId;
+      transaction.update(ref, {
+        'liked': FieldValue.arrayUnion([serializedMessage]),
+        'liker': FieldValue.arrayUnion([serialUser]),
+        'likeCounter': FieldValue.increment(1)
+      });
+      transaction.update(ref2, {
+        'likedMoovs': FieldValue.arrayUnion([postId])
+      });
+    });
+  }
+  Future<void> removeLike(
+      userId,
+      postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('food/$postId');
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(-2)});
+
+      // addGoingToNotificationFeed(
+      //     userId,
+      //     postId
+      //     );
+      Map<String, dynamic> serializedMessage = {
+        "uid": userId,
+      };
+      String serialUser = userId;
+      transaction.update(ref, {
+        'liked': FieldValue.arrayRemove([serializedMessage]),
+        'liker': FieldValue.arrayRemove([serialUser]),
+        'likeCounter': FieldValue.increment(-1)
+      });
+      transaction.update(ref2, {
+        'likedMoovs': FieldValue.arrayRemove([postId])
+      });
+    });
+  }
+
+
   Future<void> addGoing(
       String ownerId,
       String previewImg,

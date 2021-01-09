@@ -72,79 +72,79 @@ class _HomeState extends State<Home> {
       print('Error signing in: $err');
     });
 
-    if (Platform.isIOS) {
-      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
-        print(data);
-        _saveDeviceToken();
-      });
+  //   if (Platform.isIOS) {
+  //     iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+  //       print(data);
+  //       _saveDeviceToken();
+  //     });
 
-      _fcm.requestNotificationPermissions(IosNotificationSettings());
-    } else {
-      _saveDeviceToken();
-    }
+  //     _fcm.requestNotificationPermissions(IosNotificationSettings());
+  //   } else {
+  //     _saveDeviceToken();
+  //   }
 
-    _fcm.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        // final snackbar = SnackBar(
-        //   content: Text(message['notification']['title']),
-        //   action: SnackBarAction(
-        //     label: 'Go',
-        //     onPressed: () => null,
-        //   ),
-        // );
+  //   _fcm.configure(
+  //     onMessage: (Map<String, dynamic> message) async {
+  //       print("onMessage: $message");
+  //       // final snackbar = SnackBar(
+  //       //   content: Text(message['notification']['title']),
+  //       //   action: SnackBarAction(
+  //       //     label: 'Go',
+  //       //     onPressed: () => null,
+  //       //   ),
+  //       // );
 
-        // Scaffold.of(context).showSnackBar(snackbar);
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: ListTile(
-              title: Text(message['notification']['title']),
-              subtitle: Text(message['notification']['body']),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                color: Colors.amber,
-                child: Text('Ok'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-        // TODO optional
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-        // TODO optional
-      },
-    );
-  }
+  //       // Scaffold.of(context).showSnackBar(snackbar);
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) => AlertDialog(
+  //           content: ListTile(
+  //             title: Text(message['notification']['title']),
+  //             subtitle: Text(message['notification']['body']),
+  //           ),
+  //           actions: <Widget>[
+  //             FlatButton(
+  //               color: Colors.amber,
+  //               child: Text('Ok'),
+  //               onPressed: () => Navigator.of(context).pop(),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //     onLaunch: (Map<String, dynamic> message) async {
+  //       print("onLaunch: $message");
+  //       // TODO optional
+  //     },
+  //     onResume: (Map<String, dynamic> message) async {
+  //       print("onResume: $message");
+  //       // TODO optional
+  //     },
+  //   );
+  // }
 
-  /// Get the token, save it to the database for current user
-  _saveDeviceToken() async {
-    // Get the current user
-    // String uid = 'jeffd23';
+  // /// Get the token, save it to the database for current user
+  // _saveDeviceToken() async {
+  //   // Get the current user
+  //   // String uid = 'jeffd23';
 
-    // Get the token for this device
-    String fcmToken = await _fcm.getToken();
+  //   // Get the token for this device
+  //   String fcmToken = await _fcm.getToken();
 
-    // Save it to Firestore
-    if (fcmToken != null) {
-      var tokens = _db
-          .collection('users')
-          .document(currentUser.id)
-          .collection('tokens')
-          .document(fcmToken);
+  //   // Save it to Firestore
+  //   if (fcmToken != null) {
+  //     var tokens = _db
+  //         .collection('users')
+  //         .document(currentUser.id)
+  //         .collection('tokens')
+  //         .document(fcmToken);
 
-      await tokens.setData({
-        'token': fcmToken,
-        'createdAt': FieldValue.serverTimestamp(), // optional
-        'platform': Platform.operatingSystem // optional
-      });
-    }
+  //     await tokens.setData({
+  //       'token': fcmToken,
+  //       'createdAt': FieldValue.serverTimestamp(), // optional
+  //       'platform': Platform.operatingSystem // optional
+  //     });
+  //   }
   }
 
   handleSignIn(GoogleSignInAccount account) {
@@ -277,7 +277,7 @@ class _HomeState extends State<Home> {
             pauseAutoPlayOnTouch: false,
             reverse: false,
             autoPlay: true,
-            autoPlayInterval: Duration(seconds: 3),
+            autoPlayInterval: Duration(seconds: 5),
             autoPlayAnimationDuration: Duration(milliseconds: 800),
             autoPlayCurve: Curves.fastOutSlowIn,
             enlargeCenterPage: true,
@@ -285,12 +285,12 @@ class _HomeState extends State<Home> {
             scrollDirection: Axis.horizontal,
           ),
           items: [
-            Image.asset('lib/assets/ndlogo.png', height: 35),
-            Text(
-              " What's the MOOV?",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16.0, color: Colors.white),
-            ),
+            // Image.asset('lib/assets/ndlogo.png', height: 35),
+            // Text(
+            //   " What's the MOOV?",
+            //   textAlign: TextAlign.center,
+            //   style: TextStyle(fontSize: 16.0, color: Colors.white),
+            // ),
             GestureDetector(
               onTap: () async {
                 var randomPost = await randomPostMaker();

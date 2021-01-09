@@ -68,9 +68,11 @@ class _MapTestState extends State<MapTest> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 18.0),
                         child: SfCartesianChart(
+                        
                             margin: EdgeInsets.fromLTRB(10, 00, 10, 160),
                             primaryYAxis: CategoryAxis(zoomFactor: 2),
                             primaryXAxis: CategoryAxis(
+                              
                               labelRotation: 0,
                               labelsExtent: 70,
                               labelStyle: TextStyle(
@@ -80,8 +82,9 @@ class _MapTestState extends State<MapTest> {
                             // Chart title
                             title: ChartTitle(
                                 text: 'HOT MOOVS TONIGHT',
-                                textStyle:
-                                    GoogleFonts.robotoCondensed(fontSize: 20, decoration: TextDecoration.none)),
+                                textStyle: GoogleFonts.robotoCondensed(
+                                    fontSize: 20,
+                                    decoration: TextDecoration.none)),
                             // Enable legend
                             legend: Legend(
                                 overflowMode: LegendItemOverflowMode.scroll,
@@ -102,6 +105,7 @@ class _MapTestState extends State<MapTest> {
 
                                   // Enable data label
                                   dataLabelSettings: DataLabelSettings(
+                              
                                     isVisible: true,
                                   ))
                             ]),
