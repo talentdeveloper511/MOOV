@@ -7,8 +7,10 @@ import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/map_test.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -105,7 +107,6 @@ class _HomePageState extends State<HomePage>
       body: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
-        
           SliverPadding(
             padding: EdgeInsets.only(left: 0, right: 0),
             sliver: SliverGrid.count(
@@ -232,7 +233,7 @@ class _HomePageState extends State<HomePage>
               crossAxisCount: 2,
               mainAxisSpacing: 0.0,
               crossAxisSpacing: 10.0,
-              childAspectRatio: .95,
+              childAspectRatio: .97,
               children: <Widget>[
                 Container(
                   child: Column(
@@ -281,119 +282,154 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           SliverToBoxAdapter(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
+            child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 170,
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 1,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  scrollPhysics: NeverScrollableScrollPhysics(),
+                  pauseAutoPlayOnTouch: false,
+                  reverse: false,
+                  autoPlay: true,
+                  autoPlayInterval: Duration(seconds: 8),
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                  // onPageChanged: callbackFunction,
+                  scrollDirection: Axis.horizontal,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) => CupertinoAlertDialog(
-                            title: Text("No bullshit."),
-                            content: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                  "Created by two students (ND '22 and ND '23), MOOV is ND's app. \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
-                            ),
-                          ),
-                      barrierDismissible: true);
-                },
-                child: Card(
-                  margin: EdgeInsets.only(left: 8, right: 8, bottom: 20),
-                  color: Color.fromRGBO(249, 249, 249, 1.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 2, top: 10),
-                        child: RichText(
-                          textScaleFactor: 1.75,
-                          text:
-                              TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(
-                                text: "This is",
-                                style: TextStyle(fontWeight: FontWeight.w400)),
-                            TextSpan(
-                                text: " our ",
-                                style: TextStyle(
-                                    color: TextThemes.ndGold,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FontStyle.italic)),
-                            TextSpan(
-                                text: "app",
-                                style: TextStyle(fontWeight: FontWeight.w400)),
-                          ]),
-                        ),
+                items: [
+                  Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 0.0),
-                        child: Center(
-                          child: RichText(
-                            textScaleFactor: 1.75,
-                            text: TextSpan(
-                                style: TextThemes.mediumbody,
-                                children: [
-                                  TextSpan(
+                      //   boxShadow: [
+                      //     BoxShadow(
+                      //       color: Colors.grey.withOpacity(0.5),
+                      //       spreadRadius: 2,
+                      //       blurRadius: 3,
+                      //       offset: Offset(0, 3), // changes position of shadow
+                      //     ),
+                      //   ],
+                      // ),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => CupertinoAlertDialog(
+                                  title: Text("No bullshit."),
+                                  content: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Text(
+                                        "Created by two students (ND '22 and ND '23), MOOV is ND's app. \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
+                                  ),
+                                ),
+                            barrierDismissible: true);
+                      },
+                      child: Container(
+                        height: 100,
+                        child: Card(
+                          color: Color.fromRGBO(249, 249, 249, 1.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 3, top: 30),
+                                child: RichText(
+                                  textScaleFactor: 1.75,
+                                  text: TextSpan(
                                       style: TextThemes.mediumbody,
                                       children: [
                                         TextSpan(
-                                            text: "Always",
+                                            text: "This is",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
-                                            text: " know the ",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400)),
-                                        TextSpan(
-                                            text: "MOOV",
+                                            text: " our ",
                                             style: TextStyle(
                                                 color: TextThemes.ndGold,
                                                 fontWeight: FontWeight.w600,
                                                 fontStyle: FontStyle.italic)),
+                                        TextSpan(
+                                            text: "app",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400)),
                                       ]),
-                                ]),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 0.0),
+                                child: Center(
+                                  child: RichText(
+                                    textScaleFactor: 1.75,
+                                    text: TextSpan(
+                                        style: TextThemes.mediumbody,
+                                        children: [
+                                          TextSpan(
+                                              style: TextThemes.mediumbody,
+                                              children: [
+                                                TextSpan(
+                                                    text: "Always",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                                TextSpan(
+                                                    text: " know the ",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                                TextSpan(
+                                                    text: "MOOV",
+                                                    style: TextStyle(
+                                                        color: TextThemes.ndGold,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontStyle:
+                                                            FontStyle.italic)),
+                                              ]),
+                                        ]),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 2, bottom: 0),
+                                  child: RichText(
+                                    textScaleFactor: 1.75,
+                                    text: TextSpan(
+                                        style: TextThemes.mediumbody,
+                                        children: [
+                                          TextSpan(
+                                              text: "Go ",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400)),
+                                          TextSpan(
+                                              text: "Irish",
+                                              style: TextStyle(
+                                                  color: TextThemes.ndGold,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontStyle: FontStyle.italic)),
+                                        ]),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 2, bottom: 10),
-                          child: RichText(
-                            textScaleFactor: 1.75,
-                            text: TextSpan(
-                                style: TextThemes.mediumbody,
-                                children: [
-                                  TextSpan(
-                                      text: "Go ",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400)),
-                                  TextSpan(
-                                      text: "Irish",
-                                      style: TextStyle(
-                                          color: TextThemes.ndGold,
-                                          fontWeight: FontWeight.w600,
-                                          fontStyle: FontStyle.italic)),
-                                ]),
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
+                  MapTest()
+                ]),
           ),
           SliverPadding(
             padding: EdgeInsets.only(left: 10, right: 10, top: 10),
