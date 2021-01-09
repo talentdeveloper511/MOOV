@@ -1,8 +1,13 @@
 import 'dart:math';
-
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
@@ -44,6 +49,10 @@ class _HomeState extends State<Home> {
   int pageIndex = 0;
   dynamic startDate, moovId;
   List<dynamic> likedArray;
+  final Firestore _db = Firestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
+  StreamSubscription iosSubscription;
   @override
   Future<void> initState() {
     super.initState();
@@ -61,6 +70,80 @@ class _HomeState extends State<Home> {
     }).catchError((err) {
       print('Error signing in: $err');
     });
+
+    if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        print(data);
+        _saveDeviceToken();
+      });
+
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    } else {
+      _saveDeviceToken();
+    }
+
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        // final snackbar = SnackBar(
+        //   content: Text(message['notification']['title']),
+        //   action: SnackBarAction(
+        //     label: 'Go',
+        //     onPressed: () => null,
+        //   ),
+        // );
+
+        // Scaffold.of(context).showSnackBar(snackbar);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.amber,
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+      },
+    );
+  }
+
+  /// Get the token, save it to the database for current user
+  _saveDeviceToken() async {
+    // Get the current user
+    // String uid = 'jeffd23';
+
+    // Get the token for this device
+    String fcmToken = await _fcm.getToken();
+
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = _db
+          .collection('users')
+          .document(currentUser.id)
+          .collection('tokens')
+          .document(fcmToken);
+
+      await tokens.setData({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(), // optional
+        'platform': Platform.operatingSystem // optional
+      });
+    }
   }
 
   handleSignIn(GoogleSignInAccount account) {
@@ -122,6 +205,7 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     pageController.dispose();
+    if (iosSubscription != null) iosSubscription.cancel();
     super.dispose();
   }
 
