@@ -273,13 +273,11 @@ class _PostCardState extends State<PostCard> {
                       userId == currentUser.id
                           ? RaisedButton(
                               color: Colors.red,
-                              onPressed: () =>
-                                Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                   EditPost(postId))),
-                             
-                                  // showAlertDialog(context, postId, userId),
+                              onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => EditPost(postId))),
+
+                              // showAlertDialog(context, postId, userId),
                               child: Text(
                                 "Edit",
                                 style: TextStyle(color: Colors.white),
@@ -333,7 +331,7 @@ class _PostCardState extends State<PostCard> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    top: 10, right: 2.0, left: 8),
+                                    top: 0, right: 2.0, left: 20, bottom: 10),
                                 child: LikeButton(
                                   onTap:
                                       onLikeButtonTapped, //this is where the trouble is
@@ -345,13 +343,23 @@ class _PostCardState extends State<PostCard> {
                                       dotPrimaryColor: TextThemes.ndGold,
                                       dotSecondaryColor: TextThemes.ndGold),
                                   likeBuilder: (bool isLiked) {
-                                    return Icon(
-                                      Icons.directions_run,
-                                      color:
-                                          isLiked ? Colors.green : Colors.grey,
-                                      size: 30,
+                                    return Column(
+                                      children: [
+                                        Icon(
+                                          Icons.directions_run,
+                                          color: isLiked
+                                              ? Colors.green
+                                              : Colors.grey,
+                                          size: 30,
+                                        ),
+                                        // Text(
+                                        //   'Going?',
+                                        //   style: TextStyle(fontSize: 12),
+                                        // ),
+                                      ],
                                     );
                                   },
+
                                   likeCount: likerArray.length,
                                   countPostion: CountPostion.bottom,
                                   countBuilder:
@@ -362,7 +370,7 @@ class _PostCardState extends State<PostCard> {
                                     Widget result;
                                     if (count == 0) {
                                       result = Text(
-                                        "love",
+                                        "0",
                                         style: TextStyle(color: color),
                                       );
                                     } else
@@ -374,14 +382,14 @@ class _PostCardState extends State<PostCard> {
                                   },
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 5, right: 6.0, bottom: 4.0),
-                                child: Text(
-                                  'Going?',
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(
+                              //       left: 5, right: 6.0, bottom: 4.0),
+                              //   child: Text(
+                              //     'Going?',
+                              //     style: TextStyle(fontSize: 12),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],
@@ -394,7 +402,7 @@ class _PostCardState extends State<PostCard> {
       ),
     ));
   }
-  
+
   void showAlertDialog(BuildContext context, postId, userId) {
     showDialog(
       context: context,
@@ -431,5 +439,4 @@ class _PostCardState extends State<PostCard> {
 
     return !isLiked;
   }
-
 }

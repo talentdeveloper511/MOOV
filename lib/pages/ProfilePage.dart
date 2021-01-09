@@ -34,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
     var userBio;
     var userHeader = currentUser.header;
     var userFriends = currentUser.friendArray;
-    var userMoovs = currentUser.likedMoovs;
+    // var userMoovs = currentUser.likedMoovs;
     var userGroups = currentUser.friendGroups;
     // var userFriendsLength = "0";
     bool isAmbassador = currentUser.isAmbassador;
@@ -56,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
           strUserPic = snapshot.data['photoUrl'];
           isAmbassador = snapshot.data['isAmbassador'];
           userFriends = snapshot.data['friendArray'];
-          userMoovs = snapshot.data['likedMoovs'];
+          // userMoovs = snapshot.data['likedMoovs'];
           userGroups = snapshot.data['friendGroups'];
 
           return Scaffold(
@@ -186,10 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Column(
                               children: [
                                 Text(
-                                  userMoovs.length == null ||
-                                          userMoovs.length == 0
-                                      ? "0"
-                                      : userMoovs.length.toString(),
+                                  '0',
                                   style: TextThemes.extraBold,
                                 ),
                                 Padding(
@@ -324,7 +321,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           FocusedMenuHolder(
                             menuWidth: MediaQuery.of(context).size.width * 0.5,
-                            
+
                             blurSize: 5.0,
                             menuItemExtent: 45,
                             menuBoxDecoration: BoxDecoration(

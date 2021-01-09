@@ -195,7 +195,6 @@ class _HomeState extends State<Home> {
         "friendArray": [],
         "friendRequests": [],
         "venmo": "",
-        "likedMoovs": [],
         "friendGroups": []
       });
       doc = await usersRef.document(user.id).get();
