@@ -166,7 +166,9 @@ class _CategoryFeedState extends State<CategoryFeed>
                     children: <Widget>[
                       // Sign In Button
                       new FlatButton(
-                        color: _currentIndex == 0 ? Colors.blue[100] : Colors.white,
+                        color: _currentIndex == 0
+                            ? Colors.blue[100]
+                            : Colors.white,
                         onPressed: () {
                           _tabController.animateTo(0);
                           setState(() {
@@ -180,7 +182,9 @@ class _CategoryFeedState extends State<CategoryFeed>
                       ),
                       // Sign Up Button
                       new FlatButton(
-                        color: _currentIndex == 1 ? Colors.blue[100] : Colors.white,
+                        color: _currentIndex == 1
+                            ? Colors.blue[100]
+                            : Colors.white,
                         onPressed: () {
                           _tabController.animateTo(1);
                           setState(() {
@@ -230,16 +234,16 @@ class _CategoryFeedState extends State<CategoryFeed>
                           },
                           color: Colors.green,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(3.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.check, color: TextThemes.ndGold),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(4.0),
                                   child: Text('Today Only!',
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: 20)),
+                                          color: Colors.white, fontSize: 14)),
                                 ),
                               ],
                             ),
