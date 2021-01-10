@@ -71,6 +71,8 @@ dependencies:
   like_button: ^1.0.4
   syncfusion_flutter_charts: ^18.4.33
   syncfusion_flutter_maps: ^18.4.30-beta
+  polls: ^0.2.2
+
 
 
 

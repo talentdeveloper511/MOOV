@@ -19,6 +19,7 @@ class Poll extends StatefulWidget {
 
 /// State class of the realtime line chart.
 class _PollState extends State<Poll> {
+  
   _PollState() {
     timer =
         Timer.periodic(const Duration(seconds: 2), _updateDataSource);
