@@ -498,7 +498,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                           padding:
                                                               const EdgeInsets
                                                                   .only(
-                                                            bottom: 5.0,
+                                                            bottom: 5.0, right: 15,
                                                           ),
                                                           child:
                                                               GestureDetector(
@@ -546,7 +546,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                           padding:
                                                               const EdgeInsets
                                                                       .only(
-                                                                  bottom: 0.0),
+                                                                  bottom: 0.0, right: 15),
                                                           child: Text(
                                                             'Send',
                                                             style: TextStyle(
@@ -555,49 +555,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                         ),
                                                       ],
                                                     ),
-                                                    Column(
-                                                      //  mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      children: [
-                                                        
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  right: 22.0,
-                                                                  bottom: 0.0),
-                                                          child: Text(
-                                                            course["liker"]
-                                                                .length
-                                                                .toString(),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                fontSize: 12),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .fromLTRB(
-                                                                  0,
-                                                                  0,
-                                                                  22.0,
-                                                                  0),
-                                                          child: Text("",
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      TextThemes
-                                                                          .ndBlue,
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .none)),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                  
                                                   ],
                                                 ),
                                               ],
