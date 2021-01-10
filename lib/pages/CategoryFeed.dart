@@ -4,6 +4,7 @@ import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
@@ -204,14 +205,14 @@ class _CategoryFeedState extends State<CategoryFeed>
                         child: StreamBuilder(
                             stream: Firestore.instance
                                 .collection('food')
-                                .where("type", isEqualTo: type)
-                                .where("featured", isEqualTo: true)
+                                .where("type", isEqualTo: type + "featured")
+                                // .where("featured", isEqualTo: true)
                                 .orderBy("startDate")
                                 .snapshots(),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData)
+                              if (!snapshot.hasData || snapshot.data.documents.length == 0)
                                 return Center(
-                                  child: Text("No featured MOOVs.",
+                                  child: Text("No featured MOOVs. \n\n Got a feature? Email MOOV@MOOV.com.",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 20)),
                                 );
@@ -221,35 +222,549 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 itemBuilder: (context, index) {
                                   DocumentSnapshot course =
                                       snapshot.data.documents[index];
+                                  List<dynamic> likerArray = course["liker"];
                                   var strUserPic = currentUser.photoUrl;
 
                                   bool isAmbassador;
+                                  bool isLiked1;
 
-                                  // var sd1 = course['startDate'].toDate();
-                                  // var sd = DateFormat('MMMd')
-                                  //     .add_jm()
-                                  //     .format(course['startDate'].toDate());
-                                  // var now = DateFormat('MMMd')
-                                  //     .add_jm()
-                                  //     .format(DateTime.now());
-                                  // var x = (course['startDate']);
-                                  // var y =
-                                  //     (Timestamp.now().millisecondsSinceEpoch);
+                                  if (likerArray != null) {
+                                    likeCount = likerArray.length;
+                                  } else {
+                                    likeCount = 0;
+                                  }
 
-                                  // print(x);
-                                  // print(y);
-                                  // var z = (1610057148668);
-                                  // print(y > z);
+                                  if (likerArray != null &&
+                                      likerArray.contains(strUserId)) {
+                                    isLiked1 = true;
+                                  } else {
+                                    isLiked1 = false;
+                                  }
 
-                                  return PostCard(
-                                      course['title'],
-                                      course['description'],
-                                      course['address'],
-                                      course['startDate'],
-                                      course['userId'],
-                                      course['image'],
-                                      course['postId'],
-                                      course['liker']);
+                                  return Card(
+                                      color: Colors.white,
+                                      shadowColor: Colors.grey[200],
+                                      clipBehavior: Clip.antiAlias,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PostDetail(
+                                                          course.documentID)));
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Card(
+                                              color: Colors.white,
+                                              child: Row(children: <Widget>[
+                                                Expanded(
+                                                    child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                top: 0.0,
+                                                                right: 5,
+                                                                bottom: 5),
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              20)),
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Color(
+                                                                        0xff000000),
+                                                                    width: 1,
+                                                                  )),
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                            child: Image.network(
+                                                                course['image'],
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                height: 140,
+                                                                width: 50),
+                                                          ),
+                                                        ))),
+                                                Expanded(
+                                                    child: Column(children: <
+                                                        Widget>[
+                                                  Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0)),
+                                                  Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      child: Text(
+                                                          course['title']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .blue[900],
+                                                              fontSize: 20.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                          textAlign: TextAlign
+                                                              .center)),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: Text(
+                                                      course['description']
+                                                          .toString(),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontSize: 12.0,
+                                                          color: Colors.black
+                                                              .withOpacity(
+                                                                  0.6)),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5.0)),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right: 4.0),
+                                                            child: Icon(
+                                                                Icons.timer,
+                                                                color:
+                                                                    TextThemes
+                                                                        .ndGold,
+                                                                size: 20),
+                                                          ),
+                                                          Text('WHEN: ',
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                          Text(
+                                                              DateFormat('MMMd')
+                                                                  .add_jm()
+                                                                  .format(course[
+                                                                          'startDate']
+                                                                      .toDate()),
+                                                              style: TextStyle(
+                                                                fontSize: 12.0,
+                                                              )),
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 4.0),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      right:
+                                                                          0.0),
+                                                              child: Icon(
+                                                                  Icons.place,
+                                                                  color:
+                                                                      TextThemes
+                                                                          .ndGold,
+                                                                  size: 20),
+                                                            ),
+                                                            Text(' WHERE: ',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                            Text(
+                                                                course[
+                                                                    'address'],
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .fade,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize:
+                                                                      12.0,
+                                                                )),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ]))
+                                              ]),
+                                            ),
+                                            // Padding(
+                                            //   padding: EdgeInsets.symmetric(
+                                            //       horizontal: 1.0),
+                                            //   child: Container(
+                                            //     height: 1.0,
+                                            //     width: 500.0,
+                                            //     color: Colors.grey[300],
+                                            //   ),
+                                            // ),
+                                            StreamBuilder(
+                                                stream: Firestore.instance
+                                                    .collection('users')
+                                                    .document(course['userId'])
+                                                    .snapshots(),
+                                                builder: (context, snapshot2) {
+                                                  var userYear;
+                                                  var userDorm;
+                                                  bool isLargePhone =
+                                                      Screen.diagonal(context) >
+                                                          766;
+
+                                                  if (snapshot2.hasError)
+                                                    return CircularProgressIndicator();
+                                                  if (!snapshot2.hasData)
+                                                    return CircularProgressIndicator();
+                                                  else
+                                                    userDorm =
+                                                        snapshot2.data['dorm'];
+                                                  strUserPic = snapshot2
+                                                      .data['photoUrl'];
+                                                  isAmbassador = snapshot2
+                                                      .data['isAmbassador'];
+                                                  userYear =
+                                                      snapshot2.data['year'];
+
+                                                  return Container(
+                                                      child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .fromLTRB(
+                                                                      12,
+                                                                      10,
+                                                                      4,
+                                                                      10),
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () {
+                                                                  if (course[
+                                                                          'userId'] ==
+                                                                      strUserId) {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .push(MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                ProfilePage()));
+                                                                  } else {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .push(MaterialPageRoute(
+                                                                            builder: (context) => OtherProfile(
+                                                                                  course['profilePic'],
+                                                                                  course['userName'],
+                                                                                  course['userId'],
+                                                                                )));
+                                                                  }
+                                                                },
+                                                                child:
+                                                                    CircleAvatar(
+                                                                  radius: 22.0,
+                                                                  backgroundImage:
+                                                                      CachedNetworkImageProvider(
+                                                                          strUserPic),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                ),
+                                                              )),
+                                                          Container(
+                                                            width: 120,
+                                                            height: 30,
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                if (course[
+                                                                        'userId'] ==
+                                                                    strUserId) {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .push(MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              ProfilePage()));
+                                                                } else {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .push(MaterialPageRoute(
+                                                                          builder: (context) => OtherProfile(
+                                                                                course['profilePic'],
+                                                                                course['userName'],
+                                                                                course['userId'],
+                                                                              )));
+                                                                }
+                                                              },
+                                                              child: Column(
+                                                                //  mainAxisAlignment: MainAxisAlignment.start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            2.0),
+                                                                    child: Text(
+                                                                        course[
+                                                                            'userName'],
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                TextThemes.ndBlue,
+                                                                            decoration: TextDecoration.none)),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            2.0),
+                                                                    child: Text(
+                                                                        userYear +
+                                                                            " in " +
+                                                                            userDorm,
+                                                                        overflow:
+                                                                            TextOverflow
+                                                                                .ellipsis,
+                                                                        maxLines:
+                                                                            2,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                11,
+                                                                            color:
+                                                                                TextThemes.ndBlue,
+                                                                            decoration: TextDecoration.none)),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      course['userId'] ==
+                                                              currentUser.id
+                                                          ? RaisedButton(
+                                                              color: Colors.red,
+                                                              onPressed: () => Navigator
+                                                                      .of(
+                                                                          context)
+                                                                  .push(MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          EditPost(
+                                                                              course['postId']))),
+
+                                                              // showAlertDialog(context, postId, userId),
+                                                              child: Text(
+                                                                "Edit",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              ))
+                                                          : Text(''),
+                                                      Row(
+                                                        children: [
+                                                          Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                  bottom: 5.0,
+                                                                ),
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        PageTransition(
+                                                                            type: PageTransitionType
+                                                                                .bottomToTop,
+                                                                            child: SendMOOV(
+                                                                                course['postId'],
+                                                                                course['ownerId'],
+                                                                                course['photoUrl'],
+                                                                                course['postId'],
+                                                                                course['startDate'],
+                                                                                course['title'],
+                                                                                course['description'],
+                                                                                course['address'],
+                                                                                course['profilePic'],
+                                                                                course['userName'],
+                                                                                course['userEmail'],
+                                                                                course['liked'])));
+                                                                  },
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .send_rounded,
+                                                                      color: Colors
+                                                                              .blue[
+                                                                          500],
+                                                                      size: 30),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        bottom:
+                                                                            0.0),
+                                                                child: Text(
+                                                                  'Send',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Column(
+                                                            //  mainAxisAlignment: MainAxisAlignment.start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            2.0,
+                                                                        left:
+                                                                            8),
+                                                                child:
+                                                                    IconButton(
+                                                                  icon: (isLiked1)
+                                                                      ? new Icon(
+                                                                          Icons
+                                                                              .directions_run,
+                                                                          color: Colors
+                                                                              .green)
+                                                                      : new Icon(
+                                                                          Icons
+                                                                              .directions_walk),
+                                                                  color: Colors
+                                                                      .red,
+                                                                  iconSize:
+                                                                      30.0,
+                                                                  splashColor: (isLiked1)
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Colors
+                                                                          .green,
+                                                                  //splashRadius: 7.0,
+                                                                  highlightColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  onPressed:
+                                                                      () {
+                                                                    print(
+                                                                        isLiked1);
+                                                                    (isLiked1)
+                                                                        ? setState(
+                                                                            () {
+                                                                            isLiked1 =
+                                                                                false;
+                                                                            Database().removeLike(currentUser.id,
+                                                                                course['postId']);
+                                                                          })
+                                                                        : setState(
+                                                                            () {
+                                                                            isLiked1 =
+                                                                                true;
+
+                                                                            Database().addLike(currentUser.id,
+                                                                                course['postId']);
+                                                                          });
+                                                                  },
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            22.0,
+                                                                        bottom:
+                                                                            0.0),
+                                                                child: Text(
+                                                                  course["liker"]
+                                                                      .length
+                                                                      .toString(),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .fromLTRB(
+                                                                        0,
+                                                                        0,
+                                                                        22.0,
+                                                                        0),
+                                                                child: Text("",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: TextThemes
+                                                                            .ndBlue,
+                                                                        decoration:
+                                                                            TextDecoration.none)),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ));
+                                                }),
+                                          ],
+                                        ),
+                                      ));
                                 },
                               );
                             }),
@@ -295,29 +810,24 @@ class _CategoryFeedState extends State<CategoryFeed>
                               itemBuilder: (context, index) {
                                 DocumentSnapshot course =
                                     snapshot.data.documents[index];
-                                List<dynamic> likedArray = course["liked"];
+                                List<dynamic> likerArray = course["liker"];
                                 var strUserPic = currentUser.photoUrl;
 
                                 bool isAmbassador;
+                                bool isLiked1;
 
-                                if (likedArray != null) {
-                                  likeCount = likedArray.length;
-                                  for (int i = 0; i < likeCount; i++) {
-                                    var id = likedArray[i]["uid"];
-                                    likedArray.add(id);
-                                  }
+                                if (likerArray != null) {
+                                  likeCount = likerArray.length;
                                 } else {
                                   likeCount = 0;
                                 }
 
-                                if (likedArray != null &&
-                                    likedArray.contains(strUserId)) {
-                                  _isPressed = true;
+                                if (likerArray != null &&
+                                    likerArray.contains(strUserId)) {
+                                  isLiked1 = true;
                                 } else {
-                                  _isPressed = false;
+                                  isLiked1 = false;
                                 }
-
-                              
 
                                 return Card(
                                     color: Colors.white,
@@ -648,24 +1158,26 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                         ),
                                                       ],
                                                     ),
-                                                    course["userId"] ==
-                                                            currentUser.id
-                                                        ? RaisedButton(
-                                                            color: Colors.red,
-                                                            onPressed: () =>
-                                                                showAlertDialog(
-                                                                    context,
-                                                                    course[
-                                                                        "postId"],
-                                                                    course[
-                                                                        "userId"]),
-                                                            child: Text(
-                                                              "DELETE",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ))
-                                                        : Text(''),
+                                                     course['userId'] ==
+                                                              currentUser.id
+                                                          ? RaisedButton(
+                                                              color: Colors.red,
+                                                              onPressed: () => Navigator
+                                                                      .of(
+                                                                          context)
+                                                                  .push(MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          EditPost(
+                                                                              course['postId']))),
+
+                                                              // showAlertDialog(context, postId, userId),
+                                                              child: Text(
+                                                                "Edit",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              ))
+                                                          : Text(''),
                                                     Row(
                                                       children: [
                                                         Column(
@@ -712,7 +1224,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                   const EdgeInsets
                                                                           .only(
                                                                       bottom:
-                                                                          15.0),
+                                                                          0.0),
                                                               child: Text(
                                                                 'Send',
                                                                 style: TextStyle(
@@ -736,7 +1248,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                           2.0,
                                                                       left: 8),
                                                               child: IconButton(
-                                                                icon: (_isPressed)
+                                                                icon: (isLiked1)
                                                                     ? new Icon(
                                                                         Icons
                                                                             .directions_run,
@@ -748,101 +1260,36 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                     Colors.red,
                                                                 iconSize: 30.0,
                                                                 splashColor:
-                                                                    Colors
-                                                                        .green,
+                                                                    (isLiked1)
+                                                                        ? Colors
+                                                                            .red
+                                                                        : Colors
+                                                                            .green,
                                                                 //splashRadius: 7.0,
                                                                 highlightColor:
                                                                     Colors
                                                                         .green,
                                                                 onPressed: () {
-                                                                  setState(() {
-                                                                    List<dynamic>
-                                                                        likedArray =
-                                                                        course[
-                                                                            "liked"];
-                                                                    List<String>
-                                                                        uidArray =
-                                                                        List<
-                                                                            String>();
-                                                                    if (likedArray !=
-                                                                        null) {
-                                                                      likeCount =
-                                                                          likedArray
-                                                                              .length;
-                                                                      for (int i =
-                                                                              0;
-                                                                          i < likeCount;
-                                                                          i++) {
-                                                                        var id =
-                                                                            likedArray[i]["uid"];
-                                                                        uidArray
-                                                                            .add(id);
-                                                                      }
-                                                                    }
+                                                                  print(
+                                                                      isLiked1);
+                                                                  (isLiked1)
+                                                                      ? setState(
+                                                                          () {
+                                                                          isLiked1 =
+                                                                              false;
+                                                                          Database().removeLike(
+                                                                              currentUser.id,
+                                                                              course['postId']);
+                                                                        })
+                                                                      : setState(
+                                                                          () {
+                                                                          isLiked1 =
+                                                                              true;
 
-                                                                    if (uidArray !=
-                                                                            null &&
-                                                                        uidArray
-                                                                            .contains(strUserId)) {
-                                                                      Database().removeGoing(
-                                                                          course[
-                                                                              "userId"],
-                                                                          course[
-                                                                              "image"],
-                                                                          strUserId,
-                                                                          course
-                                                                              .documentID,
-                                                                          currentUser
-                                                                              .displayName,
-                                                                          strUserPic,
-                                                                          course[
-                                                                              "startDate"],
-                                                                          course[
-                                                                              "title"],
-                                                                          course[
-                                                                              "description"],
-                                                                          course[
-                                                                              "location"],
-                                                                          course[
-                                                                              "address"],
-                                                                          course[
-                                                                              "profilePic"],
-                                                                          course[
-                                                                              "userName"],
-                                                                          course[
-                                                                              "userEmail"],
-                                                                          likedArray);
-                                                                    } else {
-                                                                      Database().addGoing(
-                                                                          course[
-                                                                              "userId"],
-                                                                          course[
-                                                                              "image"],
-                                                                          strUserId,
-                                                                          course
-                                                                              .documentID,
-                                                                          currentUser
-                                                                              .displayName,
-                                                                          strUserPic,
-                                                                          course[
-                                                                              "startDate"],
-                                                                          course[
-                                                                              "title"],
-                                                                          course[
-                                                                              "description"],
-                                                                          course[
-                                                                              "location"],
-                                                                          course[
-                                                                              "address"],
-                                                                          course[
-                                                                              "profilePic"],
-                                                                          course[
-                                                                              "userName"],
-                                                                          course[
-                                                                              "userEmail"],
-                                                                          likedArray);
-                                                                    }
-                                                                  });
+                                                                          Database().addLike(
+                                                                              currentUser.id,
+                                                                              course['postId']);
+                                                                        });
                                                                 },
                                                               ),
                                                             ),
@@ -851,11 +1298,16 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                   const EdgeInsets
                                                                           .only(
                                                                       right:
-                                                                          6.0,
+                                                                          22.0,
                                                                       bottom:
-                                                                          4.0),
+                                                                          0.0),
                                                               child: Text(
-                                                                'Going?',
+                                                                course["liker"]
+                                                                    .length
+                                                                    .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         12),
@@ -868,9 +1320,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                       0,
                                                                       0,
                                                                       22.0,
-                                                                      10),
-                                                              child: Text(
-                                                                  '$likeCount',
+                                                                      0),
+                                                              child: Text("",
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           12,
