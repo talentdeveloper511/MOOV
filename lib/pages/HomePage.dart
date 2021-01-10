@@ -10,6 +10,7 @@ import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/map_test.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
+import 'package:MOOV/widgets/poll2.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -293,7 +294,7 @@ class _HomePageState extends State<HomePage>
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
                   autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 8),
+                  autoPlayInterval: Duration(seconds: 6),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   enlargeCenterPage: true,
@@ -428,7 +429,8 @@ class _HomePageState extends State<HomePage>
                       ),
                     ),
                   ),
-                  MapTest()
+                  MapTest(),
+                  PollView()
                 ]),
           ),
           SliverPadding(

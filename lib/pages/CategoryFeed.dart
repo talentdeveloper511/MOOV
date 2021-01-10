@@ -144,7 +144,7 @@ class _CategoryFeedState extends State<CategoryFeed>
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: const EdgeInsets.only(top: 20.0, bottom: 12.5),
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
@@ -215,7 +215,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 Icon(Icons.calendar_today,
                                     color: TextThemes.ndGold),
                                 Padding(
-                                  padding: const EdgeInsets.all(4.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Text('Today Only?',
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 14)),
@@ -240,7 +240,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               children: [
                                 Icon(Icons.check, color: TextThemes.ndGold),
                                 Padding(
-                                  padding: const EdgeInsets.all(4.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Text('Today Only!',
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 14)),
