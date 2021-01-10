@@ -726,17 +726,18 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                             22.0,
                                                                         bottom:
                                                                             0.0),
-                                                                child: Text(
-                                                                  course["liker"]
-                                                                      .length
-                                                                      .toString(),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12),
-                                                                ),
+                                                                child: course['liker'] != null ?
+                                                              Text(
+                                                                course["liker"]
+                                                                    .length
+                                                                    .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12),
+                                                              ) : Text("0"),
                                                               ),
                                                               Padding(
                                                                 padding:
@@ -1301,7 +1302,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                           22.0,
                                                                       bottom:
                                                                           0.0),
-                                                              child: Text(
+                                                              child: course['liker'] != null ?
+                                                              Text(
                                                                 course["liker"]
                                                                     .length
                                                                     .toString(),
@@ -1311,7 +1313,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         12),
-                                                              ),
+                                                              ) : Text("0"),
                                                             ),
                                                             Padding(
                                                               padding:
