@@ -820,7 +820,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               .collection('food')
                               .where("type", isEqualTo: type)
                               .where('privacy', isEqualTo: 'Public')
-                              .where('userId', whereIn: currentUser.friendArray)
+                              // .where('userId', whereIn: currentUser.friendArray)
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
