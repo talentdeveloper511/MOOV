@@ -1427,6 +1427,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                           stream: Firestore.instance
                               .collection('food')
                               .where("type", isEqualTo: type)
+                              .where('privacy', isEqualTo: 'Friends Only')
                               .where('userId', whereIn: currentUser.friendArray)
                               .orderBy("startDate")
                               .snapshots(),
