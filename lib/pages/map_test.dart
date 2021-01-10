@@ -42,27 +42,27 @@ class _MapTestState extends State<MapTest> {
                     itemBuilder: (context, index) {
                       bool isLargePhone = Screen.diagonal(context) > 766;
 
-                      title1 = snapshot.data.documents[1]['title'];
+                      title1 = snapshot.data.documents[0]['title'];
                       likes1 =
-                          snapshot.data.documents[1]['liker'].length.toDouble();
-                      title2 = snapshot.data.documents[2]['title'];
-                      likes2 =
-                          snapshot.data.documents[2]['liker'].length.toDouble();
-                      title3 = snapshot.data.documents[3]['title'];
-                      likes3 =
-                          snapshot.data.documents[3]['liker'].length.toDouble();
-                      title4 = snapshot.data.documents[4]['title'];
-                      likes4 =
-                          snapshot.data.documents[4]['liker'].length.toDouble();
-                      title5 = snapshot.data.documents[0]['title'];
-                      likes5 =
                           snapshot.data.documents[0]['liker'].length.toDouble();
+                      title2 = snapshot.data.documents[1]['title'];
+                      likes2 =
+                          snapshot.data.documents[1]['liker'].length.toDouble();
+                      title3 = snapshot.data.documents[2]['title'];
+                      likes3 =
+                          snapshot.data.documents[2]['liker'].length.toDouble();
+                      // title4 = snapshot.data.documents[0]['title'];
+                      // likes4 =
+                      //     snapshot.data.documents[0]['liker'].length.toDouble();
+                      // title5 = snapshot.data.documents[0]['title'];
+                      // likes5 =
+                      //     snapshot.data.documents[0]['liker'].length.toDouble();
                       List<_SalesData> data = [
                         _SalesData(title1, likes1),
                         _SalesData(title2, likes2),
                         _SalesData(title3, likes3),
-                        _SalesData(title4, likes4),
-                        _SalesData(title5, likes5)
+                        // _SalesData(title4, likes4),
+                        // _SalesData(title5, likes5)
                       ];
 
                       return Padding(
@@ -74,10 +74,10 @@ class _MapTestState extends State<MapTest> {
                             primaryXAxis: CategoryAxis(
                               
                               labelRotation: 0,
-                              labelsExtent: 70,
+                              labelsExtent: 90,
                               labelStyle: TextStyle(
-                                  color: TextThemes.ndBlue, fontSize: 10),
-                              maximumLabelWidth: 50,
+                                  color: TextThemes.ndBlue, fontSize: 13),
+                              maximumLabelWidth: 90,
                             ),
                             // Chart title
                             title: ChartTitle(

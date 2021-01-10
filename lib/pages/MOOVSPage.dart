@@ -84,7 +84,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                 height: 40,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.grey,
+                    color: TextThemes.ndBlue,
                     width: 4,
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -101,7 +101,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                   children: <Widget>[
                     // Sign In Button
                     new FlatButton(
-                      color: _currentIndex == 0 ? Colors.blue : Colors.white,
+                      color: _currentIndex == 0 ? Colors.blue[100] : Colors.white,
                       onPressed: () {
                         _tabController.animateTo(0);
                         setState(() {
@@ -112,7 +112,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                     ),
                     // Sign Up Button
                     new FlatButton(
-                      color: _currentIndex == 1 ? Colors.blue : Colors.white,
+                      color: _currentIndex == 1 ? Colors.blue[100] : Colors.white,
                       onPressed: () {
                         _tabController.animateTo(1);
                         setState(() {
