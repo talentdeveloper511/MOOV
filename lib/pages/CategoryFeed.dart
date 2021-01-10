@@ -312,7 +312,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   // print(y.toDate());
 
                                   if (startDate.millisecondsSinceEpoch <
-                                      Timestamp.now().millisecondsSinceEpoch +
+                                      Timestamp.now().millisecondsSinceEpoch -
                                           3600000) {
                                     print("Expired. See ya later.");
                                     Database().deletePost(
@@ -353,6 +353,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   }
                                   if (isToday == false && todayOnly == 1)
                                     return null;
+
+                                  if (course['featured'] != true) {
+                                    return null;
+                                  }
 
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -831,7 +835,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                           stream: Firestore.instance
                               .collection('food')
                               .where("type", isEqualTo: type)
-                              .where('privacy', isEqualTo: 'Public')
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
@@ -882,7 +885,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 // print(y.toDate());
 
                                 if (startDate.millisecondsSinceEpoch <
-                                    Timestamp.now().millisecondsSinceEpoch +
+                                    Timestamp.now().millisecondsSinceEpoch -
                                         3600000) {
                                   print("Expired. See ya later.");
                                   Database().deletePost(
@@ -1427,8 +1430,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                           stream: Firestore.instance
                               .collection('food')
                               .where("type", isEqualTo: type)
-                              .where('privacy', isEqualTo: 'Friends Only')
-                              .where('userId', whereIn: currentUser.friendArray)
+                              // .where('privacy', isEqualTo: 'Friends Only')
+                              // .where('userId', whereIn: currentUser.friendArray)
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
@@ -1468,6 +1471,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                     snapshot.data.documents[index];
                                 List<dynamic> likerArray = course["liker"];
                                 Timestamp startDate = course["startDate"];
+                                String privacy = course["privacy"];
+                                List<dynamic> friends = currentUser.friendArray;
 
                                 var strUserPic = currentUser.photoUrl;
 
@@ -1520,6 +1525,13 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 }
                                 if (isToday == false && todayOnly == 1)
                                   return null;
+
+                                if (privacy != "Friends Only") return null;
+
+                                if (!currentUser.friendArray
+                                    .contains(course['userId'])) {
+                                  return null;
+                                }
 
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
