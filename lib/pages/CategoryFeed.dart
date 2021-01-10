@@ -832,7 +832,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                               .collection('food')
                               .where("type", isEqualTo: type)
                               .where('privacy', isEqualTo: 'Public')
-                              // .where('userId', whereIn: currentUser.friendArray)
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
@@ -1424,10 +1423,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                               },
                             );
                           }),
-                          StreamBuilder(
+                      StreamBuilder(
                           stream: Firestore.instance
                               .collection('food')
                               .where("type", isEqualTo: type)
+                              .where('userId', whereIn: currentUser.friendArray)
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
