@@ -115,19 +115,19 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
               );
             } else {
               var prize;
-              Firestore.instance
-                  .collection('leaderboard')
-                  .document('prizes')
-                  .get()
-                  .then((DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists) {
-                  prize = documentSnapshot.data['prize'].toString();
-                  print(prize);
-                } else {
-                  print('Document does not exist on the database');
-                }
-              });
-              return Container(
+
+
+              return 
+              StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('leaderboard')
+                      .document('prizes')
+                      .snapshots(),
+                  builder: (context, snapshot2) {
+                    if (!snapshot2.hasData) return CircularProgressIndicator();
+                    var prize = snapshot2.data['prize'];
+                    return 
+              Container(
                 child: Column(
                   children: [
                     Padding(
@@ -297,7 +297,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                     ),
                   ],
                 ),
-              );
+              );});
             }
           },
         ),
