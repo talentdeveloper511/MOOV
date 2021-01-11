@@ -46,6 +46,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
 
   @override
   Widget build(BuildContext context) {
+    var myIndex = 0;
     var score;
     var pic;
     return Scaffold(
@@ -116,188 +117,209 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
             } else {
               var prize;
 
-
-              return 
-              StreamBuilder(
+              return StreamBuilder(
                   stream: Firestore.instance
                       .collection('leaderboard')
                       .document('prizes')
                       .snapshots(),
                   builder: (context, snapshot2) {
                     if (!snapshot2.hasData) return CircularProgressIndicator();
+
+                    for (int i = 0; i < snapshot.data.documents.length; i++) {
+                      if (snapshot.data.documents[i]['id'] == currentUser.id) {
+                        myIndex = i;
+                      }
+                    }
+
                     var prize = snapshot2.data['prize'];
-                    return 
-              Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset('lib/assets/trophy.png', height: 75),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child:
-                          Text("MOOV Leaderboard", style: TextThemes.headline1),
-                    ),
-                    Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment(0.9, 0.9),
-                                colors: [Colors.teal, TextThemes.ndBlue])),
-                        child: Center(
-                            child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            "Do you like free stuff? Well... good, 'cause we like giving."
-                            " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Friday.",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontFamily: 'Pacifico',
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ))),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 12.0),
-                          child: Text("This Week's Prize: ",
-                              style: TextStyle(fontSize: 16)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 12.0),
-                          child: Text(
-                            prize.toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    return Container(
+                      child: Column(
                         children: [
-                          ClipOval(
-                            child: Material(
-                              child: InkWell(
-                                splashColor: TextThemes.ndGold, // inkwell color
-                                child: SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: Icon(
-                                      Icons.info_outline,
-                                      size: 20,
-                                    )),
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (_) => CupertinoAlertDialog(
-                                            title: Text("MOOV Score"),
-                                            content: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8.0),
-                                              child: Text(
-                                                  "Your score is calculated as follows:"
-                                                  "\n"
-                                                  "\n2pts: 'Going' to a MOOV"
-                                                  "\n\n30pts: Posting a MOOV"),
-                                            ),
-                                          ),
-                                      barrierDismissible: true);
-                                },
-                              ),
-                            ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset('lib/assets/trophy.png',
+                                height: 75),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Text('Your MOOV Score: '),
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Text("MOOV Leaderboard",
+                                style: TextThemes.headline1),
                           ),
-                          Text(
-                            currentUser.score.toString(),
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      begin: Alignment.topRight,
+                                      end: Alignment(0.9, 0.9),
+                                      colors: [
+                                    Colors.teal,
+                                    TextThemes.ndBlue
+                                  ])),
+                              child: Center(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Text(
+                                  "Do you like free stuff? Well... good, 'cause we like giving."
+                                  " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Friday.",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontFamily: 'Pacifico',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ))),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 12.0),
+                                child: Text("This Week's Prize: ",
+                                    style: TextStyle(fontSize: 16)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 12.0),
+                                child: Text(
+                                  prize.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ClipOval(
+                                  child: Material(
+                                    child: InkWell(
+                                      splashColor:
+                                          TextThemes.ndGold, // inkwell color
+                                      child: SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: Icon(
+                                            Icons.info_outline,
+                                            size: 20,
+                                          )),
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (_) =>
+                                                CupertinoAlertDialog(
+                                                  title: Text("MOOV Score"),
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 8.0),
+                                                    child: Text(
+                                                        "Your score is calculated as follows:"
+                                                        "\n"
+                                                        "\n2pts: 'Going' to a MOOV"
+                                                        "\n\n30pts: Posting a MOOV"),
+                                                  ),
+                                                ),
+                                            barrierDismissible: true);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child: Text('Your MOOV Score: '),
+                                ),
+                                Text(
+                                  snapshot.data.documents[myIndex]['score']
+                                      .toString(),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (_, index) {
+                                score = snapshot
+                                    .data.documents[index].data['score'];
+                                pic = snapshot
+                                    .data.documents[index].data['photoUrl'];
+
+                                return Card(
+                                  color: snapshot.data.documents[index]
+                                              .data['displayName'] ==
+                                          currentUser.displayName
+                                      ? Colors.green[300]
+                                      : Colors.grey[50],
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              (index + 1).toString() + '   ',
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                            CircleAvatar(
+                                              radius: 17,
+                                              backgroundColor:
+                                                  TextThemes.ndGold,
+                                              child: CircleAvatar(
+                                                radius: 15,
+                                                backgroundColor:
+                                                    TextThemes.ndBlue,
+                                                child: CircleAvatar(
+                                                  backgroundImage: (pic == null)
+                                                      ? AssetImage(
+                                                          'images/user-avatar.png')
+                                                      : NetworkImage(pic),
+                                                  // backgroundImage: NetworkImage(currentUser.photoUrl),
+                                                  radius: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                snapshot.data.documents[index]
+                                                    .data['displayName'],
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            (index == 0)
+                                                ? Image.asset(
+                                                    'lib/assets/trophy2.png',
+                                                    height: 25)
+                                                : Text(''),
+                                          ],
+                                        ),
+                                        Text(
+                                          snapshot.data.documents[index]
+                                              .data['score']
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: TextThemes.ndBlue,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ), // getting the data from firestore
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: snapshot.data.documents.length,
-                        itemBuilder: (_, index) {
-                          score = snapshot.data.documents[index].data['score'];
-                          pic = snapshot.data.documents[index].data['photoUrl'];
-
-                          return Card(
-                            color: snapshot.data.documents[index]
-                                        .data['displayName'] ==
-                                    currentUser.displayName
-                                ? Colors.green[300]
-                                : Colors.grey[50],
-                            child: ListTile(
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        (index + 1).toString() + '   ',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      CircleAvatar(
-                                        radius: 17,
-                                        backgroundColor: TextThemes.ndGold,
-                                        child: CircleAvatar(
-                                          radius: 15,
-                                          backgroundColor: TextThemes.ndBlue,
-                                          child: CircleAvatar(
-                                            backgroundImage: (pic == null)
-                                                ? AssetImage(
-                                                    'images/user-avatar.png')
-                                                : NetworkImage(pic),
-                                            // backgroundImage: NetworkImage(currentUser.photoUrl),
-                                            radius: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          snapshot.data.documents[index]
-                                              .data['displayName'],
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      (index == 0)
-                                          ? Image.asset(
-                                              'lib/assets/trophy2.png',
-                                              height: 25)
-                                          : Text(''),
-                                    ],
-                                  ),
-                                  Text(
-                                    snapshot.data.documents[index].data['score']
-                                        .toString(),
-                                    style: TextStyle(
-                                        color: TextThemes.ndBlue,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ), // getting the data from firestore
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );});
+                    );
+                  });
             }
           },
         ),
