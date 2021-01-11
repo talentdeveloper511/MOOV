@@ -21,6 +21,7 @@ class LeaderBoardPage extends StatefulWidget {
 class _LeaderBoardState extends State<LeaderBoardPage> {
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
+
     return Container(
       child: Center(
         child: ListView(
@@ -146,6 +147,24 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                             textAlign: TextAlign.center,
                           ),
                         ))),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: Text("This Week's Prize: ",
+                              style: TextStyle(fontSize: 16)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: Text(
+                            'Air Pods',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Row(

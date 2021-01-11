@@ -80,9 +80,7 @@ class Database {
     });
   }
 
-Future<void> addLike(
-      userId,
-      postId) async {
+  Future<void> addLike(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
       final DocumentReference ref2 = dbRef.document('users/$userId');
@@ -106,9 +104,8 @@ Future<void> addLike(
       });
     });
   }
-  Future<void> removeLike(
-      userId,
-      postId) async {
+
+  Future<void> removeLike(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
       final DocumentReference ref2 = dbRef.document('users/$userId');
@@ -132,7 +129,6 @@ Future<void> addLike(
       });
     });
   }
-
 
   Future<void> addGoing(
       String ownerId,
@@ -566,7 +562,6 @@ Future<void> addLike(
     return dbRef.runTransaction((transaction) async {
       for (var i = 0; i < members.length; i++) {
         final use = members[i];
-        print('yes ' + use);
         final DocumentReference ref = dbRef.document('users/$use');
         transaction.update(ref, {
           'friendGroups': FieldValue.arrayRemove([old]),
