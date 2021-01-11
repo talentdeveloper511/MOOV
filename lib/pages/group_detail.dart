@@ -24,7 +24,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
-import '../widgets/add_users.dart';
+import '../widgets/add_users_group.dart';
 import 'edit_group.dart';
 import 'home.dart';
 

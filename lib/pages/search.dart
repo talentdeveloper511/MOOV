@@ -40,7 +40,6 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
 
   clearSearch() {
     searchController.clear();
-    
 
     setState(() {
       searchResultsFuture = null;
@@ -64,11 +63,13 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
 
   AppBar buildSearchField() {
     return AppBar(
-     toolbarHeight: 50,
-      
+      toolbarHeight: 50,
       bottom: PreferredSize(
         preferredSize: null,
         child: TextFormField(
+          onChanged: (value) {
+            handleSearch(value);
+          },
           controller: searchController,
           decoration: InputDecoration(
             fillColor: Colors.white,

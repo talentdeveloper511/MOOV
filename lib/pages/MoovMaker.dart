@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,6 +19,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:page_transition/page_transition.dart';
 import 'home.dart';
 
 final usersRef = Firestore.instance.collection('users');
@@ -48,7 +51,7 @@ class _MoovMakerState extends State<MoovMaker> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-             GestureDetector(
+              GestureDetector(
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
                     context,
@@ -251,415 +254,565 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   final descriptionController = TextEditingController();
   final startDateController = DatePicker().startDate1;
   final format = DateFormat("EEE, MMM d,' at' h:mm a");
-  User currentUser;
+  List<String> invitees = [];
+  String userName;
+  String userPic;
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: isUploading ? linearProgress() :
-      
-      SingleChildScrollView(
-        child: Column(children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: TextFormField(
-              controller: titleController,
-              decoration: InputDecoration(
-                icon: Icon(
-                  Icons.create,
-                  color: TextThemes.ndGold,
-                ),
-                labelText: "Enter Event Title",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Enter Event Title';
-                }
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: DropdownButtonFormField(
-              value: typeDropdownValue,
-              icon: Icon(Icons.arrow_downward, color: TextThemes.ndGold),
-              decoration: InputDecoration(
-                labelText: "Select Event Type",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              items: listOfTypes.map((String value) {
-                return new DropdownMenuItem<String>(
-                  value: value,
-                  child: new Text(value),
-                );
-              }).toList(),
-              onChanged: (String newValue) {
-                setState(() {
-                  typeDropdownValue = newValue;
-                });
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'What are we doing?';
-                }
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: TextFormField(
-              controller: addressController,
-              decoration: InputDecoration(
-                icon: Icon(Icons.place, color: TextThemes.ndGold),
-                labelText: "Where's it at?",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Where's it at?";
-                }
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: DropdownButtonFormField(
-              value: privacyDropdownValue,
-              icon: Icon(Icons.arrow_downward, color: TextThemes.ndGold),
-              decoration: InputDecoration(
-                labelText: "Visibility",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              items: privacyList.map((String value) {
-                return new DropdownMenuItem<String>(
-                  value: value,
-                  child: new Text(value),
-                );
-              }).toList(),
-              onChanged: (String newValue) {
-                setState(() {
-                  privacyDropdownValue = newValue;
-                });
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Who can come?';
-                }
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: TextFormField(
-              controller: descriptionController,
-              decoration: InputDecoration(
-                icon: Icon(
-                  Icons.description,
-                  color: TextThemes.ndGold,
-                ),
-                labelText: "Describe your MOOV",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "What's going down?";
-                }
-                return null;
-              },
-            ),
-          ),
-          // Padding(
-          //   padding: EdgeInsets.all(20.0),
-          //   child: DropdownButtonFormField(
-          //     value: locationDropdownValue,
-          //     icon: Icon(Icons.arrow_downward, color: TextThemes.ndGold),
-          //     decoration: InputDecoration(
-          //       labelText: "Select Location",
-          //       enabledBorder: OutlineInputBorder(
-          //         borderRadius: BorderRadius.circular(10.0),
-          //       ),
-          //     ),
-          //     items: listOfLocations.map((String value) {
-          //       return new DropdownMenuItem<String>(
-          //         value: value,
-          //         child: new Text(value),
-          //       );
-          //     }).toList(),
-          //     onChanged: (String newValue) {
-          //       setState(() {
-          //         locationDropdownValue = newValue;
-          //       });
-          //     },
-          //     validator: (value) {
-          //       if (value.isEmpty) {
-          //         return 'Select Event Type';
-          //       }
-          //       return null;
-          //     },
-          //   ),
-          // ),
-
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 20.0, left: 20, right: 20, bottom: 10),
-            child: DateTimeField(
-              format: format,
-              keyboardType: TextInputType.datetime,
-              decoration: InputDecoration(
-                  suffixIcon: Icon(
-                    Icons.arrow_downward,
-                    color: TextThemes.ndGold,
-                  ),
-                  labelText: 'Enter Start Time',
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  floatingLabelBehavior: FloatingLabelBehavior.always),
-              onChanged: (DateTime newValue) {
-                setState(() {
-                  currentValue = currentValues; // = newValue;
-                  //   newValue = currentValue;
-                });
-              },
-              onShowPicker: (context, currentValue) async {
-                final date = await showDatePicker(
-                  context: context,
-                  firstDate: DateTime(1970),
-                  initialDate: currentValue ?? DateTime.now(),
-                  lastDate: DateTime(2100),
-                  builder: (BuildContext context, Widget child) {
-                    return Theme(
-                      data: ThemeData.light().copyWith(
-                        primaryColor: TextThemes.ndGold,
-                        accentColor: TextThemes.ndGold,
-                        colorScheme:
-                            ColorScheme.light(primary: TextThemes.ndBlue),
-                        buttonTheme:
-                            ButtonThemeData(textTheme: ButtonTextTheme.primary),
+      child: isUploading
+          ? linearProgress()
+          : SingleChildScrollView(
+              child: Column(children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.create,
+                        color: TextThemes.ndGold,
                       ),
-                      child: child,
-                    );
-                  },
-                );
-                if (date != null) {
-                  final time = await showTimePicker(
-                    context: context,
-                    initialTime:
-                        TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-                    builder: (BuildContext context, Widget child) {
-                      return Theme(
-                        data: ThemeData.light().copyWith(
-                          primaryColor: TextThemes.ndGold,
-                          accentColor: TextThemes.ndGold,
-                          colorScheme:
-                              ColorScheme.light(primary: TextThemes.ndBlue),
-                          buttonTheme: ButtonThemeData(
-                              textTheme: ButtonTextTheme.primary),
-                        ),
-                        child: child,
-                      );
+                      labelText: "Enter Event Title",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    // The validator receives the text that the user has entered.
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Enter Event Title';
+                      }
+                      return null;
                     },
-                  );
-                  currentValues = DateTimeField.combine(date, time);
-                  return currentValues;
-                } else {
-                  return currentValue;
-                }
-              },
-            ),
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.all(20.0),
-          //   child: DateTimeField(
-          //     format: format,
-          //     keyboardType: TextInputType.datetime,
-          //     decoration: InputDecoration(
-          //         suffixIcon: Icon(
-          //           Icons.arrow_downward,
-          //           color: TextThemes.ndGold,
-          //         ),
-          //         labelText: 'Enter End Time',
-          //         enabledBorder: OutlineInputBorder(
-          //             borderRadius: BorderRadius.circular(10.0)),
-          //         floatingLabelBehavior: FloatingLabelBehavior.always),
-          //     onChanged: (DateTime et) {
-          //       setState(() {
-          //         endTime = endTimes;
-          //       });
-          //     },
-          //     onShowPicker: (context, endTime) async {
-          //       final date = await showDatePicker(
-          //         context: context,
-          //         firstDate: DateTime(1900),
-          //         initialDate: endTime ?? DateTime.now(),
-          //         lastDate: DateTime(2100),
-          //         builder: (BuildContext context, Widget child) {
-          //           return Theme(
-          //             data: ThemeData.light().copyWith(
-          //               primaryColor: TextThemes.ndGold,
-          //               accentColor: TextThemes.ndGold,
-          //               colorScheme:
-          //                   ColorScheme.light(primary: TextThemes.ndBlue),
-          //               buttonTheme:
-          //                   ButtonThemeData(textTheme: ButtonTextTheme.primary),
-          //             ),
-          //             child: child,
-          //           );
-          //         },
-          //       );
-          //       if (date != null) {
-          //         final time = await showTimePicker(
-          //           context: context,
-          //           initialTime:
-          //               TimeOfDay.fromDateTime(endTime ?? DateTime.now()),
-          //           builder: (BuildContext context, Widget child) {
-          //             return Theme(
-          //               data: ThemeData.light().copyWith(
-          //                 primaryColor: TextThemes.ndGold,
-          //                 accentColor: TextThemes.ndGold,
-          //                 colorScheme:
-          //                     ColorScheme.light(primary: TextThemes.ndBlue),
-          //                 buttonTheme: ButtonThemeData(
-          //                     textTheme: ButtonTextTheme.primary),
-          //               ),
-          //               child: child,
-          //             );
-          //           },
-          //         );
-          //         endTimes = DateTimeField.combine(date, time);
-          //         return endTimes;
-          //       } else {
-          //         return endTime.add(Duration(days: 18250));
-          //       }
-          //     },
-          //   ),
-          // ),
-          RaisedButton(
-              color: TextThemes.ndBlue,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Upload an image',
-                    style: TextStyle(color: Colors.white, fontSize: 22)),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0)),
-              onPressed: () => selectImage(context)),
-          _image != null
-              ? Container(
-                  height: 220,
-                  width: MediaQuery.of(context).size.width * .8,
-                  child: Center(
-                      child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: Image.file(_image,
-                                width: 100, height: 100, fit: BoxFit.fitHeight),
-                          ))),
-                )
-              : Container(),
-          Padding(
-              padding: EdgeInsets.only(bottom: 20.0, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80.0)),
-                      padding: EdgeInsets.all(0.0),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [TextThemes.ndBlue, Color(0xff64B6FF)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * .45,
+                        child: ButtonTheme(
+                          child: DropdownButtonFormField(
+                            value: typeDropdownValue,
+                            icon: Icon(Icons.arrow_downward,
+                                color: TextThemes.ndGold),
+                            decoration: InputDecoration(
+                              labelText: "Select Event Type",
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(30.0)),
-                        child: Container(
-                          constraints:
-                              BoxConstraints(maxWidth: 125.0, minHeight: 50.0),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Post!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 22),
+                            items: listOfTypes.map((String value) {
+                              return new DropdownMenuItem<String>(
+                                value: value,
+                                child: new Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                typeDropdownValue = newValue;
+                              });
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'What are we doing?';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                       ),
-                      onPressed: () async {
-                        if  (_formKey.currentState.validate()){
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * .35,
+                          child: ButtonTheme(
+                            child: DropdownButtonFormField(
+                              value: privacyDropdownValue,
+                              icon: Icon(Icons.arrow_downward,
+                                  color: TextThemes.ndGold),
+                              decoration: InputDecoration(
+                                labelText: "Visibility",
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              items: privacyList.map((String value) {
+                                return new DropdownMenuItem<String>(
+                                  value: value,
+                                  child: new Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  privacyDropdownValue = newValue;
+                                });
+                              },
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Who can come?';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: addressController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.place, color: TextThemes.ndGold),
+                      labelText: "Where's it at?",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    // The validator receives the text that the user has entered.
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Where's it at?";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
 
-                        setState(() {
-                          isUploading = true;
-                        });
-                        }
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: descriptionController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.description,
+                        color: TextThemes.ndGold,
+                      ),
+                      labelText: "Describe your MOOV",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    // The validator receives the text that the user has entered.
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "What's going down?";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                // Padding(
+                //   padding: EdgeInsets.all(20.0),
+                //   child: DropdownButtonFormField(
+                //     value: locationDropdownValue,
+                //     icon: Icon(Icons.arrow_downward, color: TextThemes.ndGold),
+                //     decoration: InputDecoration(
+                //       labelText: "Select Location",
+                //       enabledBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(10.0),
+                //       ),
+                //     ),
+                //     items: listOfLocations.map((String value) {
+                //       return new DropdownMenuItem<String>(
+                //         value: value,
+                //         child: new Text(value),
+                //       );
+                //     }).toList(),
+                //     onChanged: (String newValue) {
+                //       setState(() {
+                //         locationDropdownValue = newValue;
+                //       });
+                //     },
+                //     validator: (value) {
+                //       if (value.isEmpty) {
+                //         return 'Select Event Type';
+                //       }
+                //       return null;
+                //     },
+                //   ),
+                // ),
 
-                        final GoogleSignInAccount user =
-                            googleSignIn.currentUser;
-                        final strUserId = user.id;
-                        final profilePic = user.photoUrl;
-                        final userName = user.displayName;
-                        final userEmail = user.email;
-                        if (_formKey.currentState.validate()) {
-                          if (_image != null) {
-                            StorageReference firebaseStorageRef =
-                                FirebaseStorage.instance
-                                    .ref()
-                                    .child("images/" + titleController.text);
-                            StorageUploadTask uploadTask =
-                                firebaseStorageRef.putFile(_image);
-                            StorageTaskSnapshot taskSnapshot =
-                                await uploadTask.onComplete;
-                            if (taskSnapshot.error == null) {
-                              print("added to Firebase Storage");
-                              final String downloadUrl =
-                                  await taskSnapshot.ref.getDownloadURL();
-                              Database().createPost(
-                                title: titleController.text,
-                                type: typeDropdownValue,
-                                privacy: privacyDropdownValue,
-                                description: descriptionController.text,
-                                // location: locationDropdownValue,
-                                address: addressController.text,
-                                startDate: currentValue,
-                                // endDate: endTime,
-                                imageUrl: downloadUrl,
-                                userId: strUserId,
-                                likes: false,
-                                userName: userName,
-                                userEmail: userEmail,
-                                profilePic: profilePic,
-                              );
-                              setState(() {
-                                isUploading = false;
-                              });
-                            }
-                            Navigator.pop(context);
-                          }
-                        }
-                      }),
-                ],
-              )),
-        ]),
-      ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 20.0, left: 20, right: 20, bottom: 10),
+                  child: DateTimeField(
+                    format: format,
+                    keyboardType: TextInputType.datetime,
+                    decoration: InputDecoration(
+                        suffixIcon: Icon(
+                          Icons.arrow_downward,
+                          color: TextThemes.ndGold,
+                        ),
+                        labelText: 'Enter Start Time',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        floatingLabelBehavior: FloatingLabelBehavior.always),
+                    onChanged: (DateTime newValue) {
+                      setState(() {
+                        currentValue = currentValues; // = newValue;
+                        //   newValue = currentValue;
+                      });
+                    },
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1970),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime(2100),
+                        builder: (BuildContext context, Widget child) {
+                          return Theme(
+                            data: ThemeData.light().copyWith(
+                              primaryColor: TextThemes.ndGold,
+                              accentColor: TextThemes.ndGold,
+                              colorScheme:
+                                  ColorScheme.light(primary: TextThemes.ndBlue),
+                              buttonTheme: ButtonThemeData(
+                                  textTheme: ButtonTextTheme.primary),
+                            ),
+                            child: child,
+                          );
+                        },
+                      );
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              currentValue ?? DateTime.now()),
+                          builder: (BuildContext context, Widget child) {
+                            return Theme(
+                              data: ThemeData.light().copyWith(
+                                primaryColor: TextThemes.ndGold,
+                                accentColor: TextThemes.ndGold,
+                                colorScheme: ColorScheme.light(
+                                    primary: TextThemes.ndBlue),
+                                buttonTheme: ButtonThemeData(
+                                    textTheme: ButtonTextTheme.primary),
+                              ),
+                              child: child,
+                            );
+                          },
+                        );
+                        currentValues = DateTimeField.combine(date, time);
+                        return currentValues;
+                      } else {
+                        return currentValue;
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                    padding:
+                        const EdgeInsets.only(top: 8.0, bottom: 12.5, left: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.all(0.0),
+                                icon: Icon(
+                                  Icons.person_add,
+                                  size: 35,
+                                ),
+                                color: TextThemes.ndBlue,
+                                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AddUsersPost(
+                                              currentUser.id, invitees)));
+                                },
+                              ),
+                              Text("Invite"),
+                            ],
+                          ),
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width * .8,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                physics: AlwaysScrollableScrollPhysics(),
+                                itemCount: invitees.length,
+                                itemBuilder: (_, index) {
+
+                                  return StreamBuilder(
+                                      stream: Firestore.instance
+                                          .collection('users')
+                                          .document(invitees[index])
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        // bool isLargePhone = Screen.diagonal(context) > 766;
+
+                                        if (!snapshot.hasData)
+                                          return CircularProgressIndicator();
+                                        userName = snapshot.data['displayName'];
+                                        userPic = snapshot.data['photoUrl'];
+
+                                        // userMoovs = snapshot.data['likedMoovs'];
+
+                                        return Container(
+                                          height: 50,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OtherProfile(
+                                                                userPic,
+                                                                userName,
+                                                                invitees[index],
+                                                              )));
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 34,
+                                                  backgroundColor:
+                                                      TextThemes.ndGold,
+                                                  child: CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(userPic),
+                                                    radius: 32,
+                                                    backgroundColor:
+                                                        TextThemes.ndBlue,
+                                                    child: CircleAvatar(
+                                                      // backgroundImage: snapshot.data
+                                                      //     .documents[index].data['photoUrl'],
+                                                      backgroundImage:
+                                                          NetworkImage(userPic),
+                                                      radius: 32,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Center(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 10.0),
+                                                    child: RichText(
+                                                      textScaleFactor: 1.1,
+                                                      text: TextSpan(
+                                                          style: TextThemes
+                                                              .mediumbody,
+                                                          children: [
+                                                            TextSpan(
+                                                                text: userName,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500)),
+                                                          ]),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      });
+                                }),
+                          ),
+                        ])),
+
+                // Padding(
+                //   padding: const EdgeInsets.all(20.0),
+                //   child: DateTimeField(
+                //     format: format,
+                //     keyboardType: TextInputType.datetime,
+                //     decoration: InputDecoration(
+                //         suffixIcon: Icon(
+                //           Icons.arrow_downward,
+                //           color: TextThemes.ndGold,
+                //         ),
+                //         labelText: 'Enter End Time',
+                //         enabledBorder: OutlineInputBorder(
+                //             borderRadius: BorderRadius.circular(10.0)),
+                //         floatingLabelBehavior: FloatingLabelBehavior.always),
+                //     onChanged: (DateTime et) {
+                //       setState(() {
+                //         endTime = endTimes;
+                //       });
+                //     },
+                //     onShowPicker: (context, endTime) async {
+                //       final date = await showDatePicker(
+                //         context: context,
+                //         firstDate: DateTime(1900),
+                //         initialDate: endTime ?? DateTime.now(),
+                //         lastDate: DateTime(2100),
+                //         builder: (BuildContext context, Widget child) {
+                //           return Theme(
+                //             data: ThemeData.light().copyWith(
+                //               primaryColor: TextThemes.ndGold,
+                //               accentColor: TextThemes.ndGold,
+                //               colorScheme:
+                //                   ColorScheme.light(primary: TextThemes.ndBlue),
+                //               buttonTheme:
+                //                   ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                //             ),
+                //             child: child,
+                //           );
+                //         },
+                //       );
+                //       if (date != null) {
+                //         final time = await showTimePicker(
+                //           context: context,
+                //           initialTime:
+                //               TimeOfDay.fromDateTime(endTime ?? DateTime.now()),
+                //           builder: (BuildContext context, Widget child) {
+                //             return Theme(
+                //               data: ThemeData.light().copyWith(
+                //                 primaryColor: TextThemes.ndGold,
+                //                 accentColor: TextThemes.ndGold,
+                //                 colorScheme:
+                //                     ColorScheme.light(primary: TextThemes.ndBlue),
+                //                 buttonTheme: ButtonThemeData(
+                //                     textTheme: ButtonTextTheme.primary),
+                //               ),
+                //               child: child,
+                //             );
+                //           },
+                //         );
+                //         endTimes = DateTimeField.combine(date, time);
+                //         return endTimes;
+                //       } else {
+                //         return endTime.add(Duration(days: 18250));
+                //       }
+                //     },
+                //   ),
+                // ),
+                RaisedButton(
+                    color: TextThemes.ndBlue,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Upload an image',
+                          style: TextStyle(color: Colors.white, fontSize: 22)),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
+                    onPressed: () => selectImage(context)),
+                _image != null
+                    ? Container(
+                        height: 220,
+                        width: MediaQuery.of(context).size.width * .8,
+                        child: Center(
+                            child: AspectRatio(
+                                aspectRatio: 16 / 9,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: Image.file(_image,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.fitHeight),
+                                ))),
+                      )
+                    : Container(),
+                Padding(
+                    padding: EdgeInsets.only(bottom: 20.0, top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(80.0)),
+                            padding: EdgeInsets.all(0.0),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      TextThemes.ndBlue,
+                                      Color(0xff64B6FF)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30.0)),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: 125.0, minHeight: 50.0),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Post!",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 22),
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                setState(() {
+                                  isUploading = true;
+                                });
+                              }
+
+                              final GoogleSignInAccount user =
+                                  googleSignIn.currentUser;
+                              final strUserId = user.id;
+                              final profilePic = user.photoUrl;
+                              final userName = user.displayName;
+                              final userEmail = user.email;
+                              if (_formKey.currentState.validate()) {
+                                if (_image != null) {
+                                  StorageReference firebaseStorageRef =
+                                      FirebaseStorage.instance.ref().child(
+                                          "images/" + titleController.text);
+                                  StorageUploadTask uploadTask =
+                                      firebaseStorageRef.putFile(_image);
+                                  StorageTaskSnapshot taskSnapshot =
+                                      await uploadTask.onComplete;
+                                  if (taskSnapshot.error == null) {
+                                    print("added to Firebase Storage");
+                                    final String downloadUrl =
+                                        await taskSnapshot.ref.getDownloadURL();
+                                    Database().createPost(
+                                      title: titleController.text,
+                                      type: typeDropdownValue,
+                                      privacy: privacyDropdownValue,
+                                      description: descriptionController.text,
+                                      // location: locationDropdownValue,
+                                      address: addressController.text,
+                                      startDate: currentValue,
+                                      // endDate: endTime,
+                                      imageUrl: downloadUrl,
+                                      userId: strUserId,
+                                      likes: false,
+                                      userName: userName,
+                                      userEmail: userEmail,
+                                      profilePic: profilePic,
+                                    );
+                                    setState(() {
+                                      isUploading = false;
+                                    });
+                                  }
+                                  Navigator.pop(context);
+                                }
+                              }
+                            }),
+                      ],
+                    )),
+              ]),
+            ),
     );
   }
 
