@@ -114,6 +114,19 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                 ),
               );
             } else {
+              var prize;
+              Firestore.instance
+                  .collection('leaderboard')
+                  .document('prizes')
+                  .get()
+                  .then((DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists) {
+                  prize = documentSnapshot.data['prize'].toString();
+                  print(prize);
+                } else {
+                  print('Document does not exist on the database');
+                }
+              });
               return Container(
                 child: Column(
                   children: [
@@ -158,7 +171,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 12.0),
                           child: Text(
-                            'Air Pods',
+                            prize.toString(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
