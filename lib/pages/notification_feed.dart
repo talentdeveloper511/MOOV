@@ -88,6 +88,10 @@ class _NotificationFeedState extends State<NotificationFeed> {
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
                       final item = snapshot.data[index];
+                      List<NotificationFeedItem> feedItems = [];
+                      snapshot.data.forEach((doc) {
+                        feedItems.add(doc);
+                      });
 
                       return Dismissible(
                           // Each Dismissible must contain a Key. Keys allow Flutter to
@@ -102,14 +106,24 @@ class _NotificationFeedState extends State<NotificationFeed> {
                                 .document(docId)
                                 .delete();
 
+                          
+                              if (feedItems.contains(docId)) {
+                                //_personList is list of person shown in ListView
+                                setState(() {
+                                  feedItems.remove(docId);
+                                });
+                              }
+                            
+
+                            // setState(() {
+                            //   snapshot.data.remove(item);
+                            // });
+
                             // Remove the item from the data source.
-                            setState(() {
-                              snapshot.data.removeAt(index);
-                            });
 
                             // Then show a snackbar.
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text("Be good, notification.")));
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text("Be good, notification.")));
                           },
                           // Show a red background as the item is swiped away.
                           background: Container(color: Colors.red),
@@ -296,7 +310,7 @@ class NotificationFeedItem extends StatelessWidget {
         color: Colors.white54,
         child: ListTile(
           title: GestureDetector(
-            onTap: () => showProfile(context),
+            onTap: () => showPost(context),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

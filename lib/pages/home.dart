@@ -396,16 +396,13 @@ class _HomeState extends State<Home> {
                   MaterialPageRoute(builder: (context) => LeaderBoardPage()));
             },
           ),
-          IconButton(
-            padding: EdgeInsets.all(5.0),
-            icon: Icon(Icons.notifications_active),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
+          NamedIcon(
+            iconData: Icons.notifications_active,
+            onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => NotificationFeed()));
             },
-          )
+          ),
         ],
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
@@ -501,5 +498,63 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return isAuth ? buildAuthScreen() : buildUnAuthScreen();
+  }
+}
+
+class NamedIcon extends StatelessWidget {
+  final IconData iconData;
+  final VoidCallback onTap;
+  int notificationCount;
+
+  NamedIcon({
+    Key key,
+    this.onTap,
+    @required this.iconData,
+    this.notificationCount,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    int notifs = 0;
+
+    return StreamBuilder(
+        stream: notificationFeedRef
+            .document(currentUser.id)
+            .collection('feedItems')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) return CircularProgressIndicator();
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          notifs = snapshot.data.documents.length;
+
+          return InkWell(
+            onTap: onTap,
+            child: Container(
+              width: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Icon(iconData, color: Colors.white),
+                  notifs != 0
+                      ? Positioned(
+                          top: 8,
+                          right: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.red),
+                            alignment: Alignment.center,
+                            child: Text("$notifs",
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

@@ -972,7 +972,6 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                       )),
                                                                   Container(
                                                                     width: isLargePhone? 120 : 95,
-                                                                    height: 30,
                                                                     child:
                                                                         GestureDetector(
                                                                       onTap:
