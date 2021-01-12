@@ -219,7 +219,7 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5.0),
+      padding: const EdgeInsets.only(top: 5.0, left: 10, right: 10),
       child: Center(
         child: Text(
           title,
@@ -240,7 +240,7 @@ class _Description extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 15.0),
+      padding: const EdgeInsets.only(top: 10.0, bottom: 15.0, left: 10, right: 10),
       child: Center(
         child: Text(description,
             textAlign: TextAlign.center,

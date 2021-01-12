@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:polls/polls.dart';
@@ -25,6 +26,8 @@ class _PollViewState extends State<PollView> {
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Container(
@@ -35,8 +38,9 @@ class _PollViewState extends State<PollView> {
             Polls.options(title: 'ON', value: option1),
             Polls.options(title: 'OFF', value: option2),
           ],
-          question:
-              Text('      ON or OFF Campus Tonight?', textAlign: TextAlign.center, style: TextThemes.headline1,),
+          question: isLargePhone ?               Text('      ON or OFF Campus Tonight?', textAlign: TextAlign.center, style: TextThemes.headline1,) :
+
+              Text('       ON or OFF Campus Tonight?', textAlign: TextAlign.center, style: TextStyle(color: TextThemes.ndBlue, fontWeight: FontWeight.w900, fontSize: 20)),
           pollStyle: TextStyle(color: TextThemes.ndBlue),
           currentUser: this.user,
           creatorID: this.creator,

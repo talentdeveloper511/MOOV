@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/HomePage.dart';
@@ -70,8 +71,7 @@ class _MoovMakerState extends State<MoovMaker> {
           ),
         ),
       ),
-      body: Center(
-          child: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -79,7 +79,7 @@ class _MoovMakerState extends State<MoovMaker> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15.0),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.12,
+                  height: MediaQuery.of(context).size.height * 0.12,
                     width: MediaQuery.of(context).size.width,
                     child: Container(
                       child: ClipRRect(
@@ -123,7 +123,7 @@ class _MoovMakerState extends State<MoovMaker> {
               ]),
               MoovMakerForm(),
             ]),
-      )),
+      ),
     );
   }
 }
@@ -278,6 +278,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Form(
       key: _formKey,
       child: isUploading
@@ -321,6 +323,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         width: MediaQuery.of(context).size.width * .45,
                         child: ButtonTheme(
                           child: DropdownButtonFormField(
+                            style: isLargePhone
+                                ? null
+                                : TextStyle(
+                                    fontSize: 12.5, color: Colors.black),
                             value: typeDropdownValue,
                             icon: Icon(Icons.arrow_downward,
                                 color: TextThemes.ndGold),
@@ -356,6 +362,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                           width: MediaQuery.of(context).size.width * .35,
                           child: ButtonTheme(
                             child: DropdownButtonFormField(
+                              style: isLargePhone
+                                  ? null
+                                  : TextStyle(
+                                      fontSize: 12.5, color: Colors.black),
                               value: privacyDropdownValue,
                               icon: Icon(Icons.arrow_downward,
                                   color: TextThemes.ndGold),
@@ -590,7 +600,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                   height: 100,
                                   width: invitees.length == 0
                                       ? 0
-                                      : MediaQuery.of(context).size.width * .75,
+                                      : MediaQuery.of(context).size.width * .74,
                                   child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       physics: AlwaysScrollableScrollPhysics(),
@@ -664,8 +674,11 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                                                   horizontal:
                                                                       5.0),
                                                           child: RichText(
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                             textScaleFactor:
-                                                                1.1,
+                                                                1.0,
                                                             text: TextSpan(
                                                                 style: TextThemes
                                                                     .mediumbody,
@@ -760,23 +773,26 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 // ),
 
                 _image != null
-                    ? Stack(alignment: Alignment.center, children: [
-                        Container(
-                          height: 100,
-                          width: MediaQuery.of(context).size.width * .8,
-                          child: Center(
-                              child: AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(4),
-                                    child:
-                                        Image.file(_image, fit: BoxFit.cover),
-                                  ))),
-                        ),
-                        GestureDetector(
-                            onTap: () => selectImage(context),
-                            child: Icon(Icons.camera_alt))
-                      ])
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 18.0),
+                        child: Stack(alignment: Alignment.center, children: [
+                          Container(
+                            height: 125,
+                            width: MediaQuery.of(context).size.width * .8,
+                            child: Center(
+                                child: AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(4),
+                                      child:
+                                          Image.file(_image, fit: BoxFit.cover),
+                                    ))),
+                          ),
+                          GestureDetector(
+                              onTap: () => selectImage(context),
+                              child: Icon(Icons.camera_alt))
+                        ]),
+                      )
                     : RaisedButton(
                         color: TextThemes.ndBlue,
                         child: Padding(
@@ -788,14 +804,14 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
                         onPressed: () => selectImage(context)),
-                noImage == true
+                noImage == true && _image == null
                     ? Text(
                         "No pic, no fun.",
                         style: TextStyle(color: Colors.red),
                       )
                     : Container(),
                 Padding(
-                    padding: EdgeInsets.only(bottom: 110.0, top: 15),
+                    padding: EdgeInsets.only(bottom: 40.0, top: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
