@@ -6,27 +6,17 @@ import 'package:intl/intl.dart';
 
 class Database {
   final dbRef = Firestore.instance;
-  var postId;
   var postPic;
   var ownerId;
   dynamic startDate;
   var title;
   bool featured;
+var postId; 
 
   final GoogleSignInAccount user = googleSignIn.currentUser;
   final strUserId = googleSignIn.currentUser.id;
   final strUserName = googleSignIn.currentUser.displayName;
   final strPic = googleSignIn.currentUser.photoUrl;
-
-  getdata() {
-    Firestore.instance.collection('food').snapshots().listen((snapshot) {
-      for (var i = 0; i < snapshot.documents.length; i++) {
-        DocumentSnapshot course = snapshot.documents[i];
-        ownerId = course["userId"];
-        postId = course.documentID;
-      }
-    });
-  }
 
   void createPost(
       {title,
@@ -66,7 +56,7 @@ class Database {
       "featured": featured,
       "postId": postId
     });
-    print(ref.documentID);
+
 
     Firestore.instance
         .collection("food")
@@ -328,17 +318,28 @@ class Database {
     }
   }
 
-  deletePost(String postId, String ownerId) {
+  deletePost(String postId, String ownerId, String title) {
     final FirebaseStorage _storage =
         FirebaseStorage(storageBucket: 'gs://moov4-4d3c4.appspot.com');
-    String filePath = 'images/${DateTime.now()}.png';
+    String filePath = 'images/$ownerId$title';
 
     bool isPostOwner = strUserId == ownerId;
     if (isPostOwner) {
       postsRef.document(postId).get().then((doc) {
         if (doc.exists) {
-          doc.reference.delete();
           _storage.ref().child(filePath).delete();
+
+          doc.reference.delete();
+          notificationFeedRef
+              .document(ownerId)
+              .collection("feedItems")
+              .document(postId)
+              .get()
+              .then((doc) {
+            if (doc.exists) {
+              doc.reference.delete();
+            }
+          });
         }
       });
     }

@@ -386,7 +386,7 @@ class _HomeState extends State<Home> {
         //pinned: true,
         actions: <Widget>[
           IconButton(
-            padding: EdgeInsets.all(5.0),
+            padding: EdgeInsets.only(left: 5.0),
             icon: Icon(Icons.insert_chart),
             color: Colors.white,
             splashColor: Color.fromRGBO(220, 180, 57, 1.0),
@@ -515,11 +515,13 @@ class NamedIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final GoogleSignInAccount user = googleSignIn.currentUser;
+
     int notifs = 0;
 
     return StreamBuilder(
         stream: notificationFeedRef
-            .document(currentUser.id)
+            .document(user.id)
             .collection('feedItems')
             .snapshots(),
         builder: (context, snapshot) {

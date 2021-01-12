@@ -22,6 +22,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:random_string/random_string.dart';
 import 'home.dart';
 
 final usersRef = Firestore.instance.collection('users');
@@ -79,7 +80,7 @@ class _MoovMakerState extends State<MoovMaker> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15.0),
                   child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.12,
+                    height: MediaQuery.of(context).size.height * 0.12,
                     width: MediaQuery.of(context).size.width,
                     child: Container(
                       child: ClipRRect(
@@ -862,34 +863,38 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               final userName = user.displayName;
                               final userEmail = user.email;
                               if (_formKey.currentState.validate()) {
+                                var randomId = randomAlpha(10);
+
                                 if (_image != null) {
                                   StorageReference firebaseStorageRef =
-                                      FirebaseStorage.instance.ref().child(
-                                          "images/" + titleController.text);
+                                      FirebaseStorage.instance
+                                          .ref()
+                                          .child("images/" + user.id + titleController.text);
                                   StorageUploadTask uploadTask =
                                       firebaseStorageRef.putFile(_image);
                                   StorageTaskSnapshot taskSnapshot =
                                       await uploadTask.onComplete;
                                   if (taskSnapshot.error == null) {
+                                    
                                     print("added to Firebase Storage");
                                     final String downloadUrl =
                                         await taskSnapshot.ref.getDownloadURL();
                                     Database().createPost(
-                                      title: titleController.text,
-                                      type: typeDropdownValue,
-                                      privacy: privacyDropdownValue,
-                                      description: descriptionController.text,
-                                      // location: locationDropdownValue,
-                                      address: addressController.text,
-                                      startDate: currentValue,
-                                      // endDate: endTime,
-                                      imageUrl: downloadUrl,
-                                      userId: strUserId,
-                                      likes: false,
-                                      userName: userName,
-                                      userEmail: userEmail,
-                                      profilePic: profilePic,
-                                    );
+                                        title: titleController.text,
+                                        type: typeDropdownValue,
+                                        privacy: privacyDropdownValue,
+                                        description: descriptionController.text,
+                                        // location: locationDropdownValue,
+                                        address: addressController.text,
+                                        startDate: currentValue,
+                                        // endDate: endTime,
+                                        imageUrl: downloadUrl,
+                                        userId: strUserId,
+                                        likes: false,
+                                        userName: userName,
+                                        userEmail: userEmail,
+                                        profilePic: profilePic,
+                                        );
                                     setState(() {
                                       isUploading = false;
                                     });

@@ -166,7 +166,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                     3600000) {
                               print("Expired. See ya later.");
                               Database().deletePost(
-                                  course['postId'], course['userId']);
+                                  course['postId'], course['userId'], course['title']);
                             }
                             final now = DateTime.now();
                             bool isToday = false;
@@ -680,7 +680,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                     3600000) {
                               print("Expired. See ya later.");
                               Database().deletePost(
-                                  course['postId'], course['userId']);
+                                  course['postId'], course['userId'], course['title']);
                             }
                             final now = DateTime.now();
                             bool isToday = false;
@@ -1218,7 +1218,7 @@ class _MOOVSPageState extends State<MOOVSPage>
     //     backgroundColor: Color.fromRGBO(220, 180, 57, 1.0))
   }
 
-  void showAlertDialog(BuildContext context, postId, userId) {
+  void showAlertDialog(BuildContext context, postId, userId, title) {
     showDialog(
       context: context,
       child: CupertinoAlertDialog(
@@ -1230,7 +1230,7 @@ class _MOOVSPageState extends State<MOOVSPage>
             isDefaultAction: true,
             child: Text("Yeah", style: TextStyle(color: Colors.red)),
             onPressed: () {
-              Database().deletePost(postId, userId);
+              Database().deletePost(postId, userId, title);
             },
           ),
           CupertinoDialogAction(

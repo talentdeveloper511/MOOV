@@ -114,6 +114,7 @@ class _CategoryFeedState extends State<CategoryFeed>
               color: Colors.white,
               splashColor: Color.fromRGBO(220, 180, 57, 1.0),
               onPressed: () {
+                
                 // Implement navigation to leaderboard page here...
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => LeaderBoardPage()));
@@ -315,7 +316,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                           3600000) {
                                     print("Expired. See ya later.");
                                     Database().deletePost(
-                                        course['postId'], course['userId']);
+                                        course['postId'], course['userId'], course['title']);
                                   }
                                   final now = DateTime.now();
                                   bool isToday = false;
@@ -909,7 +910,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                         3600000) {
                                   print("Expired. See ya later.");
                                   Database().deletePost(
-                                      course['postId'], course['userId']);
+                                      course['postId'], course['userId'], course['title']);
                                 }
                                 final now = DateTime.now();
                                 bool isToday = false;
@@ -1500,7 +1501,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                         3600000) {
                                   print("Expired. See ya later.");
                                   Database().deletePost(
-                                      course['postId'], course['userId']);
+                                      course['postId'], course['userId'], course['title']);
                                 }
                                 final now = DateTime.now();
                                 bool isToday = false;
@@ -2053,9 +2054,9 @@ class _CategoryFeedState extends State<CategoryFeed>
             isDefaultAction: true,
             child: Text("Yeah", style: TextStyle(color: Colors.red)),
             onPressed: () {
-              Navigator.of(context).pop(true);
+    Navigator.pop(context);
 
-              Database().deletePost(postId, userId);
+              // Database().deletePost(postId, userId);
             },
           ),
           CupertinoDialogAction(

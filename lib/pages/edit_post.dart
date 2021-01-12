@@ -445,7 +445,6 @@ class _EditPostState extends State<EditPost> {
                                               typeDropdownValue = newValue;
                                             });
                                           },
-                                          
                                           validator: (value) {
                                             if (value.isEmpty) {
                                               return 'What type?';
@@ -631,7 +630,6 @@ class _EditPostState extends State<EditPost> {
                                           isUploading = true;
                                         });
                                         if (_formKey.currentState != null) {
-                                          
                                           if (_image != null) {
                                             StorageReference
                                                 firebaseStorageRef =
@@ -683,7 +681,6 @@ class _EditPostState extends State<EditPost> {
                                               "type": typeDropdownValue,
                                             });
                                           }
-                                        
 
                                           if (privacyDropdownValue != "") {
                                             print(privacyDropdownValue);
@@ -756,7 +753,7 @@ class _EditPostState extends State<EditPost> {
                                         ),
                                       ),
                                       onPressed: () => showAlertDialog2(
-                                          context, postId, currentUser.id)),
+                                          context, postId, currentUser.id, title)),
                                 ),
                               ],
                             ),
@@ -802,29 +799,39 @@ class _BannerImage extends StatelessWidget {
   }
 }
 
-void showAlertDialog2(BuildContext context, postId, userId) {
-  showDialog(
-    context: context,
-    child: CupertinoAlertDialog(
-      title: Text("Delete?",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-      content: Text("\nMOOV to trash can?"),
-      actions: [
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          child: Text("Yeah", style: TextStyle(color: Colors.red)),
-          onPressed: () {
-            Database().deletePost(postId, userId);
-          },
-        ),
-        CupertinoDialogAction(
-          child: Text("Cancel"),
-          onPressed: () => Navigator.of(context).pop(true),
-        )
-      ],
-    ),
-  );
-}
+void showAlertDialog2(BuildContext context, postId, userId, title) {
+  delete() {
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      Database().deletePost(postId, userId, title);
+    });
+  }
+
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Delete?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nMOOV to trash can?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yeah", style: TextStyle(color: Colors.red)),
+            onPressed: () async {
+              await Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+                (Route<dynamic> route) => false,
+              ).then(delete());
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Cancel"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
+  }
 
 // class _NonImageContents extends StatelessWidget {
 //   String title, description, visibility, type, postId;
@@ -1261,7 +1268,7 @@ void showAlertDialog2(BuildContext context, postId, userId) {
 //       });
 // }
 
-///delete
+  ///delete
 // void showAlertDialog2(BuildContext context, id) {
 //   showDialog(
 //     context: context,
@@ -1286,3 +1293,4 @@ void showAlertDialog2(BuildContext context, postId, userId) {
 //     ),
 //   );
 // }
+
