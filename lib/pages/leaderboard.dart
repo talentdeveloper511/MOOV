@@ -1,3 +1,4 @@
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -46,6 +47,8 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     var myIndex = 0;
     var score;
     var pic;
@@ -152,8 +155,9 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                       begin: Alignment.topRight,
                                       end: Alignment(0.9, 0.9),
                                       colors: [
-                                    Colors.teal,
-                                    TextThemes.ndBlue
+                                    Colors.lightBlue[300],
+                                    Colors.purple[300]
+
                                   ])),
                               child: Center(
                                   child: Padding(
@@ -163,7 +167,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                   " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Friday.",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 14,
+                                    fontSize: isLargePhone ? 14 : 12.5,
                                     fontFamily: 'Pacifico',
                                   ),
                                   textAlign: TextAlign.center,

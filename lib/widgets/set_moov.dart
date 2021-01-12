@@ -166,11 +166,10 @@ class EventResult extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
                   Database().setMOOV(gid, moov.data['postId']);
-                   Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FriendGroupsPage()));
-
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FriendGroupsPage()));
                 },
                 child: Text(
                   "Set MOOV",

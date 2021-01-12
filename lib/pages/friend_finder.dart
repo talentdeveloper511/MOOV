@@ -57,18 +57,18 @@ class _FriendFinderState extends State<FriendFinder>
             Padding(
               padding: const EdgeInsets.only(bottom: 50.0),
               child: GestureDetector(
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Home()),
-                  (Route<dynamic> route) => false,
-                );
-              },
-              child: Image.asset(
-                'lib/assets/moovblue.png',
-                fit: BoxFit.cover,
-                height: 50.0,
-              ),
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
               ),
             ),
           ],
@@ -229,20 +229,20 @@ class _FriendFinderState extends State<FriendFinder>
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                   GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 50.0,
-                ),
-              ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Image.asset(
+                        'lib/assets/moovblue.png',
+                        fit: BoxFit.cover,
+                        height: 50.0,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -491,16 +491,21 @@ class UserResult extends StatelessWidget {
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
-                                          child: Text(
-                                            snapshot.data.documents[0]['title'],
-                                            textAlign: TextAlign.center,
-                                            overflow: TextOverflow.fade,
-                                            style: TextStyle(
-                                                fontFamily: 'Solway',
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize:
-                                                    isLargePhone ? 17.0 : 14),
+                                          child: ConstrainedBox(
+                                            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width* .3),
+                                            child: Text(
+                                              snapshot.data.documents[0]
+                                                  ['title'],
+                                                  maxLines: 2,
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontFamily: 'Solway',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      isLargePhone ? 17.0 : 14),
+                                            ),
                                           ),
                                         ),
                                       ),

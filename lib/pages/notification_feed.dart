@@ -84,6 +84,15 @@ class _NotificationFeedState extends State<NotificationFeed> {
                   if (!snapshot.hasData) {
                     return circularProgress();
                   }
+                  if (snapshot.data.length == 0) {
+                    return Container(
+                        child: Center(
+                            child: Text(
+                      "No notifications. \nLame.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: TextThemes.ndBlue, fontSize: 25),
+                    )));
+                  }
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
@@ -106,14 +115,12 @@ class _NotificationFeedState extends State<NotificationFeed> {
                                 .document(docId)
                                 .delete();
 
-                          
-                              if (feedItems.contains(docId)) {
-                                //_personList is list of person shown in ListView
-                                setState(() {
-                                  feedItems.remove(docId);
-                                });
-                              }
-                            
+                            if (feedItems.contains(docId)) {
+                              //_personList is list of person shown in ListView
+                              setState(() {
+                                feedItems.remove(docId);
+                              });
+                            }
 
                             // setState(() {
                             //   snapshot.data.remove(item);

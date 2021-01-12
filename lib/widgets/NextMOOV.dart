@@ -29,7 +29,7 @@ class _NextMOOVState extends State<NextMOOV> {
   _NextMOOVState(this.selected);
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     var title;
     var pic;
@@ -45,7 +45,8 @@ class _NextMOOVState extends State<NextMOOV> {
           if (!snapshot.hasData) return Text('Loading data...');
 
           return MediaQuery(
-            data: MediaQuery.of(context).removePadding(removeTop: true, removeBottom: true),
+            data: MediaQuery.of(context)
+                .removePadding(removeTop: true, removeBottom: true),
             child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -60,12 +61,14 @@ class _NextMOOVState extends State<NextMOOV> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          height: isLargePhone ? SizeConfig.blockSizeVertical * 15 : SizeConfig.blockSizeVertical * 18,
+                          height: isLargePhone
+                              ? SizeConfig.blockSizeVertical * 15
+                              : SizeConfig.blockSizeVertical * 18,
                           child: GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PostDetail(
-                                      course.documentID)));
+                                  builder: (context) =>
+                                      PostDetail(course.documentID)));
                             },
                             child: Stack(children: <Widget>[
                               FractionallySizedBox(
@@ -117,14 +120,21 @@ class _NextMOOVState extends State<NextMOOV> {
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        title,
-                                        style: TextStyle(
-                                            fontFamily: 'Solway',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 20.0),
-                                      ),
+                                      child: ConstrainedBox(
+                                            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width* .7),
+                                            child: Text(
+                                              title,
+                                                  maxLines: 2,
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontFamily: 'Solway',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      isLargePhone ? 22.0 : 20),
+                                            ),
+                                          ),
                                     ),
                                   ),
                                 ),

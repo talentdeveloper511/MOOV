@@ -63,10 +63,12 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
               color: Colors.white,
             ),
             onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
+               Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Home()),
+                                    (Route<dynamic> route) => false,
+                                  );
             },
           ),
           backgroundColor: TextThemes.ndBlue,
