@@ -445,6 +445,7 @@ class _EditPostState extends State<EditPost> {
                                               typeDropdownValue = newValue;
                                             });
                                           },
+                                          
                                           validator: (value) {
                                             if (value.isEmpty) {
                                               return 'What type?';

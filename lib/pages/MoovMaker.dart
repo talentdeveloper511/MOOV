@@ -265,6 +265,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   String userName;
   String userPic;
   int id = 0;
+  bool noImage = false;
 
   void refreshData() {
     id++;
@@ -547,123 +548,149 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                           currentUser.id, invitees)))
                               .then(onGoBack);
                         },
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  IconButton(
-                                    padding: EdgeInsets.all(0.0),
-                                    icon: Icon(
-                                      Icons.person_add,
-                                      size: 35,
-                                    ),
-                                    color: TextThemes.ndBlue,
-                                    splashColor:
-                                        Color.fromRGBO(220, 180, 57, 1.0),
-                                    onPressed: () {
-                                      Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                  type: PageTransitionType
-                                                      .bottomToTop,
-                                                  child: AddUsersPost(
-                                                      currentUser.id,
-                                                      invitees)))
-                                          .then(onGoBack);
-                                    },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      IconButton(
+                                        padding: EdgeInsets.all(0.0),
+                                        icon: Icon(
+                                          Icons.person_add,
+                                          size: 35,
+                                        ),
+                                        color: TextThemes.ndBlue,
+                                        splashColor:
+                                            Color.fromRGBO(220, 180, 57, 1.0),
+                                        onPressed: () {
+                                          Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      type: PageTransitionType
+                                                          .bottomToTop,
+                                                      child: AddUsersPost(
+                                                          currentUser.id,
+                                                          invitees)))
+                                              .then(onGoBack);
+                                        },
+                                      ),
+                                      Text("Invite",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Text("Invite Friends",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ]))),
-                Container(
-                  height: 100,
-                  width: MediaQuery.of(context).size.width * .9,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: invitees.length,
-                      itemBuilder: (_, index) {
-                        return StreamBuilder(
-                            stream: Firestore.instance
-                                .collection('users')
-                                .document(invitees[index])
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              // bool isLargePhone = Screen.diagonal(context) > 766;
-
-                              if (!snapshot.hasData)
-                                return CircularProgressIndicator();
-                              userName = snapshot.data['displayName'];
-                              userPic = snapshot.data['photoUrl'];
-
-                              // userMoovs = snapshot.data['likedMoovs'];
-
-                              return Container(
-                                height: 50,
-                                child: Column(
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    OtherProfile(
-                                                      userPic,
-                                                      userName,
-                                                      invitees[index],
-                                                    )));
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 34,
-                                        backgroundColor: TextThemes.ndGold,
-                                        child: CircleAvatar(
-                                          backgroundImage:
-                                              NetworkImage(userPic),
-                                          radius: 32,
-                                          backgroundColor: TextThemes.ndBlue,
-                                          child: CircleAvatar(
-                                            // backgroundImage: snapshot.data
-                                            //     .documents[index].data['photoUrl'],
-                                            backgroundImage:
-                                                NetworkImage(userPic),
-                                            radius: 32,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0),
-                                          child: RichText(
-                                            textScaleFactor: 1.1,
-                                            text: TextSpan(
-                                                style: TextThemes.mediumbody,
-                                                children: [
-                                                  TextSpan(
-                                                      text: userName,
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.w500)),
-                                                ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
                                 ),
-                              );
-                            });
-                      }),
-                ),
+                                Container(
+                                  height: 100,
+                                  width: invitees.length == 0
+                                      ? 0
+                                      : MediaQuery.of(context).size.width * .75,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: invitees.length,
+                                      itemBuilder: (_, index) {
+                                        return StreamBuilder(
+                                            stream: Firestore.instance
+                                                .collection('users')
+                                                .document(invitees[index])
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              // bool isLargePhone = Screen.diagonal(context) > 766;
+
+                                              if (!snapshot.hasData)
+                                                return CircularProgressIndicator();
+                                              userName =
+                                                  snapshot.data['displayName'];
+                                              userPic =
+                                                  snapshot.data['photoUrl'];
+
+                                              // userMoovs = snapshot.data['likedMoovs'];
+
+                                              return Container(
+                                                height: 50,
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        OtherProfile(
+                                                                          userPic,
+                                                                          userName,
+                                                                          invitees[
+                                                                              index],
+                                                                        )));
+                                                      },
+                                                      child: CircleAvatar(
+                                                        radius: 34,
+                                                        backgroundColor:
+                                                            TextThemes.ndGold,
+                                                        child: CircleAvatar(
+                                                          backgroundImage:
+                                                              NetworkImage(
+                                                                  userPic),
+                                                          radius: 32,
+                                                          backgroundColor:
+                                                              TextThemes.ndBlue,
+                                                          child: CircleAvatar(
+                                                            // backgroundImage: snapshot.data
+                                                            //     .documents[index].data['photoUrl'],
+                                                            backgroundImage:
+                                                                NetworkImage(
+                                                                    userPic),
+                                                            radius: 32,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5.0),
+                                                      child: Center(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      5.0),
+                                                          child: RichText(
+                                                            textScaleFactor:
+                                                                1.1,
+                                                            text: TextSpan(
+                                                                style: TextThemes
+                                                                    .mediumbody,
+                                                                children: [
+                                                                  TextSpan(
+                                                                      text:
+                                                                          userName,
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontWeight:
+                                                                              FontWeight.w500)),
+                                                                ]),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            });
+                                      }),
+                                ),
+                              ]),
+                        ))),
 
                 // Padding(
                 //   padding: const EdgeInsets.all(20.0),
@@ -733,31 +760,40 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 // ),
 
                 _image != null
-                    ? Container(
-                        height: 100,
-                        width: MediaQuery.of(context).size.width * .3,
-                        child: Center(
-                            child: AspectRatio(
-                                aspectRatio: 16 / 9,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: Image.file(_image,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.fitHeight),
-                                ))),
-                      )
+                    ? Stack(alignment: Alignment.center, children: [
+                        Container(
+                          height: 100,
+                          width: MediaQuery.of(context).size.width * .8,
+                          child: Center(
+                              child: AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child:
+                                        Image.file(_image, fit: BoxFit.cover),
+                                  ))),
+                        ),
+                        GestureDetector(
+                            onTap: () => selectImage(context),
+                            child: Icon(Icons.camera_alt))
+                      ])
                     : RaisedButton(
                         color: TextThemes.ndBlue,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('Upload Image/Gif',
+                          child: Text('Upload Image/GIF',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20)),
                         ),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
                         onPressed: () => selectImage(context)),
+                noImage == true
+                    ? Text(
+                        "No pic, no fun.",
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : Container(),
                 Padding(
                     padding: EdgeInsets.only(bottom: 110.0, top: 15),
                     child: Row(
@@ -791,7 +827,13 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
-                              if (_formKey.currentState.validate()) {
+                              if (_image == null) {
+                                setState(() {
+                                  noImage = true;
+                                });
+                              }
+                              if (_formKey.currentState.validate() &&
+                                  _image != null) {
                                 setState(() {
                                   isUploading = true;
                                 });
