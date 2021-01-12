@@ -751,7 +751,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         color: TextThemes.ndBlue,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('Upload image/gif',
+                          child: Text('Upload Image/Gif',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20)),
                         ),
