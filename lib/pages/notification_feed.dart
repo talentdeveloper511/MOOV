@@ -3,11 +3,13 @@ import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
+import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'group_detail.dart';
 import 'home.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -18,6 +20,7 @@ class NotificationFeed extends StatefulWidget {
 }
 
 class _NotificationFeedState extends State<NotificationFeed> {
+  String docId;
   getNotificationFeed() async {
     QuerySnapshot snapshot = await notificationFeedRef
         .document(currentUser.id)
@@ -28,6 +31,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
     List<NotificationFeedItem> feedItems = [];
     snapshot.documents.forEach((doc) {
       feedItems.add(NotificationFeedItem.fromDocument(doc));
+      docId = doc.documentID;
     });
     return feedItems;
   }
@@ -35,60 +39,88 @@ class _NotificationFeedState extends State<NotificationFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
           ),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-        ),
-        backgroundColor: TextThemes.ndBlue,
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 50.0,
+          backgroundColor: TextThemes.ndBlue,
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.all(5),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  child: Image.asset(
+                    'lib/assets/moovblue.png',
+                    fit: BoxFit.cover,
+                    height: 50.0,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-      body: Container(
-          child: FutureBuilder(
-        future: getNotificationFeed(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return circularProgress();
-          }
-          return ListView(
-              children: snapshot.hasData
-                  ? snapshot.data
-                  : Text(
-                      'No Notifications',
-                    ));
-        },
-      )),
-    );
+        body: Container(
+            child: FutureBuilder(
+                future: getNotificationFeed(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return circularProgress();
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      final item = snapshot.data[index];
+
+                      return Dismissible(
+                          // Each Dismissible must contain a Key. Keys allow Flutter to
+                          // uniquely identify widgets.
+                          key: Key(item.toString()),
+                          // Provide a function that tells the app
+                          // what to do after an item has been swiped away.
+                          onDismissed: (direction) {
+                            notificationFeedRef
+                                .document(currentUser.id)
+                                .collection('feedItems')
+                                .document(docId)
+                                .delete();
+
+                            // Remove the item from the data source.
+                            setState(() {
+                              snapshot.data.removeAt(index);
+                            });
+
+                            // Then show a snackbar.
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text("Be good, notification.")));
+                          },
+                          // Show a red background as the item is swiped away.
+                          background: Container(color: Colors.red),
+                          child: snapshot.hasData
+                              ? snapshot.data[index]
+                              : Text(
+                                  'No Notifications',
+                                ));
+                    },
+                  );
+                })));
   }
 }
 
@@ -185,7 +217,9 @@ class NotificationFeedItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(previewImg),
+                    image: previewImg != null
+                        ? CachedNetworkImageProvider(previewImg)
+                        : AssetImage("lib/assets/otherbutton1.png"),
                   ),
                 ),
               )),
@@ -203,7 +237,9 @@ class NotificationFeedItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(previewImg),
+                    image: previewImg != null
+                        ? CachedNetworkImageProvider(previewImg)
+                        : AssetImage("lib/assets/otherbutton1.png"),
                   ),
                 ),
               )),
@@ -297,7 +333,9 @@ class NotificationFeedItem extends StatelessWidget {
           leading: GestureDetector(
             onTap: () => showProfile(context),
             child: CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(userProfilePic),
+              backgroundImage: userProfilePic != null
+                  ? CachedNetworkImageProvider(userProfilePic)
+                  : AssetImage("lib/assets/otherbutton1.png"),
             ),
           ),
           subtitle: Text(
