@@ -132,7 +132,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
           searchResults.add(searchResult);
         });
         return ListView(
-          children: searchResults,
+          children: searchResults
         );
       },
     );
