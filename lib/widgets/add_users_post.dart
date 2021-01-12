@@ -58,6 +58,7 @@ class _AddUsersPostState extends State<AddUsersPost> {
           icon: Icon(Icons.arrow_drop_down_circle_outlined,
               color: Colors.white, size: 35),
           onPressed: () {
+            // widget.refresh();
             Navigator.pop(context, invitees);
           }),
       flexibleSpace: FlexibleSpaceBar(

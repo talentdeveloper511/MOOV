@@ -55,7 +55,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-               GestureDetector(
+              GestureDetector(
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
                     context,
@@ -98,7 +98,7 @@ String activityItemText;
 class NotificationFeedItem extends StatelessWidget {
   final String username;
   final String userId;
-  final String type; // 'like', 'follow', 'friendgroup'
+  final String type; // 'going', 'follow', 'friendgroup'
   final String previewImg;
   final String postId;
   final String userProfilePic;
@@ -161,9 +161,7 @@ class NotificationFeedItem extends StatelessWidget {
 
   showPost(context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PostDetail(postId)));
+        context, MaterialPageRoute(builder: (context) => PostDetail(postId)));
   }
 
   showGroup(context) {
@@ -223,7 +221,9 @@ class NotificationFeedItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: previewImg != null ? CachedNetworkImageProvider(previewImg) : AssetImage("lib/assets/otherbutton1.png"),
+                    image: previewImg != null
+                        ? CachedNetworkImageProvider(previewImg)
+                        : AssetImage("lib/assets/otherbutton1.png"),
                   ),
                 ),
               )),

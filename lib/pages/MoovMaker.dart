@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
@@ -75,42 +76,48 @@ class _MoovMakerState extends State<MoovMaker> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Stack(alignment: Alignment.center, children: <Widget>[
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.12,
-                  width: MediaQuery.of(context).size.width,
-                  child: Container(
-                    child: ClipRRect(
-                      child: Image.asset(
-                        'lib/assets/motd.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    margin:
-                        EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 7.5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    width: MediaQuery.of(context).size.width,
+                    child: Container(
+                      child: ClipRRect(
+                        child: Image.asset(
+                          'lib/assets/motd.jpg',
+                          fit: BoxFit.cover,
                         ),
-                      ],
+                      ),
+                      margin: EdgeInsets.only(
+                          left: 0, top: 0, right: 0, bottom: 7.5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Container(
-                  child: Text(
-                    "MOOV Maker",
-                    style: TextStyle(
-                        fontFamily: 'Solway',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: Container(
+                    child: Text(
+                      "MOOV Maker",
+                      style: TextStyle(
+                          fontFamily: 'Solway',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 25.0),
+                    ),
                   ),
                 ),
               ]),
@@ -257,6 +264,16 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   List<String> invitees = [];
   String userName;
   String userPic;
+  int id = 0;
+
+  void refreshData() {
+    id++;
+  }
+
+  FutureOr onGoBack(dynamic value) {
+    refreshData();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -267,7 +284,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           : SingleChildScrollView(
               child: Column(children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.only(bottom: 15.0, left: 15, right: 15),
                   child: TextFormField(
                     controller: titleController,
                     decoration: InputDecoration(
@@ -290,10 +307,15 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(top: 5, bottom: 15.0, left: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12.0),
+                        child: Icon(Icons.question_answer,
+                            color: TextThemes.ndGold),
+                      ),
                       Container(
                         width: MediaQuery.of(context).size.width * .45,
                         child: ButtonTheme(
@@ -328,7 +350,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Container(
                           width: MediaQuery.of(context).size.width * .35,
                           child: ButtonTheme(
@@ -367,7 +389,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding:
+                      EdgeInsets.only(left: 15.0, right: 15, top: 5, bottom: 5),
                   child: TextFormField(
                     controller: addressController,
                     decoration: InputDecoration(
@@ -388,7 +411,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(15.0),
                   child: TextFormField(
                     controller: descriptionController,
                     decoration: InputDecoration(
@@ -396,7 +419,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         Icons.description,
                         color: TextThemes.ndGold,
                       ),
-                      labelText: "Describe your MOOV",
+                      labelText: "Details about the MOOV",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -443,50 +466,33 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 20.0, left: 20, right: 20, bottom: 10),
-                  child: DateTimeField(
-                    format: format,
-                    keyboardType: TextInputType.datetime,
-                    decoration: InputDecoration(
-                        suffixIcon: Icon(
-                          Icons.arrow_downward,
-                          color: TextThemes.ndGold,
-                        ),
-                        labelText: 'Enter Start Time',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        floatingLabelBehavior: FloatingLabelBehavior.always),
-                    onChanged: (DateTime newValue) {
-                      setState(() {
-                        currentValue = currentValues; // = newValue;
-                        //   newValue = currentValue;
-                      });
-                    },
-                    onShowPicker: (context, currentValue) async {
-                      final date = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime(1970),
-                        initialDate: currentValue ?? DateTime.now(),
-                        lastDate: DateTime(2100),
-                        builder: (BuildContext context, Widget child) {
-                          return Theme(
-                            data: ThemeData.light().copyWith(
-                              primaryColor: TextThemes.ndGold,
-                              accentColor: TextThemes.ndGold,
-                              colorScheme:
-                                  ColorScheme.light(primary: TextThemes.ndBlue),
-                              buttonTheme: ButtonThemeData(
-                                  textTheme: ButtonTextTheme.primary),
-                            ),
-                            child: child,
-                          );
-                        },
-                      );
-                      if (date != null) {
-                        final time = await showTimePicker(
+                      top: 5, left: 15, bottom: 10, right: 15),
+                  child: Container(
+                    child: DateTimeField(
+                      format: format,
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(
+                          icon: Icon(Icons.timelapse, color: TextThemes.ndGold),
+                          suffixIcon: Icon(
+                            Icons.arrow_downward,
+                            color: TextThemes.ndGold,
+                          ),
+                          labelText: 'Enter Start Time',
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          floatingLabelBehavior: FloatingLabelBehavior.always),
+                      onChanged: (DateTime newValue) {
+                        setState(() {
+                          currentValue = currentValues; // = newValue;
+                          //   newValue = currentValue;
+                        });
+                      },
+                      onShowPicker: (context, currentValue) async {
+                        final date = await showDatePicker(
                           context: context,
-                          initialTime: TimeOfDay.fromDateTime(
-                              currentValue ?? DateTime.now()),
+                          firstDate: DateTime(2021),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100),
                           builder: (BuildContext context, Widget child) {
                             return Theme(
                               data: ThemeData.light().copyWith(
@@ -501,139 +507,163 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                             );
                           },
                         );
-                        currentValues = DateTimeField.combine(date, time);
-                        return currentValues;
-                      } else {
-                        return currentValue;
-                      }
-                    },
+                        if (date != null) {
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(
+                                currentValue ?? DateTime.now()),
+                            builder: (BuildContext context, Widget child) {
+                              return Theme(
+                                data: ThemeData.light().copyWith(
+                                  primaryColor: TextThemes.ndGold,
+                                  accentColor: TextThemes.ndGold,
+                                  colorScheme: ColorScheme.light(
+                                      primary: TextThemes.ndBlue),
+                                  buttonTheme: ButtonThemeData(
+                                      textTheme: ButtonTextTheme.primary),
+                                ),
+                                child: child,
+                              );
+                            },
+                          );
+                          currentValues = DateTimeField.combine(date, time);
+                          return currentValues;
+                        } else {
+                          return currentValue;
+                        }
+                      },
+                    ),
                   ),
                 ),
                 Padding(
-                    padding:
-                        const EdgeInsets.only(top: 8.0, bottom: 12.5, left: 20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: AddUsersPost(
+                                          currentUser.id, invitees)))
+                              .then(onGoBack);
+                        },
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              IconButton(
-                                padding: EdgeInsets.all(0.0),
-                                icon: Icon(
-                                  Icons.person_add,
-                                  size: 35,
-                                ),
-                                color: TextThemes.ndBlue,
-                                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AddUsersPost(
-                                              currentUser.id, invitees)));
-                                },
+                              Column(
+                                children: [
+                                  IconButton(
+                                    padding: EdgeInsets.all(0.0),
+                                    icon: Icon(
+                                      Icons.person_add,
+                                      size: 35,
+                                    ),
+                                    color: TextThemes.ndBlue,
+                                    splashColor:
+                                        Color.fromRGBO(220, 180, 57, 1.0),
+                                    onPressed: () {
+                                      Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  type: PageTransitionType
+                                                      .bottomToTop,
+                                                  child: AddUsersPost(
+                                                      currentUser.id,
+                                                      invitees)))
+                                          .then(onGoBack);
+                                    },
+                                  ),
+                                ],
                               ),
-                              Text("Invite"),
-                            ],
-                          ),
-                          Container(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width * .8,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: AlwaysScrollableScrollPhysics(),
-                                itemCount: invitees.length,
-                                itemBuilder: (_, index) {
+                              Text("Invite Friends",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ]))),
+                Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width * .9,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemCount: invitees.length,
+                      itemBuilder: (_, index) {
+                        return StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('users')
+                                .document(invitees[index])
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                  return StreamBuilder(
-                                      stream: Firestore.instance
-                                          .collection('users')
-                                          .document(invitees[index])
-                                          .snapshots(),
-                                      builder: (context, snapshot) {
-                                        // bool isLargePhone = Screen.diagonal(context) > 766;
+                              if (!snapshot.hasData)
+                                return CircularProgressIndicator();
+                              userName = snapshot.data['displayName'];
+                              userPic = snapshot.data['photoUrl'];
 
-                                        if (!snapshot.hasData)
-                                          return CircularProgressIndicator();
-                                        userName = snapshot.data['displayName'];
-                                        userPic = snapshot.data['photoUrl'];
+                              // userMoovs = snapshot.data['likedMoovs'];
 
-                                        // userMoovs = snapshot.data['likedMoovs'];
-
-                                        return Container(
-                                          height: 50,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OtherProfile(
-                                                                userPic,
-                                                                userName,
-                                                                invitees[index],
-                                                              )));
-                                                },
-                                                child: CircleAvatar(
-                                                  radius: 34,
-                                                  backgroundColor:
-                                                      TextThemes.ndGold,
-                                                  child: CircleAvatar(
-                                                    backgroundImage:
-                                                        NetworkImage(userPic),
-                                                    radius: 32,
-                                                    backgroundColor:
-                                                        TextThemes.ndBlue,
-                                                    child: CircleAvatar(
-                                                      // backgroundImage: snapshot.data
-                                                      //     .documents[index].data['photoUrl'],
-                                                      backgroundImage:
-                                                          NetworkImage(userPic),
-                                                      radius: 32,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(5.0),
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10.0),
-                                                    child: RichText(
-                                                      textScaleFactor: 1.1,
-                                                      text: TextSpan(
-                                                          style: TextThemes
-                                                              .mediumbody,
-                                                          children: [
-                                                            TextSpan(
-                                                                text: userName,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500)),
-                                                          ]),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                              return Container(
+                                height: 50,
+                                child: Column(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    OtherProfile(
+                                                      userPic,
+                                                      userName,
+                                                      invitees[index],
+                                                    )));
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 34,
+                                        backgroundColor: TextThemes.ndGold,
+                                        child: CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(userPic),
+                                          radius: 32,
+                                          backgroundColor: TextThemes.ndBlue,
+                                          child: CircleAvatar(
+                                            // backgroundImage: snapshot.data
+                                            //     .documents[index].data['photoUrl'],
+                                            backgroundImage:
+                                                NetworkImage(userPic),
+                                            radius: 32,
                                           ),
-                                        );
-                                      });
-                                }),
-                          ),
-                        ])),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: RichText(
+                                            textScaleFactor: 1.1,
+                                            text: TextSpan(
+                                                style: TextThemes.mediumbody,
+                                                children: [
+                                                  TextSpan(
+                                                      text: userName,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500)),
+                                                ]),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                      }),
+                ),
 
                 // Padding(
                 //   padding: const EdgeInsets.all(20.0),
@@ -701,20 +731,11 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 //     },
                 //   ),
                 // ),
-                RaisedButton(
-                    color: TextThemes.ndBlue,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Upload an image',
-                          style: TextStyle(color: Colors.white, fontSize: 22)),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                    onPressed: () => selectImage(context)),
+
                 _image != null
                     ? Container(
-                        height: 220,
-                        width: MediaQuery.of(context).size.width * .8,
+                        height: 100,
+                        width: MediaQuery.of(context).size.width * .3,
                         child: Center(
                             child: AspectRatio(
                                 aspectRatio: 16 / 9,
@@ -726,9 +747,19 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                       fit: BoxFit.fitHeight),
                                 ))),
                       )
-                    : Container(),
+                    : RaisedButton(
+                        color: TextThemes.ndBlue,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Upload image/gif',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20)),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0)),
+                        onPressed: () => selectImage(context)),
                 Padding(
-                    padding: EdgeInsets.only(bottom: 20.0, top: 10),
+                    padding: EdgeInsets.only(bottom: 110.0, top: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
