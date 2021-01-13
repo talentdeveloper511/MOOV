@@ -8,6 +8,7 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'group_detail.dart';
@@ -122,18 +123,28 @@ class _NotificationFeedState extends State<NotificationFeed> {
                               });
                             }
 
-                            // setState(() {
-                            //   snapshot.data.remove(item);
-                            // });
-
                             // Remove the item from the data source.
 
                             // Then show a snackbar.
                             Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text("Notification dismissed.")));
+                                duration: Duration(milliseconds: 1500),
+                                backgroundColor: Colors.black,
+                                content: Text("Notification deleted.")));
                           },
                           // Show a red background as the item is swiped away.
-                          background: Container(color: Colors.red),
+                          background: Container(
+                            color: Colors.red,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Icon(CupertinoIcons.trash,
+                                      color: Colors.white, size: 45),
+                                ),
+                              ],
+                            ),
+                          ),
                           child: snapshot.hasData
                               ? snapshot.data[index]
                               : Text(
