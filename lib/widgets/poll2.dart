@@ -19,21 +19,15 @@ class PollView extends StatefulWidget {
 class _PollViewState extends State<PollView> {
   double option1 = 1;
   double option2 = 90;
-  double z = 0;
   // double option3 = 2.0;
   // double option4 = 3.0;
-
-  Map usersWhoVoted = {
-    'sam@mail.com': 3,
-    'mike@mail.com': 4,
-    'john@mail.com': 1,
-    'kenny@mail.com': 1
-  };
 
   Map voters = {};
   String creator = "me";
   String userId;
   String voter;
+  List<dynamic> option1List;
+  List<dynamic> option2List;
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +51,15 @@ class _PollViewState extends State<PollView> {
 
           voters = snapshot.data['voters'];
           var _list = voters.values.toList();
+          var _list2 = voters.keys.toList();
           option1 =
               _list.where((element) => element == 1).toList().length.toDouble();
-
           option2 =
               _list.where((element) => element == 2).toList().length.toDouble();
+
+          option1List = _list.where((element) => element == 1).toList();
+
+          option2List = _list.where((element) => element == 2).toList();
 
           // var count = _list.where((c) => c.product_id == 2).toList().length;
 
@@ -110,7 +108,6 @@ class _PollViewState extends State<PollView> {
 
                         setState(() {
                           x = choice;
-                          z = 1;
                         });
 
                         Firestore.instance
@@ -123,13 +120,11 @@ class _PollViewState extends State<PollView> {
                         if (choice == 1) {
                           setState(() {
                             option1 += 1.0;
-                            z += 1.0;
                           });
                         }
                         if (choice == 2) {
                           setState(() {
                             option2 += 1.0;
-                            z += 1.0;
                           });
                         }
                         // if (choice == 3) {
@@ -147,7 +142,7 @@ class _PollViewState extends State<PollView> {
                 voters.containsKey(userId)
                     ? Positioned(
                         top: isLargePhone ? 45 : 40,
-                        left: isLargePhone ? 70 : 60,
+                        left: isLargePhone ? 80 : 70,
                         child: Container(
                           height: 100,
                           width: voters.length == 0
@@ -157,28 +152,29 @@ class _PollViewState extends State<PollView> {
                               scrollDirection: Axis.horizontal,
                               physics: AlwaysScrollableScrollPhysics(),
                               // itemCount: invitees.length,
-                              itemCount: 1,
+                              itemCount: option1.toInt(),
                               itemBuilder: (_, index) {
-                                for (var entry in voters.entries) {
-                                  x = entry.key.toString();
-                                  y = entry.value.toString();
+                                voters.removeWhere((key, value) => value == 2);
 
-                                  return StreamBuilder(
-                                      stream: Firestore.instance
-                                          .collection('users')
-                                          .document(x)
-                                          .snapshots(),
-                                      builder: (context, snapshot) {
-                                        // bool isLargePhone = Screen.diagonal(context) > 766;
+                                x = voters.keys.toList();
 
-                                        if (!snapshot.hasData)
-                                          return CircularProgressIndicator();
-                                        userName = snapshot.data['displayName'];
-                                        userPic = snapshot.data['photoUrl'];
+                                return StreamBuilder(
+                                    stream: Firestore.instance
+                                        .collection('users')
+                                        .document(x[index])
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                        // userMoovs = snapshot.data['likedMoovs'];
+                                      if (!snapshot.hasData)
+                                        return CircularProgressIndicator();
+                                      userName = snapshot.data['displayName'];
+                                      userPic = snapshot.data['photoUrl'];
 
-                                        return Container(
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 5.0),
+                                        child: Container(
                                           height: 27,
                                           child: Column(
                                             children: <Widget>[
@@ -215,9 +211,91 @@ class _PollViewState extends State<PollView> {
                                               ),
                                             ],
                                           ),
-                                        );
-                                      });
-                                }
+                                        ),
+                                      );
+                                    });
+                              }),
+                        ),
+                      )
+                    : Container(),
+                voters.containsKey(userId)
+                    ? Positioned(
+                        bottom: isLargePhone ? -20 : 40,
+                        left: isLargePhone ? 80 : 70,
+                        child: Container(
+                          height: 100,
+                          width: voters.length == 0
+                              ? 0
+                              : MediaQuery.of(context).size.width * .74,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              physics: AlwaysScrollableScrollPhysics(),
+                              // itemCount: invitees.length,
+                              itemCount: option2.toInt(),
+                              itemBuilder: (_, index) {
+                                voters = snapshot.data['voters'];
+
+                                voters.removeWhere((key, value) => value == 1);
+
+                                x = voters.keys.toList();
+                                print(x);
+
+                                return StreamBuilder(
+                                    stream: Firestore.instance
+                                        .collection('users')
+                                        .document(x[index])
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      // bool isLargePhone = Screen.diagonal(context) > 766;
+
+                                      if (!snapshot.hasData)
+                                        return CircularProgressIndicator();
+                                      userName = snapshot.data['displayName'];
+                                      userPic = snapshot.data['photoUrl'];
+
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 5.0),
+                                        child: Container(
+                                          height: 27,
+                                          child: Column(
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OtherProfile(
+                                                                userPic,
+                                                                userName,
+                                                                x,
+                                                              )));
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 18,
+                                                  backgroundColor:
+                                                      TextThemes.ndBlue,
+                                                  child: CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(userPic),
+                                                    radius: 17,
+                                                    backgroundColor:
+                                                        TextThemes.ndBlue,
+                                                    child: CircleAvatar(
+                                                      // backgroundImage: snapshot.data
+                                                      //     .documents[index].data['photoUrl'],
+                                                      backgroundImage:
+                                                          NetworkImage(userPic),
+                                                      radius: 18,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
                               }),
                         ),
                       )
