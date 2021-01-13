@@ -88,7 +88,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                     return Container(
                         child: Center(
                             child: Text(
-                      "No notifications. \nLame.",
+                      "No notifications, slacker.",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: TextThemes.ndBlue, fontSize: 25),
                     )));
@@ -130,7 +130,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
 
                             // Then show a snackbar.
                             Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text("Be good, notification.")));
+                                content: Text("Notification dismissed.")));
                           },
                           // Show a red background as the item is swiped away.
                           background: Container(color: Colors.red),
