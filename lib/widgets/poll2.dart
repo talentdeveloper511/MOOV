@@ -154,6 +154,7 @@ class _PollViewState extends State<PollView> {
                               // itemCount: invitees.length,
                               itemCount: option1.toInt(),
                               itemBuilder: (_, index) {
+                                String id;
                                 voters.removeWhere((key, value) => value == 2);
 
                                 x = voters.keys.toList();
@@ -163,13 +164,14 @@ class _PollViewState extends State<PollView> {
                                         .collection('users')
                                         .document(x[index])
                                         .snapshots(),
-                                    builder: (context, snapshot) {
+                                    builder: (context, snapshot2) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                      if (!snapshot.hasData)
+                                      if (!snapshot2.hasData)
                                         return CircularProgressIndicator();
-                                      userName = snapshot.data['displayName'];
-                                      userPic = snapshot.data['photoUrl'];
+                                      userName = snapshot2.data['displayName'];
+                                      userPic = snapshot2.data['photoUrl'];
+                                      id = snapshot2.data['id'];
 
                                       return Padding(
                                         padding:
@@ -186,7 +188,7 @@ class _PollViewState extends State<PollView> {
                                                               OtherProfile(
                                                                 userPic,
                                                                 userName,
-                                                                x,
+                                                                id,
                                                               )));
                                                 },
                                                 child: CircleAvatar(
@@ -252,6 +254,7 @@ class _PollViewState extends State<PollView> {
                                         return CircularProgressIndicator();
                                       userName = snapshot.data['displayName'];
                                       userPic = snapshot.data['photoUrl'];
+                                      userId = snapshot.data['id'];
 
                                       return Padding(
                                         padding:
@@ -268,7 +271,7 @@ class _PollViewState extends State<PollView> {
                                                               OtherProfile(
                                                                 userPic,
                                                                 userName,
-                                                                x,
+                                                                userId,
                                                               )));
                                                 },
                                                 child: CircleAvatar(
