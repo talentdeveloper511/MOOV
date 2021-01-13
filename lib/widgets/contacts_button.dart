@@ -10,7 +10,7 @@ import 'package:MOOV/pages/contactsPage.dart';
 class SeeContactsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     return GestureDetector(
       onTap: () async {
@@ -41,7 +41,11 @@ class SeeContactsButton extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.contact_mail, color: Colors.white, size: 20,),
+                  child: Icon(
+                    Icons.contact_mail,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
                 Expanded(
                   child: Center(
@@ -49,7 +53,9 @@ class SeeContactsButton extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 15.0),
                       child: Text(
                         "Share MOOV",
-                        style: TextStyle(fontSize: isLargePhone ? 18 : 16, color: Colors.white),
+                        style: TextStyle(
+                            fontSize: isLargePhone ? 18 : 16,
+                            color: Colors.white),
                       ),
                     ),
                   ),
@@ -100,22 +106,22 @@ class SeeContactsButton extends StatelessWidget {
     showDialog(
       context: context,
       child: CupertinoAlertDialog(
-        title: Text("Do you like money?",
+        title: Text("Invite Friends, \nWin Cash",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text(
-            "\nEarn \$3 for every user you bring on, \$5 if your're an ambassador. \n\n Just have them refer you when creating an account."),
+            "\nEarn the chance to become an ambassador by inviting as many people as possible! You get \$3 for every person you invite if your're an ambassador. \n\n Just have them put you as their referral when creating their account."),
         actions: [
           CupertinoDialogAction(
+              child: Text("Let's earn money.", style: TextStyle()),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ContactsPage()))),
+          CupertinoDialogAction(
+            isDefaultAction: true,
             child: Text("I hate money.", style: TextStyle(color: Colors.red)),
             onPressed: () {
               Navigator.of(context).pop(true);
             },
-          ),
-          CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text("I love money."),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ContactsPage())))
+          )
         ],
       ),
     );

@@ -89,7 +89,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                     return Container(
                         child: Center(
                             child: Text(
-                      "No notifications, slacker.",
+                      "You're up to date on your notifications! Let's Go!",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: TextThemes.ndBlue, fontSize: 25),
                     )));

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -107,6 +108,17 @@ class _GroupDetailState extends State<GroupDetail> {
   var otherDisplay;
   var id;
   var iter = 1;
+  int refreshID = 0;
+  void refreshData() {
+    refreshID++;
+  }
+
+  FutureOr onGoBack(dynamic value) {
+    refreshData();
+    setState(() {
+      NextMOOV(value);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -352,10 +364,11 @@ class _GroupDetailState extends State<GroupDetail> {
                         RaisedButton(
                           onPressed: () {
                             Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.bottomToTop,
-                                    child: SetMOOV(displayName, gid)));
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.bottomToTop,
+                                        child: SetMOOV(displayName, gid)))
+                                .then(onGoBack(gid));
                           },
                           color: TextThemes.ndBlue,
                           child: Padding(

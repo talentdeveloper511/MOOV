@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'MorePage.dart';
 
 import 'friend_finder.dart';
@@ -116,9 +117,15 @@ class _HomePageState extends State<HomePage>
               crossAxisSpacing: 10.0,
               childAspectRatio: 2.25,
               children: <Widget>[
-                Container(
-                  child: MOTD(),
-                ),
+                Bounce(
+                    duration: Duration(milliseconds: 100),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MOTD()));
+                    },
+                    child: Container(
+                      child: MOTD(),
+                    )),
               ],
             ),
           ),
@@ -132,99 +139,107 @@ class _HomePageState extends State<HomePage>
               children: <Widget>[
                 Container(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FriendFinder()));
-                      },
-                      child: Card(
-                        elevation: 10,
-                        color: Colors.pink[50],
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.all(5.0),
-                              icon: Image.asset('lib/assets/ff.png'),
-                              color: Colors.white,
-                              splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FriendFinder()));
-                                // Implement navigation to shopping cart page here...
-                              },
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Bounce(
+                          duration: Duration(milliseconds: 100),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FriendFinder()));
+                          },
+                          child: Card(
+                            elevation: 10,
+                            color: Colors.pink[50],
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  padding: EdgeInsets.all(5.0),
+                                  icon: Image.asset('lib/assets/ff.png'),
+                                  color: Colors.white,
+                                  splashColor:
+                                      Color.fromRGBO(220, 180, 57, 1.0),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                FriendFinder()));
+                                    // Implement navigation to shopping cart page here...
+                                  },
+                                ),
+                                Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        "Friend Finder",
+                                        style: TextStyle(
+                                            fontFamily: 'Open Sans',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                            fontSize: 16.0),
+                                      ),
+                                    )),
+                              ],
                             ),
-                            Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                    "Friend Finder",
-                                    style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16.0),
-                                  ),
-                                )),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
+                      )),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FriendGroupsPage()));
-                    },
-                    child: Card(
-                      elevation: 10,
-                      color: Colors.purple[50],
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            padding: EdgeInsets.all(5.0),
-                            icon: Image.asset('lib/assets/fg1.png'),
-                            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          FriendGroupsPage()));
-                            },
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Bounce(
+                        duration: Duration(milliseconds: 100),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FriendGroupsPage()));
+                        },
+                        child: Card(
+                          elevation: 10,
+                          color: Colors.purple[50],
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.all(5.0),
+                                icon: Image.asset('lib/assets/fg1.png'),
+                                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              FriendGroupsPage()));
+                                },
+                              ),
+                              Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      "Friend Groups",
+                                      style: TextStyle(
+                                          fontFamily: 'Open Sans',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontSize: 16.0),
+                                    ),
+                                  )),
+                            ],
                           ),
-                          Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  "Friend Groups",
-                                  style: TextStyle(
-                                      fontFamily: 'Open Sans',
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 16.0),
-                                ),
-                              )),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                )
+                    ))
               ],
             ),
           ),
@@ -241,11 +256,15 @@ class _HomePageState extends State<HomePage>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
-                          onTap: () {
-                            navigateToCategoryFeed(
-                                context, "Restaurants & Bars");
-                          },
-                          child: CategoryButton(asset: 'lib/assets/food5.png')),
+                          onTap: () {},
+                          child: Bounce(
+                              duration: Duration(milliseconds: 100),
+                              onPressed: () {
+                                navigateToCategoryFeed(
+                                    context, "Restaurants & Bars");
+                              },
+                              child: CategoryButton(
+                                  asset: 'lib/assets/food5.png'))),
                       Align(
                           alignment: Alignment.center,
                           child: Text(
@@ -263,10 +282,15 @@ class _HomePageState extends State<HomePage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     GestureDetector(
-                        onTap: () {
-                          navigateToCategoryFeed(context, "Pregames & Parties");
-                        },
-                        child: CategoryButton(asset: 'lib/assets/party2.png')),
+                        onTap: () {},
+                        child: Bounce(
+                            duration: Duration(milliseconds: 100),
+                            onPressed: () {
+                              navigateToCategoryFeed(
+                                  context, "Pregames & Parties");
+                            },
+                            child: CategoryButton(
+                                asset: 'lib/assets/party2.png'))),
                     Align(
                         alignment: Alignment.center,
                         child: Text(

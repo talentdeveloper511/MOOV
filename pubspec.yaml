@@ -73,6 +73,7 @@ dependencies:
   syncfusion_flutter_maps: ^18.4.30-beta
   polls: ^0.2.2
   auto_size_text: ^2.1.0
+  flutter_bounce: ^1.0.8
 
 
 

@@ -300,6 +300,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.0"
+  flutter_bounce:
+    dependency: "direct main"
+    description:
+      name: flutter_bounce
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.8"
   flutter_cache_manager:
     dependency: transitive
     description:
