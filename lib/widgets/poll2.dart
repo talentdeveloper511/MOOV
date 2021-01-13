@@ -19,6 +19,7 @@ class PollView extends StatefulWidget {
 class _PollViewState extends State<PollView> {
   double option1 = 1;
   double option2 = 90;
+  double z = 0;
   // double option3 = 2.0;
   // double option4 = 3.0;
 
@@ -109,6 +110,7 @@ class _PollViewState extends State<PollView> {
 
                         setState(() {
                           x = choice;
+                          z = 1;
                         });
 
                         Firestore.instance
@@ -121,11 +123,13 @@ class _PollViewState extends State<PollView> {
                         if (choice == 1) {
                           setState(() {
                             option1 += 1.0;
+                            z += 1.0;
                           });
                         }
                         if (choice == 2) {
                           setState(() {
                             option2 += 1.0;
+                            z += 1.0;
                           });
                         }
                         // if (choice == 3) {
@@ -140,81 +144,84 @@ class _PollViewState extends State<PollView> {
                         // }
                       }),
                 ),
-                Positioned(
-                  top: isLargePhone ? 45 : 40,
-                  left: isLargePhone ? 70 : 60,
-                  child: Container(
-                    height: 100,
-                    width: voters.length == 0
-                        ? 0
-                        : MediaQuery.of(context).size.width * .74,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: AlwaysScrollableScrollPhysics(),
-                        // itemCount: invitees.length,
-                        itemCount: 1,
-                        itemBuilder: (_, index) {
-                          for (var entry in voters.entries) {
-                            x = entry.key.toString();
-                            y = entry.value.toString();
+                voters.containsKey(userId)
+                    ? Positioned(
+                        top: isLargePhone ? 45 : 40,
+                        left: isLargePhone ? 70 : 60,
+                        child: Container(
+                          height: 100,
+                          width: voters.length == 0
+                              ? 0
+                              : MediaQuery.of(context).size.width * .74,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              physics: AlwaysScrollableScrollPhysics(),
+                              // itemCount: invitees.length,
+                              itemCount: 1,
+                              itemBuilder: (_, index) {
+                                for (var entry in voters.entries) {
+                                  x = entry.key.toString();
+                                  y = entry.value.toString();
 
-                            return StreamBuilder(
-                                stream: Firestore.instance
-                                    .collection('users')
-                                    .document(x)
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  // bool isLargePhone = Screen.diagonal(context) > 766;
+                                  return StreamBuilder(
+                                      stream: Firestore.instance
+                                          .collection('users')
+                                          .document(x)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                  if (!snapshot.hasData)
-                                    return CircularProgressIndicator();
-                                  userName = snapshot.data['displayName'];
-                                  userPic = snapshot.data['photoUrl'];
+                                        if (!snapshot.hasData)
+                                          return CircularProgressIndicator();
+                                        userName = snapshot.data['displayName'];
+                                        userPic = snapshot.data['photoUrl'];
 
-                                  // userMoovs = snapshot.data['likedMoovs'];
+                                        // userMoovs = snapshot.data['likedMoovs'];
 
-                                  return Container(
-                                    height: 27,
-                                    child: Column(
-                                      children: <Widget>[
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        OtherProfile(
-                                                          userPic,
-                                                          userName,
-                                                          x,
-                                                        )));
-                                          },
-                                          child: CircleAvatar(
-                                            radius: 18,
-                                            backgroundColor: TextThemes.ndBlue,
-                                            child: CircleAvatar(
-                                              backgroundImage:
-                                                  NetworkImage(userPic),
-                                              radius: 17,
-                                              backgroundColor:
-                                                  TextThemes.ndBlue,
-                                              child: CircleAvatar(
-                                                // backgroundImage: snapshot.data
-                                                //     .documents[index].data['photoUrl'],
-                                                backgroundImage:
-                                                    NetworkImage(userPic),
-                                                radius: 18,
+                                        return Container(
+                                          height: 27,
+                                          child: Column(
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OtherProfile(
+                                                                userPic,
+                                                                userName,
+                                                                x,
+                                                              )));
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 18,
+                                                  backgroundColor:
+                                                      TextThemes.ndBlue,
+                                                  child: CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(userPic),
+                                                    radius: 17,
+                                                    backgroundColor:
+                                                        TextThemes.ndBlue,
+                                                    child: CircleAvatar(
+                                                      // backgroundImage: snapshot.data
+                                                      //     .documents[index].data['photoUrl'],
+                                                      backgroundImage:
+                                                          NetworkImage(userPic),
+                                                      radius: 18,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                });
-                          }
-                        }),
-                  ),
-                ),
+                                        );
+                                      });
+                                }
+                              }),
+                        ),
+                      )
+                    : Container(),
               ]),
             );
           }
