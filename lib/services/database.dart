@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,12 +13,34 @@ class Database {
   dynamic startDate;
   var title;
   bool featured;
-var postId; 
+  var postId;
 
   final GoogleSignInAccount user = googleSignIn.currentUser;
   final strUserId = googleSignIn.currentUser.id;
   final strUserName = googleSignIn.currentUser.displayName;
   final strPic = googleSignIn.currentUser.photoUrl;
+
+  FutureOr inviteesNotification(postId, previewImg, title, List<String> invitees) {
+    if (invitees.length > 0) {
+      for (int i = 0; i < invitees.length; i++) {
+        notificationFeedRef
+            .document(invitees[i])
+            .collection('feedItems')
+            .document(postId)
+            .setData({
+          "type": "invite",
+          "postId": postId,
+          "previewImg": previewImg,
+          "title": title,
+          "username": currentUser.displayName,
+          "userId": currentUser.id,
+          "userProfilePic": currentUser.photoUrl,
+          "timestamp": DateTime.now()
+        });
+      }
+      ;
+    }
+  }
 
   void createPost(
       {title,
@@ -25,11 +49,10 @@ var postId;
       type,
       likeCounter,
       privacy,
-      location,
       address,
       likes,
       DateTime startDate,
-      DateTime endDate,
+      invitees,
       imageUrl,
       userId,
       userName,
@@ -37,17 +60,16 @@ var postId;
       profilePic,
       featured,
       postId}) async {
-    DocumentReference ref = await dbRef.collection("food").add({
+    DocumentReference ref = await dbRef.collection("food").document(postId).setData({
       'title': title,
       'likes': likes,
       'type': type,
       'likeCounter': likeCounter,
       'privacy': privacy,
       'description': description,
-      'location': location,
       'address': address,
       'startDate': startDate,
-      'endDate': endDate,
+      'invitees': invitees,
       'image': imageUrl,
       'userId': userId,
       'userName': userName,
@@ -55,8 +77,7 @@ var postId;
       'profilePic': profilePic,
       "featured": featured,
       "postId": postId
-    });
-
+    }).then(inviteesNotification(postId, imageUrl, title, invitees));
 
     Firestore.instance
         .collection("food")
@@ -130,7 +151,6 @@ var postId;
       startDate,
       title,
       description,
-      location,
       address,
       ownerProPic,
       ownerName,
@@ -142,19 +162,8 @@ var postId;
       print('$uid');
       transaction.update(ref2, {'score': FieldValue.increment(2)});
 
-      addGoingToNotificationFeed(
-          ownerId,
-          previewImg,
-          moovId,
-          startDate,
-          title,
-          description,
-          location,
-          address,
-          ownerProPic,
-          ownerName,
-          ownerEmail,
-          likedArray);
+      addGoingToNotificationFeed(ownerId, previewImg, moovId, startDate, title,
+          description, address, ownerProPic, ownerName, ownerEmail, likedArray);
       Map<String, dynamic> serializedMessage = {
         "uid": uid,
       };
@@ -174,7 +183,6 @@ var postId;
       startDate,
       String title,
       String description,
-      String location,
       address,
       String ownerProPic,
       String ownerName,
@@ -198,7 +206,6 @@ var postId;
         "startDate": startDate,
         "title": title,
         "description": description,
-        "location": location,
         "address": address,
         "ownerProPic": ownerProPic,
         "ownerName": ownerName,
@@ -352,7 +359,6 @@ var postId;
       startDate,
       String title,
       String description,
-      String location,
       address,
       String ownerProPic,
       String ownerName,
@@ -374,7 +380,6 @@ var postId;
       "startDate": startDate,
       "title": title,
       "description": description,
-      "location": location,
       "address": address,
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
@@ -408,7 +413,6 @@ var postId;
       startDate,
       title,
       description,
-      location,
       address,
       ownerProPic,
       ownerName,

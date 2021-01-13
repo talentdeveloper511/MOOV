@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/utils/themes_styles.dart';
@@ -33,6 +34,9 @@ class _PollViewState extends State<PollView> {
   Widget build(BuildContext context) {
     String userName;
     String userPic;
+    String question;
+    String choice1;
+    String choice2;
     var x;
     var y;
     GoogleSignInAccount user = googleSignIn.currentUser;
@@ -50,6 +54,10 @@ class _PollViewState extends State<PollView> {
           if (!snapshot.hasData) return CircularProgressIndicator();
 
           voters = snapshot.data['voters'];
+          question = snapshot.data['question'];
+          choice1 = snapshot.data['choice1'];
+          choice2 = snapshot.data['choice2'];
+
           var _list = voters.values.toList();
           var _list2 = voters.keys.toList();
           option1 =
@@ -72,72 +80,76 @@ class _PollViewState extends State<PollView> {
               child: Stack(children: [
                 Container(
                   height: 200,
-                  child: Polls(
-                      children: [
-                        // This cannot be less than 2, else will throw an exception
-                        Polls.options(title: 'ON', value: option1),
-                        Polls.options(title: 'OFF', value: option2),
-                      ],
-                      question: isLargePhone
-                          ? Text(
-                              '      ON or OFF Campus Tonight?',
-                              textAlign: TextAlign.center,
-                              style: TextThemes.headline1,
-                            )
-                          : Text('       ON or OFF Campus Tonight?',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: TextThemes.ndBlue,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 20)),
-                      pollStyle: TextStyle(color: TextThemes.ndBlue),
-                      currentUser: userId,
-                      creatorID: this.creator,
-                      voteData: voters,
-                      // voteData: usersWhoVoted,
-                      // userChoice: usersWhoVoted[this.userId],
-                      userChoice: voters[userId],
-                      onVoteBackgroundColor: Colors.blue,
-                      leadingBackgroundColor: TextThemes.ndGold,
-                      backgroundColor: Colors.white,
-                      onVote: (choice) {
-                        for (var entry in voters.entries) {
-                          x = entry.key;
-                          y = entry.value;
-                        }
+                  child: Column(
+                    children: [
+                      Text(
+                        question,
+                        textAlign: TextAlign.center,
+                        style: TextThemes.headline1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Polls(
+                          children: [
+                            // This cannot be less than 2, else will throw an exception
+                            Polls.options(title: choice1, value: option1),
+                            Polls.options(title: choice2, value: option2),
+                          ],
+                          question: Text(
+                            'ON or OFF Campus Tonight?',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 0),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          pollStyle: TextStyle(color: TextThemes.ndBlue),
+                          currentUser: userId,
+                          creatorID: this.creator,
+                          voteData: voters,
+                          // voteData: usersWhoVoted,
+                          // userChoice: usersWhoVoted[this.userId],
+                          userChoice: voters[userId],
+                          onVoteBackgroundColor: Colors.blue,
+                          leadingBackgroundColor: TextThemes.ndGold,
+                          backgroundColor: Colors.white,
+                          onVote: (choice) {
+                            for (var entry in voters.entries) {
+                              x = entry.key;
+                              y = entry.value;
+                            }
 
-                        setState(() {
-                          x = choice;
-                        });
+                            setState(() {
+                              x = choice;
+                            });
 
-                        Firestore.instance
-                            .collection('poll')
-                            .document('jan12')
-                            .setData({
-                          "voters": {user.id: choice}
-                        }, merge: true);
+                            Firestore.instance
+                                .collection('poll')
+                                .document('jan12')
+                                .setData({
+                              "voters": {user.id: choice}
+                            }, merge: true);
 
-                        if (choice == 1) {
-                          setState(() {
-                            option1 += 1.0;
-                          });
-                        }
-                        if (choice == 2) {
-                          setState(() {
-                            option2 += 1.0;
-                          });
-                        }
-                        // if (choice == 3) {
-                        //   setState(() {
-                        //     option3 += 1.0;
-                        //   });
-                        // }
-                        // if (choice == 4) {
-                        //   setState(() {
-                        //     option4 += 1.0;
-                        //   });
-                        // }
-                      }),
+                            if (choice == 1) {
+                              setState(() {
+                                option1 += 1.0;
+                              });
+                            }
+                            if (choice == 2) {
+                              setState(() {
+                                option2 += 1.0;
+                              });
+                            }
+                            // if (choice == 3) {
+                            //   setState(() {
+                            //     option3 += 1.0;
+                            //   });
+                            // }
+                            // if (choice == 4) {
+                            //   setState(() {
+                            //     option4 += 1.0;
+                            //   });
+                            // }
+                          }),
+                    ],
+                  ),
                 ),
                 voters.containsKey(userId)
                     ? Positioned(
@@ -154,24 +166,25 @@ class _PollViewState extends State<PollView> {
                               // itemCount: invitees.length,
                               itemCount: option1.toInt(),
                               itemBuilder: (_, index) {
-                                String id;
+                                voters = snapshot.data['voters'];
+
                                 voters.removeWhere((key, value) => value == 2);
 
-                                x = voters.keys.toList();
+                                var p = voters.keys.toList();
 
                                 return StreamBuilder(
                                     stream: Firestore.instance
                                         .collection('users')
-                                        .document(x[index])
+                                        .document(p[index])
                                         .snapshots(),
                                     builder: (context, snapshot2) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
 
                                       if (!snapshot2.hasData)
                                         return CircularProgressIndicator();
-                                      userName = snapshot2.data['displayName'];
-                                      userPic = snapshot2.data['photoUrl'];
-                                      id = snapshot2.data['id'];
+                                      var name = snapshot2.data['displayName'];
+                                      var pic = snapshot2.data['photoUrl'];
+                                      var id = snapshot2.data['id'];
 
                                       return Padding(
                                         padding:
@@ -181,23 +194,32 @@ class _PollViewState extends State<PollView> {
                                           child: Column(
                                             children: <Widget>[
                                               GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OtherProfile(
-                                                                userPic,
-                                                                userName,
-                                                                id,
-                                                              )));
-                                                },
+                                                onTap: userId == id
+                                                    ? () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        ProfilePage()));
+                                                      }
+                                                    : () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        OtherProfile(
+                                                                          pic,
+                                                                          name,
+                                                                          id,
+                                                                        )));
+                                                      },
                                                 child: CircleAvatar(
                                                   radius: 18,
                                                   backgroundColor:
                                                       TextThemes.ndBlue,
                                                   child: CircleAvatar(
                                                     backgroundImage:
-                                                        NetworkImage(userPic),
+                                                        NetworkImage(pic),
                                                     radius: 17,
                                                     backgroundColor:
                                                         TextThemes.ndBlue,
@@ -205,7 +227,7 @@ class _PollViewState extends State<PollView> {
                                                       // backgroundImage: snapshot.data
                                                       //     .documents[index].data['photoUrl'],
                                                       backgroundImage:
-                                                          NetworkImage(userPic),
+                                                          NetworkImage(pic),
                                                       radius: 18,
                                                     ),
                                                   ),
@@ -239,22 +261,21 @@ class _PollViewState extends State<PollView> {
 
                                 voters.removeWhere((key, value) => value == 1);
 
-                                x = voters.keys.toList();
-                                print(x);
+                                var w = voters.keys.toList();
 
                                 return StreamBuilder(
                                     stream: Firestore.instance
                                         .collection('users')
-                                        .document(x[index])
+                                        .document(w[index])
                                         .snapshots(),
-                                    builder: (context, snapshot) {
+                                    builder: (context, snapshot3) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                      if (!snapshot.hasData)
+                                      if (!snapshot3.hasData)
                                         return CircularProgressIndicator();
-                                      userName = snapshot.data['displayName'];
-                                      userPic = snapshot.data['photoUrl'];
-                                      userId = snapshot.data['id'];
+                                      var name2 = snapshot3.data['displayName'];
+                                      var pic2 = snapshot3.data['photoUrl'];
+                                      var id2 = snapshot3.data['id'];
 
                                       return Padding(
                                         padding:
@@ -264,23 +285,32 @@ class _PollViewState extends State<PollView> {
                                           child: Column(
                                             children: <Widget>[
                                               GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OtherProfile(
-                                                                userPic,
-                                                                userName,
-                                                                userId,
-                                                              )));
-                                                },
+                                                onTap: userId == id2
+                                                    ? () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        ProfilePage()));
+                                                      }
+                                                    : () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        OtherProfile(
+                                                                          pic2,
+                                                                          name2,
+                                                                          id2,
+                                                                        )));
+                                                      },
                                                 child: CircleAvatar(
                                                   radius: 18,
                                                   backgroundColor:
                                                       TextThemes.ndBlue,
                                                   child: CircleAvatar(
                                                     backgroundImage:
-                                                        NetworkImage(userPic),
+                                                        NetworkImage(pic2),
                                                     radius: 17,
                                                     backgroundColor:
                                                         TextThemes.ndBlue,
@@ -288,7 +318,7 @@ class _PollViewState extends State<PollView> {
                                                       // backgroundImage: snapshot.data
                                                       //     .documents[index].data['photoUrl'],
                                                       backgroundImage:
-                                                          NetworkImage(userPic),
+                                                          NetworkImage(pic2),
                                                       radius: 18,
                                                     ),
                                                   ),

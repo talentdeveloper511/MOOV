@@ -210,7 +210,7 @@ class _UserResultState extends State<UserResult> {
                         });
                       },
                       child: Text(
-                        "Add to Group",
+                        "Add",
                         style: new TextStyle(
                           color: Colors.white,
                           fontSize: 12.0,
