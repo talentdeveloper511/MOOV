@@ -155,8 +155,8 @@ class _NonImageContents extends StatelessWidget {
   dynamic startDate, address, moovId;
   List<dynamic> likedArray;
 
-  _NonImageContents(this.title, this.description, this.startDate, 
-      this.address, this.userId, this.likedArray, this.moovId);
+  _NonImageContents(this.title, this.description, this.startDate, this.address,
+      this.userId, this.likedArray, this.moovId);
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +240,8 @@ class _Description extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0, bottom: 15.0, left: 10, right: 10),
+      padding:
+          const EdgeInsets.only(top: 10.0, bottom: 15.0, left: 10, right: 10),
       child: Center(
         child: Text(description,
             textAlign: TextAlign.center,
@@ -412,10 +413,11 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
     super.initState();
     _tabController =
         new TabController(vsync: this, length: 2, initialIndex: _currentIndex);
-          _tabController.animation
+    _tabController.animation
       ..addListener(() {
         setState(() {
-          _currentIndex = (_tabController.animation.value).round(); //_tabController.animation.value returns double
+          _currentIndex = (_tabController.animation.value)
+              .round(); //_tabController.animation.value returns double
         });
       });
   }
@@ -515,6 +517,8 @@ class Buttons extends StatelessWidget {
   Buttons(this.likedArray, this.moovId);
 
   bool _isPressed;
+  int status;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -527,146 +531,269 @@ class Buttons extends StatelessWidget {
 
           DocumentSnapshot course = snapshot.data;
           List<dynamic> likedArray = course["liked"];
-          List<String> uidArray = List<String>();
-          if (likedArray != null) {
-            likeCount = likedArray.length;
-            for (int i = 0; i < likeCount; i++) {
-              var id = likedArray[i]["uid"];
-              uidArray.add(id);
+          Map<String, dynamic> invitees = course['invitees'];
+
+          List<dynamic> inviteesIds = invitees.keys.toList();
+
+          List<dynamic> inviteesValues = invitees.values.toList();
+
+          if (invitees != null) {
+            for (int i = 0; i < invitees.length; i++) {
+              if (inviteesIds[i] == currentUser.id) {
+                if (inviteesValues[i] == 1) {
+                  status = 1;
+                }
+              }
             }
-          } else {
-            likeCount = 0;
-          }
+            if (invitees != null) {
+              for (int i = 0; i < invitees.length; i++) {
+                if (inviteesIds[i] == currentUser.id) {
+                  if (inviteesValues[i] == 2) {
+                    status = 2;
+                  }
+                }
+              }
+            }
+            if (invitees != null) {
+              for (int i = 0; i < invitees.length; i++) {
+                if (inviteesIds[i] == currentUser.id) {
+                  if (inviteesValues[i] == 3) {
+                    status = 3;
+                  }
+                }
+              }
+            }
 
-          if (uidArray != null && uidArray.contains(currentUser.id)) {
-            _isPressed = true;
-          } else {
-            _isPressed = false;
-          }
+            List<String> uidArray = List<String>();
+            if (likedArray != null) {
+              likeCount = likedArray.length;
+              for (int i = 0; i < likeCount; i++) {
+                var id = likedArray[i]["uid"];
+                uidArray.add(id);
+              }
+            } else {
+              likeCount = 0;
+            }
 
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      side: BorderSide(color: Colors.black)),
-                  onPressed: () {
-                    if (likedArray != null) {
-                      likeCount = likedArray.length;
-                      for (int i = 0; i < likeCount; i++) {
-                        var id = likedArray[i]["uid"];
-                        uidArray.add(id);
-                      }
-                    }
+            if (uidArray != null && uidArray.contains(currentUser.id)) {
+              _isPressed = true;
+            } else {
+              _isPressed = false;
+            }
 
-                    if (uidArray != null && uidArray.contains(currentUser.id)) {
-                      Database().removeGoing(
-                          course["userId"],
-                          course["image"],
-                          currentUser.id,
-                          course.documentID,
-                          currentUser.displayName,
-                          currentUser.photoUrl,
-                          course["startDate"],
-                          course["title"],
-                          course["description"],
-                          course["address"],
-                          course["profilePic"],
-                          course["userName"],
-                          course["userEmail"],
-                          likedArray);
-                    } else {
-                      Database().addGoing(
-                          course["userId"],
-                          course["image"],
-                          currentUser.id,
-                          course.documentID,
-                          currentUser.displayName,
-                          currentUser.photoUrl,
-                          course["startDate"],
-                          course["title"],
-                          course["description"],
-                          course["address"],
-                          course["profilePic"],
-                          course["userName"],
-                          course["userEmail"],
-                          likedArray);
-                    }
-                  },
-                  color: Colors.white,
-                  padding: EdgeInsets.all(5.0),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: (_isPressed)
-                        ? Column(
-                            children: [
-                              Text('Going!'),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 3.0, top: 3.0),
-                                child: Icon(Icons.directions_run,
-                                    color: Colors.green),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              Text('Going?'),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 3.0, top: 3.0),
-                                child: Icon(Icons.directions_walk,
-                                    color: Colors.red),
-                              ),
-                            ],
-                          ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 30.0, bottom: 0.0),
-                  child: RaisedButton(
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  RaisedButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                         side: BorderSide(color: Colors.black)),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              child: SendMOOV(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['image'],
-                                  course['postId'],
-                                  course['startDate'],
-                                  course['title'],
-                                  course['description'],
-                                  course['address'],
-                                  course['profilePic'],
-                                  course['userName'],
-                                  course['userEmail'],
-                                  course['liked'])));
+                      if (invitees != null && status != 1) {
+                        Database().addNotGoing(currentUser.id, moovId);
+                        status = 1;
+                        print(status);
+                      } else if (invitees != null && status == 1) {
+                        Database().removeNotGoing(currentUser.id, moovId);
+                        status = 0;
+                      }
                     },
-                    color: Colors.white,
+                    //   if (likedArray != null) {
+                    //     likeCount = likedArray.length;
+                    //     for (int i = 0; i < likeCount; i++) {
+                    //       var id = likedArray[i]["uid"];
+                    //       uidArray.add(id);
+                    //     }
+                    //   }
+
+                    //   if (uidArray != null && uidArray.contains(currentUser.id)) {
+                    //     Database().removeGoing(
+                    //         course["userId"],
+                    //         course["image"],
+                    //         currentUser.id,
+                    //         course.documentID,
+                    //         currentUser.displayName,
+                    //         currentUser.photoUrl,
+                    //         course["startDate"],
+                    //         course["title"],
+                    //         course["description"],
+                    //         course["address"],
+                    //         course["profilePic"],
+                    //         course["userName"],
+                    //         course["userEmail"],
+                    //         likedArray);
+                    //   } else {
+                    //     Database().addGoing(
+                    //         course["userId"],
+                    //         course["image"],
+                    //         currentUser.id,
+                    //         course.documentID,
+                    //         currentUser.displayName,
+                    //         currentUser.photoUrl,
+                    //         course["startDate"],
+                    //         course["title"],
+                    //         course["description"],
+                    //         course["address"],
+                    //         course["profilePic"],
+                    //         course["userName"],
+                    //         course["userEmail"],
+                    //         likedArray);
+                    //   }
+                    // },
+                    color: (status == 1) ? Colors.red : Colors.white,
                     padding: EdgeInsets.all(5.0),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 4.0),
-                      child: Column(
-                        children: [
-                          Text('Send'),
-                          Icon(Icons.send_rounded,
-                              color: Colors.blue[500], size: 30),
-                        ],
+                      child: (status == 1)
+                          ? Column(
+                              children: [
+                                Text(
+                                  'Not going',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 3.0, top: 3.0),
+                                  child: Icon(Icons.directions_run,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Text('Not going'),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 3.0, top: 3.0),
+                                  child: Icon(Icons.directions_walk,
+                                      color: Colors.red),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(color: Colors.black)),
+                      onPressed: () {
+                         if (invitees != null && status != 2) {
+                        Database().addUndecided(currentUser.id, moovId);
+                        status = 2;
+                        print(status);
+                      } else if (invitees != null && status == 2) {
+                        Database().removeUndecided(currentUser.id, moovId);
+                        status = 0;
+                      }
+                      },
+                      color: (status == 2) ? Colors.yellow : Colors.white,
+                      padding: EdgeInsets.all(5.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 3.0, right: 3),
+                        child: (status == 2)
+                            ? Column(
+                                children: [
+                                  Text('Undecided', style: TextStyle(color: Colors.white)),
+                                  Icon(Icons.accessibility,
+                                      color: Colors.white, size: 30),
+                                ],
+                              )
+                            : Column(
+                                children: [
+                                  Text('Undecided'),
+                                  Icon(Icons.accessibility,
+                                      color: Colors.yellow[600], size: 30),
+                                ],
+                              ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(color: Colors.black)),
+                      onPressed: () {
+                         if (invitees != null && status != 3) {
+                        Database().addGoingGood(currentUser.id, moovId);
+                        status = 3;
+                        print(status);
+                      } else if (invitees != null && status == 3) {
+                        Database().removeGoingGood(currentUser.id, moovId);
+                        status = 0;
+                      }
+                      },
+                      color: (status == 3) ? Colors.green : Colors.white,
+                      padding: EdgeInsets.all(5.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: (status == 3) ?
+                        Column(
+                          children: [
+                            Text('Going!', style: TextStyle(color: Colors.white)),
+                            Icon(Icons.directions_run_outlined,
+                                color: Colors.white, size: 30),
+                          ],
+                        ):
+                        Column(
+                          children: [
+                            Text('Going'),
+                            Icon(Icons.directions_run_outlined,
+                                color: Colors.green[500], size: 30),
+                          ],
+                        )
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
         });
   }
 }
+//SEND MOOV BUTTON
+//  Padding(
+//                   padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
+//                   child: RaisedButton(
+//                     shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(5),
+//                         side: BorderSide(color: Colors.black)),
+//                     onPressed: () {
+//                       Navigator.push(
+//                           context,
+//                           PageTransition(
+//                               type: PageTransitionType.bottomToTop,
+//                               child: SendMOOV(
+//                                   course['postId'],
+//                                   course['userId'],
+//                                   course['image'],
+//                                   course['postId'],
+//                                   course['startDate'],
+//                                   course['title'],
+//                                   course['description'],
+//                                   course['address'],
+//                                   course['profilePic'],
+//                                   course['userName'],
+//                                   course['userEmail'],
+//                                   course['liked'])));
+//                     },
+//                     color: Colors.white,
+//                     padding: EdgeInsets.all(5.0),
+//                     child: Padding(
+//                       padding: const EdgeInsets.only(left: 4.0),
+//                       child: Column(
+//                         children: [
+//                           Text('Send'),
+//                           Icon(Icons.send_rounded,
+//                               color: Colors.blue[500], size: 30),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),

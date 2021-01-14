@@ -119,6 +119,160 @@ class Database {
     });
   }
 
+ Future<void> addNotGoing(userId, postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('food/$postId');
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(1)});
+
+      // addGoingToNotificationFeed(
+      //     userId,
+      //     postId
+      //     );
+       Firestore.instance
+                                .collection('food')
+                                .document(postId)
+                                .setData({
+                              "invitees": {userId: 1}
+                            }, merge: true);
+  
+      String serialUser = userId;
+      transaction.update(ref, {
+        // 'notGoing': FieldValue.arrayUnion([serialUser]),
+        // 'notGoingCounter': FieldValue.increment(1)
+      });
+     
+    });
+  }
+  Future<void> removeNotGoing(userId, postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('food/$postId');
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(-1)});
+
+      // addGoingToNotificationFeed(
+      //     userId,
+      //     postId
+      //     );
+       Firestore.instance
+                                .collection('food')
+                                .document(postId)
+                                .updateData({
+                              "invitees": {userId: 0}
+                            });
+  
+      String serialUser = userId;
+      transaction.update(ref, {
+        // 'notGoing': FieldValue.arrayRemove([serialUser]),
+        // 'notGoingCounter': FieldValue.increment(-1)
+      });
+     
+    });
+  }
+  
+ Future<void> addUndecided(userId, postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('food/$postId');
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(1)});
+
+      // addGoingToNotificationFeed(
+      //     userId,
+      //     postId
+      //     );
+       Firestore.instance
+                                .collection('food')
+                                .document(postId)
+                                .setData({
+                              "invitees": {userId: 2}
+                            }, merge: true);
+  
+      String serialUser = userId;
+      transaction.update(ref, {
+        // 'undecided': FieldValue.arrayUnion([serialUser]),
+        // 'undecidedCounter': FieldValue.increment(1)
+      });
+     
+    });
+  }
+  Future<void> removeUndecided(userId, postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('food/$postId');
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(-1)});
+
+      // addGoingToNotificationFeed(
+      //     userId,
+      //     postId
+      //     );
+       Firestore.instance
+                                .collection('food')
+                                .document(postId)
+                                .updateData({
+                              "invitees": {userId: 0}
+                            });
+  
+      String serialUser = userId;
+      transaction.update(ref, {
+        // 'undecided': FieldValue.arrayRemove([serialUser]),
+        // 'undecidedCounter': FieldValue.increment(-1)
+      });
+     
+    });
+  }
+
+Future<void> addGoingGood(userId, postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('food/$postId');
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(5)});
+
+      // addGoingToNotificationFeed(
+      //     userId,
+      //     postId
+      //     );
+       Firestore.instance
+                                .collection('food')
+                                .document(postId)
+                                .setData({
+                              "invitees": {userId: 3}
+                            }, merge: true);
+  
+      String serialUser = userId;
+      transaction.update(ref, {
+        // 'going': FieldValue.arrayUnion([serialUser]),
+        // 'goingCounter': FieldValue.increment(1)
+      });
+     
+    });
+  }
+  Future<void> removeGoingGood(userId, postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.document('food/$postId');
+      final DocumentReference ref2 = dbRef.document('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(-5)});
+
+      // addGoingToNotificationFeed(
+      //     userId,
+      //     postId
+      //     );
+       Firestore.instance
+                                .collection('food')
+                                .document(postId)
+                                .updateData({
+                              "invitees": {userId: 0}
+                            });
+  
+      String serialUser = userId;
+      transaction.update(ref, {
+        // 'going': FieldValue.arrayRemove([serialUser]),
+        // 'goingCounter': FieldValue.increment(-5)
+      });
+     
+    });
+  }
+
+
   Future<void> removeLike(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
