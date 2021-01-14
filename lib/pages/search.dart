@@ -186,7 +186,7 @@ class UserResult extends StatelessWidget {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: Icon(Icons.person),
+              trailing: Icon(Icons.person, color: TextThemes.ndBlue),
             ),
           ),
           Divider(
@@ -223,7 +223,7 @@ class EventResult extends StatelessWidget {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: Icon(Icons.event),
+              trailing: Icon(Icons.event, color: Colors.green),
             ),
           ),
           Divider(
@@ -269,7 +269,7 @@ class GroupResult extends StatelessWidget {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: Icon(Icons.people),
+              trailing: Icon(Icons.people, color: TextThemes.ndGold),
             ),
           ),
           Divider(
