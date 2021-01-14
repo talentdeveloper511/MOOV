@@ -72,14 +72,28 @@ class _GroupFormState extends State<GroupForm> {
 
   createGroupInFirestore(gname, cid, pic) async {
     final String groupName = gname;
+    // var newDocRef = Firestore.instance.collection('friendgroups').document();
 
     Firestore.instance.collection('friendGroups').add({
       "groupName": groupName,
       "members": [cid],
       "groupPic": pic,
       "chat": {'messages': []},
-      "nextMOOV": ""
+      "nextMOOV": "",
+      "gid": FieldPath.documentId
     });
+    // .then((value) {
+    //   String data = value.documentID;
+    // Firestore.instance.document('friendGroups/$data').updateData({"gid" : data});
+    // // newDocRef.setData({
+    // //   "groupName": groupName,
+    // //   "members": [cid],
+    // //   "groupPic": pic,
+    // //   "chat": {'messages': []},
+    // //   "nextMOOV": "",
+    // //   "gid": newDocRef.documentID
+    // // }, merge: true);
+    // });
     return Firestore.instance.runTransaction((transaction) async {
       final DocumentReference userRefs =
           Firestore.instance.document('users/$cid');
@@ -179,7 +193,7 @@ class _GroupFormState extends State<GroupForm> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-               GestureDetector(
+              GestureDetector(
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
                     context,

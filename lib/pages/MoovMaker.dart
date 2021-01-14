@@ -316,7 +316,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 12.0),
+                        padding: const EdgeInsets.only(right: 10.0, left: 8),
                         child: Icon(Icons.question_answer,
                             color: TextThemes.ndGold),
                       ),
@@ -867,34 +867,34 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
                                 if (_image != null) {
                                   StorageReference firebaseStorageRef =
-                                      FirebaseStorage.instance
-                                          .ref()
-                                          .child("images/" + user.id + titleController.text);
+                                      FirebaseStorage.instance.ref().child(
+                                          "images/" +
+                                              user.id +
+                                              titleController.text);
                                   StorageUploadTask uploadTask =
                                       firebaseStorageRef.putFile(_image);
                                   StorageTaskSnapshot taskSnapshot =
                                       await uploadTask.onComplete;
                                   if (taskSnapshot.error == null) {
-                                    
                                     print("added to Firebase Storage");
                                     final String downloadUrl =
                                         await taskSnapshot.ref.getDownloadURL();
                                     Database().createPost(
-                                        title: titleController.text,
-                                        type: typeDropdownValue,
-                                        privacy: privacyDropdownValue,
-                                        description: descriptionController.text,
-                                        // location: locationDropdownValue,
-                                        address: addressController.text,
-                                        startDate: currentValue,
-                                        // endDate: endTime,
-                                        imageUrl: downloadUrl,
-                                        userId: strUserId,
-                                        likes: false,
-                                        userName: userName,
-                                        userEmail: userEmail,
-                                        profilePic: profilePic,
-                                        );
+                                      title: titleController.text,
+                                      type: typeDropdownValue,
+                                      privacy: privacyDropdownValue,
+                                      description: descriptionController.text,
+                                      // location: locationDropdownValue,
+                                      address: addressController.text,
+                                      startDate: currentValue,
+                                      // endDate: endTime,
+                                      imageUrl: downloadUrl,
+                                      userId: strUserId,
+                                      likes: false,
+                                      userName: userName,
+                                      userEmail: userEmail,
+                                      profilePic: profilePic,
+                                    );
                                     setState(() {
                                       isUploading = false;
                                     });

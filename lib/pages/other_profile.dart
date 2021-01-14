@@ -100,6 +100,7 @@ class _OtherProfileState extends State<OtherProfile> {
             iter = iter - 1;
           }
           return Scaffold(
+              backgroundColor: Colors.white,
               appBar: AppBar(
                 leading: IconButton(
                   icon: Icon(
@@ -119,20 +120,20 @@ class _OtherProfileState extends State<OtherProfile> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                       GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 50.0,
-                ),
-              ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: Image.asset(
+                          'lib/assets/moovblue.png',
+                          fit: BoxFit.cover,
+                          height: 50.0,
+                        ),
+                      ),
                     ],
                   ),
                 ),
