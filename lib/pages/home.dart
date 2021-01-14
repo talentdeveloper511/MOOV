@@ -515,7 +515,7 @@ class NamedIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final GoogleSignInAccount user = googleSignIn.currentUser;
+    final GoogleSignInAccount user = googleSignIn.currentUser;
 
     int notifs = 0;
 

@@ -1,8 +1,10 @@
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -25,16 +27,25 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   Future<QuerySnapshot> searchResultsEvents;
+  Future<QuerySnapshot> searchResultsGroups;
   bool get wantKeepAlive => true;
   handleSearch(String query) {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
+        .limit(5)
         .getDocuments();
-    Future<QuerySnapshot> events =
-        postsRef.where("title", isGreaterThanOrEqualTo: query).getDocuments();
+    Future<QuerySnapshot> events = postsRef
+        .where("title", isGreaterThanOrEqualTo: query)
+        .limit(5)
+        .getDocuments();
+    Future<QuerySnapshot> groups = groupsRef
+        .where("groupName", isGreaterThanOrEqualTo: query)
+        .limit(5)
+        .getDocuments();
     setState(() {
       searchResultsFuture = users;
       searchResultsEvents = events;
+      searchResultsGroups = groups;
     });
   }
 
@@ -44,6 +55,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
     setState(() {
       searchResultsFuture = null;
       searchResultsEvents = null;
+      searchResultsGroups = null;
     });
   }
 
@@ -75,7 +87,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
             fillColor: Colors.white,
             hintStyle: TextStyle(fontSize: 15),
             contentPadding: EdgeInsets.only(top: 18, bottom: 10),
-            hintText: "Search for Users or MOOVs...",
+            hintText: "Search Users, Friend Groups, or MOOVs...",
             filled: true,
             prefixIcon: Icon(
               Icons.account_box,
@@ -100,40 +112,30 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   }
 
   buildSearchResults() {
-    // List<Widget> results = [];
-    // return FutureBuilder(
-    //   future: searchResultsEvents,
-    //   builder: (context, snapshot) {
-    //     if (!snapshot.hasData) {
-    //       return circularProgress();
-    //     }
-    //     // List<EventResult> searchResults = [];
-    //     snapshot.data.documents.forEach((doc) {
-    //       print(doc);
-    //       var moov = doc;
-    //       EventResult searchResult = EventResult(moov);
-    //       results.add(searchResult);
-    //     });
-    //     return ListView(
-    //       children: results,
-    //     );
-    //   },
-    // );
     return FutureBuilder(
-      future: searchResultsFuture,
+      future: Future.wait(
+          [searchResultsFuture, searchResultsGroups, searchResultsEvents]),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return circularProgress();
         }
-        List<UserResult> searchResults = [];
-        snapshot.data.documents.forEach((doc) {
+        List<Widget> searchResults = [];
+        snapshot.data[0].documents.forEach((doc) {
           User user = User.fromDocument(doc);
           UserResult searchResult = UserResult(user);
           searchResults.add(searchResult);
         });
-        return ListView(
-          children: searchResults
-        );
+        snapshot.data[1].documents.forEach((doc) {
+          var group = doc;
+          GroupResult searchResult = GroupResult(group);
+          searchResults.add(searchResult);
+        });
+        snapshot.data[2].documents.forEach((doc) {
+          var moov = doc;
+          EventResult searchResult = EventResult(moov);
+          searchResults.add(searchResult);
+        });
+        return ListView(children: searchResults);
       },
     );
   }
@@ -189,11 +191,14 @@ class UserResult extends StatelessWidget {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => LeaderBoardPage()));
                 },
-                child: Text(
-                  "Score: ${user.score}",
-                  style: new TextStyle(
-                    color: TextThemes.ndBlue,
-                    fontSize: 14.0,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 50.0),
+                  child: Text(
+                    "Score: ${user.score}",
+                    style: new TextStyle(
+                      color: TextThemes.ndBlue,
+                      fontSize: 14.0,
+                    ),
                   ),
                 ),
               ),
@@ -221,7 +226,10 @@ class EventResult extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () => print('moov tapped'),
+            onTap: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PostDetail(moov.data['postId'])))
+            },
             child: ListTile(
               leading: Image.network(moov.data['image'],
                   fit: BoxFit.cover, height: 50, width: 70),
@@ -236,17 +244,67 @@ class EventResult extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
-                  // if (moov.id == strUserId) {
-                  //   Navigator.of(context).push(
-                  //       MaterialPageRoute(builder: (context) => ProfilePage()));
-                  // } else {
-                  //   Navigator.of(context).push(MaterialPageRoute(
-                  //       builder: (context) => OtherProfile(
-                  //           user.photoUrl, user.displayName, user.id)));
-                  // }
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PostDetail(moov.data['postId'])));
                 },
                 child: Text(
                   "View MOOV",
+                  style: new TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.0,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Divider(
+            height: 2.0,
+            color: Colors.white54,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class GroupResult extends StatelessWidget {
+  final group;
+
+  GroupResult(this.group);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () => print('moov tapped'),
+            child: ListTile(
+              leading: Image.network(group.data['groupPic'],
+                  fit: BoxFit.cover, height: 50, width: 70),
+              title: Text(
+                group.data['groupName'] == null ? "" : group.data['groupName'],
+                style: TextStyle(
+                    color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
+              ),
+              trailing: RaisedButton(
+                padding: const EdgeInsets.all(2.0),
+                color: TextThemes.ndBlue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                onPressed: () {
+                  print(group.data);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => GroupDetail(
+                          group.data['groupPic'],
+                          group.data['groupName'],
+                          group.data['members'],
+                          group.data['gid'],
+                          group.data['nextMOOV'])));
+                },
+                child: Text(
+                  "View Group",
                   style: new TextStyle(
                     color: Colors.white,
                     fontSize: 10.0,

@@ -327,7 +327,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 12.0),
+                        padding: const EdgeInsets.only(right: 10.0, left: 8),
                         child: Icon(Icons.question_answer,
                             color: TextThemes.ndGold),
                       ),

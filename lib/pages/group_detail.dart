@@ -48,6 +48,7 @@ class _GroupDetailState extends State<GroupDetail> {
   List<dynamic> members;
   bool member;
   final dbRef = Firestore.instance;
+
   _GroupDetailState(
       this.photoUrl, this.displayName, this.members, this.gid, this.next);
 
@@ -198,7 +199,7 @@ class _GroupDetailState extends State<GroupDetail> {
                     blurSize: 5.0,
                     menuItemExtent: 45,
                     menuBoxDecoration: BoxDecoration(
-                        color: Colors.grey,
+                        color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(15.0))),
                     duration: Duration(milliseconds: 100),
                     animateMenuItems: true,
@@ -216,8 +217,7 @@ class _GroupDetailState extends State<GroupDetail> {
                           title: Text("Share"),
                           trailingIcon: Icon(Icons.send),
                           onPressed: () {
-                            Share.share(
-                                "Hey let's put our friend group on MOOV.");
+                            Share.share("Hey let's put our squad on MOOV");
                           }),
                       FocusedMenuItem(
                           title: Text("Edit Group"),
@@ -362,34 +362,39 @@ class _GroupDetailState extends State<GroupDetail> {
                                 : buildNoContent(),
                           ),
                         ),
-                        RaisedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.bottomToTop,
-                                        child: SetMOOV(displayName, gid)))
-                                .then(onGoBack(gid));
-                          },
-                          color: TextThemes.ndBlue,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.edit, color: TextThemes.ndGold),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text('Set the MOOV',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20)),
+                        members.contains(currentUser.id)
+                            ? RaisedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              type: PageTransitionType
+                                                  .bottomToTop,
+                                              child: SetMOOV(displayName, gid)))
+                                      .then(onGoBack(gid));
+                                },
+                                color: TextThemes.ndBlue,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.edit,
+                                          color: TextThemes.ndGold),
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text('Set the MOOV',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20)),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0)),
-                        ),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0)),
+                              )
+                            : Container(),
                         Padding(
                           padding: const EdgeInsets.only(top: 35.0),
                           child: Text(
