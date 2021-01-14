@@ -399,7 +399,7 @@ class UserResult extends StatelessWidget {
                         child: StreamBuilder(
                             stream: Firestore.instance
                                 .collection('food')
-                                .where('liker', arrayContains: user.id)
+                                .where('going', arrayContains: user.id)
                                 .orderBy('startDate')
                                 .limit(1)
                                 .snapshots(),

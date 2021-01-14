@@ -367,14 +367,45 @@ class _AuthorContent extends StatelessWidget {
                   ),
                   Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: Container(
-                        child: Text("Score: ${course['score']}",
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: TextThemes.ndBlue,
-                                decoration: TextDecoration.none))),
-                  )
+                  padding: const EdgeInsets.only(right: 42.0, top: 10.0),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        side: BorderSide(color: Colors.black)),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.bottomToTop,
+                              child: SendMOOV(
+                                  course['postId'],
+                                  course['userId'],
+                                  course['image'],
+                                  course['postId'],
+                                  course['startDate'],
+                                  course['title'],
+                                  course['description'],
+                                  course['address'],
+                                  course['profilePic'],
+                                  course['userName'],
+                                  course['userEmail'],
+                                  course['liked'])));
+                    },
+                    color: Colors.white,
+                    padding: EdgeInsets.all(5.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
+                      child: Column(
+                        children: [
+                          Text('Send'),
+                          Icon(Icons.send_rounded,
+                              color: Colors.blue[500], size: 25),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
                 ],
               )),
             ),
@@ -690,7 +721,7 @@ class Buttons extends StatelessWidget {
                         status = 0;
                       }
                       },
-                      color: (status == 2) ? Colors.yellow : Colors.white,
+                      color: (status == 2) ? Colors.yellow[600] : Colors.white,
                       padding: EdgeInsets.all(5.0),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 3.0, right: 3),

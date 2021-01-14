@@ -21,7 +21,6 @@ class Database {
   final strPic = googleSignIn.currentUser.photoUrl;
 
   FutureOr inviteesNotification(postId, previewImg, title, invitees) {
-
     if (invitees.length > 0) {
       for (int i = 0; i < invitees.length; i++) {
         notificationFeedRef
@@ -119,7 +118,7 @@ class Database {
     });
   }
 
- Future<void> addNotGoing(userId, postId) async {
+  Future<void> addNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
       final DocumentReference ref2 = dbRef.document('users/$userId');
@@ -129,21 +128,18 @@ class Database {
       //     userId,
       //     postId
       //     );
-       Firestore.instance
-                                .collection('food')
-                                .document(postId)
-                                .setData({
-                              "invitees": {userId: 1}
-                            }, merge: true);
-  
+      Firestore.instance.collection('food').document(postId).setData({
+        "invitees": {userId: 1}
+      }, merge: true);
+
       String serialUser = userId;
       transaction.update(ref, {
         // 'notGoing': FieldValue.arrayUnion([serialUser]),
         // 'notGoingCounter': FieldValue.increment(1)
       });
-     
     });
   }
+
   Future<void> removeNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
@@ -154,22 +150,24 @@ class Database {
       //     userId,
       //     postId
       //     );
-       Firestore.instance
-                                .collection('food')
-                                .document(postId)
-                                .setData({
-                              "invitees": {userId: 0}
-                            },merge: true);
+     postsRef.document(postId).setData({
+        "invitees": {
+          user.id: FieldValue.delete()
+        }
+      }, 
+        merge: true
+      
+      );
+
       String serialUser = userId;
       transaction.update(ref, {
         // 'notGoing': FieldValue.arrayRemove([serialUser]),
         // 'notGoingCounter': FieldValue.increment(-1)
       });
-     
     });
   }
-  
- Future<void> addUndecided(userId, postId) async {
+
+  Future<void> addUndecided(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
       final DocumentReference ref2 = dbRef.document('users/$userId');
@@ -179,21 +177,18 @@ class Database {
       //     userId,
       //     postId
       //     );
-       Firestore.instance
-                                .collection('food')
-                                .document(postId)
-                                .setData({
-                              "invitees": {userId: 2}
-                            }, merge: true);
-  
+      Firestore.instance.collection('food').document(postId).setData({
+        "invitees": {userId: 2}
+      }, merge: true);
+
       String serialUser = userId;
       transaction.update(ref, {
         // 'undecided': FieldValue.arrayUnion([serialUser]),
         // 'undecidedCounter': FieldValue.increment(1)
       });
-     
     });
   }
+
   Future<void> removeUndecided(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
@@ -204,23 +199,25 @@ class Database {
       //     userId,
       //     postId
       //     );
-       Firestore.instance
-                               .collection('food')
-                                .document(postId)
-                                .setData({
-                              "invitees": {userId: 0}
-                            },merge: true);
-  
+     postsRef.document(postId).setData({
+        "invitees": {
+          user.id: FieldValue.delete()
+        }
+      }, 
+        merge: true
+      
+      );
+
+
       String serialUser = userId;
       transaction.update(ref, {
         // 'undecided': FieldValue.arrayRemove([serialUser]),
         // 'undecidedCounter': FieldValue.increment(-1)
       });
-     
     });
   }
 
-Future<void> addGoingGood(userId, postId) async {
+  Future<void> addGoingGood(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
       final DocumentReference ref2 = dbRef.document('users/$userId');
@@ -230,21 +227,18 @@ Future<void> addGoingGood(userId, postId) async {
       //     userId,
       //     postId
       //     );
-       Firestore.instance
-                                .collection('food')
-                                .document(postId)
-                                .setData({
-                              "invitees": {userId: 3}
-                            }, merge: true);
-  
+      Firestore.instance.collection('food').document(postId).setData({
+        "invitees": {userId: 3}
+      }, merge: true);
+
       String serialUser = userId;
       transaction.update(ref, {
         'going': FieldValue.arrayUnion([serialUser]),
         // 'goingCounter': FieldValue.increment(1)
       });
-     
     });
   }
+
   Future<void> removeGoingGood(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
@@ -255,22 +249,23 @@ Future<void> addGoingGood(userId, postId) async {
       //     userId,
       //     postId
       //     );
-       Firestore.instance
-                                .collection('food')
-                                .document(postId)
-                                .setData({
-                              "invitees": {userId: 0}
-                            },merge: true);
-  
+
+      postsRef.document(postId).setData({
+        "invitees": {
+          user.id: FieldValue.delete()
+        }
+      }, 
+        merge: true
+      
+      );
+
       String serialUser = userId;
       transaction.update(ref, {
         'going': FieldValue.arrayRemove([serialUser]),
         // 'goingCounter': FieldValue.increment(-5)
       });
-     
     });
   }
-
 
   Future<void> removeLike(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
