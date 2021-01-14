@@ -258,8 +258,12 @@ class GroupResult extends StatelessWidget {
                       group.data['nextMOOV'])))
             },
             child: ListTile(
-              leading: Image.network(group.data['groupPic'],
-                  fit: BoxFit.cover, height: 50, width: 70),
+              leading: Image.network(
+                group.data['groupPic'],
+                fit: BoxFit.cover,
+                height: 40,
+                width: 60,
+              ),
               title: Text(
                 group.data['groupName'] == null ? "" : group.data['groupName'],
                 style: TextStyle(
