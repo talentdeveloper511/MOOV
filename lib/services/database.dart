@@ -20,8 +20,8 @@ class Database {
   final strUserName = googleSignIn.currentUser.displayName;
   final strPic = googleSignIn.currentUser.photoUrl;
 
-  FutureOr inviteesNotification(
-      postId, previewImg, title, List<String> invitees) {
+  FutureOr inviteesNotification(postId, previewImg, title, invitees) {
+
     if (invitees.length > 0) {
       for (int i = 0; i < invitees.length; i++) {
         notificationFeedRef
@@ -39,7 +39,6 @@ class Database {
           "timestamp": DateTime.now()
         });
       }
-      ;
     }
   }
 
@@ -71,7 +70,9 @@ class Database {
       'description': description,
       'address': address,
       'startDate': startDate,
-      'invitees': invitees,
+      'invitees': {
+        for (var item in invitees) item.toString(): 2,
+      },
       'image': imageUrl,
       'userId': userId,
       'userName': userName,

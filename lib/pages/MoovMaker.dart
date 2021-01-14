@@ -263,7 +263,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   final descriptionController = TextEditingController();
   final startDateController = DatePicker().startDate1;
   final format = DateFormat("EEE, MMM d,' at' h:mm a");
-  List<String> invitees = [];
+  Map<String, int> invitees = {};
+  List<String> inviteesNameList = [];
   String userName;
   String userPic;
   int id = 0;
@@ -288,6 +289,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
   @override
   Widget build(BuildContext context) {
+
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Form(
@@ -565,7 +567,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                   PageTransition(
                                       type: PageTransitionType.bottomToTop,
                                       child: AddUsersPost(
-                                          currentUser.id, invitees)))
+                                          currentUser.id, inviteesNameList)))
                               .then(onGoBack);
                         },
                         child: Padding(
@@ -596,7 +598,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                                           .bottomToTop,
                                                       child: AddUsersPost(
                                                           currentUser.id,
-                                                          invitees)))
+                                                          inviteesNameList)))
                                               .then(onGoBack);
                                         },
                                       ),
@@ -608,18 +610,19 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                 ),
                                 Container(
                                   height: 100,
-                                  width: invitees.length == 0
+                                  width: inviteesNameList.length == 0
                                       ? 0
                                       : MediaQuery.of(context).size.width * .74,
                                   child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       physics: AlwaysScrollableScrollPhysics(),
-                                      itemCount: invitees.length,
+                                      itemCount: inviteesNameList.length,
                                       itemBuilder: (_, index) {
                                         return StreamBuilder(
                                             stream: Firestore.instance
                                                 .collection('users')
-                                                .document(invitees[index])
+                                                .document(
+                                                    inviteesNameList[index])
                                                 .snapshots(),
                                             builder: (context, snapshot) {
                                               // bool isLargePhone = Screen.diagonal(context) > 766;
@@ -646,7 +649,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                                                         OtherProfile(
                                                                           userPic,
                                                                           userName,
-                                                                          invitees[
+                                                                          inviteesNameList[
                                                                               index],
                                                                         )));
                                                       },
@@ -872,7 +875,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               final userName = user.displayName;
                               final userEmail = user.email;
                               if (_formKey.currentState.validate()) {
-                                var randomId = randomAlpha(10);
+                                print(inviteesNameList);
 
                                 if (_image != null) {
                                   StorageReference firebaseStorageRef =
@@ -895,7 +898,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         description: descriptionController.text,
                                         address: addressController.text,
                                         startDate: currentValue,
-                                        invitees: invitees,
+                                        invitees: inviteesNameList,
+                                        
+                                        // invitees: invitees,
                                         imageUrl: downloadUrl,
                                         userId: strUserId,
                                         likes: false,
