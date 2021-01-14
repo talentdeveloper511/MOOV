@@ -136,6 +136,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                       stream: Firestore.instance
                           .collection('food')
                           .where("userId", isEqualTo: currentUser.id)
+                          .where("invitees", )
                           .orderBy("startDate")
                           .snapshots(),
                       builder: (context, snapshot) {
@@ -151,23 +152,28 @@ class _MOOVSPageState extends State<MOOVSPage>
                                 snapshot.data.documents[index];
                             List<dynamic> likerArray = course["liker"];
                             Timestamp startDate = course["startDate"];
+                            Map<String, dynamic> invitees = course['invitees'];
+                            List<dynamic> inviteesIds = invitees.keys.toList();
+                            List<dynamic> inviteesValues =
+                                invitees.values.toList();
 
-                            var strUserPic = currentUser.photoUrl;
-
-                            bool isAmbassador;
-                            bool isLiked1;
                             bool hide = false;
-                            // var y = startDate;
-                            // var x = Timestamp.now();
-                            // print(x.toDate());
-                            // print(y.toDate());
+                            if (invitees != null) {
+                              for (int i = 0; i < invitees.length; i++) {
+                                if (inviteesIds[i] == currentUser.id) {
+                                  if (inviteesValues[i] != 3) {
+                                    hide = true;
+                                  }
+                                }
+                              }
+                            }
 
                             if (startDate.millisecondsSinceEpoch <
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Database().deletePost(
-                                  course['postId'], course['userId'], course['title']);
+                              Database().deletePost(course['postId'],
+                                  course['userId'], course['title']);
                             }
                             final now = DateTime.now();
                             bool isToday = false;
@@ -201,7 +207,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                   StreamBuilder(
                       stream: Firestore.instance
                           .collection('food')
-                          .where("liker", arrayContains: currentUser.id)
+                          .where("going", arrayContains: currentUser.id)
                           .orderBy("startDate")
                           .snapshots(),
                       builder: (context, snapshot) {
@@ -234,8 +240,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Database().deletePost(
-                                  course['postId'], course['userId'], course['title']);
+                              Database().deletePost(course['postId'],
+                                  course['userId'], course['title']);
                             }
                             final now = DateTime.now();
                             bool isToday = false;

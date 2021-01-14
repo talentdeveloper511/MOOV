@@ -320,7 +320,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   bool hide = false;
 
                                   if (startDate.millisecondsSinceEpoch <
-                                      Timestamp.now().millisecondsSinceEpoch +
+                                      Timestamp.now().millisecondsSinceEpoch -
                                           3600000) {
                                     print("Expired. See ya later.");
                                     Database().deletePost(course['postId'],
@@ -420,7 +420,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 // print(y.toDate());
 
                                 if (startDate.millisecondsSinceEpoch <
-                                    Timestamp.now().millisecondsSinceEpoch +
+                                    Timestamp.now().millisecondsSinceEpoch -
                                         3600000) {
                                   print("Expired. See ya later.");
                                   Database().deletePost(course['postId'],
@@ -531,7 +531,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 // print(y.toDate());
 
                                 if (startDate.millisecondsSinceEpoch <
-                                    Timestamp.now().millisecondsSinceEpoch +
+                                    Timestamp.now().millisecondsSinceEpoch -
                                         3600000) {
                                   print("Expired. See ya later.");
                                   Database().deletePost(course['postId'],
@@ -642,16 +642,9 @@ class PostOnFeed extends StatelessWidget {
 
     var strUserPic = currentUser.photoUrl;
 
-    bool isAmbassador;
-    bool isLiked1;
-    bool hide = false;
-    // var y = startDate;
-    // var x = Timestamp.now();
-    // print(x.toDate());
-    // print(y.toDate());
 
     if (startDate.millisecondsSinceEpoch <
-        Timestamp.now().millisecondsSinceEpoch + 3600000) {
+        Timestamp.now().millisecondsSinceEpoch - 3600000) {
       print("Expired. See ya later.");
       Database()
           .deletePost(course['postId'], course['userId'], course['title']);
@@ -824,7 +817,7 @@ class PostOnFeed extends StatelessWidget {
                         else
                           userDorm = snapshot2.data['dorm'];
                         strUserPic = snapshot2.data['photoUrl'];
-                        isAmbassador = snapshot2.data['isAmbassador'];
+                        bool isAmbassador = snapshot2.data['isAmbassador'];
                         userYear = snapshot2.data['year'];
 
                         return Container(
