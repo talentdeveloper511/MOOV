@@ -77,39 +77,37 @@ class TrendingSegmentState extends State<TrendingSegment> {
     return Container(
       color: Colors.grey[100],
       child: Column(
-        children: [  Container(
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topRight,
-                                  end: Alignment.bottomLeft,
-                                  colors: [
-                                Colors.pinkAccent[200],
-                                TextThemes.ndBlue
-                              ])),
-                          child: Center(
-                              child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text('T R E N D I N G',
-                                style: GoogleFonts.sriracha(
-                                    color: Colors.white, fontSize: 30)),
-                          ))),
+        children: [
+          Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.pinkAccent[200], TextThemes.ndBlue])),
+              child: Center(
+                  child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text('T R E N D I N G',
+                    style: GoogleFonts.sriracha(
+                        color: Colors.white, fontSize: 30)),
+              ))),
           Expanded(
-                      child: ListView(children: [
+            child: ListView(children: [
               Container(
-                
                 child: StreamBuilder(
                     stream: Firestore.instance
                         .collection('food')
                         .where('type', isEqualTo: 'Restaurants & Bars')
+                        .where('privacy', isEqualTo: "Public")
                         .orderBy('likeCounter', descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Text('');
                       return Container(
-                        height: (snapshot.data.documents.length <= 3) ? 270 : 400,
+                        height:
+                            (snapshot.data.documents.length <= 3) ? 210 : 400,
                         child: Column(
                           children: [
-                          
                             Expanded(
                                 child: CustomScrollView(
                               physics: NeverScrollableScrollPhysics(),
@@ -119,11 +117,13 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
-                                      Image.asset('lib/assets/plate.png', height: 40),
+                                      Image.asset('lib/assets/plate.png',
+                                          height: 40),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
-                                        child:
-                                            Text('Restaurants & Bars', style: TextThemes.extraBold),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text('Restaurants & Bars',
+                                            style: TextThemes.extraBold),
                                       ),
                                     ],
                                   ),
@@ -133,7 +133,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
                                           snapshot.data.documents[index];
-                                      List<dynamic> likedArray = course["liked"];
+                                      List<dynamic> likedArray =
+                                          course["liked"];
                                       List<String> uidArray = List<String>();
                                       if (likedArray != null) {
                                         likeCount = likedArray.length;
@@ -162,27 +163,34 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            PostDetail(
-                                                              
-                                                                course.documentID)));
+                                                            PostDetail(course
+                                                                .documentID)));
                                               },
                                               child: Column(
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Center(
                                                       child: Text(
-                                                        course['title'].toString(),
+                                                        course['title']
+                                                            .toString(),
                                                         maxLines: 1,
                                                         style: TextStyle(
-                                                            color: Colors.blue[900],
-                                                            fontSize: isLargePhone
-                                                                ? 12.0
-                                                                : 10,
+                                                            color: Colors
+                                                                .blue[900],
+                                                            fontSize:
+                                                                isLargePhone
+                                                                    ? 12.0
+                                                                    : 10,
                                                             fontWeight:
-                                                                FontWeight.bold),
-                                                        textAlign: TextAlign.center,
-                                                        overflow: TextOverflow.ellipsis,
+                                                                FontWeight
+                                                                    .bold),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ),
                                                   ),
@@ -196,20 +204,24 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                       imageUrl: course['image'],
                                                       fit: BoxFit.cover,
                                                       height: isLargePhone
-                                                          ? MediaQuery.of(context)
+                                                          ? MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.08
-                                                          : MediaQuery.of(context)
+                                                          : MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.08,
                                                       width: isLargePhone
-                                                          ? MediaQuery.of(context)
+                                                          ? MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.25
-                                                          : MediaQuery.of(context)
+                                                          : MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.25,
@@ -218,40 +230,50 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                   Row(
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
-                                                            left: 4.0, top: 4.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 4.0,
+                                                                top: 4.0),
                                                         child: CircleAvatar(
                                                           radius: 8.0,
-                                                          backgroundImage: NetworkImage(
-                                                            course['profilePic'],
+                                                          backgroundImage:
+                                                              NetworkImage(
+                                                            course[
+                                                                'profilePic'],
                                                           ),
                                                           backgroundColor:
-                                                              Colors.transparent,
+                                                              Colors
+                                                                  .transparent,
                                                         ),
                                                       ),
                                                       Padding(
                                                         padding: isLargePhone
-                                                            ? const EdgeInsets.only(
+                                                            ? const EdgeInsets
+                                                                    .only(
                                                                 top: 6.0,
                                                                 left: 12,
                                                                 right: 2)
-                                                            : const EdgeInsets.only(
+                                                            : const EdgeInsets
+                                                                    .only(
                                                                 top: 6.0,
                                                                 left: 4,
                                                                 right: 2),
                                                         child: Icon(Icons.timer,
-                                                            color: TextThemes.ndGold,
+                                                            color: TextThemes
+                                                                .ndGold,
                                                             size: 15),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
-                                                            top: 6.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 6.0),
                                                         child: Text(
                                                             DateFormat('MMMd')
                                                                 .add_jm()
-                                                                .format(
-                                                                    course['startDate']
-                                                                        .toDate()),
+                                                                .format(course[
+                                                                        'startDate']
+                                                                    .toDate()),
                                                             style: TextStyle(
                                                               fontSize: 9.0,
                                                             )),
@@ -264,7 +286,9 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                           ],
                                         ),
                                       );
-                                    }, childCount: snapshot.data.documents.length),
+                                    },
+                                        childCount:
+                                            snapshot.data.documents.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
@@ -281,12 +305,15 @@ class TrendingSegmentState extends State<TrendingSegment> {
                     stream: Firestore.instance
                         .collection('food')
                         .where('type', isEqualTo: "Pregames & Parties")
+                        .where('privacy', isEqualTo: "Public")
                         .orderBy('likeCounter', descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Text('');
+
                       return Container(
-                        height: (snapshot.data.documents.length <= 3) ? 270 : 345,
+                        height:
+                            (snapshot.data.documents.length <= 3) ? 270 : 345,
                         child: Column(
                           children: [
                             Expanded(
@@ -298,9 +325,11 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
-                                      Image.asset('lib/assets/dance.png', height: 40),
+                                      Image.asset('lib/assets/dance.png',
+                                          height: 40),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: Text('Pregames & Parties',
                                             style: TextThemes.extraBold),
                                       ),
@@ -312,24 +341,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
                                           snapshot.data.documents[index];
-                                      List<dynamic> likedArray = course["liked"];
-                                      List<String> uidArray = List<String>();
-                                      if (likedArray != null) {
-                                        likeCount = likedArray.length;
-                                        for (int i = 0; i < likeCount; i++) {
-                                          var id = likedArray[i]["uid"];
-                                          uidArray.add(id);
-                                        }
-                                      } else {
-                                        likeCount = 0;
-                                      }
-
-                                      if (uidArray != null &&
-                                          uidArray.contains(strUserId)) {
-                                        _isPressed = true;
-                                      } else {
-                                        _isPressed = false;
-                                      }
+                                      List<dynamic> likedArray =
+                                          course["liked"];
 
                                       return Card(
                                         color: Colors.white,
@@ -341,27 +354,34 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            PostDetail(
-                                                              
-                                                                course.documentID)));
+                                                            PostDetail(course
+                                                                .documentID)));
                                               },
                                               child: Column(
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Center(
                                                       child: Text(
-                                                        course['title'].toString(),
+                                                        course['title']
+                                                            .toString(),
                                                         maxLines: 1,
                                                         style: TextStyle(
-                                                            color: Colors.blue[900],
-                                                            fontSize: isLargePhone
-                                                                ? 12.0
-                                                                : 10,
+                                                            color: Colors
+                                                                .blue[900],
+                                                            fontSize:
+                                                                isLargePhone
+                                                                    ? 12.0
+                                                                    : 10,
                                                             fontWeight:
-                                                                FontWeight.bold),
-                                                        textAlign: TextAlign.center,
-                                                        overflow: TextOverflow.ellipsis,
+                                                                FontWeight
+                                                                    .bold),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ),
                                                   ),
@@ -375,20 +395,24 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                       imageUrl: course['image'],
                                                       fit: BoxFit.cover,
                                                       height: isLargePhone
-                                                          ? MediaQuery.of(context)
+                                                          ? MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.08
-                                                          : MediaQuery.of(context)
+                                                          : MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.08,
                                                       width: isLargePhone
-                                                          ? MediaQuery.of(context)
+                                                          ? MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.25
-                                                          : MediaQuery.of(context)
+                                                          : MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.25,
@@ -397,41 +421,50 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                   Row(
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
-                                                            left: 4.0, top: 4.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 4.0,
+                                                                top: 4.0),
                                                         child: CircleAvatar(
                                                           radius: 8.0,
                                                           backgroundImage:
                                                               CachedNetworkImageProvider(
-                                                            course['profilePic'],
+                                                            course[
+                                                                'profilePic'],
                                                           ),
                                                           backgroundColor:
-                                                              Colors.transparent,
+                                                              Colors
+                                                                  .transparent,
                                                         ),
                                                       ),
                                                       Padding(
                                                         padding: isLargePhone
-                                                            ? const EdgeInsets.only(
+                                                            ? const EdgeInsets
+                                                                    .only(
                                                                 top: 6.0,
                                                                 left: 12,
                                                                 right: 2)
-                                                            : const EdgeInsets.only(
+                                                            : const EdgeInsets
+                                                                    .only(
                                                                 top: 6.0,
                                                                 left: 4,
                                                                 right: 2),
                                                         child: Icon(Icons.timer,
-                                                            color: TextThemes.ndGold,
+                                                            color: TextThemes
+                                                                .ndGold,
                                                             size: 15),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
-                                                            top: 6.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 6.0),
                                                         child: Text(
                                                             DateFormat('MMMd')
                                                                 .add_jm()
-                                                                .format(
-                                                                    course['startDate']
-                                                                        .toDate()),
+                                                                .format(course[
+                                                                        'startDate']
+                                                                    .toDate()),
                                                             style: TextStyle(
                                                               fontSize: 9.0,
                                                             )),
@@ -444,7 +477,9 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                           ],
                                         ),
                                       );
-                                    }, childCount: snapshot.data.documents.length),
+                                    },
+                                        childCount:
+                                            snapshot.data.documents.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
@@ -466,7 +501,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Text('');
                       return Container(
-                        height: (snapshot.data.documents.length <= 3) ? 270 : 400,
+                        height:
+                            (snapshot.data.documents.length <= 3) ? 270 : 400,
                         child: Column(
                           children: [
                             Expanded(
@@ -478,11 +514,13 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
-                                      Image.asset('lib/assets/dance.png', height: 40),
+                                      Image.asset('lib/assets/dance.png',
+                                          height: 40),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 8.0),
-                                        child:
-                                            Text('MORE', style: TextThemes.extraBold),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text('MORE',
+                                            style: TextThemes.extraBold),
                                       ),
                                     ],
                                   ),
@@ -492,7 +530,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
                                           snapshot.data.documents[index];
-                                      List<dynamic> likedArray = course["liked"];
+                                      List<dynamic> likedArray =
+                                          course["liked"];
                                       List<String> uidArray = List<String>();
                                       if (likedArray != null) {
                                         likeCount = likedArray.length;
@@ -521,27 +560,34 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            PostDetail(
-                                                              
-                                                                course.documentID)));
+                                                            PostDetail(course
+                                                                .documentID)));
                                               },
                                               child: Column(
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Center(
                                                       child: Text(
-                                                        course['title'].toString(),
+                                                        course['title']
+                                                            .toString(),
                                                         maxLines: 1,
                                                         style: TextStyle(
-                                                            color: Colors.blue[900],
-                                                            fontSize: isLargePhone
-                                                                ? 12.0
-                                                                : 10,
+                                                            color: Colors
+                                                                .blue[900],
+                                                            fontSize:
+                                                                isLargePhone
+                                                                    ? 12.0
+                                                                    : 10,
                                                             fontWeight:
-                                                                FontWeight.bold),
-                                                        textAlign: TextAlign.center,
-                                                        overflow: TextOverflow.ellipsis,
+                                                                FontWeight
+                                                                    .bold),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ),
                                                   ),
@@ -555,20 +601,24 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                       imageUrl: course['image'],
                                                       fit: BoxFit.cover,
                                                       height: isLargePhone
-                                                          ? MediaQuery.of(context)
+                                                          ? MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.08
-                                                          : MediaQuery.of(context)
+                                                          : MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.08,
                                                       width: isLargePhone
-                                                          ? MediaQuery.of(context)
+                                                          ? MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.25
-                                                          : MediaQuery.of(context)
+                                                          : MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.25,
@@ -577,41 +627,50 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                   Row(
                                                     children: [
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
-                                                            left: 4.0, top: 4.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 4.0,
+                                                                top: 4.0),
                                                         child: CircleAvatar(
                                                           radius: 8.0,
                                                           backgroundImage:
                                                               CachedNetworkImageProvider(
-                                                            course['profilePic'],
+                                                            course[
+                                                                'profilePic'],
                                                           ),
                                                           backgroundColor:
-                                                              Colors.transparent,
+                                                              Colors
+                                                                  .transparent,
                                                         ),
                                                       ),
                                                       Padding(
                                                         padding: isLargePhone
-                                                            ? const EdgeInsets.only(
+                                                            ? const EdgeInsets
+                                                                    .only(
                                                                 top: 6.0,
                                                                 left: 12,
                                                                 right: 2)
-                                                            : const EdgeInsets.only(
+                                                            : const EdgeInsets
+                                                                    .only(
                                                                 top: 6.0,
                                                                 left: 4,
                                                                 right: 2),
                                                         child: Icon(Icons.timer,
-                                                            color: TextThemes.ndGold,
+                                                            color: TextThemes
+                                                                .ndGold,
                                                             size: 15),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(
-                                                            top: 6.0),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 6.0),
                                                         child: Text(
                                                             DateFormat('MMMd')
                                                                 .add_jm()
-                                                                .format(
-                                                                    course['startDate']
-                                                                        .toDate()),
+                                                                .format(course[
+                                                                        'startDate']
+                                                                    .toDate()),
                                                             style: TextStyle(
                                                               fontSize: 9.0,
                                                             )),
@@ -624,7 +683,9 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                           ],
                                         ),
                                       );
-                                    }, childCount: snapshot.data.documents.length),
+                                    },
+                                        childCount:
+                                            snapshot.data.documents.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,

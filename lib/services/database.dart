@@ -157,10 +157,9 @@ class Database {
        Firestore.instance
                                 .collection('food')
                                 .document(postId)
-                                .updateData({
+                                .setData({
                               "invitees": {userId: 0}
-                            });
-  
+                            },merge: true);
       String serialUser = userId;
       transaction.update(ref, {
         // 'notGoing': FieldValue.arrayRemove([serialUser]),
@@ -206,11 +205,11 @@ class Database {
       //     postId
       //     );
        Firestore.instance
-                                .collection('food')
+                               .collection('food')
                                 .document(postId)
-                                .updateData({
+                                .setData({
                               "invitees": {userId: 0}
-                            });
+                            },merge: true);
   
       String serialUser = userId;
       transaction.update(ref, {
@@ -259,9 +258,9 @@ Future<void> addGoingGood(userId, postId) async {
        Firestore.instance
                                 .collection('food')
                                 .document(postId)
-                                .updateData({
+                                .setData({
                               "invitees": {userId: 0}
-                            });
+                            },merge: true);
   
       String serialUser = userId;
       transaction.update(ref, {
