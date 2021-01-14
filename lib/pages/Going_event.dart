@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
@@ -18,6 +19,8 @@ class GoingPage extends StatelessWidget {
   GoingPage(this.likedArray, this.moovId);
 
   bool _isPressed;
+  int status = 2;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -30,22 +33,16 @@ class GoingPage extends StatelessWidget {
           if (snapshot.hasError) return CircularProgressIndicator();
 
           List<dynamic> likedArray = course["liked"];
-          List<String> uidArray = List<String>();
-          if (likedArray != null) {
-            likeCount = likedArray.length;
-            for (int i = 0; i < likeCount; i++) {
-              var id = likedArray[i]["uid"];
-              uidArray.add(id);
-            }
-          } else {
-            likeCount = 0;
-          }
+          Map<String, dynamic> invitees = course['invitees'];
+          
+         var sortedKeys = invitees.keys.toList(growable:false)
+    ..sort((k1, k2) => invitees[k2].compareTo(invitees[k1]));
+    LinkedHashMap sortedMap = LinkedHashMap
+      .fromIterable(sortedKeys, key: (k) => k, value: (k) => invitees[k]);
 
-          if (uidArray != null && uidArray.contains(currentUser.id)) {
-            _isPressed = true;
-          } else {
-            _isPressed = false;
-          }
+                List<dynamic> inviteesIds = sortedMap.keys.toList();
+
+          List<dynamic> inviteesValues = sortedMap.values.toList();
 
           return Column(
             children: [
@@ -53,18 +50,28 @@ class GoingPage extends StatelessWidget {
                   ? ListView.builder(
                       shrinkWrap: true, //MUST TO ADDED
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: likedArray.length,
+                      itemCount: inviteesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
                             stream: Firestore.instance
                                 .collection('users')
-                                .document(likedArray[index]['uid'])
+                                .document(inviteesIds[index])
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
                                 return CircularProgressIndicator();
+
+                              inviteesValues[index] == (2)
+                                  ? status = 2
+                                  : inviteesValues[index] == 1
+                                      ? status = 1
+                                      : inviteesValues[index] == 3
+                                          ? status = 3
+                                          : status = 2;
+
                               var pic = snapshot.data['photoUrl'];
                               var name = snapshot.data['displayName'];
+
                               return Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4.0),
@@ -72,7 +79,7 @@ class GoingPage extends StatelessWidget {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        if (likedArray[index]['uid'] ==
+                                        if (inviteesIds[index] ==
                                             currentUser.id) {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
@@ -82,43 +89,47 @@ class GoingPage extends StatelessWidget {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      OtherProfile(
-                                                          pic,
-                                                          name,
-                                                          likedArray[index]
-                                                              ['uid'])));
+                                                      OtherProfile(pic, name,
+                                                          inviteesIds[index])));
                                         }
                                       },
                                       child: Container(
+                                          color: status == 2
+                                              ? Colors.yellow[200]
+                                              : status == 1
+                                                  ? Colors.red[200]
+                                                  : Colors.green[200],
                                           child: Row(
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 12),
-                                            child: CircleAvatar(
-                                                radius: 22,
-                                                backgroundColor:
-                                                    TextThemes.ndBlue,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 12),
                                                 child: CircleAvatar(
-                                                  radius: 22.0,
-                                                  backgroundImage:
-                                                      NetworkImage(pic),
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                )),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 16.0),
-                                            child: Text(name,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: TextThemes.ndBlue,
-                                                    decoration:
-                                                        TextDecoration.none)),
-                                          ),
-                                        ],
-                                      )),
+                                                    radius: 22,
+                                                    backgroundColor:
+                                                        TextThemes.ndBlue,
+                                                    child: CircleAvatar(
+                                                      radius: 22.0,
+                                                      backgroundImage:
+                                                          NetworkImage(pic),
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                    )),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 16.0),
+                                                child: Text(name,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color:
+                                                            TextThemes.ndBlue,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .none)),
+                                              ),
+                                            ],
+                                          )),
                                     ),
                                   ],
                                 ),
