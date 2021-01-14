@@ -186,22 +186,7 @@ class UserResult extends StatelessWidget {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => LeaderBoardPage()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 50.0),
-                  child: Text(
-                    "Score: ${user.score}",
-                    style: new TextStyle(
-                      color: TextThemes.ndBlue,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ),
-              ),
+              trailing: Icon(Icons.person),
             ),
           ),
           Divider(
@@ -238,23 +223,7 @@ class EventResult extends StatelessWidget {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: RaisedButton(
-                padding: const EdgeInsets.all(2.0),
-                color: TextThemes.ndBlue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PostDetail(moov.data['postId'])));
-                },
-                child: Text(
-                  "View MOOV",
-                  style: new TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.0,
-                  ),
-                ),
-              ),
+              trailing: Icon(Icons.event),
             ),
           ),
           Divider(
@@ -279,38 +248,28 @@ class GroupResult extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () => print('moov tapped'),
+            onTap: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => GroupDetail(
+                      group.data['groupPic'],
+                      group.data['groupName'],
+                      group.data['members'],
+                      group.data['gid'],
+                      group.data['nextMOOV'])))
+            },
             child: ListTile(
-              leading: Image.network(group.data['groupPic'],
-                  fit: BoxFit.cover, height: 50, width: 70),
+              leading: Image.network(
+                group.data['groupPic'],
+                fit: BoxFit.cover,
+                height: 40,
+                width: 60,
+              ),
               title: Text(
                 group.data['groupName'] == null ? "" : group.data['groupName'],
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: RaisedButton(
-                padding: const EdgeInsets.all(2.0),
-                color: TextThemes.ndBlue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                onPressed: () {
-                  print(group.data);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => GroupDetail(
-                          group.data['groupPic'],
-                          group.data['groupName'],
-                          group.data['members'],
-                          group.data['gid'],
-                          group.data['nextMOOV'])));
-                },
-                child: Text(
-                  "View Group",
-                  style: new TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.0,
-                  ),
-                ),
-              ),
+              trailing: Icon(Icons.people),
             ),
           ),
           Divider(
