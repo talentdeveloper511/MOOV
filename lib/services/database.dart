@@ -20,7 +20,8 @@ class Database {
   final strUserName = googleSignIn.currentUser.displayName;
   final strPic = googleSignIn.currentUser.photoUrl;
 
-  FutureOr inviteesNotification(postId, previewImg, title, List<String> invitees) {
+  FutureOr inviteesNotification(
+      postId, previewImg, title, List<String> invitees) {
     if (invitees.length > 0) {
       for (int i = 0; i < invitees.length; i++) {
         notificationFeedRef
@@ -60,7 +61,8 @@ class Database {
       profilePic,
       featured,
       postId}) async {
-    DocumentReference ref = await dbRef.collection("food").document(postId).setData({
+    DocumentReference ref =
+        await dbRef.collection("food").document(postId).setData({
       'title': title,
       'likes': likes,
       'type': type,
@@ -329,6 +331,28 @@ class Database {
     final FirebaseStorage _storage =
         FirebaseStorage(storageBucket: 'gs://moov4-4d3c4.appspot.com');
     String filePath = 'images/$ownerId$title';
+
+    groupsRef
+        .where('nextMOOV', isEqualTo: postId)
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {});
+
+//       List<dynamic> values = snapshot.documents;
+//       print(values.toString());
+//       values.forEach((v) {
+//         final specificDocument = snapshot.documents.where((f) {
+//      return f.documentID == xxx;
+// }).toList();
+//         print(v);
+//         v.setData({
+//                               "voters": {"nextMOOV": ""}
+//                             });
+//       });
+//     });
+//  .then((querySnapshot) => {
+//     querySnapshot.forEach((doc) => {
+//         Firestore.instance.batch().(doc.ref, {branch: {id: documentId, name: after.name}})};
+//     });
 
     bool isPostOwner = strUserId == ownerId;
     if (isPostOwner) {

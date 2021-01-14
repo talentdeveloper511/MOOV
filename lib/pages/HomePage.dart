@@ -10,6 +10,7 @@ import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/map_test.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
+import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/poll2.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -317,7 +318,7 @@ class _HomePageState extends State<HomePage>
                   scrollPhysics: NeverScrollableScrollPhysics(),
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
-                  autoPlay: false,
+                  autoPlay: true,
                   autoPlayInterval: Duration(seconds: 6),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
@@ -457,7 +458,8 @@ class _HomePageState extends State<HomePage>
                   //   ),
                   // ),
                   // MapTest(),
-                  PollView()
+                  PollView(),
+                  GroupCarousel(),
                 ]),
           ),
           SliverPadding(
