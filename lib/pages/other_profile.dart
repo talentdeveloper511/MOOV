@@ -91,7 +91,6 @@ class _OtherProfileState extends State<OtherProfile> {
     return StreamBuilder(
         stream: Firestore.instance.collection('users').document(id).snapshots(),
         builder: (context, snapshot) {
-          isAmbassador = snapshot.data['isAmbassador'];
           if (!snapshot.hasData) return Text('Loading data...');
           while (iter > 0) {
             checkFunction();
@@ -99,6 +98,8 @@ class _OtherProfileState extends State<OtherProfile> {
             checkFunction3();
             iter = iter - 1;
           }
+                    isAmbassador = snapshot.data['isAmbassador'];
+
           return Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(

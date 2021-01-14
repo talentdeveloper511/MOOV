@@ -357,8 +357,9 @@ class _GroupDetailState extends State<GroupDetail> {
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0, bottom: 15),
                           child: Container(
-                            child:
-                                next != "" ? NextMOOV(next) : buildNoContent(),
+                            child: (next != "" && next != null)
+                                ? NextMOOV(next)
+                                : buildNoContent(),
                           ),
                         ),
                         members.contains(currentUser.id)

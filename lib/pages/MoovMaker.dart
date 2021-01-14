@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
@@ -267,6 +268,14 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   String userPic;
   int id = 0;
   bool noImage = false;
+
+  String generateRandomString(int len) {
+    var r = Random();
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
+        .join();
+  }
 
   void refreshData() {
     id++;
@@ -880,21 +889,20 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                     final String downloadUrl =
                                         await taskSnapshot.ref.getDownloadURL();
                                     Database().createPost(
-                                      title: titleController.text,
-                                      type: typeDropdownValue,
-                                      privacy: privacyDropdownValue,
-                                      description: descriptionController.text,
-                                      // location: locationDropdownValue,
-                                      address: addressController.text,
-                                      startDate: currentValue,
-                                      // endDate: endTime,
-                                      imageUrl: downloadUrl,
-                                      userId: strUserId,
-                                      likes: false,
-                                      userName: userName,
-                                      userEmail: userEmail,
-                                      profilePic: profilePic,
-                                    );
+                                        title: titleController.text,
+                                        type: typeDropdownValue,
+                                        privacy: privacyDropdownValue,
+                                        description: descriptionController.text,
+                                        address: addressController.text,
+                                        startDate: currentValue,
+                                        invitees: invitees,
+                                        imageUrl: downloadUrl,
+                                        userId: strUserId,
+                                        likes: false,
+                                        userName: userName,
+                                        userEmail: userEmail,
+                                        profilePic: profilePic,
+                                        postId: generateRandomString(20));
                                     setState(() {
                                       isUploading = false;
                                     });

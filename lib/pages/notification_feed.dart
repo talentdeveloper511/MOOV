@@ -89,7 +89,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                     return Container(
                         child: Center(
                             child: Text(
-                      "You're up to date on your notifications! Let's Go!",
+                      "You're up to date on your notifications! Let's go!",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: TextThemes.ndBlue, fontSize: 25),
                     )));
@@ -129,7 +129,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                             Scaffold.of(context).showSnackBar(SnackBar(
                                 duration: Duration(milliseconds: 1500),
                                 backgroundColor: Colors.black,
-                                content: Text("Notification deleted.")));
+                                content: Text("Be good, notification.")));
                           },
                           // Show a red background as the item is swiped away.
                           background: Container(
