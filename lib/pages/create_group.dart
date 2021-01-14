@@ -78,9 +78,9 @@ class _GroupFormState extends State<GroupForm> {
       "groupName": groupName,
       "members": [cid],
       "groupPic": pic,
-      "chat": {'messages': []},
+      // "chat": {'messages': []},
       "nextMOOV": "",
-      "gid": FieldPath.documentId
+      // "gid": id
     });
     // .then((value) {
     //   String data = value.documentID;
