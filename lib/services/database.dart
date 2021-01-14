@@ -239,7 +239,7 @@ Future<void> addGoingGood(userId, postId) async {
   
       String serialUser = userId;
       transaction.update(ref, {
-        // 'going': FieldValue.arrayUnion([serialUser]),
+        'going': FieldValue.arrayUnion([serialUser]),
         // 'goingCounter': FieldValue.increment(1)
       });
      
@@ -264,7 +264,7 @@ Future<void> addGoingGood(userId, postId) async {
   
       String serialUser = userId;
       transaction.update(ref, {
-        // 'going': FieldValue.arrayRemove([serialUser]),
+        'going': FieldValue.arrayRemove([serialUser]),
         // 'goingCounter': FieldValue.increment(-5)
       });
      
