@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/home.dart';
@@ -311,6 +312,8 @@ class _AuthorContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     return FutureBuilder<DocumentSnapshot>(
       future: usersRef.document(userId).get(),
       builder:
@@ -367,7 +370,7 @@ class _AuthorContent extends StatelessWidget {
                   ),
                   Spacer(),
                   Padding(
-                  padding: const EdgeInsets.only(right: 42.0, top: 10.0),
+                  padding: isLargePhone ? const EdgeInsets.only( right: 42.0, top: 10.0) :const EdgeInsets.only( right: 30.0, top: 10.0) ,
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),

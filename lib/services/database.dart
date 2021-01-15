@@ -227,20 +227,18 @@ class Database {
       final DocumentReference ref2 = dbRef.document('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(5)});
 
-      // addGoingToNotificationFeed(
-      //     userId,
-      //     postId
-      //     );
       await Firestore.instance.collection('food').document(postId).setData({
         "invitees": {userId: 3}
       }, merge: true);
 
+
+      ///NOTIF FUNCTION BELOW
       bool isNotPostOwner = strUserId != ownerId;
       if (isNotPostOwner) {
         notificationFeedRef
             .document(ownerId)
             .collection('feedItems')
-            .document(postId)
+            .document(postId + ' from ' + currentUser.id)
             .setData({
           "type": "going",
           "postId": postId,
@@ -271,7 +269,7 @@ class Database {
         notificationFeedRef
             .document(ownerId)
             .collection("feedItems")
-            .document(postId)
+            .document(postId + ' from ' + currentUser.id)
             .get()
             .then((doc) {
           if (doc.exists) {
