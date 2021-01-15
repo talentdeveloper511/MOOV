@@ -357,20 +357,15 @@ class _GroupFormState extends State<GroupForm> {
   }
 
   void _saveFirebase() async {
-
-    firebase_storage.Reference ref = firebase_storage
-                                  .FirebaseStorage.instance
-                                  .ref()
-                                  .child("images/group" + gid);
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child("images/group" + gid);
     // Reference firebaseStorageRef =
     //     FirebaseStorage.instance.ref().child("images/group" + gid);
 
-  firebase_storage.UploadTask
-                                                uploadTask;
+    firebase_storage.UploadTask uploadTask;
 
-     uploadTask = ref.putFile(_image);
-
-
+    uploadTask = ref.putFile(_image);
 
     TaskSnapshot taskSnapshot = await uploadTask.onComplete;
     if (taskSnapshot.error == null) {
