@@ -9,11 +9,12 @@ import 'package:intl/intl.dart';
 class Database {
   final dbRef = Firestore.instance;
   var postPic;
-  var ownerId;
+  String ownerId;
   dynamic startDate;
   var title;
   bool featured;
-  var postId;
+  String postId;
+  String previewImg;
 
   final GoogleSignInAccount user = googleSignIn.currentUser;
   final strUserId = googleSignIn.currentUser.id;
@@ -39,6 +40,26 @@ class Database {
         });
       }
     }
+  }
+
+  FutureOr goingNotification(postId, userId, pic, title) {
+    print("HIHI");
+    // bool isNotPostOwner = strUserId != ownerId;
+    // if (isNotPostOwner) {
+    notificationFeedRef
+        .document(userId)
+        .collection('feedItems')
+        .document(postId)
+        .setData({
+      "type": "going",
+      "postId": postId,
+      "previewImg": pic,
+      "title": title,
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userProfilePic": currentUser.photoUrl,
+      "timestamp": DateTime.now()
+    });
   }
 
   void createPost(
@@ -150,14 +171,9 @@ class Database {
       //     userId,
       //     postId
       //     );
-     postsRef.document(postId).setData({
-        "invitees": {
-          user.id: FieldValue.delete()
-        }
-      }, 
-        merge: true
-      
-      );
+      postsRef.document(postId).setData({
+        "invitees": {user.id: FieldValue.delete()}
+      }, merge: true);
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -173,10 +189,8 @@ class Database {
       final DocumentReference ref2 = dbRef.document('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
-      // addGoingToNotificationFeed(
-      //     userId,
-      //     postId
-      //     );
+     
+      
       Firestore.instance.collection('food').document(postId).setData({
         "invitees": {userId: 2}
       }, merge: true);
@@ -195,19 +209,9 @@ class Database {
       final DocumentReference ref2 = dbRef.document('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-1)});
 
-      // addGoingToNotificationFeed(
-      //     userId,
-      //     postId
-      //     );
-     postsRef.document(postId).setData({
-        "invitees": {
-          user.id: FieldValue.delete()
-        }
-      }, 
-        merge: true
-      
-      );
-
+      postsRef.document(postId).setData({
+        "invitees": {user.id: FieldValue.delete()}
+      }, merge: true);
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -217,7 +221,7 @@ class Database {
     });
   }
 
-  Future<void> addGoingGood(userId, postId) async {
+  Future<void> addGoingGood(userId, ownerId, postId, title, pic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
       final DocumentReference ref2 = dbRef.document('users/$userId');
@@ -227,9 +231,27 @@ class Database {
       //     userId,
       //     postId
       //     );
-      Firestore.instance.collection('food').document(postId).setData({
+      await Firestore.instance.collection('food').document(postId).setData({
         "invitees": {userId: 3}
       }, merge: true);
+
+      bool isNotPostOwner = strUserId != ownerId;
+      if (isNotPostOwner) {
+        notificationFeedRef
+            .document(ownerId)
+            .collection('feedItems')
+            .document(postId)
+            .setData({
+          "type": "going",
+          "postId": postId,
+          "previewImg": pic,
+          "title": title,
+          "username": currentUser.displayName,
+          "userId": currentUser.id,
+          "userProfilePic": currentUser.photoUrl,
+          "timestamp": DateTime.now()
+        });
+      }
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -239,11 +261,24 @@ class Database {
     });
   }
 
-  Future<void> removeGoingGood(userId, postId) async {
+  Future<void> removeGoingGood(userId, ownerId, postId, title, pic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.document('food/$postId');
       final DocumentReference ref2 = dbRef.document('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-5)});
+
+      
+        notificationFeedRef
+            .document(ownerId)
+            .collection("feedItems")
+            .document(postId)
+            .get()
+            .then((doc) {
+          if (doc.exists) {
+            doc.reference.delete();
+          }
+        });
+      
 
       // addGoingToNotificationFeed(
       //     userId,
@@ -251,13 +286,8 @@ class Database {
       //     );
 
       postsRef.document(postId).setData({
-        "invitees": {
-          user.id: FieldValue.delete()
-        }
-      }, 
-        merge: true
-      
-      );
+        "invitees": {user.id: FieldValue.delete()}
+      }, merge: true);
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -459,8 +489,7 @@ class Database {
     });
   }
 
-  removeGoingFromNotificationFeed(
-      String ownerId, String previewImg, String moovId) {
+  removeGoingFromNotificationFeed(String ownerId, String moovId) {
     bool isNotPostOwner = strUserId != ownerId;
     if (isNotPostOwner) {
       notificationFeedRef
@@ -592,7 +621,7 @@ class Database {
       ownerEmail,
       likedArray) async {
     return dbRef.runTransaction((transaction) async {
-      removeGoingFromNotificationFeed(ownerId, previewImg, moovId);
+      removeGoingFromNotificationFeed(ownerId, moovId);
 
       DocumentSnapshot snapshot;
       //   while (snapshot == null) {

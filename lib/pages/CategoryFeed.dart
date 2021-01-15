@@ -409,16 +409,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
 
-                                var strUserPic = currentUser.photoUrl;
-
                                 bool isAmbassador;
                                 bool isLiked1;
                                 bool hide = false;
-                                // var y = startDate;
-                                // var x = Timestamp.now();
-                                // print(x.toDate());
-                                // print(y.toDate());
-
+                
                                 if (startDate.millisecondsSinceEpoch <
                                     Timestamp.now().millisecondsSinceEpoch -
                                         3600000) {
@@ -987,13 +981,19 @@ class PostOnFeed extends StatelessWidget {
                                           if (invitees != null && status != 3) {
                                             Database().addGoingGood(
                                                 currentUser.id,
-                                                course.documentID);
+                                                course['userId'],
+                                                course.documentID,
+                                                course['title'],
+                                                course['image']);
                                             status = 3;
                                           } else if (invitees != null &&
                                               status == 3) {
                                             Database().removeGoingGood(
                                                 currentUser.id,
-                                                course.documentID);
+                                                course['userId'],
+                                                course.documentID,
+                                                course['title'],
+                                                course['image']);
                                             status = 0;
                                           }
                                         },
@@ -1002,8 +1002,6 @@ class PostOnFeed extends StatelessWidget {
                                            padding: const EdgeInsets.only(bottom: 11.0),
                                            child: status == 3 ? Text("Going!", style: TextStyle(fontSize: 12))
                                          :  Text("Going?", style: TextStyle(fontSize: 12)))
-                                        
-                                      
                                     ],
                                   ),
                                 ),

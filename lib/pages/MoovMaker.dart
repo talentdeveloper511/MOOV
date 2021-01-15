@@ -289,7 +289,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
   @override
   Widget build(BuildContext context) {
-
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Form(
@@ -874,9 +873,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               final profilePic = user.photoUrl;
                               final userName = user.displayName;
                               final userEmail = user.email;
+                              if (inviteesNameList.length == 0) {
+                                print("EMTPY");
+                              }
                               if (_formKey.currentState.validate()) {
-                                print(inviteesNameList);
-
                                 if (_image != null) {
                                   StorageReference firebaseStorageRef =
                                       FirebaseStorage.instance.ref().child(
@@ -899,7 +899,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         address: addressController.text,
                                         startDate: currentValue,
                                         invitees: inviteesNameList,
-                                        
+
                                         // invitees: invitees,
                                         imageUrl: downloadUrl,
                                         userId: strUserId,

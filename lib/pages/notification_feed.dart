@@ -175,7 +175,7 @@ class NotificationFeedItem extends StatelessWidget {
   final String ownerProPic;
   final String ownerName;
   final String ownerEmail;
-  final dynamic startDate, address, moovId;
+  final dynamic address, moovId;
   final List<dynamic> likedArray;
 
   final Timestamp timestamp;
@@ -195,7 +195,6 @@ class NotificationFeedItem extends StatelessWidget {
       this.ownerProPic,
       this.ownerName,
       this.ownerEmail,
-      this.startDate,
       this.address,
       this.moovId,
       this.likedArray});
@@ -218,7 +217,6 @@ class NotificationFeedItem extends StatelessWidget {
       location: doc['location'],
       moovId: doc['moovId'],
       likedArray: doc['likedArray'],
-      startDate: doc['startDate'],
       previewImg: doc['previewImg'],
     );
   }

@@ -751,11 +751,11 @@ class Buttons extends StatelessWidget {
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
                          if (invitees != null && status != 3) {
-                        Database().addGoingGood(currentUser.id, moovId);
+                        Database().addGoingGood(currentUser.id, course['userId'], moovId, course['title'], course['image']);
                         status = 3;
                         print(status);
                       } else if (invitees != null && status == 3) {
-                        Database().removeGoingGood(currentUser.id, moovId);
+                        Database().removeGoingGood(currentUser.id, course['userId'], moovId, course['title'], course['image']);
                         status = 0;
                       }
                       },
