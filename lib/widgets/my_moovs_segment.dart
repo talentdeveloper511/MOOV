@@ -189,55 +189,6 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                 
                                                 course.documentID)));
                                   },
-                                  onDoubleTap: () {
-                                    setState(() {
-                                      List<dynamic> likedArray =
-                                          course["liked"];
-                                      List<String> uidArray = List<String>();
-                                      if (likedArray != null) {
-                                        likeCount = likedArray.length;
-                                        for (int i = 0; i < likeCount; i++) {
-                                          var id = likedArray[i]["uid"];
-                                          uidArray.add(id);
-                                        }
-                                      }
-
-                                      if (uidArray != null &&
-                                          uidArray.contains(currentUser.id)) {
-                                        Database().removeGoing(
-                                            course["userId"],
-                                            course["image"],
-                                            currentUser.id,
-                                            course.documentID,
-                                            currentUser.displayName,
-                                            currentUser.photoUrl,
-                                            course["startDate"],
-                                            course["title"],
-                                            course["description"],
-                                            course["address"],
-                                            course["profilePic"],
-                                            course["userName"],
-                                            course["userEmail"],
-                                            likedArray);
-                                      } else {
-                                        Database().addGoing(
-                                            course["userId"],
-                                            course["image"],
-                                            currentUser.id,
-                                            course.documentID,
-                                            currentUser.displayName,
-                                            currentUser.photoUrl,
-                                            course["startDate"],
-                                            course["title"],
-                                            course["description"],
-                                            course["address"],
-                                            course["profilePic"],
-                                            course["userName"],
-                                            course["userEmail"],
-                                            likedArray);
-                                      }
-                                    });
-                                  },
                                   child: Column(
                                     children: [
                                       ListTile(
@@ -453,31 +404,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                     //splashRadius: 7.0,
                                                     highlightColor: Colors.pink,
                                                     onPressed: () async {
-                                                      // Perform action
-                                                      setState(() {
-                                                        final GoogleSignInAccount
-                                                            user = googleSignIn
-                                                                .currentUser;
-                                                        final strUserId =
-                                                            user.id;
-                                                        Database().removeGoing(
-                                                            course["userId"],
-                                                            course["image"],
-                                                            strUserId,
-                                                            course.documentID,
-                                                            strUserName,
-                                                            strUserPic,
-                                                            course["startDate"],
-                                                            course["title"],
-                                                            course[
-                                                                "description"],
-                                                            course["address"],
-                                                            course[
-                                                                "profilePic"],
-                                                            course["userName"],
-                                                            course["userEmail"],
-                                                            course["liked"]);
-                                                      });
+                                                    
                                                     },
                                                   ),
                                                 ),
@@ -649,53 +576,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                       course.documentID)));
                             },
                             onDoubleTap: () {
-                              setState(() {
-                                List<dynamic> likedArray = course["liked"];
-                                List<String> uidArray = List<String>();
-                                if (likedArray != null) {
-                                  likeCount = likedArray.length;
-                                  for (int i = 0; i < likeCount; i++) {
-                                    var id = likedArray[i]["uid"];
-                                    uidArray.add(id);
-                                  }
-                                }
-
-                                if (uidArray != null &&
-                                    uidArray.contains(currentUser.id)) {
-                                  Database().removeGoing(
-                                      course["userId"],
-                                      course["image"],
-                                      currentUser.id,
-                                      course.documentID,
-                                      currentUser.displayName,
-                                      currentUser.photoUrl,
-                                      course["startDate"],
-                                      course["title"],
-                                      course["description"],
-                                      course["address"],
-                                      course["profilePic"],
-                                      course["userName"],
-                                      course["userEmail"],
-                                      likedArray);
-                                } else {
-                                  Database().addGoing(
-                                      course["userId"],
-                                      course["image"],
-                                      currentUser.id,
-                                      course.documentID,
-                                      currentUser.displayName,
-                                      currentUser.photoUrl,
-                                      course["startDate"],
-                                      course["title"],
-                                      course["description"],
-                                      course["address"],
-                                      course["profilePic"],
-                                      course["userName"],
-                                      course["userEmail"],
-                                      likedArray);
-                                }
-                              });
-                            },
+                           
                             child: Column(
                               children: [
                                 ListTile(
@@ -864,28 +745,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                               //splashRadius: 7.0,
                                               highlightColor: Colors.pink,
                                               onPressed: () async {
-                                                // Perform action
-                                                setState(() {
-                                                  final GoogleSignInAccount
-                                                      user =
-                                                      googleSignIn.currentUser;
-                                                  final strUserId = user.id;
-                                                  Database().removeGoing(
-                                                      course["userId"],
-                                                      course["image"],
-                                                      strUserId,
-                                                      course.documentID,
-                                                      strUserName,
-                                                      strUserPic,
-                                                      course["startDate"],
-                                                      course["title"],
-                                                      course["description"],
-                                                      course["address"],
-                                                      course["profilePic"],
-                                                      course["userName"],
-                                                      course["userEmail"],
-                                                      course["liked"]);
-                                                });
+                                              
+                                              
                                               },
                                             ),
                                           ),
@@ -978,7 +839,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                 ],
                               ),*/
                               ],
-                            ),
+                            );}
                           ),
                         );
                       },
