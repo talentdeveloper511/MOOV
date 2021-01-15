@@ -12,7 +12,7 @@ import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -397,19 +397,30 @@ class _EditGroupState extends State<EditGroup> {
                               style: TextStyle(color: Colors.white)),
                           onPressed: () async {
                             if (_image != null) {
-                              StorageReference firebaseStorageRef =
-                                  FirebaseStorage.instance
-                                      .ref()
-                                      .child("images/group" + gid);
-                              StorageUploadTask uploadTask =
-                                  firebaseStorageRef.putFile(_image);
+                              firebase_storage.Reference ref = firebase_storage
+                                  .FirebaseStorage.instance
+                                  .ref()
+                                  .child("images/group" + gid);
+
+                              // StorageReference firebaseStorageRef =
+                              //     FirebaseStorage.instance
+                              //         .ref()
+                              //         .child("images/group" + gid);
+
+                                  firebase_storage.UploadTask uploadTask;
+
+                              uploadTask =
+                                  ref.putFile(_image);
+
+
+
                               StorageTaskSnapshot taskSnapshot =
-                                  await uploadTask.onComplete;
+                                  await uploadTask;
                               if (taskSnapshot.error == null) {
                                 print("added to Firebase Storage");
                                 final String downloadUrl =
                                     await taskSnapshot.ref.getDownloadURL();
-                                groupsRef.document(gid).updateData({
+                                groupsRef.doc(gid).update({
                                   "groupPic": downloadUrl,
                                 });
                               }
@@ -420,8 +431,8 @@ class _EditGroupState extends State<EditGroup> {
                                   groupNameController.text, gid, displayName);
                               FirebaseFirestore.instance
                                   .collection('friendGroups')
-                                  .document(gid)
-                                  .updateData({
+                                  .doc(gid)
+                                  .update({
                                 "groupName": groupNameController.text,
                               });
                             }

@@ -5,7 +5,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -357,9 +357,21 @@ class _GroupFormState extends State<GroupForm> {
   }
 
   void _saveFirebase() async {
-    Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child("images/group" + groupName);
-    UploadTask uploadTask = firebaseStorageRef.putFile(_image);
+
+    firebase_storage.Reference ref = firebase_storage
+                                  .FirebaseStorage.instance
+                                  .ref()
+                                  .child("images/group" + gid);
+    // Reference firebaseStorageRef =
+    //     FirebaseStorage.instance.ref().child("images/group" + gid);
+
+  firebase_storage.UploadTask
+                                                uploadTask;
+
+     uploadTask = ref.putFile(_image);
+
+
+
     TaskSnapshot taskSnapshot = await uploadTask.onComplete;
     if (taskSnapshot.error == null) {
       print("added to Firebase Storage");

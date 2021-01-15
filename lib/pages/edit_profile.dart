@@ -9,7 +9,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -400,12 +400,23 @@ class _EditProfileState extends State<EditProfile> {
                           Text('Save', style: TextStyle(color: Colors.white)),
                       onPressed: () async {
                         if (_image != null) {
-                          StorageReference firebaseStorageRef = FirebaseStorage
-                              .instance
-                              .ref()
-                              .child("images/" + currentUser.displayName);
-                          StorageUploadTask uploadTask =
-                              firebaseStorageRef.putFile(_image);
+
+
+                           firebase_storage.Reference ref = firebase_storage
+                                  .FirebaseStorage.instance
+                                  .ref()
+                                  .child("images/" + currentUser.displayName);
+
+
+
+                          // StorageReference firebaseStorageRef = FirebaseStorage
+                          //     .instance
+                          //     .ref()
+                          //     .child("images/" + currentUser.displayName);
+                                                                                      firebase_storage.UploadTask uploadTask;
+
+                          uploadTask =
+                              ref.putFile(_image);
                           StorageTaskSnapshot taskSnapshot =
                               await uploadTask.onComplete;
                           if (taskSnapshot.error == null) {
@@ -418,12 +429,20 @@ class _EditProfileState extends State<EditProfile> {
                           }
                         }
                         if (_image2 != null) {
-                          StorageReference firebaseStorageRef = FirebaseStorage
-                              .instance
-                              .ref()
-                              .child("images/header" + currentUser.displayName);
-                          StorageUploadTask uploadTask =
-                              firebaseStorageRef.putFile(_image2);
+
+                           firebase_storage.Reference ref = firebase_storage
+                                  .FirebaseStorage.instance
+                                  .ref()
+                                  .child("images/header" + currentUser.displayName);
+
+                          // StorageReference firebaseStorageRef = FirebaseStorage
+                          //     .instance
+                          //     .ref()
+                          //     .child("images/header" + currentUser.displayName);
+                                                            firebase_storage.UploadTask uploadTask;
+
+                        uploadTask =
+                              ref.putFile(_image2);
                           StorageTaskSnapshot taskSnapshot =
                               await uploadTask.onComplete;
                           if (taskSnapshot.error == null) {

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
@@ -105,7 +105,7 @@ class Database {
       //     );
       FirebaseFirestore.instance.collection('food').doc(postId).set({
         "invitees": {userId: 1}
-      }, merge: true);
+      }, SetOptions(merge: true));
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -127,7 +127,7 @@ class Database {
       //     );
       postsRef.doc(postId).set({
         "invitees": {user.id: FieldValue.delete()}
-      }, merge: true);
+      }, SetOptions(merge: true));
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -145,7 +145,7 @@ class Database {
 
       FirebaseFirestore.instance.collection('food').doc(postId).set({
         "invitees": {userId: 2}
-      }, merge: true);
+      }, SetOptions(merge: true));
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -163,7 +163,7 @@ class Database {
 
       postsRef.doc(postId).set({
         "invitees": {user.id: FieldValue.delete()}
-      }, merge: true);
+      }, SetOptions(merge: true));
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -181,7 +181,7 @@ class Database {
 
       await FirebaseFirestore.instance.collection('food').doc(postId).set({
         "invitees": {userId: 3}
-      }, merge: true);
+      }, SetOptions(merge: true));
 
       ///NOTIF FUNCTION BELOW
       bool isNotPostOwner = strUserId != ownerId;
@@ -234,7 +234,7 @@ class Database {
 
       postsRef.doc(postId).set({
         "invitees": {user.id: FieldValue.delete()}
-      }, merge: true);
+      }, SetOptions(merge: true));
 
       String serialUser = userId;
       transaction.update(ref, {
@@ -363,9 +363,13 @@ class Database {
   }
 
   deletePost(String postId, String ownerId, String title) {
-    final FirebaseStorage _storage =
-        FirebaseStorage(storageBucket: 'gs://moov4-4d3c4.appspot.com');
+    // final FirebaseStorage _storage =
+    //     FirebaseStorage(storageBucket: 'gs://moov4-4d3c4.appspot.com');
+    // String filePath = 'images/$ownerId$title';
     String filePath = 'images/$ownerId$title';
+
+    firebase_storage.Reference ref =
+        firebase_storage.FirebaseStorage.instance.ref().child(filePath);
 
     groupsRef
         .where('nextMOOV', isEqualTo: postId)
@@ -393,7 +397,8 @@ class Database {
     if (isPostOwner) {
       postsRef.doc(postId).get().then((doc) {
         if (doc.exists) {
-          _storage.ref().child(filePath).delete();
+          // _storage.ref().child(filePath).delete();
+          ref.delete();
 
           doc.reference.delete();
           notificationFeedRef

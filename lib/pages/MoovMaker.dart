@@ -9,7 +9,7 @@ import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
@@ -874,14 +874,23 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               }
                               if (_formKey.currentState.validate()) {
                                 if (_image != null) {
-                                  Reference firebaseStorageRef = FirebaseStorage
-                                      .instance
-                                      .ref()
-                                      .child("images/" +
-                                          user.id +
-                                          titleController.text);
-                                  UploadTask uploadTask =
-                                      firebaseStorageRef.putFile(_image);
+                                  firebase_storage.Reference ref =
+                                      firebase_storage.FirebaseStorage.instance
+                                          .ref()
+                                          .child("images/" +
+                                              user.id +
+                                              titleController.text);
+
+                                  // Reference firebaseStorageRef = FirebaseStorage
+                                  //     .instance
+                                  //     .ref()
+                                  //     .child("images/" +
+                                  //         user.id +
+                                  //         titleController.text);
+                                  firebase_storage.UploadTask uploadTask;
+
+                                  uploadTask =
+                                      ref.putFile(_image);
                                   TaskSnapshot taskSnapshot =
                                       await uploadTask.onComplete;
                                   if (taskSnapshot.hasError == null) {
