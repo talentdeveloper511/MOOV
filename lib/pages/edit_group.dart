@@ -13,6 +13,7 @@ import 'package:MOOV/widgets/camera.dart';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -407,15 +408,11 @@ class _EditGroupState extends State<EditGroup> {
                               //         .ref()
                               //         .child("images/group" + gid);
 
-                                  firebase_storage.UploadTask uploadTask;
+                              firebase_storage.UploadTask uploadTask;
 
-                              uploadTask =
-                                  ref.putFile(_image);
+                              uploadTask = ref.putFile(_image);
 
-
-
-                              StorageTaskSnapshot taskSnapshot =
-                                  await uploadTask;
+                              TaskSnapshot taskSnapshot = await uploadTask;
                               if (taskSnapshot.error == null) {
                                 print("added to Firebase Storage");
                                 final String downloadUrl =

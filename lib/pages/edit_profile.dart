@@ -4,6 +4,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -400,24 +401,19 @@ class _EditProfileState extends State<EditProfile> {
                           Text('Save', style: TextStyle(color: Colors.white)),
                       onPressed: () async {
                         if (_image != null) {
-
-
-                           firebase_storage.Reference ref = firebase_storage
-                                  .FirebaseStorage.instance
-                                  .ref()
-                                  .child("images/" + currentUser.displayName);
-
-
+                          firebase_storage.Reference ref = firebase_storage
+                              .FirebaseStorage.instance
+                              .ref()
+                              .child("images/" + currentUser.displayName);
 
                           // StorageReference firebaseStorageRef = FirebaseStorage
                           //     .instance
                           //     .ref()
                           //     .child("images/" + currentUser.displayName);
-                                                                                      firebase_storage.UploadTask uploadTask;
+                          firebase_storage.UploadTask uploadTask;
 
-                          uploadTask =
-                              ref.putFile(_image);
-                          StorageTaskSnapshot taskSnapshot =
+                          uploadTask = ref.putFile(_image);
+                          TaskSnapshot taskSnapshot =
                               await uploadTask.onComplete;
                           if (taskSnapshot.error == null) {
                             print("added to Firebase Storage");
@@ -429,21 +425,19 @@ class _EditProfileState extends State<EditProfile> {
                           }
                         }
                         if (_image2 != null) {
-
-                           firebase_storage.Reference ref = firebase_storage
-                                  .FirebaseStorage.instance
-                                  .ref()
-                                  .child("images/header" + currentUser.displayName);
+                          firebase_storage.Reference ref = firebase_storage
+                              .FirebaseStorage.instance
+                              .ref()
+                              .child("images/header" + currentUser.displayName);
 
                           // StorageReference firebaseStorageRef = FirebaseStorage
                           //     .instance
                           //     .ref()
                           //     .child("images/header" + currentUser.displayName);
-                                                            firebase_storage.UploadTask uploadTask;
+                          firebase_storage.UploadTask uploadTask;
 
-                        uploadTask =
-                              ref.putFile(_image2);
-                          StorageTaskSnapshot taskSnapshot =
+                          uploadTask = ref.putFile(_image2);
+                          TaskSnapshot taskSnapshot =
                               await uploadTask.onComplete;
                           if (taskSnapshot.error == null) {
                             print("added to Firebase Storage");

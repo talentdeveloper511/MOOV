@@ -10,6 +10,7 @@ import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -633,12 +634,12 @@ class _EditPostState extends State<EditPost> {
                                         });
                                         if (_formKey.currentState != null) {
                                           if (_image != null) {
-                                            firebase_storage.Reference ref = firebase_storage
-                                  .FirebaseStorage.instance
-                                  .ref()
-                                  .child("images/" +
+                                            firebase_storage.Reference ref =
+                                                firebase_storage
+                                                    .FirebaseStorage.instance
+                                                    .ref()
+                                                    .child("images/" +
                                                         titleController.text);
-                                          
 
                                             // Reference firebaseStorageRef =
                                             //     FirebaseStorage.instance
@@ -649,8 +650,7 @@ class _EditPostState extends State<EditPost> {
                                             firebase_storage.UploadTask
                                                 uploadTask;
 
-                                            uploadTask = ref
-                                                .putFile(_image);
+                                            uploadTask = ref.putFile(_image);
                                             TaskSnapshot taskSnapshot =
                                                 await uploadTask.onComplete;
                                             if (taskSnapshot.error == null) {
