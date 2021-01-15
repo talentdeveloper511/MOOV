@@ -6,7 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final usersRef = Firestore.instance.collection('users');
+final usersRef = FirebaseFirestore.instance.collection('users');
 
 class friendsList extends StatefulWidget {
   dynamic moovId;
@@ -37,7 +37,7 @@ class friendsListState extends State<friendsList> {
     // TODO: implement build
 
     return StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('users')
             .where("friendArray", arrayContains: currentUser.id)
             .snapshots(),

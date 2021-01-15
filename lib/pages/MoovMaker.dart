@@ -3,8 +3,6 @@ import 'dart:io';
 import 'dart:math';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/add_users_post.dart';
@@ -23,10 +21,9 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:random_string/random_string.dart';
 import 'home.dart';
 
-final usersRef = Firestore.instance.collection('users');
+final usersRef = FirebaseFirestore.instance.collection('users');
 
 class MoovMaker extends StatefulWidget {
   final PostModel postModel;
@@ -618,10 +615,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                       itemCount: inviteesNameList.length,
                                       itemBuilder: (_, index) {
                                         return StreamBuilder(
-                                            stream: Firestore.instance
+                                            stream: FirebaseFirestore.instance
                                                 .collection('users')
-                                                .document(
-                                                    inviteesNameList[index])
+                                                .doc(inviteesNameList[index])
                                                 .snapshots(),
                                             builder: (context, snapshot) {
                                               // bool isLargePhone = Screen.diagonal(context) > 766;
@@ -878,16 +874,17 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               }
                               if (_formKey.currentState.validate()) {
                                 if (_image != null) {
-                                  StorageReference firebaseStorageRef =
-                                      FirebaseStorage.instance.ref().child(
-                                          "images/" +
-                                              user.id +
-                                              titleController.text);
-                                  StorageUploadTask uploadTask =
+                                  Reference firebaseStorageRef = FirebaseStorage
+                                      .instance
+                                      .ref()
+                                      .child("images/" +
+                                          user.id +
+                                          titleController.text);
+                                  UploadTask uploadTask =
                                       firebaseStorageRef.putFile(_image);
-                                  StorageTaskSnapshot taskSnapshot =
+                                  TaskSnapshot taskSnapshot =
                                       await uploadTask.onComplete;
-                                  if (taskSnapshot.error == null) {
+                                  if (taskSnapshot.hasError == null) {
                                     print("added to Firebase Storage");
                                     final String downloadUrl =
                                         await taskSnapshot.ref.getDownloadURL();

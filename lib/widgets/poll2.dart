@@ -45,8 +45,10 @@ class _PollViewState extends State<PollView> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
-        stream:
-            Firestore.instance.collection('poll').document('jan12').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('poll')
+            .doc('jan12')
+            .snapshots(),
         builder: (context, snapshot) {
           // dynamic moovId;
           bool isLargePhone = Screen.diagonal(context) > 766;
@@ -120,10 +122,10 @@ class _PollViewState extends State<PollView> {
                               x = choice;
                             });
 
-                            Firestore.instance
+                            FirebaseFirestore.instance
                                 .collection('poll')
-                                .document('jan12')
-                                .setData({
+                                .doc('jan12')
+                                .set({
                               "voters": {user.id: choice}
                             }, merge: true);
 
@@ -173,9 +175,9 @@ class _PollViewState extends State<PollView> {
                                 var p = voters.keys.toList();
 
                                 return StreamBuilder(
-                                    stream: Firestore.instance
+                                    stream: FirebaseFirestore.instance
                                         .collection('users')
-                                        .document(p[index])
+                                        .doc(p[index])
                                         .snapshots(),
                                     builder: (context, snapshot2) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
@@ -264,9 +266,9 @@ class _PollViewState extends State<PollView> {
                                 var w = voters.keys.toList();
 
                                 return StreamBuilder(
-                                    stream: Firestore.instance
+                                    stream: FirebaseFirestore.instance
                                         .collection('users')
-                                        .document(w[index])
+                                        .doc(w[index])
                                         .snapshots(),
                                     builder: (context, snapshot3) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;

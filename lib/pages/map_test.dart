@@ -23,7 +23,7 @@ class _MapTestState extends State<MapTest> {
       color: Colors.white,
       height: 280,
       child: StreamBuilder(
-          stream: Firestore.instance
+          stream: FirebaseFirestore.instance
               .collection('food')
               // .where("MOTD", isEqualTo: true)
               .snapshots(),
@@ -68,11 +68,9 @@ class _MapTestState extends State<MapTest> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 18.0),
                         child: SfCartesianChart(
-                        
                             margin: EdgeInsets.fromLTRB(10, 00, 10, 160),
                             primaryYAxis: CategoryAxis(zoomFactor: 2),
                             primaryXAxis: CategoryAxis(
-                              
                               labelRotation: 0,
                               labelsExtent: 90,
                               labelStyle: TextStyle(
@@ -105,7 +103,6 @@ class _MapTestState extends State<MapTest> {
 
                                   // Enable data label
                                   dataLabelSettings: DataLabelSettings(
-                              
                                     isVisible: true,
                                   ))
                             ]),

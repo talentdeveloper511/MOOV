@@ -55,7 +55,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
@@ -63,12 +63,11 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
               color: Colors.white,
             ),
             onPressed: () {
-               Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Home()),
-                                    (Route<dynamic> route) => false,
-                                  );
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+                (Route<dynamic> route) => false,
+              );
             },
           ),
           backgroundColor: TextThemes.ndBlue,
@@ -78,7 +77,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
           ),
         ),
         body: StreamBuilder(
-            stream: Firestore.instance
+            stream: FirebaseFirestore.instance
                 .collection('friendGroups')
                 .where('members', arrayContains: currentUser.id)
                 .snapshots(),
@@ -94,37 +93,37 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 50.0),
                           child: RaisedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => GroupForm()));
-                              },
-                              color: TextThemes.ndBlue,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.people, color: TextThemes.ndGold),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text('Create Friend Group',
-                                          style: TextStyle(
-                                              color: Colors.white, fontSize: 20)),
-                                    ),
-                                  ],
-                                ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => GroupForm()));
+                            },
+                            color: TextThemes.ndBlue,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.people, color: TextThemes.ndGold),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Create Friend Group',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20)),
+                                  ),
+                                ],
                               ),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0)),
                             ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                          ),
                         ),
                         Text(
                           "When added to a Friend Group,\n it will appear here.",
                           textAlign: TextAlign.center,
-                          style:
-                              TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w300),
                         ),
                       ],
                     ),
@@ -185,7 +184,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                               // print(course['groupName']);
 
                               return StreamBuilder(
-                                  stream: Firestore.instance
+                                  stream: FirebaseFirestore.instance
                                       .collection('users')
                                       .where('friendGroups',
                                           arrayContains: course['groupName'])

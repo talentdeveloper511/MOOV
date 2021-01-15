@@ -35,7 +35,7 @@ class _NextMOOVState extends State<NextMOOV> {
     var pic;
 
     return StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('food')
             .where("postId", isEqualTo: selected)
             .snapshots(),
@@ -67,8 +67,7 @@ class _NextMOOVState extends State<NextMOOV> {
                           child: GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      PostDetail(course.documentID)));
+                                  builder: (context) => PostDetail(course.id)));
                             },
                             child: Stack(children: <Widget>[
                               FractionallySizedBox(
@@ -121,20 +120,24 @@ class _NextMOOVState extends State<NextMOOV> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: ConstrainedBox(
-                                            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width* .7),
-                                            child: Text(
-                                              title,
-                                                  maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontFamily: 'Solway',
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                  fontSize:
-                                                      isLargePhone ? 22.0 : 20),
-                                            ),
-                                          ),
+                                        constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .7),
+                                        child: Text(
+                                          title,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontFamily: 'Solway',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize:
+                                                  isLargePhone ? 22.0 : 20),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),

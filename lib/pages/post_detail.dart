@@ -78,9 +78,9 @@ class _PostDetailState extends State<PostDetail> {
           top: false,
           child: Stack(children: [
             StreamBuilder(
-                stream: Firestore.instance
+                stream: FirebaseFirestore.instance
                     .collection('food')
-                    .document(postId)
+                    .doc(postId)
                     .snapshots(),
                 builder: (context, snapshot) {
                   String title,
@@ -312,10 +312,10 @@ class _AuthorContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     return FutureBuilder<DocumentSnapshot>(
-      future: usersRef.document(userId).get(),
+      future: usersRef.doc(userId).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -370,45 +370,46 @@ class _AuthorContent extends StatelessWidget {
                   ),
                   Spacer(),
                   Padding(
-                  padding: isLargePhone ? const EdgeInsets.only( right: 42.0, top: 10.0) :const EdgeInsets.only( right: 30.0, top: 10.0) ,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        side: BorderSide(color: Colors.black)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              child: SendMOOV(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['image'],
-                                  course['postId'],
-                                  course['startDate'],
-                                  course['title'],
-                                  course['description'],
-                                  course['address'],
-                                  course['profilePic'],
-                                  course['userName'],
-                                  course['userEmail'],
-                                  course['liked'])));
-                    },
-                    color: Colors.white,
-                    padding: EdgeInsets.all(5.0),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 4.0),
-                      child: Column(
-                        children: [
-                          Text('Send'),
-                          Icon(Icons.send_rounded,
-                              color: Colors.blue[500], size: 25),
-                        ],
+                    padding: isLargePhone
+                        ? const EdgeInsets.only(right: 42.0, top: 10.0)
+                        : const EdgeInsets.only(right: 30.0, top: 10.0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(color: Colors.black)),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.bottomToTop,
+                                child: SendMOOV(
+                                    course['postId'],
+                                    course['userId'],
+                                    course['image'],
+                                    course['postId'],
+                                    course['startDate'],
+                                    course['title'],
+                                    course['description'],
+                                    course['address'],
+                                    course['profilePic'],
+                                    course['userName'],
+                                    course['userEmail'],
+                                    course['liked'])));
+                      },
+                      color: Colors.white,
+                      padding: EdgeInsets.all(5.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Column(
+                          children: [
+                            Text('Send'),
+                            Icon(Icons.send_rounded,
+                                color: Colors.blue[500], size: 25),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-
                 ],
               )),
             ),
@@ -556,8 +557,10 @@ class Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream:
-            Firestore.instance.collection('food').document(moovId).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('food')
+            .doc(moovId)
+            .snapshots(),
         builder: (context, snapshot) {
           // title = snapshot.data['title'];
           // pic = snapshot.data['pic'];
@@ -715,14 +718,14 @@ class Buttons extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                         if (invitees != null && status != 2) {
-                        Database().addUndecided(currentUser.id, moovId);
-                        status = 2;
-                        print(status);
-                      } else if (invitees != null && status == 2) {
-                        Database().removeUndecided(currentUser.id, moovId);
-                        status = 0;
-                      }
+                        if (invitees != null && status != 2) {
+                          Database().addUndecided(currentUser.id, moovId);
+                          status = 2;
+                          print(status);
+                        } else if (invitees != null && status == 2) {
+                          Database().removeUndecided(currentUser.id, moovId);
+                          status = 0;
+                        }
                       },
                       color: (status == 2) ? Colors.yellow[600] : Colors.white,
                       padding: EdgeInsets.all(5.0),
@@ -731,7 +734,8 @@ class Buttons extends StatelessWidget {
                         child: (status == 2)
                             ? Column(
                                 children: [
-                                  Text('Undecided', style: TextStyle(color: Colors.white)),
+                                  Text('Undecided',
+                                      style: TextStyle(color: Colors.white)),
                                   Icon(Icons.accessibility,
                                       color: Colors.white, size: 30),
                                 ],
@@ -753,35 +757,45 @@ class Buttons extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                         if (invitees != null && status != 3) {
-                        Database().addGoingGood(currentUser.id, course['userId'], moovId, course['title'], course['image']);
-                        status = 3;
-                        print(status);
-                      } else if (invitees != null && status == 3) {
-                        Database().removeGoingGood(currentUser.id, course['userId'], moovId, course['title'], course['image']);
-                        status = 0;
-                      }
+                        if (invitees != null && status != 3) {
+                          Database().addGoingGood(
+                              currentUser.id,
+                              course['userId'],
+                              moovId,
+                              course['title'],
+                              course['image']);
+                          status = 3;
+                          print(status);
+                        } else if (invitees != null && status == 3) {
+                          Database().removeGoingGood(
+                              currentUser.id,
+                              course['userId'],
+                              moovId,
+                              course['title'],
+                              course['image']);
+                          status = 0;
+                        }
                       },
                       color: (status == 3) ? Colors.green : Colors.white,
                       padding: EdgeInsets.all(5.0),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: (status == 3) ?
-                        Column(
-                          children: [
-                            Text('Going!', style: TextStyle(color: Colors.white)),
-                            Icon(Icons.directions_run_outlined,
-                                color: Colors.white, size: 30),
-                          ],
-                        ):
-                        Column(
-                          children: [
-                            Text('Going'),
-                            Icon(Icons.directions_run_outlined,
-                                color: Colors.green[500], size: 30),
-                          ],
-                        )
-                      ),
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: (status == 3)
+                              ? Column(
+                                  children: [
+                                    Text('Going!',
+                                        style: TextStyle(color: Colors.white)),
+                                    Icon(Icons.directions_run_outlined,
+                                        color: Colors.white, size: 30),
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    Text('Going'),
+                                    Icon(Icons.directions_run_outlined,
+                                        color: Colors.green[500], size: 30),
+                                  ],
+                                )),
                     ),
                   ),
                 ],

@@ -26,7 +26,7 @@ class _MOTDState extends State<MOTD> {
     var pic;
 
     return StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('food')
             .where("MOTD", isEqualTo: true)
             .snapshots(),
@@ -41,7 +41,7 @@ class _MOTDState extends State<MOTD> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: 1,
                 itemBuilder: (context, index) {
-                      bool isLargePhone = Screen.diagonal(context) > 766;
+                  bool isLargePhone = Screen.diagonal(context) > 766;
 
                   DocumentSnapshot course = snapshot.data.documents[index];
                   pic = course['image'];
@@ -52,12 +52,13 @@ class _MOTDState extends State<MOTD> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          height: isLargePhone ? SizeConfig.blockSizeVertical * 15 : SizeConfig.blockSizeVertical * 18,
+                          height: isLargePhone
+                              ? SizeConfig.blockSizeVertical * 15
+                              : SizeConfig.blockSizeVertical * 18,
                           child: GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PostDetail(
-                                      course.documentID)));
+                                  builder: (context) => PostDetail(course.id)));
                             },
                             child: Stack(children: <Widget>[
                               FractionallySizedBox(

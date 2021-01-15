@@ -273,7 +273,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                       // Sign In View
                       Center(
                         child: StreamBuilder(
-                            stream: Firestore.instance
+                            stream: FirebaseFirestore.instance
                                 .collection('food')
                                 .where("type", isEqualTo: type)
                                 // .where("featured", isEqualTo: true)
@@ -316,7 +316,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                     }
                                   }
 
-                             
                                   bool hide = false;
 
                                   if (startDate.millisecondsSinceEpoch <
@@ -365,7 +364,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                             }),
                       ),
                       StreamBuilder(
-                          stream: Firestore.instance
+                          stream: FirebaseFirestore.instance
                               .collection('food')
                               .where("type", isEqualTo: type)
                               .orderBy("startDate")
@@ -412,7 +411,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 bool isAmbassador;
                                 bool isLiked1;
                                 bool hide = false;
-                
+
                                 if (startDate.millisecondsSinceEpoch <
                                     Timestamp.now().millisecondsSinceEpoch -
                                         3600000) {
@@ -466,7 +465,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                             );
                           }),
                       StreamBuilder(
-                          stream: Firestore.instance
+                          stream: FirebaseFirestore.instance
                               .collection('food')
                               .where("type", isEqualTo: type)
                               // .where('privacy', isEqualTo: 'Friends Only')
@@ -636,7 +635,6 @@ class PostOnFeed extends StatelessWidget {
 
     var strUserPic = currentUser.photoUrl;
 
-
     if (startDate.millisecondsSinceEpoch <
         Timestamp.now().millisecondsSinceEpoch - 3600000) {
       print("Expired. See ya later.");
@@ -672,7 +670,7 @@ class PostOnFeed extends StatelessWidget {
               highlightColor: Colors.white,
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PostDetail(course.documentID)));
+                    builder: (context) => PostDetail(course.id)));
               },
               child: Column(
                 children: [
@@ -795,9 +793,9 @@ class PostOnFeed extends StatelessWidget {
                   //   ),
                   // ),
                   StreamBuilder(
-                      stream: Firestore.instance
+                      stream: FirebaseFirestore.instance
                           .collection('users')
-                          .document(course['userId'])
+                          .doc(course['userId'])
                           .snapshots(),
                       builder: (context, snapshot2) {
                         var userYear;
@@ -982,7 +980,7 @@ class PostOnFeed extends StatelessWidget {
                                             Database().addGoingGood(
                                                 currentUser.id,
                                                 course['userId'],
-                                                course.documentID,
+                                                course.id,
                                                 course['title'],
                                                 course['image']);
                                             status = 3;
@@ -991,7 +989,7 @@ class PostOnFeed extends StatelessWidget {
                                             Database().removeGoingGood(
                                                 currentUser.id,
                                                 course['userId'],
-                                                course.documentID,
+                                                course.id,
                                                 course['title'],
                                                 course['image']);
                                             status = 0;
@@ -999,9 +997,15 @@ class PostOnFeed extends StatelessWidget {
                                         },
                                       ),
                                       Padding(
-                                           padding: const EdgeInsets.only(bottom: 11.0),
-                                           child: status == 3 ? Text("Going!", style: TextStyle(fontSize: 12))
-                                         :  Text("Going?", style: TextStyle(fontSize: 12)))
+                                          padding: const EdgeInsets.only(
+                                              bottom: 11.0),
+                                          child: status == 3
+                                              ? Text("Going!",
+                                                  style:
+                                                      TextStyle(fontSize: 12))
+                                              : Text("Going?",
+                                                  style:
+                                                      TextStyle(fontSize: 12)))
                                     ],
                                   ),
                                 ),

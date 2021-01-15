@@ -20,12 +20,7 @@ class SendMOOV extends StatefulWidget {
   String mid;
   String ownerId, previewImg;
   dynamic startDate, moovId;
-  String title,
-      description,
-      address,
-      ownerProPic,
-      ownerName,
-      ownerEmail;
+  String title, description, address, ownerProPic, ownerName, ownerEmail;
   List<dynamic> likedArray;
 
   SendMOOV(
@@ -62,12 +57,7 @@ class _SendMOOVState extends State<SendMOOV> {
   String mid;
   String ownerId, previewImg;
   dynamic startDate, moovId;
-  String title,
-      description,
-      address,
-      ownerProPic,
-      ownerName,
-      ownerEmail;
+  String title, description, address, ownerProPic, ownerName, ownerEmail;
   List<dynamic> likedArray;
 
   _SendMOOVState(
@@ -89,7 +79,7 @@ class _SendMOOVState extends State<SendMOOV> {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
         .limit(5)
-        .getDocuments();
+        .get();
     setState(() {
       searchResultsFuture = users;
     });
@@ -200,12 +190,7 @@ class UserResult extends StatefulWidget {
   User user;
   String ownerId, previewImg;
   dynamic startDate, moovId;
-  String title,
-      description,
-      address,
-      ownerProPic,
-      ownerName,
-      ownerEmail;
+  String title, description, address, ownerProPic, ownerName, ownerEmail;
   List<dynamic> likedArray;
 
   UserResult(
@@ -242,12 +227,7 @@ class _UserResultState extends State<UserResult> {
   User user;
   String ownerId, previewImg;
   dynamic startDate, moovId;
-  String title,
-      description,
-      address,
-      ownerProPic,
-      ownerName,
-      ownerEmail;
+  String title, description, address, ownerProPic, ownerName, ownerEmail;
   List<dynamic> likedArray;
   bool status = false;
 
@@ -283,54 +263,57 @@ class _UserResultState extends State<UserResult> {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: user.id == currentUser.id ? null :
-              status
-                  ? RaisedButton(
-                      padding: const EdgeInsets.all(2.0),
-                      color: Colors.green,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                      onPressed: () {
-                        setState(() {
-                          status = false;
-                        });
-                      },
-                      child: Text(
-                        "Sent",
-                        style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                        ),
-                      ))
-                  : RaisedButton(
-                      padding: const EdgeInsets.all(2.0),
-                      color: TextThemes.ndBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                      onPressed: () {
-                        Database().sendMOOVNotification(
-                            user.id,
-                            previewImg,
-                            moovId,
-                            startDate,
-                            title,
-                            description,
-                            address,
-                            ownerProPic,
-                            ownerName,
-                            ownerEmail,
-                            likedArray);
-                        setState(() {
-                          status = true;
-                        });
-                      },
-                      child: Text(
-                        "Send MOOV",
-                        style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                        ),
-                      )),
+              trailing: user.id == currentUser.id
+                  ? null
+                  : status
+                      ? RaisedButton(
+                          padding: const EdgeInsets.all(2.0),
+                          color: Colors.green,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(3.0))),
+                          onPressed: () {
+                            setState(() {
+                              status = false;
+                            });
+                          },
+                          child: Text(
+                            "Sent",
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                            ),
+                          ))
+                      : RaisedButton(
+                          padding: const EdgeInsets.all(2.0),
+                          color: TextThemes.ndBlue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(3.0))),
+                          onPressed: () {
+                            Database().sendMOOVNotification(
+                                user.id,
+                                previewImg,
+                                moovId,
+                                startDate,
+                                title,
+                                description,
+                                address,
+                                ownerProPic,
+                                ownerName,
+                                ownerEmail,
+                                likedArray);
+                            setState(() {
+                              status = true;
+                            });
+                          },
+                          child: Text(
+                            "Send MOOV",
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                            ),
+                          )),
             ),
           ),
           Divider(

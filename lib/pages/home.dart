@@ -31,12 +31,13 @@ import 'package:random_string/random_string.dart';
 import 'create_account.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
-final StorageReference storageRef = FirebaseStorage.instance.ref();
-final usersRef = Firestore.instance.collection('users');
-final postsRef = Firestore.instance.collection('food');
-final groupsRef = Firestore.instance.collection('friendGroups');
+final Reference storageRef = FirebaseStorage.instance.ref();
+final usersRef = FirebaseFirestore.instance.collection('users');
+final postsRef = FirebaseFirestore.instance.collection('food');
+final groupsRef = FirebaseFirestore.instance.collection('friendGroups');
 
-final notificationFeedRef = Firestore.instance.collection('notificationFeed');
+final notificationFeedRef =
+    FirebaseFirestore.instance.collection('notificationFeed');
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
@@ -51,7 +52,7 @@ class _HomeState extends State<Home> {
   int pageIndex = 0;
   dynamic startDate, moovId;
   List<dynamic> likedArray;
-  final Firestore _db = Firestore.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
   StreamSubscription iosSubscription;
@@ -73,79 +74,117 @@ class _HomeState extends State<Home> {
       print('Error signing in: $err');
     });
 
-    //   if (Platform.isIOS) {
-    //     iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
-    //       print(data);
-    //       _saveDeviceToken();
-    //     });
+    if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        print(data);
+        _saveDeviceToken();
+      });
 
-    //     _fcm.requestNotificationPermissions(IosNotificationSettings());
-    //   } else {
-    //     _saveDeviceToken();
-    //   }
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    } else {
+      _saveDeviceToken();
+    }
 
-    //   _fcm.configure(
-    //     onMessage: (Map<String, dynamic> message) async {
-    //       print("onMessage: $message");
-    //       // final snackbar = SnackBar(
-    //       //   content: Text(message['notification']['title']),
-    //       //   action: SnackBarAction(
-    //       //     label: 'Go',
-    //       //     onPressed: () => null,
-    //       //   ),
-    //       // );
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        // final snackbar = SnackBar(
+        //   content: Text(message['notification']['body']),
+        //   action: SnackBarAction(
+        //     label: 'Go',
+        //     onPressed: () => null,
+        //   ),
+        // );
 
-    //       // Scaffold.of(context).showSnackBar(snackbar);
-    //       showDialog(
-    //         context: context,
-    //         builder: (context) => AlertDialog(
-    //           content: ListTile(
-    //             title: Text(message['notification']['title']),
-    //             subtitle: Text(message['notification']['body']),
-    //           ),
-    //           actions: <Widget>[
-    //             FlatButton(
-    //               color: Colors.amber,
-    //               child: Text('Ok'),
-    //               onPressed: () => Navigator.of(context).pop(),
-    //             ),
-    //           ],
-    //         ),
-    //       );
-    //     },
-    //     onLaunch: (Map<String, dynamic> message) async {
-    //       print("onLaunch: $message");
-    //       // TODO optional
-    //     },
-    //     onResume: (Map<String, dynamic> message) async {
-    //       print("onResume: $message");
-    //       // TODO optional
-    //     },
-    //   );
-    // }
+        // Scaffold.of(context).showSnackBar(snackbar);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title'],
+                  style: TextStyle(color: Colors.white)),
+              subtitle: Text(message['notification']['body'],
+                  style: TextStyle(color: Colors.white)),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.amber,
+                child: Text('Sweet', style: TextStyle(color: Colors.black)),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title'],
+                  style: TextStyle(color: Colors.white)),
+              subtitle: Text(message['notification']['body'],
+                  style: TextStyle(color: Colors.white)),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.amber,
+                child: Text('Sweet', style: TextStyle(color: Colors.black)),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title'],
+                  style: TextStyle(color: Colors.white)),
+              subtitle: Text(message['notification']['body'],
+                  style: TextStyle(color: Colors.white)),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.amber,
+                child: Text('Sweet', style: TextStyle(color: Colors.black)),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-    // /// Get the token, save it to the database for current user
-    // _saveDeviceToken() async {
-    //   // Get the current user
-    //   // String uid = 'jeffd23';
+  /// Get the token, save it to the database for current user
+  _saveDeviceToken() async {
+    // Get the current user
+    // String uid = 'jeffd23';
 
-    //   // Get the token for this device
-    //   String fcmToken = await _fcm.getToken();
+    // Get the token for this device
+    String fcmToken = await _fcm.getToken();
 
-    //   // Save it to Firestore
-    //   if (fcmToken != null) {
-    //     var tokens = _db
-    //         .collection('users')
-    //         .document(currentUser.id)
-    //         .collection('tokens')
-    //         .document(fcmToken);
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = _db
+          .collection('users')
+          .doc(currentUser.id)
+          .collection('tokens')
+          .doc(fcmToken);
 
-    //     await tokens.setData({
-    //       'token': fcmToken,
-    //       'createdAt': FieldValue.serverTimestamp(), // optional
-    //       'platform': Platform.operatingSystem // optional
-    //     });
-    //   }
+      await tokens.set({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(), // optional
+        'platform': Platform.operatingSystem // optional
+      });
+    }
   }
 
   handleSignIn(GoogleSignInAccount account) {
@@ -164,7 +203,7 @@ class _HomeState extends State<Home> {
   createUserInFirestore() async {
     // 1) check if user exists in users collection in database (according to their id)
     final GoogleSignInAccount user = googleSignIn.currentUser;
-    DocumentSnapshot doc = await usersRef.document(user.id).get();
+    DocumentSnapshot doc = await usersRef.doc(user.id).get();
 
     if (!doc.exists) {
       // 2) if the user doesn't exist, then we want to take them to the create account page
@@ -177,7 +216,7 @@ class _HomeState extends State<Home> {
       final String referral = result[3];
 
       // 3) get username from create account, use it to make new user document in users collection
-      usersRef.document(user.id).setData({
+      usersRef.doc(user.id).set({
         "id": user.id,
         "photoUrl": user.photoUrl,
         "email": user.email,
@@ -198,7 +237,7 @@ class _HomeState extends State<Home> {
         "venmo": "",
         "friendGroups": []
       });
-      doc = await usersRef.document(user.id).get();
+      doc = await usersRef.doc(user.id).get();
     }
     currentUser = User.fromDocument(doc);
   }
@@ -241,17 +280,16 @@ class _HomeState extends State<Home> {
           .where("postId", isGreaterThanOrEqualTo: randomAlpha(1))
           .orderBy("postId")
           .limit(1)
-          .getDocuments();
-      if (result.documents != null)
-        randomPost = await result.documents.first['postId'];
+          .get();
+      if (result.docs != null) randomPost = await result.docs.first['postId'];
 
-      if (result.documents == null) {
+      if (result.docs == null) {
         final QuerySnapshot result2 = await postsRef
             .where("postId", isGreaterThanOrEqualTo: "")
             .orderBy("postId")
             .limit(1)
-            .getDocuments();
-        randomPost = await result.documents.first['postId'];
+            .get();
+        randomPost = await result.docs.first['postId'];
       }
       // print(randomPost);
       return randomPost;
@@ -528,7 +566,7 @@ class NamedIcon extends StatelessWidget {
 
     return StreamBuilder(
         stream: notificationFeedRef
-            .document(user.id)
+            .doc(user.id)
             .collection('feedItems')
             .snapshots(),
         builder: (context, snapshot) {

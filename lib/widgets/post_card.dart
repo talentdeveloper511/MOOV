@@ -173,13 +173,13 @@
 //             //   ),
 //             // ),
 //             StreamBuilder(
-//                 stream: Firestore.instance
+//                 stream: FirebaseFirestore.instance
 //                     .collection('users')
 //                     .document(userId)
 //                     .snapshots(),
 //                 builder: (context, snapshot2) {
 //                   Future<bool> likePost() async {
-//                     Future<DocumentSnapshot> docSnapshot = Firestore.instance
+//                     Future<DocumentSnapshot> docSnapshot = FirebaseFirestore.instance
 //                         .collection('food')
 //                         .document(postId)
 //                         .get(); // i need to get the postId here, but cant pass it in

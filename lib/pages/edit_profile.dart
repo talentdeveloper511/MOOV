@@ -16,7 +16,7 @@ import 'package:image_picker/image_picker.dart';
 class EditProfile extends StatefulWidget {
   final Home user;
 
-  final usersRef = Firestore.instance.collection('users');
+  final usersRef = FirebaseFirestore.instance.collection('users');
 
   EditProfile({Key key, this.user}) : super(key: key);
 
@@ -412,7 +412,7 @@ class _EditProfileState extends State<EditProfile> {
                             print("added to Firebase Storage");
                             final String downloadUrl =
                                 await taskSnapshot.ref.getDownloadURL();
-                            usersRef.document(currentUser.id).updateData({
+                            usersRef.doc(currentUser.id).update({
                               "photoUrl": downloadUrl,
                             });
                           }
@@ -430,19 +430,19 @@ class _EditProfileState extends State<EditProfile> {
                             print("added to Firebase Storage");
                             final String headerUrl =
                                 await taskSnapshot.ref.getDownloadURL();
-                            usersRef.document(currentUser.id).updateData({
+                            usersRef.doc(currentUser.id).update({
                               "header": headerUrl,
                             });
                           }
                         }
                         if (dormController.text != "") {
-                          usersRef.document(currentUser.id).updateData({
+                          usersRef.doc(currentUser.id).update({
                             "dorm": dormController.text.toUpperCase(),
                           });
                         }
 
                         if (bioController.text != "") {
-                          usersRef.document(currentUser.id).updateData({
+                          usersRef.doc(currentUser.id).update({
                             "bio": bioController.text,
                           });
                         }

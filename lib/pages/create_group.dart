@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 class GroupForm extends StatefulWidget {
   final Home user;
-  final usersRef = Firestore.instance.collection('users');
+  final usersRef = FirebaseFirestore.instance.collection('users');
 
   GroupForm({Key key, this.user}) : super(key: key);
 
@@ -41,12 +41,12 @@ class _GroupFormState extends State<GroupForm> {
   Future<bool> doesNameAlreadyExist(groupName) async {
     List<String> groupNames = [];
 
-    final QuerySnapshot result = await Firestore.instance
+    final QuerySnapshot result = await FirebaseFirestore.instance
         .collection('friendGroups')
         .where('groupName', isEqualTo: groupName)
-        .getDocuments();
-    for (int i = 0; i < result.documents.length; i++) {
-      groupNames.add(result.documents[i].data['groupName']);
+        .get();
+    for (int i = 0; i < result.docs.length; i++) {
+      groupNames.add(result.docs[i].data()['groupName']);
     }
     if (groupNames.contains(groupName))
       // return true;
@@ -72,9 +72,9 @@ class _GroupFormState extends State<GroupForm> {
 
   createGroupInFirestore(gname, cid, pic) async {
     final String groupName = gname;
-    // var newDocRef = Firestore.instance.collection('friendgroups').document();
+    // var newDocRef = FirebaseFirestore.instance.collection('friendgroups').document();
 
-    Firestore.instance.collection('friendGroups').add({
+    FirebaseFirestore.instance.collection('friendGroups').add({
       "groupName": groupName,
       "members": [cid],
       "groupPic": pic,
@@ -84,7 +84,7 @@ class _GroupFormState extends State<GroupForm> {
     });
     // .then((value) {
     //   String data = value.documentID;
-    // Firestore.instance.document('friendGroups/$data').updateData({"gid" : data});
+    // FirebaseFirestore.instance.document('friendGroups/$data').updateData({"gid" : data});
     // // newDocRef.setData({
     // //   "groupName": groupName,
     // //   "members": [cid],
@@ -94,9 +94,9 @@ class _GroupFormState extends State<GroupForm> {
     // //   "gid": newDocRef.documentID
     // // }, merge: true);
     // });
-    return Firestore.instance.runTransaction((transaction) async {
+    return FirebaseFirestore.instance.runTransaction((transaction) async {
       final DocumentReference userRefs =
-          Firestore.instance.document('users/$cid');
+          FirebaseFirestore.instance.doc('users/$cid');
 
       transaction.update(userRefs, {
         'friendGroups': FieldValue.arrayUnion([gname]),
@@ -357,10 +357,10 @@ class _GroupFormState extends State<GroupForm> {
   }
 
   void _saveFirebase() async {
-    StorageReference firebaseStorageRef =
+    Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child("images/group" + groupName);
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    UploadTask uploadTask = firebaseStorageRef.putFile(_image);
+    TaskSnapshot taskSnapshot = await uploadTask.onComplete;
     if (taskSnapshot.error == null) {
       print("added to Firebase Storage");
       final String downloadUrl = await taskSnapshot.ref.getDownloadURL();

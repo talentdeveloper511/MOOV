@@ -24,15 +24,15 @@ class _NotificationFeedState extends State<NotificationFeed> {
   String docId;
   getNotificationFeed() async {
     QuerySnapshot snapshot = await notificationFeedRef
-        .document(currentUser.id)
+        .doc(currentUser.id)
         .collection('feedItems')
         .orderBy('timestamp', descending: true)
         .limit(50)
-        .getDocuments();
+        .get();
     List<NotificationFeedItem> feedItems = [];
-    snapshot.documents.forEach((doc) {
+    snapshot.docs.forEach((doc) {
       feedItems.add(NotificationFeedItem.fromDocument(doc));
-      docId = doc.documentID;
+      docId = doc.id;
     });
     return feedItems;
   }
@@ -111,9 +111,9 @@ class _NotificationFeedState extends State<NotificationFeed> {
                           // what to do after an item has been swiped away.
                           onDismissed: (direction) {
                             notificationFeedRef
-                                .document(currentUser.id)
+                                .doc(currentUser.id)
                                 .collection('feedItems')
-                                .document(docId)
+                                .doc(docId)
                                 .delete();
 
                             if (feedItems.contains(docId)) {

@@ -24,8 +24,10 @@ class GoingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream:
-            Firestore.instance.collection('food').document(moovId).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('food')
+            .doc(moovId)
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
 
@@ -53,9 +55,9 @@ class GoingPage extends StatelessWidget {
                       itemCount: inviteesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
-                            stream: Firestore.instance
+                            stream: FirebaseFirestore.instance
                                 .collection('users')
-                                .document(inviteesIds[index])
+                                .doc(inviteesIds[index])
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
@@ -244,8 +246,10 @@ class GoingPageFriends extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream:
-            Firestore.instance.collection('food').document(moovId).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('food')
+            .doc(moovId)
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
 
@@ -273,9 +277,9 @@ class GoingPageFriends extends StatelessWidget {
                       itemCount: inviteesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
-                            stream: Firestore.instance
+                            stream: FirebaseFirestore.instance
                                 .collection('users')
-                                .document(inviteesIds[index])
+                                .doc(inviteesIds[index])
                                 .snapshots(),
                             builder: (context, snapshot2) {
                               if (!snapshot2.hasData)

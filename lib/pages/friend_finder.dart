@@ -33,7 +33,7 @@ class _FriendFinderState extends State<FriendFinder>
         // .where("displayName", isGreaterThanOrEqualTo: query)
         .where("friendArray", arrayContains: currentUser.id)
         .limit(5)
-        .getDocuments();
+        .get();
     setState(() {
       searchResultsFuture = users;
     });
@@ -249,9 +249,9 @@ class _FriendFinderState extends State<FriendFinder>
             ),
       body: currentUser.friendArray.isEmpty
           ? StreamBuilder(
-              stream: Firestore.instance
+              stream: FirebaseFirestore.instance
                   .collection('users')
-                  .document(currentUser.id)
+                  .doc(currentUser.id)
                   .snapshots(),
               builder: (context, snapshot) {
                 List<dynamic> friendArray;
@@ -397,7 +397,7 @@ class UserResult extends StatelessWidget {
                     Container(child: Text("is going to")),
                     Container(
                         child: StreamBuilder(
-                            stream: Firestore.instance
+                            stream: FirebaseFirestore.instance
                                 .collection('food')
                                 .where('going', arrayContains: user.id)
                                 .orderBy('startDate')
@@ -492,11 +492,15 @@ class UserResult extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: ConstrainedBox(
-                                            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width* .3),
+                                            constraints: BoxConstraints(
+                                                maxWidth: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    .3),
                                             child: Text(
                                               snapshot.data.documents[0]
                                                   ['title'],
-                                                  maxLines: 2,
+                                              maxLines: 2,
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -551,7 +555,7 @@ class UserResult extends StatelessWidget {
 //   final userFriends;
 
 //   friendFind(arr) {
-//     moovRef = Firestore.instance
+//     moovRef = FirebaseFirestore.instance
 //         .collection('food')
 //         .where('liker', arrayContains: arr) // add document id
 //         .orderBy("startDate")
@@ -572,7 +576,7 @@ class UserResult extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     return StreamBuilder(
-//         stream: Firestore.instance
+//         stream: FirebaseFirestore.instance
 //             .collection('users')
 //             .where("friendArray", arrayContains: currentUser.id)
 //             .snapshots(),

@@ -47,7 +47,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
 
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     var myIndex = 0;
     var score;
@@ -93,7 +93,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
       ),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream: Firestore.instance
+          stream: FirebaseFirestore.instance
               .collection('users')
               .orderBy('score', descending: true)
               .limit(50)
@@ -121,15 +121,15 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
               var prize;
 
               return StreamBuilder(
-                  stream: Firestore.instance
+                  stream: FirebaseFirestore.instance
                       .collection('leaderboard')
-                      .document('prizes')
+                      .doc('prizes')
                       .snapshots(),
                   builder: (context, snapshot2) {
                     if (!snapshot2.hasData) return CircularProgressIndicator();
 
-                    for (int i = 0; i < snapshot.data.documents.length; i++) {
-                      if (snapshot.data.documents[i]['id'] == currentUser.id) {
+                    for (int i = 0; i < snapshot.data.docs.length; i++) {
+                      if (snapshot.data.docs[i]['id'] == currentUser.id) {
                         myIndex = i;
                       }
                     }
@@ -157,7 +157,6 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                       colors: [
                                     Colors.lightBlue[300],
                                     Colors.purple[300]
-
                                   ])),
                               child: Center(
                                   child: Padding(
@@ -236,7 +235,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                   child: Text('Your MOOV Score: '),
                                 ),
                                 Text(
-                                  snapshot.data.documents[myIndex]['score']
+                                  snapshot.data.docs[myIndex]['score']
                                       .toString(),
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
@@ -245,16 +244,16 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                           ),
                           Expanded(
                             child: ListView.builder(
-                              itemCount: snapshot.data.documents.length,
+                              itemCount: snapshot.data.docs.length,
                               itemBuilder: (_, index) {
-                                score = snapshot
-                                    .data.documents[index].data['score'];
-                                pic = snapshot
-                                    .data.documents[index].data['photoUrl'];
+                                score =
+                                    snapshot.data.docs[index].data()['score'];
+                                pic = snapshot.data.docs[index]
+                                    .data()['photoUrl'];
 
                                 return Card(
-                                  color: snapshot.data.documents[index]
-                                              .data['displayName'] ==
+                                  color: snapshot.data.docs[index]
+                                              .data()['displayName'] ==
                                           currentUser.displayName
                                       ? Colors.green[300]
                                       : Colors.grey[50],
@@ -291,8 +290,8 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
-                                                snapshot.data.documents[index]
-                                                    .data['displayName'],
+                                                snapshot.data.docs[index]
+                                                    .data()['displayName'],
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -306,8 +305,8 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                           ],
                                         ),
                                         Text(
-                                          snapshot.data.documents[index]
-                                              .data['score']
+                                          snapshot.data.docs[index]
+                                              .data()['score']
                                               .toString(),
                                           style: TextStyle(
                                               color: TextThemes.ndBlue,

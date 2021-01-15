@@ -40,9 +40,9 @@ class _SetMOOVState extends State<SetMOOV> {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
         .limit(5)
-        .getDocuments();
+        .get();
     Future<QuerySnapshot> events =
-        postsRef.where("title", isGreaterThanOrEqualTo: query).getDocuments();
+        postsRef.where("title", isGreaterThanOrEqualTo: query).get();
 
     setState(() {
       searchResultsFuture = users;

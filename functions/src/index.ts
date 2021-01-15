@@ -6,6 +6,7 @@ admin.initializeApp();
 const db = admin.firestore();
 const fcm = admin.messaging();
 
+
 export const sendToDevice = functions.firestore
   .document('notificationFeed/{currentUser}/feedItems/{userId}')
   .onCreate(async snapshot => {
@@ -26,8 +27,8 @@ export const sendToDevice = functions.firestore
         title: 'Friend Request Accepted',
         body: `You made a new friend`,
         icon: '../../lib/assets/alvin.png',
-        click_action: 'FLUTTER_NOTIFICATION_CLICK'
-      }
+        click_action: 'FLUTTER_NOTIFICATION_CLICK',
+      },
     };
 
     return fcm.sendToDevice(tokens, payload);

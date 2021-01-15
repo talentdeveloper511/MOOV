@@ -84,7 +84,7 @@ class _UploaderState extends State<Uploader> {
   final FirebaseStorage _storage =
       FirebaseStorage(storageBucket: 'gs://moov4-4d3c4.appspot.com');
 
-  StorageUploadTask _uploadTask;
+  UploadTask _uploadTask;
 
   void _startUpload() {
     String filePath = 'images/${DateTime.now()}.png';
@@ -98,7 +98,7 @@ class _UploaderState extends State<Uploader> {
   Widget build(BuildContext context) {
     if (_uploadTask != null) {
       return StreamBuilder<StorageTaskEvent>(
-          stream: _uploadTask.events,
+          stream: _uploadTask.snapshotEvents,
           builder: (context, snapshot) {
             var event = snapshot?.data?.snapshot;
 

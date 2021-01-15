@@ -7,7 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
 class Database {
-  final dbRef = Firestore.instance;
+  final dbRef = FirebaseFirestore.instance;
   var postPic;
   String ownerId;
   dynamic startDate;
@@ -25,10 +25,10 @@ class Database {
     if (invitees.length > 0) {
       for (int i = 0; i < invitees.length; i++) {
         notificationFeedRef
-            .document(invitees[i])
+            .doc(invitees[i])
             .collection('feedItems')
-            .document(postId)
-            .setData({
+            .doc(postId)
+            .set({
           "type": "invite",
           "postId": postId,
           "previewImg": previewImg,
@@ -60,8 +60,7 @@ class Database {
       profilePic,
       featured,
       postId}) async {
-    DocumentReference ref =
-        await dbRef.collection("food").document(postId).setData({
+    DocumentReference ref = await dbRef.collection("food").doc(postId).set({
       'title': title,
       'likes': likes,
       'type': type,
@@ -82,29 +81,29 @@ class Database {
       "postId": postId
     }).then(inviteesNotification(postId, imageUrl, title, invitees));
 
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection("food")
         .orderBy("startDate", descending: true);
 
     dbRef.runTransaction((transaction) async {
-      final DocumentReference ref2 = dbRef.document('users/$userId');
+      final DocumentReference ref2 = dbRef.doc('users/$userId');
       print('$userId');
       transaction.update(ref2, {'score': FieldValue.increment(30)});
-      transaction.update(ref, {'postId': ref.documentID});
+      transaction.update(ref, {'postId': ref.id});
     });
   }
 
   Future<void> addNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('food/$postId');
-      final DocumentReference ref2 = dbRef.document('users/$userId');
+      final DocumentReference ref = dbRef.doc('food/$postId');
+      final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
       // addGoingToNotificationFeed(
       //     userId,
       //     postId
       //     );
-      Firestore.instance.collection('food').document(postId).setData({
+      FirebaseFirestore.instance.collection('food').doc(postId).set({
         "invitees": {userId: 1}
       }, merge: true);
 
@@ -118,15 +117,15 @@ class Database {
 
   Future<void> removeNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('food/$postId');
-      final DocumentReference ref2 = dbRef.document('users/$userId');
+      final DocumentReference ref = dbRef.doc('food/$postId');
+      final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-1)});
 
       // addGoingToNotificationFeed(
       //     userId,
       //     postId
       //     );
-      postsRef.document(postId).setData({
+      postsRef.doc(postId).set({
         "invitees": {user.id: FieldValue.delete()}
       }, merge: true);
 
@@ -140,13 +139,11 @@ class Database {
 
   Future<void> addUndecided(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('food/$postId');
-      final DocumentReference ref2 = dbRef.document('users/$userId');
+      final DocumentReference ref = dbRef.doc('food/$postId');
+      final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
-     
-      
-      Firestore.instance.collection('food').document(postId).setData({
+      FirebaseFirestore.instance.collection('food').doc(postId).set({
         "invitees": {userId: 2}
       }, merge: true);
 
@@ -160,11 +157,11 @@ class Database {
 
   Future<void> removeUndecided(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('food/$postId');
-      final DocumentReference ref2 = dbRef.document('users/$userId');
+      final DocumentReference ref = dbRef.doc('food/$postId');
+      final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-1)});
 
-      postsRef.document(postId).setData({
+      postsRef.doc(postId).set({
         "invitees": {user.id: FieldValue.delete()}
       }, merge: true);
 
@@ -178,23 +175,22 @@ class Database {
 
   Future<void> addGoingGood(userId, ownerId, postId, title, pic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('food/$postId');
-      final DocumentReference ref2 = dbRef.document('users/$userId');
+      final DocumentReference ref = dbRef.doc('food/$postId');
+      final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(5)});
 
-      await Firestore.instance.collection('food').document(postId).setData({
+      await FirebaseFirestore.instance.collection('food').doc(postId).set({
         "invitees": {userId: 3}
       }, merge: true);
-
 
       ///NOTIF FUNCTION BELOW
       bool isNotPostOwner = strUserId != ownerId;
       if (isNotPostOwner) {
         notificationFeedRef
-            .document(ownerId)
+            .doc(ownerId)
             .collection('feedItems')
-            .document(postId + ' from ' + currentUser.id)
-            .setData({
+            .doc(postId + ' from ' + currentUser.id)
+            .set({
           "type": "going",
           "postId": postId,
           "previewImg": pic,
@@ -216,29 +212,27 @@ class Database {
 
   Future<void> removeGoingGood(userId, ownerId, postId, title, pic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('food/$postId');
-      final DocumentReference ref2 = dbRef.document('users/$userId');
+      final DocumentReference ref = dbRef.doc('food/$postId');
+      final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-5)});
 
-      
-        notificationFeedRef
-            .document(ownerId)
-            .collection("feedItems")
-            .document(postId + ' from ' + currentUser.id)
-            .get()
-            .then((doc) {
-          if (doc.exists) {
-            doc.reference.delete();
-          }
-        });
-      
+      notificationFeedRef
+          .doc(ownerId)
+          .collection("feedItems")
+          .doc(postId + ' from ' + currentUser.id)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
 
       // addGoingToNotificationFeed(
       //     userId,
       //     postId
       //     );
 
-      postsRef.document(postId).setData({
+      postsRef.doc(postId).set({
         "invitees": {user.id: FieldValue.delete()}
       }, merge: true);
 
@@ -252,8 +246,8 @@ class Database {
 
   // Future<void> removeLike(userId, postId) async {
   //   return dbRef.runTransaction((transaction) async {
-  //     final DocumentReference ref = dbRef.document('food/$postId');
-  //     final DocumentReference ref2 = dbRef.document('users/$userId');
+  //     final DocumentReference ref = dbRef.doc('food/$postId');
+  //     final DocumentReference ref2 = dbRef.doc('users/$userId');
   //     transaction.update(ref2, {'score': FieldValue.increment(-2)});
 
   //     // addGoingToNotificationFeed(
@@ -275,15 +269,9 @@ class Database {
   //   });
   // }
 
-
-
   addedToGroup(String addee, String gname, String gid, String groupPic,
       List<dynamic> members, String moov) {
-    notificationFeedRef
-        .document(addee)
-        .collection("feedItems")
-        .document(gid)
-        .setData({
+    notificationFeedRef.doc(addee).collection("feedItems").doc(gid).set({
       "type": "friendgroup",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -300,11 +288,7 @@ class Database {
 
   friendRequestNotification(
       String ownerId, String ownerProPic, String ownerName, String sender) {
-    notificationFeedRef
-        .document(ownerId)
-        .collection("feedItems")
-        .document(sender)
-        .setData({
+    notificationFeedRef.doc(ownerId).collection("feedItems").doc(sender).set({
       "type": "request",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -328,11 +312,7 @@ class Database {
       String ownerName,
       String ownerEmail,
       List<dynamic> likedArray) {
-    notificationFeedRef
-        .document(ownerId)
-        .collection("feedItems")
-        .document(moovId)
-        .setData({
+    notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
       "type": "invite",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -354,11 +334,7 @@ class Database {
 
   friendAcceptNotification(
       String ownerId, String ownerProPic, String ownerName, String sender) {
-    notificationFeedRef
-        .document(ownerId)
-        .collection("feedItems")
-        .document(sender)
-        .setData({
+    notificationFeedRef.doc(ownerId).collection("feedItems").doc(sender).set({
       "type": "accept",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -374,9 +350,9 @@ class Database {
     bool isNotPostOwner = strUserId != ownerId;
     if (isNotPostOwner) {
       notificationFeedRef
-          .document(ownerId)
+          .doc(ownerId)
           .collection("feedItems")
-          .document(moovId)
+          .doc(moovId)
           .get()
           .then((doc) {
         if (doc.exists) {
@@ -393,37 +369,37 @@ class Database {
 
     groupsRef
         .where('nextMOOV', isEqualTo: postId)
-        .getDocuments()
+        .get()
         .then((QuerySnapshot snapshot) {});
 
-//       List<dynamic> values = snapshot.documents;
+//       List<dynamic> values = snapshot.docs;
 //       print(values.toString());
 //       values.forEach((v) {
-//         final specificDocument = snapshot.documents.where((f) {
-//      return f.documentID == xxx;
+//         final specificDocument = snapshot.docs.where((f) {
+//      return f.id == xxx;
 // }).toList();
 //         print(v);
-//         v.setData({
+//         v.set({
 //                               "voters": {"nextMOOV": ""}
 //                             });
 //       });
 //     });
 //  .then((querySnapshot) => {
 //     querySnapshot.forEach((doc) => {
-//         Firestore.instance.batch().(doc.ref, {branch: {id: documentId, name: after.name}})};
+//         FirebaseFirestore.instance.batch().(doc.ref, {branch: {id: docId, name: after.name}})};
 //     });
 
     bool isPostOwner = strUserId == ownerId;
     if (isPostOwner) {
-      postsRef.document(postId).get().then((doc) {
+      postsRef.doc(postId).get().then((doc) {
         if (doc.exists) {
           _storage.ref().child(filePath).delete();
 
           doc.reference.delete();
           notificationFeedRef
-              .document(ownerId)
+              .doc(ownerId)
               .collection("feedItems")
-              .document(postId)
+              .doc(postId)
               .get()
               .then((doc) {
             if (doc.exists) {
@@ -447,11 +423,7 @@ class Database {
       String ownerName,
       String ownerEmail,
       List<dynamic> likedArray) {
-    notificationFeedRef
-        .document(ownerId)
-        .collection("feedItems")
-        .document(moovId)
-        .setData({
+    notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
       "type": "friend",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -475,9 +447,9 @@ class Database {
       String ownerId, String previewImg, String moovId) {
     bool isNotPostOwner = strUserId != ownerId;
     notificationFeedRef
-        .document(ownerId)
+        .doc(ownerId)
         .collection("feedItems")
-        .document(moovId)
+        .doc(moovId)
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -506,8 +478,8 @@ class Database {
 
   //     DocumentSnapshot snapshot;
   //     //   while (snapshot == null) {
-  //     final DocumentReference userRef = dbRef.document('food/$moovId');
-  //     final DocumentReference userRef2 = dbRef.document('users/$uid');
+  //     final DocumentReference userRef = dbRef.doc('food/$moovId');
+  //     final DocumentReference userRef2 = dbRef.doc('users/$uid');
   //     Map<String, dynamic> serializedMessage = {
   //       "uid": uid,
   //     };
@@ -527,7 +499,7 @@ class Database {
   Future<void> sendFriendRequest(String senderId, String receiverId,
       String senderName, String senderPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$receiverId');
+      final DocumentReference ref = dbRef.doc('users/$receiverId');
       String serializedMessage = senderId;
       transaction.update(ref, {
         'friendRequests': FieldValue.arrayUnion([serializedMessage]),
@@ -538,8 +510,8 @@ class Database {
   Future<void> acceptFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$receiverId');
-      final DocumentReference ref2 = dbRef.document('users/$senderId');
+      final DocumentReference ref = dbRef.doc('users/$receiverId');
+      final DocumentReference ref2 = dbRef.doc('users/$senderId');
       String serializedMessage = senderId;
       String serializedMessage2 = receiverId;
       String serializedMessage3 = senderId;
@@ -562,8 +534,8 @@ class Database {
   Future<void> rejectFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$receiverId');
-      final DocumentReference ref2 = dbRef.document('users/$senderId');
+      final DocumentReference ref = dbRef.doc('users/$receiverId');
+      final DocumentReference ref2 = dbRef.doc('users/$senderId');
       String serializedMessage = senderId;
       String serializedMessage2 = receiverId;
       transaction.update(ref, {
@@ -576,25 +548,25 @@ class Database {
   }
 
   Future<QuerySnapshot> checkStatus(String senderId, String receiverId) {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection('users')
         .where('id', isEqualTo: receiverId)
         .where('friendRequests', arrayContains: senderId)
-        .getDocuments();
+        .get();
   }
 
   Future<QuerySnapshot> checkFriends(String senderId, String receiverId) {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection('users')
         .where('id', isEqualTo: receiverId)
         .where('friendArray', arrayContains: senderId)
-        .getDocuments();
+        .get();
   }
 
   Future<void> leaveGroup(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$id');
-      final DocumentReference ref2 = dbRef.document('friendGroups/$gid');
+      final DocumentReference ref = dbRef.doc('users/$id');
+      final DocumentReference ref2 = dbRef.doc('friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayRemove([gname]),
       });
@@ -606,13 +578,13 @@ class Database {
 
   Future<void> destroyGroup(gid) async {
     return dbRef.runTransaction((transaction) async {
-      dbRef.document('friendGroups/$gid').delete();
+      dbRef.doc('friendGroups/$gid').delete();
     });
   }
 
   Future<void> sendChat(user, message, gid) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('friendGroups/$gid');
+      final DocumentReference ref = dbRef.doc('friendGroups/$gid');
       final Map<String, dynamic> chat = {
         'sender': user,
         'message': message,
@@ -626,8 +598,8 @@ class Database {
 
   Future<void> addUser(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('users/$id');
-      final DocumentReference ref2 = dbRef.document('friendGroups/$gid');
+      final DocumentReference ref = dbRef.doc('users/$id');
+      final DocumentReference ref2 = dbRef.doc('friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayUnion([gname]),
       });
@@ -639,7 +611,7 @@ class Database {
 
   Future<void> setMOOV(gid, moovId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.document('friendGroups/$gid');
+      final DocumentReference ref = dbRef.doc('friendGroups/$gid');
       transaction.update(ref, {
         'nextMOOV': moovId,
       });
@@ -650,7 +622,7 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       for (var i = 0; i < members.length; i++) {
         final use = members[i];
-        final DocumentReference ref = dbRef.document('users/$use');
+        final DocumentReference ref = dbRef.doc('users/$use');
         transaction.update(ref, {
           'friendGroups': FieldValue.arrayRemove([old]),
         });

@@ -95,7 +95,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
             child: ListView(children: [
               Container(
                 child: StreamBuilder(
-                    stream: Firestore.instance
+                    stream: FirebaseFirestore.instance
                         .collection('food')
                         .where('type', isEqualTo: 'Restaurants & Bars')
                         .where('privacy', isEqualTo: "Public")
@@ -163,8 +163,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            PostDetail(course
-                                                                .documentID)));
+                                                            PostDetail(
+                                                                course.id)));
                                               },
                                               child: Column(
                                                 children: [
@@ -302,7 +302,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
               ),
               Container(
                 child: StreamBuilder(
-                    stream: Firestore.instance
+                    stream: FirebaseFirestore.instance
                         .collection('food')
                         .where('type', isEqualTo: "Pregames & Parties")
                         .where('privacy', isEqualTo: "Public")
@@ -354,8 +354,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            PostDetail(course
-                                                                .documentID)));
+                                                            PostDetail(
+                                                                course.id)));
                                               },
                                               child: Column(
                                                 children: [
@@ -493,7 +493,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
               ),
               Container(
                 child: StreamBuilder(
-                    stream: Firestore.instance
+                    stream: FirebaseFirestore.instance
                         .collection('food')
                         .where('type', isEqualTo: 'Sport')
                         .orderBy('likeCounter', descending: true)
@@ -560,8 +560,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            PostDetail(course
-                                                                .documentID)));
+                                                            PostDetail(
+                                                                course.id)));
                                               },
                                               child: Column(
                                                 children: [

@@ -155,7 +155,7 @@ class _EditPostState extends State<EditPost> {
   }
 
   String postId;
-  final dbRef = Firestore.instance;
+  final dbRef = FirebaseFirestore.instance;
   _EditPostState(this.postId);
 
   void showAlertDialog(BuildContext context) {
@@ -201,8 +201,10 @@ class _EditPostState extends State<EditPost> {
     final groupNameController = TextEditingController();
 
     return StreamBuilder(
-        stream:
-            Firestore.instance.collection('food').document(postId).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('food')
+            .doc(postId)
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           String title = snapshot.data['title'];
@@ -631,16 +633,15 @@ class _EditPostState extends State<EditPost> {
                                         });
                                         if (_formKey.currentState != null) {
                                           if (_image != null) {
-                                            StorageReference
-                                                firebaseStorageRef =
+                                            Reference firebaseStorageRef =
                                                 FirebaseStorage.instance
                                                     .ref()
                                                     .child("images/" +
                                                         titleController.text);
-                                            StorageUploadTask uploadTask =
+                                            UploadTask uploadTask =
                                                 firebaseStorageRef
                                                     .putFile(_image);
-                                            StorageTaskSnapshot taskSnapshot =
+                                            TaskSnapshot taskSnapshot =
                                                 await uploadTask.onComplete;
                                             if (taskSnapshot.error == null) {
                                               print(
@@ -648,45 +649,35 @@ class _EditPostState extends State<EditPost> {
                                               final String downloadUrl =
                                                   await taskSnapshot.ref
                                                       .getDownloadURL();
-                                              postsRef
-                                                  .document(postId)
-                                                  .updateData({
+                                              postsRef.doc(postId).update({
                                                 "image": downloadUrl,
                                               });
                                             }
                                           }
 
                                           if (titleController.text != "") {
-                                            postsRef
-                                                .document(postId)
-                                                .updateData({
+                                            postsRef.doc(postId).update({
                                               "title": titleController.text,
                                             });
                                           }
 
                                           if (descriptionController.text !=
                                               "") {
-                                            postsRef
-                                                .document(postId)
-                                                .updateData({
+                                            postsRef.doc(postId).update({
                                               "description":
                                                   descriptionController.text,
                                             });
                                           }
 
                                           if (typeDropdownValue != null) {
-                                            postsRef
-                                                .document(postId)
-                                                .updateData({
+                                            postsRef.doc(postId).update({
                                               "type": typeDropdownValue,
                                             });
                                           }
 
                                           if (privacyDropdownValue != "") {
                                             print(privacyDropdownValue);
-                                            postsRef
-                                                .document(postId)
-                                                .updateData({
+                                            postsRef.doc(postId).update({
                                               "privacy": privacyDropdownValue,
                                             });
                                           }
@@ -702,9 +693,7 @@ class _EditPostState extends State<EditPost> {
                                                 .add_jm()
                                                 .format(startDate.toDate()));
 
-                                            postsRef
-                                                .document(postId)
-                                                .updateData({
+                                            postsRef.doc(postId).update({
                                               "startDate": currentValue,
                                             });
                                           }
@@ -752,8 +741,8 @@ class _EditPostState extends State<EditPost> {
                                           ),
                                         ),
                                       ),
-                                      onPressed: () => showAlertDialog2(
-                                          context, postId, currentUser.id, title)),
+                                      onPressed: () => showAlertDialog2(context,
+                                          postId, currentUser.id, title)),
                                 ),
                               ],
                             ),
@@ -806,32 +795,32 @@ void showAlertDialog2(BuildContext context, postId, userId, title) {
     });
   }
 
-    showDialog(
-      context: context,
-      child: CupertinoAlertDialog(
-        title: Text("Delete?",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nMOOV to trash can?"),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text("Yeah", style: TextStyle(color: Colors.red)),
-            onPressed: () async {
-              await Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => Home()),
-                (Route<dynamic> route) => false,
-              ).then(delete());
-            },
-          ),
-          CupertinoDialogAction(
-            child: Text("Cancel"),
-            onPressed: () => Navigator.of(context).pop(true),
-          )
-        ],
-      ),
-    );
-  }
+  showDialog(
+    context: context,
+    child: CupertinoAlertDialog(
+      title: Text("Delete?",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+      content: Text("\nMOOV to trash can?"),
+      actions: [
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          child: Text("Yeah", style: TextStyle(color: Colors.red)),
+          onPressed: () async {
+            await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+              (Route<dynamic> route) => false,
+            ).then(delete());
+          },
+        ),
+        CupertinoDialogAction(
+          child: Text("Cancel"),
+          onPressed: () => Navigator.of(context).pop(true),
+        )
+      ],
+    ),
+  );
+}
 
 // class _NonImageContents extends StatelessWidget {
 //   String title, description, visibility, type, postId;
@@ -1247,7 +1236,7 @@ void showAlertDialog2(BuildContext context, postId, userId, title) {
 //                           if (groupNameController.text != "") {
 //                             Database().updateGroupNames(members,
 //                                 groupNameController.text, gid, displayName);
-//                             Firestore.instance
+//                             FirebaseFirestore.instance
 //                                 .collection('friendGroups')
 //                                 .document(gid)
 //                                 .updateData({
@@ -1268,7 +1257,7 @@ void showAlertDialog2(BuildContext context, postId, userId, title) {
 //       });
 // }
 
-  ///delete
+///delete
 // void showAlertDialog2(BuildContext context, id) {
 //   showDialog(
 //     context: context,
@@ -1293,4 +1282,3 @@ void showAlertDialog2(BuildContext context, postId, userId, title) {
 //     ),
 //   );
 // }
-

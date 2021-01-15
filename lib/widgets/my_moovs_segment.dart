@@ -124,7 +124,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
       //       return PostCard(postData: DemoValues.posts[index]);
       //     }),
       StreamBuilder(
-          stream: Firestore.instance
+          stream: FirebaseFirestore.instance
               .collection('food')
               .where("userId", isEqualTo: user.id)
               .orderBy("startDate")
@@ -185,9 +185,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (context) => PostDetail(
-                                                
-                                                course.documentID)));
+                                            builder: (context) =>
+                                                PostDetail(course.id)));
                                   },
                                   child: Column(
                                     children: [
@@ -403,9 +402,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                                     splashColor: Colors.pink,
                                                     //splashRadius: 7.0,
                                                     highlightColor: Colors.pink,
-                                                    onPressed: () async {
-                                                    
-                                                    },
+                                                    onPressed: () async {},
                                                   ),
                                                 ),
                                                 Padding(
@@ -515,7 +512,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
             );
           }),
       StreamBuilder(
-          stream: Firestore.instance
+          stream: FirebaseFirestore.instance
               .collection('food')
               .where("liked", arrayContains: {"uid": strUserId})
               .orderBy("startDate")
@@ -569,15 +566,12 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                         return Card(
                           color: Colors.white,
                           clipBehavior: Clip.antiAlias,
-                          child: new InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PostDetail(
-                                      course.documentID)));
-                            },
-                            onDoubleTap: () {
-                           
-                            child: Column(
+                          child: new InkWell(onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PostDetail(course.id)));
+                          }, onDoubleTap: () {
+                            child:
+                            Column(
                               children: [
                                 ListTile(
                                   title: Row(children: <Widget>[
@@ -744,10 +738,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                               splashColor: Colors.pink,
                                               //splashRadius: 7.0,
                                               highlightColor: Colors.pink,
-                                              onPressed: () async {
-                                              
-                                              
-                                              },
+                                              onPressed: () async {},
                                             ),
                                           ),
                                           Padding(
@@ -839,8 +830,8 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
                                 ],
                               ),*/
                               ],
-                            );}
-                          ),
+                            );
+                          }),
                         );
                       },
                     ),

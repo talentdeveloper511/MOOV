@@ -25,7 +25,7 @@
 
 // class _NotificationDetailsState extends State<NotificationDetails> {
 //   String photoUrl, displayName, id;
-//   final dbRef = Firestore.instance;
+//   final dbRef = FirebaseFirestore.instance;
 //   _NotificationDetailsState(this.photoUrl, this.displayName, this.id);
 //   bool rejectRequest = false;
 //   bool sendRequest = false;

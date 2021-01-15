@@ -47,7 +47,7 @@ class _GroupDetailState extends State<GroupDetail> {
   String photoUrl, displayName, gid, next;
   List<dynamic> members;
   bool member;
-  final dbRef = Firestore.instance;
+  final dbRef = FirebaseFirestore.instance;
 
   _GroupDetailState(
       this.photoUrl, this.displayName, this.members, this.gid, this.next);
@@ -126,7 +126,7 @@ class _GroupDetailState extends State<GroupDetail> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('users')
             .where('friendGroups', arrayContains: displayName)
             .snapshots(),

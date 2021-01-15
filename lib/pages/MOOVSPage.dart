@@ -133,10 +133,12 @@ class _MOOVSPageState extends State<MOOVSPage>
                     // Restrict scroll by user
                     children: [
                   StreamBuilder(
-                      stream: Firestore.instance
+                      stream: FirebaseFirestore.instance
                           .collection('food')
                           .where("userId", isEqualTo: currentUser.id)
-                          .where("invitees", )
+                          .where(
+                            "invitees",
+                          )
                           .orderBy("startDate")
                           .snapshots(),
                       builder: (context, snapshot) {
@@ -205,7 +207,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                         );
                       }),
                   StreamBuilder(
-                      stream: Firestore.instance
+                      stream: FirebaseFirestore.instance
                           .collection('food')
                           .where("going", arrayContains: currentUser.id)
                           .orderBy("startDate")

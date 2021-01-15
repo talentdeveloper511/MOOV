@@ -131,7 +131,7 @@ class _EditGroupState extends State<EditGroup> {
 
   String photoUrl, displayName, gid;
   List<dynamic> members;
-  final dbRef = Firestore.instance;
+  final dbRef = FirebaseFirestore.instance;
   _EditGroupState(this.photoUrl, this.displayName, this.members, this.gid);
 
   sendChat() {
@@ -196,7 +196,7 @@ class _EditGroupState extends State<EditGroup> {
     final groupNameController = TextEditingController();
 
     return StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('users')
             .where('friendGroups', arrayContains: displayName)
             .snapshots(),
@@ -418,7 +418,7 @@ class _EditGroupState extends State<EditGroup> {
                             if (groupNameController.text != "") {
                               Database().updateGroupNames(members,
                                   groupNameController.text, gid, displayName);
-                              Firestore.instance
+                              FirebaseFirestore.instance
                                   .collection('friendGroups')
                                   .document(gid)
                                   .updateData({

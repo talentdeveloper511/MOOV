@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
-
 class GroupCarousel extends StatelessWidget {
   String userId;
   GroupCarousel({Key key}) : super(key: key);
@@ -24,24 +23,22 @@ class GroupCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     GoogleSignInAccount user = googleSignIn.currentUser;
     userId = user.id;
-  
+
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Container(
       height: 120,
       child: Card(
-        color: Colors.white,
+          color: Colors.white,
           child: StreamBuilder(
-              stream: Firestore.instance
+              stream: FirebaseFirestore.instance
                   .collection('friendGroups')
                   .where('members', arrayContains: user.id)
                   .snapshots(),
               builder: (context, snapshot) {
-
                 if (!snapshot.hasData) return CircularProgressIndicator();
-                if (snapshot.data.documents.length == 0 || currentUser.friendGroups.length == 0) {
-                  
-                  
+                if (snapshot.data.documents.length == 0 ||
+                    currentUser.friendGroups.length == 0) {
                   return Container(
                     height: 120,
                     child: Center(
@@ -54,9 +51,9 @@ class GroupCarousel extends StatelessWidget {
                             child: RaisedButton(
                               onPressed: () {
                                 Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => GroupForm()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => GroupForm()));
                               },
                               color: TextThemes.ndBlue,
                               child: Padding(
@@ -64,12 +61,14 @@ class GroupCarousel extends StatelessWidget {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.people, color: TextThemes.ndGold),
+                                    Icon(Icons.people,
+                                        color: TextThemes.ndGold),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text('Create Friend Group',
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 20)),
+                                              color: Colors.white,
+                                              fontSize: 20)),
                                     ),
                                   ],
                                 ),
@@ -83,14 +82,13 @@ class GroupCarousel extends StatelessWidget {
                     )),
                   );
                 }
-                            DocumentSnapshot course = snapshot.data.documents[i];
-
+                DocumentSnapshot course = snapshot.data.documents[i];
 
                 return Container(
                     height: 150,
                     // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
                     child: StreamBuilder(
-                        stream: Firestore.instance
+                        stream: FirebaseFirestore.instance
                             .collection('users')
                             .where('friendGroups',
                                 arrayContains: course['groupName'])
@@ -108,7 +106,8 @@ class GroupCarousel extends StatelessWidget {
                               // color: Colors.white,
                               clipBehavior: Clip.none,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Stack(
                                     children: <Widget>[
@@ -130,7 +129,7 @@ class GroupCarousel extends StatelessWidget {
                                         },
                                         child: Container(
                                           height: 120,
-                                                                                  child: Column(
+                                          child: Column(
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.only(
@@ -140,32 +139,41 @@ class GroupCarousel extends StatelessWidget {
                                                   decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.all(
-                                                              Radius.circular(20)),
+                                                              Radius.circular(
+                                                                  20)),
                                                       border: Border.all(
-                                                        color: TextThemes.ndBlue,
+                                                        color:
+                                                            TextThemes.ndBlue,
                                                         width: 3,
                                                       )),
                                                   child: ClipRRect(
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(15)),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                15)),
                                                     child: CachedNetworkImage(
-                                                      imageUrl: course['groupPic'],
+                                                      imageUrl:
+                                                          course['groupPic'],
                                                       fit: BoxFit.cover,
                                                       height: isLargePhone
-                                                          ? MediaQuery.of(context)
+                                                          ? MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.1
-                                                          : MediaQuery.of(context)
+                                                          : MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.13,
                                                       width: isLargePhone
-                                                          ? MediaQuery.of(context)
+                                                          ? MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.3
-                                                          : MediaQuery.of(context)
+                                                          : MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.25,
@@ -174,7 +182,8 @@ class GroupCarousel extends StatelessWidget {
                                                 ),
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.all(5),
+                                                padding:
+                                                    const EdgeInsets.all(5),
                                                 child: Center(
                                                   child: FittedBox(
                                                     child: Text(
@@ -188,7 +197,8 @@ class GroupCarousel extends StatelessWidget {
                                                               : 14,
                                                           fontWeight:
                                                               FontWeight.bold),
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     ),
@@ -214,23 +224,32 @@ class GroupCarousel extends StatelessWidget {
                                                               .length >
                                                           1
                                                       ? CircleAvatar(
-                                                    radius: isLargePhone ? 20.0 : 15,
+                                                          radius: isLargePhone
+                                                              ? 20.0
+                                                              : 15,
                                                           backgroundImage:
                                                               NetworkImage(
                                                             snapshot3
-                                                                .data
-                                                                .documents[1]
-                                                                .data['photoUrl'],
+                                                                    .data
+                                                                    .documents[1]
+                                                                    .data[
+                                                                'photoUrl'],
                                                           ),
                                                         )
                                                       : Container()),
                                               Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 4, left: 20.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 4, left: 20.0),
                                                   child: CircleAvatar(
-                                                    radius: isLargePhone ? 20.0 : 15,
-                                                    backgroundImage: NetworkImage(
-                                                      snapshot3.data.documents[0]
+                                                    radius: isLargePhone
+                                                        ? 20.0
+                                                        : 15,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      snapshot3
+                                                          .data
+                                                          .documents[0]
                                                           .data['photoUrl'],
                                                     ),
                                                   )),
@@ -238,34 +257,34 @@ class GroupCarousel extends StatelessWidget {
                                                 padding: const EdgeInsets.only(
                                                     top: 4, left: 40.0),
                                                 child: CircleAvatar(
-                                                    radius: isLargePhone ? 20.0 : 15,
-                                                  child:
-                                                      course['members'].length > 2
-                                                          ? Text(
-                                                              "+" +
-                                                                  (course['members']
-                                                                      .length
-                                                                      .toString()),
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      TextThemes
-                                                                          .ndGold,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            )
-                                                          : Text(
+                                                  radius:
+                                                      isLargePhone ? 20.0 : 15,
+                                                  child: course['members']
+                                                              .length >
+                                                          2
+                                                      ? Text(
+                                                          "+" +
                                                               (course['members']
                                                                   .length
                                                                   .toString()),
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      TextThemes
-                                                                          .ndGold,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                            ),
+                                                          style: TextStyle(
+                                                              color: TextThemes
+                                                                  .ndGold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        )
+                                                      : Text(
+                                                          (course['members']
+                                                              .length
+                                                              .toString()),
+                                                          style: TextStyle(
+                                                              color: TextThemes
+                                                                  .ndGold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
                                                   backgroundColor:
                                                       TextThemes.ndBlue,
                                                 ),
@@ -280,8 +299,8 @@ class GroupCarousel extends StatelessWidget {
                                     padding: const EdgeInsets.only(bottom: 20),
                                     child: Text(
                                       "Going to",
-                                      style:
-                                          TextStyle(fontStyle: FontStyle.italic),
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic),
                                     ),
                                   ),
                                   Padding(
@@ -291,7 +310,7 @@ class GroupCarousel extends StatelessWidget {
                                         right: 0,
                                       ),
                                       child: StreamBuilder(
-                                          stream: Firestore.instance
+                                          stream: FirebaseFirestore.instance
                                               .collection('food')
                                               .where("postId",
                                                   isEqualTo: course['nextMOOV'])
@@ -304,7 +323,8 @@ class GroupCarousel extends StatelessWidget {
 
                                             return Column(children: [
                                               Container(
-                                                    width: isLargePhone ? 135.0 : 120,
+                                                width:
+                                                    isLargePhone ? 135.0 : 120,
                                                 child: MediaQuery(
                                                   data: MediaQuery.of(context)
                                                       .removePadding(
@@ -317,9 +337,11 @@ class GroupCarousel extends StatelessWidget {
                                                       itemCount: 1,
                                                       itemBuilder:
                                                           (context, index) {
-                                                        DocumentSnapshot course =
-                                                            snapshot.data
-                                                                .documents[index];
+                                                        DocumentSnapshot
+                                                            course = snapshot
+                                                                    .data
+                                                                    .documents[
+                                                                index];
                                                         String pic =
                                                             course['image'];
                                                         String title =
@@ -351,7 +373,7 @@ class GroupCarousel extends StatelessWidget {
                                                                             context)
                                                                         .push(MaterialPageRoute(
                                                                             builder: (context) =>
-                                                                                PostDetail(course.documentID)));
+                                                                                PostDetail(course.id)));
                                                                   },
                                                                   child: Stack(
                                                                       children: <
@@ -365,20 +387,16 @@ class GroupCarousel extends StatelessWidget {
                                                                               Container(
                                                                             child:
                                                                                 ClipRRect(
-                                                                              borderRadius:
-                                                                                  BorderRadius.circular(10),
-                                                                              child:
-                                                                                  CachedNetworkImage(
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                              child: CachedNetworkImage(
                                                                                 imageUrl: pic,
                                                                                 fit: BoxFit.cover,
                                                                               ),
                                                                             ),
                                                                             decoration:
                                                                                 BoxDecoration(
-                                                                              color:
-                                                                                  Colors.white,
-                                                                              borderRadius:
-                                                                                  BorderRadius.all(
+                                                                              color: Colors.white,
+                                                                              borderRadius: BorderRadius.all(
                                                                                 Radius.circular(10),
                                                                               ),
                                                                               boxShadow: [
@@ -397,13 +415,11 @@ class GroupCarousel extends StatelessWidget {
                                                                               Alignment.center,
                                                                           child:
                                                                               Container(
-                                                                            alignment: Alignment(
-                                                                                0.0,
-                                                                                0.0),
+                                                                            alignment:
+                                                                                Alignment(0.0, 0.0),
                                                                             child:
                                                                                 Container(
-                                                                              decoration:
-                                                                                  BoxDecoration(
+                                                                              decoration: BoxDecoration(
                                                                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                                                                                 gradient: LinearGradient(
                                                                                   begin: Alignment.topCenter,
@@ -415,8 +431,7 @@ class GroupCarousel extends StatelessWidget {
                                                                                   ],
                                                                                 ),
                                                                               ),
-                                                                              child:
-                                                                                  Padding(
+                                                                              child: Padding(
                                                                                 padding: const EdgeInsets.all(4.0),
                                                                                 child: ConstrainedBox(
                                                                                   constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .7),
@@ -438,11 +453,12 @@ class GroupCarousel extends StatelessWidget {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .only(top: 8.0),
+                                                                            .only(
+                                                                        top:
+                                                                            8.0),
                                                                 child: Text(
                                                                     "On " +
-                                                                        DateFormat(
-                                                                                'EEEE')
+                                                                        DateFormat('EEEE')
                                                                             .format(course['startDate']
                                                                                 .toDate())
                                                                             .toString(),
@@ -450,8 +466,9 @@ class GroupCarousel extends StatelessWidget {
                                                                         fontWeight:
                                                                             FontWeight
                                                                                 .bold,
-                                                                        fontSize: isLargePhone ?
-                                                                            17 : 14)),
+                                                                        fontSize: isLargePhone
+                                                                            ? 17
+                                                                            : 14)),
                                                               )
                                                             ],
                                                           ),

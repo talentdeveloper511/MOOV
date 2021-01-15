@@ -33,15 +33,13 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
         .limit(5)
-        .getDocuments();
-    Future<QuerySnapshot> events = postsRef
-        .where("title", isGreaterThanOrEqualTo: query)
-        .limit(5)
-        .getDocuments();
+        .get();
+    Future<QuerySnapshot> events =
+        postsRef.where("title", isGreaterThanOrEqualTo: query).limit(5).get();
     Future<QuerySnapshot> groups = groupsRef
         .where("groupName", isGreaterThanOrEqualTo: query)
         .limit(5)
-        .getDocuments();
+        .get();
     setState(() {
       searchResultsFuture = users;
       searchResultsEvents = events;

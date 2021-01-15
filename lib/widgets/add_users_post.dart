@@ -38,7 +38,7 @@ class _AddUsersPostState extends State<AddUsersPost> {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
         .limit(5)
-        .getDocuments();
+        .get();
     setState(() {
       searchResultsFuture = users;
     });

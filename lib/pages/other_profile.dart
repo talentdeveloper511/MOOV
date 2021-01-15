@@ -28,7 +28,7 @@ class OtherProfile extends StatefulWidget {
 
 class _OtherProfileState extends State<OtherProfile> {
   String photoUrl, displayName, id;
-  final dbRef = Firestore.instance;
+  final dbRef = FirebaseFirestore.instance;
   _OtherProfileState(this.photoUrl, this.displayName, this.id);
   bool requestsent = false;
   bool sendRequest = false;
@@ -44,7 +44,7 @@ class _OtherProfileState extends State<OtherProfile> {
   checkFunction() {
     // check to see if a request from other user already exists
     Database().checkStatus(id, strUserId).then((QuerySnapshot docs) => {
-          if (docs.documents.isNotEmpty)
+          if (docs.docs.isNotEmpty)
             {
               // setState(
               //     () => userRequests = docs.documents[0].data['friendRequests']),
@@ -62,10 +62,10 @@ class _OtherProfileState extends State<OtherProfile> {
   checkFunction2() {
     // checks to see if current user has sent request already
     Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
-          if (docs.documents.isNotEmpty)
+          if (docs.docs.isNotEmpty)
             {
-              setState(() =>
-                  userRequests = docs.documents[0].data['friendRequests']),
+              setState(
+                  () => userRequests = docs.docs[0].data()['friendRequests']),
               if (userRequests[0] != null) {status = 0}
             }
         });
@@ -74,10 +74,10 @@ class _OtherProfileState extends State<OtherProfile> {
   checkFunction3() {
     // users are already friends
     Database().checkFriends(strUserId, id).then((QuerySnapshot docs) => {
-          if (docs.documents.isNotEmpty)
+          if (docs.docs.isNotEmpty)
             {
               setState(
-                () => userRequests = docs.documents[0].data['friendRequests'],
+                () => userRequests = docs.docs[0].data()['friendRequests'],
               ),
               status = 1
             }
@@ -89,7 +89,8 @@ class _OtherProfileState extends State<OtherProfile> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
-        stream: Firestore.instance.collection('users').document(id).snapshots(),
+        stream:
+            FirebaseFirestore.instance.collection('users').doc(id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
           while (iter > 0) {
@@ -98,7 +99,7 @@ class _OtherProfileState extends State<OtherProfile> {
             checkFunction3();
             iter = iter - 1;
           }
-                    isAmbassador = snapshot.data['isAmbassador'];
+          isAmbassador = snapshot.data['isAmbassador'];
 
           return Scaffold(
               backgroundColor: Colors.white,

@@ -40,9 +40,9 @@ class _ProfilePageState extends State<ProfilePage> {
     bool isAmbassador = currentUser.isAmbassador;
 
     return StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('users')
-            .document(currentUser.id)
+            .doc(currentUser.id)
             .snapshots(),
         builder: (context, snapshot) {
           List<dynamic> likedArray;
