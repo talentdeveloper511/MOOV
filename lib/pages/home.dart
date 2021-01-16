@@ -572,7 +572,7 @@ class NamedIcon extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) return CircularProgressIndicator();
           if (!snapshot.hasData) return CircularProgressIndicator();
-          notifs = snapshot.data.documents.length;
+          notifs = snapshot.data.docs.length;
 
           return InkWell(
             onTap: onTap,

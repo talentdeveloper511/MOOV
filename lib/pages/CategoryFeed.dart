@@ -281,7 +281,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData ||
-                                  snapshot.data.documents.length == 0)
+                                  snapshot.data.docs.length == 0)
                                 return Center(
                                   child: Text(
                                       "No featured MOOVs. \n\n Got a feature? Email MOOV@MOOV.com.",
@@ -290,10 +290,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 );
 
                               return ListView.builder(
-                                itemCount: snapshot.data.documents.length,
+                                itemCount: snapshot.data.docs.length,
                                 itemBuilder: (context, index) {
                                   DocumentSnapshot course =
-                                      snapshot.data.documents[index];
+                                      snapshot.data.docs[index];
                                   List<dynamic> likerArray = course["liker"];
                                   Timestamp startDate = course["startDate"];
                                   privacy = course['privacy'];
@@ -371,7 +371,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData ||
-                                snapshot.data.documents.length == 0)
+                                snapshot.data.docs.length == 0)
                               return Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -400,10 +400,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 ),
                               );
                             return ListView.builder(
-                              itemCount: snapshot.data.documents.length,
+                              itemCount: snapshot.data.docs.length,
                               itemBuilder: (context, index) {
                                 DocumentSnapshot course =
-                                    snapshot.data.documents[index];
+                                    snapshot.data.docs[index];
                                 List<dynamic> likerArray = course["liker"];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
@@ -474,7 +474,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData ||
-                                snapshot.data.documents.length == 0)
+                                snapshot.data.docs.length == 0)
                               return Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -503,10 +503,10 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 ),
                               );
                             return ListView.builder(
-                              itemCount: snapshot.data.documents.length,
+                              itemCount: snapshot.data.docs.length,
                               itemBuilder: (context, index) {
                                 DocumentSnapshot course =
-                                    snapshot.data.documents[index];
+                                    snapshot.data.docs[index];
                                 List<dynamic> likerArray = course["liker"];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course["privacy"];

@@ -37,7 +37,7 @@ class GroupCarousel extends StatelessWidget {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return CircularProgressIndicator();
-                if (snapshot.data.documents.length == 0 ||
+                if (snapshot.data.docs.length == 0 ||
                     currentUser.friendGroups.length == 0) {
                   return Container(
                     height: 120,
@@ -82,11 +82,11 @@ class GroupCarousel extends StatelessWidget {
                     )),
                   );
                 }
-                DocumentSnapshot course = snapshot.data.documents[i];
+                DocumentSnapshot course = snapshot.data().docs[i];
 
                 return Container(
                     height: 150,
-                    // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
+                    // height: (snapshot.data.docs.length <= 3) ? 270 : 400,
                     child: StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection('users')
@@ -123,7 +123,7 @@ class GroupCarousel extends StatelessWidget {
                                                           course['members'],
                                                           snapshot
                                                               .data
-                                                              .documents[i]
+                                                              .docs[i]
                                                               .documentID,
                                                           course['nextMOOV'])));
                                         },
@@ -231,7 +231,7 @@ class GroupCarousel extends StatelessWidget {
                                                               NetworkImage(
                                                             snapshot3
                                                                     .data
-                                                                    .documents[1]
+                                                                    .docs[1]
                                                                     .data[
                                                                 'photoUrl'],
                                                           ),
@@ -249,7 +249,7 @@ class GroupCarousel extends StatelessWidget {
                                                         NetworkImage(
                                                       snapshot3
                                                           .data
-                                                          .documents[0]
+                                                          .docs[0]
                                                           .data['photoUrl'],
                                                     ),
                                                   )),
@@ -339,8 +339,8 @@ class GroupCarousel extends StatelessWidget {
                                                           (context, index) {
                                                         DocumentSnapshot
                                                             course = snapshot
-                                                                    .data
-                                                                    .documents[
+                                                                    .data()
+                                                                    .docs[
                                                                 index];
                                                         String pic =
                                                             course['image'];

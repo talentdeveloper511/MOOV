@@ -93,14 +93,14 @@ class _PostDetailState extends State<PostDetail> {
                   List<dynamic> likedArray;
 
                   if (!snapshot.hasData) return CircularProgressIndicator();
-                  title = snapshot.data['title'];
-                  bannerImage = snapshot.data['image'];
-                  description = snapshot.data['description'];
-                  startDate = snapshot.data['startDate'];
-                  address = snapshot.data['address'];
-                  userId = snapshot.data['userId'];
-                  likedArray = snapshot.data['likedArray'];
-                  postId = snapshot.data['postId'];
+                  title = snapshot.data()()['title'];
+                  bannerImage = snapshot.data()['image'];
+                  description = snapshot.data()['description'];
+                  startDate = snapshot.data()['startDate'];
+                  address = snapshot.data()['address'];
+                  userId = snapshot.data()['userId'];
+                  likedArray = snapshot.data()['likedArray'];
+                  postId = snapshot.data()['postId'];
                   return Container(
                     color: Colors.white,
                     child: ListView(
@@ -566,7 +566,7 @@ class Buttons extends StatelessWidget {
           // pic = snapshot.data['pic'];
           if (!snapshot.hasData) return Text('Loading data...');
 
-          DocumentSnapshot course = snapshot.data;
+          DocumentSnapshot course = snapshot.data();
           List<dynamic> likedArray = course["liked"];
           Map<String, dynamic> invitees = course['invitees'];
 

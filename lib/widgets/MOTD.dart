@@ -43,7 +43,7 @@ class _MOTDState extends State<MOTD> {
                 itemBuilder: (context, index) {
                   bool isLargePhone = Screen.diagonal(context) > 766;
 
-                  DocumentSnapshot course = snapshot.data.documents[index];
+                  DocumentSnapshot course = snapshot.data.docs[index];
                   pic = course['image'];
                   title = course['title'];
 
