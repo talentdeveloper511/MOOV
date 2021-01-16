@@ -55,137 +55,137 @@ class _HomeState extends State<Home> {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   // final FirebaseMessaging _fcm = FirebaseMessaging();
 
-  // StreamSubscription iosSubscription;
-  // @override
-  // Future<void> initState() {
-  //   super.initState();
-  //   pageController = PageController();
-  //   // Detects when user signed in
-  //   googleSignIn.onCurrentUserChanged.listen((account) {
-  //     handleSignIn(account);
-  //   }, onError: (err) {
-  //     print('Error signing in: $err');
-  //   });
+  StreamSubscription iosSubscription;
+  @override
+  Future<void> initState() {
+    super.initState();
+    pageController = PageController();
+    // Detects when user signed in
+    googleSignIn.onCurrentUserChanged.listen((account) {
+      handleSignIn(account);
+    }, onError: (err) {
+      print('Error signing in: $err');
+    });
 
-  //   // Reauthenticate user when app is opened
-  //   googleSignIn.signInSilently(suppressErrors: false).then((account) {
-  //     handleSignIn(account);
-  //   }).catchError((err) {
-  //     print('Error signing in: $err');
-  //   });
+    // Reauthenticate user when app is opened
+    googleSignIn.signInSilently(suppressErrors: false).then((account) {
+      handleSignIn(account);
+    }).catchError((err) {
+      print('Error signing in: $err');
+    });
 
-  //   if (Platform.isIOS) {
-  //     iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
-  //       print(data);
-  //       _saveDeviceToken();
-  //     });
+    //   if (Platform.isIOS) {
+    //     iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+    //       print(data);
+    //       _saveDeviceToken();
+    //     });
 
-  //     _fcm.requestNotificationPermissions(IosNotificationSettings());
-  //   } else {
-  //     _saveDeviceToken();
-  //   }
+    //     _fcm.requestNotificationPermissions(IosNotificationSettings());
+    //   } else {
+    //     _saveDeviceToken();
+    //   }
 
-  //   _fcm.configure(
-  //     onMessage: (Map<String, dynamic> message) async {
-  //       print("onMessage: $message");
-  //       // final snackbar = SnackBar(
-  //       //   content: Text(message['notification']['body']),
-  //       //   action: SnackBarAction(
-  //       //     label: 'Go',
-  //       //     onPressed: () => null,
-  //       //   ),
-  //       // );
+    //   _fcm.configure(
+    //     onMessage: (Map<String, dynamic> message) async {
+    //       print("onMessage: $message");
+    //       // final snackbar = SnackBar(
+    //       //   content: Text(message['notification']['body']),
+    //       //   action: SnackBarAction(
+    //       //     label: 'Go',
+    //       //     onPressed: () => null,
+    //       //   ),
+    //       // );
 
-  //       // Scaffold.of(context).showSnackBar(snackbar);
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           content: ListTile(
-  //             title: Text(message['notification']['title'],
-  //                 style: TextStyle(color: Colors.white)),
-  //             subtitle: Text(message['notification']['body'],
-  //                 style: TextStyle(color: Colors.white)),
-  //           ),
-  //           actions: <Widget>[
-  //             FlatButton(
-  //               color: Colors.amber,
-  //               child: Text('Sweet', style: TextStyle(color: Colors.black)),
-  //               onPressed: () => Navigator.of(context).pop(),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //     onLaunch: (Map<String, dynamic> message) async {
-  //       print("onLaunch: $message");
-  //       // TODO optional
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           content: ListTile(
-  //             title: Text(message['notification']['title'],
-  //                 style: TextStyle(color: Colors.white)),
-  //             subtitle: Text(message['notification']['body'],
-  //                 style: TextStyle(color: Colors.white)),
-  //           ),
-  //           actions: <Widget>[
-  //             FlatButton(
-  //               color: Colors.amber,
-  //               child: Text('Sweet', style: TextStyle(color: Colors.black)),
-  //               onPressed: () => Navigator.of(context).pop(),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //     onResume: (Map<String, dynamic> message) async {
-  //       print("onResume: $message");
-  //       // TODO optional
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           content: ListTile(
-  //             title: Text(message['notification']['title'],
-  //                 style: TextStyle(color: Colors.white)),
-  //             subtitle: Text(message['notification']['body'],
-  //                 style: TextStyle(color: Colors.white)),
-  //           ),
-  //           actions: <Widget>[
-  //             FlatButton(
-  //               color: Colors.amber,
-  //               child: Text('Sweet', style: TextStyle(color: Colors.black)),
-  //               onPressed: () => Navigator.of(context).pop(),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+    //       // Scaffold.of(context).showSnackBar(snackbar);
+    //       showDialog(
+    //         context: context,
+    //         builder: (context) => AlertDialog(
+    //           content: ListTile(
+    //             title: Text(message['notification']['title'],
+    //                 style: TextStyle(color: Colors.white)),
+    //             subtitle: Text(message['notification']['body'],
+    //                 style: TextStyle(color: Colors.white)),
+    //           ),
+    //           actions: <Widget>[
+    //             FlatButton(
+    //               color: Colors.amber,
+    //               child: Text('Sweet', style: TextStyle(color: Colors.black)),
+    //               onPressed: () => Navigator.of(context).pop(),
+    //             ),
+    //           ],
+    //         ),
+    //       );
+    //     },
+    //     onLaunch: (Map<String, dynamic> message) async {
+    //       print("onLaunch: $message");
+    //       // TODO optional
+    //       showDialog(
+    //         context: context,
+    //         builder: (context) => AlertDialog(
+    //           content: ListTile(
+    //             title: Text(message['notification']['title'],
+    //                 style: TextStyle(color: Colors.white)),
+    //             subtitle: Text(message['notification']['body'],
+    //                 style: TextStyle(color: Colors.white)),
+    //           ),
+    //           actions: <Widget>[
+    //             FlatButton(
+    //               color: Colors.amber,
+    //               child: Text('Sweet', style: TextStyle(color: Colors.black)),
+    //               onPressed: () => Navigator.of(context).pop(),
+    //             ),
+    //           ],
+    //         ),
+    //       );
+    //     },
+    //     onResume: (Map<String, dynamic> message) async {
+    //       print("onResume: $message");
+    //       // TODO optional
+    //       showDialog(
+    //         context: context,
+    //         builder: (context) => AlertDialog(
+    //           content: ListTile(
+    //             title: Text(message['notification']['title'],
+    //                 style: TextStyle(color: Colors.white)),
+    //             subtitle: Text(message['notification']['body'],
+    //                 style: TextStyle(color: Colors.white)),
+    //           ),
+    //           actions: <Widget>[
+    //             FlatButton(
+    //               color: Colors.amber,
+    //               child: Text('Sweet', style: TextStyle(color: Colors.black)),
+    //               onPressed: () => Navigator.of(context).pop(),
+    //             ),
+    //           ],
+    //         ),
+    //       );
+    //     },
+    //   );
+    // }
 
-  // /// Get the token, save it to the database for current user
-  // _saveDeviceToken() async {
-  //   // Get the current user
-  //   // String uid = 'jeffd23';
+    // /// Get the token, save it to the database for current user
+    // _saveDeviceToken() async {
+    //   // Get the current user
+    //   // String uid = 'jeffd23';
 
-  //   // Get the token for this device
-  //   String fcmToken = await _fcm.getToken();
+    //   // Get the token for this device
+    //   String fcmToken = await _fcm.getToken();
 
-  //   // Save it to Firestore
-  //   if (fcmToken != null) {
-  //     var tokens = _db
-  //         .collection('users')
-  //         .doc(currentUser.id)
-  //         .collection('tokens')
-  //         .doc(fcmToken);
+    //   // Save it to Firestore
+    //   if (fcmToken != null) {
+    //     var tokens = _db
+    //         .collection('users')
+    //         .doc(currentUser.id)
+    //         .collection('tokens')
+    //         .doc(fcmToken);
 
-  //     await tokens.set({
-  //       'token': fcmToken,
-  //       'createdAt': FieldValue.serverTimestamp(), // optional
-  //       'platform': Platform.operatingSystem // optional
-  //     });
-  //   }
-  // }
+    //     await tokens.set({
+    //       'token': fcmToken,
+    //       'createdAt': FieldValue.serverTimestamp(), // optional
+    //       'platform': Platform.operatingSystem // optional
+    //     });
+    //   }
+  }
 
   handleSignIn(GoogleSignInAccount account) {
     if (account != null) {
@@ -245,7 +245,7 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     pageController.dispose();
-    // if (iosSubscription != null) iosSubscription.cancel();
+    if (iosSubscription != null) iosSubscription.cancel();
     super.dispose();
   }
 
