@@ -176,7 +176,7 @@ class NotificationFeedItem extends StatelessWidget {
   final String ownerName;
   final String ownerEmail;
   final dynamic address, moovId;
-  final List<dynamic> likedArray;
+  final List<String> members;
 
   final Timestamp timestamp;
 
@@ -197,28 +197,27 @@ class NotificationFeedItem extends StatelessWidget {
       this.ownerEmail,
       this.address,
       this.moovId,
-      this.likedArray});
+      this.members});
 
   factory NotificationFeedItem.fromDocument(DocumentSnapshot doc) {
     return NotificationFeedItem(
-      username: doc['username'],
-      userEmail: doc['userEmail'],
-      userId: doc['userId'],
-      type: doc['type'],
-      postId: doc['postId'],
-      userProfilePic: doc['userProfilePic'],
-      timestamp: doc['timestamp'],
-      title: doc['title'],
-      description: doc['description'],
-      ownerProPic: doc['ownerProPic'],
-      ownerName: doc['ownerName'],
-      ownerEmail: doc['ownerEmail'],
-      address: doc['address'],
-      location: doc['location'],
-      moovId: doc['moovId'],
-      likedArray: doc['likedArray'],
-      previewImg: doc['previewImg'],
-    );
+        username: doc.data()['username'],
+        userEmail: doc.data()['userEmail'],
+        userId: doc.data()['userId'],
+        type: doc.data()['type'],
+        postId: doc.data()['postId'],
+        userProfilePic: doc.data()['userProfilePic'],
+        timestamp: doc.data()['timestamp'],
+        title: doc.data()['title'],
+        description: doc.data()['description'],
+        ownerProPic: doc.data()['ownerProPic'],
+        ownerName: doc.data()['ownerName'],
+        ownerEmail: doc.data()['ownerEmail'],
+        address: doc.data()['address'],
+        location: doc.data()['location'],
+        moovId: doc.data()['moovId'],
+        previewImg: doc.data()['previewImg'],
+        members: doc.data()['members']);
   }
 
   showPost(context) {
@@ -231,7 +230,7 @@ class NotificationFeedItem extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                GroupDetail(previewImg, title, likedArray, postId, address)));
+                GroupDetail(previewImg, title, members, postId, address)));
   }
 
   configureMediaPreview(context) {
