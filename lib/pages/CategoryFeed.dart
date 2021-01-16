@@ -289,16 +289,19 @@ class _CategoryFeedState extends State<CategoryFeed>
                                       style: TextStyle(fontSize: 20)),
                                 );
 
+
                               return ListView.builder(
                                 itemCount: snapshot.data.docs.length,
                                 itemBuilder: (context, index) {
+                          print(snapshot.data.docs[index]);
+
                                   DocumentSnapshot course =
                                       snapshot.data.docs[index];
-                                  List<dynamic> likerArray = course["liker"];
                                   Timestamp startDate = course["startDate"];
                                   privacy = course['privacy'];
                                   Map<String, dynamic> invitees =
-                                      course['invitees'];
+                                      (snapshot.data.docs[index]['invitees']);
+
                                   int status = 0;
                                   List<dynamic> inviteesIds =
                                       invitees.keys.toList();
@@ -404,7 +407,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                               itemBuilder: (context, index) {
                                 DocumentSnapshot course =
                                     snapshot.data.docs[index];
-                                List<dynamic> likerArray = course["liker"];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
 
@@ -440,18 +442,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   isTomorrow = true;
                                 }
 
-                                if (likerArray != null) {
-                                  likeCount = likerArray.length;
-                                } else {
-                                  likeCount = 0;
-                                }
-
-                                if (likerArray != null &&
-                                    likerArray.contains(strUserId)) {
-                                  isLiked1 = true;
-                                } else {
-                                  isLiked1 = false;
-                                }
                                 if (privacy == "Friends Only") {
                                   hide = true;
                                 }
@@ -507,7 +497,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                               itemBuilder: (context, index) {
                                 DocumentSnapshot course =
                                     snapshot.data.docs[index];
-                                List<dynamic> likerArray = course["liker"];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course["privacy"];
                                 List<dynamic> friends = currentUser.friendArray;
@@ -614,7 +603,6 @@ class PostOnFeed extends StatelessWidget {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     String privacy;
-    List<dynamic> likerArray = course["liker"];
     Timestamp startDate = course["startDate"];
     privacy = course['privacy'];
     Map<String, dynamic> invitees = course['invitees'];

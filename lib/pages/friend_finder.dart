@@ -149,7 +149,7 @@ class _FriendFinderState extends State<FriendFinder>
         }
 
         List<UserResult> searchResults = [];
-        snapshot.data.documents.forEach((doc) {
+        snapshot.data.docs.forEach((doc) {
           User user = User.fromDocument(doc);
           UserResult searchResult = UserResult(user);
           searchResults.add(searchResult);
@@ -254,13 +254,14 @@ class _FriendFinderState extends State<FriendFinder>
                   .doc(currentUser.id)
                   .snapshots(),
               builder: (context, snapshot) {
+                print("HIIII");
                 List<dynamic> friendArray;
 
                 bool isLargePhone = Screen.diagonal(context) > 766;
 
                 if (!snapshot.hasData) return CircularProgressIndicator();
-                friendArray = snapshot.data['friendArray'];
-                if (snapshot.data["friendArray"].isEmpty) {
+                friendArray = snapshot.data.docs['friendArray'];
+                if (snapshot.data.docs["friendArray"].isEmpty) {
                   return Container(
                     height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(
@@ -407,7 +408,7 @@ class UserResult extends StatelessWidget {
                               if (!snapshot.hasData)
                                 return CircularProgressIndicator();
                               if (!snapshot.hasData ||
-                                  snapshot.data.documents.length == 0)
+                                  snapshot.data.docs.length == 0)
                                 return SizedBox(
                                     child: Align(
                                         alignment: Alignment.centerLeft,
@@ -419,7 +420,7 @@ class UserResult extends StatelessWidget {
                                             0.49,
                                     height: MediaQuery.of(context).size.height *
                                         0.15);
-                              var course = snapshot.data.documents[0];
+                              var course = snapshot.data.docs[0];
 
                               return GestureDetector(
                                 onTap: () {
@@ -498,8 +499,7 @@ class UserResult extends StatelessWidget {
                                                         .width *
                                                     .3),
                                             child: Text(
-                                              snapshot.data.documents[0]
-                                                  ['title'],
+                                              snapshot.data.docs[0]['title'],
                                               maxLines: 2,
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
@@ -559,12 +559,12 @@ class UserResult extends StatelessWidget {
 //         .collection('food')
 //         .where('liker', arrayContains: arr) // add document id
 //         .orderBy("startDate")
-//         .getDocuments()
+//         .getdocs()
 //         .then((QuerySnapshot docs) => {
-//               if (docs.documents.isNotEmpty)
+//               if (docs.docs.isNotEmpty)
 //                 {
 //                   // setState(() {
-//                   moov = docs.documents[0].data['title']
+//                   moov = docs.docs[0].data['title']
 //                   // })
 //                 }
 //             });
@@ -602,16 +602,16 @@ class UserResult extends StatelessWidget {
 //                 ),
 //               ),
 //               // body: Column(children: <Widget>[
-//               //   // Text(friendFind(snapshot.data.documents[0].data).toString()),
-//               //   Text(friendFind(snapshot.data.documents[1].data).toString()),
-//               //   Text(friendFind(snapshot.data.documents[2].data).toString()),
+//               //   // Text(friendFind(snapshot.data.docs[0].data).toString()),
+//               //   Text(friendFind(snapshot.data.docs[1].data).toString()),
+//               //   Text(friendFind(snapshot.data.docs[2].data).toString()),
 //               // ])
 //               body: ListView.builder(
-//                   itemCount: snapshot.data.documents.length,
+//                   itemCount: snapshot.data.docs.length,
 //                   itemBuilder: (_, index) {
 //                     var iter = 0;
 //                     while (iter == 0) {
-//                       print(snapshot.data.documents[index].data['id']);
+//                       print(snapshot.data.docs[index].data['id']);
 //                                             print(snapshot.data.documents[index].data['id']);
 //                       print(snapshot.data.documents[index].data['id']);
 

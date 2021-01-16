@@ -90,24 +90,22 @@ class _PostDetailState extends State<PostDetail> {
                       userId,
                       postId;
                   dynamic startDate;
-                  List<dynamic> likedArray;
 
                   if (!snapshot.hasData) return CircularProgressIndicator();
-                  title = snapshot.data()()['title'];
-                  bannerImage = snapshot.data()['image'];
-                  description = snapshot.data()['description'];
-                  startDate = snapshot.data()['startDate'];
-                  address = snapshot.data()['address'];
-                  userId = snapshot.data()['userId'];
-                  likedArray = snapshot.data()['likedArray'];
-                  postId = snapshot.data()['postId'];
+                  title = snapshot.data['title'];
+                  bannerImage = snapshot.data['image'];
+                  description = snapshot.data['description'];
+                  startDate = snapshot.data['startDate'];
+                  address = snapshot.data['address'];
+                  userId = snapshot.data['userId'];
+                  postId = snapshot.data['postId'];
                   return Container(
                     color: Colors.white,
                     child: ListView(
                       children: <Widget>[
                         _BannerImage(bannerImage),
                         _NonImageContents(title, description, startDate,
-                            address, userId, likedArray, postId),
+                            address, userId, postId),
                       ],
                     ),
                   );
@@ -154,10 +152,9 @@ class _BannerImage extends StatelessWidget {
 class _NonImageContents extends StatelessWidget {
   String title, description, userId;
   dynamic startDate, address, moovId;
-  List<dynamic> likedArray;
 
   _NonImageContents(this.title, this.description, this.startDate, this.address,
-      this.userId, this.likedArray, this.moovId);
+      this.userId, this.moovId);
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +175,7 @@ class _NonImageContents extends StatelessWidget {
               color: Colors.grey[700],
             ),
           ),
-          Buttons(likedArray, moovId),
+          Buttons(moovId),
           Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: Container(
@@ -206,7 +203,7 @@ class _NonImageContents extends StatelessWidget {
               ],
             ),
           ),
-          Seg2(likedArray: likedArray, moovId: moovId),
+          Seg2(moovId: moovId),
         ],
       ),
     );
@@ -324,6 +321,7 @@ class _AuthorContent extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> course = snapshot.data.data();
+          print(course);
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -378,23 +376,23 @@ class _AuthorContent extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.bottomToTop,
-                                child: SendMOOV(
-                                    course['postId'],
-                                    course['userId'],
-                                    course['image'],
-                                    course['postId'],
-                                    course['startDate'],
-                                    course['title'],
-                                    course['description'],
-                                    course['address'],
-                                    course['profilePic'],
-                                    course['userName'],
-                                    course['userEmail'],
-                                    course['liked'])));
+                        // Navigator.push(
+                        //     context,
+                        //     PageTransition(
+                        //         type: PageTransitionType.bottomToTop,
+                        //         child: SendMOOV(
+                        //             course['postId'],
+                        //             course['userId'],
+                        //             course['image'],
+                        //             course['postId'],
+                        //             course['startDate'],
+                        //             course['title'],
+                        //             course['description'],
+                        //             course['address'],
+                        //             course['profilePic'],
+                        //             course['userName'],
+                        //             course['userEmail'],
+                        //             course['liked'])));
                       },
                       color: Colors.white,
                       padding: EdgeInsets.all(5.0),
@@ -423,22 +421,20 @@ class _AuthorContent extends StatelessWidget {
 }
 
 class Seg2 extends StatefulWidget {
-  List<dynamic> likedArray;
   dynamic moovId;
-  Seg2({Key key, @required this.likedArray, @required this.moovId})
+  Seg2({Key key, @required this.moovId})
       : super(key: key);
 
   @override
-  _Seg2State createState() => _Seg2State(likedArray, moovId);
+  _Seg2State createState() => _Seg2State(moovId);
 }
 
 class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
   // TabController to control and switch tabs
   TabController _tabController;
-  List<dynamic> likedArray;
   dynamic moovId;
 
-  _Seg2State(this.likedArray, this.moovId);
+  _Seg2State(this.moovId);
 
   // Current Index of tab
   int _currentIndex = 0;
@@ -525,7 +521,7 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
                     child: ListView.builder(
                         itemCount: 1,
                         itemBuilder: (context, index) {
-                          return GoingPage(likedArray, moovId);
+                          return GoingPage(moovId);
                         }),
                   ),
                   // Sign Up View
@@ -533,7 +529,7 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
                     child: ListView.builder(
                         itemCount: 1,
                         itemBuilder: (context, index) {
-                          return GoingPageFriends(likedArray, moovId);
+                          return GoingPageFriends(moovId);
                         }),
                   )
                 ]),
@@ -545,11 +541,10 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
 }
 
 class Buttons extends StatelessWidget {
-  List<dynamic> likedArray;
   dynamic moovId, likeCount;
   String text = 'https://www.whatsthemoov.com';
 
-  Buttons(this.likedArray, this.moovId);
+  Buttons(this.moovId);
 
   bool _isPressed;
   int status;
@@ -566,8 +561,7 @@ class Buttons extends StatelessWidget {
           // pic = snapshot.data['pic'];
           if (!snapshot.hasData) return Text('Loading data...');
 
-          DocumentSnapshot course = snapshot.data();
-          List<dynamic> likedArray = course["liked"];
+          DocumentSnapshot course = snapshot.data;
           Map<String, dynamic> invitees = course['invitees'];
 
           List<dynamic> inviteesIds = invitees.keys.toList();
@@ -601,23 +595,7 @@ class Buttons extends StatelessWidget {
               }
             }
 
-            List<String> uidArray = List<String>();
-            if (likedArray != null) {
-              likeCount = likedArray.length;
-              for (int i = 0; i < likeCount; i++) {
-                var id = likedArray[i]["uid"];
-                uidArray.add(id);
-              }
-            } else {
-              likeCount = 0;
-            }
-
-            if (uidArray != null && uidArray.contains(currentUser.id)) {
-              _isPressed = true;
-            } else {
-              _isPressed = false;
-            }
-
+           
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(

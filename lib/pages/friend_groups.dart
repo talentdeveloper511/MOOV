@@ -83,7 +83,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
-              if (snapshot.data.documents.length == 0) {
+              if (snapshot.data.docs.length == 0) {
                 return Container(
                   child: Center(
                       child: Padding(
@@ -175,7 +175,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                 return CircularProgressIndicator();
 
                               DocumentSnapshot course =
-                                  snapshot.data.documents[index];
+                                  snapshot.data.docs[index];
                               var length = course['members'].length - 2;
 
                               // var rng = new Random();
@@ -187,7 +187,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                   stream: FirebaseFirestore.instance
                                       .collection('users')
                                       .where('friendGroups',
-                                          arrayContains: course['groupName'])
+                                          arrayContains: course['groupId'])
                                       .snapshots(),
                                   builder: (context, snapshot3) {
                                     if (!snapshot3.hasData)
@@ -217,9 +217,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                     'members'],
                                                                 snapshot
                                                                     .data
-                                                                    .documents[
+                                                                    .docs[
                                                                         index]
-                                                                    .documentID,
+                                                                    .docId,
                                                                 course[
                                                                     'nextMOOV'])));
                                               },
@@ -329,7 +329,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                     NetworkImage(
                                                                   snapshot3
                                                                           .data
-                                                                          .documents[
+                                                                          .docs[
                                                                               1]
                                                                           .data[
                                                                       'photoUrl'],
@@ -348,7 +348,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                               NetworkImage(
                                                             snapshot3
                                                                     .data
-                                                                    .documents[0]
+                                                                    .docs[0]
                                                                     .data[
                                                                 'photoUrl'],
                                                           ),
@@ -398,7 +398,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                       ),
                                     );
                                   });
-                            }, childCount: snapshot.data.documents.length),
+                            }, childCount: snapshot.data.docs.length),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,

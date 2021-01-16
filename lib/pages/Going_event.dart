@@ -13,10 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class GoingPage extends StatelessWidget {
-  List<dynamic> likedArray;
-  dynamic moovId, likeCount;
+  dynamic moovId;
 
-  GoingPage(this.likedArray, this.moovId);
+  GoingPage(this.moovId);
 
   bool _isPressed;
   int status = 2;
@@ -34,7 +33,6 @@ class GoingPage extends StatelessWidget {
           DocumentSnapshot course = snapshot.data;
           if (snapshot.hasError) return CircularProgressIndicator();
 
-          List<dynamic> likedArray = course["liked"];
           Map<String, dynamic> invitees = course['invitees'];
 
           var sortedKeys = invitees.keys.toList(growable: false)
@@ -236,13 +234,11 @@ class GoingPage extends StatelessWidget {
 }
 
 class GoingPageFriends extends StatelessWidget {
-  List<dynamic> likedArray;
   dynamic moovId, likeCount;
   int status = 2;
 
-  GoingPageFriends(this.likedArray, this.moovId);
+  GoingPageFriends(this.moovId);
 
-  bool _isPressed;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -256,7 +252,6 @@ class GoingPageFriends extends StatelessWidget {
           DocumentSnapshot course = snapshot.data;
           if (snapshot.hasError) return CircularProgressIndicator();
 
-          List<dynamic> likedArray = course["liked"];
           Map<String, dynamic> invitees = course['invitees'];
 
           var sortedKeys = invitees.keys.toList(growable: false)
