@@ -82,7 +82,7 @@ class GroupCarousel extends StatelessWidget {
                     )),
                   );
                 }
-                DocumentSnapshot course = snapshot.data().docs[i];
+                DocumentSnapshot course = snapshot.data.docs[i];
 
                 return Container(
                     height: 150,
@@ -91,7 +91,7 @@ class GroupCarousel extends StatelessWidget {
                         stream: FirebaseFirestore.instance
                             .collection('users')
                             .where('friendGroups',
-                                arrayContains: course['groupName'])
+                                arrayContains: course['groupId'])
                             .snapshots(),
                         builder: (context, snapshot3) {
                           if (!snapshot3.hasData)
@@ -339,7 +339,7 @@ class GroupCarousel extends StatelessWidget {
                                                           (context, index) {
                                                         DocumentSnapshot
                                                             course = snapshot
-                                                                    .data()
+                                                                    .data
                                                                     .docs[
                                                                 index];
                                                         String pic =

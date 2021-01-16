@@ -148,11 +148,10 @@ class _MOOVSPageState extends State<MOOVSPage>
                                   "You have no posts. Go post the MOOV!",
                                   style: TextStyle(fontSize: 20)));
                         return ListView.builder(
-                          itemCount: snapshot.data.documents.length,
+                          itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
                             DocumentSnapshot course =
-                                snapshot.data.documents[index];
-                            List<dynamic> likerArray = course["liker"];
+                                snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             Map<String, dynamic> invitees = course['invitees'];
                             List<dynamic> inviteesIds = invitees.keys.toList();
@@ -214,18 +213,17 @@ class _MOOVSPageState extends State<MOOVSPage>
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
-                            snapshot.data.documents.length == 0)
+                            snapshot.data.docs.length == 0)
                           return Center(
                             child: Text("You're not going to any MOOVs!",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 20)),
                           );
                         return ListView.builder(
-                          itemCount: snapshot.data.documents.length,
+                          itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
                             DocumentSnapshot course =
-                                snapshot.data.documents[index];
-                            List<dynamic> likerArray = course["liker"];
+                                snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
 
                             var strUserPic = currentUser.photoUrl;

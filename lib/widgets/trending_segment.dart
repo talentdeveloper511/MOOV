@@ -104,8 +104,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Text('');
                       return Container(
-                        height:
-                            (snapshot.data.documents.length <= 3) ? 210 : 400,
+                        height: (snapshot.data.docs.length <= 3) ? 210 : 400,
                         child: Column(
                           children: [
                             Expanded(
@@ -132,7 +131,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                     delegate: SliverChildBuilderDelegate(
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
-                                          snapshot.data.documents[index];
+                                          snapshot.data.docs[index];
                                       List<dynamic> likedArray =
                                           course["liked"];
                                       List<String> uidArray = List<String>();
@@ -286,9 +285,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                           ],
                                         ),
                                       );
-                                    },
-                                        childCount:
-                                            snapshot.data.documents.length),
+                                    }, childCount: snapshot.data.docs.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
@@ -312,8 +309,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                       if (!snapshot.hasData) return Text('');
 
                       return Container(
-                        height:
-                            (snapshot.data.documents.length <= 3) ? 270 : 345,
+                        height: (snapshot.data.docs.length <= 3) ? 270 : 345,
                         child: Column(
                           children: [
                             Expanded(
@@ -340,9 +336,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                     delegate: SliverChildBuilderDelegate(
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
-                                          snapshot.data.documents[index];
-                                      List<dynamic> likedArray =
-                                          course["liked"];
+                                          snapshot.data.docs[index];
+                            
 
                                       return Card(
                                         color: Colors.white,
@@ -479,7 +474,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                       );
                                     },
                                         childCount:
-                                            snapshot.data.documents.length),
+                                            snapshot.data.docs.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
@@ -502,7 +497,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                       if (!snapshot.hasData) return Text('');
                       return Container(
                         height:
-                            (snapshot.data.documents.length <= 3) ? 270 : 400,
+                            (snapshot.data.docs.length <= 3) ? 270 : 400,
                         child: Column(
                           children: [
                             Expanded(
@@ -529,26 +524,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                     delegate: SliverChildBuilderDelegate(
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
-                                          snapshot.data.documents[index];
-                                      List<dynamic> likedArray =
-                                          course["liked"];
-                                      List<String> uidArray = List<String>();
-                                      if (likedArray != null) {
-                                        likeCount = likedArray.length;
-                                        for (int i = 0; i < likeCount; i++) {
-                                          var id = likedArray[i]["uid"];
-                                          uidArray.add(id);
-                                        }
-                                      } else {
-                                        likeCount = 0;
-                                      }
-
-                                      if (uidArray != null &&
-                                          uidArray.contains(strUserId)) {
-                                        _isPressed = true;
-                                      } else {
-                                        _isPressed = false;
-                                      }
+                                          snapshot.data.docs[index];
 
                                       return Card(
                                         color: Colors.white,
@@ -683,9 +659,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                           ],
                                         ),
                                       );
-                                    },
-                                        childCount:
-                                            snapshot.data.documents.length),
+                                    }, childCount: snapshot.data.docs.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
