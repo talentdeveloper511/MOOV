@@ -375,23 +375,23 @@ class _AuthorContent extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                        // Navigator.push(
-                        //     context,
-                        //     PageTransition(
-                        //         type: PageTransitionType.bottomToTop,
-                        //         child: SendMOOV(
-                        //             course['postId'],
-                        //             course['userId'],
-                        //             course['image'],
-                        //             course['postId'],
-                        //             course['startDate'],
-                        //             course['title'],
-                        //             course['description'],
-                        //             course['address'],
-                        //             course['profilePic'],
-                        //             course['userName'],
-                        //             course['userEmail'],
-                        //             course['liked'])));
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.bottomToTop,
+                                child: SendMOOV(
+                                    course['postId'],
+                                    course['userId'],
+                                    course['image'],
+                                    course['postId'],
+                                    course['startDate'],
+                                    course['title'],
+                                    course['description'],
+                                    course['address'],
+                                    course['profilePic'],
+                                    course['userName'],
+                                    course['userEmail'],
+                                   )));
                       },
                       color: Colors.white,
                       padding: EdgeInsets.all(5.0),

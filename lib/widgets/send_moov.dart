@@ -21,7 +21,6 @@ class SendMOOV extends StatefulWidget {
   String ownerId, previewImg;
   dynamic startDate, moovId;
   String title, description, address, ownerProPic, ownerName, ownerEmail;
-  List<dynamic> likedArray;
 
   SendMOOV(
       this.mid,
@@ -35,7 +34,7 @@ class SendMOOV extends StatefulWidget {
       this.ownerProPic,
       this.ownerName,
       this.ownerEmail,
-      this.likedArray);
+      );
 
   @override
   _SendMOOVState createState() => _SendMOOVState(
@@ -50,7 +49,7 @@ class SendMOOV extends StatefulWidget {
       this.ownerProPic,
       this.ownerName,
       this.ownerEmail,
-      this.likedArray);
+      );
 }
 
 class _SendMOOVState extends State<SendMOOV> {
@@ -58,7 +57,6 @@ class _SendMOOVState extends State<SendMOOV> {
   String ownerId, previewImg;
   dynamic startDate, moovId;
   String title, description, address, ownerProPic, ownerName, ownerEmail;
-  List<dynamic> likedArray;
 
   _SendMOOVState(
       this.mid,
@@ -72,7 +70,7 @@ class _SendMOOVState extends State<SendMOOV> {
       this.ownerProPic,
       this.ownerName,
       this.ownerEmail,
-      this.likedArray);
+      );
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   handleSearch(String query) {
@@ -151,7 +149,7 @@ class _SendMOOVState extends State<SendMOOV> {
           return circularProgress();
         }
         List<UserResult> searchResults = [];
-        snapshot.data.documents.forEach((doc) {
+        snapshot.data.docs.forEach((doc) {
           User user = User.fromDocument(doc);
           UserResult searchResult = UserResult(
               user,
@@ -164,8 +162,8 @@ class _SendMOOVState extends State<SendMOOV> {
               address,
               ownerProPic,
               ownerName,
-              ownerEmail,
-              likedArray);
+              ownerEmail
+              );
           searchResults.add(searchResult);
         });
         return ListView(
@@ -191,7 +189,6 @@ class UserResult extends StatefulWidget {
   String ownerId, previewImg;
   dynamic startDate, moovId;
   String title, description, address, ownerProPic, ownerName, ownerEmail;
-  List<dynamic> likedArray;
 
   UserResult(
       this.user,
@@ -205,7 +202,7 @@ class UserResult extends StatefulWidget {
       this.ownerProPic,
       this.ownerName,
       this.ownerEmail,
-      this.likedArray);
+      );
 
   @override
   _UserResultState createState() => _UserResultState(
@@ -220,7 +217,7 @@ class UserResult extends StatefulWidget {
       this.ownerProPic,
       this.ownerName,
       this.ownerEmail,
-      this.likedArray);
+      );
 }
 
 class _UserResultState extends State<UserResult> {
@@ -228,7 +225,6 @@ class _UserResultState extends State<UserResult> {
   String ownerId, previewImg;
   dynamic startDate, moovId;
   String title, description, address, ownerProPic, ownerName, ownerEmail;
-  List<dynamic> likedArray;
   bool status = false;
 
   _UserResultState(
@@ -243,7 +239,7 @@ class _UserResultState extends State<UserResult> {
       this.ownerProPic,
       this.ownerName,
       this.ownerEmail,
-      this.likedArray);
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -302,7 +298,7 @@ class _UserResultState extends State<UserResult> {
                                 ownerProPic,
                                 ownerName,
                                 ownerEmail,
-                                likedArray);
+                                );
                             setState(() {
                               status = true;
                             });

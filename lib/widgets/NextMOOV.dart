@@ -52,7 +52,7 @@ class _NextMOOVState extends State<NextMOOV> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: 1,
                 itemBuilder: (context, index) {
-                  DocumentSnapshot course = snapshot.data.documents[index];
+                  DocumentSnapshot course = snapshot.data.docs[index];
                   pic = course['image'];
                   title = course['title'];
 

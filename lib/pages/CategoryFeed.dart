@@ -930,7 +930,7 @@ class PostOnFeed extends StatelessWidget {
                                                       course['profilePic'],
                                                       course['userName'],
                                                       course['userEmail'],
-                                                      course['liked'])));
+                                                      )));
                                         },
                                         child: Icon(Icons.send_rounded,
                                             color: Colors.blue[500], size: 30),

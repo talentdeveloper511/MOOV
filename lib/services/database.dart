@@ -311,7 +311,7 @@ class Database {
       String ownerProPic,
       String ownerName,
       String ownerEmail,
-      List<dynamic> likedArray) {
+      ) {
     notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
       "type": "invite",
       "username": currentUser.displayName,
@@ -328,7 +328,6 @@ class Database {
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
       "ownerEmail": ownerEmail,
-      "likedArray": likedArray
     });
   }
 
