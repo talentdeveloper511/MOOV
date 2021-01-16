@@ -394,7 +394,9 @@ class UserResult extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(child: Text("is going to")),
+                    
+                    Container(
+                      child: Text("is going to")),
                     Container(
                         child: StreamBuilder(
                             stream: FirebaseFirestore.instance
@@ -405,7 +407,8 @@ class UserResult extends StatelessWidget {
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
-                                return CircularProgressIndicator();
+                                return Center(
+                                  child: Text("nothing, right now."));
                               if (!snapshot.hasData ||
                                   snapshot.data.docs.length == 0)
                                 return SizedBox(

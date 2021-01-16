@@ -7,6 +7,6 @@ class Group {
   Group({this.groupName, this.members});
 
   factory Group.fromDocument(DocumentSnapshot doc) {
-    return Group(groupName: doc['groupName'], members: doc['members']);
+    return Group(groupName: doc.data()['groupName'], members: doc.data()['members']);
   }
 }

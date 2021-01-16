@@ -234,8 +234,8 @@ class _HomeState extends State<Home> {
         "isAmbassador": false,
         "friendArray": [],
         "friendRequests": [],
+        "friendGroups": [],
         "venmo": "",
-        "friendGroups": []
       });
       doc = await usersRef.doc(user.id).get();
     }

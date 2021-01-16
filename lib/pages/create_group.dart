@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/home.dart';
@@ -21,6 +22,7 @@ class GroupForm extends StatefulWidget {
 }
 
 class _GroupFormState extends State<GroupForm> {
+  List memberoonis = [currentUser.id];
   get firestoreInstance => null;
   File _image;
   final picker = ImagePicker();
@@ -71,14 +73,24 @@ class _GroupFormState extends State<GroupForm> {
     });
   }
 
+  String generateRandomString(int len) {
+    var r = Random();
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
+        .join();
+  }
+
   createGroupInFirestore(gname, cid, pic) async {
     final String groupName = gname;
+    final groupId = generateRandomString(20);
     // var newDocRef = FirebaseFirestore.instance.collection('friendgroups').document();
 
-    FirebaseFirestore.instance.collection('friendGroups').add({
+    FirebaseFirestore.instance.collection('friendGroups').doc(groupId).set({
       "groupName": groupName,
-      "members": [cid],
+      "members": memberoonis,
       "groupPic": pic,
+      "groupId": groupId,
       // "chat": {'messages': []},
       "nextMOOV": "",
       // "gid": id
@@ -100,7 +112,7 @@ class _GroupFormState extends State<GroupForm> {
           FirebaseFirestore.instance.doc('users/$cid');
 
       transaction.update(userRefs, {
-        'friendGroups': FieldValue.arrayUnion([gname]),
+        'friendGroups': FieldValue.arrayUnion([groupId]),
       });
     });
   }
@@ -368,14 +380,8 @@ class _GroupFormState extends State<GroupForm> {
 
     uploadTask = ref.putFile(_image);
 
-
-      firebase_storage.TaskSnapshot
-                                                taskSnapshot = await uploadTask;
-                                            if (uploadTask.snapshot.state ==
-                                                firebase_storage
-                                                    .TaskState.success) {
-
-   
+    firebase_storage.TaskSnapshot taskSnapshot = await uploadTask;
+    if (uploadTask.snapshot.state == firebase_storage.TaskState.success) {
       print("added to Firebase Storage");
       final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
       createGroupInFirestore(groupName, currentUser.id, downloadUrl);

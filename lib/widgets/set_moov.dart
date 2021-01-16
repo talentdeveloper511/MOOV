@@ -117,7 +117,7 @@ class _SetMOOVState extends State<SetMOOV> {
           return circularProgress();
         }
         // List<EventResult> searchResults = [];
-        snapshot.data.documents.forEach((doc) {
+        snapshot.data.docs.forEach((doc) {
           var moov = doc;
           EventResult searchResult = EventResult(moov, gid);
           results.add(searchResult);

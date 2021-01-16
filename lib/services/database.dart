@@ -272,7 +272,7 @@ class Database {
   addedToGroup(String addee, String gname, String gid, String groupPic,
       List<dynamic> members, String moov) {
     notificationFeedRef.doc(addee).collection("feedItems").doc(gid).set({
-      "type": "friendgroup",
+      "type": "friendGroup",
       "username": currentUser.displayName,
       "userId": currentUser.id,
       "userEmail": currentUser.email,
@@ -606,7 +606,7 @@ class Database {
       final DocumentReference ref = dbRef.doc('users/$id');
       final DocumentReference ref2 = dbRef.doc('friendGroups/$gid');
       transaction.update(ref, {
-        'friendGroups': FieldValue.arrayUnion([gname]),
+        'friendGroups': FieldValue.arrayUnion([gid]),
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayUnion([id]),

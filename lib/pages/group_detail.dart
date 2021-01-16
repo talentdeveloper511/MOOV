@@ -128,7 +128,7 @@ class _GroupDetailState extends State<GroupDetail> {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .where('friendGroups', arrayContains: displayName)
+            .where('friendGroups', arrayContains: gid)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
@@ -261,10 +261,10 @@ class _GroupDetailState extends State<GroupDetail> {
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           physics: AlwaysScrollableScrollPhysics(),
-                          itemCount: snapshot.data.documents.length,
+                          itemCount: snapshot.data.docs.length,
                           itemBuilder: (_, index) {
                             DocumentSnapshot course =
-                                snapshot.data.documents[index];
+                                snapshot.data.docs[index];
 
                             return Container(
                               height: 100,
@@ -299,16 +299,16 @@ class _GroupDetailState extends State<GroupDetail> {
                                         child: CircleAvatar(
                                           backgroundImage: NetworkImage(snapshot
                                               .data
-                                              .documents[index]
-                                              .data['photoUrl']),
+                                              .docs[index]
+                                              ['photoUrl']),
                                           radius: 50,
                                           backgroundColor: TextThemes.ndBlue,
                                           child: CircleAvatar(
                                             // backgroundImage: snapshot.data
                                             //     .documents[index].data['photoUrl'],
                                             backgroundImage: NetworkImage(
-                                                snapshot.data.documents[index]
-                                                    .data['photoUrl']),
+                                                snapshot.data.docs[index]
+                                                    ['photoUrl']),
                                             radius: 50,
                                           ),
                                         ),
@@ -329,8 +329,8 @@ class _GroupDetailState extends State<GroupDetail> {
                                                 TextSpan(
                                                     text: snapshot
                                                         .data
-                                                        .documents[index]
-                                                        .data['displayName']
+                                                        .docs[index]
+                                                        ['displayName']
                                                         .toString(),
                                                     style: TextStyle(
                                                         color: Colors.black,

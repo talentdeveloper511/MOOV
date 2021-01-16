@@ -40,22 +40,22 @@ class User {
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
-        id: doc['id'],
-        email: doc['email'],
-        photoUrl: doc['photoUrl'],
-        displayName: doc['displayName'],
-        bio: doc['bio'],
-        score: doc['score'],
-        dorm: doc['dorm'],
-        header: doc['header'],
-        year: doc['year'],
-        gender: doc['gender'],
-        friendArray: doc['friendArray'],
-        friendRequests: doc['friendRequests'],
-        postLimit: doc['postLimit'],
-        venmo: doc['venmo'],
-        isAmbassador: doc['isAmbassador'],
-        friendGroups: doc['friendGroups'],
-        referral: doc['referral']);
+        id: doc.data()['id'],
+        email: doc.data()['email'],
+        photoUrl: doc.data()['photoUrl'],
+        displayName: doc.data()['displayName'],
+        bio: doc.data()['bio'],
+        score: doc.data()['score'],
+        dorm: doc.data()['dorm'],
+        header: doc.data()['header'],
+        year: doc.data()['year'],
+        gender: doc.data()['gender'],
+        friendArray: doc.data()['friendArray'],
+        friendRequests: doc.data()['friendRequests'],
+        postLimit: doc.data()['postLimit'],
+        venmo: doc.data()['venmo'],
+        isAmbassador: doc.data()['isAmbassador'],
+        friendGroups: doc.data()['friendGroups'],
+        referral: doc.data()['referral']);
   }
 }

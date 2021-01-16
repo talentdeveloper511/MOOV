@@ -318,7 +318,7 @@ class _HomePageState extends State<HomePage>
                   scrollPhysics: NeverScrollableScrollPhysics(),
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
-                  autoPlay: true,
+                  autoPlay: false,
                   autoPlayInterval: Duration(seconds: 6),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
@@ -459,7 +459,7 @@ class _HomePageState extends State<HomePage>
                   // ),
                   // MapTest(),
                   PollView(),
-                  GroupCarousel(),
+                  // GroupCarousel(),
                 ]),
           ),
           SliverPadding(

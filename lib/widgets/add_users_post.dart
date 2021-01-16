@@ -111,11 +111,12 @@ class _AddUsersPostState extends State<AddUsersPost> {
           return circularProgress();
         }
         List<UserResult> searchResults = [];
-        snapshot.data.documents.forEach((doc) {
+        snapshot.data.docs.forEach((doc) {
           User user = User.fromDocument(doc);
           UserResult searchResult = UserResult(user, me, invitees);
           searchResults.add(searchResult);
         });
+
         return ListView(
           children: searchResults,
         );

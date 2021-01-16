@@ -255,7 +255,7 @@ class NotificationFeedItem extends StatelessWidget {
               )),
         ),
       );
-    } else if (type == 'friendgroup') {
+    } else if (type == 'friendGroup') {
       mediaPreview = GestureDetector(
         onTap: () => showGroup(context),
         child: Container(
@@ -305,7 +305,7 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = "has sent you a friend request.";
     } else if (type == 'accept') {
       activityItemText = "accepted your friend request.";
-    } else if (type == 'friendgroup') {
+    } else if (type == 'friendGroup') {
       activityItemText = 'has added you to ';
     } else if (type == 'invite') {
       activityItemText = 'has invited you to ';

@@ -177,6 +177,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                               DocumentSnapshot course =
                                   snapshot.data.docs[index];
                               var length = course['members'].length - 2;
+                              String groupId = course['groupId'];
 
                               // var rng = new Random();
                               // var l = rng.nextInt(course['members'].length);
@@ -187,7 +188,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                   stream: FirebaseFirestore.instance
                                       .collection('users')
                                       .where('friendGroups',
-                                          arrayContains: course['groupId'])
+                                          arrayContains: groupId)
                                       .snapshots(),
                                   builder: (context, snapshot3) {
                                     if (!snapshot3.hasData)
@@ -215,11 +216,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                     'groupName'],
                                                                 course[
                                                                     'members'],
-                                                                snapshot
-                                                                    .data
-                                                                    .docs[
-                                                                        index]
-                                                                    .docId,
+                                                                course['groupId'],
                                                                 course[
                                                                     'nextMOOV'])));
                                               },
@@ -329,9 +326,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                     NetworkImage(
                                                                   snapshot3
                                                                           .data
-                                                                          .docs[
-                                                                              1]
-                                                                          .data[
+                                                                          .docs[1]
+                                                                          [
                                                                       'photoUrl'],
                                                                 ),
                                                               )
@@ -349,7 +345,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                             snapshot3
                                                                     .data
                                                                     .docs[0]
-                                                                    .data[
+                                                                    [
                                                                 'photoUrl'],
                                                           ),
                                                         )),

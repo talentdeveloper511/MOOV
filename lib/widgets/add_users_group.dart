@@ -110,7 +110,7 @@ class _AddUsersState extends State<AddUsers> {
           return circularProgress();
         }
         List<UserResult> searchResults = [];
-        snapshot.data.documents.forEach((doc) {
+        snapshot.data.docs.forEach((doc) {
           User user = User.fromDocument(doc);
           UserResult searchResult =
               UserResult(user, gname, gid, pic, members, moov);
@@ -162,7 +162,7 @@ class _UserResultState extends State<UserResult> {
     if (user.friendGroups == null) {
       return Container();
     }
-    user.friendGroups.contains(gname) ? status = true : false;
+    user.friendGroups.contains(gid) ? status = true : false;
 
     return Container(
       color: Colors.white,
