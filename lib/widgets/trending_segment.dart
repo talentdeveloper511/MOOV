@@ -99,7 +99,6 @@ class TrendingSegmentState extends State<TrendingSegment> {
                         .collection('food')
                         .where('type', isEqualTo: 'Restaurants & Bars')
                         .where('privacy', isEqualTo: "Public")
-                        .orderBy('likeCounter', descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Text('');
@@ -303,7 +302,6 @@ class TrendingSegmentState extends State<TrendingSegment> {
                         .collection('food')
                         .where('type', isEqualTo: "Pregames & Parties")
                         .where('privacy', isEqualTo: "Public")
-                        .orderBy('likeCounter', descending: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Text('');

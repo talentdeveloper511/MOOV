@@ -293,7 +293,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                               return ListView.builder(
                                 itemCount: snapshot.data.docs.length,
                                 itemBuilder: (context, index) {
-                          print(snapshot.data.docs[index]);
 
                                   DocumentSnapshot course =
                                       snapshot.data.docs[index];

@@ -118,17 +118,17 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
           return circularProgress();
         }
         List<Widget> searchResults = [];
-        snapshot.data[0].documents.forEach((doc) {
+        snapshot.data[0].docs.forEach((doc) {
           User user = User.fromDocument(doc);
           UserResult searchResult = UserResult(user);
           searchResults.add(searchResult);
         });
-        snapshot.data[1].documents.forEach((doc) {
+        snapshot.data[1].docs.forEach((doc) {
           var group = doc;
           GroupResult searchResult = GroupResult(group);
           searchResults.add(searchResult);
         });
-        snapshot.data[2].documents.forEach((doc) {
+        snapshot.data[2].docs.forEach((doc) {
           var moov = doc;
           EventResult searchResult = EventResult(moov);
           searchResults.add(searchResult);
@@ -252,7 +252,7 @@ class GroupResult extends StatelessWidget {
                       group.data['groupPic'],
                       group.data['groupName'],
                       group.data['members'],
-                      group.data['gid'],
+                      group.data['groupId'],
                       group.data['nextMOOV'])))
             },
             child: ListTile(

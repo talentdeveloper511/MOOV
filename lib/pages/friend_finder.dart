@@ -254,14 +254,13 @@ class _FriendFinderState extends State<FriendFinder>
                   .doc(currentUser.id)
                   .snapshots(),
               builder: (context, snapshot) {
-                print("HIIII");
                 List<dynamic> friendArray;
 
                 bool isLargePhone = Screen.diagonal(context) > 766;
 
                 if (!snapshot.hasData) return CircularProgressIndicator();
-                friendArray = snapshot.data.docs['friendArray'];
-                if (snapshot.data.docs["friendArray"].isEmpty) {
+                friendArray = snapshot.data['friendArray'];
+                if (snapshot.data["friendArray"].isEmpty) {
                   return Container(
                     height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(

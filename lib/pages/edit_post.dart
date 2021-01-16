@@ -211,7 +211,7 @@ class _EditPostState extends State<EditPost> {
           String title = snapshot.data['title'];
           String type = snapshot.data['type'];
           String address = snapshot.data['address'];
-          String visibility = snapshot.data['visibility'];
+          String visibility = snapshot.data['privacy'];
           String description = snapshot.data['description'];
           dynamic startDate = snapshot.data['startDate'];
           String image = snapshot.data['image'];

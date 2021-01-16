@@ -27,7 +27,7 @@ class GroupCarousel extends StatelessWidget {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Container(
-      height: 120,
+      height: 110,
       child: Card(
           color: Colors.white,
           child: StreamBuilder(
@@ -40,14 +40,14 @@ class GroupCarousel extends StatelessWidget {
                 if (snapshot.data.docs.length == 0 ||
                     currentUser.friendGroups.length == 0) {
                   return Container(
-                    height: 120,
+                    height: 110,
                     child: Center(
                         child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 50.0),
+                            padding: const EdgeInsets.only(bottom: 40.0),
                             child: RaisedButton(
                               onPressed: () {
                                 Navigator.push(
@@ -91,7 +91,7 @@ class GroupCarousel extends StatelessWidget {
                         stream: FirebaseFirestore.instance
                             .collection('users')
                             .where('friendGroups',
-                                arrayContains: course['groupId'])
+                                arrayContains: course['groupName'])
                             .snapshots(),
                         builder: (context, snapshot3) {
                           if (!snapshot3.hasData)
@@ -102,7 +102,7 @@ class GroupCarousel extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              height: 120,
+                              height: 110,
                               // color: Colors.white,
                               clipBehavior: Clip.none,
                               child: Row(
@@ -128,7 +128,7 @@ class GroupCarousel extends StatelessWidget {
                                                           course['nextMOOV'])));
                                         },
                                         child: Container(
-                                          height: 120,
+                                          height: 110,
                                           child: Column(
                                             children: [
                                               Padding(
