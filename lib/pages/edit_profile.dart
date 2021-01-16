@@ -400,52 +400,53 @@ class _EditProfileState extends State<EditProfile> {
                           Text('Save', style: TextStyle(color: Colors.white)),
                       onPressed: () async {
                         if (_image != null) {
-
-
-                           firebase_storage.Reference ref = firebase_storage
-                                  .FirebaseStorage.instance
-                                  .ref()
-                                  .child("images/" + currentUser.displayName);
-
-
+                          firebase_storage.Reference ref = firebase_storage
+                              .FirebaseStorage.instance
+                              .ref()
+                              .child("images/" + currentUser.displayName);
 
                           // StorageReference firebaseStorageRef = FirebaseStorage
                           //     .instance
                           //     .ref()
                           //     .child("images/" + currentUser.displayName);
-                                                                                      firebase_storage.UploadTask uploadTask;
+                          firebase_storage.UploadTask uploadTask;
 
-                          uploadTask =
-                              ref.putFile(_image);
-                          StorageTaskSnapshot taskSnapshot =
-                              await uploadTask.onComplete;
-                          if (taskSnapshot.error == null) {
+                          uploadTask = ref.putFile(_image);
+
+                          firebase_storage.UploadTask /*!*/ task;
+
+                          // task = await uploadTask;
+                          if (uploadTask.snapshot.state ==
+                              firebase_storage.TaskState.success) {
                             print("added to Firebase Storage");
+
                             final String downloadUrl =
-                                await taskSnapshot.ref.getDownloadURL();
+                                await ref.getDownloadURL();
+
                             usersRef.doc(currentUser.id).update({
                               "photoUrl": downloadUrl,
                             });
                           }
                         }
                         if (_image2 != null) {
-
-                           firebase_storage.Reference ref = firebase_storage
-                                  .FirebaseStorage.instance
-                                  .ref()
-                                  .child("images/header" + currentUser.displayName);
+                          firebase_storage.Reference ref = firebase_storage
+                              .FirebaseStorage.instance
+                              .ref()
+                              .child("images/header" + currentUser.displayName);
 
                           // StorageReference firebaseStorageRef = FirebaseStorage
                           //     .instance
                           //     .ref()
                           //     .child("images/header" + currentUser.displayName);
-                                                            firebase_storage.UploadTask uploadTask;
+                          firebase_storage.UploadTask uploadTask;
 
-                        uploadTask =
-                              ref.putFile(_image2);
-                          StorageTaskSnapshot taskSnapshot =
-                              await uploadTask.onComplete;
-                          if (taskSnapshot.error == null) {
+                          uploadTask = ref.putFile(_image2);
+                          firebase_storage.UploadTask /*!*/ task;
+
+                          firebase_storage.TaskSnapshot taskSnapshot =
+                              await task;
+                          if (task.snapshot.state ==
+                              firebase_storage.TaskState.success) {
                             print("added to Firebase Storage");
                             final String headerUrl =
                                 await taskSnapshot.ref.getDownloadURL();

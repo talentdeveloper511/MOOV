@@ -127,7 +127,7 @@ class _PollViewState extends State<PollView> {
                                 .doc('jan12')
                                 .set({
                               "voters": {user.id: choice}
-                            }, merge: true);
+                            }, SetOptions(merge: true));
 
                             if (choice == 1) {
                               setState(() {

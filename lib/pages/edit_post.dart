@@ -633,12 +633,12 @@ class _EditPostState extends State<EditPost> {
                                         });
                                         if (_formKey.currentState != null) {
                                           if (_image != null) {
-                                            firebase_storage.Reference ref = firebase_storage
-                                  .FirebaseStorage.instance
-                                  .ref()
-                                  .child("images/" +
+                                            firebase_storage.Reference ref =
+                                                firebase_storage
+                                                    .FirebaseStorage.instance
+                                                    .ref()
+                                                    .child("images/" +
                                                         titleController.text);
-                                          
 
                                             // Reference firebaseStorageRef =
                                             //     FirebaseStorage.instance
@@ -649,16 +649,20 @@ class _EditPostState extends State<EditPost> {
                                             firebase_storage.UploadTask
                                                 uploadTask;
 
-                                            uploadTask = ref
-                                                .putFile(_image);
-                                            TaskSnapshot taskSnapshot =
-                                                await uploadTask.onComplete;
-                                            if (taskSnapshot.error == null) {
+                                            uploadTask = ref.putFile(_image);
+
+                                            firebase_storage
+                                                .UploadTask /*!*/ task;
+
+                                            firebase_storage.TaskSnapshot
+                                                taskSnapshot = await task;
+                                            if (task.snapshot.state ==
+                                                firebase_storage
+                                                    .TaskState.success) {
                                               print(
                                                   "added to Firebase Storage");
                                               final String downloadUrl =
-                                                  await taskSnapshot.ref
-                                                      .getDownloadURL();
+                                                  await ref.getDownloadURL();
                                               postsRef.doc(postId).update({
                                                 "image": downloadUrl,
                                               });

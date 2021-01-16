@@ -31,7 +31,6 @@ dependencies:
   firebase_storage: ^7.0.0
 #  firebase_storage: ^5.0.0
   image_picker: ^0.6.7+4
-  firebase_messaging: ^6.0.16
 #  firebase_core: ^0.5.1
   firebase_core: ^0.7.0
   shared_preferences: ^0.5.0
@@ -40,15 +39,15 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   cached_network_image: ^2.2.0+1
   flutter_svg: ^0.18.0
-  geolocator: ^5.3.2+2
+  # geolocator: ^5.3.2+2
   image: ^2.1.14
   firebase_auth: ^0.20.0+1
 #  firebase_auth: ^0.18.2
   google_sign_in: ^4.4.4
   permission_handler: ^5.0.0
-  contacts_service: ^0.3.10
+  contacts_service: ^0.4.6
   flutter_sms: ^2.0.0
-  firebase_analytics: ^5.0.6
+  firebase_analytics: ^7.0.1
   flutter_form_builder: ^3.7.2
   duration: ^2.0.0
 #  get_it: ^4.0.2

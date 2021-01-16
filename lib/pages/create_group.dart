@@ -359,7 +359,7 @@ class _GroupFormState extends State<GroupForm> {
   void _saveFirebase() async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
-        .child("images/group" + gid);
+        .child("images/group" + groupName);
     // Reference firebaseStorageRef =
     //     FirebaseStorage.instance.ref().child("images/group" + gid);
 
@@ -367,8 +367,14 @@ class _GroupFormState extends State<GroupForm> {
 
     uploadTask = ref.putFile(_image);
 
-    TaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    if (taskSnapshot.error == null) {
+
+      firebase_storage.TaskSnapshot
+                                                taskSnapshot = await uploadTask;
+                                            if (uploadTask.snapshot.state ==
+                                                firebase_storage
+                                                    .TaskState.success) {
+
+   
       print("added to Firebase Storage");
       final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
       createGroupInFirestore(groupName, currentUser.id, downloadUrl);

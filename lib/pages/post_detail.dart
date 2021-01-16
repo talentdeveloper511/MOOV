@@ -323,7 +323,7 @@ class _AuthorContent extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> course = snapshot.data.data;
+          Map<String, dynamic> course = snapshot.data.data();
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),

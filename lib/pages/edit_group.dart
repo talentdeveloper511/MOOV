@@ -407,16 +407,29 @@ class _EditGroupState extends State<EditGroup> {
                               //         .ref()
                               //         .child("images/group" + gid);
 
+
+                                            // Reference firebaseStorageRef =
+                                            //     FirebaseStorage.instance
+                                            //         .ref()
+                                            //         .child("images/" +
+                                            //             titleController.text);
+
+                                            
+                                          
+                                          
+
+
                                   firebase_storage.UploadTask uploadTask;
 
                               uploadTask =
                                   ref.putFile(_image);
 
 
-
-                              StorageTaskSnapshot taskSnapshot =
-                                  await uploadTask;
-                              if (taskSnapshot.error == null) {
+  firebase_storage.TaskSnapshot
+                                                taskSnapshot = await uploadTask;
+                                            if (uploadTask.snapshot.state ==
+                                                firebase_storage
+                                                    .TaskState.success) {
                                 print("added to Firebase Storage");
                                 final String downloadUrl =
                                     await taskSnapshot.ref.getDownloadURL();
