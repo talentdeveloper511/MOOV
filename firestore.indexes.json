@@ -1,0 +1,61 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "food",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "liked",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "startDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "food",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "liker",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "startDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "food",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "startDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "food",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "startDate",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
