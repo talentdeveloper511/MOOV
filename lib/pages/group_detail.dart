@@ -106,20 +106,17 @@ class _GroupDetailState extends State<GroupDetail> {
   final strUserName = currentUser.displayName;
   var profilePic;
   var otherDisplay;
-  var id;
+  int id = 0;
   var iter = 1;
   int status = 0;
 
-  int refreshID = 0;
   void refreshData() {
-    refreshID++;
+    id++;
   }
 
   FutureOr onGoBack(dynamic value) {
     refreshData();
-    setState(() {
-      NextMOOV(value);
-    });
+    setState(() {});
   }
 
   @override
@@ -146,8 +143,7 @@ class _GroupDetailState extends State<GroupDetail> {
                 if (!snapshot2.hasData) return CircularProgressIndicator();
                 if (snapshot2.data == null) return Container();
 
-
-               //this is for getting the first name of the suggestor
+                //this is for getting the first name of the suggestor
                 String fullName = "";
                 List<String> tempList = fullName.split(" ");
                 int start = 0;
@@ -651,7 +647,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                               radius: 24,
                                                               backgroundColor:
                                                                   TextThemes
-                                                                      .ndGold,
+                                                                      .ndBlue,
                                                               child:
                                                                   CircleAvatar(
                                                                 backgroundImage:
@@ -780,7 +776,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                               radius: 24,
                                                               backgroundColor:
                                                                   TextThemes
-                                                                      .ndGold,
+                                                                      .ndBlue,
                                                               child:
                                                                   CircleAvatar(
                                                                 backgroundImage:
@@ -852,9 +848,9 @@ class _GroupDetailState extends State<GroupDetail> {
                                                   PageTransition(
                                                       type: PageTransitionType
                                                           .bottomToTop,
-                                                      child: SetMOOV(
-                                                          displayName, gid)))
-                                              .then(onGoBack(gid));
+                                                      child:
+                                                          SetMOOV(next, gid)))
+                                              .then(onGoBack);
                                         },
                                         color: TextThemes.ndBlue,
                                         child: Padding(

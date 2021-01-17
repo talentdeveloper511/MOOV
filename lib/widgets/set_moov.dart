@@ -20,18 +20,18 @@ import '../pages/ProfilePage.dart';
 import '../pages/other_profile.dart';
 
 class SetMOOV extends StatefulWidget {
-  String gname, gid;
+  String moov, gid;
 
-  SetMOOV(this.gname, this.gid);
+  SetMOOV(this.moov, this.gid);
 
   @override
-  _SetMOOVState createState() => _SetMOOVState(this.gname, this.gid);
+  _SetMOOVState createState() => _SetMOOVState(this.moov, this.gid);
 }
 
 class _SetMOOVState extends State<SetMOOV> {
-  String gname, gid;
+  String moov, gid;
 
-  _SetMOOVState(this.gname, this.gid);
+  _SetMOOVState(this.moov, this.gid);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   Future<QuerySnapshot> searchResultsEvents;
@@ -154,10 +154,10 @@ class EventResult extends StatelessWidget {
           GestureDetector(
             onTap: () => print('moov tapped'),
             child: ListTile(
-              leading: Image.network(moov.data['image'],
+              leading: Image.network(moov['image'],
                   fit: BoxFit.cover, height: 50, width: 70),
               title: Text(
-                moov.data['title'] == null ? "" : moov.data['title'],
+                moov['title'] == null ? "" : moov['title'],
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
@@ -167,8 +167,8 @@ class EventResult extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
-                  Database().setMOOV(gid, moov.data['postId']);
-                  Navigator.pop(context);
+                  Database().setMOOV(gid, moov['postId']);
+                  Navigator.pop(context, moov['postId']);
                 },
                 child: Text(
                   "Set MOOV",

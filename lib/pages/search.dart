@@ -211,13 +211,13 @@ class EventResult extends StatelessWidget {
           GestureDetector(
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PostDetail(moov.data['postId'])))
+                  builder: (context) => PostDetail(moov['postId'])))
             },
             child: ListTile(
-              leading: Image.network(moov.data['image'],
+              leading: Image.network(moov['image'],
                   fit: BoxFit.cover, height: 50, width: 70),
               title: Text(
-                moov.data['title'] == null ? "" : moov.data['title'],
+                moov['title'] == null ? "" : moov['title'],
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
@@ -249,21 +249,21 @@ class GroupResult extends StatelessWidget {
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => GroupDetail(
-                      group.data['groupPic'],
-                      group.data['groupName'],
-                      group.data['members'],
-                      group.data['groupId'],
-                      group.data['nextMOOV'])))
+                      group['groupPic'],
+                      group['groupName'],
+                      group['members'],
+                      group['groupId'],
+                      group['nextMOOV'])))
             },
             child: ListTile(
               leading: Image.network(
-                group.data['groupPic'],
+                group['groupPic'],
                 fit: BoxFit.cover,
                 height: 40,
                 width: 60,
               ),
               title: Text(
-                group.data['groupName'] == null ? "" : group.data['groupName'],
+                group['groupName'] == null ? "" : group['groupName'],
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),

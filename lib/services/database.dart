@@ -571,7 +571,7 @@ class Database {
       final DocumentReference ref = dbRef.doc('users/$id');
       final DocumentReference ref2 = dbRef.doc('friendGroups/$gid');
       transaction.update(ref, {
-        'friendGroups': FieldValue.arrayRemove([gname]),
+        'friendGroups': FieldValue.arrayRemove([gid]),
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayRemove([id]),

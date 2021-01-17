@@ -199,7 +199,7 @@ class _EditGroupState extends State<EditGroup> {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .where('friendGroups', arrayContains: displayName)
+            .where('friendGroups', arrayContains: gid)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
@@ -234,15 +234,15 @@ class _EditGroupState extends State<EditGroup> {
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           physics: AlwaysScrollableScrollPhysics(),
-                          itemCount: snapshot.data.documents.length,
+                          itemCount: snapshot.data.docs.length,
                           itemBuilder: (_, index) {
                             DocumentSnapshot course =
-                                snapshot.data.documents[index];
+                                snapshot.data.docs[index];
                             profilePic =
-                                snapshot.data.documents[index].data['photoUrl'];
+                                snapshot.data.docs[index]['photoUrl'];
                             otherDisplay = snapshot
-                                .data.documents[index].data['displayName'];
-                            id = snapshot.data.documents[index].data['id'];
+                                .data.docs[index]['displayName'];
+                            id = snapshot.data.docs[index]['id'];
                             return Container(
                               height: 100,
                               child: Column(
@@ -272,8 +272,8 @@ class _EditGroupState extends State<EditGroup> {
                                                     backgroundImage:
                                                         NetworkImage(snapshot
                                                             .data
-                                                            .documents[index]
-                                                            .data['photoUrl']),
+                                                            .docs[index]
+                                                            ['photoUrl']),
                                                     radius: 50,
                                                     backgroundColor:
                                                         TextThemes.ndBlue,
@@ -283,8 +283,8 @@ class _EditGroupState extends State<EditGroup> {
                                                       backgroundImage:
                                                           NetworkImage(snapshot
                                                               .data
-                                                              .documents[index]
-                                                              .data['photoUrl']),
+                                                              .docs[index]
+                                                              ['photoUrl']),
                                                       radius: 50,
                                                     ),
                                                   ),
@@ -305,8 +305,8 @@ class _EditGroupState extends State<EditGroup> {
                                             backgroundColor: TextThemes.ndGold,
                                             child: CircleAvatar(
                                               backgroundImage: NetworkImage(
-                                                  snapshot.data.documents[index]
-                                                      .data['photoUrl']),
+                                                  snapshot.data.docs[index]
+                                                      ['photoUrl']),
                                               radius: 50,
                                               backgroundColor:
                                                   TextThemes.ndBlue,
@@ -316,8 +316,8 @@ class _EditGroupState extends State<EditGroup> {
                                                 backgroundImage: NetworkImage(
                                                     snapshot
                                                         .data
-                                                        .documents[index]
-                                                        .data['photoUrl']),
+                                                        .docs[index]
+                                                        ['photoUrl']),
                                                 radius: 50,
                                               ),
                                             ),
@@ -337,8 +337,8 @@ class _EditGroupState extends State<EditGroup> {
                                                 TextSpan(
                                                     text: snapshot
                                                         .data
-                                                        .documents[index]
-                                                        .data['displayName']
+                                                        .docs[index]
+                                                        ['displayName']
                                                         .toString(),
                                                     style: TextStyle(
                                                         color: Colors.black,
