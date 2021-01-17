@@ -326,29 +326,28 @@ class PostOnTrending extends StatelessWidget {
                     ),
                   ]),
                   Container(
+
                     height: 21,
-                    color: Colors.blue[50],
+                    decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.pinkAccent[100], Colors.blue[100]])),
+
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4.0, top: 2.0),
-                          child: CircleAvatar(
-                            radius: 8.0,
-                            backgroundImage: NetworkImage(
-                              course['profilePic'],
-                            ),
-                            backgroundColor: Colors.transparent,
-                          ),
-                        ),
-                        Padding(
-                          padding: isLargePhone
-                              ? const EdgeInsets.only(
-                                  top: 2.0, left: 12, right: 2)
-                              : const EdgeInsets.only(
-                                  top: 2.0, left: 4, right: 2),
-                          child: Icon(Icons.timer,
-                              color: TextThemes.ndGold, size: 15),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(left: 4.0, top: 2.0),
+                        //   child: CircleAvatar(
+                        //     radius: 8.0,
+                        //     backgroundImage: NetworkImage(
+                        //       course['profilePic'],
+                        //     ),
+                        //     backgroundColor: Colors.transparent,
+                        //   ),
+                        // ),
+                       
                         Padding(
                           padding: const EdgeInsets.only(top: 2.0),
                           child: Text(
@@ -356,7 +355,7 @@ class PostOnTrending extends StatelessWidget {
                                   .add_jm()
                                   .format(course['startDate'].toDate()),
                               style: TextStyle(
-                                fontSize: 10.0,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700
                               )),
                         )
