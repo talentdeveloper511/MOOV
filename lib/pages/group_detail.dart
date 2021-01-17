@@ -108,6 +108,8 @@ class _GroupDetailState extends State<GroupDetail> {
   var otherDisplay;
   var id;
   var iter = 1;
+  int status = 0;
+
   int refreshID = 0;
   void refreshData() {
     refreshID++;
@@ -123,11 +125,8 @@ class _GroupDetailState extends State<GroupDetail> {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> voters = {};
-    List<dynamic> votersIds = voters.keys.toList();
-    List<dynamic> votersValues = voters.values.toList();
 
     bool isLargePhone = Screen.diagonal(context) > 766;
-    int status = 0;
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -136,13 +135,42 @@ class _GroupDetailState extends State<GroupDetail> {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
+          if (snapshot.data == null) return Container();
 
           return StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('friendGroups')
-                  .where('groupId', isEqualTo: gid)
+                  .doc(gid)
                   .snapshots(),
               builder: (context, snapshot2) {
+                if (!snapshot2.hasData) return CircularProgressIndicator();
+                if (snapshot2.data == null) return Container();
+
+
+               //this is for getting the first name of the suggestor
+                String fullName = "";
+                List<String> tempList = fullName.split(" ");
+                int start = 0;
+                int end = tempList.length;
+                if (end > 1) {
+                  end = 1;
+                }
+                final selectedWords = tempList.sublist(start, end);
+                String firstName = selectedWords.join(" ");
+
+                DocumentSnapshot course = snapshot2.data;
+                voters = course['voters'];
+
+                List<dynamic> votersIds = voters.keys.toList();
+                List<dynamic> votersValues = voters.values.toList();
+                int noVoteCount = votersValues
+                    .where((element) => element == 1)
+                    .toList()
+                    .length;
+                int yesVoteCount = votersValues
+                    .where((element) => element == 2)
+                    .toList()
+                    .length;
                 if (voters != null) {
                   for (int i = 0; i < votersValues.length; i++) {
                     if (votersIds[i] == currentUser.id) {
@@ -451,29 +479,33 @@ class _GroupDetailState extends State<GroupDetail> {
                                                 color: Colors.black)),
                                         onPressed: () {
                                           if (voters != null && status != 1) {
-                                            Database().addNoVote(currentUser.id, gid);
+                                            Database()
+                                                .addNoVote(currentUser.id, gid);
                                             status = 1;
                                             print(status);
-                                          } else if (voters != null && status == 1) {
-                                            Database().removeNoVote(currentUser.id, gid);
+                                          } else if (voters != null &&
+                                              status == 1) {
+                                            Database().removeNoVote(
+                                                currentUser.id, gid);
                                             status = 0;
                                           }
                                         },
                                         color: (status == 1)
-                                            ? Colors.yellow[600]
+                                            ? Colors.red
                                             : Colors.white,
                                         padding: EdgeInsets.all(5.0),
                                         child: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 3.0, right: 3),
-                                          child: (status == 0)
+                                          child: (status == 1)
                                               ? Column(
                                                   children: [
                                                     Text('No',
                                                         style: TextStyle(
-                                                            color: Colors.red)),
+                                                            color:
+                                                                Colors.white)),
                                                     Icon(Icons.thumb_down,
-                                                        color: Colors.red,
+                                                        color: Colors.white,
                                                         size: 30),
                                                   ],
                                                 )
@@ -481,8 +513,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                   children: [
                                                     Text('No'),
                                                     Icon(Icons.thumb_down,
-                                                        color:
-                                                            Colors.white,
+                                                        color: Colors.red,
                                                         size: 30),
                                                   ],
                                                 ),
@@ -498,40 +529,45 @@ class _GroupDetailState extends State<GroupDetail> {
                                             side: BorderSide(
                                                 color: Colors.black)),
                                         onPressed: () {
-                                          // if (invitees != null && status != 2) {
-                                          //   Database().addUndecided(currentUser.id, moovId);
-                                          //   status = 2;
-                                          //   print(status);
-                                          // } else if (invitees != null && status == 2) {
-                                          //   Database().removeUndecided(currentUser.id, moovId);
-                                          //   status = 0;
-                                          // }
+                                          if (voters != null && status != 2) {
+                                            Database().addYesVote(
+                                                currentUser.id, gid);
+                                            status = 2;
+                                            print(status);
+                                          } else if (voters != null &&
+                                              status == 2) {
+                                            Database().removeYesVote(
+                                                currentUser.id, gid);
+                                            status = 0;
+                                          }
                                         },
-                                        color: (status == 1)
-                                            ? Colors.yellow[600]
+                                        color: (status == 2)
+                                            ? Colors.green
                                             : Colors.white,
                                         padding: EdgeInsets.all(5.0),
                                         child: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 3.0, right: 3),
-                                          child: (status == 0)
+                                          child: (status == 2)
                                               ? Column(
                                                   children: [
                                                     Text('Yes',
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.green)),
+                                                                Colors.white)),
                                                     Icon(Icons.thumb_up,
-                                                        color: Colors.green,
+                                                        color: Colors.white,
                                                         size: 30),
                                                   ],
                                                 )
                                               : Column(
                                                   children: [
-                                                    Text('Undecided'),
-                                                    Icon(Icons.accessibility,
-                                                        color:
-                                                            Colors.yellow[600],
+                                                    Text('Yes',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black)),
+                                                    Icon(Icons.thumb_up,
+                                                        color: Colors.green,
                                                         size: 30),
                                                   ],
                                                 ),
@@ -541,82 +577,350 @@ class _GroupDetailState extends State<GroupDetail> {
                                   ],
                                 ),
                               ),
-                              members.contains(currentUser.id)
-                                  ? RaisedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    type: PageTransitionType
-                                                        .bottomToTop,
-                                                    child: SetMOOV(
-                                                        displayName, gid)))
-                                            .then(onGoBack(gid));
-                                      },
-                                      color: TextThemes.ndBlue,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(Icons.edit,
-                                                color: TextThemes.ndGold),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(10.0),
-                                              child: Text('Suggest the MOOV',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0)),
-                                    )
-                                  : Container(),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 35.0),
-                                child: Text(
-                                  "CHAT",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    child: TextFormField(
-                                      controller: chatController,
-                                      decoration: InputDecoration(
-                                        fillColor: Colors.white,
-                                        hintStyle: TextStyle(fontSize: 15),
-                                        contentPadding: EdgeInsets.only(
-                                            top: 18, bottom: 10),
-                                        hintText:
-                                            "What's the MOOV tonight guys...",
-                                        filled: true,
-                                        prefixIcon: Icon(
-                                          Icons.message,
-                                          size: 28.0,
-                                        ),
-                                        suffixIcon: IconButton(
-                                          icon: Icon(Icons.send),
-                                          onPressed: sendChat,
-                                        ),
-                                      ),
-                                      // onFieldSubmitted: sendChat(currentUser.displayName,
-                                      //     chatController.text, gid),
-                                    ),
-                                    height: 150,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        physics:
+                                            AlwaysScrollableScrollPhysics(),
+                                        itemCount: noVoteCount,
+                                        itemBuilder: (_, index) {
+                                          voters.removeWhere(
+                                              (key, value) => value != 1);
+
+                                          var w = voters.keys.toList();
+                                          print(w);
+
+                                          return StreamBuilder(
+                                              stream: FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(w[index])
+                                                  .snapshots(),
+                                              builder: (context, snapshot3) {
+                                                if (!snapshot3.hasData ||
+                                                    snapshot3.data == null)
+                                                  return Container();
+
+                                                return Container(
+                                                  height: 100,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            top: 17.0,
+                                                            bottom: 5,
+                                                          ),
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              if (snapshot3
+                                                                          .data[
+                                                                      'id'] ==
+                                                                  strUserId) {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                ProfilePage()));
+                                                              } else {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(MaterialPageRoute(
+                                                                        builder: (context) => OtherProfile(
+                                                                              snapshot3.data['id'],
+                                                                            )));
+                                                              }
+                                                            },
+                                                            child: CircleAvatar(
+                                                              radius: 24,
+                                                              backgroundColor:
+                                                                  TextThemes
+                                                                      .ndGold,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        snapshot3
+                                                                            .data['photoUrl']),
+                                                                radius: 22,
+                                                                backgroundColor:
+                                                                    TextThemes
+                                                                        .ndBlue,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(0.0),
+                                                          child: Center(
+                                                            child: Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      5.0),
+                                                              child: RichText(
+                                                                textScaleFactor:
+                                                                    .75,
+                                                                text: TextSpan(
+                                                                    style: TextThemes
+                                                                        .mediumbody,
+                                                                    children: [
+                                                                      TextSpan(
+                                                                          text: snapshot3.data['displayName']
+                                                                              .toString(),
+                                                                          style: TextStyle(
+                                                                              color: Colors.black,
+                                                                              fontWeight: FontWeight.w500)),
+                                                                    ]),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                        }),
                                     decoration: BoxDecoration(
+                                        color: Colors.red[100],
                                         border: Border.all(
-                                          color: TextThemes.ndBlue,
+                                          color: Colors.red[200],
                                         ),
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(5))),
-                                  ))
+                                            Radius.circular(20))),
+                                    height: 100,
+                                    width:
+                                        MediaQuery.of(context).size.width * .45,
+                                  ),
+                                  Container(
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        physics:
+                                            AlwaysScrollableScrollPhysics(),
+                                        itemCount: yesVoteCount,
+                                        itemBuilder: (_, index) {
+                                          voters.removeWhere(
+                                              (key, value) => value != 2);
+
+                                          var w = voters.keys.toList();
+                                          print(w);
+
+                                          return StreamBuilder(
+                                              stream: FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(w[index])
+                                                  .snapshots(),
+                                              builder: (context, snapshot3) {
+                                                if (!snapshot3.hasData ||
+                                                    snapshot3.data == null)
+                                                  return Container();
+
+                                                return Container(
+                                                  height: 100,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 17.0,
+                                                                  bottom: 5),
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              if (snapshot3
+                                                                          .data[
+                                                                      'id'] ==
+                                                                  strUserId) {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                ProfilePage()));
+                                                              } else {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(MaterialPageRoute(
+                                                                        builder: (context) => OtherProfile(
+                                                                              snapshot3.data['id'],
+                                                                            )));
+                                                              }
+                                                            },
+                                                            child: CircleAvatar(
+                                                              radius: 24,
+                                                              backgroundColor:
+                                                                  TextThemes
+                                                                      .ndGold,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        snapshot3
+                                                                            .data['photoUrl']),
+                                                                radius: 22,
+                                                                backgroundColor:
+                                                                    TextThemes
+                                                                        .ndBlue,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(0.0),
+                                                          child: Center(
+                                                            child: Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      5.0),
+                                                              child: RichText(
+                                                                textScaleFactor:
+                                                                    .75,
+                                                                text: TextSpan(
+                                                                    style: TextThemes
+                                                                        .mediumbody,
+                                                                    children: [
+                                                                      TextSpan(
+                                                                          text: snapshot3.data['displayName']
+                                                                              .toString(),
+                                                                          style: TextStyle(
+                                                                              color: Colors.black,
+                                                                              fontWeight: FontWeight.w500)),
+                                                                    ]),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                        }),
+                                    decoration: BoxDecoration(
+                                        color: Colors.green[100],
+                                        border: Border.all(
+                                          color: Colors.green[200],
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    height: 100,
+                                    width:
+                                        MediaQuery.of(context).size.width * .45,
+                                  )
+                                ],
+                              ),
+                              members.contains(currentUser.id)
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(30),
+                                      child: RaisedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      type: PageTransitionType
+                                                          .bottomToTop,
+                                                      child: SetMOOV(
+                                                          displayName, gid)))
+                                              .then(onGoBack(gid));
+                                        },
+                                        color: TextThemes.ndBlue,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(Icons.edit,
+                                                  color: TextThemes.ndGold),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Text('Suggest the MOOV',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 20)),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0)),
+                                      ),
+                                    )
+                                  : Container(),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(top: 35.0),
+                              //   child: Text(
+                              //     "CHAT",
+                              //     style: TextStyle(fontSize: 20),
+                              //   ),
+                              // ),
+                              // Padding(
+                              //     padding: const EdgeInsets.all(8.0),
+                              //     child: Container(
+                              //       child: TextFormField(
+                              //         controller: chatController,
+                              //         decoration: InputDecoration(
+                              //           fillColor: Colors.white,
+                              //           hintStyle: TextStyle(fontSize: 15),
+                              //           contentPadding: EdgeInsets.only(
+                              //               top: 18, bottom: 10),
+                              //           hintText:
+                              //               "What's the MOOV tonight guys...",
+                              //           filled: true,
+                              //           prefixIcon: Icon(
+                              //             Icons.message,
+                              //             size: 28.0,
+                              //           ),
+                              //           suffixIcon: IconButton(
+                              //             icon: Icon(Icons.send),
+                              //             onPressed: sendChat,
+                              //           ),
+                              //         ),
+                              //         // onFieldSubmitted: sendChat(currentUser.displayName,
+                              //         //     chatController.text, gid),
+                              //       ),
+                              //       height: 150,
+                              //       decoration: BoxDecoration(
+                              //           border: Border.all(
+                              //             color: TextThemes.ndBlue,
+                              //           ),
+                              //           borderRadius: BorderRadius.all(
+                              //               Radius.circular(5))),
+                              //     ))
                             ]),
                           )
                         ],

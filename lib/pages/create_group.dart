@@ -97,6 +97,7 @@ class _GroupFormState extends State<GroupForm> {
       "groupId": groupId,
       // "chat": {'messages': []},
       "nextMOOV": "",
+      "voters": {}
       // "gid": id
     });
     // .then((value) {

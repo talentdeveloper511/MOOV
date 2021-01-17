@@ -193,7 +193,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                   builder: (context, snapshot3) {
                                     if (!snapshot3.hasData)
                                       return CircularProgressIndicator();
-                                    if (snapshot3.hasError)
+                                    if (snapshot3.hasError || snapshot3.data == null)
                                       return CircularProgressIndicator();
 
                                     return Padding(
