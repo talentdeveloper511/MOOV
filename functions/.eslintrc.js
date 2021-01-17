@@ -1,14 +1,24 @@
 module.exports = {
-  root: true,
-  env: {
+  "root": true,
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true,
+    },
+  },
+  "env": {
     es6: true,
     node: true,
   },
-  extends: [
+  "extends": [
     "eslint:recommended",
     "google",
   ],
-  rules: {
+  "rules": {
     quotes: ["error", "double"],
   },
 };

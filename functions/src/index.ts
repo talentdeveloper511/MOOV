@@ -6,6 +6,65 @@ admin.initializeApp();
 const db = admin.firestore();
 const fcm = admin.messaging();
 
+exports.onCreateActivityFeedItem = functions.firestore
+  .document("/notificationFeed/{userId}/feedItems/{activityFeedItem}")
+  .onCreate(async (snapshot, context) => {
+    console.log("Activity Feed Item Created", snapshot.data());
+
+    // 1) Get user connected to the feed
+    const userId = context.params.userId;
+
+    const userRef = admin.firestore().doc(`users/${userId}`);
+    const doc = await userRef.get();
+
+    // 2) Once we have user, check if they have a notification token; send notification, if they have a token
+    const androidNotificationToken = doc.data()!.androidNotificationToken;
+    const createdActivityFeedItem = snapshot.data();
+    if (androidNotificationToken) {
+      sendNotification(androidNotificationToken, createdActivityFeedItem);
+    } else {
+      console.log("No token for user, cannot send notification Alvin");
+    }
+
+    function sendNotification(androidNotificationToken: any, activityFeedItem: { [x: string]: any; type?: any; username?: any; commentData?: any; }) {
+      let body;
+
+      // 3) switch body value based off of notification type
+      switch (activityFeedItem.type) {
+        case "invite":
+          body = `${activityFeedItem.username} invited you`;
+          break;
+        case "going":
+          body = `${activityFeedItem.username} is going to your MOOV`;
+          break;
+        case "friendgroup":
+          body = `${activityFeedItem.username} added you to a friend group`;
+          break;
+        default:
+          break;
+      }
+
+      // 4) Create message for push notification
+      const message = {
+        notification: { body },
+        token: androidNotificationToken,
+        data: { recipient: userId }
+      };
+
+      // 5) Send message with admin.messaging()
+      admin
+        .messaging()
+        .send(message)
+        .then(response => {
+          // Response is a message ID string
+          console.log("Successfully sent message Alvin", response);
+        })
+        .catch(error => {
+          console.log("Error sending message Alvin", error);
+        });
+    }
+  });
+
 
 export const sendToDevice = functions.firestore
   .document('notificationFeed/{currentUser}/feedItems/{userId}')
@@ -56,14 +115,6 @@ export const sendToDevice = functions.firestore
       
         await batch.commit();
       });
-      
-//       var x = (course['startDate']
-//       .millisecondsSinceEpoch);
-//   var y =
-//       (DateTime.now().millisecondsSinceEpoch);
-
-//   print(x);
-//   print(x < (y));
 
 exports.scheduledFunction = functions.pubsub.schedule('every 5 minutes').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now().toMillis;

@@ -74,7 +74,7 @@ dependencies:
   polls: ^0.2.2
   auto_size_text: ^2.1.0
   flutter_bounce: ^1.0.8
-
+  firebase_messaging: ^4.0.0+1
 
 
 
