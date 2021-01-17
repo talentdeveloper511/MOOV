@@ -97,10 +97,11 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('food')
-                        .where('type', isNotEqualTo: 'Restaurants & Bars')
+                        .where('type', isEqualTo: 'Restaurants & Bars')
+                        .where('privacy', isEqualTo: 'Public')
                         .snapshots(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) return Text('');
+                      if (!snapshot.hasData || snapshot.data.docs.length == 0) return Text('');
                       return Container(
                         height: (snapshot.data.docs.length <= 3 && isLargePhone)
                             ? 210
@@ -162,7 +163,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                         .where('privacy', isEqualTo: "Public")
                         .snapshots(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) return Text('');
+                      if (!snapshot.hasData || snapshot.data.docs.length == 0) return Text('');
 
                       return Container(
                        height: (snapshot.data.docs.length <= 3 && isLargePhone)
@@ -221,10 +222,11 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('food')
-                        .where('type', isNotEqualTo: 'Pregames & Parties')
+                        .where('type', isEqualTo: 'Shows')
+                        .where('privacy', isEqualTo: 'Public')
                         .snapshots(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) return Text('');
+                      if (!snapshot.hasData || snapshot.data.docs.length == 0) return Text('');
                       return Container(
                          height: (snapshot.data.docs.length <= 3 && isLargePhone)
                             ? 210
