@@ -122,25 +122,12 @@ class _GroupDetailState extends State<GroupDetail> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> voters = {};
+    List<dynamic> votersIds = voters.keys.toList();
+    List<dynamic> votersValues = voters.values.toList();
 
     bool isLargePhone = Screen.diagonal(context) > 766;
-    // Map<String, dynamic> invitees = course['invitees'];
-        Map<String, dynamic> invitees = {};
-
     int status = 0;
-    List<dynamic> inviteesIds = invitees.keys.toList();
-
-    List<dynamic> inviteesValues = invitees.values.toList();
-
-    if (invitees != null) {
-      for (int i = 0; i < invitees.length; i++) {
-        if (inviteesIds[i] == currentUser.id) {
-          if (inviteesValues[i] == 3) {
-            status = 3;
-          }
-        }
-      }
-    }
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -150,429 +137,494 @@ class _GroupDetailState extends State<GroupDetail> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
 
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
-                ),
-                backgroundColor: TextThemes.ndBlue,
-                flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.all(15),
-                  title: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 210),
-                    child: Text(
-                      displayName,
-                      style: TextStyle(
-                          fontSize: isLargePhone ? 30.0 : 22,
-                          color: Colors.white),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-                actions: <Widget>[
-                  // Padding(
-                  //   padding: const EdgeInsets.all(4.0),
-                  //   child: FlatButton(
-                  //       onPressed: () {
-                  //         Database()
-                  //             .leaveGroup(currentUser.id, displayName, gid);
+          return StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('friendGroups')
+                  .where('groupId', isEqualTo: gid)
+                  .snapshots(),
+              builder: (context, snapshot2) {
+                if (voters != null) {
+                  for (int i = 0; i < votersValues.length; i++) {
+                    if (votersIds[i] == currentUser.id) {
+                      if (votersValues[i] == 1) {
+                        status = 1;
+                      }
+                    }
+                    if (votersIds[i] == currentUser.id) {
+                      if (votersValues[i] == 2) {
+                        status = 2;
+                      }
+                    }
+                  }
+                }
 
-                  //         Navigator.pop(
-                  //           context,
-                  //           MaterialPageRoute(builder: (context) => HomePage()),
-                  //         );
-                  //       },
-                  //       child: Text(
-                  //         "LEAVE",
-                  //         style: TextStyle(color: Colors.red),
-                  //       )),
-                  // ),
-                  IconButton(
-                    padding: EdgeInsets.all(5.0),
-                    icon: Icon(Icons.person_add),
-                    color: Colors.white,
-                    splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              child: AddUsers(
-                                  displayName, gid, photoUrl, members, next)));
-                    },
-                  ),
-                  FocusedMenuHolder(
-                    menuWidth: MediaQuery.of(context).size.width * 0.50,
-                    blurSize: 5.0,
-                    menuItemExtent: 45,
-                    menuBoxDecoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                    duration: Duration(milliseconds: 100),
-                    animateMenuItems: true,
-                    blurBackgroundColor: Colors.black54,
-                    openWithTap:
-                        true, // Open Focused-Menu on Tap rather than Long Press
-                    menuOffset:
-                        10.0, // Offset value to show menuItem from the selected item
-                    bottomOffsetHeight:
-                        80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
-                    menuItems: <FocusedMenuItem>[
-                      // Add Each FocusedMenuItem  for Menu Options
+                return Scaffold(
+                  backgroundColor: Colors.white,
+                  appBar: AppBar(
+                      leading: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                        },
+                      ),
+                      backgroundColor: TextThemes.ndBlue,
+                      flexibleSpace: FlexibleSpaceBar(
+                        titlePadding: EdgeInsets.all(15),
+                        title: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 210),
+                          child: Text(
+                            displayName,
+                            style: TextStyle(
+                                fontSize: isLargePhone ? 30.0 : 22,
+                                color: Colors.white),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                      actions: <Widget>[
+                        // Padding(
+                        //   padding: const EdgeInsets.all(4.0),
+                        //   child: FlatButton(
+                        //       onPressed: () {
+                        //         Database()
+                        //             .leaveGroup(currentUser.id, displayName, gid);
 
-                      FocusedMenuItem(
-                          title: Text("Share"),
-                          trailingIcon: Icon(Icons.send),
-                          onPressed: () {
-                            Share.share("Hey let's put our squad on MOOV");
-                          }),
-                      FocusedMenuItem(
-                          title: Text("Edit Group"),
-                          trailingIcon: Icon(Icons.edit),
+                        //         Navigator.pop(
+                        //           context,
+                        //           MaterialPageRoute(builder: (context) => HomePage()),
+                        //         );
+                        //       },
+                        //       child: Text(
+                        //         "LEAVE",
+                        //         style: TextStyle(color: Colors.red),
+                        //       )),
+                        // ),
+                        IconButton(
+                          padding: EdgeInsets.all(5.0),
+                          icon: Icon(Icons.person_add),
+                          color: Colors.white,
+                          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                           onPressed: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditGroup(
-                                        photoUrl, displayName, members, gid)));
-                          }),
-                      FocusedMenuItem(
-                          title: Text(
-                            "Leave Group",
-                            style: TextStyle(color: Colors.redAccent),
+                                PageTransition(
+                                    type: PageTransitionType.bottomToTop,
+                                    child: AddUsers(displayName, gid, photoUrl,
+                                        members, next)));
+                          },
+                        ),
+                        FocusedMenuHolder(
+                          menuWidth: MediaQuery.of(context).size.width * 0.50,
+                          blurSize: 5.0,
+                          menuItemExtent: 45,
+                          menuBoxDecoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0))),
+                          duration: Duration(milliseconds: 100),
+                          animateMenuItems: true,
+                          blurBackgroundColor: Colors.black54,
+                          openWithTap:
+                              true, // Open Focused-Menu on Tap rather than Long Press
+                          menuOffset:
+                              10.0, // Offset value to show menuItem from the selected item
+                          bottomOffsetHeight:
+                              80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                          menuItems: <FocusedMenuItem>[
+                            // Add Each FocusedMenuItem  for Menu Options
+
+                            FocusedMenuItem(
+                                title: Text("Share"),
+                                trailingIcon: Icon(Icons.send),
+                                onPressed: () {
+                                  Share.share(
+                                      "Hey let's put our squad on MOOV");
+                                }),
+                            FocusedMenuItem(
+                                title: Text("Edit Group"),
+                                trailingIcon: Icon(Icons.edit),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EditGroup(
+                                              photoUrl,
+                                              displayName,
+                                              members,
+                                              gid)));
+                                }),
+                            FocusedMenuItem(
+                                title: Text(
+                                  "Leave Group",
+                                  style: TextStyle(color: Colors.redAccent),
+                                ),
+                                trailingIcon: Icon(
+                                  Icons.directions_walk,
+                                  color: Colors.redAccent,
+                                ),
+                                onPressed: () {
+                                  showAlertDialog(context);
+                                }),
+                          ],
+                          onPressed: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                            ),
                           ),
-                          trailingIcon: Icon(
-                            Icons.directions_walk,
-                            color: Colors.redAccent,
+                        ),
+                      ]),
+                  body: SingleChildScrollView(
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 200,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                physics: AlwaysScrollableScrollPhysics(),
+                                itemCount: snapshot.data.docs.length,
+                                itemBuilder: (_, index) {
+                                  DocumentSnapshot course =
+                                      snapshot.data.docs[index];
+
+                                  return Container(
+                                    height: 100,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 30.0, bottom: 10),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              if (course['id'] == strUserId) {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ProfilePage()));
+                                              } else {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OtherProfile(
+                                                              course['id'],
+                                                            )));
+                                              }
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 54,
+                                              backgroundColor:
+                                                  TextThemes.ndGold,
+                                              child: CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                    snapshot.data.docs[index]
+                                                        ['photoUrl']),
+                                                radius: 50,
+                                                backgroundColor:
+                                                    TextThemes.ndBlue,
+                                                child: CircleAvatar(
+                                                  // backgroundImage: snapshot.data
+                                                  //     .documents[index].data['photoUrl'],
+                                                  backgroundImage: NetworkImage(
+                                                      snapshot.data.docs[index]
+                                                          ['photoUrl']),
+                                                  radius: 50,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Center(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10.0),
+                                              child: RichText(
+                                                textScaleFactor: 1.1,
+                                                text: TextSpan(
+                                                    style:
+                                                        TextThemes.mediumbody,
+                                                    children: [
+                                                      TextSpan(
+                                                          text: snapshot
+                                                              .data
+                                                              .docs[index][
+                                                                  'displayName']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
+                                                    ]),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
                           ),
-                          onPressed: () {
-                            showAlertDialog(context);
-                          }),
-                    ],
-                    onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
+                          SingleChildScrollView(
+                            child: Column(children: [
+                              Text(
+                                "NEXT MOOV",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10.0, bottom: 5),
+                                child: Container(
+                                  child: (next != "" && next != null)
+                                      ? NextMOOV(next)
+                                      : buildNoContent(),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 20.0, right: 20),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text("Suggested by "),
+                                      Text(
+                                          snapshot.data.docs[0]['displayName']
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: Colors.blue[600],
+                                              fontWeight: FontWeight.w500))
+                                    ]),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: RichText(
+                                  textScaleFactor: 1.2,
+                                  text: TextSpan(
+                                      style: TextThemes.mediumbody,
+                                      children: [
+                                        TextSpan(
+                                            text: "Vote on ",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400)),
+                                        TextSpan(
+                                            text: "Alvin's ",
+                                            style: TextStyle(
+                                                color: Colors.blue[600],
+                                                fontWeight: FontWeight.w500)),
+                                        TextSpan(
+                                            text: "suggestion",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w400)),
+                                      ]),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: RaisedButton(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            side: BorderSide(
+                                                color: Colors.black)),
+                                        onPressed: () {
+                                          if (voters != null && status != 1) {
+                                            Database().addNoVote(currentUser.id, gid);
+                                            status = 1;
+                                            print(status);
+                                          } else if (voters != null && status == 1) {
+                                            Database().removeNoVote(currentUser.id, gid);
+                                            status = 0;
+                                          }
+                                        },
+                                        color: (status == 1)
+                                            ? Colors.yellow[600]
+                                            : Colors.white,
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 3.0, right: 3),
+                                          child: (status == 0)
+                                              ? Column(
+                                                  children: [
+                                                    Text('No',
+                                                        style: TextStyle(
+                                                            color: Colors.red)),
+                                                    Icon(Icons.thumb_down,
+                                                        color: Colors.red,
+                                                        size: 30),
+                                                  ],
+                                                )
+                                              : Column(
+                                                  children: [
+                                                    Text('No'),
+                                                    Icon(Icons.thumb_down,
+                                                        color:
+                                                            Colors.white,
+                                                        size: 30),
+                                                  ],
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: RaisedButton(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            side: BorderSide(
+                                                color: Colors.black)),
+                                        onPressed: () {
+                                          // if (invitees != null && status != 2) {
+                                          //   Database().addUndecided(currentUser.id, moovId);
+                                          //   status = 2;
+                                          //   print(status);
+                                          // } else if (invitees != null && status == 2) {
+                                          //   Database().removeUndecided(currentUser.id, moovId);
+                                          //   status = 0;
+                                          // }
+                                        },
+                                        color: (status == 1)
+                                            ? Colors.yellow[600]
+                                            : Colors.white,
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 3.0, right: 3),
+                                          child: (status == 0)
+                                              ? Column(
+                                                  children: [
+                                                    Text('Yes',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.green)),
+                                                    Icon(Icons.thumb_up,
+                                                        color: Colors.green,
+                                                        size: 30),
+                                                  ],
+                                                )
+                                              : Column(
+                                                  children: [
+                                                    Text('Undecided'),
+                                                    Icon(Icons.accessibility,
+                                                        color:
+                                                            Colors.yellow[600],
+                                                        size: 30),
+                                                  ],
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              members.contains(currentUser.id)
+                                  ? RaisedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: SetMOOV(
+                                                        displayName, gid)))
+                                            .then(onGoBack(gid));
+                                      },
+                                      color: TextThemes.ndBlue,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.edit,
+                                                color: TextThemes.ndGold),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Text('Suggest the MOOV',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0)),
+                                    )
+                                  : Container(),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 35.0),
+                                child: Text(
+                                  "CHAT",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    child: TextFormField(
+                                      controller: chatController,
+                                      decoration: InputDecoration(
+                                        fillColor: Colors.white,
+                                        hintStyle: TextStyle(fontSize: 15),
+                                        contentPadding: EdgeInsets.only(
+                                            top: 18, bottom: 10),
+                                        hintText:
+                                            "What's the MOOV tonight guys...",
+                                        filled: true,
+                                        prefixIcon: Icon(
+                                          Icons.message,
+                                          size: 28.0,
+                                        ),
+                                        suffixIcon: IconButton(
+                                          icon: Icon(Icons.send),
+                                          onPressed: sendChat,
+                                        ),
+                                      ),
+                                      // onFieldSubmitted: sendChat(currentUser.displayName,
+                                      //     chatController.text, gid),
+                                    ),
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: TextThemes.ndBlue,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5))),
+                                  ))
+                            ]),
+                          )
+                        ],
                       ),
                     ),
                   ),
-                ]),
-            body: SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: [
-                    Container(
-                      height: 200,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: AlwaysScrollableScrollPhysics(),
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (_, index) {
-                            DocumentSnapshot course = snapshot.data.docs[index];
-
-                            return Container(
-                              height: 100,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 30.0, bottom: 10),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        if (course['id'] == strUserId) {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ProfilePage()));
-                                        } else {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      OtherProfile(
-                                                      
-                                                        course['id'],
-                                                      )));
-                                        }
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 54,
-                                        backgroundColor: TextThemes.ndGold,
-                                        child: CircleAvatar(
-                                          backgroundImage: NetworkImage(snapshot
-                                              .data.docs[index]['photoUrl']),
-                                          radius: 50,
-                                          backgroundColor: TextThemes.ndBlue,
-                                          child: CircleAvatar(
-                                            // backgroundImage: snapshot.data
-                                            //     .documents[index].data['photoUrl'],
-                                            backgroundImage: NetworkImage(
-                                                snapshot.data.docs[index]
-                                                    ['photoUrl']),
-                                            radius: 50,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        child: RichText(
-                                          textScaleFactor: 1.1,
-                                          text: TextSpan(
-                                              style: TextThemes.mediumbody,
-                                              children: [
-                                                TextSpan(
-                                                    text: snapshot
-                                                        .data
-                                                        .docs[index]
-                                                            ['displayName']
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                              ]),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                    ),
-                    SingleChildScrollView(
-                      child: Column(children: [
-                        Text(
-                          "NEXT MOOV",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0, bottom: 5),
-                          child: Container(
-                            child: (next != "" && next != null)
-                                ? NextMOOV(next)
-                                : buildNoContent(),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 20.0, right: 20),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text("Suggested by "),
-                                Text(
-                                    snapshot.data.docs[0]['displayName']
-                                        .toString(),
-                                    style: TextStyle(
-                                        color: Colors.blue[600],
-                                        fontWeight: FontWeight.w500))
-                              ]),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: RichText(
-                            textScaleFactor: 1.2,
-                            text:
-                                TextSpan(style: TextThemes.mediumbody, children: [
-                              TextSpan(
-                                  text: "Vote on ",
-                                  style: TextStyle(fontWeight: FontWeight.w400)),
-                              TextSpan(
-                                  text: "Alvin's ",
-                                  style: TextStyle(
-                                      color: Colors.blue[600],
-                                      fontWeight: FontWeight.w500)),
-                              TextSpan(
-                                  text: "suggestion",
-                                  style: TextStyle(fontWeight: FontWeight.w400)),
-                            ]),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20.0),
-                          child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: BorderSide(color: Colors.black)),
-                      onPressed: () {
-                          // if (invitees != null && status != 2) {
-                          //   Database().addUndecided(currentUser.id, moovId);
-                          //   status = 2;
-                          //   print(status);
-                          // } else if (invitees != null && status == 2) {
-                          //   Database().removeUndecided(currentUser.id, moovId);
-                          //   status = 0;
-                          // }
-                      },
-                      color: (status == 1) ? Colors.yellow[600] : Colors.white,
-                      padding: EdgeInsets.all(5.0),
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 3.0, right: 3),
-                          child: (status == 0)
-                                ? Column(
-                                    children: [
-                                      Text('No',
-                                          style: TextStyle(color: Colors.red)),
-                                      Icon(Icons.thumb_down,
-                                          color: Colors.red, size: 30),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Text('Undecided'),
-                                      Icon(Icons.accessibility,
-                                          color: Colors.yellow[600], size: 30),
-                                    ],
-                                  ),
-                      ),
-                    ),
-                            ),
-                     Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: BorderSide(color: Colors.black)),
-                          onPressed: () {
-                            // if (invitees != null && status != 2) {
-                            //   Database().addUndecided(currentUser.id, moovId);
-                            //   status = 2;
-                            //   print(status);
-                            // } else if (invitees != null && status == 2) {
-                            //   Database().removeUndecided(currentUser.id, moovId);
-                            //   status = 0;
-                            // }
-                          },
-                          color: (status == 1) ? Colors.yellow[600] : Colors.white,
-                          padding: EdgeInsets.all(5.0),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 3.0, right: 3),
-                            child: (status == 0)
-                                ? Column(
-                                    children: [
-                                      Text('Yes',
-                                          style: TextStyle(color: Colors.green)),
-                                      Icon(Icons.thumb_up,
-                                          color: Colors.green, size: 30),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Text('Undecided'),
-                                      Icon(Icons.accessibility,
-                                          color: Colors.yellow[600], size: 30),
-                                    ],
-                                  ),
-                          ),
-                    ),
-                     ),
-                          ],),
-                        ),
-                        members.contains(currentUser.id)
-                            ? RaisedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              type: PageTransitionType
-                                                  .bottomToTop,
-                                              child: SetMOOV(displayName, gid)))
-                                      .then(onGoBack(gid));
-                                },
-                                color: TextThemes.ndBlue,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.edit,
-                                          color: TextThemes.ndGold),
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text('Suggest the MOOV',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20)),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0)),
-                              )
-                            : Container(),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 35.0),
-                          child: Text(
-                            "CHAT",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              child: TextFormField(
-                                controller: chatController,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  hintStyle: TextStyle(fontSize: 15),
-                                  contentPadding:
-                                      EdgeInsets.only(top: 18, bottom: 10),
-                                  hintText: "What's the MOOV tonight guys...",
-                                  filled: true,
-                                  prefixIcon: Icon(
-                                    Icons.message,
-                                    size: 28.0,
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(Icons.send),
-                                    onPressed: sendChat,
-                                  ),
-                                ),
-                                // onFieldSubmitted: sendChat(currentUser.displayName,
-                                //     chatController.text, gid),
-                              ),
-                              height: 150,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: TextThemes.ndBlue,
-                                  ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
-                            ))
-                      ]),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
+                );
+              });
         });
   }
 

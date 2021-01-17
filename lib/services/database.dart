@@ -300,17 +300,17 @@ class Database {
   }
 
   sendMOOVNotification(
-      String ownerId,
-      String previewImg,
-      dynamic moovId,
-      startDate,
-      String title,
-      String description,
-      address,
-      String ownerProPic,
-      String ownerName,
-      String ownerEmail,
-      ) {
+    String ownerId,
+    String previewImg,
+    dynamic moovId,
+    startDate,
+    String title,
+    String description,
+    address,
+    String ownerProPic,
+    String ownerName,
+    String ownerEmail,
+  ) {
     notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
       "type": "invite",
       "username": currentUser.displayName,
@@ -633,6 +633,36 @@ class Database {
           'friendGroups': FieldValue.arrayUnion([newName]),
         });
       }
+    });
+  }
+
+  Future<void> addNoVote(userId, gid) async {
+    return dbRef.runTransaction((transaction) async {
+      FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
+        "voters": {userId: 1}
+      }, SetOptions(merge: true));
+    });
+  }
+    Future<void> removeNoVote(userId, gid) async {
+    return dbRef.runTransaction((transaction) async {
+      FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
+        "voters": {userId: FieldValue.delete()}
+      }, SetOptions(merge: true));
+    });
+  }
+
+  Future<void> addYesVote(userId, gid) async {
+    return dbRef.runTransaction((transaction) async {
+      FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
+        "voters": {userId: 2}
+      }, SetOptions(merge: true));
+    });
+  }
+    Future<void> removeYesVote(userId, gid) async {
+    return dbRef.runTransaction((transaction) async {
+      FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
+        "voters": {userId: FieldValue.delete()}
+      }, SetOptions(merge: true));
     });
   }
 }
