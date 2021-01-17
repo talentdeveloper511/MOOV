@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
@@ -201,7 +202,9 @@ class _GroupFormState extends State<GroupForm> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
+    return Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
         appBar: AppBar(
@@ -241,245 +244,248 @@ class _GroupFormState extends State<GroupForm> {
             ),
           ),
         ),
-        body: Column(children: [
-          Container(
-              child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Stack(children: [
-                    _image != null
-                        ? Container(
-                            height: 200,
-                            width: 200,
-                            child: Image.file(_image, fit: BoxFit.cover),
-                            margin: EdgeInsets.only(
-                                left: 20, top: 0, right: 20, bottom: 7.5),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(
-                                      0, 3), // changes position of shadow
+        body: SingleChildScrollView(
+          child: Column(children: [
+            Container(
+                child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(children: [
+                      _image != null
+                          ? Container(
+                              height: 200,
+                              width: 200,
+                              child: Image.file(_image, fit: BoxFit.cover),
+                              margin: EdgeInsets.only(
+                                  left: 20, top: 0, right: 20, bottom: 7.5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
                                 ),
-                              ],
-                            ),
-                          )
-                        : Container(
-                            width: 100,
-                            height: 100,
-                            child: IconButton(
-                                icon: Icon(Icons.add_a_photo, size: 50),
-                                onPressed: () => selectImage(context))),
-                  ]))),
-          Container(
-              margin: const EdgeInsets.all(20.0),
-              child: new Form(
-                  key: _formKey,
-                  autovalidate: _autoValidate,
-                  child: new Column(children: <Widget>[
-                    new SizedBox(
-                      height: 20.0,
-                    ),
-                    new TextFormField(
-                      decoration:
-                          const InputDecoration(labelText: 'Friend Group Name'),
-                      onSaved: (String value) {
-                        groupName = value;
-                      },
-                      validator: _validateGroupName,
-                      keyboardType: TextInputType.name,
-                    ),
-                    new SizedBox(
-                      height: 20.0,
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15.0, vertical: 10),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    IconButton(
-                                      padding: EdgeInsets.all(0.0),
-                                      icon: Icon(
-                                        Icons.person_add,
-                                        size: 35,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(
+                              width: 100,
+                              height: 100,
+                              child: IconButton(
+                                  icon: Icon(Icons.add_a_photo, size: 50),
+                                  onPressed: () => selectImage(context))),
+                    ]))),
+            Container(
+                margin: const EdgeInsets.all(20.0),
+                child: new Form(
+                    key: _formKey,
+                    autovalidate: _autoValidate,
+                    child: new Column(children: <Widget>[
+                      new SizedBox(
+                        height: 20.0,
+                      ),
+                      new TextFormField(
+                        decoration: const InputDecoration(
+                            labelText: 'Friend Group Name'),
+                        onSaved: (String value) {
+                          groupName = value;
+                        },
+                        validator: _validateGroupName,
+                        keyboardType: TextInputType.name,
+                      ),
+                      new SizedBox(
+                        height: 20.0,
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      IconButton(
+                                        padding: EdgeInsets.all(0.0),
+                                        icon: Icon(
+                                          Icons.person_add,
+                                          size: 35,
+                                        ),
+                                        color: TextThemes.ndBlue,
+                                        splashColor:
+                                            Color.fromRGBO(220, 180, 57, 1.0),
+                                        onPressed: () {
+                                          Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      type: PageTransitionType
+                                                          .bottomToTop,
+                                                      child: AddUsersPost(
+                                                          currentUser.id,
+                                                          memberoonis)))
+                                              .then(onGoBack);
+                                        },
                                       ),
-                                      color: TextThemes.ndBlue,
-                                      splashColor:
-                                          Color.fromRGBO(220, 180, 57, 1.0),
-                                      onPressed: () {
-                                        Navigator.push(
-                                                context,
-                                                PageTransition(
-                                                    type: PageTransitionType
-                                                        .bottomToTop,
-                                                    child: AddUsersPost(
-                                                        currentUser.id,
-                                                        memberoonis)))
-                                            .then(onGoBack);
-                                      },
-                                    ),
-                                    Text("Invite",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ],
+                                      Text("Invite",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                height: 100,
-                                width: memberoonis.length == 0
-                                    ? 0
-                                    : MediaQuery.of(context).size.width * .65,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    physics: AlwaysScrollableScrollPhysics(),
-                                    itemCount: memberoonis.length,
-                                    itemBuilder: (_, index) {
-                                      return StreamBuilder(
-                                          stream: FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(memberoonis[index])
-                                              .snapshots(),
-                                          builder: (context, snapshot) {
-                                            // bool isLargePhone = Screen.diagonal(context) > 766;
+                                Container(
+                                  height: 100,
+                                  width: memberoonis.length == 0
+                                      ? 0
+                                      : MediaQuery.of(context).size.width * .64,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: memberoonis.length,
+                                      itemBuilder: (_, index) {
+                                        return StreamBuilder(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(memberoonis[index])
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                            if (!snapshot.hasData)
-                                              return CircularProgressIndicator();
-                                            String userName =
-                                                snapshot.data['displayName'];
-                                            String userPic =
-                                                snapshot.data['photoUrl'];
+                                              if (!snapshot.hasData)
+                                                return CircularProgressIndicator();
+                                              String userName =
+                                                  snapshot.data['displayName'];
+                                              String userPic =
+                                                  snapshot.data['photoUrl'];
 
-                                            // userMoovs = snapshot.data['likedMoovs'];
+                                              // userMoovs = snapshot.data['likedMoovs'];
 
-                                            return Container(
-                                              height: 50,
-                                              child: Column(
-                                                children: <Widget>[
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  OtherProfile(
-                                                                    memberoonis[
-                                                                        index],
-                                                                  )));
-                                                    },
-                                                    child: CircleAvatar(
-                                                      radius: 34,
-                                                      backgroundColor:
-                                                          TextThemes.ndGold,
+                                              return Container(
+                                                height: 50,
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        OtherProfile(
+                                                                          memberoonis[
+                                                                              index],
+                                                                        )));
+                                                      },
                                                       child: CircleAvatar(
-                                                        backgroundImage:
-                                                            NetworkImage(
-                                                                userPic),
-                                                        radius: 32,
+                                                        radius: 34,
                                                         backgroundColor:
-                                                            TextThemes.ndBlue,
+                                                            TextThemes.ndGold,
                                                         child: CircleAvatar(
-                                                          // backgroundImage: snapshot.data
-                                                          //     .documents[index].data['photoUrl'],
                                                           backgroundImage:
                                                               NetworkImage(
                                                                   userPic),
                                                           radius: 32,
+                                                          backgroundColor:
+                                                              TextThemes.ndBlue,
+                                                          child: CircleAvatar(
+                                                            // backgroundImage: snapshot.data
+                                                            //     .documents[index].data['photoUrl'],
+                                                            backgroundImage:
+                                                                NetworkImage(
+                                                                    userPic),
+                                                            radius: 32,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            5.0),
-                                                    child: Center(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    5.0),
-                                                        child: RichText(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          textScaleFactor: 1.0,
-                                                          text: TextSpan(
-                                                              style: TextThemes
-                                                                  .mediumbody,
-                                                              children: [
-                                                                TextSpan(
-                                                                    text:
-                                                                        userName,
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontWeight:
-                                                                            FontWeight.w500)),
-                                                              ]),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5.0),
+                                                      child: Center(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      5.0),
+                                                          child: RichText(
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            textScaleFactor:
+                                                                1.0,
+                                                            text: TextSpan(
+                                                                style: TextThemes
+                                                                    .mediumbody,
+                                                                children: [
+                                                                  TextSpan(
+                                                                      text:
+                                                                          userName,
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontWeight:
+                                                                              FontWeight.w500)),
+                                                                ]),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          });
-                                    }),
+                                                  ],
+                                                ),
+                                              );
+                                            });
+                                      }),
+                                ),
+                              ])),
+                      CheckboxListTile(
+                          title: new Text("We'll be lit."),
+                          value: _termsChecked,
+                          onChanged: (bool value) =>
+                              setState(() => _termsChecked = value)),
+                     SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        height: 50.0,
+                        child: RaisedButton(
+                          onPressed: _validateInputs,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(80.0)),
+                          padding: EdgeInsets.all(0.0),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    TextThemes.ndBlue,
+                                    Color(0xff64B6FF)
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0)),
+                            child: Container(
+                              constraints: BoxConstraints(
+                                  maxWidth: 300.0, minHeight: 50.0),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Create Friend Group",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
                               ),
-                            ])),
-                    CheckboxListTile(
-                        title: new Text("We'll be lit."),
-                        value: _termsChecked,
-                        onChanged: (bool value) =>
-                            setState(() => _termsChecked = value)),
-                    new SizedBox(
-                      height: 30.0,
-                    ),
-                    Container(
-                      height: 50.0,
-                      child: RaisedButton(
-                        onPressed: _validateInputs,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(80.0)),
-                        padding: EdgeInsets.all(0.0),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [TextThemes.ndBlue, Color(0xff64B6FF)],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                              ),
-                              borderRadius: BorderRadius.circular(30.0)),
-                          child: Container(
-                            constraints: BoxConstraints(
-                                maxWidth: 300.0, minHeight: 50.0),
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Create Friend Group",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          'You can add friends after you create the group.'),
-                    )
-                  ])))
-        ]));
+                    ])))
+          ]),
+        ));
   }
 
   String _validateGroupName(String value) {

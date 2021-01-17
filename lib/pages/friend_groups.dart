@@ -63,9 +63,11 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
               color: Colors.white,
             ),
             onPressed: () {
+
+              
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => Home()),
+                PageRouteBuilder(pageBuilder: (_,__,___) => Home()),
                 (Route<dynamic> route) => false,
               );
             },
