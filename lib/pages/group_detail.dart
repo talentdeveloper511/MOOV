@@ -714,6 +714,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                             AlwaysScrollableScrollPhysics(),
                                         itemCount: yesVoteCount,
                                         itemBuilder: (_, index) {
+                                          voters = course['voters'];
                                           voters.removeWhere(
                                               (key, value) => value != 2);
 
