@@ -280,60 +280,61 @@ class PostOnTrending extends StatelessWidget {
               },
               child: Column(
                 children: [
-                  Stack(alignment: Alignment.center, children: [
-                    Container(
-                      child: CachedNetworkImage(
-                        imageUrl: course['image'],
-                        fit: BoxFit.cover,
-                        height: isLargePhone
-                            ? MediaQuery.of(context).size.height * 0.1226
-                            : MediaQuery.of(context).size.height * 0.1432,
-                        width: isLargePhone
-                            ? MediaQuery.of(context).size.width * 0.315
-                            : MediaQuery.of(context).size.width * 0.32,
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment(0.0, 0.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: <Color>[
-                              Colors.black.withAlpha(0),
-                              Colors.black,
-                              Colors.black12,
-                            ],
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            course['title'],
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontFamily: 'Solway',
-                                color: Colors.white,
-                                fontSize: isLargePhone ? 12.0 : 10,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                  Expanded(
+                    child: Stack(alignment: Alignment.center, children: [
+                      Container(
+                        height: 500,
+                        child: CachedNetworkImage(
+                          imageUrl: course['image'],
+                          fit: BoxFit.cover,
+                          width: isLargePhone
+                              ? MediaQuery.of(context).size.width * 0.315
+                              : MediaQuery.of(context).size.width * 0.32,
                         ),
                       ),
-                    ),
-                  ]),
+                      Container(
+                        alignment: Alignment(0.0, 0.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: <Color>[
+                                Colors.black.withAlpha(0),
+                                Colors.black,
+                                Colors.black12,
+                              ],
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              course['title'],
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontFamily: 'Solway',
+                                  color: Colors.white,
+                                  fontSize: isLargePhone ? 12.0 : 10,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
                   Container(
-
                     height: 21,
                     decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [Colors.pinkAccent[100], Colors.blue[100]])),
-
+                        gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                          Colors.pinkAccent[100],
+                          Colors.blue[100]
+                        ])),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -347,7 +348,7 @@ class PostOnTrending extends StatelessWidget {
                         //     backgroundColor: Colors.transparent,
                         //   ),
                         // ),
-                       
+
                         Padding(
                           padding: const EdgeInsets.only(top: 2.0),
                           child: Text(
@@ -355,9 +356,7 @@ class PostOnTrending extends StatelessWidget {
                                   .add_jm()
                                   .format(course['startDate'].toDate()),
                               style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700
-                              )),
+                                  fontSize: 11, fontWeight: FontWeight.w700)),
                         )
                       ],
                     ),
