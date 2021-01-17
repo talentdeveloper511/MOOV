@@ -112,12 +112,14 @@ class _GroupFormState extends State<GroupForm> {
     // // }, merge: true);
     // });
     return FirebaseFirestore.instance.runTransaction((transaction) async {
-      final DocumentReference userRefs =
-          FirebaseFirestore.instance.doc('users/$cid');
+      for (int i = 0; i < memberoonis.length; i++) {
+        final DocumentReference userRefs =
+            FirebaseFirestore.instance.doc('users/${memberoonis[i]}');
 
-      transaction.update(userRefs, {
-        'friendGroups': FieldValue.arrayUnion([groupId]),
-      });
+        transaction.update(userRefs, {
+          'friendGroups': FieldValue.arrayUnion([groupId]),
+        });
+      }
     });
   }
 
@@ -369,8 +371,6 @@ class _GroupFormState extends State<GroupForm> {
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   OtherProfile(
-                                                                    userPic,
-                                                                    userName,
                                                                     memberoonis[
                                                                         index],
                                                                   )));

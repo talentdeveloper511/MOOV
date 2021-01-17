@@ -89,7 +89,7 @@ class GoingPage extends StatelessWidget {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      OtherProfile(pic, name,
+                                                      OtherProfile(
                                                           inviteesIds[index])));
                                         }
                                       },
@@ -314,8 +314,7 @@ class GoingPageFriends extends StatelessWidget {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         OtherProfile(
-                                                            pic,
-                                                            name,
+                                                         
                                                             inviteesIds[
                                                                 index])));
                                           }

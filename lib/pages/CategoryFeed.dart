@@ -289,11 +289,9 @@ class _CategoryFeedState extends State<CategoryFeed>
                                       style: TextStyle(fontSize: 20)),
                                 );
 
-
                               return ListView.builder(
                                 itemCount: snapshot.data.docs.length,
                                 itemBuilder: (context, index) {
-
                                   DocumentSnapshot course =
                                       snapshot.data.docs[index];
                                   Timestamp startDate = course["startDate"];
@@ -821,8 +819,6 @@ class PostOnFeed extends StatelessWidget {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       OtherProfile(
-                                                        course['profilePic'],
-                                                        course['userName'],
                                                         course['userId'],
                                                       )));
                                         }
@@ -849,8 +845,6 @@ class PostOnFeed extends StatelessWidget {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     OtherProfile(
-                                                      course['profilePic'],
-                                                      course['userName'],
                                                       course['userId'],
                                                     )));
                                       }
@@ -919,18 +913,18 @@ class PostOnFeed extends StatelessWidget {
                                                   type: PageTransitionType
                                                       .bottomToTop,
                                                   child: SendMOOV(
-                                                      course['postId'],
-                                                      course['ownerId'],
-                                                      course['photoUrl'],
-                                                      course['postId'],
-                                                      course['startDate'],
-                                                      course['title'],
-                                                      course['description'],
-                                                      course['address'],
-                                                      course['profilePic'],
-                                                      course['userName'],
-                                                      course['userEmail'],
-                                                      )));
+                                                    course['postId'],
+                                                    course['ownerId'],
+                                                    course['photoUrl'],
+                                                    course['postId'],
+                                                    course['startDate'],
+                                                    course['title'],
+                                                    course['description'],
+                                                    course['address'],
+                                                    course['profilePic'],
+                                                    course['userName'],
+                                                    course['userEmail'],
+                                                  )));
                                         },
                                         child: Icon(Icons.send_rounded,
                                             color: Colors.blue[500], size: 30),

@@ -206,7 +206,7 @@ class _UserResultState extends State<UserResult> {
                       onPressed: () {
                         Database().addUser(user.id, gname, gid);
                         Database().addedToGroup(
-                            user.id, gname, gid, pic, members, moov);
+                            user.id, gname, gid, pic, members);
                         setState(() {
                           status = true;
                         });

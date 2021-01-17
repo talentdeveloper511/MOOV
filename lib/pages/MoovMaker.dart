@@ -642,8 +642,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                                                 builder:
                                                                     (context) =>
                                                                         OtherProfile(
-                                                                          userPic,
-                                                                          userName,
                                                                           inviteesNameList[
                                                                               index],
                                                                         )));

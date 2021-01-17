@@ -270,7 +270,7 @@ class Database {
   // }
 
   addedToGroup(String addee, String gname, String gid, String groupPic,
-      List<dynamic> members, String moov) {
+      List<dynamic> members) {
     notificationFeedRef.doc(addee).collection("feedItems").doc(gid).set({
       "type": "friendGroup",
       "username": currentUser.displayName,
@@ -281,7 +281,6 @@ class Database {
       "postId": gid,
       "title": gname,
       "likedArray": members,
-      "address": moov,
       "timestamp": DateTime.now()
     });
   }

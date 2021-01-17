@@ -361,8 +361,7 @@ class UserResult extends StatelessWidget {
                             } else {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => OtherProfile(
-                                        user.photoUrl,
-                                        user.displayName,
+                                      
                                         user.id,
                                       )));
                             }

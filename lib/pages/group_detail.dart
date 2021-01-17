@@ -99,7 +99,6 @@ class _GroupDetailState extends State<GroupDetail> {
   bool sendRequest = false;
   bool friends;
 
-  var status;
   var userRequests;
   final GoogleSignInAccount userMe = googleSignIn.currentUser;
   final strUserId = currentUser.id;
@@ -123,7 +122,25 @@ class _GroupDetailState extends State<GroupDetail> {
 
   @override
   Widget build(BuildContext context) {
+
     bool isLargePhone = Screen.diagonal(context) > 766;
+    // Map<String, dynamic> invitees = course['invitees'];
+        Map<String, dynamic> invitees = {};
+
+    int status = 0;
+    List<dynamic> inviteesIds = invitees.keys.toList();
+
+    List<dynamic> inviteesValues = invitees.values.toList();
+
+    if (invitees != null) {
+      for (int i = 0; i < invitees.length; i++) {
+        if (inviteesIds[i] == currentUser.id) {
+          if (inviteesValues[i] == 3) {
+            status = 3;
+          }
+        }
+      }
+    }
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -263,8 +280,7 @@ class _GroupDetailState extends State<GroupDetail> {
                           physics: AlwaysScrollableScrollPhysics(),
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (_, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
 
                             return Container(
                               height: 100,
@@ -287,8 +303,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       OtherProfile(
-                                                        course['photoUrl'],
-                                                        course['displayName'],
+                                                      
                                                         course['id'],
                                                       )));
                                         }
@@ -298,9 +313,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                         backgroundColor: TextThemes.ndGold,
                                         child: CircleAvatar(
                                           backgroundImage: NetworkImage(snapshot
-                                              .data
-                                              .docs[index]
-                                              ['photoUrl']),
+                                              .data.docs[index]['photoUrl']),
                                           radius: 50,
                                           backgroundColor: TextThemes.ndBlue,
                                           child: CircleAvatar(
@@ -330,7 +343,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                     text: snapshot
                                                         .data
                                                         .docs[index]
-                                                        ['displayName']
+                                                            ['displayName']
                                                         .toString(),
                                                     style: TextStyle(
                                                         color: Colors.black,
@@ -355,12 +368,131 @@ class _GroupDetailState extends State<GroupDetail> {
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10.0, bottom: 15),
+                          padding: const EdgeInsets.only(top: 10.0, bottom: 5),
                           child: Container(
                             child: (next != "" && next != null)
                                 ? NextMOOV(next)
                                 : buildNoContent(),
                           ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: 20.0, right: 20),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text("Suggested by "),
+                                Text(
+                                    snapshot.data.docs[0]['displayName']
+                                        .toString(),
+                                    style: TextStyle(
+                                        color: Colors.blue[600],
+                                        fontWeight: FontWeight.w500))
+                              ]),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                            textScaleFactor: 1.2,
+                            text:
+                                TextSpan(style: TextThemes.mediumbody, children: [
+                              TextSpan(
+                                  text: "Vote on ",
+                                  style: TextStyle(fontWeight: FontWeight.w400)),
+                              TextSpan(
+                                  text: "Alvin's ",
+                                  style: TextStyle(
+                                      color: Colors.blue[600],
+                                      fontWeight: FontWeight.w500)),
+                              TextSpan(
+                                  text: "suggestion",
+                                  style: TextStyle(fontWeight: FontWeight.w400)),
+                            ]),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              side: BorderSide(color: Colors.black)),
+                      onPressed: () {
+                          // if (invitees != null && status != 2) {
+                          //   Database().addUndecided(currentUser.id, moovId);
+                          //   status = 2;
+                          //   print(status);
+                          // } else if (invitees != null && status == 2) {
+                          //   Database().removeUndecided(currentUser.id, moovId);
+                          //   status = 0;
+                          // }
+                      },
+                      color: (status == 1) ? Colors.yellow[600] : Colors.white,
+                      padding: EdgeInsets.all(5.0),
+                      child: Padding(
+                          padding: const EdgeInsets.only(left: 3.0, right: 3),
+                          child: (status == 0)
+                                ? Column(
+                                    children: [
+                                      Text('No',
+                                          style: TextStyle(color: Colors.red)),
+                                      Icon(Icons.thumb_down,
+                                          color: Colors.red, size: 30),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Text('Undecided'),
+                                      Icon(Icons.accessibility,
+                                          color: Colors.yellow[600], size: 30),
+                                    ],
+                                  ),
+                      ),
+                    ),
+                            ),
+                     Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              side: BorderSide(color: Colors.black)),
+                          onPressed: () {
+                            // if (invitees != null && status != 2) {
+                            //   Database().addUndecided(currentUser.id, moovId);
+                            //   status = 2;
+                            //   print(status);
+                            // } else if (invitees != null && status == 2) {
+                            //   Database().removeUndecided(currentUser.id, moovId);
+                            //   status = 0;
+                            // }
+                          },
+                          color: (status == 1) ? Colors.yellow[600] : Colors.white,
+                          padding: EdgeInsets.all(5.0),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 3.0, right: 3),
+                            child: (status == 0)
+                                ? Column(
+                                    children: [
+                                      Text('Yes',
+                                          style: TextStyle(color: Colors.green)),
+                                      Icon(Icons.thumb_up,
+                                          color: Colors.green, size: 30),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Text('Undecided'),
+                                      Icon(Icons.accessibility,
+                                          color: Colors.yellow[600], size: 30),
+                                    ],
+                                  ),
+                          ),
+                    ),
+                     ),
+                          ],),
                         ),
                         members.contains(currentUser.id)
                             ? RaisedButton(
@@ -383,7 +515,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                           color: TextThemes.ndGold),
                                       Padding(
                                         padding: const EdgeInsets.all(10.0),
-                                        child: Text('Set the MOOV',
+                                        child: Text('Suggest the MOOV',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 20)),

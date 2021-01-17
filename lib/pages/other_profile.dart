@@ -16,20 +16,20 @@ import 'package:MOOV/services/database.dart';
 import 'home.dart';
 
 class OtherProfile extends StatefulWidget {
-  String photoUrl, displayName, id;
+  String id;
 
-  OtherProfile(this.photoUrl, this.displayName, this.id);
+  OtherProfile(this.id);
 
   @override
   State<StatefulWidget> createState() {
-    return _OtherProfileState(this.photoUrl, this.displayName, this.id);
+    return _OtherProfileState(this.id);
   }
 }
 
 class _OtherProfileState extends State<OtherProfile> {
   String photoUrl, displayName, id;
   final dbRef = FirebaseFirestore.instance;
-  _OtherProfileState(this.photoUrl, this.displayName, this.id);
+  _OtherProfileState(this.id);
   bool requestsent = false;
   bool sendRequest = false;
   bool friends;
@@ -100,6 +100,8 @@ class _OtherProfileState extends State<OtherProfile> {
             iter = iter - 1;
           }
           isAmbassador = snapshot.data['isAmbassador'];
+          displayName = snapshot.data['displayName'];
+          photoUrl = snapshot.data['photoUrl'];
 
           return Scaffold(
               backgroundColor: Colors.white,
@@ -195,7 +197,7 @@ class _OtherProfileState extends State<OtherProfile> {
                           child: CircleAvatar(
                             backgroundImage: (photoUrl == null)
                                 ? AssetImage('images/user-avatar.png')
-                                : NetworkImage(snapshot.data['photoUrl']),
+                                : NetworkImage(photoUrl),
                             // backgroundImage: NetworkImage(currentUser.photoUrl),
                             radius: 50,
                           ),

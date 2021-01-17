@@ -327,8 +327,7 @@ class _AuthorContent extends StatelessWidget {
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => course['id'] != currentUser.id
-                      ? OtherProfile(course['photoUrl'], course['displayName'],
-                          course['id'])
+                      ? OtherProfile(course['id'])
                       : ProfilePage())),
               child: Container(
                   child: Row(
@@ -380,18 +379,18 @@ class _AuthorContent extends StatelessWidget {
                             PageTransition(
                                 type: PageTransitionType.bottomToTop,
                                 child: SendMOOV(
-                                    course['postId'],
-                                    course['userId'],
-                                    course['image'],
-                                    course['postId'],
-                                    course['startDate'],
-                                    course['title'],
-                                    course['description'],
-                                    course['address'],
-                                    course['profilePic'],
-                                    course['userName'],
-                                    course['userEmail'],
-                                   )));
+                                  course['postId'],
+                                  course['userId'],
+                                  course['image'],
+                                  course['postId'],
+                                  course['startDate'],
+                                  course['title'],
+                                  course['description'],
+                                  course['address'],
+                                  course['profilePic'],
+                                  course['userName'],
+                                  course['userEmail'],
+                                )));
                       },
                       color: Colors.white,
                       padding: EdgeInsets.all(5.0),
@@ -421,8 +420,7 @@ class _AuthorContent extends StatelessWidget {
 
 class Seg2 extends StatefulWidget {
   dynamic moovId;
-  Seg2({Key key, @required this.moovId})
-      : super(key: key);
+  Seg2({Key key, @required this.moovId}) : super(key: key);
 
   @override
   _Seg2State createState() => _Seg2State(moovId);
@@ -594,7 +592,6 @@ class Buttons extends StatelessWidget {
               }
             }
 
-           
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(

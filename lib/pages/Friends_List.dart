@@ -87,16 +87,7 @@ class friendsListState extends State<friendsList> {
                                                           (BuildContext
                                                               context) {
                                                     return OtherProfile(
-                                                        snapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .data['photoUrl']
-                                                            .toString(),
-                                                        snapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .data['displayName']
-                                                            .toString(),
+                                                        
                                                         snapshot
                                                             .data
                                                             .documents[index]
@@ -130,16 +121,7 @@ class friendsListState extends State<friendsList> {
                                                           (BuildContext
                                                               context) {
                                                     return OtherProfile(
-                                                        snapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .data['photoUrl']
-                                                            .toString(),
-                                                        snapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .data['displayName']
-                                                            .toString(),
+                                                       
                                                         snapshot
                                                             .data
                                                             .documents[index]
@@ -179,20 +161,7 @@ class friendsListState extends State<friendsList> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             OtherProfile(
-                                                                snapshot
-                                                                    .data
-                                                                    .documents[
-                                                                        index]
-                                                                    .data[
-                                                                        'photoUrl']
-                                                                    .toString(),
-                                                                snapshot
-                                                                    .data
-                                                                    .documents[
-                                                                        index]
-                                                                    .data[
-                                                                        'displayName']
-                                                                    .toString(),
+                                                               
                                                                 snapshot
                                                                     .data
                                                                     .documents[

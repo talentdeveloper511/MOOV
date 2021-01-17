@@ -210,8 +210,6 @@ class _PollViewState extends State<PollView> {
                                                                 builder:
                                                                     (context) =>
                                                                         OtherProfile(
-                                                                          pic,
-                                                                          name,
                                                                           id,
                                                                         )));
                                                       },
@@ -301,8 +299,6 @@ class _PollViewState extends State<PollView> {
                                                                 builder:
                                                                     (context) =>
                                                                         OtherProfile(
-                                                                          pic2,
-                                                                          name2,
                                                                           id2,
                                                                         )));
                                                       },
