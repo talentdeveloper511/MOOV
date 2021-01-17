@@ -286,10 +286,10 @@ class PostOnTrending extends StatelessWidget {
                         imageUrl: course['image'],
                         fit: BoxFit.cover,
                         height: isLargePhone
-                            ? MediaQuery.of(context).size.height * 0.08
+                            ? MediaQuery.of(context).size.height * 0.122
                             : MediaQuery.of(context).size.height * 0.1432,
                         width: isLargePhone
-                            ? MediaQuery.of(context).size.width * 0.25
+                            ? MediaQuery.of(context).size.width * 0.315
                             : MediaQuery.of(context).size.width * 0.32,
                       ),
                     ),
