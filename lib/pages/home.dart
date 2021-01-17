@@ -455,7 +455,7 @@ class _HomeState extends State<Home> {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      PageRouteBuilder(pageBuilder: (_,__,___) => Home()),
                       (Route<dynamic> route) => false,
                     );
                   },

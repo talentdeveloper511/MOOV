@@ -97,13 +97,22 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('food')
-                        .where('type', isEqualTo: 'Restaurants & Bars')
-                        .where('privacy', isEqualTo: "Public")
+                        .where('type', isNotEqualTo: 'Restaurants & Bars')
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Text('');
                       return Container(
-                        height: (snapshot.data.docs.length <= 3) ? 210 : 400,
+                        height: (snapshot.data.docs.length <= 3 && isLargePhone)
+                            ? 210
+                            : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                ? 345
+                                : (snapshot.data.docs.length <= 3 &&
+                                        !isLargePhone)
+                                    ? 190
+                                    : (snapshot.data.docs.length >= 3 &&
+                                            !isLargePhone)
+                                        ? 310
+                                        : 350,
                         child: Column(
                           children: [
                             Expanded(
@@ -156,7 +165,17 @@ class TrendingSegmentState extends State<TrendingSegment> {
                       if (!snapshot.hasData) return Text('');
 
                       return Container(
-                        height: (snapshot.data.docs.length <= 3) ? 270 : 345,
+                       height: (snapshot.data.docs.length <= 3 && isLargePhone)
+                            ? 210
+                            : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                ? 345
+                                : (snapshot.data.docs.length <= 3 &&
+                                        !isLargePhone)
+                                    ? 190
+                                    : (snapshot.data.docs.length >= 3 &&
+                                            !isLargePhone)
+                                        ? 310
+                                        : 350,
                         child: Column(
                           children: [
                             Expanded(
@@ -202,13 +221,22 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('food')
-                        .where('type', isEqualTo: 'Sport')
-                        .orderBy('likeCounter', descending: true)
+                        .where('type', isNotEqualTo: 'Pregames & Parties')
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Text('');
                       return Container(
-                        height: (snapshot.data.docs.length <= 3) ? 270 : 400,
+                         height: (snapshot.data.docs.length <= 3 && isLargePhone)
+                            ? 210
+                            : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                ? 345
+                                : (snapshot.data.docs.length <= 3 &&
+                                        !isLargePhone)
+                                    ? 190
+                                    : (snapshot.data.docs.length >= 3 &&
+                                            !isLargePhone)
+                                        ? 310
+                                        : 350,
                         child: Column(
                           children: [
                             Expanded(
@@ -311,11 +339,11 @@ class PostOnTrending extends StatelessWidget {
                             padding: const EdgeInsets.all(4.0),
                             child: Text(
                               course['title'],
-                              maxLines: 1,
+                              maxLines: 2,
                               style: TextStyle(
                                   fontFamily: 'Solway',
                                   color: Colors.white,
-                                  fontSize: isLargePhone ? 12.0 : 10,
+                                  fontSize: isLargePhone ? 13.0 : 10,
                                   fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
@@ -331,10 +359,7 @@ class PostOnTrending extends StatelessWidget {
                         gradient: LinearGradient(
                             begin: Alignment.topRight,
                             end: Alignment.bottomLeft,
-                            colors: [
-                          Colors.pinkAccent[100],
-                          Colors.blue[100]
-                        ])),
+                            colors: [Colors.pink[100], Colors.blue[100]])),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -356,7 +381,9 @@ class PostOnTrending extends StatelessWidget {
                                   .add_jm()
                                   .format(course['startDate'].toDate()),
                               style: TextStyle(
-                                  fontSize: 11, fontWeight: FontWeight.w700)),
+                                  fontFamily: 'Solway',
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700)),
                         )
                       ],
                     ),

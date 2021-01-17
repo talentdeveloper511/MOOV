@@ -91,7 +91,7 @@ class GroupCarousel extends StatelessWidget {
                         stream: FirebaseFirestore.instance
                             .collection('users')
                             .where('friendGroups',
-                                arrayContains: course['groupName'])
+                                arrayContains: course['groupId'])
                             .snapshots(),
                         builder: (context, snapshot3) {
                           if (!snapshot3.hasData)
@@ -121,14 +121,11 @@ class GroupCarousel extends StatelessWidget {
                                                           course['groupPic'],
                                                           course['groupName'],
                                                           course['members'],
-                                                          snapshot
-                                                              .data
-                                                              .docs[i]
-                                                              .documentID,
+                                                          course['groupId'],
                                                           course['nextMOOV'])));
                                         },
                                         child: Container(
-                                          height: 110,
+                                          height: 120,
                                           child: Column(
                                             children: [
                                               Padding(
@@ -229,11 +226,9 @@ class GroupCarousel extends StatelessWidget {
                                                               : 15,
                                                           backgroundImage:
                                                               NetworkImage(
-                                                            snapshot3
-                                                                    .data
+                                                            snapshot3.data
                                                                     .docs[1]
-                                                                    .data[
-                                                                'photoUrl'],
+                                                                ['photoUrl'],
                                                           ),
                                                         )
                                                       : Container()),
@@ -247,10 +242,8 @@ class GroupCarousel extends StatelessWidget {
                                                         : 15,
                                                     backgroundImage:
                                                         NetworkImage(
-                                                      snapshot3
-                                                          .data
-                                                          .docs[0]
-                                                          .data['photoUrl'],
+                                                      snapshot3.data.docs[0]
+                                                          ['photoUrl'],
                                                     ),
                                                   )),
                                               Padding(
@@ -339,9 +332,8 @@ class GroupCarousel extends StatelessWidget {
                                                           (context, index) {
                                                         DocumentSnapshot
                                                             course = snapshot
-                                                                    .data
-                                                                    .docs[
-                                                                index];
+                                                                .data
+                                                                .docs[index];
                                                         String pic =
                                                             course['image'];
                                                         String title =
@@ -362,7 +354,7 @@ class GroupCarousel extends StatelessWidget {
                                                                 height: isLargePhone
                                                                     ? SizeConfig
                                                                             .blockSizeVertical *
-                                                                        8.45
+                                                                        8.5
                                                                     : SizeConfig
                                                                             .blockSizeVertical *
                                                                         12,
@@ -382,7 +374,7 @@ class GroupCarousel extends StatelessWidget {
                                                                           width:
                                                                               150,
                                                                           height:
-                                                                              120,
+                                                                              130,
                                                                           child:
                                                                               Container(
                                                                             child:
@@ -395,9 +387,13 @@ class GroupCarousel extends StatelessWidget {
                                                                             ),
                                                                             decoration:
                                                                                 BoxDecoration(
+                                                                              border: Border.all(
+                                                                                color: TextThemes.ndBlue,
+                                                                                width: 3,
+                                                                              ),
                                                                               color: Colors.white,
                                                                               borderRadius: BorderRadius.all(
-                                                                                Radius.circular(10),
+                                                                                Radius.circular(20),
                                                                               ),
                                                                               boxShadow: [
                                                                                 BoxShadow(
