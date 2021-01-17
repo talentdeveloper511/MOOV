@@ -109,14 +109,14 @@ class SeeContactsButton extends StatelessWidget {
         title: Text("Invite Friends, \nWin Cash",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text(
-            "\nEarn the chance to become an ambassador by inviting as many people as possible! You get \$3 for every person you invite if your're an ambassador. \n\n Just have them put you as their referral when creating their account."),
+            "\nEarn \$3 for each friend you bring on! Bring on enough and we'll consider you for an ambassador position. \n\n Just have them put you as their referral when creating their account."),
         actions: [
           CupertinoDialogAction(
-              child: Text("Let's earn money.", style: TextStyle()),
+              isDefaultAction: true,
+              child: Text("Let's make bread.", style: TextStyle()),
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ContactsPage()))),
           CupertinoDialogAction(
-            isDefaultAction: true,
             child: Text("I hate money.", style: TextStyle(color: Colors.red)),
             onPressed: () {
               Navigator.of(context).pop(true);
