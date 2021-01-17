@@ -31,7 +31,6 @@ class _MOOVSPageState extends State<MOOVSPage>
     with SingleTickerProviderStateMixin {
   // TabController to control and switch tabs
   TabController _tabController;
-  List<dynamic> likedArray;
   dynamic moovId;
   String type;
   var todayOnly = 0;
@@ -63,14 +62,9 @@ class _MOOVSPageState extends State<MOOVSPage>
   }
 
   Widget getChildWidget() => childWidgets[selectedIndex];
-  bool isLiked = false;
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
-
-    isLiked = false;
-
-    dynamic likeCount;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -136,13 +130,10 @@ class _MOOVSPageState extends State<MOOVSPage>
                       stream: FirebaseFirestore.instance
                           .collection('food')
                           .where("userId", isEqualTo: currentUser.id)
-                          .where(
-                            "invitees",
-                          )
-                          .orderBy("startDate")
+                          // .orderBy("startDate")
                           .snapshots(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData)
+                        if (!snapshot.hasData || snapshot.data == null)
                           return Center(
                               child: Text(
                                   "You have no posts. Go post the MOOV!",
@@ -150,8 +141,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             Map<String, dynamic> invitees = course['invitees'];
                             List<dynamic> inviteesIds = invitees.keys.toList();
@@ -208,12 +198,11 @@ class _MOOVSPageState extends State<MOOVSPage>
                   StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('food')
-                          .where("going", arrayContains: currentUser.id)
-                          .orderBy("startDate")
+                          .where('going', arrayContains: currentUser.id)
+                          // .orderBy("startDate")
                           .snapshots(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                             child: Text("You're not going to any MOOVs!",
                                 textAlign: TextAlign.center,
@@ -222,14 +211,12 @@ class _MOOVSPageState extends State<MOOVSPage>
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
 
                             var strUserPic = currentUser.photoUrl;
 
                             bool isAmbassador;
-                            bool isLiked1;
                             bool hide = false;
                             // var y = startDate;
                             // var x = Timestamp.now();
@@ -308,13 +295,5 @@ class _MOOVSPageState extends State<MOOVSPage>
         ],
       ),
     );
-  }
-
-  handleLikePost() {
-    if (isLiked == true) {
-      isLiked = false;
-    } else {
-      isLiked = true;
-    }
   }
 }

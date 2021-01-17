@@ -156,7 +156,7 @@ class _PollViewState extends State<PollView> {
                 voters.containsKey(userId)
                     ? Positioned(
                         top: isLargePhone ? 45 : 45,
-                        left: isLargePhone ? 90 : 70,
+                        left: isLargePhone ? 90 : 90,
                         child: Container(
                           height: 100,
                           width: voters.length == 0
@@ -245,7 +245,7 @@ class _PollViewState extends State<PollView> {
                 voters.containsKey(userId)
                     ? Positioned(
                         bottom: isLargePhone ? -20 : -20,
-                        left: isLargePhone ? 80 : 70,
+                        left: isLargePhone ? 90 : 90,
                         child: Container(
                           height: 100,
                           width: voters.length == 0

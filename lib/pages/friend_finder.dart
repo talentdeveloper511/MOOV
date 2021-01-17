@@ -401,7 +401,7 @@ class UserResult extends StatelessWidget {
                             stream: FirebaseFirestore.instance
                                 .collection('food')
                                 .where('going', arrayContains: user.id)
-                                .orderBy('startDate')
+                                // .orderBy('startDate')
                                 .limit(1)
                                 .snapshots(),
                             builder: (context, snapshot) {

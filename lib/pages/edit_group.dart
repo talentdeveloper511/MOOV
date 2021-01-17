@@ -391,11 +391,34 @@ class _EditGroupState extends State<EditGroup> {
                       ]),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.only(bottom: 50.0),
                       child: RaisedButton(
-                          color: TextThemes.ndBlue,
-                          child: Text('Save',
-                              style: TextStyle(color: Colors.white)),
+                          shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(80.0)),
+                            padding: EdgeInsets.all(0.0),
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      TextThemes.ndBlue,
+                                      Color(0xff64B6FF)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30.0)),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: 125.0, minHeight: 50.0),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Save",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 22),
+                                ),
+                              ),
+                            ),
                           onPressed: () async {
                             if (_image != null) {
                               firebase_storage.Reference ref = firebase_storage
