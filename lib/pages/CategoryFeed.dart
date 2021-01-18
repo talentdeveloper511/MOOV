@@ -914,8 +914,8 @@ class PostOnFeed extends StatelessWidget {
                                                       .bottomToTop,
                                                   child: SendMOOV(
                                                     course['postId'],
-                                                    course['ownerId'],
-                                                    course['photoUrl'],
+                                                    course['userId'],
+                                                    course['image'],
                                                     course['postId'],
                                                     course['startDate'],
                                                     course['title'],

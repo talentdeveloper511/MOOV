@@ -284,7 +284,7 @@ class Database {
   }
 
   friendRequestNotification(
-      String ownerId, String ownerProPic, String ownerName, String sender) {
+      String ownerId, String senderProPic, String ownerName, String sender) {
     notificationFeedRef.doc(ownerId).collection("feedItems").doc(sender).set({
       "type": "request",
       "username": currentUser.displayName,
@@ -292,7 +292,6 @@ class Database {
       "userEmail": currentUser.email,
       "userProfilePic": currentUser.photoUrl,
       "timestamp": DateTime.now(),
-      "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
   }
