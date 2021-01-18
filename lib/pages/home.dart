@@ -211,10 +211,29 @@ class _HomeState extends State<Home> {
       usersRef.doc(user.id).update({'androidNotificationToken': token});
     });
 
-    _fcm.configure(
-        // onLaunch: (Map<String, dynamic> message) async {},
-        // onResume: (Map<String, dynamic> message) async {},
-        onMessage: (Map<String, dynamic> message) async {
+    _fcm.configure(onLaunch: (Map<String, dynamic> message) async {
+      print('on message: $message');
+      final String recipientId = message['data']['recipient'];
+      final String body = message['notification']['body'];
+      if (recipientId == user.id) {
+        print('Notification shown');
+        SnackBar snackbar =
+            SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+      }
+      print('Notification not shown :(');
+    }, onResume: (Map<String, dynamic> message) async {
+      print('on message: $message');
+      final String recipientId = message['data']['recipient'];
+      final String body = message['notification']['body'];
+      if (recipientId == user.id) {
+        print('Notification shown');
+        SnackBar snackbar =
+            SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+      }
+      print('Notification not shown :(');
+    }, onMessage: (Map<String, dynamic> message) async {
       print('on message: $message');
       final String recipientId = message['data']['recipient'];
       final String body = message['notification']['body'];
@@ -487,7 +506,7 @@ class _HomeState extends State<Home> {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      PageRouteBuilder(pageBuilder: (_,__,___) => Home()),
+                      PageRouteBuilder(pageBuilder: (_, __, ___) => Home()),
                       (Route<dynamic> route) => false,
                     );
                   },
