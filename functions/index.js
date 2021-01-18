@@ -37,7 +37,7 @@ exports.onCreateActivityFeedItem = functions.firestore
         // 3) switch body value based off of notification type
         switch (activityFeedItem.type) {
           case "invite":
-            body = `${activityFeedItem.username} invited you`;
+            body = `${activityFeedItem.username} invited you to a MOOV`;
             break;
           case "going":
             body = `${activityFeedItem.username} is going to your MOOV`;
