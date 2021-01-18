@@ -30,27 +30,24 @@ import 'edit_group.dart';
 import 'home.dart';
 
 class GroupDetail extends StatefulWidget {
-  String photoUrl, displayName, gid, next;
-  List<dynamic> members;
+  String gid;
 
-  GroupDetail(
-      this.photoUrl, this.displayName, this.members, this.gid, this.next);
+  GroupDetail(this.gid);
 
   @override
   State<StatefulWidget> createState() {
-    return _GroupDetailState(
-        this.photoUrl, this.displayName, this.members, this.gid, this.next);
+    return _GroupDetailState(this.gid);
   }
 }
 
 class _GroupDetailState extends State<GroupDetail> {
-  String photoUrl, displayName, gid, next;
+  String gid, groupName, groupPic, nextMOOV;
   List<dynamic> members;
+
   bool member;
   final dbRef = FirebaseFirestore.instance;
 
-  _GroupDetailState(
-      this.photoUrl, this.displayName, this.members, this.gid, this.next);
+  _GroupDetailState(this.gid);
 
   sendChat() {
     Database().sendChat(currentUser.displayName, chatController.text, gid);
@@ -78,19 +75,6 @@ class _GroupDetailState extends State<GroupDetail> {
           )
         ],
       ),
-    );
-  }
-
-  leaveGroup() {
-    if (members.length == 1) {
-      Database().leaveGroup(currentUser.id, displayName, gid);
-      Database().destroyGroup(gid);
-    } else {
-      Database().leaveGroup(currentUser.id, displayName, gid);
-    }
-    Navigator.pop(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 
@@ -181,6 +165,10 @@ class _GroupDetailState extends State<GroupDetail> {
                     }
                   }
                 }
+                groupName = course['groupName'];
+                groupPic = course['groupPic'];
+                nextMOOV = course['nextMOOV'];
+                members = course['members'];
 
                 return Scaffold(
                   backgroundColor: Colors.white,
@@ -203,7 +191,7 @@ class _GroupDetailState extends State<GroupDetail> {
                         title: ConstrainedBox(
                           constraints: BoxConstraints(maxWidth: 210),
                           child: Text(
-                            displayName,
+                            groupName,
                             style: TextStyle(
                                 fontSize: isLargePhone ? 30.0 : 22,
                                 color: Colors.white),
@@ -239,8 +227,8 @@ class _GroupDetailState extends State<GroupDetail> {
                                 context,
                                 PageTransition(
                                     type: PageTransitionType.bottomToTop,
-                                    child: AddUsers(displayName, gid, photoUrl,
-                                        members, next)));
+                                    child: AddUsers(groupName, gid, groupPic,
+                                        members, nextMOOV)));
                           },
                         ),
                         FocusedMenuHolder(
@@ -278,8 +266,8 @@ class _GroupDetailState extends State<GroupDetail> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => EditGroup(
-                                              photoUrl,
-                                              displayName,
+                                              groupPic,
+                                              groupName,
                                               members,
                                               gid)));
                                 }),
@@ -417,8 +405,8 @@ class _GroupDetailState extends State<GroupDetail> {
                                 padding:
                                     const EdgeInsets.only(top: 10.0, bottom: 5),
                                 child: Container(
-                                  child: (next != "" && next != null)
-                                      ? NextMOOV(next)
+                                  child: (nextMOOV != "" && nextMOOV != null)
+                                      ? NextMOOV(nextMOOV)
                                       : buildNoContent(),
                                 ),
                               ),
@@ -849,8 +837,8 @@ class _GroupDetailState extends State<GroupDetail> {
                                                   PageTransition(
                                                       type: PageTransitionType
                                                           .bottomToTop,
-                                                      child:
-                                                          SetMOOV(next, gid)))
+                                                      child: SetMOOV(
+                                                          nextMOOV, gid)))
                                               .then(onGoBack);
                                         },
                                         color: TextThemes.ndBlue,
@@ -999,6 +987,19 @@ class _GroupDetailState extends State<GroupDetail> {
           ),
         ]),
       ),
+    );
+  }
+
+  leaveGroup() {
+    if (members.length == 1) {
+      Database().leaveGroup(currentUser.id, groupName, gid);
+      Database().destroyGroup(gid);
+    } else {
+      Database().leaveGroup(currentUser.id, groupName, gid);
+    }
+    Navigator.pop(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 }

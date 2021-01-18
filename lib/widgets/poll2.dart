@@ -73,6 +73,8 @@ class _PollViewState extends State<PollView> {
 
           // var count = _list.where((c) => c.product_id == 2).toList().length;
 
+        
+
           for (var entry in voters.entries) {
             x = entry.key;
             y = entry.value;

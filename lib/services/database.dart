@@ -269,18 +269,16 @@ class Database {
   //   });
   // }
 
-  addedToGroup(String addee, String gname, String gid, String groupPic,
-      List<dynamic> members) {
-    notificationFeedRef.doc(addee).collection("feedItems").doc(gid).set({
+  addedToGroup(String addee, String groupName, String groupId, String groupPic,
+      ) {
+    notificationFeedRef.doc(addee).collection("feedItems").doc(groupId).set({
       "type": "friendGroup",
       "username": currentUser.displayName,
       "userId": currentUser.id,
-      "userEmail": currentUser.email,
       "userProfilePic": currentUser.photoUrl,
-      "previewImg": groupPic,
-      "postId": gid,
-      "title": gname,
-      "likedArray": members,
+      "groupPic": groupPic,
+      "groupId": groupId,
+      "groupName": groupName,
       "timestamp": DateTime.now()
     });
   }

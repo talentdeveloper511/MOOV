@@ -170,8 +170,7 @@ class UserResult extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => ProfilePage()));
               } else {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => OtherProfile(
-                       user.id)));
+                    builder: (context) => OtherProfile(user.id)));
               }
             },
             child: ListTile(
@@ -248,12 +247,7 @@ class GroupResult extends StatelessWidget {
           GestureDetector(
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => GroupDetail(
-                      group['groupPic'],
-                      group['groupName'],
-                      group['members'],
-                      group['groupId'],
-                      group['nextMOOV'])))
+                  builder: (context) => GroupDetail(group['groupId'])))
             },
             child: ListTile(
               leading: Image.network(

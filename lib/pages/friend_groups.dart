@@ -63,11 +63,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
               color: Colors.white,
             ),
             onPressed: () {
-
-              
               Navigator.pushAndRemoveUntil(
                 context,
-                PageRouteBuilder(pageBuilder: (_,__,___) => Home()),
+                PageRouteBuilder(pageBuilder: (_, __, ___) => Home()),
                 (Route<dynamic> route) => false,
               );
             },
@@ -195,7 +193,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                   builder: (context, snapshot3) {
                                     if (!snapshot3.hasData)
                                       return CircularProgressIndicator();
-                                    if (snapshot3.hasError || snapshot3.data == null)
+                                    if (snapshot3.hasError ||
+                                        snapshot3.data == null)
                                       return CircularProgressIndicator();
 
                                     return Padding(
@@ -212,15 +211,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             GroupDetail(
-                                                                course[
-                                                                    'groupPic'],
-                                                                course[
-                                                                    'groupName'],
-                                                                course[
-                                                                    'members'],
-                                                                course['groupId'],
-                                                                course[
-                                                                    'nextMOOV'])));
+                                                              course['groupId'],
+                                                            )));
                                               },
                                               child: Column(
                                                 children: [
@@ -326,10 +318,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                 radius: 20.0,
                                                                 backgroundImage:
                                                                     NetworkImage(
-                                                                  snapshot3
-                                                                          .data
+                                                                  snapshot3.data
                                                                           .docs[1]
-                                                                          [
+                                                                      [
                                                                       'photoUrl'],
                                                                 ),
                                                               )
@@ -344,11 +335,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                           radius: 20.0,
                                                           backgroundImage:
                                                               NetworkImage(
-                                                            snapshot3
-                                                                    .data
+                                                            snapshot3.data
                                                                     .docs[0]
-                                                                    [
-                                                                'photoUrl'],
+                                                                ['photoUrl'],
                                                           ),
                                                         )),
                                                     Padding(

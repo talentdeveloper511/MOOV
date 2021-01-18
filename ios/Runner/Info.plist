@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<string>NO</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -27,7 +25,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.539403240889-gke8cen93mic6rf9kaqiiknvalt2p9pu</string>
+				<string>com.googleusercontent.apps.539403240889-1jenth4caipickvn7guka4mohiov020c</string>
 			</array>
 		</dict>
 		<dict>
@@ -41,6 +39,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<string>NO</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
@@ -48,7 +48,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>MOOV requires access to your calendar.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>MOOV requires access to your phone&apos;s camera.</string>
+	<string>MOOV requires access to your phone's camera.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>This just allows you to invite your friends!</string>
 	<key>NSLocationAlwaysUsageDescription</key>

@@ -167,11 +167,13 @@ class NotificationFeedItem extends StatelessWidget {
   final String postId;
   final String userProfilePic;
   final String userEmail;
+  final String groupId;
+  final String groupPic;
+  final String groupName;
 
   //for redirecting to PostDetail
   final String title;
   final String description;
-  final String location;
   final String ownerProPic;
   final String ownerName;
   final String ownerEmail;
@@ -183,9 +185,11 @@ class NotificationFeedItem extends StatelessWidget {
   NotificationFeedItem(
       {this.title,
       this.description,
-      this.location,
       this.username,
       this.userEmail,
+      this.groupId,
+      this.groupPic,
+      this.groupName,
       this.userId,
       this.type,
       this.previewImg,
@@ -214,10 +218,12 @@ class NotificationFeedItem extends StatelessWidget {
         ownerName: doc.data()['ownerName'],
         ownerEmail: doc.data()['ownerEmail'],
         address: doc.data()['address'],
-        location: doc.data()['location'],
         moovId: doc.data()['moovId'],
         previewImg: doc.data()['previewImg'],
-        members: doc.data()['members']);
+        members: doc.data()['members'],
+        groupId: doc.data()['groupId'],
+        groupPic: doc.data()['groupPic'],
+        groupName: doc.data()['groupName'],);
   }
 
   showPost(context) {
@@ -227,10 +233,7 @@ class NotificationFeedItem extends StatelessWidget {
 
   showGroup(context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                GroupDetail(previewImg, title, members, postId, address)));
+        context, MaterialPageRoute(builder: (context) => GroupDetail(groupId)));
   }
 
   configureMediaPreview(context) {
@@ -378,7 +381,7 @@ class NotificationFeedItem extends StatelessWidget {
   }
 
   showProfile(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => OtherProfile(userId)));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => OtherProfile(userId)));
   }
 }

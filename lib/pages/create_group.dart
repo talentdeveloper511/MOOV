@@ -6,6 +6,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
+import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/camera.dart';
@@ -101,6 +102,7 @@ class _GroupFormState extends State<GroupForm> {
       "voters": {}
       // "gid": id
     });
+
     // .then((value) {
     //   String data = value.documentID;
     // FirebaseFirestore.instance.document('friendGroups/$data').updateData({"gid" : data});
@@ -121,6 +123,9 @@ class _GroupFormState extends State<GroupForm> {
         transaction.update(userRefs, {
           'friendGroups': FieldValue.arrayUnion([groupId]),
         });
+        if (memberoonis[i] != currentUser.id) {
+          Database().addedToGroup(memberoonis[i], groupName, groupId, pic);
+        }
       }
     });
   }
@@ -449,7 +454,7 @@ class _GroupFormState extends State<GroupForm> {
                           value: _termsChecked,
                           onChanged: (bool value) =>
                               setState(() => _termsChecked = value)),
-                     SizedBox(
+                      SizedBox(
                         height: 10.0,
                       ),
                       Container(
