@@ -250,12 +250,15 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
-                                      Image.asset('lib/assets/dance.png',
-                                          height: 40),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 2.0),
+                                        child: Image.asset('lib/assets/show3.png',
+                                            height: 40),
+                                      ),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
-                                        child: Text('MORE',
+                                        child: Text('More',
                                             style: TextThemes.extraBold),
                                       ),
                                     ],
