@@ -297,7 +297,6 @@ class _UserResultState extends State<UserResult> {
                                 address,
                                 ownerProPic,
                                 ownerName,
-                                ownerEmail,
                                 );
                             setState(() {
                               status = true;

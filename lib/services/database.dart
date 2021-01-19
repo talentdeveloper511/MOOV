@@ -289,7 +289,6 @@ class Database {
       "type": "request",
       "username": currentUser.displayName,
       "userId": currentUser.id,
-      "userEmail": currentUser.email,
       "userProfilePic": currentUser.photoUrl,
       "timestamp": DateTime.now(),
       "ownerName": ownerName,
@@ -306,7 +305,6 @@ class Database {
     address,
     String ownerProPic,
     String ownerName,
-    String ownerEmail,
   ) {
     notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
       "type": "invite",
@@ -323,7 +321,6 @@ class Database {
       "address": address,
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
-      "ownerEmail": ownerEmail,
     });
   }
 
@@ -415,14 +412,11 @@ class Database {
       String ownerId,
       String previewImg,
       dynamic moovId,
-      startDate,
       String title,
-      String description,
-      address,
       String ownerProPic,
       String ownerName,
-      String ownerEmail,
-      List<dynamic> likedArray) {
+      
+      ) {
     notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
       "type": "friend",
       "username": currentUser.displayName,
@@ -434,12 +428,8 @@ class Database {
       "timestamp": timestamp,
       "startDate": startDate,
       "title": title,
-      "description": description,
-      "address": address,
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
-      "ownerEmail": ownerEmail,
-      "likedArray": likedArray
     });
   }
 

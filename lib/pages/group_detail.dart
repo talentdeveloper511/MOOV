@@ -170,665 +170,696 @@ class _GroupDetailState extends State<GroupDetail> {
                 nextMOOV = course['nextMOOV'];
                 members = course['members'];
 
-                return Scaffold(
-                  backgroundColor: Colors.white,
-                  appBar: AppBar(
-                      leading: IconButton(
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        },
-                      ),
-                      backgroundColor: TextThemes.ndBlue,
-                      flexibleSpace: FlexibleSpaceBar(
-                        titlePadding: EdgeInsets.all(15),
-                        title: ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: 210),
-                          child: Text(
-                            groupName,
-                            style: TextStyle(
-                                fontSize: isLargePhone ? 30.0 : 22,
-                                color: Colors.white),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                      actions: <Widget>[
-                        // Padding(
-                        //   padding: const EdgeInsets.all(4.0),
-                        //   child: FlatButton(
-                        //       onPressed: () {
-                        //         Database()
-                        //             .leaveGroup(currentUser.id, displayName, gid);
+                return (members.contains(strUserId))
+                    ? Scaffold(
+                        backgroundColor: Colors.white,
+                        appBar: AppBar(
+                            leading: IconButton(
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()),
+                                );
+                              },
+                            ),
+                            backgroundColor: TextThemes.ndBlue,
+                            flexibleSpace: FlexibleSpaceBar(
+                              titlePadding: EdgeInsets.all(15),
+                              title: ConstrainedBox(
+                                constraints: BoxConstraints(maxWidth: 210),
+                                child: Text(
+                                  groupName,
+                                  style: TextStyle(
+                                      fontSize: isLargePhone ? 30.0 : 22,
+                                      color: Colors.white),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                            actions: <Widget>[
+                              // Padding(
+                              //   padding: const EdgeInsets.all(4.0),
+                              //   child: FlatButton(
+                              //       onPressed: () {
+                              //         Database()
+                              //             .leaveGroup(currentUser.id, displayName, gid);
 
-                        //         Navigator.pop(
-                        //           context,
-                        //           MaterialPageRoute(builder: (context) => HomePage()),
-                        //         );
-                        //       },
-                        //       child: Text(
-                        //         "LEAVE",
-                        //         style: TextStyle(color: Colors.red),
-                        //       )),
-                        // ),
-                        IconButton(
-                          padding: EdgeInsets.all(5.0),
-                          icon: Icon(Icons.person_add),
-                          color: Colors.white,
-                          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.bottomToTop,
-                                    child: AddUsers(groupName, gid, groupPic,
-                                        members, nextMOOV)));
-                          },
-                        ),
-                        FocusedMenuHolder(
-                          menuWidth: MediaQuery.of(context).size.width * 0.50,
-                          blurSize: 5.0,
-                          menuItemExtent: 45,
-                          menuBoxDecoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15.0))),
-                          duration: Duration(milliseconds: 100),
-                          animateMenuItems: true,
-                          blurBackgroundColor: Colors.black54,
-                          openWithTap:
-                              true, // Open Focused-Menu on Tap rather than Long Press
-                          menuOffset:
-                              10.0, // Offset value to show menuItem from the selected item
-                          bottomOffsetHeight:
-                              80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
-                          menuItems: <FocusedMenuItem>[
-                            // Add Each FocusedMenuItem  for Menu Options
-
-                            FocusedMenuItem(
-                                title: Text("Share"),
-                                trailingIcon: Icon(Icons.send),
-                                onPressed: () {
-                                  Share.share(
-                                      "Hey let's put our squad on MOOV");
-                                }),
-                            FocusedMenuItem(
-                                title: Text("Edit Group"),
-                                trailingIcon: Icon(Icons.edit),
+                              //         Navigator.pop(
+                              //           context,
+                              //           MaterialPageRoute(builder: (context) => HomePage()),
+                              //         );
+                              //       },
+                              //       child: Text(
+                              //         "LEAVE",
+                              //         style: TextStyle(color: Colors.red),
+                              //       )),
+                              // ),
+                              IconButton(
+                                padding: EdgeInsets.all(5.0),
+                                icon: Icon(Icons.person_add),
+                                color: Colors.white,
+                                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
                                 onPressed: () {
                                   Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => EditGroup(
-                                              groupPic,
-                                              groupName,
-                                              members,
-                                              gid)));
-                                }),
-                            FocusedMenuItem(
-                                title: Text(
-                                  "Leave Group",
-                                  style: TextStyle(color: Colors.redAccent),
-                                ),
-                                trailingIcon: Icon(
-                                  Icons.directions_walk,
-                                  color: Colors.redAccent,
-                                ),
-                                onPressed: () {
-                                  showAlertDialog(context);
-                                }),
-                          ],
-                          onPressed: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.more_vert,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ]),
-                  body: SingleChildScrollView(
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: AlwaysScrollableScrollPhysics(),
-                                itemCount: snapshot.data.docs.length,
-                                itemBuilder: (_, index) {
-                                  DocumentSnapshot course =
-                                      snapshot.data.docs[index];
+                                      PageTransition(
+                                          type: PageTransitionType.bottomToTop,
+                                          child: AddUsers(groupName, gid,
+                                              groupPic, members, nextMOOV)));
+                                },
+                              ),
+                              FocusedMenuHolder(
+                                menuWidth:
+                                    MediaQuery.of(context).size.width * 0.50,
+                                blurSize: 5.0,
+                                menuItemExtent: 45,
+                                menuBoxDecoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(15.0))),
+                                duration: Duration(milliseconds: 100),
+                                animateMenuItems: true,
+                                blurBackgroundColor: Colors.black54,
+                                openWithTap:
+                                    true, // Open Focused-Menu on Tap rather than Long Press
+                                menuOffset:
+                                    10.0, // Offset value to show menuItem from the selected item
+                                bottomOffsetHeight:
+                                    80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                                menuItems: <FocusedMenuItem>[
+                                  // Add Each FocusedMenuItem  for Menu Options
 
-                                  return Container(
-                                    height: 100,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 30.0, bottom: 10),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              if (course['id'] == strUserId) {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ProfilePage()));
-                                              } else {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            OtherProfile(
-                                                              course['id'],
-                                                            )));
-                                              }
-                                            },
-                                            child: CircleAvatar(
-                                              radius: 54,
-                                              backgroundColor:
-                                                  TextThemes.ndGold,
-                                              child: CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                    snapshot.data.docs[index]
-                                                        ['photoUrl']),
-                                                radius: 50,
-                                                backgroundColor:
-                                                    TextThemes.ndBlue,
-                                                child: CircleAvatar(
-                                                  // backgroundImage: snapshot.data
-                                                  //     .documents[index].data['photoUrl'],
-                                                  backgroundImage: NetworkImage(
-                                                      snapshot.data.docs[index]
-                                                          ['photoUrl']),
-                                                  radius: 50,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Center(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10.0),
-                                              child: RichText(
-                                                textScaleFactor: 1.1,
-                                                text: TextSpan(
-                                                    style:
-                                                        TextThemes.mediumbody,
-                                                    children: [
-                                                      TextSpan(
-                                                          text: snapshot
-                                                              .data
-                                                              .docs[index][
-                                                                  'displayName']
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                    ]),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }),
-                          ),
-                          SingleChildScrollView(
-                            child: Column(children: [
-                              Text(
-                                "NEXT MOOV",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 10.0, bottom: 5),
-                                child: Container(
-                                  child: (nextMOOV != "" && nextMOOV != null)
-                                      ? NextMOOV(nextMOOV)
-                                      : buildNoContent(),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 20.0, right: 20),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text("Suggested by "),
-                                      Text(
-                                          snapshot.data.docs[0]['displayName']
-                                              .toString(),
-                                          style: TextStyle(
-                                              color: Colors.blue[600],
-                                              fontWeight: FontWeight.w500))
-                                    ]),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: RichText(
-                                  textScaleFactor: 1.2,
-                                  text: TextSpan(
-                                      style: TextThemes.mediumbody,
-                                      children: [
-                                        TextSpan(
-                                            text: "Vote on ",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400)),
-                                        TextSpan(
-                                            text: "Alvin's ",
-                                            style: TextStyle(
-                                                color: Colors.blue[600],
-                                                fontWeight: FontWeight.w500)),
-                                        TextSpan(
-                                            text: "suggestion",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400)),
-                                      ]),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 20.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: RaisedButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            side: BorderSide(
-                                                color: Colors.black)),
-                                        onPressed: () {
-                                          if (voters != null && status != 1) {
-                                            Database()
-                                                .addNoVote(currentUser.id, gid);
-                                            status = 1;
-                                            print(status);
-                                          } else if (voters != null &&
-                                              status == 1) {
-                                            Database().removeNoVote(
-                                                currentUser.id, gid);
-                                            status = 0;
-                                          }
-                                        },
-                                        color: (status == 1)
-                                            ? Colors.red
-                                            : Colors.white,
-                                        padding: EdgeInsets.all(5.0),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 3.0, right: 3),
-                                          child: (status == 1)
-                                              ? Column(
-                                                  children: [
-                                                    Text('No',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                    Icon(Icons.thumb_down,
-                                                        color: Colors.white,
-                                                        size: 30),
-                                                  ],
-                                                )
-                                              : Column(
-                                                  children: [
-                                                    Text('No'),
-                                                    Icon(Icons.thumb_down,
-                                                        color: Colors.red,
-                                                        size: 30),
-                                                  ],
-                                                ),
-                                        ),
+                                  FocusedMenuItem(
+                                      title: Text("Share"),
+                                      trailingIcon: Icon(Icons.send),
+                                      onPressed: () {
+                                        Share.share(
+                                            "Hey let's put our squad on MOOV");
+                                      }),
+                                  FocusedMenuItem(
+                                      title: Text("Edit Group"),
+                                      trailingIcon: Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => EditGroup(
+                                                    groupPic,
+                                                    groupName,
+                                                    members,
+                                                    gid)));
+                                      }),
+                                  FocusedMenuItem(
+                                      title: Text(
+                                        "Leave Group",
+                                        style:
+                                            TextStyle(color: Colors.redAccent),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: RaisedButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            side: BorderSide(
-                                                color: Colors.black)),
-                                        onPressed: () {
-                                          if (voters != null && status != 2) {
-                                            Database().addYesVote(
-                                                currentUser.id, gid);
-                                            status = 2;
-                                            print(status);
-                                          } else if (voters != null &&
-                                              status == 2) {
-                                            Database().removeYesVote(
-                                                currentUser.id, gid);
-                                            status = 0;
-                                          }
-                                        },
-                                        color: (status == 2)
-                                            ? Colors.green
-                                            : Colors.white,
-                                        padding: EdgeInsets.all(5.0),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 3.0, right: 3),
-                                          child: (status == 2)
-                                              ? Column(
-                                                  children: [
-                                                    Text('Yes',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                    Icon(Icons.thumb_up,
-                                                        color: Colors.white,
-                                                        size: 30),
-                                                  ],
-                                                )
-                                              : Column(
-                                                  children: [
-                                                    Text('Yes',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black)),
-                                                    Icon(Icons.thumb_up,
-                                                        color: Colors.green,
-                                                        size: 30),
-                                                  ],
-                                                ),
-                                        ),
+                                      trailingIcon: Icon(
+                                        Icons.directions_walk,
+                                        color: Colors.redAccent,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        physics:
-                                            AlwaysScrollableScrollPhysics(),
-                                        itemCount: noVoteCount,
-                                        itemBuilder: (_, index) {
-                                          voters.removeWhere(
-                                              (key, value) => value != 1);
-
-                                          var w = voters.keys.toList();
-                                          print(w);
-
-                                          return StreamBuilder(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('users')
-                                                  .doc(w[index])
-                                                  .snapshots(),
-                                              builder: (context, snapshot3) {
-                                                if (!snapshot3.hasData ||
-                                                    snapshot3.data == null)
-                                                  return Container();
-
-                                                return Container(
-                                                  height: 100,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                            top: 17.0,
-                                                            bottom: 5,
-                                                          ),
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              if (snapshot3
-                                                                          .data[
-                                                                      'id'] ==
-                                                                  strUserId) {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .push(MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                ProfilePage()));
-                                                              } else {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .push(MaterialPageRoute(
-                                                                        builder: (context) => OtherProfile(
-                                                                              snapshot3.data['id'],
-                                                                            )));
-                                                              }
-                                                            },
-                                                            child: CircleAvatar(
-                                                              radius: 24,
-                                                              backgroundColor:
-                                                                  TextThemes
-                                                                      .ndBlue,
-                                                              child:
-                                                                  CircleAvatar(
-                                                                backgroundImage:
-                                                                    NetworkImage(
-                                                                        snapshot3
-                                                                            .data['photoUrl']),
-                                                                radius: 22,
-                                                                backgroundColor:
-                                                                    TextThemes
-                                                                        .ndBlue,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(0.0),
-                                                          child: Center(
-                                                            child: Padding(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      5.0),
-                                                              child: RichText(
-                                                                textScaleFactor:
-                                                                    .75,
-                                                                text: TextSpan(
-                                                                    style: TextThemes
-                                                                        .mediumbody,
-                                                                    children: [
-                                                                      TextSpan(
-                                                                          text: snapshot3.data['displayName']
-                                                                              .toString(),
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontWeight: FontWeight.w500)),
-                                                                    ]),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              });
-                                        }),
-                                    decoration: BoxDecoration(
-                                        color: Colors.red[100],
-                                        border: Border.all(
-                                          color: Colors.red[200],
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))),
-                                    height: 100,
-                                    width:
-                                        MediaQuery.of(context).size.width * .45,
+                                      onPressed: () {
+                                        showAlertDialog(context);
+                                      }),
+                                ],
+                                onPressed: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.more_vert,
+                                    color: Colors.white,
                                   ),
-                                  Container(
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        physics:
-                                            AlwaysScrollableScrollPhysics(),
-                                        itemCount: yesVoteCount,
-                                        itemBuilder: (_, index) {
-                                          voters = course['voters'];
-                                          voters.removeWhere(
-                                              (key, value) => value != 2);
+                                ),
+                              ),
+                            ]),
+                        body: SingleChildScrollView(
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Stack(children: [
+                              
+                               Container(
+                                 height: 200,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Image.network(groupPic, fit: BoxFit.cover)),
+                          Container(
+                              child: Column(children: [
+                            Container(
+                              height: 200,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  itemCount: members.length,
+                                  itemBuilder: (_, index) {
+                                    DocumentSnapshot course = snapshot2.data;
 
-                                          var w = voters.keys.toList();
-                                          print(w);
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left:8.0, right: 8),
+                                      child: Container(
+                                        height: 200,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 30.0, bottom: 10),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (course['id'] == strUserId) {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ProfilePage()));
+                                                  } else {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                OtherProfile(
+                                                                  course['id'],
+                                                                )));
+                                                  }
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 54,
+                                                  backgroundColor:
+                                                      TextThemes.ndGold,
+                                                  child: CircleAvatar(
+                                                    // backgroundImage: snapshot.data
+                                                    //     .documents[index].data['photoUrl'],
+                                                    backgroundImage: NetworkImage(
+                                                        snapshot.data.docs[index]
+                                                            ['photoUrl']),
+                                                    radius: 50,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                  alignment: Alignment(0.0, 0.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: <Color>[
+                                          Colors.black.withAlpha(0),
+                                          Colors.black,
+                                          Colors.black12,
+                                        ],
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        snapshot.data.docs[index]
+                                                            ['displayName'],
+                                        style: TextStyle(
+                                            fontFamily: 'Solway',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 16.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            )
+                          ])),
+                        ]),
+                                SingleChildScrollView(
+                                  child: Column(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 20.0),
+                                      child: Text(
+                                        "NEXT MOOV",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10.0, bottom: 5),
+                                      child: Container(
+                                        child:
+                                            (nextMOOV != "" && nextMOOV != null)
+                                                ? NextMOOV(nextMOOV)
+                                                : buildNoContent(),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 20.0, right: 20),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text("Suggested by "),
+                                            Text(
+                                                snapshot
+                                                    .data.docs[0]['displayName']
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    color: Colors.blue[600],
+                                                    fontWeight:
+                                                        FontWeight.w500))
+                                          ]),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: RichText(
+                                        textScaleFactor: 1.2,
+                                        text: TextSpan(
+                                            style: TextThemes.mediumbody,
+                                            children: [
+                                              TextSpan(
+                                                  text: "Vote on ",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400)),
+                                              TextSpan(
+                                                  text: "Alvin's ",
+                                                  style: TextStyle(
+                                                      color: Colors.blue[600],
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                              TextSpan(
+                                                  text: "suggestion",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400)),
+                                            ]),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 20.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: RaisedButton(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  side: BorderSide(
+                                                      color: Colors.black)),
+                                              onPressed: () {
+                                                if (voters != null &&
+                                                    status != 1) {
+                                                  Database().addNoVote(
+                                                      currentUser.id, gid);
+                                                  status = 1;
+                                                  print(status);
+                                                } else if (voters != null &&
+                                                    status == 1) {
+                                                  Database().removeNoVote(
+                                                      currentUser.id, gid);
+                                                  status = 0;
+                                                }
+                                              },
+                                              color: (status == 1)
+                                                  ? Colors.red
+                                                  : Colors.white,
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 3.0, right: 3),
+                                                child: (status == 1)
+                                                    ? Column(
+                                                        children: [
+                                                          Text('No',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                          Icon(Icons.thumb_down,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 30),
+                                                        ],
+                                                      )
+                                                    : Column(
+                                                        children: [
+                                                          Text('No'),
+                                                          Icon(Icons.thumb_down,
+                                                              color: Colors.red,
+                                                              size: 30),
+                                                        ],
+                                                      ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: RaisedButton(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  side: BorderSide(
+                                                      color: Colors.black)),
+                                              onPressed: () {
+                                                if (voters != null &&
+                                                    status != 2) {
+                                                  Database().addYesVote(
+                                                      currentUser.id, gid);
+                                                  status = 2;
+                                                  print(status);
+                                                } else if (voters != null &&
+                                                    status == 2) {
+                                                  Database().removeYesVote(
+                                                      currentUser.id, gid);
+                                                  status = 0;
+                                                }
+                                              },
+                                              color: (status == 2)
+                                                  ? Colors.green
+                                                  : Colors.white,
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 3.0, right: 3),
+                                                child: (status == 2)
+                                                    ? Column(
+                                                        children: [
+                                                          Text('Yes',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                          Icon(Icons.thumb_up,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 30),
+                                                        ],
+                                                      )
+                                                    : Column(
+                                                        children: [
+                                                          Text('Yes',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black)),
+                                                          Icon(Icons.thumb_up,
+                                                              color:
+                                                                  Colors.green,
+                                                              size: 30),
+                                                        ],
+                                                      ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              physics:
+                                                  AlwaysScrollableScrollPhysics(),
+                                              itemCount: noVoteCount,
+                                              itemBuilder: (_, index) {
+                                                voters.removeWhere(
+                                                    (key, value) => value != 1);
 
-                                          return StreamBuilder(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('users')
-                                                  .doc(w[index])
-                                                  .snapshots(),
-                                              builder: (context, snapshot3) {
-                                                if (!snapshot3.hasData ||
-                                                    snapshot3.data == null)
-                                                  return Container();
+                                                var w = voters.keys.toList();
+                                                print(w);
 
-                                                return Container(
-                                                  height: 100,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Padding(
+                                                return StreamBuilder(
+                                                    stream: FirebaseFirestore
+                                                        .instance
+                                                        .collection('users')
+                                                        .doc(w[index])
+                                                        .snapshots(),
+                                                    builder:
+                                                        (context, snapshot3) {
+                                                      if (!snapshot3.hasData ||
+                                                          snapshot3.data ==
+                                                              null)
+                                                        return Container();
+
+                                                      return Container(
+                                                        height: 100,
+                                                        child: Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                       .only(
+                                                                  left: 8.0),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
                                                                   top: 17.0,
-                                                                  bottom: 5),
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              if (snapshot3
-                                                                          .data[
-                                                                      'id'] ==
-                                                                  strUserId) {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .push(MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                ProfilePage()));
-                                                              } else {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .push(MaterialPageRoute(
-                                                                        builder: (context) => OtherProfile(
-                                                                              snapshot3.data['id'],
-                                                                            )));
-                                                              }
-                                                            },
-                                                            child: CircleAvatar(
-                                                              radius: 24,
-                                                              backgroundColor:
-                                                                  TextThemes
-                                                                      .ndBlue,
-                                                              child:
-                                                                  CircleAvatar(
-                                                                backgroundImage:
-                                                                    NetworkImage(
-                                                                        snapshot3
-                                                                            .data['photoUrl']),
-                                                                radius: 22,
-                                                                backgroundColor:
-                                                                    TextThemes
-                                                                        .ndBlue,
+                                                                  bottom: 5,
+                                                                ),
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    if (snapshot3
+                                                                            .data['id'] ==
+                                                                        strUserId) {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .push(
+                                                                              MaterialPageRoute(builder: (context) => ProfilePage()));
+                                                                    } else {
+                                                                      Navigator.of(context).push(MaterialPageRoute(
+                                                                          builder: (context) => OtherProfile(
+                                                                                snapshot3.data['id'],
+                                                                              )));
+                                                                    }
+                                                                  },
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    radius: 24,
+                                                                    backgroundColor:
+                                                                        TextThemes
+                                                                            .ndBlue,
+                                                                    child:
+                                                                        CircleAvatar(
+                                                                      backgroundImage:
+                                                                          NetworkImage(
+                                                                              snapshot3.data['photoUrl']),
+                                                                      radius:
+                                                                          22,
+                                                                      backgroundColor:
+                                                                          TextThemes
+                                                                              .ndBlue,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        0.0),
+                                                                child: Center(
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            5.0),
+                                                                    child:
+                                                                        RichText(
+                                                                      textScaleFactor:
+                                                                          .75,
+                                                                      text: TextSpan(
+                                                                          style:
+                                                                              TextThemes.mediumbody,
+                                                                          children: [
+                                                                            TextSpan(
+                                                                                text: snapshot3.data['displayName'].toString(),
+                                                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
+                                                                          ]),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                        Padding(
+                                                      );
+                                                    });
+                                              }),
+                                          decoration: BoxDecoration(
+                                              color: Colors.red[100],
+                                              border: Border.all(
+                                                color: Colors.red[200],
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                          height: 100,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .45,
+                                        ),
+                                        Container(
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              physics:
+                                                  AlwaysScrollableScrollPhysics(),
+                                              itemCount: yesVoteCount,
+                                              itemBuilder: (_, index) {
+                                                voters = course['voters'];
+                                                voters.removeWhere(
+                                                    (key, value) => value != 2);
+
+                                                var w = voters.keys.toList();
+                                                print(w);
+
+                                                return StreamBuilder(
+                                                    stream: FirebaseFirestore
+                                                        .instance
+                                                        .collection('users')
+                                                        .doc(w[index])
+                                                        .snapshots(),
+                                                    builder:
+                                                        (context, snapshot3) {
+                                                      if (!snapshot3.hasData ||
+                                                          snapshot3.data ==
+                                                              null)
+                                                        return Container();
+
+                                                      return Container(
+                                                        height: 100,
+                                                        child: Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(0.0),
-                                                          child: Center(
-                                                            child: Padding(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      5.0),
-                                                              child: RichText(
-                                                                textScaleFactor:
-                                                                    .75,
-                                                                text: TextSpan(
-                                                                    style: TextThemes
-                                                                        .mediumbody,
-                                                                    children: [
-                                                                      TextSpan(
-                                                                          text: snapshot3.data['displayName']
-                                                                              .toString(),
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontWeight: FontWeight.w500)),
-                                                                    ]),
+                                                                      .only(
+                                                                  left: 8.0),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            17.0,
+                                                                        bottom:
+                                                                            5),
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    if (snapshot3
+                                                                            .data['id'] ==
+                                                                        strUserId) {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .push(
+                                                                              MaterialPageRoute(builder: (context) => ProfilePage()));
+                                                                    } else {
+                                                                      Navigator.of(context).push(MaterialPageRoute(
+                                                                          builder: (context) => OtherProfile(
+                                                                                snapshot3.data['id'],
+                                                                              )));
+                                                                    }
+                                                                  },
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    radius: 24,
+                                                                    backgroundColor:
+                                                                        TextThemes
+                                                                            .ndBlue,
+                                                                    child:
+                                                                        CircleAvatar(
+                                                                      backgroundImage:
+                                                                          NetworkImage(
+                                                                              snapshot3.data['photoUrl']),
+                                                                      radius:
+                                                                          22,
+                                                                      backgroundColor:
+                                                                          TextThemes
+                                                                              .ndBlue,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        0.0),
+                                                                child: Center(
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            5.0),
+                                                                    child:
+                                                                        RichText(
+                                                                      textScaleFactor:
+                                                                          .75,
+                                                                      text: TextSpan(
+                                                                          style:
+                                                                              TextThemes.mediumbody,
+                                                                          children: [
+                                                                            TextSpan(
+                                                                                text: snapshot3.data['displayName'].toString(),
+                                                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
+                                                                          ]),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              });
-                                        }),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green[100],
-                                        border: Border.all(
-                                          color: Colors.green[200],
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))),
-                                    height: 100,
-                                    width:
-                                        MediaQuery.of(context).size.width * .45,
-                                  )
-                                ],
-                              ),
-                              members.contains(currentUser.id)
-                                  ? Padding(
+                                                      );
+                                                    });
+                                              }),
+                                          decoration: BoxDecoration(
+                                              color: Colors.green[100],
+                                              border: Border.all(
+                                                color: Colors.green[200],
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                          height: 100,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .45,
+                                        )
+                                      ],
+                                    ),
+                                    Padding(
                                       padding: const EdgeInsets.all(30),
                                       child: RaisedButton(
                                         onPressed: () {
@@ -865,54 +896,286 @@ class _GroupDetailState extends State<GroupDetail> {
                                                 BorderRadius.circular(8.0)),
                                       ),
                                     )
-                                  : Container(),
+
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(top: 35.0),
+                                    //   child: Text(
+                                    //     "CHAT",
+                                    //     style: TextStyle(fontSize: 20),
+                                    //   ),
+                                    // ),
+                                    // Padding(
+                                    //     padding: const EdgeInsets.all(8.0),
+                                    //     child: Container(
+                                    //       child: TextFormField(
+                                    //         controller: chatController,
+                                    //         decoration: InputDecoration(
+                                    //           fillColor: Colors.white,
+                                    //           hintStyle: TextStyle(fontSize: 15),
+                                    //           contentPadding: EdgeInsets.only(
+                                    //               top: 18, bottom: 10),
+                                    //           hintText:
+                                    //               "What's the MOOV tonight guys...",
+                                    //           filled: true,
+                                    //           prefixIcon: Icon(
+                                    //             Icons.message,
+                                    //             size: 28.0,
+                                    //           ),
+                                    //           suffixIcon: IconButton(
+                                    //             icon: Icon(Icons.send),
+                                    //             onPressed: sendChat,
+                                    //           ),
+                                    //         ),
+                                    //         // onFieldSubmitted: sendChat(currentUser.displayName,
+                                    //         //     chatController.text, gid),
+                                    //       ),
+                                    //       height: 150,
+                                    //       decoration: BoxDecoration(
+                                    //           border: Border.all(
+                                    //             color: TextThemes.ndBlue,
+                                    //           ),
+                                    //           borderRadius: BorderRadius.all(
+                                    //               Radius.circular(5))),
+                                    //     ))
+                                  ]),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Scaffold(
+                        backgroundColor: Colors.white,
+                        appBar: AppBar(
+                            leading: IconButton(
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()),
+                                );
+                              },
+                            ),
+                            backgroundColor: TextThemes.ndBlue,
+                            flexibleSpace: FlexibleSpaceBar(
+                              titlePadding: EdgeInsets.all(15),
+                              title: ConstrainedBox(
+                                constraints: BoxConstraints(maxWidth: 210),
+                                child: Text(
+                                  groupName,
+                                  style: TextStyle(
+                                      fontSize: isLargePhone ? 30.0 : 22,
+                                      color: Colors.white),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                            actions: <Widget>[
                               // Padding(
-                              //   padding: const EdgeInsets.only(top: 35.0),
-                              //   child: Text(
-                              //     "CHAT",
-                              //     style: TextStyle(fontSize: 20),
-                              //   ),
+                              //   padding: const EdgeInsets.all(4.0),
+                              //   child: FlatButton(
+                              //       onPressed: () {
+                              //         Database()
+                              //             .leaveGroup(currentUser.id, displayName, gid);
+
+                              //         Navigator.pop(
+                              //           context,
+                              //           MaterialPageRoute(builder: (context) => HomePage()),
+                              //         );
+                              //       },
+                              //       child: Text(
+                              //         "LEAVE",
+                              //         style: TextStyle(color: Colors.red),
+                              //       )),
                               // ),
-                              // Padding(
-                              //     padding: const EdgeInsets.all(8.0),
-                              //     child: Container(
-                              //       child: TextFormField(
-                              //         controller: chatController,
-                              //         decoration: InputDecoration(
-                              //           fillColor: Colors.white,
-                              //           hintStyle: TextStyle(fontSize: 15),
-                              //           contentPadding: EdgeInsets.only(
-                              //               top: 18, bottom: 10),
-                              //           hintText:
-                              //               "What's the MOOV tonight guys...",
-                              //           filled: true,
-                              //           prefixIcon: Icon(
-                              //             Icons.message,
-                              //             size: 28.0,
-                              //           ),
-                              //           suffixIcon: IconButton(
-                              //             icon: Icon(Icons.send),
-                              //             onPressed: sendChat,
-                              //           ),
-                              //         ),
-                              //         // onFieldSubmitted: sendChat(currentUser.displayName,
-                              //         //     chatController.text, gid),
-                              //       ),
-                              //       height: 150,
-                              //       decoration: BoxDecoration(
-                              //           border: Border.all(
-                              //             color: TextThemes.ndBlue,
-                              //           ),
-                              //           borderRadius: BorderRadius.all(
-                              //               Radius.circular(5))),
-                              //     ))
+                              IconButton(
+                                padding: EdgeInsets.all(5.0),
+                                icon: Icon(Icons.person_add),
+                                color: Colors.white,
+                                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.bottomToTop,
+                                          child: AddUsers(groupName, gid,
+                                              groupPic, members, nextMOOV)));
+                                },
+                              ),
+                              FocusedMenuHolder(
+                                menuWidth:
+                                    MediaQuery.of(context).size.width * 0.50,
+                                blurSize: 5.0,
+                                menuItemExtent: 45,
+                                menuBoxDecoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(15.0))),
+                                duration: Duration(milliseconds: 100),
+                                animateMenuItems: true,
+                                blurBackgroundColor: Colors.black54,
+                                openWithTap:
+                                    true, // Open Focused-Menu on Tap rather than Long Press
+                                menuOffset:
+                                    10.0, // Offset value to show menuItem from the selected item
+                                bottomOffsetHeight:
+                                    80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                                menuItems: <FocusedMenuItem>[
+                                  // Add Each FocusedMenuItem  for Menu Options
+
+                                  FocusedMenuItem(
+                                      title: Text("Share"),
+                                      trailingIcon: Icon(Icons.send),
+                                      onPressed: () {
+                                        Share.share(
+                                            "Hey let's put our squad on MOOV");
+                                      }),
+                                  FocusedMenuItem(
+                                      title: Text("Edit Group"),
+                                      trailingIcon: Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => EditGroup(
+                                                    groupPic,
+                                                    groupName,
+                                                    members,
+                                                    gid)));
+                                      }),
+                                  FocusedMenuItem(
+                                      title: Text(
+                                        "Leave Group",
+                                        style:
+                                            TextStyle(color: Colors.redAccent),
+                                      ),
+                                      trailingIcon: Icon(
+                                        Icons.directions_walk,
+                                        color: Colors.redAccent,
+                                      ),
+                                      onPressed: () {
+                                        showAlertDialog(context);
+                                      }),
+                                ],
+                                onPressed: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.more_vert,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ]),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                        body: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Stack(children: [
+                                  
+                                   Container(
+                                     height: 200,
+                                          width: MediaQuery.of(context).size.width,
+                                          child: Image.network(groupPic, fit: BoxFit.cover)),
+                          Container(
+                                  child: Column(children: [
+                                Container(
+                                  height: 200,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      itemCount: members.length,
+                                      itemBuilder: (_, index) {
+                                        DocumentSnapshot course = snapshot2.data;
+
+                                        return Padding(
+                                          padding: const EdgeInsets.only(left:8.0, right: 8),
+                                          child: Container(
+                                            height: 200,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      top: 30.0, bottom: 10),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      if (course['id'] == strUserId) {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ProfilePage()));
+                                                      } else {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    OtherProfile(
+                                                                      course['id'],
+                                                                    )));
+                                                      }
+                                                    },
+                                                    child: CircleAvatar(
+                                                      radius: 54,
+                                                      backgroundColor:
+                                                          TextThemes.ndGold,
+                                                      child: CircleAvatar(
+                                                        // backgroundImage: snapshot.data
+                                                        //     .documents[index].data['photoUrl'],
+                                                        backgroundImage: NetworkImage(
+                                                            snapshot.data.docs[index]
+                                                                ['photoUrl']),
+                                                        radius: 50,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                      alignment: Alignment(0.0, 0.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.all(Radius.circular(20)),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: <Color>[
+                                              Colors.black.withAlpha(0),
+                                              Colors.black,
+                                              Colors.black12,
+                                            ],
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            snapshot.data.docs[index]
+                                                                ['displayName'],
+                                            style: TextStyle(
+                                                fontFamily: 'Solway',
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: 16.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                )
+                          ])),
+                        ]),
+
+                              ],
+                            )));
               });
         });
   }
@@ -1003,3 +1266,5 @@ class _GroupDetailState extends State<GroupDetail> {
     );
   }
 }
+
+

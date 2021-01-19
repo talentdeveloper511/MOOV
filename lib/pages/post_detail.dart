@@ -468,7 +468,7 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
               height: 40,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.grey,
+                  color: TextThemes.ndBlue,
                   width: 4,
                 ),
                 borderRadius: BorderRadius.circular(8),
@@ -513,7 +513,6 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
             child: TabBarView(controller: _tabController,
                 // Restrict scroll by user
                 children: [
-                  // Sign In View
                   Center(
                     child: ListView.builder(
                         itemCount: 1,
@@ -521,7 +520,6 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
                           return GoingPage(moovId);
                         }),
                   ),
-                  // Sign Up View
                   Center(
                     child: ListView.builder(
                         itemCount: 1,
@@ -819,3 +817,4 @@ class Buttons extends StatelessWidget {
 //                     ),
 //                   ),
 //                 ),
+
