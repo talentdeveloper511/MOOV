@@ -1,6 +1,6 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
-import 'package:MOOV/pages/ProfilePageWithHeader.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
@@ -110,6 +110,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                           // Provide a function that tells the app
                           // what to do after an item has been swiped away.
                           onDismissed: (direction) {
+                            
                             notificationFeedRef
                                 .doc(currentUser.id)
                                 .collection('feedItems')

@@ -45,7 +45,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             break;
           case "friendGroup":
             title = "Added to Friend Group";
-            body = `${activityFeedItem.username} added you to their friend group, ${activityFeedItem.groupName}`;
+            body = `${activityFeedItem.username} added you to their Friend Group, ${activityFeedItem.groupName}`;
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
