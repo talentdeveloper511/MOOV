@@ -102,6 +102,7 @@ class _GroupFormState extends State<GroupForm> {
       "voters": {}
       // "gid": id
     });
+  
 
     // .then((value) {
     //   String data = value.documentID;

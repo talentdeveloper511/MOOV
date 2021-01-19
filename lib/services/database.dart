@@ -634,7 +634,8 @@ class Database {
           .set({
         "voters": {userId: 2},
         "nextMOOV": postId,
-        "suggestorId": userName,
+        "suggestorName": userName,
+        "suggestorId": userId
       }, SetOptions(merge: true));
 
       transaction.update(ref2, {'score': FieldValue.increment(1)});
@@ -656,52 +657,52 @@ class Database {
     });
   }
 
-  Future<void> addNoVote(userId, gid) async {
+  Future<void> addNoVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
       FirebaseFirestore.instance
           .collection('friendGroups')
           .doc(gid)
           .collection('suggestedMOOVs')
-          .doc(userId)
+          .doc(suggestorId)
           .set({
         "voters": {userId: 1}
       }, SetOptions(merge: true));
     });
   }
 
-  Future<void> removeNoVote(userId, gid) async {
+  Future<void> removeNoVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
       FirebaseFirestore.instance
           .collection('friendGroups')
           .doc(gid)
           .collection('suggestedMOOVs')
-          .doc(userId)
+          .doc(suggestorId)
           .set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });
   }
 
-  Future<void> addYesVote(userId, gid) async {
+  Future<void> addYesVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
       FirebaseFirestore.instance
           .collection('friendGroups')
           .doc(gid)
           .collection('suggestedMOOVs')
-          .doc(userId)
+          .doc(suggestorId)
           .set({
         "voters": {userId: 2}
       }, SetOptions(merge: true));
     });
   }
 
-  Future<void> removeYesVote(userId, gid) async {
+  Future<void> removeYesVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
       FirebaseFirestore.instance
           .collection('friendGroups')
           .doc(gid)
           .collection('suggestedMOOVs')
-          .doc(userId)
+          .doc(suggestorId)
           .set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));

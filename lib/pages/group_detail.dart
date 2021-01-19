@@ -6,8 +6,10 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/NextMOOV.dart';
 import 'package:MOOV/widgets/set_moov.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -425,18 +427,6 @@ class _GroupDetailState extends State<GroupDetail> {
                                       ),
                                     ),
                                     Example(gid),
-
-                                    // Padding(
-                                    //   padding: const EdgeInsets.only(
-                                    //       top: 10.0, bottom: 5),
-                                    //   child: Container(
-                                    //     child:
-                                    //         (nextMOOV != "" && nextMOOV != null)
-                                    //             ? NextMOOV(nextMOOV)
-                                    //             : buildNoContent(),
-                                    //   ),
-                                    // ),
-
                                     Padding(
                                       padding: const EdgeInsets.all(30),
                                       child: RaisedButton(
@@ -881,7 +871,7 @@ class _ExampleState extends State<Example> {
   PageController _controller;
   String groupId;
   Map<String, dynamic> voters = {};
-  int pageNumber;
+  int pageNumber = 0;
 
   _ExampleState(this.groupId);
 
@@ -934,6 +924,8 @@ class _ExampleState extends State<Example> {
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     int status = 0;
     final circleShape = Shape(
       size: 16,
@@ -948,11 +940,73 @@ class _ExampleState extends State<Example> {
             .snapshots(),
         builder: (context, snapshot4) {
           if (!snapshot4.hasData || snapshot4.data == null) return Container();
+          if (snapshot4.data.docs.length == 0) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 18.0),
+              child: Container(
+                            height: isLargePhone
+                                ? SizeConfig.blockSizeVertical * 15
+                                : SizeConfig.blockSizeVertical * 18,
+                            child: Stack(children: <Widget>[
+                              FractionallySizedBox(
+                                widthFactor: 1,
+                                child: Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset(
+                                      'lib/assets/motd.jpg',
+                                     fit: BoxFit.cover
+                                    ),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                      left: 20, top: 0, right: 20, bottom: 7.5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  alignment: Alignment(0.0, 0.0),
+                                  child: Container(
+                                    
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        "YOUR MOOV",
+                                        style: TextStyle(
+                                            fontFamily: 'Solway',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ),
+            );
+          }
           int count = snapshot4.data.docs.length;
           for (int i = 0; i < count; i++) {
             DocumentSnapshot course4 = snapshot4.data.docs[pageNumber];
             voters = course4['voters'];
             String suggestorName = course4['suggestorName'];
+            String suggestorId = course4['suggestorId'];
 
             List<dynamic> votersIds = voters.keys.toList();
             List<dynamic> votersValues = voters.values.toList();
@@ -1040,11 +1094,12 @@ class _ExampleState extends State<Example> {
                               side: BorderSide(color: Colors.black)),
                           onPressed: () {
                             if (voters != null && status != 1) {
-                              Database().addNoVote(currentUser.id, groupId);
+                              Database().addNoVote(
+                                  currentUser.id, groupId, suggestorId);
                               status = 1;
-                              print(status);
                             } else if (voters != null && status == 1) {
-                              Database().removeNoVote(currentUser.id, groupId);
+                              Database().removeNoVote(
+                                  currentUser.id, groupId, suggestorId);
                               status = 0;
                             }
                           },
@@ -1080,11 +1135,12 @@ class _ExampleState extends State<Example> {
                               side: BorderSide(color: Colors.black)),
                           onPressed: () {
                             if (voters != null && status != 2) {
-                              Database().addYesVote(currentUser.id, groupId);
+                              Database().addYesVote(
+                                  currentUser.id, groupId, suggestorId);
                               status = 2;
-                              print(status);
                             } else if (voters != null && status == 2) {
-                              Database().removeYesVote(currentUser.id, groupId);
+                              Database().removeYesVote(
+                                  currentUser.id, groupId, suggestorId);
                               status = 0;
                             }
                           },
@@ -1129,7 +1185,6 @@ class _ExampleState extends State<Example> {
                             voters.removeWhere((key, value) => value != 1);
 
                             var w = voters.keys.toList();
-                            print(w);
 
                             return StreamBuilder(
                                 stream: FirebaseFirestore.instance
@@ -1239,11 +1294,10 @@ class _ExampleState extends State<Example> {
                           physics: AlwaysScrollableScrollPhysics(),
                           itemCount: yesVoteCount,
                           itemBuilder: (_, index) {
-                            voters = snapshot4.data.docs[index]['voters'];
+                            voters = course4['voters'];
                             voters.removeWhere((key, value) => value != 2);
 
                             var w = voters.keys.toList();
-                            print(w);
 
                             return StreamBuilder(
                                 stream: FirebaseFirestore.instance
