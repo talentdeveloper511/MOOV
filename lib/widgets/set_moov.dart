@@ -20,21 +20,21 @@ import '../pages/ProfilePage.dart';
 import '../pages/other_profile.dart';
 
 class SetMOOV extends StatefulWidget {
-  String moov, gid;
+  String moov, gid, groupName;
   List members;
 
-  SetMOOV(this.moov, this.gid, this.members);
+  SetMOOV(this.moov, this.gid, this.members, groupName);
 
   @override
   _SetMOOVState createState() =>
-      _SetMOOVState(this.moov, this.gid, this.members);
+      _SetMOOVState(this.moov, this.gid, this.members, this.groupName);
 }
 
 class _SetMOOVState extends State<SetMOOV> {
-  String moov, gid;
+  String moov, gid, groupName;
   List members;
 
-  _SetMOOVState(this.moov, this.gid, this.members);
+  _SetMOOVState(this.moov, this.gid, this.members, this.groupName);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   Future<QuerySnapshot> searchResultsEvents;
@@ -122,7 +122,7 @@ class _SetMOOVState extends State<SetMOOV> {
         // List<EventResult> searchResults = [];
         snapshot.data.docs.forEach((doc) {
           var moov = doc;
-          EventResult searchResult = EventResult(moov, gid, members);
+          EventResult searchResult = EventResult(moov, gid, members, groupName);
           results.add(searchResult);
         });
         return ListView(
@@ -144,9 +144,9 @@ class _SetMOOVState extends State<SetMOOV> {
 }
 
 class EventResult extends StatelessWidget {
-  final moov, gid, members;
+  final moov, gid, members, groupName;
 
-  EventResult(this.moov, this.gid, this.members);
+  EventResult(this.moov, this.gid, this.members, this.groupName);
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +171,7 @@ class EventResult extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
                   Database().suggestMOOV(currentUser.id, gid, moov['postId'],
-                      currentUser.displayName, members, moov['title'], moov['image']);
+                      currentUser.displayName, members, moov['title'], moov['image'], groupName);
                   Navigator.pop(context, moov['postId']);
                 },
                 child: Text(
