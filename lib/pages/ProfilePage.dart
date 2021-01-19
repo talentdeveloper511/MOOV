@@ -73,8 +73,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Container(
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: userHeader == null
-                                ? null
+                            child: userHeader == ""
+                                ? Image.asset('lib/assets/header.jpg', fit: BoxFit.cover)
                                 : Image.network(
                                     userHeader,
                                     fit: BoxFit.fitWidth,

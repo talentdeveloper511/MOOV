@@ -75,8 +75,8 @@ class _SearchNoTrendingState extends State<SearchNoTrending> with AutomaticKeepA
   AppBar buildSearchField() {
     return
     AppBar(
-        leadingWidth: 100,
-        leading:IconButton(
+        leadingWidth: 60,
+        leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
               color: Colors.white,

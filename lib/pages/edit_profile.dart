@@ -273,8 +273,8 @@ class _EditProfileState extends State<EditProfile> {
                   child: Container(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: currentUser.header == null
-                          ? AssetImage('images/user-avatar.png')
+                      child: currentUser.header == ""
+                          ? AssetImage('lib/assets/header.jpg')
                           : Image.network(
                               currentUser.header,
                               fit: BoxFit.fitWidth,

@@ -128,6 +128,7 @@ flutter:
     - lib/assets/otherbutton1.png
     - lib/assets/dummyqr.png
     - lib/assets/ndlogo.png
+    - lib/assets/header.jpg
     - lib/assets/kilwins.jpg
     - lib/assets/chens.jpg
     - lib/assets/woman.jpg

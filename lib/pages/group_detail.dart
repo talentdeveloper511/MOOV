@@ -236,7 +236,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                 menuOffset:
                                     10.0, // Offset value to show menuItem from the selected item
                                 bottomOffsetHeight:
-                                    80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                                    80.0, // Offset height to consider, for showing the menu item ( for Suggestions bottom navigation bar), so that the popup menu will be shown on top of selected item.
                                 menuItems: <FocusedMenuItem>[
                                   // Add Each FocusedMenuItem  for Menu Options
 
@@ -427,7 +427,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
-                                    Example(gid),
+                                    Suggestions(gid),
                                     Padding(
                                       padding: const EdgeInsets.all(30),
                                       child: RaisedButton(
@@ -856,25 +856,25 @@ class _GroupDetailState extends State<GroupDetail> {
   }
 }
 
-class Example extends StatefulWidget {
+class Suggestions extends StatefulWidget {
   String groupId;
   Map<String, dynamic> voters = {};
 
-  Example(this.groupId);
+  Suggestions(this.groupId);
 
   @override
   State<StatefulWidget> createState() {
-    return _ExampleState(this.groupId);
+    return _SuggestionsState(this.groupId);
   }
 }
 
-class _ExampleState extends State<Example> {
+class _SuggestionsState extends State<Suggestions> {
   PageController _controller;
   String groupId;
   Map<String, dynamic> voters = {};
   int pageNumber = 0;
 
-  _ExampleState(this.groupId);
+  _SuggestionsState(this.groupId);
 
   @override
   void initState() {
@@ -909,7 +909,7 @@ class _ExampleState extends State<Example> {
     );
   }
 
-  Widget buildExampleIndicatorWithShapeAndBottomPos(
+  Widget buildSuggestionsIndicatorWithShapeAndBottomPos(
       Shape shape, double bottomPos, count) {
     return Positioned(
       bottom: bottomPos,
@@ -1047,7 +1047,7 @@ class _ExampleState extends State<Example> {
                   child: Stack(
                     children: <Widget>[
                       buildPageView(snapshot4, count),
-                      buildExampleIndicatorWithShapeAndBottomPos(
+                      buildSuggestionsIndicatorWithShapeAndBottomPos(
                           circleShape, 20, count),
                     ],
                   ),
