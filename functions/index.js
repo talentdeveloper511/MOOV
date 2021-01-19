@@ -31,22 +31,32 @@ exports.onCreateActivityFeedItem = functions.firestore
        */
       function sendNotification(androidNotificationToken, activityFeedItem) {
         let body;
+        let title;
 
         // 3) switch body value based off of notification type
         switch (activityFeedItem.type) {
           case "invite":
+            title = "You're Invited";
             body = `${activityFeedItem.username} invited you to ${activityFeedItem.title}`;
             break;
           case "going":
+            title = `${activityFeedItem.title}`;
             body = `${activityFeedItem.username} is going to ${activityFeedItem.title}`;
             break;
           case "friendGroup":
-            body = `${activityFeedItem.username} added you to their Friend Group, ${activityFeedItem.groupName}`;
+            title = "Added to Friend Group";
+            body = `${activityFeedItem.username} added you to their friend group, ${activityFeedItem.groupName}`;
+            break;
+          case "suggestion":
+            title = `${activityFeedItem.groupName}`;
+            body = `${activityFeedItem.username} suggested ${activityFeedItem.title} to the group`;
             break;
           case "request":
+            title = "You Have Friends?";
             body = `${activityFeedItem.username} sent you a friend request`;
             break;
           case "accept":
+            title = "New Friend!";
             body = `${activityFeedItem.username} accepted your friend request`;
             break;
           default:
@@ -55,7 +65,7 @@ exports.onCreateActivityFeedItem = functions.firestore
 
         // 4) Create message for push notification
         const message = {
-          notification: {body},
+          notification: {title, body},
           token: androidNotificationToken,
           data: {recipient: userId},
         };
