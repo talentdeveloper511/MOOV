@@ -645,7 +645,7 @@ class Database {
             .set({
           "type": "suggestion",
           "postId": postId,
-          "previewImg": previewImg,
+          "previewImg": pic,
           "title": title,
           "username": currentUser.displayName,
           "userId": currentUser.id,
