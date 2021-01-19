@@ -27,7 +27,7 @@ class Database {
         notificationFeedRef
             .doc(invitees[i])
             .collection('feedItems')
-            .doc(postId)
+            .doc(postId + 'eventinvite')
             .set({
           "type": "invite",
           "postId": postId,
@@ -275,7 +275,11 @@ class Database {
     String groupId,
     String groupPic,
   ) {
-    notificationFeedRef.doc(addee).collection("feedItems").doc(groupId).set({
+    notificationFeedRef
+        .doc(addee)
+        .collection("feedItems")
+        .doc('added to ' + groupId)
+        .set({
       "type": "friendGroup",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -289,7 +293,11 @@ class Database {
 
   friendRequestNotification(
       String ownerId, String senderProPic, String ownerName, String sender) {
-    notificationFeedRef.doc(ownerId).collection("feedItems").doc(sender).set({
+    notificationFeedRef
+        .doc(ownerId)
+        .collection("feedItems")
+        .doc('request ' + sender)
+        .set({
       "type": "request",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -308,7 +316,11 @@ class Database {
     String ownerProPic,
     String ownerName,
   ) {
-    notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
+    notificationFeedRef
+        .doc(ownerId)
+        .collection("feedItems")
+        .doc('invite ' + moovId)
+        .set({
       "type": "invite",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -325,7 +337,11 @@ class Database {
 
   friendAcceptNotification(
       String ownerId, String ownerProPic, String ownerName, String sender) {
-    notificationFeedRef.doc(ownerId).collection("feedItems").doc(sender).set({
+    notificationFeedRef
+        .doc(ownerId)
+        .collection("feedItems")
+        .doc('accept ' + sender)
+        .set({
       "type": "accept",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -343,7 +359,7 @@ class Database {
       notificationFeedRef
           .doc(ownerId)
           .collection("feedItems")
-          .doc(moovId)
+          .doc('going ' + moovId)
           .get()
           .then((doc) {
         if (doc.exists) {
@@ -406,83 +422,6 @@ class Database {
       });
     }
   }
-
-  addFriendToNotificationFeed(
-    String ownerId,
-    String previewImg,
-    dynamic moovId,
-    String title,
-    String ownerProPic,
-    String ownerName,
-  ) {
-    notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
-      "type": "friend",
-      "username": currentUser.displayName,
-      "userId": currentUser.id,
-      "userEmail": currentUser.email,
-      "userProfilePic": currentUser.photoUrl,
-      "previewImg": previewImg,
-      "postId": moovId,
-      "timestamp": timestamp,
-      "startDate": startDate,
-      "title": title,
-      "ownerProPic": ownerProPic,
-      "ownerName": ownerName,
-    });
-  }
-
-  removeFriendFromNotificationFeed(
-      String ownerId, String previewImg, String moovId) {
-    bool isNotPostOwner = strUserId != ownerId;
-    notificationFeedRef
-        .doc(ownerId)
-        .collection("feedItems")
-        .doc(moovId)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-  }
-
-  // Future<void> removeGoing(
-  //     String ownerId,
-  //     String previewImg,
-  //     String uid,
-  //     String moovId,
-  //     String strName,
-  //     strPic,
-  //     startDate,
-  //     title,
-  //     description,
-  //     address,
-  //     ownerProPic,
-  //     ownerName,
-  //     ownerEmail,
-  //     likedArray) async {
-  //   return dbRef.runTransaction((transaction) async {
-  //     removeGoingFromNotificationFeed(ownerId, moovId);
-
-  //     DocumentSnapshot snapshot;
-  //     //   while (snapshot == null) {
-  //     final DocumentReference userRef = dbRef.doc('food/$moovId');
-  //     final DocumentReference userRef2 = dbRef.doc('users/$uid');
-  //     Map<String, dynamic> serializedMessage = {
-  //       "uid": uid,
-  //     };
-  //     String serialUser = uid;
-
-  //     transaction.update(userRef, {
-  //       'liked': FieldValue.arrayRemove([serializedMessage]),
-  //       'liker': FieldValue.arrayRemove([serialUser]),
-  //       'likeCounter': FieldValue.increment(-1)
-  //     });
-  //     transaction.update(userRef2, {
-  //       'score': FieldValue.increment(-2),
-  //     });
-  //   });
-  // }
 
   Future<void> sendFriendRequest(String senderId, String receiverId,
       String senderName, String senderPic) async {
@@ -621,7 +560,8 @@ class Database {
     });
   }
 
-  Future<void> suggestMOOV(userId, gid, postId, userName, members, title, pic, groupName) async {
+  Future<void> suggestMOOV(
+      userId, gid, postId, userName, members, title, pic, groupName) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
@@ -638,7 +578,7 @@ class Database {
         "suggestorId": userId
       }, SetOptions(merge: true));
       for (var i = 0; i < members.length; i++) {
-         notificationFeedRef
+        notificationFeedRef
             .doc(members[i])
             .collection('feedItems')
             .doc(postId)
