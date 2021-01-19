@@ -42,7 +42,9 @@ class friendsListState extends State<friendsList> {
             .where("friendArray", arrayContains: currentUser.id)
             .snapshots(),
         builder: (context, snapshot) {
-          print(snapshot.data.documents.length);
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (snapshot.data == null) return Container();
+
           return Scaffold(
               appBar: AppBar(
                 leading: IconButton(
@@ -65,7 +67,7 @@ class friendsListState extends State<friendsList> {
                 ),
               ),
               body: ListView.builder(
-                  itemCount: snapshot.data.documents.length,
+                  itemCount: snapshot.data.docs.length,
                   itemBuilder: (_, index) => Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Container(
@@ -89,7 +91,7 @@ class friendsListState extends State<friendsList> {
                                                               context) {
                                                     return OtherProfile(snapshot
                                                         .data
-                                                        .documents[index]
+                                                        .docs[index]
                                                         .data['id']
                                                         .toString());
                                                   })); //Material
@@ -101,8 +103,7 @@ class friendsListState extends State<friendsList> {
                                                         backgroundImage:
                                                             NetworkImage(snapshot
                                                                     .data
-                                                                    .documents[
-                                                                        index]
+                                                                    .docs[index]
                                                                     .data[
                                                                 'photoUrl'])
 
@@ -121,15 +122,13 @@ class friendsListState extends State<friendsList> {
                                                               context) {
                                                     return OtherProfile(snapshot
                                                         .data
-                                                        .documents[index]
+                                                        .docs[index]
                                                         .data['id']
                                                         .toString());
                                                   })); //Material
                                                 },
                                                 child: Text(
-                                                    snapshot
-                                                        .data
-                                                        .documents[index]
+                                                    snapshot.data.docs[index]
                                                         .data['displayName']
                                                         .toString(),
                                                     style: TextStyle(
@@ -159,8 +158,7 @@ class friendsListState extends State<friendsList> {
                                                         builder: (context) =>
                                                             OtherProfile(snapshot
                                                                 .data
-                                                                .documents[
-                                                                    index]
+                                                                .docs[index]
                                                                 .data['id']
                                                                 .toString())));
                                               },

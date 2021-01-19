@@ -51,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
           if (!snapshot.hasData) return CircularProgressIndicator();
           userBio = snapshot.data['bio'];
+          int score = snapshot.data['score'];
           userDorm = snapshot.data['dorm'];
           userHeader = snapshot.data['header'];
           strUserPic = snapshot.data['photoUrl'];
@@ -74,7 +75,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: userHeader == ""
-                                ? Image.asset('lib/assets/header.jpg', fit: BoxFit.cover)
+                                ? Image.asset('lib/assets/header.jpg',
+                                    fit: BoxFit.cover)
                                 : Image.network(
                                     userHeader,
                                     fit: BoxFit.fitWidth,
@@ -175,33 +177,33 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MOOVSPage()));
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  '0',
-                                  style: TextThemes.extraBold,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4.0),
-                                  child: Text(
-                                    'Next MOOVs   ',
-                                    style: TextThemes.bodyText1,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => LeaderBoardPage()));
+                              },
+                              child: Column(
+                                children: [
+                                  Text(
+                                    score.toString(),
+                                    style: TextThemes.extraBold,
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Text(
+                                      '       Score       ',
+                                      style: TextThemes.bodyText1,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
+                            GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => friendsList(
@@ -220,39 +222,39 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
                                     child: Text(
-                                      'Friends',
+                                      '     Friends     ',
                                       style: TextThemes.bodyText1,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => FriendGroupsPage()));
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  userGroups.length == null ||
-                                          userGroups.length == 0
-                                      ? "0"
-                                      : userGroups.length.toString(),
-                                  style: TextThemes.extraBold,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4.0),
-                                  child: Text(
-                                    'Friend Groups',
-                                    style: TextThemes.bodyText1,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => FriendGroupsPage()));
+                              },
+                              child: Column(
+                                children: [
+                                  Text(
+                                    userGroups.length == null ||
+                                            userGroups.length == 0
+                                        ? "0"
+                                        : userGroups.length.toString(),
+                                    style: TextThemes.extraBold,
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Text(
+                                      'Friend Groups',
+                                      style: TextThemes.bodyText1,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       GestureDetector(
                         onTap: () {

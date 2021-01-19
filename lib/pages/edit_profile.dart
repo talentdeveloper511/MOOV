@@ -423,9 +423,7 @@ class _EditProfileState extends State<EditProfile> {
 
                           uploadTask = ref.putFile(_image);
 
-                          firebase_storage.UploadTask /*!*/ task;
-
-                          // task = await uploadTask;
+                          firebase_storage.TaskSnapshot taskSnapshot = await uploadTask;
                           if (uploadTask.snapshot.state ==
                               firebase_storage.TaskState.success) {
                             print("added to Firebase Storage");
@@ -451,11 +449,10 @@ class _EditProfileState extends State<EditProfile> {
                           firebase_storage.UploadTask uploadTask;
 
                           uploadTask = ref.putFile(_image2);
-                          firebase_storage.UploadTask /*!*/ task;
 
                           firebase_storage.TaskSnapshot taskSnapshot =
-                              await task;
-                          if (task.snapshot.state ==
+                              await uploadTask;
+                          if (uploadTask.snapshot.state ==
                               firebase_storage.TaskState.success) {
                             print("added to Firebase Storage");
                             final String headerUrl =
