@@ -21,17 +21,20 @@ import '../pages/other_profile.dart';
 
 class SetMOOV extends StatefulWidget {
   String moov, gid;
+  List members;
 
-  SetMOOV(this.moov, this.gid);
+  SetMOOV(this.moov, this.gid, this.members);
 
   @override
-  _SetMOOVState createState() => _SetMOOVState(this.moov, this.gid);
+  _SetMOOVState createState() =>
+      _SetMOOVState(this.moov, this.gid, this.members);
 }
 
 class _SetMOOVState extends State<SetMOOV> {
   String moov, gid;
+  List members;
 
-  _SetMOOVState(this.moov, this.gid);
+  _SetMOOVState(this.moov, this.gid, this.members);
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   Future<QuerySnapshot> searchResultsEvents;
@@ -119,7 +122,7 @@ class _SetMOOVState extends State<SetMOOV> {
         // List<EventResult> searchResults = [];
         snapshot.data.docs.forEach((doc) {
           var moov = doc;
-          EventResult searchResult = EventResult(moov, gid);
+          EventResult searchResult = EventResult(moov, gid, members);
           results.add(searchResult);
         });
         return ListView(
@@ -141,9 +144,9 @@ class _SetMOOVState extends State<SetMOOV> {
 }
 
 class EventResult extends StatelessWidget {
-  final moov, gid;
+  final moov, gid, members;
 
-  EventResult(this.moov, this.gid);
+  EventResult(this.moov, this.gid, this.members);
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +170,8 @@ class EventResult extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
-                  Database().suggestMOOV(currentUser.id, gid, moov['postId'], currentUser.displayName);
+                  Database().suggestMOOV(currentUser.id, gid, moov['postId'],
+                      currentUser.displayName, members);
                   Navigator.pop(context, moov['postId']);
                 },
                 child: Text(

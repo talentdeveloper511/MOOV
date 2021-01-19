@@ -41,7 +41,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             body = `${activityFeedItem.username} is going to ${activityFeedItem.title}`;
             break;
           case "friendGroup":
-            body = `${activityFeedItem.username} added you to their friend group, ${activityFeedItem.groupName}`;
+            body = `${activityFeedItem.username} added you to their Friend Group, ${activityFeedItem.groupName}`;
             break;
           case "request":
             body = `${activityFeedItem.username} sent you a friend request`;
