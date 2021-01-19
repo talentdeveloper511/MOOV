@@ -41,6 +41,34 @@ class _OtherProfileState extends State<OtherProfile> {
   bool isAmbassador = currentUser.isAmbassador;
   var iter = 1;
 
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Unfriend user?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nCut 'em out?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yes", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().unfriend(strUserId, id);
+              setState(() {
+                status = null;
+              });
+              Navigator.of(context).pop(true);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("No"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
+  }
+
   checkFunction() {
     // check to see if a request from other user already exists
     Database().checkStatus(id, strUserId).then((QuerySnapshot docs) => {
@@ -427,13 +455,17 @@ class _OtherProfileState extends State<OtherProfile> {
                                   onPressed: () {
                                     // unfriend code here
                                   },
-                                  child: Text(
-                                    "Friends",
-                                    style: new TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
-                                    ),
-                                  )),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        showAlertDialog(context);
+                                      },
+                                      child: Text(
+                                        "Friends",
+                                        style: new TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                        ),
+                                      ))),
                     ),
                   ],
                 ),
