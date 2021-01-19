@@ -113,6 +113,7 @@ class _GroupDetailState extends State<GroupDetail> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           if (snapshot.data == null) return Container();
+          
 
           return StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -324,7 +325,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                               bottom: 10),
                                                       child: GestureDetector(
                                                         onTap: () {
-                                                          if (course['id'] ==
+                                                          if (snapshot.data.docs[index]['id'] ==
                                                               strUserId) {
                                                             Navigator.of(
                                                                     context)
@@ -338,7 +339,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                                     builder:
                                                                         (context) =>
                                                                             OtherProfile(
-                                                                              course['id'],
+                                                                              snapshot.data.docs[index]['id'],
                                                                             )));
                                                           }
                                                         },
