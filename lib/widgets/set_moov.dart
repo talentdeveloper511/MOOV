@@ -23,7 +23,7 @@ class SetMOOV extends StatefulWidget {
   String moov, gid, groupName;
   List members;
 
-  SetMOOV(this.moov, this.gid, this.members, groupName);
+  SetMOOV(this.moov, this.gid, this.members, this.groupName);
 
   @override
   _SetMOOVState createState() =>
@@ -144,7 +144,8 @@ class _SetMOOVState extends State<SetMOOV> {
 }
 
 class EventResult extends StatelessWidget {
-  final moov, gid, members, groupName;
+  final moov, gid, members;
+  String groupName;
 
   EventResult(this.moov, this.gid, this.members, this.groupName);
 
@@ -170,8 +171,15 @@ class EventResult extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
-                  Database().suggestMOOV(currentUser.id, gid, moov['postId'],
-                      currentUser.displayName, members, moov['title'], moov['image'], groupName);
+                  Database().suggestMOOV(
+                      currentUser.id,
+                      gid,
+                      moov['postId'],
+                      currentUser.displayName,
+                      members,
+                      moov['title'],
+                      moov['image'],
+                      groupName);
                   Navigator.pop(context, moov['postId']);
                 },
                 child: Text(

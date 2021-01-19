@@ -113,7 +113,6 @@ class _GroupDetailState extends State<GroupDetail> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           if (snapshot.data == null) return Container();
-          
 
           return StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -325,7 +324,10 @@ class _GroupDetailState extends State<GroupDetail> {
                                                               bottom: 10),
                                                       child: GestureDetector(
                                                         onTap: () {
-                                                          if (snapshot.data.docs[index]['id'] ==
+                                                          if (snapshot.data
+                                                                          .docs[
+                                                                      index]
+                                                                  ['id'] ==
                                                               strUserId) {
                                                             Navigator.of(
                                                                     context)
@@ -438,8 +440,13 @@ class _GroupDetailState extends State<GroupDetail> {
                                                       type: PageTransitionType
                                                           .bottomToTop,
                                                       child: SetMOOV(
-                                                          nextMOOV, gid, members, snapshot2.data['groupName'])))
+                                                          nextMOOV,
+                                                          gid,
+                                                          members,
+                                                          snapshot2.data[
+                                                              'groupName'])))
                                               .then(onGoBack);
+                                          print(groupName);
                                         },
                                         color: TextThemes.ndBlue,
                                         child: Padding(
@@ -925,7 +932,7 @@ class _SuggestionsState extends State<Suggestions> {
 
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     int status = 0;
     final circleShape = Shape(
@@ -945,61 +952,57 @@ class _SuggestionsState extends State<Suggestions> {
             return Padding(
               padding: const EdgeInsets.only(top: 18.0),
               child: Container(
-                            height: isLargePhone
-                                ? SizeConfig.blockSizeVertical * 15
-                                : SizeConfig.blockSizeVertical * 18,
-                            child: Stack(children: <Widget>[
-                              FractionallySizedBox(
-                                widthFactor: 1,
-                                child: Container(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      'lib/assets/motd.jpg',
-                                     fit: BoxFit.cover
-                                    ),
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      left: 20, top: 0, right: 20, bottom: 7.5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 5,
-                                        blurRadius: 7,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  alignment: Alignment(0.0, 0.0),
-                                  child: Container(
-                                    
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        "YOUR MOOV",
-                                        style: TextStyle(
-                                            fontFamily: 'Solway',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 20.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]),
+                height: isLargePhone
+                    ? SizeConfig.blockSizeVertical * 15
+                    : SizeConfig.blockSizeVertical * 18,
+                child: Stack(children: <Widget>[
+                  FractionallySizedBox(
+                    widthFactor: 1,
+                    child: Container(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset('lib/assets/motd.jpg',
+                            fit: BoxFit.cover),
+                      ),
+                      margin: EdgeInsets.only(
+                          left: 20, top: 0, right: 20, bottom: 7.5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      alignment: Alignment(0.0, 0.0),
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Text(
+                            "YOUR MOOV",
+                            style: TextStyle(
+                                fontFamily: 'Solway',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 20.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
             );
           }
           int count = snapshot4.data.docs.length;

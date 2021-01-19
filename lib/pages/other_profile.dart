@@ -181,8 +181,11 @@ class _OtherProfileState extends State<OtherProfile> {
                         child: Container(
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: snapshot.data['header'] == null
-                                ? null
+                            child: snapshot.data['header'] == ""
+                                ? Image.asset(
+                                    'lib/assets/headerNoWhite.jpg',
+                                    fit: BoxFit.fitWidth,
+                                  )
                                 : Image.network(
                                     snapshot.data['header'],
                                     fit: BoxFit.fitWidth,

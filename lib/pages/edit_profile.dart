@@ -224,6 +224,7 @@ class _EditProfileState extends State<EditProfile> {
     final bioController = TextEditingController();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -274,7 +275,8 @@ class _EditProfileState extends State<EditProfile> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: currentUser.header == ""
-                          ? AssetImage('lib/assets/header.jpg')
+                          ? Image.asset('lib/assets/headerNoWhite.jpg',
+                              fit: BoxFit.cover)
                           : Image.network(
                               currentUser.header,
                               fit: BoxFit.fitWidth,
@@ -297,6 +299,13 @@ class _EditProfileState extends State<EditProfile> {
                       ],
                     ),
                   ),
+                ),
+                Positioned(
+                  right: 50,
+                  top: 20,
+                  child: IconButton(
+                      icon: Icon(Icons.add_a_photo, size: 50),
+                      onPressed: () => selectImage2(context)),
                 ),
                 FractionallySizedBox(
                     widthFactor: isLargePhone ? 1.15 : 1.34,
