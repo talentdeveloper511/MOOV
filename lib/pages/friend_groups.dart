@@ -209,10 +209,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            GroupDetail(
-                                                              course['groupId'],
-                                                            )));
+                                                        builder: (context) => GroupDetail(groupId)
+                                                            ));
                                               },
                                               child: Column(
                                                 children: [

@@ -913,17 +913,13 @@ class PostOnFeed extends StatelessWidget {
                                                   type: PageTransitionType
                                                       .bottomToTop,
                                                   child: SendMOOV(
-                                                    course['postId'],
                                                     course['userId'],
                                                     course['image'],
                                                     course['postId'],
                                                     course['startDate'],
                                                     course['title'],
-                                                    course['description'],
-                                                    course['address'],
                                                     course['profilePic'],
                                                     course['userName'],
-                                                    course['userEmail'],
                                                   )));
                                         },
                                         child: Icon(Icons.send_rounded,

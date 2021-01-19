@@ -269,8 +269,12 @@ class Database {
   //   });
   // }
 
-  addedToGroup(String addee, String groupName, String groupId, String groupPic,
-      ) {
+  addedToGroup(
+    String addee,
+    String groupName,
+    String groupId,
+    String groupPic,
+  ) {
     notificationFeedRef.doc(addee).collection("feedItems").doc(groupId).set({
       "type": "friendGroup",
       "username": currentUser.displayName,
@@ -301,8 +305,6 @@ class Database {
     dynamic moovId,
     startDate,
     String title,
-    String description,
-    address,
     String ownerProPic,
     String ownerName,
   ) {
@@ -310,15 +312,12 @@ class Database {
       "type": "invite",
       "username": currentUser.displayName,
       "userId": currentUser.id,
-      "userEmail": currentUser.email,
       "userProfilePic": currentUser.photoUrl,
       "previewImg": previewImg,
       "postId": moovId,
       "timestamp": timestamp,
       "startDate": startDate,
       "title": title,
-      "description": description,
-      "address": address,
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
@@ -409,14 +408,13 @@ class Database {
   }
 
   addFriendToNotificationFeed(
-      String ownerId,
-      String previewImg,
-      dynamic moovId,
-      String title,
-      String ownerProPic,
-      String ownerName,
-      
-      ) {
+    String ownerId,
+    String previewImg,
+    dynamic moovId,
+    String title,
+    String ownerProPic,
+    String ownerName,
+  ) {
     notificationFeedRef.doc(ownerId).collection("feedItems").doc(moovId).set({
       "type": "friend",
       "username": currentUser.displayName,
@@ -608,6 +606,26 @@ class Database {
     });
   }
 
+  Future<void> suggestMOOV(userId, gid, postId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      transaction.update(ref2, {'score': FieldValue.increment(1)});
+
+      FirebaseFirestore.instance
+          .collection('friendGroups')
+          .doc(gid)
+          .collection("suggestedMOOVs")
+          .doc(userId)
+          .set({
+        "voters": {userId: 2},
+        "nextMOOV": postId,
+        "suggestorId": userId,
+      }, SetOptions(merge: true));
+
+      transaction.update(ref2, {'score': FieldValue.increment(1)});
+    });
+  }
+
   Future<void> updateGroupNames(members, newName, gid, old) async {
     return dbRef.runTransaction((transaction) async {
       for (var i = 0; i < members.length; i++) {
@@ -630,7 +648,8 @@ class Database {
       }, SetOptions(merge: true));
     });
   }
-    Future<void> removeNoVote(userId, gid) async {
+
+  Future<void> removeNoVote(userId, gid) async {
     return dbRef.runTransaction((transaction) async {
       FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
         "voters": {userId: FieldValue.delete()}
@@ -645,7 +664,8 @@ class Database {
       }, SetOptions(merge: true));
     });
   }
-    Future<void> removeYesVote(userId, gid) async {
+
+  Future<void> removeYesVote(userId, gid) async {
     return dbRef.runTransaction((transaction) async {
       FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
         "voters": {userId: FieldValue.delete()}

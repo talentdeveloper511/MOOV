@@ -17,59 +17,45 @@ import '../pages/ProfilePage.dart';
 import '../pages/other_profile.dart';
 
 class SendMOOV extends StatefulWidget {
-  String mid;
   String ownerId, previewImg;
   dynamic startDate, moovId;
-  String title, description, address, ownerProPic, ownerName, ownerEmail;
+  String title, ownerProPic, ownerName;
 
   SendMOOV(
-      this.mid,
       this.ownerId,
       this.previewImg,
       this.moovId,
       this.startDate,
       this.title,
-      this.description,
-      this.address,
       this.ownerProPic,
       this.ownerName,
-      this.ownerEmail,
       );
 
   @override
   _SendMOOVState createState() => _SendMOOVState(
-      this.mid,
       this.ownerId,
       this.previewImg,
       this.moovId,
       this.startDate,
       this.title,
-      this.description,
-      this.address,
       this.ownerProPic,
       this.ownerName,
-      this.ownerEmail,
       );
 }
 
 class _SendMOOVState extends State<SendMOOV> {
-  String mid;
   String ownerId, previewImg;
   dynamic startDate, moovId;
-  String title, description, address, ownerProPic, ownerName, ownerEmail;
+  String title, ownerProPic, ownerName;
 
   _SendMOOVState(
-      this.mid,
       this.ownerId,
       this.previewImg,
       this.moovId,
       this.startDate,
       this.title,
-      this.description,
-      this.address,
       this.ownerProPic,
       this.ownerName,
-      this.ownerEmail,
       );
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
@@ -158,11 +144,8 @@ class _SendMOOVState extends State<SendMOOV> {
               moovId,
               startDate,
               title,
-              description,
-              address,
               ownerProPic,
               ownerName,
-              ownerEmail
               );
           searchResults.add(searchResult);
         });
@@ -197,11 +180,8 @@ class UserResult extends StatefulWidget {
       this.moovId,
       this.startDate,
       this.title,
-      this.description,
-      this.address,
       this.ownerProPic,
       this.ownerName,
-      this.ownerEmail,
       );
 
   @override
@@ -212,11 +192,8 @@ class UserResult extends StatefulWidget {
       this.moovId,
       this.startDate,
       this.title,
-      this.description,
-      this.address,
       this.ownerProPic,
       this.ownerName,
-      this.ownerEmail,
       );
 }
 
@@ -224,7 +201,7 @@ class _UserResultState extends State<UserResult> {
   User user;
   String ownerId, previewImg;
   dynamic startDate, moovId;
-  String title, description, address, ownerProPic, ownerName, ownerEmail;
+  String title, ownerProPic, ownerName;
   bool status = false;
 
   _UserResultState(
@@ -234,11 +211,8 @@ class _UserResultState extends State<UserResult> {
       this.moovId,
       this.startDate,
       this.title,
-      this.description,
-      this.address,
       this.ownerProPic,
       this.ownerName,
-      this.ownerEmail,
       );
 
   @override
@@ -293,8 +267,6 @@ class _UserResultState extends State<UserResult> {
                                 moovId,
                                 startDate,
                                 title,
-                                description,
-                                address,
                                 ownerProPic,
                                 ownerName,
                                 );

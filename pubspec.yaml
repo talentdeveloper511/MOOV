@@ -76,6 +76,8 @@ dependencies:
   auto_size_text: ^2.1.0
   flutter_bounce: ^1.0.8
   firebase_messaging: ^6.0.16
+  worm_indicator: ^0.2.4
+
 
 
 

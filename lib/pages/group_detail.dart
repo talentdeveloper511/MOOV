@@ -25,6 +25,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
+import 'package:worm_indicator/indicator.dart';
+import 'package:worm_indicator/shape.dart';
 import '../widgets/add_users_group.dart';
 import 'edit_group.dart';
 import 'home.dart';
@@ -403,6 +405,7 @@ class _GroupDetailState extends State<GroupDetail> {
                         ]),
                                 SingleChildScrollView(
                                   child: Column(children: [
+                                    Example(),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 20.0),
                                       child: Text(
@@ -1267,4 +1270,74 @@ class _GroupDetailState extends State<GroupDetail> {
   }
 }
 
+class Example extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _ExampleState();
+}
 
+class _ExampleState extends State<Example> {
+  PageController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController();
+  }
+
+  Widget buildPageView() {
+    return PageView.builder(
+      physics: AlwaysScrollableScrollPhysics(),
+      controller: _controller,
+      itemBuilder: (BuildContext context, int pos) {
+        return Container(
+          margin: EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "Worm Indicator - Page $pos",
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.black,
+                ),
+              )
+            ],
+          ),
+        );
+      },
+      itemCount: 3,
+    );
+  }
+
+  Widget buildExampleIndicatorWithShapeAndBottomPos(
+      Shape shape, double bottomPos) {
+    return Positioned(
+      bottom: bottomPos,
+      left: 0,
+      right: 0,
+      child: WormIndicator(
+        length: 3,
+        controller: _controller,
+        shape: shape,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final circleShape = Shape(
+      size: 16,
+      shape: DotShape.Circle,
+      spacing: 8,
+    );
+    return Container(
+      height: 100,
+      child: Stack(
+        children: <Widget>[
+          buildPageView(),
+          buildExampleIndicatorWithShapeAndBottomPos(circleShape, 20),
+        ],
+      ),
+    );
+  }
+}
