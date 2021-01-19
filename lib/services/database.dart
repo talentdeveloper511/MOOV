@@ -621,7 +621,7 @@ class Database {
     });
   }
 
-  Future<void> suggestMOOV(userId, gid, postId, userName) async {
+  Future<void> suggestMOOV(userId, gid, postId, userName, members, title, pic, groupName) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
@@ -637,6 +637,23 @@ class Database {
         "suggestorName": userName,
         "suggestorId": userId
       }, SetOptions(merge: true));
+      for (var i = 0; i < members.length; i++) {
+         notificationFeedRef
+            .doc(members[i])
+            .collection('feedItems')
+            .doc(postId)
+            .set({
+          "type": "suggestion",
+          "postId": postId,
+          "previewImg": pic,
+          "title": title,
+          "groupName": groupName,
+          "username": currentUser.displayName,
+          "userId": currentUser.id,
+          "userProfilePic": currentUser.photoUrl,
+          "timestamp": DateTime.now()
+        });
+      }
 
       transaction.update(ref2, {'score': FieldValue.increment(1)});
     });

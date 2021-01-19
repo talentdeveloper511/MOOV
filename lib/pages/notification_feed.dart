@@ -205,25 +205,26 @@ class NotificationFeedItem extends StatelessWidget {
 
   factory NotificationFeedItem.fromDocument(DocumentSnapshot doc) {
     return NotificationFeedItem(
-        username: doc.data()['username'],
-        userEmail: doc.data()['userEmail'],
-        userId: doc.data()['userId'],
-        type: doc.data()['type'],
-        postId: doc.data()['postId'],
-        userProfilePic: doc.data()['userProfilePic'],
-        timestamp: doc.data()['timestamp'],
-        title: doc.data()['title'],
-        description: doc.data()['description'],
-        ownerProPic: doc.data()['ownerProPic'],
-        ownerName: doc.data()['ownerName'],
-        ownerEmail: doc.data()['ownerEmail'],
-        address: doc.data()['address'],
-        moovId: doc.data()['moovId'],
-        previewImg: doc.data()['previewImg'],
-        members: doc.data()['members'],
-        groupId: doc.data()['groupId'],
-        groupPic: doc.data()['groupPic'],
-        groupName: doc.data()['groupName'],);
+      username: doc.data()['username'],
+      userEmail: doc.data()['userEmail'],
+      userId: doc.data()['userId'],
+      type: doc.data()['type'],
+      postId: doc.data()['postId'],
+      userProfilePic: doc.data()['userProfilePic'],
+      timestamp: doc.data()['timestamp'],
+      title: doc.data()['title'],
+      description: doc.data()['description'],
+      ownerProPic: doc.data()['ownerProPic'],
+      ownerName: doc.data()['ownerName'],
+      ownerEmail: doc.data()['ownerEmail'],
+      address: doc.data()['address'],
+      moovId: doc.data()['moovId'],
+      previewImg: doc.data()['previewImg'],
+      members: doc.data()['members'],
+      groupId: doc.data()['groupId'],
+      groupPic: doc.data()['groupPic'],
+      groupName: doc.data()['groupName'],
+    );
   }
 
   showPost(context) {
@@ -297,6 +298,26 @@ class NotificationFeedItem extends StatelessWidget {
               )),
         ),
       );
+    } else if (type == 'suggestion') {
+      mediaPreview = GestureDetector(
+        onTap: () => showGroup(context),
+        child: Container(
+          height: 50.0,
+          width: 50.0,
+          child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: previewImg != null
+                        ? CachedNetworkImageProvider(previewImg)
+                        : AssetImage("lib/assets/otherbutton1.png"),
+                  ),
+                ),
+              )),
+        ),
+      );
     } else {
       mediaPreview = Text('');
     }
@@ -311,6 +332,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'has added you to ';
     } else if (type == 'invite') {
       activityItemText = 'has invited you to ';
+    } else if (type == 'suggestion') {
+      activityItemText = 'has suggested the MOOV, ';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
