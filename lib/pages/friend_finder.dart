@@ -169,43 +169,43 @@ class _FriendFinderState extends State<FriendFinder>
           })
         : null;
 
-    return SingleChildScrollView(
-        child: Container(
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.pink[300], Colors.pink[200]],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(style: TextThemes.mediumbody, children: [
-                      TextSpan(
-                          text: "Fuck FOMO. \n Find your friends",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w300)),
-                      TextSpan(
-                          text: " now",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w600)),
-                      TextSpan(
-                          text: ".",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w300))
-                    ]))),
-            Image.asset('lib/assets/ff.png')
-          ],
-        ),
-      ),
-    ));
+    // return SingleChildScrollView(
+    //     child: Container(
+    //   height: MediaQuery.of(context).size.height,
+    //   decoration: BoxDecoration(
+    //     gradient: LinearGradient(
+    //       colors: [Colors.pink[300], Colors.pink[200]],
+    //       begin: Alignment.centerLeft,
+    //       end: Alignment.centerRight,
+    //     ),
+    //   ),
+    //   child: Center(
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Padding(
+    //             padding: const EdgeInsets.all(50.0),
+    //             child: RichText(
+    //                 textAlign: TextAlign.center,
+    //                 text: TextSpan(style: TextThemes.mediumbody, children: [
+    //                   TextSpan(
+    //                       text: "Fuck FOMO. \n Find your friends",
+    //                       style: TextStyle(
+    //                           fontSize: 30, fontWeight: FontWeight.w300)),
+    //                   TextSpan(
+    //                       text: " now",
+    //                       style: TextStyle(
+    //                           fontSize: 30, fontWeight: FontWeight.w600)),
+    //                   TextSpan(
+    //                       text: ".",
+    //                       style: TextStyle(
+    //                           fontSize: 30, fontWeight: FontWeight.w300))
+    //                 ]))),
+    //         Image.asset('lib/assets/ff.png')
+    //       ],
+    //     ),
+    //   ),
+    // ));
   }
 
   @override
@@ -400,8 +400,8 @@ class UserResult extends StatelessWidget {
                         child: StreamBuilder(
                             stream: FirebaseFirestore.instance
                                 .collection('food')
+                                .orderBy('startDate', descending: true)
                                 .where('going', arrayContains: user.id)
-                                // .orderBy('startDate')
                                 .limit(1)
                                 .snapshots(),
                             builder: (context, snapshot) {
