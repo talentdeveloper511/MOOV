@@ -171,7 +171,7 @@ class EventResult extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
                   Database().suggestMOOV(currentUser.id, gid, moov['postId'],
-                      currentUser.displayName, members);
+                      currentUser.displayName, members, moov['title'], moov['image']);
                   Navigator.pop(context, moov['postId']);
                 },
                 child: Text(

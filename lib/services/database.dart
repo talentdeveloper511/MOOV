@@ -621,7 +621,7 @@ class Database {
     });
   }
 
-  Future<void> suggestMOOV(userId, gid, postId, userName, members) async {
+  Future<void> suggestMOOV(userId, gid, postId, userName, members, title, pic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
