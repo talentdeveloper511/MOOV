@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:MOOV/main.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -234,7 +234,7 @@ class _EditProfileState extends State<EditProfile> {
           onPressed: () {
             Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
+              MaterialPageRoute(builder: (context) => ProfilePageWithHeader()),
             );
           },
         ),

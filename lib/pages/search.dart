@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'ProfilePage.dart';
+import 'ProfilePageWithHeader.dart';
 import 'other_profile.dart';
 
 class Search extends StatefulWidget {
@@ -166,8 +166,8 @@ class UserResult extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (user.id == strUserId) {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProfilePage()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ProfilePageWithHeader()));
               } else {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => OtherProfile(user.id)));

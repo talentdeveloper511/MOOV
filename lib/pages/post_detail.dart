@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
@@ -328,7 +328,7 @@ class _AuthorContent extends StatelessWidget {
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => course['id'] != currentUser.id
                       ? OtherProfile(course['id'])
-                      : ProfilePage())),
+                      : ProfilePageWithHeader())),
               child: Container(
                   child: Row(
                 children: [
@@ -813,4 +813,3 @@ class Buttons extends StatelessWidget {
 //                     ),
 //                   ),
 //                 ),
-

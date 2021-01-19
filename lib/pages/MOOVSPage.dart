@@ -1,6 +1,6 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';

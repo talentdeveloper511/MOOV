@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../pages/ProfilePage.dart';
+import '../pages/ProfilePageWithHeader.dart';
 import '../pages/other_profile.dart';
 
 class SetMOOV extends StatefulWidget {

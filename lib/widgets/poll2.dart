@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/utils/themes_styles.dart';
@@ -72,8 +72,6 @@ class _PollViewState extends State<PollView> {
           option2List = _list.where((element) => element == 2).toList();
 
           // var count = _list.where((c) => c.product_id == 2).toList().length;
-
-        
 
           for (var entry in voters.entries) {
             x = entry.key;
@@ -204,7 +202,7 @@ class _PollViewState extends State<PollView> {
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        ProfilePage()));
+                                                                        ProfilePageWithHeader()));
                                                       }
                                                     : () {
                                                         Navigator.of(context).push(
@@ -293,7 +291,7 @@ class _PollViewState extends State<PollView> {
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        ProfilePage()));
+                                                                        ProfilePageWithHeader()));
                                                       }
                                                     : () {
                                                         Navigator.of(context).push(

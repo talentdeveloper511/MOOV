@@ -1,6 +1,6 @@
 import 'package:MOOV/helpers/demo_values.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/post_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';

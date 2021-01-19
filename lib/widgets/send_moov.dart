@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../pages/ProfilePage.dart';
+import '../pages/ProfilePageWithHeader.dart';
 import '../pages/other_profile.dart';
 
 class SendMOOV extends StatefulWidget {
@@ -22,24 +22,24 @@ class SendMOOV extends StatefulWidget {
   String title, ownerProPic, ownerName;
 
   SendMOOV(
-      this.ownerId,
-      this.previewImg,
-      this.moovId,
-      this.startDate,
-      this.title,
-      this.ownerProPic,
-      this.ownerName,
-      );
+    this.ownerId,
+    this.previewImg,
+    this.moovId,
+    this.startDate,
+    this.title,
+    this.ownerProPic,
+    this.ownerName,
+  );
 
   @override
   _SendMOOVState createState() => _SendMOOVState(
-      this.ownerId,
-      this.previewImg,
-      this.moovId,
-      this.startDate,
-      this.title,
-      this.ownerProPic,
-      this.ownerName,
+        this.ownerId,
+        this.previewImg,
+        this.moovId,
+        this.startDate,
+        this.title,
+        this.ownerProPic,
+        this.ownerName,
       );
 }
 
@@ -49,14 +49,14 @@ class _SendMOOVState extends State<SendMOOV> {
   String title, ownerProPic, ownerName;
 
   _SendMOOVState(
-      this.ownerId,
-      this.previewImg,
-      this.moovId,
-      this.startDate,
-      this.title,
-      this.ownerProPic,
-      this.ownerName,
-      );
+    this.ownerId,
+    this.previewImg,
+    this.moovId,
+    this.startDate,
+    this.title,
+    this.ownerProPic,
+    this.ownerName,
+  );
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   handleSearch(String query) {
@@ -138,15 +138,15 @@ class _SendMOOVState extends State<SendMOOV> {
         snapshot.data.docs.forEach((doc) {
           User user = User.fromDocument(doc);
           UserResult searchResult = UserResult(
-              user,
-              ownerId,
-              previewImg,
-              moovId,
-              startDate,
-              title,
-              ownerProPic,
-              ownerName,
-              );
+            user,
+            ownerId,
+            previewImg,
+            moovId,
+            startDate,
+            title,
+            ownerProPic,
+            ownerName,
+          );
           searchResults.add(searchResult);
         });
         return ListView(
@@ -174,26 +174,26 @@ class UserResult extends StatefulWidget {
   String title, description, address, ownerProPic, ownerName, ownerEmail;
 
   UserResult(
-      this.user,
-      this.ownerId,
-      this.previewImg,
-      this.moovId,
-      this.startDate,
-      this.title,
-      this.ownerProPic,
-      this.ownerName,
-      );
+    this.user,
+    this.ownerId,
+    this.previewImg,
+    this.moovId,
+    this.startDate,
+    this.title,
+    this.ownerProPic,
+    this.ownerName,
+  );
 
   @override
   _UserResultState createState() => _UserResultState(
-      this.user,
-      this.ownerId,
-      this.previewImg,
-      this.moovId,
-      this.startDate,
-      this.title,
-      this.ownerProPic,
-      this.ownerName,
+        this.user,
+        this.ownerId,
+        this.previewImg,
+        this.moovId,
+        this.startDate,
+        this.title,
+        this.ownerProPic,
+        this.ownerName,
       );
 }
 
@@ -205,15 +205,15 @@ class _UserResultState extends State<UserResult> {
   bool status = false;
 
   _UserResultState(
-      this.user,
-      this.ownerId,
-      this.previewImg,
-      this.moovId,
-      this.startDate,
-      this.title,
-      this.ownerProPic,
-      this.ownerName,
-      );
+    this.user,
+    this.ownerId,
+    this.previewImg,
+    this.moovId,
+    this.startDate,
+    this.title,
+    this.ownerProPic,
+    this.ownerName,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -262,14 +262,14 @@ class _UserResultState extends State<UserResult> {
                                   BorderRadius.all(Radius.circular(3.0))),
                           onPressed: () {
                             Database().sendMOOVNotification(
-                                user.id,
-                                previewImg,
-                                moovId,
-                                startDate,
-                                title,
-                                ownerProPic,
-                                ownerName,
-                                );
+                              user.id,
+                              previewImg,
+                              moovId,
+                              startDate,
+                              title,
+                              ownerProPic,
+                              ownerName,
+                            );
                             setState(() {
                               status = true;
                             });

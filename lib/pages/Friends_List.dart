@@ -3,7 +3,7 @@ import 'package:MOOV/pages/other_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final usersRef = FirebaseFirestore.instance.collection('users');
@@ -53,7 +53,8 @@ class friendsListState extends State<friendsList> {
                   onPressed: () {
                     Navigator.pop(
                       context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                      MaterialPageRoute(
+                          builder: (context) => ProfilePageWithHeader()),
                     );
                   },
                 ),
@@ -86,13 +87,11 @@ class friendsListState extends State<friendsList> {
                                                       MaterialPageRoute(builder:
                                                           (BuildContext
                                                               context) {
-                                                    return OtherProfile(
-                                                        
-                                                        snapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .data['id']
-                                                            .toString());
+                                                    return OtherProfile(snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['id']
+                                                        .toString());
                                                   })); //Material
                                                 },
                                                 child: CircleAvatar(
@@ -120,13 +119,11 @@ class friendsListState extends State<friendsList> {
                                                       MaterialPageRoute(builder:
                                                           (BuildContext
                                                               context) {
-                                                    return OtherProfile(
-                                                       
-                                                        snapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .data['id']
-                                                            .toString());
+                                                    return OtherProfile(snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['id']
+                                                        .toString());
                                                   })); //Material
                                                 },
                                                 child: Text(
@@ -160,14 +157,12 @@ class friendsListState extends State<friendsList> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            OtherProfile(
-                                                               
-                                                                snapshot
-                                                                    .data
-                                                                    .documents[
-                                                                        index]
-                                                                    .data['id']
-                                                                    .toString())));
+                                                            OtherProfile(snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .data['id']
+                                                                .toString())));
                                               },
                                               child: Text(
                                                 "Friends",

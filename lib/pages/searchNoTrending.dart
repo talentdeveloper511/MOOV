@@ -16,7 +16,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'ProfilePage.dart';
+import 'ProfilePageWithHeader.dart';
 import 'other_profile.dart';
 
 class SearchNoTrending extends StatefulWidget {
@@ -24,7 +24,8 @@ class SearchNoTrending extends StatefulWidget {
   _SearchNoTrendingState createState() => _SearchNoTrendingState();
 }
 
-class _SearchNoTrendingState extends State<SearchNoTrending> with AutomaticKeepAliveClientMixin {
+class _SearchNoTrendingState extends State<SearchNoTrending>
+    with AutomaticKeepAliveClientMixin {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   Future<QuerySnapshot> searchResultsEvents;
@@ -73,74 +74,71 @@ class _SearchNoTrendingState extends State<SearchNoTrending> with AutomaticKeepA
   }
 
   AppBar buildSearchField() {
-    return
-    AppBar(
-        leadingWidth: 60,
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                PageRouteBuilder(pageBuilder: (_, __, ___) => Home()),
-                (Route<dynamic> route) => false,
-              );
-            },
-          ),
-        backgroundColor: TextThemes.ndBlue, 
-      
-        actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.only(left: 5.0),
-            icon: Icon(Icons.insert_chart),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
-              // Implement navigation to leaderboard page here...
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-            },
-          ),
-          NamedIcon(
-            iconData: Icons.notifications_active,
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationFeed()));
-            },
-          ),
-        ],
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {},
-                child: Bounce(
-                  duration: Duration(milliseconds: 50),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      PageRouteBuilder(pageBuilder: (_, __, ___) => Home()),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 50.0),
-                    child: Image.asset(
-                      'lib/assets/moovblue.png',
-                      fit: BoxFit.cover,
-                      height: 50.0,
-                    ),
+    return AppBar(
+      leadingWidth: 60,
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            PageRouteBuilder(pageBuilder: (_, __, ___) => Home()),
+            (Route<dynamic> route) => false,
+          );
+        },
+      ),
+      backgroundColor: TextThemes.ndBlue,
+      actions: <Widget>[
+        IconButton(
+          padding: EdgeInsets.only(left: 5.0),
+          icon: Icon(Icons.insert_chart),
+          color: Colors.white,
+          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+          onPressed: () {
+            // Implement navigation to leaderboard page here...
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+          },
+        ),
+        NamedIcon(
+          iconData: Icons.notifications_active,
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NotificationFeed()));
+          },
+        ),
+      ],
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: EdgeInsets.all(5),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {},
+              child: Bounce(
+                duration: Duration(milliseconds: 50),
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    PageRouteBuilder(pageBuilder: (_, __, ___) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  child: Image.asset(
+                    'lib/assets/moovblue.png',
+                    fit: BoxFit.cover,
+                    height: 50.0,
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-   
+      ),
       toolbarHeight: 105,
       bottom: PreferredSize(
         preferredSize: null,
@@ -234,8 +232,8 @@ class UserResult extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (user.id == strUserId) {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProfilePage()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ProfilePageWithHeader()));
               } else {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => OtherProfile(user.id)));

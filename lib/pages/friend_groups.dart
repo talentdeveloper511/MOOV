@@ -15,7 +15,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'HomePage.dart';
-import 'ProfilePage.dart';
+import 'ProfilePageWithHeader.dart';
 
 class FriendGroupsPage extends StatefulWidget {
   @override
@@ -209,8 +209,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                        builder: (context) => GroupDetail(groupId)
-                                                            ));
+                                                        builder: (context) =>
+                                                            GroupDetail(
+                                                                groupId)));
                                               },
                                               child: Column(
                                                 children: [

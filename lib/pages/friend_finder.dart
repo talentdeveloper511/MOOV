@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'ProfilePage.dart';
+import 'ProfilePageWithHeader.dart';
 import 'other_profile.dart';
 
 class FriendFinder extends StatefulWidget {
@@ -83,7 +83,7 @@ class _FriendFinderState extends State<FriendFinder>
         onPressed: () {
           Navigator.pop(
             context,
-            MaterialPageRoute(builder: (context) => ProfilePage()),
+            MaterialPageRoute(builder: (context) => ProfilePageWithHeader()),
           );
         },
       ),
@@ -306,7 +306,8 @@ class _FriendFinderState extends State<FriendFinder>
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => SearchNoTrending()),
+                                        builder: (context) =>
+                                            SearchNoTrending()),
                                     (Route<dynamic> route) => false,
                                   );
                                 },
@@ -358,11 +359,11 @@ class UserResult extends StatelessWidget {
                           onTap: () {
                             if (user.id == currentUser.id) {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ProfilePage()));
+                                  builder: (context) =>
+                                      ProfilePageWithHeader()));
                             } else {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => OtherProfile(
-                                      
                                         user.id,
                                       )));
                             }
@@ -394,9 +395,7 @@ class UserResult extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
-                    Container(
-                      child: Text("is going to")),
+                    Container(child: Text("is going to")),
                     Container(
                         child: StreamBuilder(
                             stream: FirebaseFirestore.instance
@@ -408,7 +407,7 @@ class UserResult extends StatelessWidget {
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
                                 return Center(
-                                  child: Text("nothing, right now."));
+                                    child: Text("nothing, right now."));
                               if (!snapshot.hasData ||
                                   snapshot.data.docs.length == 0)
                                 return SizedBox(
@@ -530,7 +529,7 @@ class UserResult extends StatelessWidget {
 // import 'package:flutter/material.dart';
 // import 'package:MOOV/helpers/themes.dart';
 // import 'package:MOOV/pages/post_detail.dart';
-// import 'package:MOOV/pages/ProfilePage.dart';
+// import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
 // class FriendFinder extends StatefulWidget {
@@ -593,7 +592,7 @@ class UserResult extends StatelessWidget {
 //                   onPressed: () {
 //                     Navigator.pop(
 //                       context,
-//                       MaterialPageRoute(builder: (context) => ProfilePage()),
+//                       MaterialPageRoute(builder: (context) => ProfilePageWithHeader()),
 //                     );
 //                   },
 //                 ),

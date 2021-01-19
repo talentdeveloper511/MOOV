@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../pages/ProfilePage.dart';
+import '../pages/ProfilePageWithHeader.dart';
 import '../pages/other_profile.dart';
 
 class AddUsers extends StatefulWidget {
@@ -205,8 +205,7 @@ class _UserResultState extends State<UserResult> {
                           borderRadius: BorderRadius.all(Radius.circular(3.0))),
                       onPressed: () {
                         Database().addUser(user.id, gname, gid);
-                        Database().addedToGroup(
-                            user.id, gname, gid, pic);
+                        Database().addedToGroup(user.id, gname, gid, pic);
                         setState(() {
                           status = true;
                         });

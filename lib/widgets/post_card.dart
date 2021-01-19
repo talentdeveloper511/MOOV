@@ -3,7 +3,7 @@
 // import 'package:MOOV/models/post_model.dart';
 // import 'package:MOOV/pages/HomePage.dart';
 // import 'package:MOOV/pages/MoovMaker.dart';
-// import 'package:MOOV/pages/ProfilePage.dart';
+// import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 // import 'package:MOOV/pages/edit_post.dart';
 // import 'package:MOOV/pages/leaderboard.dart';
 // import 'package:MOOV/pages/notification_feed.dart';
@@ -242,7 +242,7 @@
 //                                     Navigator.of(context).push(
 //                                         MaterialPageRoute(
 //                                             builder: (context) =>
-//                                                 ProfilePage()));
+//                                                 ProfilePageWithHeader()));
 //                                   } else {
 //                                     Navigator.of(context)
 //                                         .push(MaterialPageRoute(
@@ -267,7 +267,7 @@
 //                               onTap: () {
 //                                 if (userId == strUserId) {
 //                                   Navigator.of(context).push(MaterialPageRoute(
-//                                       builder: (context) => ProfilePage()));
+//                                       builder: (context) => ProfilePageWithHeader()));
 //                                 } else {
 //                                   Navigator.of(context).push(MaterialPageRoute(
 //                                       builder: (context) => OtherProfile(

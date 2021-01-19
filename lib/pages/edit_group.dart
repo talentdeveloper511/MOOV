@@ -7,7 +7,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:animated_widgets/animated_widgets.dart';
@@ -236,12 +236,10 @@ class _EditGroupState extends State<EditGroup> {
                           physics: AlwaysScrollableScrollPhysics(),
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (_, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
-                            profilePic =
-                                snapshot.data.docs[index]['photoUrl'];
-                            otherDisplay = snapshot
-                                .data.docs[index]['displayName'];
+                            DocumentSnapshot course = snapshot.data.docs[index];
+                            profilePic = snapshot.data.docs[index]['photoUrl'];
+                            otherDisplay =
+                                snapshot.data.docs[index]['displayName'];
                             id = snapshot.data.docs[index]['id'];
                             return Container(
                               height: 100,
@@ -271,8 +269,8 @@ class _EditGroupState extends State<EditGroup> {
                                                   child: CircleAvatar(
                                                     backgroundImage:
                                                         NetworkImage(snapshot
-                                                            .data
-                                                            .docs[index]
+                                                                .data
+                                                                .docs[index]
                                                             ['photoUrl']),
                                                     radius: 50,
                                                     backgroundColor:
@@ -282,8 +280,8 @@ class _EditGroupState extends State<EditGroup> {
                                                       //     .documents[index].data['photoUrl'],
                                                       backgroundImage:
                                                           NetworkImage(snapshot
-                                                              .data
-                                                              .docs[index]
+                                                                  .data
+                                                                  .docs[index]
                                                               ['photoUrl']),
                                                       radius: 50,
                                                     ),
@@ -314,9 +312,7 @@ class _EditGroupState extends State<EditGroup> {
                                                 // backgroundImage: snapshot.data
                                                 //     .documents[index].data['photoUrl'],
                                                 backgroundImage: NetworkImage(
-                                                    snapshot
-                                                        .data
-                                                        .docs[index]
+                                                    snapshot.data.docs[index]
                                                         ['photoUrl']),
                                                 radius: 50,
                                               ),
@@ -338,7 +334,7 @@ class _EditGroupState extends State<EditGroup> {
                                                     text: snapshot
                                                         .data
                                                         .docs[index]
-                                                        ['displayName']
+                                                            ['displayName']
                                                         .toString(),
                                                     style: TextStyle(
                                                         color: Colors.black,
@@ -394,31 +390,31 @@ class _EditGroupState extends State<EditGroup> {
                       padding: const EdgeInsets.only(bottom: 50.0),
                       child: RaisedButton(
                           shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(80.0)),
-                            padding: EdgeInsets.all(0.0),
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      TextThemes.ndBlue,
-                                      Color(0xff64B6FF)
-                                    ],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              child: Container(
-                                constraints: BoxConstraints(
-                                    maxWidth: 125.0, minHeight: 50.0),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Save",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 22),
+                              borderRadius: BorderRadius.circular(80.0)),
+                          padding: EdgeInsets.all(0.0),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    TextThemes.ndBlue,
+                                    Color(0xff64B6FF)
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
                                 ),
+                                borderRadius: BorderRadius.circular(30.0)),
+                            child: Container(
+                              constraints: BoxConstraints(
+                                  maxWidth: 125.0, minHeight: 50.0),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Save",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 22),
                               ),
                             ),
+                          ),
                           onPressed: () async {
                             if (_image != null) {
                               firebase_storage.Reference ref = firebase_storage
@@ -431,28 +427,20 @@ class _EditGroupState extends State<EditGroup> {
                               //         .ref()
                               //         .child("images/group" + gid);
 
+                              // Reference firebaseStorageRef =
+                              //     FirebaseStorage.instance
+                              //         .ref()
+                              //         .child("images/" +
+                              //             titleController.text);
 
-                                            // Reference firebaseStorageRef =
-                                            //     FirebaseStorage.instance
-                                            //         .ref()
-                                            //         .child("images/" +
-                                            //             titleController.text);
-
-                                            
-                                          
-                                          
-
-
-                                  firebase_storage.UploadTask uploadTask;
+                              firebase_storage.UploadTask uploadTask;
 
                               uploadTask = ref.putFile(_image);
 
-
-  firebase_storage.TaskSnapshot
-                                                taskSnapshot = await uploadTask;
-                                            if (uploadTask.snapshot.state ==
-                                                firebase_storage
-                                                    .TaskState.success) {
+                              firebase_storage.TaskSnapshot taskSnapshot =
+                                  await uploadTask;
+                              if (uploadTask.snapshot.state ==
+                                  firebase_storage.TaskState.success) {
                                 print("added to Firebase Storage");
                                 final String downloadUrl =
                                     await taskSnapshot.ref.getDownloadURL();

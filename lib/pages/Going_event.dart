@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
-import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
@@ -84,7 +84,7 @@ class GoingPage extends StatelessWidget {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      ProfilePage()));
+                                                      ProfilePageWithHeader()));
                                         } else {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
@@ -308,13 +308,12 @@ class GoingPageFriends extends StatelessWidget {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        ProfilePage()));
+                                                        ProfilePageWithHeader()));
                                           } else {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         OtherProfile(
-                                                         
                                                             inviteesIds[
                                                                 index])));
                                           }

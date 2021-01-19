@@ -5,7 +5,7 @@ import 'HomePage.dart';
 import 'MOOVSPage.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:flutter/cupertino.dart';
-import 'ProfilePage.dart';
+import 'ProfilePageWithHeader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
   Scaffold buildHomeScreen() {
     return Scaffold(
         body: PageView(
-          children: <Widget>[HomePage(), MOOVSPage(), ProfilePage()],
+          children: <Widget>[HomePage(), MOOVSPage(), ProfilePageWithHeader()],
           controller: pageController,
           onPageChanged: whenPageChanges,
         ),
