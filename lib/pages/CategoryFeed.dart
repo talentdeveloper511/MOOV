@@ -664,21 +664,21 @@ class PostOnFeed extends StatelessWidget {
                     child: Row(children: <Widget>[
                       Expanded(
                           child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 0.0, right: 5, bottom: 5),
+                              padding:
+                                  const EdgeInsets.only(top: 0.0, right: 5),
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
+                                        BorderRadius.all(Radius.circular(5)),
                                     border: Border.all(
                                       color: Color(0xff000000),
                                       width: 1,
                                     )),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(5),
                                   child: Image.network(course['image'],
                                       fit: BoxFit.cover,
-                                      height: 140,
+                                      height: 120,
                                       width: 50),
                                 ),
                               ))),
