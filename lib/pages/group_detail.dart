@@ -5,6 +5,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/NextMOOV.dart';
@@ -334,7 +335,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                                 .push(MaterialPageRoute(
                                                                     builder:
                                                                         (context) =>
-                                                                            ProfilePage()));
+                                                                            ProfilePageWithHeader()));
                                                           } else {
                                                             Navigator.of(context).push(
                                                                 MaterialPageRoute(
@@ -446,7 +447,6 @@ class _GroupDetailState extends State<GroupDetail> {
                                                           snapshot2.data[
                                                               'groupName'])))
                                               .then(onGoBack);
-                                          print(groupName);
                                         },
                                         color: TextThemes.ndBlue,
                                         child: Padding(
@@ -692,7 +692,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                             MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        ProfilePage()));
+                                                                        ProfilePageWithHeader()));
                                                       } else {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(
@@ -1222,7 +1222,7 @@ class _SuggestionsState extends State<Suggestions> {
                                                   Navigator.of(context).push(
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              ProfilePage()));
+                                                              ProfilePageWithHeader()));
                                                 } else {
                                                   Navigator.of(context).push(
                                                       MaterialPageRoute(
@@ -1333,7 +1333,7 @@ class _SuggestionsState extends State<Suggestions> {
                                                   Navigator.of(context).push(
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              ProfilePage()));
+                                                              ProfilePageWithHeader()));
                                                 } else {
                                                   Navigator.of(context).push(
                                                       MaterialPageRoute(
