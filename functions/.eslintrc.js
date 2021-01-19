@@ -19,6 +19,11 @@ module.exports = {
     "google",
   ],
   "rules": {
-    quotes: ["error", "double"],
+    "quotes": [
+      "error", "double",
+    ],
+    "max-len": [
+      "error", {"code": 120},
+    ],
   },
 };

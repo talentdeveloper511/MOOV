@@ -535,6 +535,21 @@ class Database {
     });
   }
 
+  Future<void> unfriend(String senderId, String receiverId) async {
+    return dbRef.runTransaction((transaction) async {
+      final DocumentReference ref = dbRef.doc('users/$receiverId');
+      final DocumentReference ref2 = dbRef.doc('users/$senderId');
+      String serializedMessage3 = senderId;
+      String serializedMessage4 = receiverId;
+      transaction.update(ref, {
+        'friendArray': FieldValue.arrayRemove([serializedMessage3]),
+      });
+      transaction.update(ref2, {
+        'friendArray': FieldValue.arrayRemove([serializedMessage4]),
+      });
+    });
+  }
+
   Future<QuerySnapshot> checkStatus(String senderId, String receiverId) {
     return FirebaseFirestore.instance
         .collection('users')

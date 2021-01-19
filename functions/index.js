@@ -3,9 +3,6 @@ const admin = require("firebase-admin");
 
 admin.initializeApp();
 
-// const db = admin.firestore();
-// const fcm = admin.messaging();
-
 exports.onCreateActivityFeedItem = functions.firestore
     .document("/notificationFeed/{userId}/feedItems/{activityFeedItem}")
     .onCreate(async (snapshot, context) => {
@@ -23,8 +20,9 @@ exports.onCreateActivityFeedItem = functions.firestore
       if (androidNotificationToken) {
         sendNotification(androidNotificationToken, createdActivityFeedItem);
       } else {
-        console.log("No token for user, cannot send notification Alvin");
+        console.log("No token for user, cannot send notification");
       }
+
       /**
        * Adds two numbers together.
        * @param {string} androidNotificationToken The first number.
@@ -37,13 +35,19 @@ exports.onCreateActivityFeedItem = functions.firestore
         // 3) switch body value based off of notification type
         switch (activityFeedItem.type) {
           case "invite":
-            body = `${activityFeedItem.username} invited you to a MOOV`;
+            body = `${activityFeedItem.username} invited you to ${activityFeedItem.title}`;
             break;
           case "going":
-            body = `${activityFeedItem.username} is going to your MOOV`;
+            body = `${activityFeedItem.username} is going to ${activityFeedItem.title}`;
             break;
-          case "friendgroup":
-            body = `${activityFeedItem.username} added you to a friend group`;
+          case "friendGroup":
+            body = `${activityFeedItem.username} added you to their friend group, ${activityFeedItem.groupName}`;
+            break;
+          case "request":
+            body = `${activityFeedItem.username} sent you a friend request`;
+            break;
+          case "accept":
+            body = `${activityFeedItem.username} accepted your friend request`;
             break;
           default:
             break;
@@ -62,44 +66,16 @@ exports.onCreateActivityFeedItem = functions.firestore
             .send(message)
             .then((response) => {
               // Response is a message ID string
-              console.log("Successfully sent message Alvin", response);
+              console.log("Successfully sent message!", response);
             })
             .catch((error) => {
-              console.log("Error sending message Alvin", error);
+              console.log("Error sending message", error);
             });
       }
     });
 
-// exports.sendToDevice = functions.firestore
-//     .document("notificationFeed/{currentUser}/feedItems/{userId}")
-//     .onCreate(async (snapshot) => {
-//       const notification = snapshot.data();
-
-//       const querySnapshot = await db
-//           .collection("users")
-//           .doc(notification.ownerName)
-//           .collection("tokens")
-//           .get();
-
-//       const tokens = querySnapshot.docs.map((snap) => snap.id);
-
-//       const payload: admin.messaging.MessagingPayload = {
-//         notification: {
-//           title: "Friend Request Accepted",
-//           body: "You made a new friend",
-//           icon: "../../lib/assets/alvin.png",
-//           click_action: "FLUTTER_NOTIFICATION_CLICK",
-//         },
-//       };
-
-//       return fcm.sendToDevice(tokens, payload);
-//     });
-
-
 functions.pubsub.schedule("* * * * *").onRun(async () => {
-  // const oneHourOld = admin.firestore.Timestamp.now().toMillis() - 3600000;
   const now = admin.firestore.Timestamp.now().toMillis;
-
   const querySnapshot = await admin
       .firestore()
       .collection("food")
