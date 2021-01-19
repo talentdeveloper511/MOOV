@@ -581,7 +581,7 @@ class Database {
         notificationFeedRef
             .doc(members[i])
             .collection('feedItems')
-            .doc(postId)
+            .doc('suggest ' + postId)
             .set({
           "type": "suggestion",
           "postId": postId,
