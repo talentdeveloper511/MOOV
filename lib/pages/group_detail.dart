@@ -438,7 +438,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                       type: PageTransitionType
                                                           .bottomToTop,
                                                       child: SetMOOV(
-                                                          nextMOOV, gid, members, groupName)))
+                                                          nextMOOV, gid, members, snapshot2.data['groupName'])))
                                               .then(onGoBack);
                                         },
                                         color: TextThemes.ndBlue,
