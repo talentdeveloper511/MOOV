@@ -167,7 +167,7 @@ class EventResult extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(3.0))),
                 onPressed: () {
-                  Database().suggestMOOV(currentUser.id, gid, moov['postId']);
+                  Database().suggestMOOV(currentUser.id, gid, moov['postId'], currentUser.displayName);
                   Navigator.pop(context, moov['postId']);
                 },
                 child: Text(

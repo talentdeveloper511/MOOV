@@ -606,7 +606,7 @@ class Database {
     });
   }
 
-  Future<void> suggestMOOV(userId, gid, postId) async {
+  Future<void> suggestMOOV(userId, gid, postId, userName) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
@@ -619,7 +619,7 @@ class Database {
           .set({
         "voters": {userId: 2},
         "nextMOOV": postId,
-        "suggestorId": userId,
+        "suggestorId": userName,
       }, SetOptions(merge: true));
 
       transaction.update(ref2, {'score': FieldValue.increment(1)});
@@ -643,7 +643,12 @@ class Database {
 
   Future<void> addNoVote(userId, gid) async {
     return dbRef.runTransaction((transaction) async {
-      FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
+      FirebaseFirestore.instance
+          .collection('friendGroups')
+          .doc(gid)
+          .collection('suggestedMOOVs')
+          .doc(userId)
+          .set({
         "voters": {userId: 1}
       }, SetOptions(merge: true));
     });
@@ -651,7 +656,12 @@ class Database {
 
   Future<void> removeNoVote(userId, gid) async {
     return dbRef.runTransaction((transaction) async {
-      FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
+      FirebaseFirestore.instance
+          .collection('friendGroups')
+          .doc(gid)
+          .collection('suggestedMOOVs')
+          .doc(userId)
+          .set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });
@@ -659,7 +669,12 @@ class Database {
 
   Future<void> addYesVote(userId, gid) async {
     return dbRef.runTransaction((transaction) async {
-      FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
+      FirebaseFirestore.instance
+          .collection('friendGroups')
+          .doc(gid)
+          .collection('suggestedMOOVs')
+          .doc(userId)
+          .set({
         "voters": {userId: 2}
       }, SetOptions(merge: true));
     });
@@ -667,7 +682,12 @@ class Database {
 
   Future<void> removeYesVote(userId, gid) async {
     return dbRef.runTransaction((transaction) async {
-      FirebaseFirestore.instance.collection('friendGroups').doc(gid).set({
+      FirebaseFirestore.instance
+          .collection('friendGroups')
+          .doc(gid)
+          .collection('suggestedMOOVs')
+          .doc(userId)
+          .set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });

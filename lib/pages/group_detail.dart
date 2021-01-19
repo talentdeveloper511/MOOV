@@ -1,26 +1,18 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:ui';
-
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/helpers/utils.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/going.dart';
-import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/NextMOOV.dart';
 import 'package:MOOV/widgets/set_moov.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
@@ -128,17 +120,6 @@ class _GroupDetailState extends State<GroupDetail> {
               builder: (context, snapshot2) {
                 if (!snapshot2.hasData) return CircularProgressIndicator();
                 if (snapshot2.data == null) return Container();
-
-                //this is for getting the first name of the suggestor
-                String fullName = "";
-                List<String> tempList = fullName.split(" ");
-                int start = 0;
-                int end = tempList.length;
-                if (end > 1) {
-                  end = 1;
-                }
-                final selectedWords = tempList.sublist(start, end);
-                String firstName = selectedWords.join(" ");
 
                 DocumentSnapshot course = snapshot2.data;
                 voters = course['voters'];
@@ -305,107 +286,134 @@ class _GroupDetailState extends State<GroupDetail> {
                             child: Column(
                               children: [
                                 Stack(children: [
-                              
-                               Container(
-                                 height: 200,
+                                  Container(
+                                      height: 200,
                                       width: MediaQuery.of(context).size.width,
-                                      child: Image.network(groupPic, fit: BoxFit.cover)),
-                          Container(
-                              child: Column(children: [
-                            Container(
-                              height: 200,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  itemCount: members.length,
-                                  itemBuilder: (_, index) {
-                                    DocumentSnapshot course = snapshot2.data;
+                                      child: Image.network(groupPic,
+                                          fit: BoxFit.cover)),
+                                  Container(
+                                      child: Column(children: [
+                                    Container(
+                                      height: 200,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          physics:
+                                              AlwaysScrollableScrollPhysics(),
+                                          itemCount: members.length,
+                                          itemBuilder: (_, index) {
+                                            DocumentSnapshot course =
+                                                snapshot2.data;
 
-                                    return Padding(
-                                      padding: const EdgeInsets.only(left:8.0, right: 8),
-                                      child: Container(
-                                        height: 200,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Padding(
+                                            return Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 30.0, bottom: 10),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  if (course['id'] == strUserId) {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ProfilePage()));
-                                                  } else {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                OtherProfile(
-                                                                  course['id'],
-                                                                )));
-                                                  }
-                                                },
-                                                child: CircleAvatar(
-                                                  radius: 54,
-                                                  backgroundColor:
-                                                      TextThemes.ndGold,
-                                                  child: CircleAvatar(
-                                                    // backgroundImage: snapshot.data
-                                                    //     .documents[index].data['photoUrl'],
-                                                    backgroundImage: NetworkImage(
-                                                        snapshot.data.docs[index]
-                                                            ['photoUrl']),
-                                                    radius: 50,
-                                                  ),
+                                                  left: 8.0, right: 8),
+                                              child: Container(
+                                                height: 200,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 30.0,
+                                                              bottom: 10),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          if (course['id'] ==
+                                                              strUserId) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            ProfilePage()));
+                                                          } else {
+                                                            Navigator.of(context).push(
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            OtherProfile(
+                                                                              course['id'],
+                                                                            )));
+                                                          }
+                                                        },
+                                                        child: CircleAvatar(
+                                                          radius: 54,
+                                                          backgroundColor:
+                                                              TextThemes.ndGold,
+                                                          child: CircleAvatar(
+                                                            // backgroundImage: snapshot.data
+                                                            //     .documents[index].data['photoUrl'],
+                                                            backgroundImage:
+                                                                NetworkImage(snapshot
+                                                                            .data
+                                                                            .docs[
+                                                                        index][
+                                                                    'photoUrl']),
+                                                            radius: 50,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment(0.0, 0.0),
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)),
+                                                          gradient:
+                                                              LinearGradient(
+                                                            begin: Alignment
+                                                                .topCenter,
+                                                            end: Alignment
+                                                                .bottomCenter,
+                                                            colors: <Color>[
+                                                              Colors.black
+                                                                  .withAlpha(0),
+                                                              Colors.black,
+                                                              Colors.black12,
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: Text(
+                                                            snapshot.data
+                                                                    .docs[index]
+                                                                ['displayName'],
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'Solway',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 16.0),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ),
-                                            Container(
-                                  alignment: Alignment(0.0, 0.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: <Color>[
-                                          Colors.black.withAlpha(0),
-                                          Colors.black,
-                                          Colors.black12,
-                                        ],
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        snapshot.data.docs[index]
-                                                            ['displayName'],
-                                        style: TextStyle(
-                                            fontFamily: 'Solway',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 16.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            )
-                          ])),
-                        ]),
+                                            );
+                                          }),
+                                    )
+                                  ])),
+                                ]),
                                 SingleChildScrollView(
                                   child: Column(children: [
-                                    Example(),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 20.0),
                                       child: Text(
@@ -416,452 +424,19 @@ class _GroupDetailState extends State<GroupDetail> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10.0, bottom: 5),
-                                      child: Container(
-                                        child:
-                                            (nextMOOV != "" && nextMOOV != null)
-                                                ? NextMOOV(nextMOOV)
-                                                : buildNoContent(),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 20.0, right: 20),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text("Suggested by "),
-                                            Text(
-                                                snapshot
-                                                    .data.docs[0]['displayName']
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    color: Colors.blue[600],
-                                                    fontWeight:
-                                                        FontWeight.w500))
-                                          ]),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: RichText(
-                                        textScaleFactor: 1.2,
-                                        text: TextSpan(
-                                            style: TextThemes.mediumbody,
-                                            children: [
-                                              TextSpan(
-                                                  text: "Vote on ",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              TextSpan(
-                                                  text: "Alvin's ",
-                                                  style: TextStyle(
-                                                      color: Colors.blue[600],
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                              TextSpan(
-                                                  text: "suggestion",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                            ]),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 20.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: RaisedButton(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  side: BorderSide(
-                                                      color: Colors.black)),
-                                              onPressed: () {
-                                                if (voters != null &&
-                                                    status != 1) {
-                                                  Database().addNoVote(
-                                                      currentUser.id, gid);
-                                                  status = 1;
-                                                  print(status);
-                                                } else if (voters != null &&
-                                                    status == 1) {
-                                                  Database().removeNoVote(
-                                                      currentUser.id, gid);
-                                                  status = 0;
-                                                }
-                                              },
-                                              color: (status == 1)
-                                                  ? Colors.red
-                                                  : Colors.white,
-                                              padding: EdgeInsets.all(5.0),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 3.0, right: 3),
-                                                child: (status == 1)
-                                                    ? Column(
-                                                        children: [
-                                                          Text('No',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white)),
-                                                          Icon(Icons.thumb_down,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 30),
-                                                        ],
-                                                      )
-                                                    : Column(
-                                                        children: [
-                                                          Text('No'),
-                                                          Icon(Icons.thumb_down,
-                                                              color: Colors.red,
-                                                              size: 30),
-                                                        ],
-                                                      ),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: RaisedButton(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  side: BorderSide(
-                                                      color: Colors.black)),
-                                              onPressed: () {
-                                                if (voters != null &&
-                                                    status != 2) {
-                                                  Database().addYesVote(
-                                                      currentUser.id, gid);
-                                                  status = 2;
-                                                  print(status);
-                                                } else if (voters != null &&
-                                                    status == 2) {
-                                                  Database().removeYesVote(
-                                                      currentUser.id, gid);
-                                                  status = 0;
-                                                }
-                                              },
-                                              color: (status == 2)
-                                                  ? Colors.green
-                                                  : Colors.white,
-                                              padding: EdgeInsets.all(5.0),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 3.0, right: 3),
-                                                child: (status == 2)
-                                                    ? Column(
-                                                        children: [
-                                                          Text('Yes',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white)),
-                                                          Icon(Icons.thumb_up,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 30),
-                                                        ],
-                                                      )
-                                                    : Column(
-                                                        children: [
-                                                          Text('Yes',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black)),
-                                                          Icon(Icons.thumb_up,
-                                                              color:
-                                                                  Colors.green,
-                                                              size: 30),
-                                                        ],
-                                                      ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                          child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              physics:
-                                                  AlwaysScrollableScrollPhysics(),
-                                              itemCount: noVoteCount,
-                                              itemBuilder: (_, index) {
-                                                voters.removeWhere(
-                                                    (key, value) => value != 1);
+                                    Example(gid),
 
-                                                var w = voters.keys.toList();
-                                                print(w);
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(
+                                    //       top: 10.0, bottom: 5),
+                                    //   child: Container(
+                                    //     child:
+                                    //         (nextMOOV != "" && nextMOOV != null)
+                                    //             ? NextMOOV(nextMOOV)
+                                    //             : buildNoContent(),
+                                    //   ),
+                                    // ),
 
-                                                return StreamBuilder(
-                                                    stream: FirebaseFirestore
-                                                        .instance
-                                                        .collection('users')
-                                                        .doc(w[index])
-                                                        .snapshots(),
-                                                    builder:
-                                                        (context, snapshot3) {
-                                                      if (!snapshot3.hasData ||
-                                                          snapshot3.data ==
-                                                              null)
-                                                        return Container();
-
-                                                      return Container(
-                                                        height: 100,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 8.0),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: <Widget>[
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                  top: 17.0,
-                                                                  bottom: 5,
-                                                                ),
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    if (snapshot3
-                                                                            .data['id'] ==
-                                                                        strUserId) {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .push(
-                                                                              MaterialPageRoute(builder: (context) => ProfilePage()));
-                                                                    } else {
-                                                                      Navigator.of(context).push(MaterialPageRoute(
-                                                                          builder: (context) => OtherProfile(
-                                                                                snapshot3.data['id'],
-                                                                              )));
-                                                                    }
-                                                                  },
-                                                                  child:
-                                                                      CircleAvatar(
-                                                                    radius: 24,
-                                                                    backgroundColor:
-                                                                        TextThemes
-                                                                            .ndBlue,
-                                                                    child:
-                                                                        CircleAvatar(
-                                                                      backgroundImage:
-                                                                          NetworkImage(
-                                                                              snapshot3.data['photoUrl']),
-                                                                      radius:
-                                                                          22,
-                                                                      backgroundColor:
-                                                                          TextThemes
-                                                                              .ndBlue,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        0.0),
-                                                                child: Center(
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                        horizontal:
-                                                                            5.0),
-                                                                    child:
-                                                                        RichText(
-                                                                      textScaleFactor:
-                                                                          .75,
-                                                                      text: TextSpan(
-                                                                          style:
-                                                                              TextThemes.mediumbody,
-                                                                          children: [
-                                                                            TextSpan(
-                                                                                text: snapshot3.data['displayName'].toString(),
-                                                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
-                                                                          ]),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    });
-                                              }),
-                                          decoration: BoxDecoration(
-                                              color: Colors.red[100],
-                                              border: Border.all(
-                                                color: Colors.red[200],
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          height: 100,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              .45,
-                                        ),
-                                        Container(
-                                          child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              physics:
-                                                  AlwaysScrollableScrollPhysics(),
-                                              itemCount: yesVoteCount,
-                                              itemBuilder: (_, index) {
-                                                voters = course['voters'];
-                                                voters.removeWhere(
-                                                    (key, value) => value != 2);
-
-                                                var w = voters.keys.toList();
-                                                print(w);
-
-                                                return StreamBuilder(
-                                                    stream: FirebaseFirestore
-                                                        .instance
-                                                        .collection('users')
-                                                        .doc(w[index])
-                                                        .snapshots(),
-                                                    builder:
-                                                        (context, snapshot3) {
-                                                      if (!snapshot3.hasData ||
-                                                          snapshot3.data ==
-                                                              null)
-                                                        return Container();
-
-                                                      return Container(
-                                                        height: 100,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 8.0),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: <Widget>[
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        top:
-                                                                            17.0,
-                                                                        bottom:
-                                                                            5),
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    if (snapshot3
-                                                                            .data['id'] ==
-                                                                        strUserId) {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .push(
-                                                                              MaterialPageRoute(builder: (context) => ProfilePage()));
-                                                                    } else {
-                                                                      Navigator.of(context).push(MaterialPageRoute(
-                                                                          builder: (context) => OtherProfile(
-                                                                                snapshot3.data['id'],
-                                                                              )));
-                                                                    }
-                                                                  },
-                                                                  child:
-                                                                      CircleAvatar(
-                                                                    radius: 24,
-                                                                    backgroundColor:
-                                                                        TextThemes
-                                                                            .ndBlue,
-                                                                    child:
-                                                                        CircleAvatar(
-                                                                      backgroundImage:
-                                                                          NetworkImage(
-                                                                              snapshot3.data['photoUrl']),
-                                                                      radius:
-                                                                          22,
-                                                                      backgroundColor:
-                                                                          TextThemes
-                                                                              .ndBlue,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        0.0),
-                                                                child: Center(
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                        horizontal:
-                                                                            5.0),
-                                                                    child:
-                                                                        RichText(
-                                                                      textScaleFactor:
-                                                                          .75,
-                                                                      text: TextSpan(
-                                                                          style:
-                                                                              TextThemes.mediumbody,
-                                                                          children: [
-                                                                            TextSpan(
-                                                                                text: snapshot3.data['displayName'].toString(),
-                                                                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
-                                                                          ]),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    });
-                                              }),
-                                          decoration: BoxDecoration(
-                                              color: Colors.green[100],
-                                              border: Border.all(
-                                                color: Colors.green[200],
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          height: 100,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              .45,
-                                        )
-                                      ],
-                                    ),
                                     Padding(
                                       padding: const EdgeInsets.all(30),
                                       child: RaisedButton(
@@ -1076,14 +651,14 @@ class _GroupDetailState extends State<GroupDetail> {
                             ]),
                         body: SingleChildScrollView(
                             child: Column(
-                              children: [
-                                Stack(children: [
-                                  
-                                   Container(
-                                     height: 200,
-                                          width: MediaQuery.of(context).size.width,
-                                          child: Image.network(groupPic, fit: BoxFit.cover)),
-                          Container(
+                          children: [
+                            Stack(children: [
+                              Container(
+                                  height: 200,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Image.network(groupPic,
+                                      fit: BoxFit.cover)),
+                              Container(
                                   child: Column(children: [
                                 Container(
                                   height: 200,
@@ -1092,10 +667,12 @@ class _GroupDetailState extends State<GroupDetail> {
                                       physics: AlwaysScrollableScrollPhysics(),
                                       itemCount: members.length,
                                       itemBuilder: (_, index) {
-                                        DocumentSnapshot course = snapshot2.data;
+                                        DocumentSnapshot course =
+                                            snapshot2.data;
 
                                         return Padding(
-                                          padding: const EdgeInsets.only(left:8.0, right: 8),
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, right: 8),
                                           child: Container(
                                             height: 200,
                                             child: Column(
@@ -1105,22 +682,28 @@ class _GroupDetailState extends State<GroupDetail> {
                                                   CrossAxisAlignment.center,
                                               children: <Widget>[
                                                 Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 30.0, bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 30.0,
+                                                          bottom: 10),
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                      if (course['id'] == strUserId) {
+                                                      if (course['id'] ==
+                                                          strUserId) {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ProfilePage()));
+                                                                builder:
+                                                                    (context) =>
+                                                                        ProfilePage()));
                                                       } else {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    OtherProfile(
-                                                                      course['id'],
-                                                                    )));
+                                                                builder:
+                                                                    (context) =>
+                                                                        OtherProfile(
+                                                                          course[
+                                                                              'id'],
+                                                                        )));
                                                       }
                                                     },
                                                     child: CircleAvatar(
@@ -1130,8 +713,10 @@ class _GroupDetailState extends State<GroupDetail> {
                                                       child: CircleAvatar(
                                                         // backgroundImage: snapshot.data
                                                         //     .documents[index].data['photoUrl'],
-                                                        backgroundImage: NetworkImage(
-                                                            snapshot.data.docs[index]
+                                                        backgroundImage:
+                                                            NetworkImage(snapshot
+                                                                    .data
+                                                                    .docs[index]
                                                                 ['photoUrl']),
                                                         radius: 50,
                                                       ),
@@ -1139,46 +724,56 @@ class _GroupDetailState extends State<GroupDetail> {
                                                   ),
                                                 ),
                                                 Container(
-                                      alignment: Alignment(0.0, 0.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.all(Radius.circular(20)),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: <Color>[
-                                              Colors.black.withAlpha(0),
-                                              Colors.black,
-                                              Colors.black12,
-                                            ],
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(
-                                            snapshot.data.docs[index]
-                                                                ['displayName'],
-                                            style: TextStyle(
-                                                fontFamily: 'Solway',
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize: 16.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                                  alignment:
+                                                      Alignment(0.0, 0.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20)),
+                                                      gradient: LinearGradient(
+                                                        begin:
+                                                            Alignment.topCenter,
+                                                        end: Alignment
+                                                            .bottomCenter,
+                                                        colors: <Color>[
+                                                          Colors.black
+                                                              .withAlpha(0),
+                                                          Colors.black,
+                                                          Colors.black12,
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              4.0),
+                                                      child: Text(
+                                                        snapshot.data
+                                                                .docs[index]
+                                                            ['displayName'],
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'Solway',
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.white,
+                                                            fontSize: 16.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),
                                         );
                                       }),
                                 )
-                          ])),
-                        ]),
-
-                              ],
-                            )));
+                              ])),
+                            ]),
+                          ],
+                        )));
               });
         });
   }
@@ -1271,12 +866,24 @@ class _GroupDetailState extends State<GroupDetail> {
 }
 
 class Example extends StatefulWidget {
+  String groupId;
+  Map<String, dynamic> voters = {};
+
+  Example(this.groupId);
+
   @override
-  State<StatefulWidget> createState() => _ExampleState();
+  State<StatefulWidget> createState() {
+    return _ExampleState(this.groupId);
+  }
 }
 
 class _ExampleState extends State<Example> {
   PageController _controller;
+  String groupId;
+  Map<String, dynamic> voters = {};
+  int pageNumber;
+
+  _ExampleState(this.groupId);
 
   @override
   void initState() {
@@ -1284,39 +891,41 @@ class _ExampleState extends State<Example> {
     _controller = PageController();
   }
 
-  Widget buildPageView() {
+  _onPageViewChange(int page) {
+    setState(() {
+      pageNumber = page;
+    });
+  }
+
+  Widget buildPageView(snapshot4, count) {
     return PageView.builder(
       physics: AlwaysScrollableScrollPhysics(),
       controller: _controller,
+      onPageChanged: _onPageViewChange,
       itemBuilder: (BuildContext context, int pos) {
+        DocumentSnapshot course = snapshot4.data.docs[pos];
+        String nextMOOV = course['nextMOOV'];
+
         return Container(
-          margin: EdgeInsets.all(20),
+          margin: EdgeInsets.all(5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "Worm Indicator - Page $pos",
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.black,
-                ),
-              )
-            ],
+            children: <Widget>[NextMOOV(nextMOOV)],
           ),
         );
       },
-      itemCount: 3,
+      itemCount: count,
     );
   }
 
   Widget buildExampleIndicatorWithShapeAndBottomPos(
-      Shape shape, double bottomPos) {
+      Shape shape, double bottomPos, count) {
     return Positioned(
       bottom: bottomPos,
       left: 0,
       right: 0,
       child: WormIndicator(
-        length: 3,
+        length: count,
         controller: _controller,
         shape: shape,
       ),
@@ -1325,19 +934,422 @@ class _ExampleState extends State<Example> {
 
   @override
   Widget build(BuildContext context) {
+    int status = 0;
     final circleShape = Shape(
       size: 16,
       shape: DotShape.Circle,
       spacing: 8,
     );
-    return Container(
-      height: 100,
-      child: Stack(
-        children: <Widget>[
-          buildPageView(),
-          buildExampleIndicatorWithShapeAndBottomPos(circleShape, 20),
-        ],
-      ),
-    );
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('friendGroups')
+            .doc(groupId)
+            .collection("suggestedMOOVs")
+            .snapshots(),
+        builder: (context, snapshot4) {
+          if (!snapshot4.hasData || snapshot4.data == null) return Container();
+          int count = snapshot4.data.docs.length;
+          for (int i = 0; i < count; i++) {
+            DocumentSnapshot course4 = snapshot4.data.docs[pageNumber];
+            voters = course4['voters'];
+            String suggestorName = course4['suggestorName'];
+
+            List<dynamic> votersIds = voters.keys.toList();
+            List<dynamic> votersValues = voters.values.toList();
+            int noVoteCount =
+                votersValues.where((element) => element == 1).toList().length;
+            int yesVoteCount =
+                votersValues.where((element) => element == 2).toList().length;
+            if (voters != null) {
+              for (int i = 0; i < votersValues.length; i++) {
+                if (votersIds[i] == currentUser.id) {
+                  if (votersValues[i] == 1) {
+                    status = 1;
+                  }
+                }
+                if (votersIds[i] == currentUser.id) {
+                  if (votersValues[i] == 2) {
+                    status = 2;
+                  }
+                }
+              }
+            }
+            //this is for getting the first name of the suggestor
+            String fullName = suggestorName;
+            List<String> tempList = fullName.split(" ");
+            int start = 0;
+            int end = tempList.length;
+            if (end > 1) {
+              end = 1;
+            }
+            final selectedWords = tempList.sublist(start, end);
+            String firstName = selectedWords.join(" ");
+
+            return Column(
+              children: [
+                Container(
+                  height: 160,
+                  child: Stack(
+                    children: <Widget>[
+                      buildPageView(snapshot4, count),
+                      buildExampleIndicatorWithShapeAndBottomPos(
+                          circleShape, 20, count),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0, right: 20),
+                  child:
+                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    Text("Suggested by "),
+                    Text(suggestorName,
+                        style: TextStyle(
+                            color: Colors.blue[600],
+                            fontWeight: FontWeight.w500))
+                  ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RichText(
+                    textScaleFactor: 1.2,
+                    text: TextSpan(style: TextThemes.mediumbody, children: [
+                      TextSpan(
+                          text: "Vote on ",
+                          style: TextStyle(fontWeight: FontWeight.w400)),
+                      TextSpan(
+                          text: firstName + "'s ",
+                          style: TextStyle(
+                              color: Colors.blue[600],
+                              fontWeight: FontWeight.w500)),
+                      TextSpan(
+                          text: "suggestion",
+                          style: TextStyle(fontWeight: FontWeight.w400)),
+                    ]),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              side: BorderSide(color: Colors.black)),
+                          onPressed: () {
+                            if (voters != null && status != 1) {
+                              Database().addNoVote(currentUser.id, groupId);
+                              status = 1;
+                              print(status);
+                            } else if (voters != null && status == 1) {
+                              Database().removeNoVote(currentUser.id, groupId);
+                              status = 0;
+                            }
+                          },
+                          color: (status == 1) ? Colors.red : Colors.white,
+                          padding: EdgeInsets.all(5.0),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 3.0, right: 3),
+                            child: (status == 1)
+                                ? Column(
+                                    children: [
+                                      Text('No',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      Icon(Icons.thumb_down,
+                                          color: Colors.white, size: 30),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Text('No'),
+                                      Icon(Icons.thumb_down,
+                                          color: Colors.red, size: 30),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              side: BorderSide(color: Colors.black)),
+                          onPressed: () {
+                            if (voters != null && status != 2) {
+                              Database().addYesVote(currentUser.id, groupId);
+                              status = 2;
+                              print(status);
+                            } else if (voters != null && status == 2) {
+                              Database().removeYesVote(currentUser.id, groupId);
+                              status = 0;
+                            }
+                          },
+                          color: (status == 2) ? Colors.green : Colors.white,
+                          padding: EdgeInsets.all(5.0),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 3.0, right: 3),
+                            child: (status == 2)
+                                ? Column(
+                                    children: [
+                                      Text('Yes',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      Icon(Icons.thumb_up,
+                                          color: Colors.white, size: 30),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Text('Yes',
+                                          style:
+                                              TextStyle(color: Colors.black)),
+                                      Icon(Icons.thumb_up,
+                                          color: Colors.green, size: 30),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: noVoteCount,
+                          itemBuilder: (_, index) {
+                            voters.removeWhere((key, value) => value != 1);
+
+                            var w = voters.keys.toList();
+                            print(w);
+
+                            return StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(w[index])
+                                    .snapshots(),
+                                builder: (context, snapshot3) {
+                                  if (!snapshot3.hasData ||
+                                      snapshot3.data == null)
+                                    return Container();
+
+                                  return Container(
+                                    height: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 17.0,
+                                              bottom: 5,
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                if (snapshot3.data['id'] ==
+                                                    currentUser.id) {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProfilePage()));
+                                                } else {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OtherProfile(
+                                                                snapshot3
+                                                                    .data['id'],
+                                                              )));
+                                                }
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 24,
+                                                backgroundColor:
+                                                    TextThemes.ndBlue,
+                                                child: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      snapshot3
+                                                          .data['photoUrl']),
+                                                  radius: 22,
+                                                  backgroundColor:
+                                                      TextThemes.ndBlue,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(0.0),
+                                            child: Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5.0),
+                                                child: RichText(
+                                                  textScaleFactor: .75,
+                                                  text: TextSpan(
+                                                      style:
+                                                          TextThemes.mediumbody,
+                                                      children: [
+                                                        TextSpan(
+                                                            text: snapshot3
+                                                                .data[
+                                                                    'displayName']
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500)),
+                                                      ]),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          }),
+                      decoration: BoxDecoration(
+                          color: Colors.red[100],
+                          border: Border.all(
+                            color: Colors.red[200],
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      height: 100,
+                      width: MediaQuery.of(context).size.width * .45,
+                    ),
+                    Container(
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: yesVoteCount,
+                          itemBuilder: (_, index) {
+                            voters = snapshot4.data.docs[index]['voters'];
+                            voters.removeWhere((key, value) => value != 2);
+
+                            var w = voters.keys.toList();
+                            print(w);
+
+                            return StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(w[index])
+                                    .snapshots(),
+                                builder: (context, snapshot3) {
+                                  if (!snapshot3.hasData ||
+                                      snapshot3.data == null)
+                                    return Container();
+
+                                  return Container(
+                                    height: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 17.0, bottom: 5),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                if (snapshot3.data['id'] ==
+                                                    currentUser.id) {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProfilePage()));
+                                                } else {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OtherProfile(
+                                                                snapshot3
+                                                                    .data['id'],
+                                                              )));
+                                                }
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 24,
+                                                backgroundColor:
+                                                    TextThemes.ndBlue,
+                                                child: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      snapshot3
+                                                          .data['photoUrl']),
+                                                  radius: 22,
+                                                  backgroundColor:
+                                                      TextThemes.ndBlue,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(0.0),
+                                            child: Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5.0),
+                                                child: RichText(
+                                                  textScaleFactor: .75,
+                                                  text: TextSpan(
+                                                      style:
+                                                          TextThemes.mediumbody,
+                                                      children: [
+                                                        TextSpan(
+                                                            text: snapshot3
+                                                                .data[
+                                                                    'displayName']
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500)),
+                                                      ]),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          }),
+                      decoration: BoxDecoration(
+                          color: Colors.green[100],
+                          border: Border.all(
+                            color: Colors.green[200],
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      height: 100,
+                      width: MediaQuery.of(context).size.width * .45,
+                    )
+                  ],
+                ),
+              ],
+            );
+          }
+        });
   }
 }
