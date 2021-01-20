@@ -5,7 +5,9 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
+import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/leaderboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -114,6 +116,9 @@ class _OtherProfileState extends State<OtherProfile> {
 
   @override
   Widget build(BuildContext context) {
+    var userFriends;
+    var score;
+
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
@@ -130,6 +135,8 @@ class _OtherProfileState extends State<OtherProfile> {
           isAmbassador = snapshot.data['isAmbassador'];
           displayName = snapshot.data['displayName'];
           photoUrl = snapshot.data['photoUrl'];
+          userFriends = snapshot.data['friendArray'];
+          score = snapshot.data['score'];
 
           return Scaffold(
               backgroundColor: Colors.white,
@@ -257,7 +264,7 @@ class _OtherProfileState extends State<OtherProfile> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 2.0, bottom: 8.0),
+                          padding: const EdgeInsets.only(top: 2.0, bottom: 12.0),
                           child: Text(
                             snapshot.data['year'] +
                                 " in " +
@@ -270,35 +277,53 @@ class _OtherProfileState extends State<OtherProfile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Column(
-                          children: [
-                            Text(
-                              '2',
-                              style: TextThemes.extraBold,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(
-                                'Next MOOVs   ',
-                                style: TextThemes.bodyText1,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => LeaderBoardPage()));
+                          },
                           child: Column(
                             children: [
                               Text(
-                                '0',
+                                score.toString(),
                                 style: TextThemes.extraBold,
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 4.0),
                                 child: Text(
-                                  'Friends',
+                                  '       Score       ',
                                   style: TextThemes.bodyText1,
                                 ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => FriendsList(
+                                    id: id)));
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                userFriends.length == null ||
+                                        userFriends.length == 0
+                                    ? "0"
+                                    : userFriends.length.toString(),
+                                style: TextThemes.extraBold,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: userFriends.length == 1 ?
+                                    Text(
+                                      '     Friend     ',
+                                      style: TextThemes.bodyText1,
+                                    ):
+                                    Text(
+                                      '     Friends     ',
+                                      style: TextThemes.bodyText1,
+                                    ),
                               ),
                             ],
                           ),

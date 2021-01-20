@@ -198,9 +198,9 @@ class _MOOVSPageState extends State<MOOVSPage>
                   StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('food')
-                          .where('going', arrayContains: currentUser.id)
-                          // .orderBy("startDate")
-                          .snapshots(),
+                          .where("going", arrayContains: currentUser.id)
+                              .orderBy("startDate")
+                              .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(

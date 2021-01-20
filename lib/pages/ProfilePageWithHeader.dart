@@ -62,42 +62,42 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
 
           return Scaffold(
             appBar: AppBar(
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
                 ),
-                backgroundColor: TextThemes.ndBlue,
-                flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.all(5),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
-                            (Route<dynamic> route) => false,
-                          );
-                        },
-                        child: Image.asset(
-                          'lib/assets/moovblue.png',
-                          fit: BoxFit.cover,
-                          height: 50.0,
-                        ),
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+              ),
+              backgroundColor: TextThemes.ndBlue,
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.all(5),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Image.asset(
+                        'lib/assets/moovblue.png',
+                        fit: BoxFit.cover,
+                        height: 50.0,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+            ),
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
               child: Stack(children: [
@@ -112,7 +112,8 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: userHeader == ""
-                                ? Image.asset('lib/assets/header.jpg', fit: BoxFit.cover)
+                                ? Image.asset('lib/assets/header.jpg',
+                                    fit: BoxFit.cover)
                                 : Image.network(
                                     userHeader,
                                     fit: BoxFit.fitWidth,
@@ -242,9 +243,8 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => friendsList(
-                                        likedArray, moovId,
-                                        userFriends: userFriends)));
+                                    builder: (context) =>
+                                        FriendsList(id: currentUser.id)));
                               },
                               child: Column(
                                 children: [
@@ -257,8 +257,13 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: Text(
-                                      'Friends',
+                                  child: userFriends.length == 1 ?
+                                    Text(
+                                      '     Friend     ',
+                                      style: TextThemes.bodyText1,
+                                    ):
+                                    Text(
+                                      '     Friends     ',
                                       style: TextThemes.bodyText1,
                                     ),
                                   ),

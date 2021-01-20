@@ -8,29 +8,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final usersRef = FirebaseFirestore.instance.collection('users');
 
-class friendsList extends StatefulWidget {
-  dynamic moovId;
+class FriendsList extends StatefulWidget {
   TextEditingController searchController = TextEditingController();
-  List<dynamic> likedArray;
-  final userFriends;
+  final id;
 
-  friendsList(this.moovId, this.likedArray, {this.userFriends});
+  FriendsList({this.id});
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return friendsListState(this.moovId, this.likedArray, this.userFriends);
+    return FriendsListState(this.id);
   }
 }
 
-class friendsListState extends State<friendsList> {
-  dynamic moovId;
+class FriendsListState extends State<FriendsList> {
   TextEditingController searchController = TextEditingController();
-  List<dynamic> likedArray;
   var iter = 0;
-  final userFriends;
+  final id;
 
-  friendsListState(this.moovId, this.likedArray, this.userFriends);
+  FriendsListState(this.id);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +35,7 @@ class friendsListState extends State<friendsList> {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .where("friendArray", arrayContains: currentUser.id)
+            .where("friendArray", arrayContains: id)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
@@ -61,7 +57,12 @@ class friendsListState extends State<friendsList> {
                   },
                 ),
                 backgroundColor: TextThemes.ndBlue,
-                title: Text(
+                title: snapshot.data.docs.length == 1 ?
+                Text(
+                  "Friend",
+                  style: TextStyle(color: Colors.white),
+                ):
+                Text(
                   "Friends",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -92,7 +93,7 @@ class friendsListState extends State<friendsList> {
                                                     return OtherProfile(snapshot
                                                         .data
                                                         .docs[index]
-                                                        .data['id']
+                                                        ['id']
                                                         .toString());
                                                   })); //Material
                                                 },
@@ -104,7 +105,7 @@ class friendsListState extends State<friendsList> {
                                                             NetworkImage(snapshot
                                                                     .data
                                                                     .docs[index]
-                                                                    .data[
+                                                                    [
                                                                 'photoUrl'])
 
                                                         // NetworkImage(likedArray[index]['strPic']),
@@ -123,13 +124,13 @@ class friendsListState extends State<friendsList> {
                                                     return OtherProfile(snapshot
                                                         .data
                                                         .docs[index]
-                                                        .data['id']
+                                                        ['id']
                                                         .toString());
                                                   })); //Material
                                                 },
                                                 child: Text(
                                                     snapshot.data.docs[index]
-                                                        .data['displayName']
+                                                        ['displayName']
                                                         .toString(),
                                                     style: TextStyle(
                                                         fontSize: 18,
@@ -159,7 +160,7 @@ class friendsListState extends State<friendsList> {
                                                             OtherProfile(snapshot
                                                                 .data
                                                                 .docs[index]
-                                                                .data['id']
+                                                                ['id']
                                                                 .toString())));
                                               },
                                               child: Text(

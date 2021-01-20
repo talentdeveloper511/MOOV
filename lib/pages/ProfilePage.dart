@@ -45,8 +45,6 @@ class _ProfilePageState extends State<ProfilePage> {
             .doc(currentUser.id)
             .snapshots(),
         builder: (context, snapshot) {
-          List<dynamic> likedArray;
-          dynamic moovId;
           bool isLargePhone = Screen.diagonal(context) > 766;
 
           if (!snapshot.hasData) return CircularProgressIndicator();
@@ -206,9 +204,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => friendsList(
-                                        likedArray, moovId,
-                                        userFriends: userFriends)));
+                                    builder: (context) => FriendsList(
+                                        
+                                        id: currentUser.id)));
                               },
                               child: Column(
                                 children: [
@@ -221,7 +219,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: Text(
+                                    child: userFriends.length == 1 ?
+                                    Text(
+                                      '     Friend     ',
+                                      style: TextThemes.bodyText1,
+                                    ):
+                                    Text(
                                       '     Friends     ',
                                       style: TextThemes.bodyText1,
                                     ),

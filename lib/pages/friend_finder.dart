@@ -15,6 +15,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 
 import 'ProfilePageWithHeader.dart';
 import 'other_profile.dart';
@@ -26,6 +27,9 @@ class FriendFinder extends StatefulWidget {
 
 class _FriendFinderState extends State<FriendFinder>
     with AutomaticKeepAliveClientMixin {
+  int todayOnly = 0;
+  int tomorrowOnly = 0;
+
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot> searchResultsFuture;
   bool get wantKeepAlive => true;
@@ -152,11 +156,130 @@ class _FriendFinderState extends State<FriendFinder>
         List<UserResult> searchResults = [];
         snapshot.data.docs.forEach((doc) {
           User user = User.fromDocument(doc);
-          UserResult searchResult = UserResult(user);
+          UserResult searchResult = UserResult(user, todayOnly, tomorrowOnly);
           searchResults.add(searchResult);
         });
-        return ListView(
-          children: searchResults,
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0, top: 20),
+                    child: todayOnly == 0
+                        ? RaisedButton(
+                            onPressed: () {
+                              setState(() {
+                                todayOnly = 1;
+                              });
+                            },
+                            color: TextThemes.ndBlue,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.calendar_today,
+                                      color: TextThemes.ndGold),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Today?',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                          )
+                        : RaisedButton(
+                            onPressed: () {
+                              setState(() {
+                                todayOnly = 0;
+                              });
+                            },
+                            color: Colors.green,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.check, color: TextThemes.ndGold),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Today!',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                          )),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0, top: 20),
+                    child: tomorrowOnly == 0
+                        ? RaisedButton(
+                            onPressed: () {
+                              setState(() {
+                                tomorrowOnly = 1;
+                              });
+                            },
+                            color: TextThemes.ndBlue,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.calendar_today,
+                                      color: TextThemes.ndGold),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Tomorrow?',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                          )
+                        : RaisedButton(
+                            onPressed: () {
+                              setState(() {
+                                tomorrowOnly = 0;
+                              });
+                            },
+                            color: Colors.green,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.check, color: TextThemes.ndGold),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Tomorrow!',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                          )),
+              ],
+            ),
+            Expanded(
+              child: ListView(
+                children: searchResults,
+              ),
+            ),
+          ],
         );
       },
     );
@@ -212,7 +335,7 @@ class _FriendFinderState extends State<FriendFinder>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Colors.white12,
+      backgroundColor: Colors.white,
       appBar: currentUser.friendArray.isNotEmpty
           ? buildSearchField()
           : AppBar(
@@ -333,8 +456,9 @@ class _FriendFinderState extends State<FriendFinder>
 
 class UserResult extends StatelessWidget {
   final User user;
+  int todayOnly, tomorrowOnly;
 
-  UserResult(this.user);
+  UserResult(this.user, this.todayOnly, this.tomorrowOnly);
 
   @override
   Widget build(BuildContext context) {
@@ -400,9 +524,8 @@ class UserResult extends StatelessWidget {
                         child: StreamBuilder(
                             stream: FirebaseFirestore.instance
                                 .collection('food')
-                                .orderBy('startDate', descending: true)
                                 .where('going', arrayContains: user.id)
-                                .limit(1)
+                                .orderBy("startDate")
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
@@ -422,100 +545,257 @@ class UserResult extends StatelessWidget {
                                     height: MediaQuery.of(context).size.height *
                                         0.15);
                               var course = snapshot.data.docs[0];
+                              Timestamp startDate = course["startDate"];
+                              bool hide = false;
 
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          (PostDetail(course['postId']))));
-                                },
-                                child: Stack(
-                                    alignment: Alignment.center,
-                                    children: <Widget>[
-                                      SizedBox(
-                                        width: isLargePhone
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.51
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.49,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.15,
-                                        child: Container(
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: CachedNetworkImage(
-                                              imageUrl: course['image'],
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          margin: EdgeInsets.only(
-                                              left: 20,
-                                              top: 0,
-                                              right: 20,
-                                              bottom: 7.5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(10),
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.5),
-                                                spreadRadius: 5,
-                                                blurRadius: 7,
-                                                offset: Offset(0,
-                                                    3), // changes position of shadow
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: <Color>[
-                                              Colors.black.withAlpha(0),
-                                              Colors.black,
-                                              Colors.black12,
-                                            ],
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                                maxWidth: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    .3),
-                                            child: Text(
-                                              snapshot.data.docs[0]['title'],
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontFamily: 'Solway',
-                                                  fontWeight: FontWeight.bold,
+                              final now = DateTime.now();
+                              bool isToday = false;
+                              bool isTomorrow = false;
+                              bool isNextWeek = false;
+
+                              final today =
+                                  DateTime(now.year, now.month, now.day);
+                              final yesterday =
+                                  DateTime(now.year, now.month, now.day - 1);
+                              final tomorrow =
+                                  DateTime(now.year, now.month, now.day + 1);
+                              final week =
+                                  DateTime(now.year, now.month, now.day + 6);
+
+                              final dateToCheck = startDate.toDate();
+                              final aDate = DateTime(dateToCheck.year,
+                                  dateToCheck.month, dateToCheck.day);
+
+                              if (aDate == today) {
+                                isToday = true;
+                              } else if (aDate == tomorrow) {
+                                isTomorrow = true;
+                              }
+                              if (isToday == false && todayOnly == 1) {
+                                hide = true;
+                              }
+
+                              if (isTomorrow == false && tomorrowOnly == 1) {
+                                hide = true;
+                              }
+                              if (todayOnly == 1 &&
+                                  tomorrowOnly == 1 &&
+                                  (isTomorrow == false || isToday == false)) {
+                                hide = false;
+                              }
+                              if (aDate.isAfter(week)) {
+                                isNextWeek = true;
+                              }
+
+                              return (hide == false)
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    (PostDetail(
+                                                        course['postId']))));
+                                      },
+                                      child: Stack(
+                                          alignment: Alignment.center,
+                                          children: <Widget>[
+                                            SizedBox(
+                                              width: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.51
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.49,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.15,
+                                              child: Container(
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: course['image'],
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                margin: EdgeInsets.only(
+                                                    left: 20,
+                                                    top: 0,
+                                                    right: 20,
+                                                    bottom: 7.5),
+                                                decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  fontSize:
-                                                      isLargePhone ? 17.0 : 14),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(10),
+                                                  ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 5,
+                                                      blurRadius: 7,
+                                                      offset: Offset(0,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                              );
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: <Color>[
+                                                    Colors.black.withAlpha(0),
+                                                    Colors.black,
+                                                    Colors.black12,
+                                                  ],
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: ConstrainedBox(
+                                                  constraints: BoxConstraints(
+                                                      maxWidth:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              .3),
+                                                  child: Text(
+                                                    snapshot.data.docs[0]
+                                                        ['title'],
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontFamily: 'Solway',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white,
+                                                        fontSize: isLargePhone
+                                                            ? 17.0
+                                                            : 14),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            isToday == false
+                                                ? Positioned(
+                                                    top: 0,
+                                                    right: 0,
+                                                    child: Container(
+                                                      height: 30,
+                                                      padding:
+                                                          EdgeInsets.all(4),
+                                                      decoration: BoxDecoration(
+                                                          gradient:
+                                                              LinearGradient(
+                                                            colors: [
+                                                              Colors.pink[400],
+                                                              Colors.purple[300]
+                                                            ],
+                                                            begin: Alignment
+                                                                .centerLeft,
+                                                            end: Alignment
+                                                                .centerRight,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0)),
+                                                      child: isNextWeek? 
+                                                       Text(
+                                                        DateFormat('MMM d')
+                                                            .add_jm()
+                                                            .format(course[
+                                                                    'startDate']
+                                                                .toDate()),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18),
+                                                      ):
+                                                      
+                                                      Text(
+                                                        DateFormat('EEE')
+                                                            .add_jm()
+                                                            .format(course[
+                                                                    'startDate']
+                                                                .toDate()),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Container(),
+                                            isToday == true
+                                                ? Positioned(
+                                                    top: 0,
+                                                    right: 0,
+                                                    child: Container(
+                                                      height: 30,
+                                                      padding:
+                                                          EdgeInsets.all(4),
+                                                      decoration: BoxDecoration(
+                                                          gradient:
+                                                              LinearGradient(
+                                                            colors: [
+                                                              Colors.red[400],
+                                                              Colors.red[600]
+                                                            ],
+                                                            begin: Alignment
+                                                                .centerLeft,
+                                                            end: Alignment
+                                                                .centerRight,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0)),
+                                                      child: Text(
+                                                        DateFormat('EEE')
+                                                            .add_jm()
+                                                            .format(course[
+                                                                    'startDate']
+                                                                .toDate()),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Text(""),
+                                          ]),
+                                    )
+                                  : SizedBox(
+                                      width: isLargePhone
+                                          ? MediaQuery.of(context).size.width *
+                                              0.51
+                                          : MediaQuery.of(context).size.width *
+                                              0.49,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("no MOOVs, right now.")),
+                                    );
                             }))
                   ]),
             )),
@@ -525,267 +805,3 @@ class UserResult extends StatelessWidget {
 }
 
 // import 'package:MOOV/pages/home.dart';
-// import 'package:MOOV/pages/other_profile.dart';
-// import 'package:flutter/material.dart';
-// import 'package:MOOV/helpers/themes.dart';
-// import 'package:MOOV/pages/post_detail.dart';
-// import 'package:MOOV/pages/ProfilePageWithHeader.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
-// class FriendFinder extends StatefulWidget {
-//   String moovId;
-//   TextEditingController searchController = TextEditingController();
-//   List<dynamic> likedArray;
-//   final userFriends;
-//   // var moovRef;
-//   FriendFinder({this.userFriends});
-
-//   @override
-//   State<StatefulWidget> createState() {
-//     return FriendFinderState(this.userFriends);
-//   }
-// }
-
-// class FriendFinderState extends State<FriendFinder> {
-//   String moovId;
-//   var moovArray;
-//   var moovRef;
-//   var moov;
-//   TextEditingController searchController = TextEditingController();
-//   List<dynamic> likedArray;
-//   final userFriends;
-
-//   friendFind(arr) {
-//     moovRef = FirebaseFirestore.instance
-//         .collection('food')
-//         .where('liker', arrayContains: arr) // add document id
-//         .orderBy("startDate")
-//         .getdocs()
-//         .then((QuerySnapshot docs) => {
-//               if (docs.docs.isNotEmpty)
-//                 {
-//                   // setState(() {
-//                   moov = docs.docs[0].data['title']
-//                   // })
-//                 }
-//             });
-//     print(moov);
-//   }
-
-//   FriendFinderState(this.userFriends);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamBuilder(
-//         stream: FirebaseFirestore.instance
-//             .collection('users')
-//             .where("friendArray", arrayContains: currentUser.id)
-//             .snapshots(),
-//         builder: (context, snapshot) {
-//           return Scaffold(
-//               appBar: AppBar(
-//                 leading: IconButton(
-//                   icon: Icon(
-//                     Icons.arrow_back,
-//                     color: Colors.white,
-//                   ),
-//                   onPressed: () {
-//                     Navigator.pop(
-//                       context,
-//                       MaterialPageRoute(builder: (context) => ProfilePageWithHeader()),
-//                     );
-//                   },
-//                 ),
-//                 backgroundColor: TextThemes.ndBlue,
-//                 title: Text(
-//                   "Friend Finder",
-//                   style: TextStyle(color: Colors.white),
-//                 ),
-//               ),
-//               // body: Column(children: <Widget>[
-//               //   // Text(friendFind(snapshot.data.docs[0].data).toString()),
-//               //   Text(friendFind(snapshot.data.docs[1].data).toString()),
-//               //   Text(friendFind(snapshot.data.docs[2].data).toString()),
-//               // ])
-//               body: ListView.builder(
-//                   itemCount: snapshot.data.docs.length,
-//                   itemBuilder: (_, index) {
-//                     var iter = 0;
-//                     while (iter == 0) {
-//                       print(snapshot.data.docs[index].data['id']);
-//                                             print(snapshot.data.documents[index].data['id']);
-//                       print(snapshot.data.documents[index].data['id']);
-
-//                       friendFind(snapshot.data.documents[index].data['id']);
-//                       iter = iter + 1;
-//                     }
-//                     return moov == null
-//                         ? Container(color: Colors.white)
-//                         : Padding(
-//                             padding: const EdgeInsets.all(2.0),
-//                             child: Container(
-//                                 margin: EdgeInsets.all(0.0),
-//                                 child: Padding(
-//                                   padding:
-//                                       const EdgeInsets.symmetric(vertical: 2.0),
-//                                   child: Column(
-//                                     children: [
-//                                       Container(
-//                                           color: Colors.grey[300],
-//                                           child: Row(
-//                                             children: [
-//                                               Padding(
-//                                                 padding:
-//                                                     const EdgeInsets.all(8.0),
-//                                                 child: GestureDetector(
-//                                                     onTap: () {
-//                                                       Navigator.of(context).push(
-//                                                           MaterialPageRoute(
-//                                                               builder:
-//                                                                   (BuildContext
-//                                                                       context) {
-//                                                         return OtherProfile(
-//                                                             snapshot
-//                                                                 .data
-//                                                                 .documents[
-//                                                                     index]
-//                                                                 .data[
-//                                                                     'photoUrl']
-//                                                                 .toString(),
-//                                                             snapshot
-//                                                                 .data
-//                                                                 .documents[
-//                                                                     index]
-//                                                                 .data[
-//                                                                     'displayName']
-//                                                                 .toString(),
-//                                                             snapshot
-//                                                                 .data
-//                                                                 .documents[
-//                                                                     index]
-//                                                                 .data['id']
-//                                                                 .toString());
-//                                                       })); //Material
-//                                                     },
-//                                                     child: CircleAvatar(
-//                                                         radius: 22,
-//                                                         child: CircleAvatar(
-//                                                             radius: 22.0,
-//                                                             backgroundImage:
-//                                                                 NetworkImage(snapshot
-//                                                                         .data
-//                                                                         .documents[
-//                                                                             index]
-//                                                                         .data[
-//                                                                     'photoUrl'])
-
-//                                                             // NetworkImage(likedArray[index]['strPic']),
-
-//                                                             ))),
-//                                               ),
-//                                               Padding(
-//                                                 padding: const EdgeInsets.only(
-//                                                     left: 10.0),
-//                                                 child: GestureDetector(
-//                                                     onTap: () {
-//                                                       Navigator.of(context).push(
-//                                                           MaterialPageRoute(
-//                                                               builder:
-//                                                                   (BuildContext
-//                                                                       context) {
-//                                                         return OtherProfile(
-//                                                             snapshot
-//                                                                 .data
-//                                                                 .documents[
-//                                                                     index]
-//                                                                 .data[
-//                                                                     'photoUrl']
-//                                                                 .toString(),
-//                                                             snapshot
-//                                                                 .data
-//                                                                 .documents[
-//                                                                     index]
-//                                                                 .data[
-//                                                                     'displayName']
-//                                                                 .toString(),
-//                                                             snapshot
-//                                                                 .data
-//                                                                 .documents[
-//                                                                     index]
-//                                                                 .data['id']
-//                                                                 .toString());
-//                                                       })); //Material
-//                                                     },
-//                                                     child: Text(
-//                                                         snapshot
-//                                                             .data
-//                                                             .documents[index]
-//                                                             .data['displayName']
-//                                                             .toString(),
-//                                                         style: TextStyle(
-//                                                             fontSize: 16,
-//                                                             color: TextThemes
-//                                                                 .ndBlue,
-//                                                             decoration:
-//                                                                 TextDecoration
-//                                                                     .none))),
-//                                               ),
-//                                               Text(' is',
-//                                                   style:
-//                                                       TextStyle(fontSize: 16)),
-//                                               Text(' Going ',
-//                                                   style: TextStyle(
-//                                                       fontWeight:
-//                                                           FontWeight.bold,
-//                                                       fontSize: 16,
-//                                                       color: Colors.green)),
-//                                               Text('to ',
-//                                                   style:
-//                                                       TextStyle(fontSize: 16)),
-//                                               Spacer(),
-//                                               GestureDetector(
-//                                                   onTap: () {
-//                                                     Navigator.of(context).push(
-//                                                         MaterialPageRoute(
-//                                                             builder:
-//                                                                 (BuildContext
-//                                                                     context) {
-//                                                       return OtherProfile(
-//                                                           snapshot
-//                                                               .data
-//                                                               .documents[index]
-//                                                               .data['photoUrl']
-//                                                               .toString(),
-//                                                           snapshot
-//                                                               .data
-//                                                               .documents[index]
-//                                                               .data[
-//                                                                   'displayName']
-//                                                               .toString(),
-//                                                           snapshot
-//                                                               .data
-//                                                               .documents[index]
-//                                                               .data['id']
-//                                                               .toString());
-//                                                     })); //Material
-//                                                   },
-//                                                   child: Text(moov.toString(),
-//                                                       style: TextStyle(
-//                                                           fontWeight:
-//                                                               FontWeight.bold,
-//                                                           fontSize: 16,
-//                                                           color:
-//                                                               TextThemes.ndBlue,
-//                                                           decoration:
-//                                                               TextDecoration
-//                                                                   .none))),
-//                                             ],
-//                                           )),
-//                                     ],
-//                                   ),
-//                                 )),
-//                           );
-//                   }));
-//         });
-//   }
-// }

@@ -578,21 +578,24 @@ class Database {
         "suggestorId": userId
       }, SetOptions(merge: true));
       for (var i = 0; i < members.length; i++) {
-        notificationFeedRef
-            .doc(members[i])
-            .collection('feedItems')
-            .doc('suggest ' + postId)
-            .set({
-          "type": "suggestion",
-          "postId": postId,
-          "previewImg": pic,
-          "title": title,
-          "groupName": groupName,
-          "username": currentUser.displayName,
-          "userId": currentUser.id,
-          "userProfilePic": currentUser.photoUrl,
-          "timestamp": DateTime.now()
-        });
+        if (members[i] != currentUser.id) {
+          notificationFeedRef
+              .doc(members[i])
+              .collection('feedItems')
+              .doc('suggest ' + postId)
+              .set({
+            "type": "suggestion",
+            "postId": postId,
+            "previewImg": pic,
+            "title": title,
+            "groupId": gid,
+            "groupName": groupName,
+            "username": currentUser.displayName,
+            "userId": currentUser.id,
+            "userProfilePic": currentUser.photoUrl,
+            "timestamp": DateTime.now()
+          });
+        }
       }
 
       transaction.update(ref2, {'score': FieldValue.increment(1)});

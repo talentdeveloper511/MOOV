@@ -110,7 +110,6 @@ class _NotificationFeedState extends State<NotificationFeed> {
                           // Provide a function that tells the app
                           // what to do after an item has been swiped away.
                           onDismissed: (direction) {
-                            
                             notificationFeedRef
                                 .doc(currentUser.id)
                                 .collection('feedItems')
@@ -236,6 +235,7 @@ class NotificationFeedItem extends StatelessWidget {
   showGroup(context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => GroupDetail(groupId)));
+    print(groupId);
   }
 
   configureMediaPreview(context) {
@@ -352,7 +352,13 @@ class NotificationFeedItem extends StatelessWidget {
         color: Colors.white54,
         child: ListTile(
           title: GestureDetector(
-            onTap: () => showPost(context),
+            onTap: () {
+              (type == 'request' || type == 'accept')
+                  ? showProfile(context)
+                  : (type == 'suggestion' || type == 'friendGroup')
+                      ? showGroup(context)
+                      : showPost(context);
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

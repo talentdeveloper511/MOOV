@@ -206,7 +206,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                             _currentIndex = 2;
                           });
                         },
-                        child: Text("Friends"),
+                        child: Text("Private"),
                       )
                     ],
                   ),
