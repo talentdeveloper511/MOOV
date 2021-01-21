@@ -373,15 +373,15 @@ class _FriendFinderState extends State<FriendFinder>
             ),
       body: currentUser.friendArray.isEmpty
           ? StreamBuilder(
-              stream: usersRef
-                  .doc(currentUser.id)
-                  .snapshots(),
+              stream: usersRef.doc(currentUser.id).snapshots(),
               builder: (context, snapshot) {
                 List<dynamic> friendArray;
 
                 bool isLargePhone = Screen.diagonal(context) > 766;
 
                 if (!snapshot.hasData) return CircularProgressIndicator();
+                if (snapshot.data == null || snapshot.data == 0)
+                  return Container();
                 friendArray = snapshot.data['friendArray'];
                 if (snapshot.data["friendArray"].isEmpty) {
                   return Container(
@@ -443,6 +443,7 @@ class _FriendFinderState extends State<FriendFinder>
                     ),
                   );
                 } else {
+                  return
                   buildNoContent();
                 }
               })
@@ -585,8 +586,7 @@ class UserResult extends StatelessWidget {
                               if (isToday || isTomorrow) {
                                 isEither = true;
                               }
-                              if (isBoth == true && isEither == true
-                               ) {
+                              if (isBoth == true && isEither == true) {
                                 hide = false;
                               }
                               if (aDate.isAfter(week)) {

@@ -172,6 +172,9 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                 (BuildContext context, int index) {
                               if (!snapshot.hasData)
                                 return CircularProgressIndicator();
+                              if (snapshot.data.docs.length == 0) {
+                                return Container();
+                              }
 
                               DocumentSnapshot course =
                                   snapshot.data.docs[index];

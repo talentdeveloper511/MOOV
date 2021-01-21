@@ -85,7 +85,7 @@ class Database {
         .orderBy("startDate", descending: true);
 
     dbRef.runTransaction((transaction) async {
-      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       print('$userId');
       transaction.update(ref2, {'score': FieldValue.increment(30)});
       transaction.update(ref, {'postId': ref.id});
@@ -94,8 +94,8 @@ class Database {
 
   Future<void> addNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('food/$postId');
-      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      final DocumentReference ref = postsRef.doc('notreDame/data/food/$postId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
       // addGoingToNotificationFeed(
@@ -116,8 +116,8 @@ class Database {
 
   Future<void> removeNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('food/$postId');
-      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      final DocumentReference ref = dbRef.doc('notreDame/food/$postId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-1)});
 
       // addGoingToNotificationFeed(
@@ -138,8 +138,8 @@ class Database {
 
   Future<void> addUndecided(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('food/$postId');
-      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
       postsRef.doc(postId).set({
@@ -156,8 +156,8 @@ class Database {
 
   Future<void> removeUndecided(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('food/$postId');
-      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-1)});
 
       postsRef.doc(postId).set({
@@ -174,8 +174,8 @@ class Database {
 
   Future<void> addGoingGood(userId, ownerId, postId, title, pic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('food/$postId');
-      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(5)});
 
       await postsRef.doc(postId).set({
@@ -211,8 +211,8 @@ class Database {
 
   Future<void> removeGoingGood(userId, ownerId, postId, title, pic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('food/$postId');
-      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-5)});
 
       notificationFeedRef
@@ -425,7 +425,7 @@ class Database {
   Future<void> sendFriendRequest(String senderId, String receiverId,
       String senderName, String senderPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('users/$receiverId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/users/$receiverId');
       String serializedMessage = senderId;
       transaction.update(ref, {
         'friendRequests': FieldValue.arrayUnion([serializedMessage]),
@@ -436,8 +436,8 @@ class Database {
   Future<void> acceptFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('users/$receiverId');
-      final DocumentReference ref2 = dbRef.doc('users/$senderId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/users/$receiverId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$senderId');
       String serializedMessage = senderId;
       String serializedMessage2 = receiverId;
       String serializedMessage3 = senderId;
@@ -460,8 +460,8 @@ class Database {
   Future<void> rejectFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('users/$receiverId');
-      final DocumentReference ref2 = dbRef.doc('users/$senderId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/users/$receiverId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$senderId');
       String serializedMessage = senderId;
       String serializedMessage2 = receiverId;
       transaction.update(ref, {
@@ -475,8 +475,8 @@ class Database {
 
   Future<void> unfriend(String senderId, String receiverId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('users/$receiverId');
-      final DocumentReference ref2 = dbRef.doc('users/$senderId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/users/$receiverId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$senderId');
       String serializedMessage3 = senderId;
       String serializedMessage4 = receiverId;
       transaction.update(ref, {
@@ -504,8 +504,8 @@ class Database {
 
   Future<void> leaveGroup(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('users/$id');
-      final DocumentReference ref2 = dbRef.doc('friendGroups/$gid');
+      final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayRemove([gid]),
       });
@@ -517,13 +517,13 @@ class Database {
 
   Future<void> destroyGroup(gid) async {
     return dbRef.runTransaction((transaction) async {
-      dbRef.doc('friendGroups/$gid').delete();
+      dbRef.doc('notreDame/data/friendGroups/$gid').delete();
     });
   }
 
   Future<void> sendChat(user, message, gid) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('friendGroups/$gid');
+      final DocumentReference ref = dbRef.doc('notreDame/data/friendGroups/$gid');
       final Map<String, dynamic> chat = {
         'sender': user,
         'message': message,
@@ -537,8 +537,8 @@ class Database {
 
   Future<void> addUser(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('users/$id');
-      final DocumentReference ref2 = dbRef.doc('friendGroups/$gid');
+      final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayUnion([gid]),
       });
@@ -550,7 +550,7 @@ class Database {
 
   Future<void> setMOOV(gid, moovId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('friendGroups/$gid');
+      final DocumentReference ref = dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'nextMOOV': moovId,
       });
@@ -560,7 +560,7 @@ class Database {
   Future<void> suggestMOOV(
       userId, gid, postId, userName, members, title, pic, groupName) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref2 = dbRef.doc('users/$userId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
       groupsRef
@@ -602,7 +602,7 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       for (var i = 0; i < members.length; i++) {
         final use = members[i];
-        final DocumentReference ref = dbRef.doc('users/$use');
+        final DocumentReference ref = dbRef.doc('notreDame/data/users/$use');
         transaction.update(ref, {
           'friendGroups': FieldValue.arrayRemove([old]),
         });

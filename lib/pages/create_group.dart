@@ -117,7 +117,7 @@ class _GroupFormState extends State<GroupForm> {
     return FirebaseFirestore.instance.runTransaction((transaction) async {
       for (int i = 0; i < memberoonis.length; i++) {
         final DocumentReference userRefs =
-            FirebaseFirestore.instance.doc('users/${memberoonis[i]}');
+            FirebaseFirestore.instance.doc('notreDame/data/users/${memberoonis[i]}');
 
         transaction.update(userRefs, {
           'friendGroups': FieldValue.arrayUnion([groupId]),
