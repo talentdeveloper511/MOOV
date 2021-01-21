@@ -776,13 +776,12 @@ class PostOnFeed extends StatelessWidget {
                   //   ),
                   // ),
                   StreamBuilder(
-                      stream: usersRef
-                          .doc(course['userId'])
-                          .snapshots(),
+                      stream: usersRef.doc(course['userId']).snapshots(),
                       builder: (context, snapshot2) {
                         var userYear;
                         var userDorm;
                         bool isLargePhone = Screen.diagonal(context) > 766;
+                        bool isPostOwner = false;
 
                         if (snapshot2.hasError)
                           return CircularProgressIndicator();
@@ -793,6 +792,9 @@ class PostOnFeed extends StatelessWidget {
                         strUserPic = snapshot2.data['photoUrl'];
                         bool isAmbassador = snapshot2.data['isAmbassador'];
                         userYear = snapshot2.data['year'];
+                        if (currentUser.id == course['userId']) {
+                          isPostOwner = true;
+                        }
 
                         return Container(
                             child: Row(
@@ -828,8 +830,10 @@ class PostOnFeed extends StatelessWidget {
                                         backgroundColor: Colors.transparent,
                                       ),
                                     )),
-                                Container(
-                                  width: isLargePhone ? 130 : 95,
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: 130,
+                                  ),
                                   child: GestureDetector(
                                     onTap: () {
                                       if (course['userId'] == currentUser.id) {
@@ -854,22 +858,35 @@ class PostOnFeed extends StatelessWidget {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 2.0),
-                                          child: Row(
-                                            children: [
-                                              Text(course['userName'],
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: TextThemes.ndBlue,
-                                                      decoration:
-                                                          TextDecoration.none)),
-                                                           isAmbassador
-                                ? Padding(
-                                  padding: const EdgeInsets.only(left: 2.0),
-                                  child: Image.asset('lib/assets/verif.png',
-                                      height: 22.5),
-                                )
-                                : Text("")
-                                            ],
+                                          child: ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              maxWidth: 130,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Text(course['userName'],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color:
+                                                            TextThemes.ndBlue,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .none)),
+                                                isAmbassador
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 2.0),
+                                                        child: Image.asset(
+                                                            'lib/assets/verif.png',
+                                                            height: 22.5),
+                                                      )
+                                                    : Text("")
+                                              ],
+                                            ),
                                           ),
                                         ),
                                         Padding(
@@ -892,18 +909,28 @@ class PostOnFeed extends StatelessWidget {
                               ],
                             ),
                             course['userId'] == currentUser.id
-                                ? RaisedButton(
-                                    color: Colors.red,
-                                    onPressed: () => Navigator.of(context).push(
+                                ? GestureDetector(
+                                    onTap: () => Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 EditPost(course['postId']))),
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
 
-                                    // showAlertDialog(context, postId, userId),
-                                    child: Text(
-                                      "Edit",
-                                      style: TextStyle(color: Colors.white),
-                                    ))
+                                        // showAlertDialog(context, postId, userId),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Edit",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13),
+                                          ),
+                                        )),
+                                  )
                                 : Text(''),
                             Row(
                               children: [
