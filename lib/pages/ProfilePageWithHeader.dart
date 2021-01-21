@@ -41,9 +41,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
     bool isAmbassador = currentUser.isAmbassador;
 
     return StreamBuilder(
-        stream: usersRef
-            .doc(currentUser.id)
-            .snapshots(),
+        stream: usersRef.doc(currentUser.id).snapshots(),
         builder: (context, snapshot) {
           List<dynamic> likedArray;
           dynamic moovId;
@@ -108,15 +106,23 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                       FractionallySizedBox(
                         widthFactor: isLargePhone ? 1.17 : 1.34,
                         child: Container(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: userHeader == ""
-                                ? Image.asset('lib/assets/header.jpg',
-                                    fit: BoxFit.cover)
-                                : Image.network(
-                                    userHeader,
-                                    fit: BoxFit.fitWidth,
-                                  ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditProfile()));
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: userHeader == ""
+                                  ? Image.asset('lib/assets/header.jpg',
+                                      fit: BoxFit.cover)
+                                  : Image.network(
+                                      userHeader,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                            ),
                           ),
                           margin: EdgeInsets.only(
                               left: 20, top: 0, right: 20, bottom: 7.5),
@@ -140,20 +146,6 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                     ]),
                   ),
                 ),
-                Positioned(
-                    top: 60,
-                    right: 75,
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile()));
-                        },
-                        child: Icon(
-                          Icons.edit,
-                          size: 35,
-                        ))),
                 Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -256,15 +248,15 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                  child: userFriends.length == 1 ?
-                                    Text(
-                                      '     Friend     ',
-                                      style: TextThemes.bodyText1,
-                                    ):
-                                    Text(
-                                      '     Friends     ',
-                                      style: TextThemes.bodyText1,
-                                    ),
+                                    child: userFriends.length == 1
+                                        ? Text(
+                                            '     Friend     ',
+                                            style: TextThemes.bodyText1,
+                                          )
+                                        : Text(
+                                            '     Friends     ',
+                                            style: TextThemes.bodyText1,
+                                          ),
                                   ),
                                 ],
                               ),

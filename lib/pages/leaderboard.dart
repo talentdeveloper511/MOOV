@@ -154,8 +154,8 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                       begin: Alignment.topRight,
                                       end: Alignment(0.9, 0.9),
                                       colors: [
-                                    Colors.lightBlue[300],
-                                    Colors.purple[300]
+                                    TextThemes.ndBlue,
+                                    TextThemes.ndBlue
                                   ])),
                               child: Center(
                                   child: Padding(

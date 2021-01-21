@@ -40,9 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
     bool isAmbassador = currentUser.isAmbassador;
 
     return StreamBuilder(
-        stream: usersRef
-            .doc(currentUser.id)
-            .snapshots(),
+        stream: usersRef.doc(currentUser.id).snapshots(),
         builder: (context, snapshot) {
           bool isLargePhone = Screen.diagonal(context) > 766;
 
@@ -69,15 +67,23 @@ class _ProfilePageState extends State<ProfilePage> {
                       FractionallySizedBox(
                         widthFactor: isLargePhone ? 1.17 : 1.34,
                         child: Container(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: userHeader == ""
-                                ? Image.asset('lib/assets/header.jpg',
-                                    fit: BoxFit.cover)
-                                : Image.network(
-                                    userHeader,
-                                    fit: BoxFit.fitWidth,
-                                  ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditProfile()));
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: userHeader == ""
+                                  ? Image.asset('lib/assets/header.jpg',
+                                      fit: BoxFit.cover)
+                                  : Image.network(
+                                      userHeader,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                            ),
                           ),
                           margin: EdgeInsets.only(
                               left: 20, top: 0, right: 20, bottom: 7.5),
@@ -101,20 +107,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ]),
                   ),
                 ),
-                Positioned(
-                    top: 60,
-                    right: 75,
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile()));
-                        },
-                        child: Icon(
-                          Icons.edit,
-                          size: 35,
-                        ))),
                 Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -203,9 +195,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => FriendsList(
-                                        
-                                        id: currentUser.id)));
+                                    builder: (context) =>
+                                        FriendsList(id: currentUser.id)));
                               },
                               child: Column(
                                 children: [
@@ -218,15 +209,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: userFriends.length == 1 ?
-                                    Text(
-                                      '     Friend     ',
-                                      style: TextThemes.bodyText1,
-                                    ):
-                                    Text(
-                                      '     Friends     ',
-                                      style: TextThemes.bodyText1,
-                                    ),
+                                    child: userFriends.length == 1
+                                        ? Text(
+                                            '     Friend     ',
+                                            style: TextThemes.bodyText1,
+                                          )
+                                        : Text(
+                                            '     Friends     ',
+                                            style: TextThemes.bodyText1,
+                                          ),
                                   ),
                                 ],
                               ),

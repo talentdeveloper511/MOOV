@@ -8,6 +8,7 @@ import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/NextMOOV.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/set_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -106,17 +107,13 @@ class _GroupDetailState extends State<GroupDetail> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
-        stream: usersRef
-            .where('friendGroups', arrayContains: gid)
-            .snapshots(),
+        stream: usersRef.where('friendGroups', arrayContains: gid).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           if (snapshot.data == null) return Container();
 
           return StreamBuilder(
-              stream: groupsRef
-                  .doc(gid)
-                  .snapshots(),
+              stream: groupsRef.doc(gid).snapshots(),
               builder: (context, snapshot2) {
                 if (!snapshot2.hasData) return CircularProgressIndicator();
                 if (snapshot2.data == null) return Container();
@@ -281,7 +278,8 @@ class _GroupDetailState extends State<GroupDetail> {
                                 ),
                               ),
                             ]),
-                        body: SingleChildScrollView(
+                        body:
+                        SingleChildScrollView(
                           child: Container(
                             child: Column(
                               children: [
@@ -901,13 +899,15 @@ class _SuggestionsState extends State<Suggestions> {
         DocumentSnapshot course = snapshot4.data.docs[pos];
         String nextMOOV = course['nextMOOV'];
 
-        return (nextMOOV != null && nextMOOV.isNotEmpty) ? Container(
-          margin: EdgeInsets.all(5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[NextMOOV(nextMOOV)],
-          ),
-        ) : Container();
+        return (nextMOOV != null && nextMOOV.isNotEmpty)
+            ? Container(
+                margin: EdgeInsets.all(5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[NextMOOV(nextMOOV)],
+                ),
+              )
+            : Container();
       },
       itemCount: count,
     );
@@ -938,10 +938,7 @@ class _SuggestionsState extends State<Suggestions> {
       spacing: 8,
     );
     return StreamBuilder(
-        stream: groupsRef
-            .doc(groupId)
-            .collection("suggestedMOOVs")
-            .snapshots(),
+        stream: groupsRef.doc(groupId).collection("suggestedMOOVs").snapshots(),
         builder: (context, snapshot4) {
           if (!snapshot4.hasData || snapshot4.data == null) return Container();
           if (snapshot4.data.docs.length == 0) {
@@ -1187,9 +1184,7 @@ class _SuggestionsState extends State<Suggestions> {
                             var w = voters.keys.toList();
 
                             return StreamBuilder(
-                                stream: usersRef
-                                    .doc(w[index])
-                                    .snapshots(),
+                                stream: usersRef.doc(w[index]).snapshots(),
                                 builder: (context, snapshot3) {
                                   if (!snapshot3.hasData ||
                                       snapshot3.data == null)
@@ -1299,9 +1294,7 @@ class _SuggestionsState extends State<Suggestions> {
                             var w = voters.keys.toList();
 
                             return StreamBuilder(
-                                stream: usersRef
-                                    .doc(w[index])
-                                    .snapshots(),
+                                stream: usersRef.doc(w[index]).snapshots(),
                                 builder: (context, snapshot3) {
                                   if (!snapshot3.hasData ||
                                       snapshot3.data == null)

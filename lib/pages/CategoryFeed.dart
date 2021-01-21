@@ -829,7 +829,7 @@ class PostOnFeed extends StatelessWidget {
                                       ),
                                     )),
                                 Container(
-                                  width: isLargePhone ? 120 : 95,
+                                  width: isLargePhone ? 130 : 95,
                                   child: GestureDetector(
                                     onTap: () {
                                       if (course['userId'] == currentUser.id) {
@@ -854,12 +854,23 @@ class PostOnFeed extends StatelessWidget {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 2.0),
-                                          child: Text(course['userName'],
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: TextThemes.ndBlue,
-                                                  decoration:
-                                                      TextDecoration.none)),
+                                          child: Row(
+                                            children: [
+                                              Text(course['userName'],
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: TextThemes.ndBlue,
+                                                      decoration:
+                                                          TextDecoration.none)),
+                                                           isAmbassador
+                                ? Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: Image.asset('lib/assets/verif.png',
+                                      height: 22.5),
+                                )
+                                : Text("")
+                                            ],
+                                          ),
                                         ),
                                         Padding(
                                           padding:

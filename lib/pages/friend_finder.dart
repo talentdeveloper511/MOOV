@@ -539,7 +539,7 @@ class UserResult extends StatelessWidget {
                                     child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding: !isLargePhone ? const EdgeInsets.all(4.0) : 0,
+                                          padding: !isLargePhone ? const EdgeInsets.all(4.0) : EdgeInsets.all(2.0),
                                           child: Text("nothing, right now."),
                                         )),
                                     width: isLargePhone
@@ -814,7 +814,10 @@ class UserResult extends StatelessWidget {
                                               0.15,
                                       child: Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text("no MOOVs, right now.")),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 2.0),
+                                            child: Text("no MOOVs, right now."),
+                                          )),
                                     );
                             }))
                   ]),

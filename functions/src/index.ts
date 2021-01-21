@@ -7,14 +7,14 @@ const db = admin.firestore();
 const fcm = admin.messaging();
 
 exports.onCreateActivityFeedItem = functions.firestore
-  .document("/notificationFeed/{userId}/feedItems/{activityFeedItem}")
+  .document("notreDame/data/notificationFeed/{userId}/feedItems/{activityFeedItem}")
   .onCreate(async (snapshot, context) => {
     console.log("Activity Feed Item Created", snapshot.data());
 
     // 1) Get user connected to the feed
     const userId = context.params.userId;
 
-    const userRef = admin.firestore().doc(`users/${userId}`);
+    const userRef = admin.firestore().doc(`notreDame/data/users/${userId}`);
     const doc = await userRef.get();
 
     // 2) Once we have user, check if they have a notification token; send notification, if they have a token
@@ -67,7 +67,7 @@ exports.onCreateActivityFeedItem = functions.firestore
 
 
 export const sendToDevice = functions.firestore
-  .document('notificationFeed/{currentUser}/feedItems/{userId}')
+  .document('notreDame/data/notificationFeed/{currentUser}/feedItems/{userId}')
   .onCreate(async snapshot => {
 
 

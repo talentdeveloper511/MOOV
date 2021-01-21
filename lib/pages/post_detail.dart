@@ -320,6 +320,7 @@ class _AuthorContent extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> course = snapshot.data.data();
+          bool isAmbassador = snapshot.data['isAmbassador'];
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -346,11 +347,20 @@ class _AuthorContent extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(course['displayName'],
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: TextThemes.ndBlue,
-                                  decoration: TextDecoration.none)),
+                          child: Row(
+                            children: [
+                              Text(course['displayName'],
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: TextThemes.ndBlue,
+                                      decoration: TextDecoration.none)),
+                                      isAmbassador
+                                ? Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: Image.asset('lib/assets/verif.png',
+                                      height: 22.5),) : Text('')
+                            ],
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
