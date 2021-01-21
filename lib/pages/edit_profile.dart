@@ -17,7 +17,6 @@ import 'package:image_picker/image_picker.dart';
 class EditProfile extends StatefulWidget {
   final Home user;
 
-  final usersRef = FirebaseFirestore.instance.collection('users');
 
   EditProfile({Key key, this.user}) : super(key: key);
 

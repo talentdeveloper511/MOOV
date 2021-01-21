@@ -32,12 +32,22 @@ import 'create_account.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final Reference storageRef = FirebaseStorage.instance.ref();
-final usersRef = FirebaseFirestore.instance.collection('users');
-final postsRef = FirebaseFirestore.instance.collection('food');
-final groupsRef = FirebaseFirestore.instance.collection('friendGroups');
-
-final notificationFeedRef =
-    FirebaseFirestore.instance.collection('notificationFeed');
+final usersRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('users');
+final postsRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('food');
+final groupsRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('friendGroups');
+final notificationFeedRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('notificationFeed');
 final DateTime timestamp = DateTime.now();
 User currentUser;
 

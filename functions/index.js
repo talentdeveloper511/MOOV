@@ -87,7 +87,7 @@ exports.onCreateActivityFeedItem = functions.firestore
 functions.pubsub.schedule("* * * * *").onRun(async () => {
   const now = admin.firestore.Timestamp.now().toMillis;
   const querySnapshot = await admin
-      .firestore()
+      .firestore().collection("notreDame").doc("data")
       .collection("food")
       .where("startDateTimestamp", "<", now)
       .get();
@@ -106,7 +106,7 @@ exports.scheduledFunction = functions.pubsub.schedule("every 5 minutes")
       const now = admin.firestore.Timestamp.now().toMillis;
 
       const querySnapshot = await admin
-          .firestore()
+          .firestore().collection("notreDame").doc("data")
           .collection("food")
           .where("startDateTimestamp", "<", now)
           .get();

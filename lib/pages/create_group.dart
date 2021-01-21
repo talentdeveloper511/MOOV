@@ -19,7 +19,6 @@ import 'package:page_transition/page_transition.dart';
 
 class GroupForm extends StatefulWidget {
   final Home user;
-  final usersRef = FirebaseFirestore.instance.collection('users');
 
   GroupForm({Key key, this.user}) : super(key: key);
 
@@ -49,9 +48,9 @@ class _GroupFormState extends State<GroupForm> {
 
   Future<bool> doesNameAlreadyExist(groupName) async {
     List<String> groupNames = [];
+    
 
-    final QuerySnapshot result = await FirebaseFirestore.instance
-        .collection('friendGroups')
+    final QuerySnapshot result = await groupsRef
         .where('groupName', isEqualTo: groupName)
         .get();
     for (int i = 0; i < result.docs.length; i++) {
@@ -90,9 +89,8 @@ class _GroupFormState extends State<GroupForm> {
   createGroupInFirestore(gname, cid, pic) async {
     final String groupName = gname;
     final groupId = generateRandomString(20);
-    // var newDocRef = FirebaseFirestore.instance.collection('friendgroups').document();
 
-    FirebaseFirestore.instance.collection('friendGroups').doc(groupId).set({
+    groupsRef.doc(groupId).set({
       "groupName": groupName,
       "members": memberoonis,
       "groupPic": pic,
@@ -356,8 +354,7 @@ class _GroupFormState extends State<GroupForm> {
                                       itemCount: memberoonis.length,
                                       itemBuilder: (_, index) {
                                         return StreamBuilder(
-                                            stream: FirebaseFirestore.instance
-                                                .collection('users')
+                                            stream: usersRef
                                                 .doc(memberoonis[index])
                                                 .snapshots(),
                                             builder: (context, snapshot) {

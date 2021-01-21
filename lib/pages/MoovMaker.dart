@@ -18,12 +18,10 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:page_transition/page_transition.dart';
 import 'home.dart';
 
-final usersRef = FirebaseFirestore.instance.collection('users');
 
 class MoovMaker extends StatefulWidget {
   final PostModel postModel;
@@ -615,8 +613,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                       itemCount: inviteesNameList.length,
                                       itemBuilder: (_, index) {
                                         return StreamBuilder(
-                                            stream: FirebaseFirestore.instance
-                                                .collection('users')
+                                            stream: usersRef
                                                 .doc(inviteesNameList[index])
                                                 .snapshots(),
                                             builder: (context, snapshot) {

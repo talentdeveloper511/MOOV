@@ -106,8 +106,7 @@ class _GroupDetailState extends State<GroupDetail> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('users')
+        stream: usersRef
             .where('friendGroups', arrayContains: gid)
             .snapshots(),
         builder: (context, snapshot) {
@@ -115,8 +114,7 @@ class _GroupDetailState extends State<GroupDetail> {
           if (snapshot.data == null) return Container();
 
           return StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('friendGroups')
+              stream: groupsRef
                   .doc(gid)
                   .snapshots(),
               builder: (context, snapshot2) {
@@ -940,8 +938,7 @@ class _SuggestionsState extends State<Suggestions> {
       spacing: 8,
     );
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('friendGroups')
+        stream: groupsRef
             .doc(groupId)
             .collection("suggestedMOOVs")
             .snapshots(),
@@ -1190,8 +1187,7 @@ class _SuggestionsState extends State<Suggestions> {
                             var w = voters.keys.toList();
 
                             return StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('users')
+                                stream: usersRef
                                     .doc(w[index])
                                     .snapshots(),
                                 builder: (context, snapshot3) {
@@ -1303,8 +1299,7 @@ class _SuggestionsState extends State<Suggestions> {
                             var w = voters.keys.toList();
 
                             return StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('users')
+                                stream: usersRef
                                     .doc(w[index])
                                     .snapshots(),
                                 builder: (context, snapshot3) {

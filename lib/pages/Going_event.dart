@@ -23,8 +23,7 @@ class GoingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('food')
+        stream: postsRef
             .doc(moovId)
             .snapshots(),
         builder: (context, snapshot) {
@@ -53,8 +52,7 @@ class GoingPage extends StatelessWidget {
                       itemCount: inviteesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
-                            stream: FirebaseFirestore.instance
-                                .collection('users')
+                            stream: usersRef
                                 .doc(inviteesIds[index])
                                 .snapshots(),
                             builder: (context, snapshot) {
@@ -242,8 +240,7 @@ class GoingPageFriends extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('food')
+        stream: postsRef
             .doc(moovId)
             .snapshots(),
         builder: (context, snapshot) {
@@ -272,8 +269,7 @@ class GoingPageFriends extends StatelessWidget {
                       itemCount: inviteesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
-                            stream: FirebaseFirestore.instance
-                                .collection('users')
+                            stream: usersRef
                                 .doc(inviteesIds[index])
                                 .snapshots(),
                             builder: (context, snapshot2) {

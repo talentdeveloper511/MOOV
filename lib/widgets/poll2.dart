@@ -45,7 +45,7 @@ class _PollViewState extends State<PollView> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
+        stream: FirebaseFirestore.instance.collection('notreDame').doc('data')
             .collection('poll')
             .doc('jan12')
             .snapshots(),
@@ -122,7 +122,7 @@ class _PollViewState extends State<PollView> {
                               x = choice;
                             });
 
-                            FirebaseFirestore.instance
+                            FirebaseFirestore.instance.collection('notreDame').doc('data')
                                 .collection('poll')
                                 .doc('jan12')
                                 .set({
@@ -175,8 +175,7 @@ class _PollViewState extends State<PollView> {
                                 var p = voters.keys.toList();
 
                                 return StreamBuilder(
-                                    stream: FirebaseFirestore.instance
-                                        .collection('users')
+                                    stream: usersRef
                                         .doc(p[index])
                                         .snapshots(),
                                     builder: (context, snapshot2) {
@@ -264,8 +263,7 @@ class _PollViewState extends State<PollView> {
                                 var w = voters.keys.toList();
 
                                 return StreamBuilder(
-                                    stream: FirebaseFirestore.instance
-                                        .collection('users')
+                                    stream: usersRef
                                         .doc(w[index])
                                         .snapshots(),
                                     builder: (context, snapshot3) {

@@ -74,6 +74,7 @@ export const sendToDevice = functions.firestore
     const notification = snapshot.data();
 
     const querySnapshot = await db
+    .collection('notreDame').doc('data')
       .collection('users')
       .doc(notification.ownerName)
       .collection('tokens')
@@ -102,7 +103,7 @@ export const sendToDevice = functions.firestore
         
       
         const querySnapshot = await admin
-          .firestore()
+          .firestore().collection("notreDame").doc("data")
           .collection("food")
           .where("startDateTimestamp", "<", now)
           .get();
@@ -123,7 +124,7 @@ exports.scheduledFunction = functions.pubsub.schedule('every 5 minutes').onRun(a
         
       
         const querySnapshot = await admin
-          .firestore()
+          .firestore().collection("notreDame").doc("data")
           .collection("food")
           .where("startDateTimestamp", "<", now)
           .get();

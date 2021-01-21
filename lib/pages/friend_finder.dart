@@ -373,8 +373,7 @@ class _FriendFinderState extends State<FriendFinder>
             ),
       body: currentUser.friendArray.isEmpty
           ? StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
+              stream: usersRef
                   .doc(currentUser.id)
                   .snapshots(),
               builder: (context, snapshot) {
@@ -522,8 +521,7 @@ class UserResult extends StatelessWidget {
                     Container(child: Text("is going to")),
                     Container(
                         child: StreamBuilder(
-                            stream: FirebaseFirestore.instance
-                                .collection('food')
+                            stream: postsRef
                                 .where('going', arrayContains: user.id)
                                 .orderBy("startDate")
                                 .snapshots(),

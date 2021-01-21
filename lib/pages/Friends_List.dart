@@ -6,8 +6,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final usersRef = FirebaseFirestore.instance.collection('users');
-
 class FriendsList extends StatefulWidget {
   TextEditingController searchController = TextEditingController();
   final id;
@@ -33,8 +31,7 @@ class FriendsListState extends State<FriendsList> {
     // TODO: implement build
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('users')
+        stream: usersRef
             .where("friendArray", arrayContains: id)
             .snapshots(),
         builder: (context, snapshot) {

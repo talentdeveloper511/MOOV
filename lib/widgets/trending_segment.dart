@@ -95,8 +95,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
             child: ListView(children: [
               Container(
                 child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('food')
+                    stream: postsRef
                         .where('type', isEqualTo: 'Restaurants & Bars')
                         .where('privacy', isEqualTo: 'Public')
                         .snapshots(),
@@ -157,8 +156,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
               ),
               Container(
                 child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('food')
+                    stream: postsRef
                         .where('type', isEqualTo: "Pregames & Parties")
                         .where('privacy', isEqualTo: "Public")
                         .snapshots(),
@@ -220,8 +218,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
               ),
               Container(
                 child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('food')
+                    stream: postsRef
                         .where('type', isEqualTo: 'Shows')
                         .where('privacy', isEqualTo: 'Public')
                         .snapshots(),

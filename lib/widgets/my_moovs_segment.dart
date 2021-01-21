@@ -124,8 +124,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
       //       return PostCard(postData: DemoValues.posts[index]);
       //     }),
       StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('food')
+          stream: postsRef
               .where("userId", isEqualTo: user.id)
               .orderBy("startDate")
               .snapshots(),
@@ -512,8 +511,7 @@ class MyMoovsSegmentState extends State<MyMoovsSegment> {
             );
           }),
       StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('food')
+          stream: postsRef
               .where("liked", arrayContains: {"uid": strUserId})
               .orderBy("startDate")
               .snapshots(),

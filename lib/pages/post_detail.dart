@@ -78,8 +78,7 @@ class _PostDetailState extends State<PostDetail> {
           top: false,
           child: Stack(children: [
             StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('food')
+                stream: postsRef
                     .doc(postId)
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -543,8 +542,7 @@ class Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('food')
+        stream: postsRef
             .doc(moovId)
             .snapshots(),
         builder: (context, snapshot) {

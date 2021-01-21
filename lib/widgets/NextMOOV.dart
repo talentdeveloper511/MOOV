@@ -35,8 +35,7 @@ class _NextMOOVState extends State<NextMOOV> {
     var pic;
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('food')
+        stream: postsRef
             .where("postId", isEqualTo: selected)
             .snapshots(),
         builder: (context, snapshot) {

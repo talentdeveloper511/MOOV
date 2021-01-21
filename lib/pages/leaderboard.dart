@@ -93,8 +93,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
       ),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('users')
+          stream: usersRef
               .orderBy('score', descending: true)
               .limit(50)
               .snapshots(),
@@ -121,7 +120,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
               var prize;
 
               return StreamBuilder(
-                  stream: FirebaseFirestore.instance
+                  stream: FirebaseFirestore.instance.collection('notreDame').doc('data')
                       .collection('leaderboard')
                       .doc('prizes')
                       .snapshots(),

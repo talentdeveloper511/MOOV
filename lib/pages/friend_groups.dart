@@ -77,8 +77,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
           ),
         ),
         body: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('friendGroups')
+            stream: groupsRef
                 .where('members', arrayContains: currentUser.id)
                 .snapshots(),
             builder: (context, snapshot) {
@@ -185,8 +184,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                               // print(course['groupName']);
 
                               return StreamBuilder(
-                                  stream: FirebaseFirestore.instance
-                                      .collection('users')
+                                  stream: usersRef
                                       .where('friendGroups',
                                           arrayContains: groupId)
                                       .snapshots(),

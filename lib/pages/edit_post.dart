@@ -202,8 +202,7 @@ class _EditPostState extends State<EditPost> {
     final groupNameController = TextEditingController();
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('food')
+        stream: postsRef
             .doc(postId)
             .snapshots(),
         builder: (context, snapshot) {

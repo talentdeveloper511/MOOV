@@ -23,8 +23,7 @@ class _MapTestState extends State<MapTest> {
       color: Colors.white,
       height: 280,
       child: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('food')
+          stream: postsRef
               // .where("MOTD", isEqualTo: true)
               .snapshots(),
           builder: (context, snapshot) {

@@ -40,8 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
     bool isAmbassador = currentUser.isAmbassador;
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('users')
+        stream: usersRef
             .doc(currentUser.id)
             .snapshots(),
         builder: (context, snapshot) {

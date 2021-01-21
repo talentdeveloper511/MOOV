@@ -60,7 +60,7 @@ class Database {
       profilePic,
       featured,
       postId}) async {
-    DocumentReference ref = await dbRef.collection("food").doc(postId).set({
+    DocumentReference ref = await postsRef.doc(postId).set({
       'title': title,
       'likes': likes,
       'type': type,
@@ -81,8 +81,7 @@ class Database {
       "postId": postId
     }).then(inviteesNotification(postId, imageUrl, title, invitees));
 
-    FirebaseFirestore.instance
-        .collection("food")
+    postsRef
         .orderBy("startDate", descending: true);
 
     dbRef.runTransaction((transaction) async {
@@ -103,7 +102,7 @@ class Database {
       //     userId,
       //     postId
       //     );
-      FirebaseFirestore.instance.collection('food').doc(postId).set({
+      postsRef.doc(postId).set({
         "invitees": {userId: 1}
       }, SetOptions(merge: true));
 
@@ -143,7 +142,7 @@ class Database {
       final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
-      FirebaseFirestore.instance.collection('food').doc(postId).set({
+      postsRef.doc(postId).set({
         "invitees": {userId: 2}
       }, SetOptions(merge: true));
 
@@ -179,7 +178,7 @@ class Database {
       final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(5)});
 
-      await FirebaseFirestore.instance.collection('food').doc(postId).set({
+      await postsRef.doc(postId).set({
         "invitees": {userId: 3}
       }, SetOptions(merge: true));
 
@@ -490,16 +489,14 @@ class Database {
   }
 
   Future<QuerySnapshot> checkStatus(String senderId, String receiverId) {
-    return FirebaseFirestore.instance
-        .collection('users')
+    return usersRef
         .where('id', isEqualTo: receiverId)
         .where('friendRequests', arrayContains: senderId)
         .get();
   }
 
   Future<QuerySnapshot> checkFriends(String senderId, String receiverId) {
-    return FirebaseFirestore.instance
-        .collection('users')
+    return usersRef
         .where('id', isEqualTo: receiverId)
         .where('friendArray', arrayContains: senderId)
         .get();
@@ -566,8 +563,7 @@ class Database {
       final DocumentReference ref2 = dbRef.doc('users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
-      FirebaseFirestore.instance
-          .collection('friendGroups')
+      groupsRef
           .doc(gid)
           .collection("suggestedMOOVs")
           .doc(userId)
@@ -619,8 +615,7 @@ class Database {
 
   Future<void> addNoVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      FirebaseFirestore.instance
-          .collection('friendGroups')
+      groupsRef
           .doc(gid)
           .collection('suggestedMOOVs')
           .doc(suggestorId)
@@ -632,8 +627,7 @@ class Database {
 
   Future<void> removeNoVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      FirebaseFirestore.instance
-          .collection('friendGroups')
+      groupsRef
           .doc(gid)
           .collection('suggestedMOOVs')
           .doc(suggestorId)
@@ -645,8 +639,7 @@ class Database {
 
   Future<void> addYesVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      FirebaseFirestore.instance
-          .collection('friendGroups')
+      groupsRef
           .doc(gid)
           .collection('suggestedMOOVs')
           .doc(suggestorId)
@@ -658,8 +651,7 @@ class Database {
 
   Future<void> removeYesVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      FirebaseFirestore.instance
-          .collection('friendGroups')
+      groupsRef
           .doc(gid)
           .collection('suggestedMOOVs')
           .doc(suggestorId)

@@ -197,8 +197,7 @@ class _EditGroupState extends State<EditGroup> {
     final groupNameController = TextEditingController();
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('users')
+        stream: usersRef
             .where('friendGroups', arrayContains: gid)
             .snapshots(),
         builder: (context, snapshot) {
@@ -453,8 +452,7 @@ class _EditGroupState extends State<EditGroup> {
                             if (groupNameController.text != "") {
                               Database().updateGroupNames(members,
                                   groupNameController.text, gid, displayName);
-                              FirebaseFirestore.instance
-                                  .collection('friendGroups')
+                              groupsRef
                                   .doc(gid)
                                   .update({
                                 "groupName": groupNameController.text,

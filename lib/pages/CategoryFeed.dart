@@ -1,6 +1,7 @@
 import 'package:MOOV/helpers/demo_values.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
@@ -273,8 +274,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                       // Sign In View
                       Center(
                         child: StreamBuilder(
-                            stream: FirebaseFirestore.instance
-                                .collection('food')
+                            stream: postsRef
                                 .where("type", isEqualTo: type)
                                 // .where("featured", isEqualTo: true)
                                 .orderBy("startDate")
@@ -364,8 +364,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                             }),
                       ),
                       StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('food')
+                          stream: postsRef
                               .where("type", isEqualTo: type)
                               .orderBy("startDate")
                               .snapshots(),
@@ -452,8 +451,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                             );
                           }),
                       StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('food')
+                          stream: postsRef
                               .where("type", isEqualTo: type)
                               // .where('privacy', isEqualTo: 'Friends Only')
                               // .where('userId', whereIn: currentUser.friendArray)
@@ -778,8 +776,7 @@ class PostOnFeed extends StatelessWidget {
                   //   ),
                   // ),
                   StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
+                      stream: usersRef
                           .doc(course['userId'])
                           .snapshots(),
                       builder: (context, snapshot2) {

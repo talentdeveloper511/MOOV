@@ -123,7 +123,7 @@ class _OtherProfileState extends State<OtherProfile> {
 
     return StreamBuilder(
         stream:
-            FirebaseFirestore.instance.collection('users').doc(id).snapshots(),
+            usersRef.doc(id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
           while (iter > 0) {
