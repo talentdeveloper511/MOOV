@@ -882,7 +882,7 @@ class PostOnFeed extends StatelessWidget {
                                                                 left: 2.0),
                                                         child: Image.asset(
                                                             'lib/assets/verif.png',
-                                                            height: 22.5),
+                                                            height: 21),
                                                       )
                                                     : Text("")
                                               ],

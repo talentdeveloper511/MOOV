@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV/pages/notification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class NextMOOV extends StatefulWidget {
   String selected;
@@ -53,6 +54,33 @@ class _NextMOOVState extends State<NextMOOV> {
                   DocumentSnapshot course = snapshot.data.docs[index];
                   pic = course['image'];
                   title = course['title'];
+                  Timestamp startDate = course['startDate'];
+                  final now = DateTime.now();
+                  bool isToday = false;
+                  bool isTomorrow = false;
+                  bool isBoth = false;
+                  bool isEither = false;
+
+                  bool isNextWeek = false;
+
+                  final today = DateTime(now.year, now.month, now.day);
+                  final yesterday = DateTime(now.year, now.month, now.day - 1);
+                  final tomorrow = DateTime(now.year, now.month, now.day + 1);
+                  final week = DateTime(now.year, now.month, now.day + 6);
+
+                  final dateToCheck = startDate.toDate();
+                  final aDate = DateTime(
+                      dateToCheck.year, dateToCheck.month, dateToCheck.day);
+
+                  if (aDate == today) {
+                    isToday = true;
+                  } else if (aDate == tomorrow) {
+                    isTomorrow = true;
+                  }
+
+                  if (aDate.isAfter(week)) {
+                    isNextWeek = true;
+                  }
 
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -140,6 +168,77 @@ class _NextMOOVState extends State<NextMOOV> {
                                   ),
                                 ),
                               ),
+                              isToday == false
+                                  ? Positioned(
+                                      top: 0,
+                                      right: 20,
+                                      child: Container(
+                                        height: 30,
+                                        padding: EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.pink[400],
+                                                Colors.purple[300]
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        child: isNextWeek
+                                            ? Text(
+                                                DateFormat('MMM d')
+                                                    .add_jm()
+                                                    .format(course['startDate']
+                                                        .toDate()),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              )
+                                            : Text(
+                                                DateFormat('EEE')
+                                                    .add_jm()
+                                                    .format(course['startDate']
+                                                        .toDate()),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ),
+                                      ),
+                                    )
+                                  : Container(),
+                              isToday == true
+                                  ? Positioned(
+                                      top: 0,
+                                      right: 20,
+                                      child: Container(
+                                        height: 30,
+                                        padding: EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.red[400],
+                                                Colors.red[600]
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        child: Text(
+                                          DateFormat('EEE').add_jm().format(
+                                              course['startDate'].toDate()),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                    )
+                                  : Text("")
                             ]),
                           ),
                         ),

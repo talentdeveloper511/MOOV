@@ -247,7 +247,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                           context)
                                                                       .size
                                                                       .height *
-                                                                  0.1
+                                                                  0.11
                                                               : MediaQuery.of(
                                                                           context)
                                                                       .size
@@ -258,12 +258,12 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                           context)
                                                                       .size
                                                                       .width *
-                                                                  0.3
+                                                                  0.35
                                                               : MediaQuery.of(
                                                                           context)
                                                                       .size
                                                                       .width *
-                                                                  0.3,
+                                                                  0.35,
                                                         ),
                                                       ),
                                                     ),
@@ -271,7 +271,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.all(
-                                                            22.5),
+                                                            12.5),
                                                     child: Center(
                                                       child: FittedBox(
                                                         child: Text(
@@ -300,8 +300,8 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                               ),
                                             ),
                                             Positioned(
-                                              bottom: isLargePhone ? 85 : 60,
-                                              right: 30,
+                                              bottom: isLargePhone ? 80 : 70,
+                                              right: 20,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,

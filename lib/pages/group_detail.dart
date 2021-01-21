@@ -994,6 +994,7 @@ class _SuggestionsState extends State<Suggestions> {
                       ),
                     ),
                   ),
+                  
                 ]),
               ),
             );
