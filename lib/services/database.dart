@@ -282,7 +282,7 @@ class Database {
       "username": currentUser.displayName,
       "userId": currentUser.id,
       "userProfilePic": currentUser.photoUrl,
-      "groupPic": groupPic,
+      "previewImg": groupPic,
       "groupId": groupId,
       "groupName": groupName,
       "timestamp": DateTime.now()
