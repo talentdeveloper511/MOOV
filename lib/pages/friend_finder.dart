@@ -551,6 +551,9 @@ class UserResult extends StatelessWidget {
                               final now = DateTime.now();
                               bool isToday = false;
                               bool isTomorrow = false;
+                              bool isBoth = false;
+                              bool isEither = false;
+
                               bool isNextWeek = false;
 
                               final today =
@@ -578,9 +581,14 @@ class UserResult extends StatelessWidget {
                               if (isTomorrow == false && tomorrowOnly == 1) {
                                 hide = true;
                               }
-                              if (todayOnly == 1 &&
-                                  tomorrowOnly == 1 &&
-                                  (isTomorrow == false || isToday == false)) {
+                              if (todayOnly == 1 && tomorrowOnly == 1) {
+                                isBoth = true;
+                              }
+                              if (isToday || isTomorrow) {
+                                isEither = true;
+                              }
+                              if (isBoth == true && isEither == true
+                               ) {
                                 hide = false;
                               }
                               if (aDate.isAfter(week)) {
@@ -713,32 +721,36 @@ class UserResult extends StatelessWidget {
                                                               BorderRadius
                                                                   .circular(
                                                                       10.0)),
-                                                      child: isNextWeek? 
-                                                       Text(
-                                                        DateFormat('MMM d')
-                                                            .add_jm()
-                                                            .format(course[
-                                                                    'startDate']
-                                                                .toDate()),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 18),
-                                                      ):
-                                                      
-                                                      Text(
-                                                        DateFormat('EEE')
-                                                            .add_jm()
-                                                            .format(course[
-                                                                    'startDate']
-                                                                .toDate()),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 18),
-                                                      ),
+                                                      child: isNextWeek
+                                                          ? Text(
+                                                              DateFormat(
+                                                                      'MMM d')
+                                                                  .add_jm()
+                                                                  .format(course[
+                                                                          'startDate']
+                                                                      .toDate()),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 18),
+                                                            )
+                                                          : Text(
+                                                              DateFormat('EEE')
+                                                                  .add_jm()
+                                                                  .format(course[
+                                                                          'startDate']
+                                                                      .toDate()),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 18),
+                                                            ),
                                                     ),
                                                   )
                                                 : Container(),
