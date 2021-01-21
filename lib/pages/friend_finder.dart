@@ -529,13 +529,19 @@ class UserResult extends StatelessWidget {
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
                                 return Center(
-                                    child: Text("nothing, right now."));
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text("nothing, right now."),
+                                    ));
                               if (!snapshot.hasData ||
                                   snapshot.data.docs.length == 0)
                                 return SizedBox(
                                     child: Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text("nothing, right now.")),
+                                        child: Padding(
+                                          padding: !isLargePhone ? const EdgeInsets.all(4.0) : 0,
+                                          child: Text("nothing, right now."),
+                                        )),
                                     width: isLargePhone
                                         ? MediaQuery.of(context).size.width *
                                             0.51
@@ -615,10 +621,14 @@ class UserResult extends StatelessWidget {
                                                           .size
                                                           .width *
                                                       0.49,
-                                              height: MediaQuery.of(context)
+                                              height: isLargePhone ?
+                                               MediaQuery.of(context)
                                                       .size
                                                       .height *
-                                                  0.15,
+                                                  0.15 : MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.17 ,
                                               child: Container(
                                                 child: ClipRRect(
                                                   borderRadius:

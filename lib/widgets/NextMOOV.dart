@@ -35,13 +35,12 @@ class _NextMOOVState extends State<NextMOOV> {
     var pic;
 
     return StreamBuilder(
-        stream: postsRef
-            .where("postId", isEqualTo: selected)
-            .snapshots(),
+        stream: postsRef.where("postId", isEqualTo: selected).snapshots(),
         builder: (context, snapshot) {
           // title = snapshot.data['title'];
           // pic = snapshot.data['pic'];
           if (!snapshot.hasData) return Text('Loading data...');
+          if (snapshot.data.docs.length == 0) return Container();
 
           return MediaQuery(
             data: MediaQuery.of(context)

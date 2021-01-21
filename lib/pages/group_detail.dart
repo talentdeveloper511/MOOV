@@ -901,13 +901,13 @@ class _SuggestionsState extends State<Suggestions> {
         DocumentSnapshot course = snapshot4.data.docs[pos];
         String nextMOOV = course['nextMOOV'];
 
-        return Container(
+        return (nextMOOV != null && nextMOOV.isNotEmpty) ? Container(
           margin: EdgeInsets.all(5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[NextMOOV(nextMOOV)],
           ),
-        );
+        ) : Container();
       },
       itemCount: count,
     );

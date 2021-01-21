@@ -263,7 +263,7 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
                                                                           context)
                                                                       .size
                                                                       .width *
-                                                                  0.25,
+                                                                  0.3,
                                                         ),
                                                       ),
                                                     ),

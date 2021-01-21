@@ -81,8 +81,7 @@ class Database {
       "postId": postId
     }).then(inviteesNotification(postId, imageUrl, title, invitees));
 
-    postsRef
-        .orderBy("startDate", descending: true);
+    postsRef.orderBy("startDate", descending: true);
 
     dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
@@ -399,33 +398,44 @@ class Database {
 //         FirebaseFirestore.instance.batch().(doc.ref, {branch: {id: docId, name: after.name}})};
 //     });
 
-    bool isPostOwner = strUserId == ownerId;
-    if (isPostOwner) {
-      postsRef.doc(postId).get().then((doc) {
-        if (doc.exists) {
-          // _storage.ref().child(filePath).delete();
-          ref.delete();
+    postsRef.doc(postId).get().then((doc) {
+      if (doc.exists) {
+        // _storage.ref().child(filePath).delete();
+        ref.delete();
 
-          doc.reference.delete();
-          notificationFeedRef
-              .doc(ownerId)
-              .collection("feedItems")
-              .doc(postId)
-              .get()
-              .then((doc) {
-            if (doc.exists) {
-              doc.reference.delete();
-            }
-          });
-        }
-      });
-    }
+        doc.reference.delete();
+        notificationFeedRef
+            .doc(ownerId)
+            .collection("feedItems")
+            .doc(postId)
+            .get()
+            .then((doc) {
+          if (doc.exists) {
+            doc.reference.delete();
+          }
+        });
+
+        groupsRef.where("nextMOOV", isEqualTo: postId).get().then((doc) {
+          final DocumentReference ref =
+              dbRef.doc('notreDame/data/friendGroups/$doc');
+
+          if (doc.docs.isNotEmpty) {
+            return dbRef.runTransaction((transaction) async {
+              transaction.update(ref, {
+                'nextMOOV': FieldValue.arrayRemove([postId]),
+              });
+            });
+          }
+        });
+      }
+    });
   }
 
   Future<void> sendFriendRequest(String senderId, String receiverId,
       String senderName, String senderPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('notreDame/data/users/$receiverId');
+      final DocumentReference ref =
+          dbRef.doc('notreDame/data/users/$receiverId');
       String serializedMessage = senderId;
       transaction.update(ref, {
         'friendRequests': FieldValue.arrayUnion([serializedMessage]),
@@ -436,8 +446,10 @@ class Database {
   Future<void> acceptFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('notreDame/data/users/$receiverId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$senderId');
+      final DocumentReference ref =
+          dbRef.doc('notreDame/data/users/$receiverId');
+      final DocumentReference ref2 =
+          dbRef.doc('notreDame/data/users/$senderId');
       String serializedMessage = senderId;
       String serializedMessage2 = receiverId;
       String serializedMessage3 = senderId;
@@ -460,8 +472,10 @@ class Database {
   Future<void> rejectFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('notreDame/data/users/$receiverId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$senderId');
+      final DocumentReference ref =
+          dbRef.doc('notreDame/data/users/$receiverId');
+      final DocumentReference ref2 =
+          dbRef.doc('notreDame/data/users/$senderId');
       String serializedMessage = senderId;
       String serializedMessage2 = receiverId;
       transaction.update(ref, {
@@ -475,8 +489,10 @@ class Database {
 
   Future<void> unfriend(String senderId, String receiverId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('notreDame/data/users/$receiverId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$senderId');
+      final DocumentReference ref =
+          dbRef.doc('notreDame/data/users/$receiverId');
+      final DocumentReference ref2 =
+          dbRef.doc('notreDame/data/users/$senderId');
       String serializedMessage3 = senderId;
       String serializedMessage4 = receiverId;
       transaction.update(ref, {
@@ -505,7 +521,8 @@ class Database {
   Future<void> leaveGroup(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/friendGroups/$gid');
+      final DocumentReference ref2 =
+          dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayRemove([gid]),
       });
@@ -523,7 +540,8 @@ class Database {
 
   Future<void> sendChat(user, message, gid) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('notreDame/data/friendGroups/$gid');
+      final DocumentReference ref =
+          dbRef.doc('notreDame/data/friendGroups/$gid');
       final Map<String, dynamic> chat = {
         'sender': user,
         'message': message,
@@ -538,7 +556,8 @@ class Database {
   Future<void> addUser(id, gname, gid) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/friendGroups/$gid');
+      final DocumentReference ref2 =
+          dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayUnion([gid]),
       });
@@ -550,7 +569,8 @@ class Database {
 
   Future<void> setMOOV(gid, moovId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('notreDame/data/friendGroups/$gid');
+      final DocumentReference ref =
+          dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'nextMOOV': moovId,
       });
@@ -563,11 +583,7 @@ class Database {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
-      groupsRef
-          .doc(gid)
-          .collection("suggestedMOOVs")
-          .doc(userId)
-          .set({
+      groupsRef.doc(gid).collection("suggestedMOOVs").doc(userId).set({
         "voters": {userId: 2},
         "nextMOOV": postId,
         "suggestorName": userName,
@@ -615,11 +631,7 @@ class Database {
 
   Future<void> addNoVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef
-          .doc(gid)
-          .collection('suggestedMOOVs')
-          .doc(suggestorId)
-          .set({
+      groupsRef.doc(gid).collection('suggestedMOOVs').doc(suggestorId).set({
         "voters": {userId: 1}
       }, SetOptions(merge: true));
     });
@@ -627,11 +639,7 @@ class Database {
 
   Future<void> removeNoVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef
-          .doc(gid)
-          .collection('suggestedMOOVs')
-          .doc(suggestorId)
-          .set({
+      groupsRef.doc(gid).collection('suggestedMOOVs').doc(suggestorId).set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });
@@ -639,11 +647,7 @@ class Database {
 
   Future<void> addYesVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef
-          .doc(gid)
-          .collection('suggestedMOOVs')
-          .doc(suggestorId)
-          .set({
+      groupsRef.doc(gid).collection('suggestedMOOVs').doc(suggestorId).set({
         "voters": {userId: 2}
       }, SetOptions(merge: true));
     });
@@ -651,11 +655,7 @@ class Database {
 
   Future<void> removeYesVote(userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef
-          .doc(gid)
-          .collection('suggestedMOOVs')
-          .doc(suggestorId)
-          .set({
+      groupsRef.doc(gid).collection('suggestedMOOVs').doc(suggestorId).set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });
