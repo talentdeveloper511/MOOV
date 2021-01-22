@@ -160,11 +160,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                Navigator.pop(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomePage()),
-                                );
+                                Navigator.pop(context);
                               },
                             ),
                             backgroundColor: TextThemes.ndBlue,
@@ -278,8 +274,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                 ),
                               ),
                             ]),
-                        body:
-                        SingleChildScrollView(
+                        body: SingleChildScrollView(
                           child: Container(
                             child: Column(
                               children: [
@@ -524,11 +519,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                Navigator.pop(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomePage()),
-                                );
+                                Navigator.pop(context);
                               },
                             ),
                             backgroundColor: TextThemes.ndBlue,
@@ -586,7 +577,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(15.0))),
-                                duration: Duration(milliseconds: 100),
+                                duration: Duration(milliseconds: 20),
                                 animateMenuItems: true,
                                 blurBackgroundColor: Colors.black54,
                                 openWithTap:
@@ -994,7 +985,6 @@ class _SuggestionsState extends State<Suggestions> {
                       ),
                     ),
                   ),
-                  
                 ]),
               ),
             );

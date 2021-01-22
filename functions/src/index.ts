@@ -117,23 +117,20 @@ export const sendToDevice = functions.firestore
         await batch.commit();
       });
 
-exports.scheduledFunction = functions.pubsub.schedule('every 5 minutes').onRun(async (context) => {
-    const now = admin.firestore.Timestamp.now().toMillis;
+// exports.scheduledFunction = functions.pubsub.schedule('every 5 minutes').onRun(async (context) => {
+//     const now = admin.firestore.Timestamp.now().toMillis;
 
-
-        
+//         const querySnapshot = await admin
+//           .firestore().collection("notreDame").doc("data")
+//           .collection("food")
+//           .where("startDateTimestamp", "<", now)
+//           .get();
       
-        const querySnapshot = await admin
-          .firestore().collection("notreDame").doc("data")
-          .collection("food")
-          .where("startDateTimestamp", "<", now)
-          .get();
+//         const batch = admin.firestore().batch();
       
-        const batch = admin.firestore().batch();
+//         querySnapshot.forEach((docSnapshot) => {
+//           batch.delete(docSnapshot.ref);
+//         });
       
-        querySnapshot.forEach((docSnapshot) => {
-          batch.delete(docSnapshot.ref);
-        });
-      
-        await batch.commit();    return null;
-  });
+//         await batch.commit();    return null;
+//   });
