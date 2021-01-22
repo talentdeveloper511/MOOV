@@ -2,6 +2,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
 admin.initializeApp();
+// const db = admin.firestore();
 
 exports.onCreateActivityFeedItem = functions.firestore
     .document("{college}/data/notificationFeed/{userId}/feedItems/{activityFeedItem}")
@@ -85,38 +86,45 @@ exports.onCreateActivityFeedItem = functions.firestore
       }
     });
 
-functions.pubsub.schedule("* * * * *").onRun(async () => {
-  const now = admin.firestore.Timestamp.now().toMillis;
-  const querySnapshot = await admin
-      .firestore().collection("notreDame").doc("data")
-      .collection("food")
-      .where("startDateTimestamp", "<", now)
-      .get();
-
-  const batch = admin.firestore().batch();
-
-  querySnapshot.forEach((docSnapshot) => {
-    batch.delete(docSnapshot.ref);
-  });
-
-  await batch.commit();
-});
-
-exports.scheduledFunction = functions.pubsub.schedule("every 5 minutes")
-    .onRun(async (context) => {
-      const now = admin.firestore.Timestamp.now().toMillis;
-
-      const querySnapshot = await admin
+exports.scheduledFunction = functions.pubsub.schedule("* * * * *").timeZone("America/New_York")
+    .onRun((context) => {
+      const now = admin.firestore.Timestamp.now().toMillis() - 3600000;
+      console.log("Hi");
+      const querySnapshot = admin
           .firestore().collection("notreDame").doc("data")
           .collection("food")
-          .where("startDateTimestamp", "<", now)
-          .get();
+          .where("startDate", ">=", now);
 
-      const batch = admin.firestore().batch();
+      // const batch = admin.firestore().batch();
+      const tasks = querySnapshot.get();
 
-      querySnapshot.forEach((docSnapshot) => {
-        batch.delete(docSnapshot.ref);
+      tasks.forEach((docSnapshot) => {
+        docSnapshot.ref.data.going.forEach((uid) => {
+          const user = admin.firestore.collection("notreDame").doc("data")
+              .collection("users").doc(uid);
+          console.log("user: ", user);
+
+          // message
+          const message = {
+            notification: {title: `${docSnapshot.ref.data.title}`, body: "starts in one hour, don't flake!"},
+            token: user.data["androidNotificationToken"],
+            data: {recipient: user.data["id"]},
+          };
+          console.log(message);
+
+          // send message
+          admin
+              .messaging()
+              .send(message)
+              .then((response) => {
+                // Response is a message ID string
+                console.log("Successfully sent message!", response);
+              })
+              .catch((error) => {
+                console.log("Error sending message", error);
+              });
+        });
       });
 
-      await batch.commit(); return null;
+      return null;
     });
