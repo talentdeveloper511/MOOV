@@ -384,7 +384,7 @@ class NotificationFeedItem extends StatelessWidget {
                     ? RichText(
                         overflow: TextOverflow.ellipsis,
                         text: TextSpan(
-                            text: title,
+                            text: title.isEmpty ? groupName : title,
                             style: TextStyle(
                                 color: TextThemes.ndBlue,
                                 fontWeight: FontWeight.bold)))
