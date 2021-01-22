@@ -326,7 +326,7 @@ class NotificationFeedItem extends StatelessWidget {
     if (type == 'going') {
       activityItemText = "is going to ";
     } else if (type == 'request') {
-      activityItemText = "has sent you a friend request.";
+      activityItemText = "sent you a friend request.";
     } else if (type == 'accept') {
       activityItemText = "accepted your friend request.";
     } else if (type == 'friendGroup') {
@@ -334,7 +334,7 @@ class NotificationFeedItem extends StatelessWidget {
     } else if (type == 'invite') {
       activityItemText = 'has invited you to ';
     } else if (type == 'suggestion') {
-      activityItemText = 'has suggested the MOOV, ';
+      activityItemText = 'has suggested a MOOV to your group, ';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }

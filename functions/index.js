@@ -4,14 +4,15 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 
 exports.onCreateActivityFeedItem = functions.firestore
-    .document("notreDame/data/notificationFeed/{userId}/feedItems/{activityFeedItem}")
+    .document("{college}/data/notificationFeed/{userId}/feedItems/{activityFeedItem}")
     .onCreate(async (snapshot, context) => {
       console.log("Activity Feed Item Created", snapshot.data());
 
       // 1) Get user connected to the feed
       const userId = context.params.userId;
+      const college = context.params.college;
 
-      const userRef = admin.firestore().collection('notreDame').doc('data').doc(`users/${userId}`);
+      const userRef = admin.firestore().doc(`${college}/data/users/${userId}`);
       const doc = await userRef.get();
 
       // 2) check if they have a notification token
