@@ -129,7 +129,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                             Scaffold.of(context).showSnackBar(SnackBar(
                                 duration: Duration(milliseconds: 1500),
                                 backgroundColor: TextThemes.ndBlue,
-                                content: Text("Be good, notification.")));
+                                content: Text("Notification dismissed")));
                           },
                           // Show a red background as the item is swiped away.
                           background: Container(
