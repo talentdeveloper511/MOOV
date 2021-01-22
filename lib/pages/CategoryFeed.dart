@@ -665,6 +665,7 @@ class PostOnFeed extends StatelessWidget {
                               padding:
                                   const EdgeInsets.only(top: 0.0, right: 5),
                               child: Container(
+                                height: 170,
                                 decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(5)),
@@ -675,9 +676,7 @@ class PostOnFeed extends StatelessWidget {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
                                   child: Image.network(course['image'],
-                                      fit: BoxFit.cover,
-                                      height: 120,
-                                      width: 50),
+                                      fit: BoxFit.cover, width: 50),
                                 ),
                               ))),
                       Expanded(
@@ -690,9 +689,9 @@ class PostOnFeed extends StatelessWidget {
                             child: AutoSizeText(course['title'].toString(),
                                 minFontSize: 17,
                                 style: TextStyle(
-                                    color: Colors.blue[900],
+                                    color: TextThemes.ndBlue,
                                     fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.w800),
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis),

@@ -23,9 +23,7 @@ class GoingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: postsRef
-            .doc(moovId)
-            .snapshots(),
+        stream: postsRef.doc(moovId).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
 
@@ -52,9 +50,8 @@ class GoingPage extends StatelessWidget {
                       itemCount: inviteesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
-                            stream: usersRef
-                                .doc(inviteesIds[index])
-                                .snapshots(),
+                            stream:
+                                usersRef.doc(inviteesIds[index]).snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
                                 return CircularProgressIndicator();
@@ -69,6 +66,7 @@ class GoingPage extends StatelessWidget {
 
                               var pic = snapshot.data['photoUrl'];
                               var name = snapshot.data['displayName'];
+                              bool isAmbassador = snapshot.data['isAmbassador'];
 
                               return Padding(
                                 padding:
@@ -129,14 +127,31 @@ class GoingPage extends StatelessWidget {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             left: 16.0),
-                                                    child: Text(name,
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            color: TextThemes
-                                                                .ndBlue,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .none)),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(name,
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                color:
+                                                                    TextThemes
+                                                                        .ndBlue,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .none)),
+                                                        isAmbassador
+                                                            ? Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            2.0),
+                                                                child: Image.asset(
+                                                                    'lib/assets/verif.png',
+                                                                    height: 24),
+                                                              )
+                                                            : Text("")
+                                                      ],
+                                                    ),
                                                   ),
                                                 ]),
                                                 Padding(
@@ -240,9 +255,7 @@ class GoingPageFriends extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: postsRef
-            .doc(moovId)
-            .snapshots(),
+        stream: postsRef.doc(moovId).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
 
@@ -269,9 +282,8 @@ class GoingPageFriends extends StatelessWidget {
                       itemCount: inviteesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
-                            stream: usersRef
-                                .doc(inviteesIds[index])
-                                .snapshots(),
+                            stream:
+                                usersRef.doc(inviteesIds[index]).snapshots(),
                             builder: (context, snapshot2) {
                               if (!snapshot2.hasData)
                                 return CircularProgressIndicator();
@@ -287,6 +299,8 @@ class GoingPageFriends extends StatelessWidget {
 
                                 var pic = snapshot2.data['photoUrl'];
                                 var name = snapshot2.data['displayName'];
+                                bool isAmbassador =
+                                    snapshot2.data['isAmbassador'];
 
                                 if (status == 0) {
                                   return Container();
@@ -350,14 +364,31 @@ class GoingPageFriends extends StatelessWidget {
                                                       padding:
                                                           const EdgeInsets.only(
                                                               left: 16.0),
-                                                      child: Text(name,
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: TextThemes
-                                                                  .ndBlue,
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .none)),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(name,
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  color:
+                                                                      TextThemes
+                                                                          .ndBlue,
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .none)),
+                                                          isAmbassador
+                                                              ? Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left:
+                                                                          2.0),
+                                                                  child: Image.asset(
+                                                                      'lib/assets/verif.png',
+                                                                      height:
+                                                                          21),
+                                                                )
+                                                              : Text("")
+                                                        ],
+                                                      ),
                                                     ),
                                                   ]),
                                                   Padding(

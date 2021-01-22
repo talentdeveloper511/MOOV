@@ -147,30 +147,34 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                             child: Text("MOOV Leaderboard",
                                 style: TextThemes.headline1),
                           ),
-                          Container(
-                              height: 100,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      begin: Alignment.topRight,
-                                      end: Alignment(0.9, 0.9),
-                                      colors: [
-                                    TextThemes.ndBlue,
-                                    TextThemes.ndBlue
-                                  ])),
-                              child: Center(
-                                  child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text(
-                                  "Do you like free stuff? Well... good, 'cause we like giving."
-                                  " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Friday.",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: isLargePhone ? 14 : 12.5,
-                                    fontFamily: 'Pacifico',
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  border: Border(),
+                                    gradient: LinearGradient(
+                                        begin: Alignment.topRight,
+                                        end: Alignment(0.9, 0.9),
+                                        colors: [
+                                      TextThemes.ndBlue,
+                                      TextThemes.ndBlue
+                                    ])),
+                                child: Center(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Text(
+                                    "Do you like free stuff?"
+                                    " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Friday.",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: isLargePhone ? 14 : 15,
+                                      fontFamily: 'Pacifico',
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ))),
+                                ))),
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
@@ -22,6 +24,8 @@ class NotificationFeed extends StatefulWidget {
 
 class _NotificationFeedState extends State<NotificationFeed> {
   String docId;
+  List<String> docIds;
+
   getNotificationFeed() async {
     QuerySnapshot snapshot = await notificationFeedRef
         .doc(currentUser.id)
@@ -30,11 +34,30 @@ class _NotificationFeedState extends State<NotificationFeed> {
         .limit(50)
         .get();
     List<NotificationFeedItem> feedItems = [];
+    List<String> docIds = [];
     snapshot.docs.forEach((doc) {
       feedItems.add(NotificationFeedItem.fromDocument(doc));
-      docId = doc.id;
+      docIds.add(doc.id);
     });
+
     return feedItems;
+  }
+
+  getIds() async {
+    QuerySnapshot snapshot = await notificationFeedRef
+        .doc(currentUser.id)
+        .collection('feedItems')
+        .orderBy('timestamp', descending: true)
+        .limit(50)
+        .get();
+    List<NotificationFeedItem> feedItems = [];
+    List<String> docIds = [];
+    snapshot.docs.forEach((doc) {
+      feedItems.add(NotificationFeedItem.fromDocument(doc));
+      docIds.add(doc.id);
+    });
+
+    return docIds;
   }
 
   @override
@@ -80,76 +103,93 @@ class _NotificationFeedState extends State<NotificationFeed> {
         ),
         body: Container(
             child: FutureBuilder(
-                future: getNotificationFeed(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
+                future: getIds(),
+                builder: (context, snapshot2) {
+                  if (!snapshot2.hasData) {
                     return circularProgress();
                   }
-                  if (snapshot.data.length == 0) {
-                    return Container(
-                        child: Center(
-                            child: Text(
-                      "You're up to date on your notifications! Let's go!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: TextThemes.ndBlue, fontSize: 25),
-                    )));
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      final item = snapshot.data[index];
-                      List<NotificationFeedItem> feedItems = [];
-                      snapshot.data.forEach((doc) {
-                        feedItems.add(doc);
-                      });
 
-                      return Dismissible(
-                          // Each Dismissible must contain a Key. Keys allow Flutter to
-                          // uniquely identify widgets.
-                          key: Key(item.toString()),
-                          // Provide a function that tells the app
-                          // what to do after an item has been swiped away.
-                          onDismissed: (direction) {
-                            notificationFeedRef
-                                .doc(currentUser.id)
-                                .collection('feedItems')
-                                .doc(docId)
-                                .delete();
+                  return FutureBuilder(
+                    future: getNotificationFeed(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return circularProgress();
+                      }
+                      if (snapshot.data.length == 0) {
+                        return Container(
+                            child: Center(
+                                child: Text(
+                          "You're up to date on your notifications! Let's go!",
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(color: TextThemes.ndBlue, fontSize: 25),
+                        )));
+                      }
+                      return ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, index) {
+                          List<String> docIds = [];
+                          snapshot2.data.forEach((doc) {
+                            docIds.add(doc);
+                          });
+                          final item = snapshot.data[index];
+                          List<NotificationFeedItem> feedItems = [];
 
-                            if (feedItems.contains(docId)) {
-                              //_personList is list of person shown in ListView
-                              setState(() {
-                                feedItems.remove(docId);
-                              });
-                            }
+                          snapshot.data.forEach((doc) {
+                            feedItems.add(doc);
+                          });
 
-                            // Remove the item from the data source.
+                          return Dismissible(
 
-                            // Then show a snackbar.
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                                duration: Duration(milliseconds: 1500),
-                                backgroundColor: TextThemes.ndBlue,
-                                content: Text("Be good, notification.")));
-                          },
-                          // Show a red background as the item is swiped away.
-                          background: Container(
-                            color: Colors.red,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Icon(CupertinoIcons.trash,
-                                      color: Colors.white, size: 45),
+                              // Each Dismissible must contain a Key. Keys allow Flutter to
+                              // uniquely identify widgets.
+                              key: Key(item.toString()),
+                              // Provide a function that tells the app
+                              // what to do after an item has been swiped away.
+                              onDismissed: (direction) {
+                                notificationFeedRef
+                                    .doc(currentUser.id)
+                                    .collection('feedItems')
+                                    .doc(docIds[index])
+                                    .delete();
+
+                                if (feedItems.contains(docId)) {
+                                  //_personList is list of person shown in ListView
+                                  setState(() {
+                                    feedItems.remove(docId);
+                                  });
+                                }
+
+                                // Remove the item from the data source.
+
+                                // Then show a snackbar.
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                    duration: Duration(milliseconds: 1500),
+                                    backgroundColor: TextThemes.ndBlue,
+                                    content: Text("Be good, notification.")));
+                              },
+                              // Show a red background as the item is swiped away.
+                              background: Container(
+                                color: Colors.red,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: Icon(CupertinoIcons.trash,
+                                          color: Colors.white, size: 45),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          child: snapshot.hasData
-                              ? snapshot.data[index]
-                              : Text(
-                                  'No Notifications',
-                                ));
+                              ),
+                              child: snapshot.hasData
+                                  ? snapshot.data[index]
+                                  : Text(
+                                      'No Notifications',
+                                    ));
+                        },
+                      );
                     },
                   );
                 })));

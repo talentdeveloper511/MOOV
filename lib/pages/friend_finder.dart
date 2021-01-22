@@ -123,6 +123,9 @@ class _FriendFinderState extends State<FriendFinder>
       bottom: PreferredSize(
         preferredSize: null,
         child: TextFormField(
+           onChanged: (value) {
+            handleSearch(value);
+          },
           controller: searchController,
           decoration: InputDecoration(
             fillColor: Colors.white,
