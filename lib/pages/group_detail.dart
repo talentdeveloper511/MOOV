@@ -577,7 +577,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(15.0))),
-                                duration: Duration(milliseconds: 100),
+                                duration: Duration(milliseconds: 20),
                                 animateMenuItems: true,
                                 blurBackgroundColor: Colors.black54,
                                 openWithTap:
