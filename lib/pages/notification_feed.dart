@@ -25,7 +25,7 @@ class NotificationFeed extends StatefulWidget {
 class _NotificationFeedState extends State<NotificationFeed> {
   String docId;
   List<String> docIds;
-  bool gotNotifs = true;
+  bool gotNotifs = false;
 
   getNotificationFeed() async {
     QuerySnapshot snapshot = await notificationFeedRef
@@ -129,6 +129,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                                 color: TextThemes.ndBlue, fontSize: 25),
                           )));
                         }
+
                         return ListView.builder(
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
@@ -142,6 +143,9 @@ class _NotificationFeedState extends State<NotificationFeed> {
                             snapshot.data.forEach((doc) {
                               feedItems.add(doc);
                             });
+                            if (feedItems.isNotEmpty) {
+                                gotNotifs = true;
+                            }
 
                             return Dismissible(
 
@@ -169,7 +173,6 @@ class _NotificationFeedState extends State<NotificationFeed> {
                                   // Then show a snackbar.
                                   Scaffold.of(context).showSnackBar(SnackBar(
                                       duration: Duration(milliseconds: 1500),
-                                      
                                       backgroundColor: TextThemes.ndBlue,
                                       content: Padding(
                                         padding: const EdgeInsets.all(2.0),
@@ -204,29 +207,16 @@ class _NotificationFeedState extends State<NotificationFeed> {
             ),
             gotNotifs
                 ? Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(28.0),
                     child: GestureDetector(
-                      onTap: () {
-                        notificationFeedRef
-                            .doc(currentUser.id)
-                            .collection('feedItems')
-                            .get()
-                            .then((snapshot) {
-                          for (DocumentSnapshot ds in snapshot.docs) {
-                            ds.reference.delete();
-                          }
-                        });
-                        setState(() {
-                          gotNotifs = false;
-                        });
-                      },
+                      onTap: () => showAlertDialog(context),
                       child: Container(
                         decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color: Colors.red, width: 3),
                             borderRadius: BorderRadius.circular(10.0)),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(12.0),
                           child: Text(
                             "CLEAR NOTIFICATIONS",
                             style: TextStyle(color: Colors.red),
@@ -238,6 +228,42 @@ class _NotificationFeedState extends State<NotificationFeed> {
                 : Container()
           ],
         )));
+  }
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Clear?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nCleanin' up?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Clear", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+              notificationFeedRef
+                  .doc(currentUser.id)
+                  .collection('feedItems')
+                  .get()
+                  .then((snapshot) {
+                for (DocumentSnapshot ds in snapshot.docs) {
+                  ds.reference.delete();
+                }
+              });
+              setState(() {
+                gotNotifs = false;
+              });
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, my mistake"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 }
 

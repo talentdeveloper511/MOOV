@@ -159,30 +159,6 @@ class _EditPostState extends State<EditPost> {
   final dbRef = FirebaseFirestore.instance;
   _EditPostState(this.postId);
 
-  void showAlertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      child: CupertinoAlertDialog(
-        title: Text("Leave the group?",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nTime to MOOV on?"),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text("Yes get me out", style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-          ),
-          CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
-            onPressed: () => Navigator.of(context).pop(true),
-          )
-        ],
-      ),
-    );
-  }
-
   bool friends;
   var status;
   var userRequests;
@@ -202,9 +178,7 @@ class _EditPostState extends State<EditPost> {
     final groupNameController = TextEditingController();
 
     return StreamBuilder(
-        stream: postsRef
-            .doc(postId)
-            .snapshots(),
+        stream: postsRef.doc(postId).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           String title = snapshot.data['title'];
@@ -724,7 +698,8 @@ class _EditPostState extends State<EditPost> {
                                       }),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                                  padding: const EdgeInsets.only(
+                                      top: 10.0, bottom: 20),
                                   child: RaisedButton(
                                       shape: RoundedRectangleBorder(
                                           borderRadius:

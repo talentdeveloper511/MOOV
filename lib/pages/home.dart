@@ -28,6 +28,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:random_string/random_string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'create_account.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -57,6 +58,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int notifCounts;
+  bool isSelected = false;
+  String stringValue = "No value";
+  int intiial = 1;
+
   bool isAuth = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   FirebaseMessaging _fcm = FirebaseMessaging();
@@ -84,6 +90,7 @@ class _HomeState extends State<Home> {
     }).catchError((err) {
       print('Error signing in: $err');
     });
+    getAllSavedData();
   }
 
   handleSignIn(GoogleSignInAccount account) {
@@ -223,7 +230,23 @@ class _HomeState extends State<Home> {
     );
   }
 
+  getAllSavedData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    bool value = prefs.getBool("youKey");
+
+    // For first time you get null data so no value
+    // is assigned so it will not assign anything
+    if (value != null) stringValue = value.toString();
+
+    setState(() {});
+  }
+
   Scaffold buildAuthScreen() {
+    final GoogleSignInAccount user = googleSignIn.currentUser;
+
+    // print(randomPost);
+
     Future<String> randomPostMaker() async {
       String randomPost;
       print(randomAlpha(1));
@@ -234,16 +257,6 @@ class _HomeState extends State<Home> {
           .limit(1)
           .get();
       if (result.docs != null) randomPost = await result.docs.first['postId'];
-
-      if (result.docs == null) {
-        final QuerySnapshot result2 = await postsRef
-            .where("postId", isGreaterThanOrEqualTo: "")
-            .orderBy("postId")
-            .limit(1)
-            .get();
-        randomPost = await result.docs.first['postId'];
-      }
-      // print(randomPost);
       return randomPost;
     }
 
@@ -252,7 +265,15 @@ class _HomeState extends State<Home> {
           MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
     }
 
+    // notificationFeedRef
+    //     .doc(currentUser.id)
+    //     .collection('feedItems')
+    //     .orderBy('timestamp', descending: true)
+    //     .limit(50)
+    //     .get();
+
     // Upload(currentUser: currentUser);
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -377,7 +398,7 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.insert_chart),
             color: Colors.white,
             splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () {
+            onPressed: () async {
               // Implement navigation to leaderboard page here...
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => LeaderBoardPage()));
@@ -385,11 +406,31 @@ class _HomeState extends State<Home> {
           ),
           NamedIcon(
             iconData: Icons.notifications_active,
-            onTap: () {
+            onTap: () async {
+              if (isSelected == false) {
+                // isSelected = !isSelected;
+                //color = Colors.pink;
+                print('Coming here');
+              } else {
+                isSelected = false;
+                // color = Colors.white;
+
+              }
+              int first = 0;
+              if (first != 0) {
+                isSelected = !isSelected;
+              }
+
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setBool("youKey", isSelected);
+
+              // This is where you save the data and then when the user second time opens  he will get the stoared data
+              setState(() {});
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => NotificationFeed()));
             },
-          ),
+            notifs: !isSelected ? 0 : 1,
+          )
         ],
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
@@ -496,21 +537,24 @@ class _HomeState extends State<Home> {
 
 class NamedIcon extends StatelessWidget {
   final IconData iconData;
+  final int notifs;
   final VoidCallback onTap;
+  final int intitial;
   int notificationCount;
 
   NamedIcon({
     Key key,
     this.onTap,
+    this.intitial,
+    this.notifs,
     @required this.iconData,
     this.notificationCount,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int initial;
     final GoogleSignInAccount user = googleSignIn.currentUser;
-
-    int notifs = 0;
 
     return StreamBuilder(
         stream: notificationFeedRef
@@ -520,7 +564,7 @@ class NamedIcon extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) return CircularProgressIndicator();
           if (!snapshot.hasData) return CircularProgressIndicator();
-          notifs = snapshot.data.docs.length;
+          initial = snapshot.data.docs.length;
 
           return InkWell(
             onTap: onTap,
