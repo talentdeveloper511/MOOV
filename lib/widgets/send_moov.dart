@@ -62,7 +62,6 @@ class _SendMOOVState extends State<SendMOOV> {
   handleSearch(String query) {
     Future<QuerySnapshot> users = usersRef
         .where("displayName", isGreaterThanOrEqualTo: query)
-        .limit(5)
         .get();
     setState(() {
       searchResultsFuture = users;

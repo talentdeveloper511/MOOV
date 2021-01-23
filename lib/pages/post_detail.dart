@@ -78,9 +78,7 @@ class _PostDetailState extends State<PostDetail> {
           top: false,
           child: Stack(children: [
             StreamBuilder(
-                stream: postsRef
-                    .doc(postId)
-                    .snapshots(),
+                stream: postsRef.doc(postId).snapshots(),
                 builder: (context, snapshot) {
                   String title,
                       description,
@@ -91,20 +89,21 @@ class _PostDetailState extends State<PostDetail> {
                   dynamic startDate;
 
                   if (!snapshot.hasData) return CircularProgressIndicator();
-                  title = snapshot.data['title'];
-                  bannerImage = snapshot.data['image'];
-                  description = snapshot.data['description'];
-                  startDate = snapshot.data['startDate'];
-                  address = snapshot.data['address'];
-                  userId = snapshot.data['userId'];
-                  postId = snapshot.data['postId'];
+                  DocumentSnapshot course = snapshot.data;
+                  title = course['title'];
+                  bannerImage = course['image'];
+                  description = course['description'];
+                  startDate = course['startDate'];
+                  address = course['address'];
+                  userId = course['userId'];
+                  postId = course['postId'];
                   return Container(
                     color: Colors.white,
                     child: ListView(
                       children: <Widget>[
                         _BannerImage(bannerImage),
                         _NonImageContents(title, description, startDate,
-                            address, userId, postId),
+                            address, userId, postId, course),
                       ],
                     ),
                   );
@@ -151,9 +150,10 @@ class _BannerImage extends StatelessWidget {
 class _NonImageContents extends StatelessWidget {
   String title, description, userId;
   dynamic startDate, address, moovId;
+  DocumentSnapshot course;
 
   _NonImageContents(this.title, this.description, this.startDate, this.address,
-      this.userId, this.moovId);
+      this.userId, this.moovId, this.course);
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +165,7 @@ class _NonImageContents extends StatelessWidget {
           _Title(title),
           _Description(description),
           PostTimeAndPlace(startDate, address),
-          _AuthorContent(userId),
+          _AuthorContent(userId, course),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.0),
             child: Container(
@@ -301,10 +301,9 @@ class PostTimeAndPlace extends StatelessWidget {
 
 class _AuthorContent extends StatelessWidget {
   String userId;
-  var course;
-  var snapshot;
+  DocumentSnapshot course;
   var data;
-  _AuthorContent(this.userId);
+  _AuthorContent(this.userId, this.course);
 
   @override
   Widget build(BuildContext context) {
@@ -313,21 +312,21 @@ class _AuthorContent extends StatelessWidget {
     return FutureBuilder<DocumentSnapshot>(
       future: usersRef.doc(userId).get(),
       builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot2) {
+        if (snapshot2.hasError) {
           return Text("Something went wrong");
         }
 
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> course = snapshot.data.data();
-          bool isAmbassador = snapshot.data['isAmbassador'];
+        if (snapshot2.connectionState == ConnectionState.done) {
+          Map<String, dynamic> course1 = snapshot2.data.data();
+          bool isAmbassador = snapshot2.data['isAmbassador'];
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => course['id'] != currentUser.id
-                      ? OtherProfile(course['id'])
+                  builder: (context) => course1['id'] != currentUser.id
+                      ? OtherProfile(course1['id'])
                       : ProfilePageWithHeader())),
               child: Container(
                   child: Row(
@@ -337,7 +336,7 @@ class _AuthorContent extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 22.0,
                         backgroundImage:
-                            CachedNetworkImageProvider(course['photoUrl']),
+                            CachedNetworkImageProvider(course1['photoUrl']),
                         backgroundColor: Colors.transparent,
                       )),
                   Container(
@@ -349,22 +348,24 @@ class _AuthorContent extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Row(
                             children: [
-                              Text(course['displayName'],
+                              Text(course1['displayName'],
                                   style: TextStyle(
                                       fontSize: 14,
                                       color: TextThemes.ndBlue,
                                       decoration: TextDecoration.none)),
-                                      isAmbassador
-                                ? Padding(
-                                  padding: const EdgeInsets.only(left: 2.0),
-                                  child: Image.asset('lib/assets/verif.png',
-                                      height: 22.5),) : Text('')
+                              isAmbassador
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(left: 2.0),
+                                      child: Image.asset('lib/assets/verif.png',
+                                          height: 22.5),
+                                    )
+                                  : Text('')
                             ],
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(course['email'],
+                          child: Text(course1['email'],
                               style: TextStyle(
                                   fontSize: 12,
                                   color: TextThemes.ndBlue,
@@ -552,9 +553,7 @@ class Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: postsRef
-            .doc(moovId)
-            .snapshots(),
+        stream: postsRef.doc(moovId).snapshots(),
         builder: (context, snapshot) {
           // title = snapshot.data['title'];
           // pic = snapshot.data['pic'];
