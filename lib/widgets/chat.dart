@@ -56,21 +56,23 @@ class ChatState extends State<Chat> {
   }
 
   addComment() {
+    if (commentController.text.isNotEmpty){
     chatRef
         .doc(gid)
         .collection("chat")
-        .doc(currentUser.id + timestamp.millisecondsSinceEpoch.toString())
+        .doc(currentUser.id + " " + DateTime.now().millisecondsSinceEpoch.toString())
         .set({
       "username": currentUser.displayName,
       "comment": commentController.text,
       "timestamp": timestamp,
       "avatarUrl": currentUser.photoUrl,
       "userId": currentUser.id,
-      "chatId": currentUser.id + timestamp.toString(),
+      "chatId": currentUser.id + " " + DateTime.now().millisecondsSinceEpoch.toString(),
       "gid": gid,
-      "millis": timestamp.millisecondsSinceEpoch
+      "millis": DateTime.now().millisecondsSinceEpoch.toString()
     });
     commentController.clear();
+    }
   }
 
   @override
@@ -105,7 +107,7 @@ class Comment extends StatelessWidget {
   final Timestamp timestamp;
   final String chatId;
   final String gid;
-  final int millis;
+  final String millis;
 
   Comment(
       {this.username,
@@ -139,12 +141,13 @@ class Comment extends StatelessWidget {
             backgroundImage: CachedNetworkImageProvider(avatarUrl),
           ),
           subtitle: Text(timeago.format(timestamp.toDate())),
-          trailing: (userId == currentUser.id) ?
-          GestureDetector(
-              onTap: () {
-                showAlertDialog(context, chatId, gid, millis);},
-              
-              child: Icon(Icons.more_vert_outlined)) : Text(''),
+          trailing: (userId == currentUser.id)
+              ? GestureDetector(
+                  onTap: () {
+                    showAlertDialog(context, chatId, gid, millis);
+                  },
+                  child: Icon(Icons.more_vert_outlined))
+              : Text(''),
         ),
         Divider(),
       ],
@@ -168,7 +171,7 @@ class Comment extends StatelessWidget {
               chatRef
                   .doc(gid)
                   .collection("chat")
-                  .doc(currentUser.id + millis.toString())
+                  .doc(currentUser.id + " " + millis)
                   .delete();
             },
           ),

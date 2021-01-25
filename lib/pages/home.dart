@@ -245,18 +245,18 @@ class _HomeState extends State<Home> {
   }
 
   Scaffold buildAuthScreen() {
-    Future<int> notifCount() async {
-      int notifCount;
+    // Future<int> notifCount() async {
+    //   int notifCount;
 
-      final QuerySnapshot result = await notificationFeedRef
-          .doc(currentUser.id)
-          .collection('feedItems')
-          .get();
-      if (result.docs != null) notifCount = await result.docs.length;
+    //   final QuerySnapshot result = await notificationFeedRef
+    //       .doc(currentUser.id)
+    //       .collection('feedItems')
+    //       .get();
+    //   if (result.docs != null) notifCount = await result.docs.length;
 
-      // print(randomPost);
-      return notifCount;
-    }
+    //   // print(randomPost);
+    //   return notifCount;
+    // }
 
     Future<String> randomPostMaker() async {
       String randomPost;
@@ -428,7 +428,11 @@ class _HomeState extends State<Home> {
                   MaterialPageRoute(builder: (context) => LeaderBoardPage()));
             },
           ),
-          NamedIcon(iconData: Icons.notifications_active, onTap: () async {}),
+          NamedIcon(iconData: Icons.notifications_active, onTap: () {
+            Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationFeed()));
+
+          }),
         ],
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
@@ -559,7 +563,7 @@ class NamedIcon extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) return CircularProgressIndicator();
           if (!snapshot.hasData) return CircularProgressIndicator();
-          // notifs = snapshot.data.docs.length;
+          int notifs = snapshot.data.docs.length;
 
           return InkWell(
             onTap: onTap,
