@@ -6,7 +6,6 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/widgets/my_moovs_segment.dart';
 import 'package:MOOV/widgets/send_moov.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';

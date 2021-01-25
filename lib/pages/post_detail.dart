@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
+import 'package:MOOV/pages/Comment.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/home.dart';
@@ -174,6 +175,31 @@ class _NonImageContents extends StatelessWidget {
               color: Colors.grey[700],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                showComments(context,
+                    postId: moovId,
+                    ownerId: currentUser.id,
+                    mediaUrl: currentUser.photoUrl);
+              },
+              child: Align(
+                  child: Text("Comments",
+                      style: TextStyle(
+                          color: TextThemes.ndBlue,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold))),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 1.0),
+            child: Container(
+              height: 1.0,
+              width: 500.0,
+              color: Colors.grey[700],
+            ),
+          ),
           Buttons(moovId),
           Padding(
             padding: EdgeInsets.only(bottom: 10),
@@ -186,9 +212,10 @@ class _NonImageContents extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                  padding: const EdgeInsets.only(left: 0.0, right: 4.0),
                   child: Icon(Icons.directions_run, color: Colors.green),
                 ),
                 Text(
@@ -196,8 +223,8 @@ class _NonImageContents extends StatelessWidget {
                   textAlign: TextAlign.start,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.black.withOpacity(0.6)),
+                      fontSize: 20,
+                      color: TextThemes.ndBlue),
                 ),
               ],
             ),
@@ -206,6 +233,17 @@ class _NonImageContents extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  showComments(BuildContext context,
+      {String postId, String ownerId, String mediaUrl}) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return PostComments(
+        postId: postId,
+        postOwnerId: ownerId,
+        postMediaUrl: mediaUrl,
+      );
+    }));
   }
 }
 
@@ -780,43 +818,3 @@ class Buttons extends StatelessWidget {
         });
   }
 }
-//SEND MOOV BUTTON
-//  Padding(
-//                   padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
-//                   child: RaisedButton(
-//                     shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(5),
-//                         side: BorderSide(color: Colors.black)),
-//                     onPressed: () {
-//                       Navigator.push(
-//                           context,
-//                           PageTransition(
-//                               type: PageTransitionType.bottomToTop,
-//                               child: SendMOOV(
-//                                   course['postId'],
-//                                   course['userId'],
-//                                   course['image'],
-//                                   course['postId'],
-//                                   course['startDate'],
-//                                   course['title'],
-//                                   course['description'],
-//                                   course['address'],
-//                                   course['profilePic'],
-//                                   course['userName'],
-//                                   course['userEmail'],
-//                                   course['liked'])));
-//                     },
-//                     color: Colors.white,
-//                     padding: EdgeInsets.all(5.0),
-//                     child: Padding(
-//                       padding: const EdgeInsets.only(left: 4.0),
-//                       child: Column(
-//                         children: [
-//                           Text('Send'),
-//                           Icon(Icons.send_rounded,
-//                               color: Colors.blue[500], size: 30),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                 ),

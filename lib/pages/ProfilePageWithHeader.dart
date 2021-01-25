@@ -11,7 +11,6 @@ import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
-import 'package:MOOV/widgets/my_moovs_segment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -62,7 +62,7 @@ class ChatState extends State<Chat> {
         .collection("chat")
         .doc(DateTime.now().millisecondsSinceEpoch.toString() + " " + currentUser.id)
         .set({
-      "username": currentUser.displayName,
+      "displayName": currentUser.displayName,
       "comment": commentController.text,
       "timestamp": timestamp,
       "avatarUrl": currentUser.photoUrl,
