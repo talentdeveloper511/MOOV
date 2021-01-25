@@ -25,7 +25,7 @@ class NotificationFeed extends StatefulWidget {
 class _NotificationFeedState extends State<NotificationFeed> {
   String docId;
   List<String> docIds;
-  bool gotNotifs = false;
+  bool gotNotifs = true;
 
   getNotificationFeed() async {
     QuerySnapshot snapshot = await notificationFeedRef
@@ -143,8 +143,9 @@ class _NotificationFeedState extends State<NotificationFeed> {
                             snapshot.data.forEach((doc) {
                               feedItems.add(doc);
                             });
-                            if (feedItems.isNotEmpty) {
-                                gotNotifs = true;
+                            if (feedItems.isEmpty) {
+                            
+                                gotNotifs = false;
                             }
 
                             return Dismissible(

@@ -49,6 +49,10 @@ final notificationFeedRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('notificationFeed');
+final chatRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('chat');
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
@@ -58,10 +62,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int notifCounts;
   bool isSelected = false;
   String stringValue = "No value";
-  int intiial = 1;
 
   bool isAuth = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -243,9 +245,18 @@ class _HomeState extends State<Home> {
   }
 
   Scaffold buildAuthScreen() {
-    final GoogleSignInAccount user = googleSignIn.currentUser;
+    Future<int> notifCount() async {
+      int notifCount;
 
-    // print(randomPost);
+      final QuerySnapshot result = await notificationFeedRef
+          .doc(currentUser.id)
+          .collection('feedItems')
+          .get();
+      if (result.docs != null) notifCount = await result.docs.length;
+
+      // print(randomPost);
+      return notifCount;
+    }
 
     Future<String> randomPostMaker() async {
       String randomPost;
@@ -257,6 +268,16 @@ class _HomeState extends State<Home> {
           .limit(1)
           .get();
       if (result.docs != null) randomPost = await result.docs.first['postId'];
+
+      if (result.docs == null) {
+        final QuerySnapshot result2 = await postsRef
+            .where("postId", isGreaterThanOrEqualTo: "")
+            .orderBy("postId")
+            .limit(1)
+            .get();
+        randomPost = await result.docs.first['postId'];
+      }
+      // print(randomPost);
       return randomPost;
     }
 
@@ -265,6 +286,10 @@ class _HomeState extends State<Home> {
           MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
     }
 
+    int hi = 2;
+    if (hi != 0) {
+      isSelected = true;
+    }
     // notificationFeedRef
     //     .doc(currentUser.id)
     //     .collection('feedItems')
@@ -273,7 +298,6 @@ class _HomeState extends State<Home> {
     //     .get();
 
     // Upload(currentUser: currentUser);
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -404,33 +428,7 @@ class _HomeState extends State<Home> {
                   MaterialPageRoute(builder: (context) => LeaderBoardPage()));
             },
           ),
-          NamedIcon(
-            iconData: Icons.notifications_active,
-            onTap: () async {
-              if (isSelected == false) {
-                // isSelected = !isSelected;
-                //color = Colors.pink;
-                print('Coming here');
-              } else {
-                isSelected = false;
-                // color = Colors.white;
-
-              }
-              int first = 0;
-              if (first != 0) {
-                isSelected = !isSelected;
-              }
-
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.setBool("youKey", isSelected);
-
-              // This is where you save the data and then when the user second time opens  he will get the stoared data
-              setState(() {});
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationFeed()));
-            },
-            notifs: !isSelected ? 0 : 1,
-          )
+          NamedIcon(iconData: Icons.notifications_active, onTap: () async {}),
         ],
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
@@ -539,13 +537,11 @@ class NamedIcon extends StatelessWidget {
   final IconData iconData;
   final int notifs;
   final VoidCallback onTap;
-  final int intitial;
   int notificationCount;
 
   NamedIcon({
     Key key,
     this.onTap,
-    this.intitial,
     this.notifs,
     @required this.iconData,
     this.notificationCount,
@@ -553,7 +549,6 @@ class NamedIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int initial;
     final GoogleSignInAccount user = googleSignIn.currentUser;
 
     return StreamBuilder(
@@ -564,7 +559,7 @@ class NamedIcon extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) return CircularProgressIndicator();
           if (!snapshot.hasData) return CircularProgressIndicator();
-          initial = snapshot.data.docs.length;
+          // notifs = snapshot.data.docs.length;
 
           return InkWell(
             onTap: onTap,
@@ -595,5 +590,94 @@ class NamedIcon extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+
+class SharedPreferencesDemo extends StatefulWidget {
+  SharedPreferencesDemo({Key key}) : super(key: key);
+
+  @override
+  SharedPreferencesDemoState createState() => SharedPreferencesDemoState();
+}
+
+class SharedPreferencesDemoState extends State<SharedPreferencesDemo> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Future<int> _counter = notificationFeedRef
+      .doc(googleSignIn.currentUser.id)
+      .collection('feedItems')
+      .snapshots()
+      .length;
+
+  Future<void> _incrementCounter() async {
+    final SharedPreferences prefs = await _prefs;
+    final int counter = (prefs.getInt('counter') ?? 0) + 1;
+
+    setState(() {
+      _counter = prefs.setInt("counter", counter).then((bool success) {
+        return counter;
+      });
+    });
+  }
+
+  Future<void> _clearCounter() async {
+    final SharedPreferences prefs = await _prefs;
+    final int counter = (prefs.getInt('counter') ?? 0) * 0;
+
+    setState(() {
+      _counter = prefs.setInt("counter", counter).then((bool success) {
+        return counter;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print(notificationFeedRef
+        .doc(googleSignIn.currentUser.id)
+        .collection('feedItems')
+        .snapshots()
+        .length);
+    _counter = _prefs.then((SharedPreferences prefs) {
+      return (prefs.getInt('counter') ?? 0);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("SharedPreferences Demo"),
+      ),
+      body: Column(
+        children: [
+          Center(
+              child: FutureBuilder<int>(
+                  future: _counter,
+                  builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const CircularProgressIndicator();
+                      default:
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Text(
+                            'Button tapped ${snapshot.data} time${snapshot.data == 1 ? '' : 's'}.\n\n'
+                            'This should persist across restarts.',
+                          );
+                        }
+                    }
+                  })),
+          FlatButton(onPressed: _clearCounter, child: Text("HI"))
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }

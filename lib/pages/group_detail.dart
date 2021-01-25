@@ -8,6 +8,7 @@ import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/NextMOOV.dart';
+import 'package:MOOV/widgets/chat.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/set_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -461,48 +462,17 @@ class _GroupDetailState extends State<GroupDetail> {
                                             borderRadius:
                                                 BorderRadius.circular(8.0)),
                                       ),
-                                    )
-
-                                    // Padding(
-                                    //   padding: const EdgeInsets.only(top: 35.0),
-                                    //   child: Text(
-                                    //     "CHAT",
-                                    //     style: TextStyle(fontSize: 20),
-                                    //   ),
-                                    // ),
-                                    // Padding(
-                                    //     padding: const EdgeInsets.all(8.0),
-                                    //     child: Container(
-                                    //       child: TextFormField(
-                                    //         controller: chatController,
-                                    //         decoration: InputDecoration(
-                                    //           fillColor: Colors.white,
-                                    //           hintStyle: TextStyle(fontSize: 15),
-                                    //           contentPadding: EdgeInsets.only(
-                                    //               top: 18, bottom: 10),
-                                    //           hintText:
-                                    //               "What's the MOOV tonight guys...",
-                                    //           filled: true,
-                                    //           prefixIcon: Icon(
-                                    //             Icons.message,
-                                    //             size: 28.0,
-                                    //           ),
-                                    //           suffixIcon: IconButton(
-                                    //             icon: Icon(Icons.send),
-                                    //             onPressed: sendChat,
-                                    //           ),
-                                    //         ),
-                                    //         // onFieldSubmitted: sendChat(currentUser.displayName,
-                                    //         //     chatController.text, gid),
-                                    //       ),
-                                    //       height: 150,
-                                    //       decoration: BoxDecoration(
-                                    //           border: Border.all(
-                                    //             color: TextThemes.ndBlue,
-                                    //           ),
-                                    //           borderRadius: BorderRadius.all(
-                                    //               Radius.circular(5))),
-                                    //     ))
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(0.0),
+                                      child: Column(
+                                        children: [
+                                          Text("Talk about it", style: TextStyle(color: TextThemes.ndBlue, fontSize: 20)),
+                                          Chat(gid: gid, groupPic: groupPic,),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 30,)
                                   ]),
                                 )
                               ],
@@ -761,6 +731,7 @@ class _GroupDetailState extends State<GroupDetail> {
               });
         });
   }
+
 
   buildNoContent() {
     bool isLargePhone = Screen.diagonal(context) > 766;
