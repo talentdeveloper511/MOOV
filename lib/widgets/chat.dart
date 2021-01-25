@@ -39,7 +39,7 @@ class ChatState extends State<Chat> {
         stream: chatRef
             .doc(gid)
             .collection('chat')
-            .orderBy("timestamp", descending: false)
+            // .orderBy("timestamp", descending: false)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -60,14 +60,14 @@ class ChatState extends State<Chat> {
     chatRef
         .doc(gid)
         .collection("chat")
-        .doc(currentUser.id + " " + DateTime.now().millisecondsSinceEpoch.toString())
+        .doc(DateTime.now().millisecondsSinceEpoch.toString() + " " + currentUser.id)
         .set({
       "username": currentUser.displayName,
       "comment": commentController.text,
       "timestamp": timestamp,
       "avatarUrl": currentUser.photoUrl,
       "userId": currentUser.id,
-      "chatId": currentUser.id + " " + DateTime.now().millisecondsSinceEpoch.toString(),
+      "chatId": DateTime.now().millisecondsSinceEpoch.toString() + " " + currentUser.id,
       "gid": gid,
       "millis": DateTime.now().millisecondsSinceEpoch.toString()
     });
@@ -171,7 +171,7 @@ class Comment extends StatelessWidget {
               chatRef
                   .doc(gid)
                   .collection("chat")
-                  .doc(currentUser.id + " " + millis)
+                  .doc(millis + " " + currentUser.id)
                   .delete();
             },
           ),
