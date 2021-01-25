@@ -3,6 +3,7 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -55,12 +56,19 @@ class ChatState extends State<Chat> {
   }
 
   addComment() {
-    chatRef.doc(gid).collection("chat").add({
+    chatRef
+        .doc(gid)
+        .collection("chat")
+        .doc(currentUser.id + timestamp.millisecondsSinceEpoch.toString())
+        .set({
       "username": currentUser.displayName,
       "comment": commentController.text,
       "timestamp": timestamp,
       "avatarUrl": currentUser.photoUrl,
       "userId": currentUser.id,
+      "chatId": currentUser.id + timestamp.toString(),
+      "gid": gid,
+      "millis": timestamp.millisecondsSinceEpoch
     });
     commentController.clear();
   }
@@ -79,10 +87,9 @@ class ChatState extends State<Chat> {
               decoration: InputDecoration(labelText: "Talk to 'em..."),
             ),
             trailing: OutlineButton(
-              onPressed: addComment,
-              borderSide: BorderSide.none,
-              child: Text("Post", style: TextStyle(color: Colors.blue))
-            ),
+                onPressed: addComment,
+                borderSide: BorderSide.none,
+                child: Text("Post", style: TextStyle(color: Colors.blue))),
           ),
         ],
       ),
@@ -96,23 +103,30 @@ class Comment extends StatelessWidget {
   final String avatarUrl;
   final String comment;
   final Timestamp timestamp;
+  final String chatId;
+  final String gid;
+  final int millis;
 
-  Comment({
-    this.username,
-    this.userId,
-    this.avatarUrl,
-    this.comment,
-    this.timestamp,
-  });
+  Comment(
+      {this.username,
+      this.userId,
+      this.avatarUrl,
+      this.comment,
+      this.timestamp,
+      this.chatId,
+      this.gid,
+      this.millis});
 
   factory Comment.fromDocument(DocumentSnapshot doc) {
     return Comment(
-      username: doc['username'],
-      userId: doc['userId'],
-      comment: doc['comment'],
-      timestamp: doc['timestamp'],
-      avatarUrl: doc['avatarUrl'],
-    );
+        username: doc['username'],
+        userId: doc['userId'],
+        comment: doc['comment'],
+        timestamp: doc['timestamp'],
+        avatarUrl: doc['avatarUrl'],
+        chatId: doc['chatId'],
+        gid: doc['gid'],
+        millis: doc['millis']);
   }
 
   @override
@@ -125,9 +139,45 @@ class Comment extends StatelessWidget {
             backgroundImage: CachedNetworkImageProvider(avatarUrl),
           ),
           subtitle: Text(timeago.format(timestamp.toDate())),
+          trailing: (userId == currentUser.id) ?
+          GestureDetector(
+              onTap: () {
+                showAlertDialog(context, chatId, gid, millis);},
+              
+              child: Icon(Icons.more_vert_outlined)) : Text(''),
         ),
         Divider(),
       ],
+    );
+  }
+
+  void showAlertDialog(BuildContext context, chatId, gid, millis) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Delete?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nMOOV to trash can?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yeah", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Navigator.pop(context);
+
+              chatRef
+                  .doc(gid)
+                  .collection("chat")
+                  .doc(currentUser.id + millis.toString())
+                  .delete();
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Cancel"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
     );
   }
 }
