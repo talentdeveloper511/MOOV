@@ -192,6 +192,7 @@ class _EditPostState extends State<EditPost> {
           String typeDropdownValue = snapshot.data['type'];
 
           return Scaffold(
+            backgroundColor: Colors.white,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
 

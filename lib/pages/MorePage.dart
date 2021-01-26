@@ -61,6 +61,7 @@ class _MorePageState extends State<MorePage>
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButton: FadeTransition(
         opacity: _hideFabAnimController,
         child: ScaleTransition(

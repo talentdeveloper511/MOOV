@@ -780,8 +780,6 @@ class PostOnFeed extends StatelessWidget {
                   StreamBuilder(
                       stream: usersRef.doc(course['userId']).snapshots(),
                       builder: (context, snapshot2) {
-                        var userYear;
-                        var userDorm;
                         bool isLargePhone = Screen.diagonal(context) > 766;
                         bool isPostOwner = false;
 
@@ -789,11 +787,15 @@ class PostOnFeed extends StatelessWidget {
                           return CircularProgressIndicator();
                         if (!snapshot2.hasData)
                           return CircularProgressIndicator();
-                        else
-                          userDorm = snapshot2.data['dorm'];
-                        strUserPic = snapshot2.data['photoUrl'];
+                        
+
                         bool isAmbassador = snapshot2.data['isAmbassador'];
-                        userYear = snapshot2.data['year'];
+                        String userYear = snapshot2.data['year'];
+                        String userDorm = snapshot2.data['dorm'];
+                        String displayName = snapshot2.data['displayName'];
+                        String email = snapshot2.data['email'];
+                        String proPic = snapshot2.data['photoUrl'];
+
                         if (currentUser.id == course['userId']) {
                           isPostOwner = true;
                         }
@@ -866,7 +868,7 @@ class PostOnFeed extends StatelessWidget {
                                             ),
                                             child: Row(
                                               children: [
-                                                Text(course['userName'],
+                                                Text(displayName,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
@@ -955,8 +957,8 @@ class PostOnFeed extends StatelessWidget {
                                                     course['postId'],
                                                     course['startDate'],
                                                     course['title'],
-                                                    course['profilePic'],
-                                                    course['userName'],
+                                                    proPic,
+                                                    displayName,
                                                   )));
                                         },
                                         child: Icon(Icons.send_rounded,

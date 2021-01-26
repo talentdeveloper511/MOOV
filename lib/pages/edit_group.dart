@@ -204,6 +204,7 @@ class _EditGroupState extends State<EditGroup> {
           if (!snapshot.hasData) return CircularProgressIndicator();
 
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(

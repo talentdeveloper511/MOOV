@@ -22,7 +22,6 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:page_transition/page_transition.dart';
 import 'home.dart';
 
-
 class MoovMaker extends StatefulWidget {
   final PostModel postModel;
 
@@ -187,7 +186,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
       builder: (context) {
         return SimpleDialog(
           title: Text(
-            "Create Post",
+            "Show it off",
             style: TextStyle(color: Colors.white),
           ),
           children: <Widget>[
@@ -257,6 +256,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   final addressController = TextEditingController();
   final descriptionController = TextEditingController();
   final startDateController = DatePicker().startDate1;
+  final maxOccupancyController = TextEditingController();
+
   final format = DateFormat("EEE, MMM d,' at' h:mm a");
   Map<String, int> invitees = {};
   List<String> inviteesNameList = [];
@@ -264,6 +265,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   String userPic;
   int id = 0;
   bool noImage = false;
+  bool barcode = false;
+  String maxOccupancy;
+  int maxOccupancyInt;
 
   String generateRandomString(int len) {
     var r = Random();
@@ -301,7 +305,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         Icons.create,
                         color: TextThemes.ndGold,
                       ),
-                      labelText: "Enter Event Title",
+                      labelText: "MOOV Title",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -334,8 +338,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                 : TextStyle(
                                     fontSize: 12.5, color: Colors.black),
                             value: typeDropdownValue,
-                            icon: Icon(Icons.arrow_downward,
-                                color: TextThemes.ndGold),
+                            icon: Icon(Icons.museum, color: TextThemes.ndGold),
                             decoration: InputDecoration(
                               labelText: "Select Event Type",
                               enabledBorder: OutlineInputBorder(
@@ -373,7 +376,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                   : TextStyle(
                                       fontSize: 12.5, color: Colors.black),
                               value: privacyDropdownValue,
-                              icon: Icon(Icons.arrow_downward,
+                              icon: Icon(Icons.privacy_tip_outlined,
                                   color: TextThemes.ndGold),
                               decoration: InputDecoration(
                                 labelText: "Visibility",
@@ -412,7 +415,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                     controller: addressController,
                     decoration: InputDecoration(
                       icon: Icon(Icons.place, color: TextThemes.ndGold),
-                      labelText: "Where's it at?",
+                      labelText: "Location or Address",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -491,7 +494,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                       decoration: InputDecoration(
                           icon: Icon(Icons.timelapse, color: TextThemes.ndGold),
                           suffixIcon: Icon(
-                            Icons.arrow_downward,
+                            Icons.calendar_today,
                             color: TextThemes.ndGold,
                           ),
                           labelText: 'Enter Start Time',
@@ -553,6 +556,56 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                   ),
                 ),
                 Padding(
+                  padding:
+                      const EdgeInsets.only(top: 0.0, left: 40, right: 12.5),
+                  child: Column(
+                    children: <Widget>[
+                      ExpansionTile(
+                        title: Text(
+                          "Optional Details",
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                        children: <Widget>[
+                          // ExpansionTile(
+                          //   title: Text(
+                          //     'Sub title',
+                          //   ),
+                          //   children: <Widget>[
+                          //     // ListTile(
+                          //     //   title: Text('data'),
+                          //     // )
+                          //   ],
+                          // ),
+                          ListTile(
+                            title: Row(
+                              children: <Widget>[
+                                Expanded(flex: 4, child: Text('Max Occupancy')),
+                                Expanded(
+                                  flex: 1,
+                                  child: TextField(
+                                    controller: maxOccupancyController,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) =>
+                                        setState(() => maxOccupancy = value),
+
+                                    // your TextField's Content
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          CheckboxListTile(
+                              title: new Text("Needs a Barcode (Verification)"),
+                              value: barcode,
+                              onChanged: (bool value) =>
+                                  setState(() => barcode = value)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: GestureDetector(
                         onTap: () {
@@ -566,7 +619,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 10),
+                              horizontal: 15.0, vertical: 5),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -861,9 +914,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               final GoogleSignInAccount user =
                                   googleSignIn.currentUser;
                               final strUserId = user.id;
-                              final profilePic = user.photoUrl;
-                              final userName = user.displayName;
-                              final userEmail = user.email;
                               if (inviteesNameList.length == 0) {
                                 print("EMTPY");
                               }
@@ -875,13 +925,11 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                           .child("images/" +
                                               user.id +
                                               titleController.text);
+                                  if (maxOccupancyController.text.isNotEmpty) {
+                                    maxOccupancyInt =
+                                        int.parse(maxOccupancyController.text);
+                                  }
 
-                                  // Reference firebaseStorageRef = FirebaseStorage
-                                  //     .instance
-                                  //     .ref()
-                                  //     .child("images/" +
-                                  //         user.id +
-                                  //         titleController.text);
                                   firebase_storage.UploadTask uploadTask;
 
                                   uploadTask = ref.putFile(_image);
@@ -901,14 +949,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         address: addressController.text,
                                         startDate: currentValue,
                                         invitees: inviteesNameList,
-
-                                        // invitees: invitees,
+                                        maxOccupancy: maxOccupancyInt,
+                                        barcode: barcode,
                                         imageUrl: downloadUrl,
                                         userId: strUserId,
-                                        likes: false,
-                                        userName: userName,
-                                        userEmail: userEmail,
-                                        profilePic: profilePic,
                                         postId: generateRandomString(20));
                                     setState(() {
                                       isUploading = false;

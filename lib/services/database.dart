@@ -44,27 +44,20 @@ class Database {
 
   void createPost(
       {title,
-      String uid,
       description,
       type,
-      likeCounter,
       privacy,
       address,
-      likes,
       DateTime startDate,
       invitees,
+      int maxOccupancy,
+      bool barcode,
       imageUrl,
       userId,
-      userName,
-      userEmail,
-      profilePic,
-      featured,
       postId}) async {
     DocumentReference ref = await postsRef.doc(postId).set({
       'title': title,
-      'likes': likes,
       'type': type,
-      'likeCounter': likeCounter,
       'privacy': privacy,
       'description': description,
       'address': address,
@@ -72,12 +65,11 @@ class Database {
       'invitees': {
         for (var item in invitees) item.toString(): 2,
       },
+      'maxOccupancy': maxOccupancy,
+      'barcode': barcode,
       'image': imageUrl,
       'userId': userId,
-      'userName': userName,
-      'userEmail': userEmail,
-      'profilePic': profilePic,
-      "featured": featured,
+      "featured": false,
       "postId": postId
     }).then(inviteesNotification(postId, imageUrl, title, invitees));
 
