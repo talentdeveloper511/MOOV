@@ -541,10 +541,13 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 if (privacy != "Friends Only") {
                                   hide = true;
                                 }
-
                                 if (!currentUser.friendArray
                                     .contains(course['userId'])) {
                                   hide = true;
+                                }
+                                if (course['userId'] == currentUser.id &&
+                                    privacy == "Friends Only") {
+                                  hide = false;
                                 }
                                 // // print(hide);
 

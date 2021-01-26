@@ -377,6 +377,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20.0),
                                         child: RichText(
+                                          textAlign: TextAlign.center,
                                           textScaleFactor: 1.3,
                                           text: TextSpan(
                                               style: TextThemes.mediumbody,
@@ -406,7 +407,7 @@ class _OtherProfileState extends State<OtherProfile> {
                               children: [
                                 RaisedButton(
                                     padding: const EdgeInsets.all(12.0),
-                                    color: Color.fromRGBO(0, 100, 0, 1.0),
+                                    color: Colors.green,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(3.0))),
