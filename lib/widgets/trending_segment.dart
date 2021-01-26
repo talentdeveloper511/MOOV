@@ -75,7 +75,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
     dynamic likeCount;
 
     return Container(
-      color: Colors.grey[100],
+      color: Colors.white,
       child: Column(
         children: [
           Container(

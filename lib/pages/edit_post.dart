@@ -192,6 +192,7 @@ class _EditPostState extends State<EditPost> {
           String typeDropdownValue = snapshot.data['type'];
 
           return Scaffold(
+            backgroundColor: Colors.white,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
 
@@ -392,44 +393,44 @@ class _EditPostState extends State<EditPost> {
                                     },
                                   ),
                                 ),
-                                Padding(
-                                    padding: EdgeInsets.only(top: 20),
-                                    child: Container(
-                                      width: 250,
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButtonFormField(
-                                          value: typeDropdownValue,
-                                          icon: Icon(Icons.arrow_downward,
-                                              color: TextThemes.ndGold),
-                                          decoration: InputDecoration(
-                                            labelText: "Type",
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                            ),
-                                          ),
-                                          items:
-                                              listOfTypes.map((String value) {
-                                            return new DropdownMenuItem<String>(
-                                              value: value,
-                                              child: new Text(value),
-                                            );
-                                          }).toList(),
-                                          onChanged: (String newValue) {
-                                            setState(() {
-                                              typeDropdownValue = newValue;
-                                            });
-                                          },
-                                          validator: (value) {
-                                            if (value.isEmpty) {
-                                              return 'What type?';
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ),
-                                    )),
+                                // Padding(
+                                //     padding: EdgeInsets.only(top: 20),
+                                //     child: Container(
+                                //       width: 250,
+                                //       child: ButtonTheme(
+                                //         alignedDropdown: true,
+                                //         child: DropdownButtonFormField(
+                                //           value: typeDropdownValue,
+                                //           icon: Icon(Icons.arrow_downward,
+                                //               color: TextThemes.ndGold),
+                                //           decoration: InputDecoration(
+                                //             labelText: "Type",
+                                //             enabledBorder: OutlineInputBorder(
+                                //               borderRadius:
+                                //                   BorderRadius.circular(10.0),
+                                //             ),
+                                //           ),
+                                //           items:
+                                //               listOfTypes.map((String value) {
+                                //             return new DropdownMenuItem<String>(
+                                //               value: value,
+                                //               child: new Text(value),
+                                //             );
+                                //           }).toList(),
+                                //           onChanged: (String newValue) {
+                                //             setState(() {
+                                //               typeDropdownValue = newValue;
+                                //             });
+                                //           },
+                                //           validator: (value) {
+                                //             if (value.isEmpty) {
+                                //               return 'What type?';
+                                //             }
+                                //             return null;
+                                //           },
+                                //         ),
+                                //       ),
+                                //     )),
                                 Padding(
                                     padding: EdgeInsets.all(20.0),
                                     child: Container(

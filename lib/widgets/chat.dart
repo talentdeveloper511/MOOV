@@ -36,7 +36,7 @@ class ChatState extends State<Chat> {
 
   buildChat() {
     return StreamBuilder(
-        stream: chatRef
+        stream: groupsRef
             .doc(gid)
             .collection('chat')
             // .orderBy("timestamp", descending: false)
@@ -57,7 +57,7 @@ class ChatState extends State<Chat> {
 
   addComment() {
     if (commentController.text.isNotEmpty){
-    chatRef
+    groupsRef
         .doc(gid)
         .collection("chat")
         .doc(DateTime.now().millisecondsSinceEpoch.toString() + " " + currentUser.id)
@@ -100,7 +100,7 @@ class ChatState extends State<Chat> {
 }
 
 class Comment extends StatelessWidget {
-  final String username;
+  final String displayName;
   final String userId;
   final String avatarUrl;
   final String comment;
@@ -110,7 +110,7 @@ class Comment extends StatelessWidget {
   final String millis;
 
   Comment(
-      {this.username,
+      {this.displayName,
       this.userId,
       this.avatarUrl,
       this.comment,
@@ -121,7 +121,7 @@ class Comment extends StatelessWidget {
 
   factory Comment.fromDocument(DocumentSnapshot doc) {
     return Comment(
-        username: doc['username'],
+        displayName: doc['displayName'],
         userId: doc['userId'],
         comment: doc['comment'],
         timestamp: doc['timestamp'],
@@ -168,7 +168,7 @@ class Comment extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
 
-              chatRef
+              groupsRef
                   .doc(gid)
                   .collection("chat")
                   .doc(millis + " " + currentUser.id)

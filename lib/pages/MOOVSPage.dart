@@ -196,8 +196,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                   StreamBuilder(
                       stream: postsRef
                           .where("going", arrayContains: currentUser.id)
-                              .orderBy("startDate")
-                              .snapshots(),
+                          .orderBy("startDate")
+                          .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
@@ -249,6 +249,10 @@ class _MOOVSPageState extends State<MOOVSPage>
                             }
 
                             if (isToday == false && todayOnly == 1) hide = true;
+
+                            if (!course['going'].contains(currentUser.id)) {
+                              hide = true;
+                            }
 
                             return (hide == false)
                                 ? PostOnFeed(course)

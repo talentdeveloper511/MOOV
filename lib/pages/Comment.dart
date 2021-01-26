@@ -85,6 +85,7 @@ class PostCommentsState extends State<PostComments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -122,22 +123,28 @@ class PostCommentsState extends State<PostComments> {
           ),
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(child: buildPostComments()),
-          Divider(),
-          ListTile(
-            title: TextFormField(
-              controller: commentController,
-              decoration: InputDecoration(labelText: "Write a comment..."),
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 20.0),
+        child: Column(
+          children: <Widget>[
+            Expanded(child: buildPostComments()),
+            Divider(),
+            ListTile(
+              title: TextFormField(
+                controller: commentController,
+                decoration: InputDecoration(labelText: "Talk to 'em..."),
+              ),
+              trailing: OutlineButton(
+                onPressed: addComment,
+                borderSide: BorderSide.none,
+                child: Text(
+                  "Post",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
             ),
-            trailing: OutlineButton(
-              onPressed: addComment,
-              borderSide: BorderSide.none,
-              child: Text("Post"),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

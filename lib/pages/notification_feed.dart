@@ -120,6 +120,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                           return circularProgress();
                         }
                         if (snapshot.data.length == 0) {
+                          gotNotifs = false;
                           return Container(
                               child: Center(
                                   child: Text(
@@ -143,9 +144,9 @@ class _NotificationFeedState extends State<NotificationFeed> {
                             snapshot.data.forEach((doc) {
                               feedItems.add(doc);
                             });
-                            if (feedItems.isEmpty) {
-                            
-                                gotNotifs = false;
+
+                            if (feedItems.isNotEmpty) {
+                              gotNotifs = true;
                             }
 
                             return Dismissible(
@@ -177,7 +178,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                                       backgroundColor: TextThemes.ndBlue,
                                       content: Padding(
                                         padding: const EdgeInsets.all(2.0),
-                                        child: Text("Be good, notification."),
+                                        child: Text("See ya, notification."),
                                       )));
                                 },
                                 // Show a red background as the item is swiped away.
@@ -206,7 +207,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                     );
                   }),
             ),
-            gotNotifs
+            gotNotifs == true
                 ? Padding(
                     padding: const EdgeInsets.all(28.0),
                     child: GestureDetector(

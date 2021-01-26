@@ -284,7 +284,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   snapshot.data.docs.length == 0)
                                 return Center(
                                   child: Text(
-                                      "No featured MOOVs. \n\n Got a feature? Email MOOV@MOOV.com.",
+                                      "No featured MOOVs. \n\n Got a feature? Email kcamson@nd.edu.",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 20)),
                                 );
@@ -541,10 +541,13 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 if (privacy != "Friends Only") {
                                   hide = true;
                                 }
-
                                 if (!currentUser.friendArray
                                     .contains(course['userId'])) {
                                   hide = true;
+                                }
+                                if (course['userId'] == currentUser.id &&
+                                    privacy == "Friends Only") {
+                                  hide = false;
                                 }
                                 // // print(hide);
 
@@ -777,8 +780,6 @@ class PostOnFeed extends StatelessWidget {
                   StreamBuilder(
                       stream: usersRef.doc(course['userId']).snapshots(),
                       builder: (context, snapshot2) {
-                        var userYear;
-                        var userDorm;
                         bool isLargePhone = Screen.diagonal(context) > 766;
                         bool isPostOwner = false;
 
@@ -786,11 +787,15 @@ class PostOnFeed extends StatelessWidget {
                           return CircularProgressIndicator();
                         if (!snapshot2.hasData)
                           return CircularProgressIndicator();
-                        else
-                          userDorm = snapshot2.data['dorm'];
-                        strUserPic = snapshot2.data['photoUrl'];
+                        
+
                         bool isAmbassador = snapshot2.data['isAmbassador'];
-                        userYear = snapshot2.data['year'];
+                        String userYear = snapshot2.data['year'];
+                        String userDorm = snapshot2.data['dorm'];
+                        String displayName = snapshot2.data['displayName'];
+                        String email = snapshot2.data['email'];
+                        String proPic = snapshot2.data['photoUrl'];
+
                         if (currentUser.id == course['userId']) {
                           isPostOwner = true;
                         }
@@ -863,7 +868,7 @@ class PostOnFeed extends StatelessWidget {
                                             ),
                                             child: Row(
                                               children: [
-                                                Text(course['userName'],
+                                                Text(displayName,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
@@ -952,8 +957,8 @@ class PostOnFeed extends StatelessWidget {
                                                     course['postId'],
                                                     course['startDate'],
                                                     course['title'],
-                                                    course['profilePic'],
-                                                    course['userName'],
+                                                    proPic,
+                                                    displayName,
                                                   )));
                                         },
                                         child: Icon(Icons.send_rounded,
