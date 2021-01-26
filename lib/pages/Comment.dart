@@ -132,7 +132,7 @@ class PostCommentsState extends State<PostComments> {
             ListTile(
               title: TextFormField(
                 controller: commentController,
-                decoration: InputDecoration(labelText: "Write a comment..."),
+                decoration: InputDecoration(labelText: "Talk to 'em..."),
               ),
               trailing: OutlineButton(
                 onPressed: addComment,

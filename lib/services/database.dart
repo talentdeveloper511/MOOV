@@ -93,8 +93,8 @@ class Database {
 
   Future<void> addNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = postsRef.doc('notreDame/data/food/$postId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/users/$userId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
       // addGoingToNotificationFeed(
@@ -115,8 +115,8 @@ class Database {
 
   Future<void> removeNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('notreDame/food/$postId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/users/$userId');
+      final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(-1)});
 
       // addGoingToNotificationFeed(
@@ -376,27 +376,17 @@ class Database {
     firebase_storage.Reference ref =
         firebase_storage.FirebaseStorage.instance.ref().child(filePath);
 
-    groupsRef
-        .where('nextMOOV', isEqualTo: postId)
-        .get()
-        .then((QuerySnapshot snapshot) {});
+    // groupsRef
+    //     .where('nextMOOV', isEqualTo: postId)
+    //     .get()
+    //     .then((QuerySnapshot snapshot) {});
 
-//       List<dynamic> values = snapshot.docs;
-//       print(values.toString());
-//       values.forEach((v) {
-//         final specificDocument = snapshot.docs.where((f) {
-//      return f.id == xxx;
-// }).toList();
-//         print(v);
-//         v.set({
-//                               "voters": {"nextMOOV": ""}
-//                             });
-//       });
-//     });
-//  .then((querySnapshot) => {
-//     querySnapshot.forEach((doc) => {
-//         FirebaseFirestore.instance.batch().(doc.ref, {branch: {id: docId, name: after.name}})};
-//     });
+    // notificationFeedRef.where("postId", isEqualTo: postId).get().then((doc) {
+    //   print(doc);
+     
+      
+    // });
+    ///this is gonna be a little more complicated to delete notifs
 
     postsRef.doc(postId).get().then((doc) {
       if (doc.exists) {
@@ -404,28 +394,18 @@ class Database {
         ref.delete();
 
         doc.reference.delete();
-        notificationFeedRef
-            .doc(ownerId)
-            .collection("feedItems")
-            .doc(postId)
-            .get()
-            .then((doc) {
-          if (doc.exists) {
-            doc.reference.delete();
-          }
-        });
+      }
+    });
 
-        groupsRef.where("nextMOOV", isEqualTo: postId).get().then((doc) {
-          final DocumentReference ref =
-              dbRef.doc('notreDame/data/friendGroups/$doc');
+    groupsRef.where("nextMOOV", isEqualTo: postId).get().then((doc) {
+      final DocumentReference ref =
+          dbRef.doc('notreDame/data/friendGroups/$doc');
 
-          if (doc.docs.isNotEmpty) {
-            return dbRef.runTransaction((transaction) async {
-              transaction.update(ref, {
-                'nextMOOV': FieldValue.arrayRemove([postId]),
-              });
-            });
-          }
+      if (doc.docs.isNotEmpty) {
+        return dbRef.runTransaction((transaction) async {
+          transaction.update(ref, {
+            'nextMOOV': FieldValue.arrayRemove([postId]),
+          });
         });
       }
     });

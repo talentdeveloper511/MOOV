@@ -284,7 +284,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                   snapshot.data.docs.length == 0)
                                 return Center(
                                   child: Text(
-                                      "No featured MOOVs. \n\n Got a feature? Email MOOV@MOOV.com.",
+                                      "No featured MOOVs. \n\n Got a feature? Email kcamson@nd.edu.",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 20)),
                                 );

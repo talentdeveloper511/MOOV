@@ -168,7 +168,7 @@ class _UserResultState extends State<UserResult> {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () => print(user.dorm),
+            // onTap: () => print(user.dorm),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.white,
@@ -179,7 +179,8 @@ class _UserResultState extends State<UserResult> {
                 style: TextStyle(
                     color: TextThemes.ndBlue, fontWeight: FontWeight.bold),
               ),
-              trailing: status
+              trailing: user.id == currentUser.id ? Text("") :
+              status
                   ? RaisedButton(
                       padding: const EdgeInsets.all(2.0),
                       color: Colors.green,
