@@ -1,6 +1,41 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-admin.initializeApp();
+const algoliasearch = require("algoliasearch");
+admin.initializeApp(functions.config().firebase);
+
+const ALGOLIA_APP_ID = "CUWBHO409I";
+const ALGOLIA_ADMIN_KEY = "53390b64ddeba1e1f32e81485ebf9492";
+const ALGOLIA_INDEX_NAME = "users";
+
+exports.createPost = functions.firestore
+    .document("notreDame/data/users/{userId}")
+    .onCreate( async (snap, context) => {
+      const newValue = snap.data();
+      newValue.objectID = snap.id;
+      const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_KEY);
+      const index = client.initIndex(ALGOLIA_INDEX_NAME);
+      index.saveObject(newValue);
+      console.log("Finished");
+    });
+
+exports.updatePost = functions.firestore
+    .document("notreDame/data/users/{userId}")
+    .onUpdate( async (snap, context) => {
+      const afterUpdate = snap.after.data();
+      afterUpdate.objectID = snap.after.id;
+      const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_KEY);
+      const index = client.initIndex(ALGOLIA_INDEX_NAME);
+      index.saveObject(afterUpdate);
+    });
+
+exports.deletePost = functions.firestore
+    .document("notreDame/data/users/{userId}")
+    .onDelete( async (snap, context) => {
+      const oldID = snap.id;
+      const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_KEY);
+      const index = client.initIndex(ALGOLIA_INDEX_NAME);
+      index.deleteObject(oldID);
+    });
 
 exports.onCreateActivityFeedItem = functions.firestore
     .document("{college}/data/notificationFeed/{userId}/feedItems/{activityFeedItem}")
@@ -17,16 +52,6 @@ exports.onCreateActivityFeedItem = functions.firestore
       // 2) check if they have a notification token
       const androidNotificationToken = doc.data().androidNotificationToken;
       const createdActivityFeedItem = snapshot.data();
-      // const goingUserIDRef = admin.firestore().doc(`${college}/data/users/${snapshot.data().userId}`);
-      // admin.messaging().subscribeToTopic(goingUserIDRef.androidNotificationToken, snapshot.data().postId)
-      //     .then(function(response) {
-      //       // See the MessagingTopicManagementResponse reference documentation
-      //       // for the contents of response.
-      //       console.log("Successfully subscribed to topic:", response);
-      //     })
-      //     .catch(function(error) {
-      //       console.log("Error subscribing to topic:", error);
-      //     });
       if (androidNotificationToken) {
         sendNotification(androidNotificationToken, createdActivityFeedItem);
       } else {
@@ -114,19 +139,22 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                   token: notifToken,
                   data: {recipient: user.id},
                 };
-                if ((data.startDate.toDate().getMilliseconds() - 3600000) <= now.toDate().getMilliseconds()) {
-                  console.log((data.startDate.toDate().getMilliseconds() - 3600000));
-                  console.log(now.toDate().getMilliseconds());
-                  // admin
-                  //     .messaging()
-                  //     .send(message)
-                  //     .then((response) => {
-                  //       // Response is a message ID string
-                  //       console.log("Successfully sent message!", response, querySnapshot);
-                  //     })
-                  //     .catch((error) => {
-                  //       console.log("Error sending message", error);
-                  //     });
+                if (data.startDate.toDate().getDate() == now.toDate().getDate() && data.startDate.toDate().getMonth() == now.toDate().getMonth() && data.startDate.toDate().getFullYear() == now.toDate().getFullYear()) {
+                  if ((data.startDate.toDate().getHours() - 1 == now.toDate().getHours()) && data.scheduled != "true") {
+                    admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).set({
+                      scheduled: "true",
+                    }, {merge: true});
+                    admin
+                        .messaging()
+                        .send(message)
+                        .then((response) => {
+                          // Response is a message ID string
+                          console.log("Successfully sent message!", response, querySnapshot);
+                        })
+                        .catch((error) => {
+                          console.log("Error sending message", error);
+                        });
+                  }
                   console.log(querySnapshot, message);
                 }
               });
