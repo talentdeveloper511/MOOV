@@ -1,8 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-
 admin.initializeApp();
-// const db = admin.firestore();
 
 exports.onCreateActivityFeedItem = functions.firestore
     .document("{college}/data/notificationFeed/{userId}/feedItems/{activityFeedItem}")
@@ -19,6 +17,16 @@ exports.onCreateActivityFeedItem = functions.firestore
       // 2) check if they have a notification token
       const androidNotificationToken = doc.data().androidNotificationToken;
       const createdActivityFeedItem = snapshot.data();
+      // const goingUserIDRef = admin.firestore().doc(`${college}/data/users/${snapshot.data().userId}`);
+      // admin.messaging().subscribeToTopic(goingUserIDRef.androidNotificationToken, snapshot.data().postId)
+      //     .then(function(response) {
+      //       // See the MessagingTopicManagementResponse reference documentation
+      //       // for the contents of response.
+      //       console.log("Successfully subscribed to topic:", response);
+      //     })
+      //     .catch(function(error) {
+      //       console.log("Error subscribing to topic:", error);
+      //     });
       if (androidNotificationToken) {
         sendNotification(androidNotificationToken, createdActivityFeedItem);
       } else {
@@ -86,45 +94,45 @@ exports.onCreateActivityFeedItem = functions.firestore
       }
     });
 
-exports.scheduledFunction = functions.pubsub.schedule("* * * * *").timeZone("America/New_York")
-    .onRun((context) => {
-      const now = admin.firestore.Timestamp.now().toMillis() - 3600000;
-      console.log("Hi");
+exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
+    .onRun(async (context) => {
+      const now = admin.firestore.Timestamp.now();
       const querySnapshot = admin
           .firestore().collection("notreDame").doc("data")
           .collection("food")
-          .where("startDate", ">=", now);
-
-      // const batch = admin.firestore().batch();
-      const tasks = querySnapshot.get();
-
-      tasks.forEach((docSnapshot) => {
-        docSnapshot.ref.data.going.forEach((uid) => {
-          const user = admin.firestore.collection("notreDame").doc("data")
-              .collection("users").doc(uid);
-          console.log("user: ", user);
-
-          // message
-          const message = {
-            notification: {title: `${docSnapshot.ref.data.title}`, body: "starts in one hour, don't flake!"},
-            token: user.data["androidNotificationToken"],
-            data: {recipient: user.data["id"]},
-          };
-          console.log(message);
-
-          // send message
-          admin
-              .messaging()
-              .send(message)
-              .then((response) => {
-                // Response is a message ID string
-                console.log("Successfully sent message!", response);
-              })
-              .catch((error) => {
-                console.log("Error sending message", error);
+          .where("startDate", ">=", now).get()
+          .then((snapshot) => {
+            snapshot.docs.forEach(async (doc) => {
+              // doc is a DocumentSnapshot with actual data
+              const data = doc.data();
+              data.going.forEach(async (goingUser) => {
+                const user = admin.firestore().collection("notreDame").doc("data").collection("users").doc(`${goingUser}`);
+                const getUser = await user.get();
+                const notifToken = getUser.data().androidNotificationToken;
+                const message = {
+                  notification: {title: data.title, body: "starts in one hour, don't flake!"},
+                  token: notifToken,
+                  data: {recipient: user.id},
+                };
+                if ((data.startDate.toDate().getMilliseconds() - 3600000) <= now.toDate().getMilliseconds()) {
+                  console.log((data.startDate.toDate().getMilliseconds() - 3600000));
+                  console.log(now.toDate().getMilliseconds());
+                  // admin
+                  //     .messaging()
+                  //     .send(message)
+                  //     .then((response) => {
+                  //       // Response is a message ID string
+                  //       console.log("Successfully sent message!", response, querySnapshot);
+                  //     })
+                  //     .catch((error) => {
+                  //       console.log("Error sending message", error);
+                  //     });
+                  console.log(querySnapshot, message);
+                }
               });
-        });
-      });
-
-      return null;
+            });
+          })
+          .catch((error) => {
+            console.log("Error Alvin: ", error);
+          });
     });
