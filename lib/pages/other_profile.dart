@@ -122,8 +122,7 @@ class _OtherProfileState extends State<OtherProfile> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
-        stream:
-            usersRef.doc(id).snapshots(),
+        stream: usersRef.doc(id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text('Loading data...');
           while (iter > 0) {
@@ -255,7 +254,10 @@ class _OtherProfileState extends State<OtherProfile> {
                             style: TextThemes.extraBold,
                           ),
                           isAmbassador
-                              ? Image.asset('lib/assets/verif.png', height: 35)
+                              ? Padding(
+                                  padding: EdgeInsets.only(left: 5, top: 5),
+                                  child: Image.asset('lib/assets/verif2.png',
+                                      height: 20))
                               : Text("")
                         ],
                       ),
@@ -264,7 +266,8 @@ class _OtherProfileState extends State<OtherProfile> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 2.0, bottom: 12.0),
+                          padding:
+                              const EdgeInsets.only(top: 2.0, bottom: 12.0),
                           child: Text(
                             snapshot.data['year'] +
                                 " in " +
@@ -301,8 +304,7 @@ class _OtherProfileState extends State<OtherProfile> {
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => FriendsList(
-                                    id: id)));
+                                builder: (context) => FriendsList(id: id)));
                           },
                           child: Column(
                             children: [
@@ -315,15 +317,15 @@ class _OtherProfileState extends State<OtherProfile> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 4.0),
-                                child: userFriends.length == 1 ?
-                                    Text(
-                                      '     Friend     ',
-                                      style: TextThemes.bodyText1,
-                                    ):
-                                    Text(
-                                      '     Friends     ',
-                                      style: TextThemes.bodyText1,
-                                    ),
+                                child: userFriends.length == 1
+                                    ? Text(
+                                        '     Friend     ',
+                                        style: TextThemes.bodyText1,
+                                      )
+                                    : Text(
+                                        '     Friends     ',
+                                        style: TextThemes.bodyText1,
+                                      ),
                               ),
                             ],
                           ),

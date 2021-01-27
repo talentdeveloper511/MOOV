@@ -197,14 +197,14 @@ class DisplaySearchResult extends StatelessWidget {
           padding: const EdgeInsets.only(left: 12.5),
           child: Text(
             displayName ?? "",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
           ),
         ),
         isAmbassador
             ? Padding(
-              padding: const EdgeInsets.only(top: 3, left: 3),
-              child: Image.asset('lib/assets/verif.png', height: 30),
-            )
+                padding: EdgeInsets.only(left: 5, top: 3),
+                child: Image.asset('lib/assets/verif2.png', height: 20))
             : Text(""),
         // Text(
         //   email ?? "",

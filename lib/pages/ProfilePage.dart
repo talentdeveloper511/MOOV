@@ -150,8 +150,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               style: TextThemes.extraBold,
                             ),
                             isAmbassador
-                                ? Image.asset('lib/assets/verif.png',
-                                    height: 35)
+                                ? Padding(
+                                    padding: EdgeInsets.only(left: 5, top: 5),
+                                    child: Image.asset('lib/assets/verif2.png',
+                                        height: 20))
                                 : Text("")
                           ],
                         ),

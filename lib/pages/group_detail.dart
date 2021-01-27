@@ -450,7 +450,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.all(10.0),
-                                                child: Text('Suggest the MOOV',
+                                                child: Text('Suggest a MOOV',
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 20)),
@@ -467,12 +467,20 @@ class _GroupDetailState extends State<GroupDetail> {
                                       padding: const EdgeInsets.all(0.0),
                                       child: Column(
                                         children: [
-                                          Text("Talk about it", style: TextStyle(color: TextThemes.ndBlue, fontSize: 20)),
-                                          Chat(gid: gid, groupPic: groupPic,),
+                                          Text("Talk about it",
+                                              style: TextStyle(
+                                                  color: TextThemes.ndBlue,
+                                                  fontSize: 20)),
+                                          Chat(
+                                            gid: gid,
+                                            groupPic: groupPic,
+                                          ),
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 30,)
+                                    SizedBox(
+                                      height: 30,
+                                    )
                                   ]),
                                 )
                               ],
@@ -731,7 +739,6 @@ class _GroupDetailState extends State<GroupDetail> {
               });
         });
   }
-
 
   buildNoContent() {
     bool isLargePhone = Screen.diagonal(context) > 766;

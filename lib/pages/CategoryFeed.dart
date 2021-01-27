@@ -787,7 +787,6 @@ class PostOnFeed extends StatelessWidget {
                           return CircularProgressIndicator();
                         if (!snapshot2.hasData)
                           return CircularProgressIndicator();
-                        
 
                         bool isAmbassador = snapshot2.data['isAmbassador'];
                         String userYear = snapshot2.data['year'];
@@ -881,12 +880,12 @@ class PostOnFeed extends StatelessWidget {
                                                 isAmbassador
                                                     ? Padding(
                                                         padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 2.0),
+                                                            EdgeInsets.only(
+                                                          left: 5,
+                                                        ),
                                                         child: Image.asset(
-                                                            'lib/assets/verif.png',
-                                                            height: 21),
+                                                            'lib/assets/verif2.png',
+                                                            height: 15),
                                                       )
                                                     : Text("")
                                               ],
