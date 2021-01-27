@@ -46,6 +46,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
       searchResultsGroups = groups;
     });
   }
+  
 
   clearSearch() {
     searchController.clear();
@@ -105,7 +106,6 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   }
 
   buildNoContent() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
     return TrendingSegment();
   }
 

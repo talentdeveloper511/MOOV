@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/map_test.dart';
 import 'dart:async';
@@ -465,7 +466,7 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           // Timeline(),
           HomePage(),
-          Search(),
+          SearchBar(),
           MOOVSPage(),
           ProfilePage()
         ],

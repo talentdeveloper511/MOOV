@@ -77,6 +77,8 @@ dependencies:
   flutter_bounce: ^1.0.8
   firebase_messaging: ^6.0.16
   worm_indicator: ^0.2.4
+  algolia: ^0.1.7
+
 
 
 
