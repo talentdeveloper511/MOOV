@@ -223,7 +223,7 @@ class PostComment extends StatelessWidget {
       child: CupertinoAlertDialog(
         title: Text("Delete?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nMOOV to trash can?"),
+        content: Text("\nRemove your message?"),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,

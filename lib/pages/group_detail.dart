@@ -902,7 +902,7 @@ class _SuggestionsState extends State<Suggestions> {
 
     int status = 0;
     final circleShape = Shape(
-      size: 16,
+      size: 8,
       shape: DotShape.Circle,
       spacing: 8,
     );

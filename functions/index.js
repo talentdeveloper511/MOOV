@@ -133,28 +133,28 @@ exports.onCreateActivityFeedItem = functions.firestore
         // 3) switch body value based off of notification type
         switch (activityFeedItem.type) {
           case "invite":
-            title = "You're Invited";
-            body = `${activityFeedItem.username} invited you to ${activityFeedItem.title}`;
+            title = `${activityFeedItem.username}`;
+            body = `invited you to ${activityFeedItem.title}`;
             break;
           case "going":
             title = `${activityFeedItem.title}`;
-            body = `${activityFeedItem.username} is going to ${activityFeedItem.title}`;
+            body = `${activityFeedItem.username} is going`;
             break;
           case "friendGroup":
-            title = "Added to Friend Group";
-            body = `${activityFeedItem.username} added you to their Friend Group, ${activityFeedItem.groupName}`;
+            title = `${activityFeedItem.username}`;
+            body = `added you to ${activityFeedItem.groupName}`;
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
-            body = `${activityFeedItem.username} suggested ${activityFeedItem.title} to the group`;
+            body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
             break;
           case "request":
-            title = "You Have Friends?";
-            body = `${activityFeedItem.username} sent you a friend request`;
+            title = `${activityFeedItem.username}`;
+            body = "sent you a friend request";
             break;
           case "accept":
-            title = "New Friend!";
-            body = `${activityFeedItem.username} accepted your friend request`;
+            title = `${activityFeedItem.username} `;
+            body = "accepted your friend request";
             break;
           default:
             break;
@@ -216,6 +216,9 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                         .catch((error) => {
                           console.log("Error sending message", error);
                         });
+                  } else if ((data.startDate.toDate().getHours() + 1 == now.toDate().getHours()) && data.scheduled != "true") {
+                    admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).delete();
+                    // admin.firestore().collection("notreDame").doc("data").collection("friendGroups").doc(`${data.postId}`).delete();
                   }
                   console.log(querySnapshot, message);
                 }

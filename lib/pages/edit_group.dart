@@ -197,9 +197,7 @@ class _EditGroupState extends State<EditGroup> {
     final groupNameController = TextEditingController();
 
     return StreamBuilder(
-        stream: usersRef
-            .where('friendGroups', arrayContains: gid)
-            .snapshots(),
+        stream: usersRef.where('friendGroups', arrayContains: gid).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
 
@@ -453,16 +451,11 @@ class _EditGroupState extends State<EditGroup> {
                             if (groupNameController.text != "") {
                               Database().updateGroupNames(members,
                                   groupNameController.text, gid, displayName);
-                              groupsRef
-                                  .doc(gid)
-                                  .update({
+                              groupsRef.doc(gid).update({
                                 "groupName": groupNameController.text,
                               });
                             }
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FriendGroupsPage()));
+                            Navigator.pop(context);
                           }),
                     )
                   ],
