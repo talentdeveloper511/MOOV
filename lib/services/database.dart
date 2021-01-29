@@ -109,8 +109,13 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(-1)});
-
+      var checkZero;
+      ref2.get().then((snap) => {
+            if (snap.data()['score'] == 0) {checkZero = "true"}
+          });
+      if (checkZero != "true") {
+        transaction.update(ref2, {'score': FieldValue.increment(-1)});
+      }
       // addGoingToNotificationFeed(
       //     userId,
       //     postId
@@ -149,8 +154,13 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(-1)});
-
+      var checkZero;
+      ref2.get().then((snap) => {
+            if (snap.data()['score'] == 0) {checkZero = "true"}
+          });
+      if (checkZero != "true") {
+        transaction.update(ref2, {'score': FieldValue.increment(-1)});
+      }
       postsRef.doc(postId).set({
         "invitees": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));
@@ -204,8 +214,13 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(-5)});
-
+      var checkZero;
+      ref2.get().then((snap) => {
+            if (snap.data()['score'] == 0) {checkZero = "true"}
+          });
+      if (checkZero != "true") {
+        transaction.update(ref2, {'score': FieldValue.increment(-5)});
+      }
       notificationFeedRef
           .doc(ownerId)
           .collection("feedItems")

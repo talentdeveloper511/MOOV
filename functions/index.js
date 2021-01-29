@@ -181,6 +181,40 @@ exports.onCreateActivityFeedItem = functions.firestore
       }
     });
 
+exports.resetScore = functions.pubsub.schedule("55 23 * * 5").timeZone("America/New_York")
+    .onRun(async (context) => {
+      const querySnapshot = admin
+          .firestore().collection("notreDame").doc("data")
+          .collection("users").get()
+          .then((snapshot) => {
+            snapshot.docs.forEach(async (doc) => {
+              const data = doc.data();
+              let prize;
+              let winner;
+              let idx = 0;
+              admin.firestore().collection("notreDame").doc("data").collection("users").orderBy("score").get().then((snap) => {
+                if (idx == 0) {
+                  winner = snap.data().winner;
+                  console.log(winner);
+                }
+                idx += 1;
+              });
+              admin.firestore().collection("notreDame").doc("data").collection("leaderboard").doc("log").get().then((snap) => {
+                prize = snap.data().prize;
+                console.log(prize);
+              });
+              admin.firestore().collection("notreDame").doc("data").collection("leaderboard").doc("log").set({
+                winner: winner,
+                prize: prize,
+              }, {merge: true});
+              admin.firestore().collection("notreDame").doc("data").collection("users").doc(`${data.id}`).set({
+                score: 0,
+              }, {merge: true});
+            });
+            console.log(querySnapshot);
+          });
+    });
+
 exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
     .onRun(async (context) => {
       const now = admin.firestore.Timestamp.now();

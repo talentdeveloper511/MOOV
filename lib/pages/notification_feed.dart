@@ -178,7 +178,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
                                       backgroundColor: TextThemes.ndBlue,
                                       content: Padding(
                                         padding: const EdgeInsets.all(2.0),
-                                        child: Text("See ya, notification."),
+                                        child: Text("See ya notification."),
                                       )));
                                 },
                                 // Show a red background as the item is swiped away.
@@ -447,7 +447,7 @@ class NotificationFeedItem extends StatelessWidget {
     } else if (type == 'invite') {
       activityItemText = 'has invited you to ';
     } else if (type == 'suggestion') {
-      activityItemText = 'has suggested a MOOV to your group, ';
+      activityItemText = 'suggested a MOOV, ';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
@@ -497,7 +497,7 @@ class NotificationFeedItem extends StatelessWidget {
                     ? RichText(
                         overflow: TextOverflow.ellipsis,
                         text: TextSpan(
-                            text: title.isEmpty ? groupName : title,
+                            text: type == 'friendGroup' ? groupName : title,
                             style: TextStyle(
                                 color: TextThemes.ndBlue,
                                 fontWeight: FontWeight.bold)))

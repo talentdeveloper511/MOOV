@@ -93,10 +93,8 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
       ),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream: usersRef
-              .orderBy('score', descending: true)
-              .limit(50)
-              .snapshots(),
+          stream:
+              usersRef.orderBy('score', descending: true).limit(50).snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -120,7 +118,9 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
               var prize;
 
               return StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection('notreDame').doc('data')
+                  stream: FirebaseFirestore.instance
+                      .collection('notreDame')
+                      .doc('data')
                       .collection('leaderboard')
                       .doc('prizes')
                       .snapshots(),
@@ -152,20 +152,20 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                             child: Container(
                                 height: 100,
                                 decoration: BoxDecoration(
-                                  border: Border(),
+                                    border: Border(),
                                     gradient: LinearGradient(
                                         begin: Alignment.topRight,
                                         end: Alignment(0.9, 0.9),
                                         colors: [
-                                      TextThemes.ndBlue,
-                                      TextThemes.ndBlue
-                                    ])),
+                                          TextThemes.ndBlue,
+                                          TextThemes.ndBlue
+                                        ])),
                                 child: Center(
                                     child: Padding(
                                   padding: const EdgeInsets.all(15.0),
                                   child: Text(
                                     "Do you like free stuff?"
-                                    " \nMOOV to the top of the leaderboard to win. \nEvery. Single. Friday.",
+                                    " \nRise to the top of the leaderboard to win. \nPayouts on MOOV Money Monday",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: isLargePhone ? 14 : 15,
@@ -224,8 +224,14 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                                     child: Text(
                                                         "Your score is calculated as follows:"
                                                         "\n"
-                                                        "\n2pts: 'Going' to a MOOV"
-                                                        "\n\n30pts: Posting a MOOV"),
+                                                        "\n1pt: 'Suggest' a MOOV to your group"
+                                                        "\n\n5pts: 'Going' to a MOOV"
+                                                        "\n\n20pts: 'Send' a MOOV to a friend"
+                                                        "\n\n30pts: 'Post' a MOOV"
+                                                        "\n\n40pts: 'Join' a friend group"
+                                                        "\n\n50pts: 'Sharing' MOOV to contacts"
+                                                        "\n\n\n**Negative points arise from gaming the system. If suspected of cheating, your score will be set to zero"
+                                                        ""),
                                                   ),
                                                 ),
                                             barrierDismissible: true);
