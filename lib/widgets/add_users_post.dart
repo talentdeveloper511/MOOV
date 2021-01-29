@@ -435,7 +435,6 @@ class _SearchUsersGroupState extends State<SearchUsersGroup> {
                 });
               },
               // Set Focus Node
-              focusNode: textFieldFocusNode,
               decoration: InputDecoration(
                 labelStyle: TextStyle(fontSize: 20),
                 border: InputBorder.none,
@@ -446,15 +445,11 @@ class _SearchUsersGroupState extends State<SearchUsersGroup> {
                     onTap: () {
                       clearSearch();
                       // Unfocus all focus nodes
-                      textFieldFocusNode.unfocus();
 
                       // Disable text field's focus node request
-                      textFieldFocusNode.canRequestFocus = false;
 
                       //Enable the text field's focus node request after some delay
-                      Future.delayed(Duration(milliseconds: 10), () {
-                        textFieldFocusNode.canRequestFocus = true;
-                      });
+                
                     },
                     child: IconButton(
                         onPressed: null,

@@ -56,22 +56,26 @@ class ChatState extends State<Chat> {
   }
 
   addComment() {
-    if (commentController.text.isNotEmpty){
-    groupsRef
-        .doc(gid)
-        .collection("chat")
-        .doc(DateTime.now().millisecondsSinceEpoch.toString() + " " + currentUser.id)
-        .set({
-      "displayName": currentUser.displayName,
-      "comment": commentController.text,
-      "timestamp": timestamp,
-      "avatarUrl": currentUser.photoUrl,
-      "userId": currentUser.id,
-      "chatId": DateTime.now().millisecondsSinceEpoch.toString() + " " + currentUser.id,
-      "gid": gid,
-      "millis": DateTime.now().millisecondsSinceEpoch.toString()
-    });
-    commentController.clear();
+    if (commentController.text.isNotEmpty) {
+      groupsRef
+          .doc(gid)
+          .collection("chat")
+          .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+              " " +
+              currentUser.id)
+          .set({
+        "displayName": currentUser.displayName,
+        "comment": commentController.text,
+        "timestamp": timestamp,
+        "avatarUrl": currentUser.photoUrl,
+        "userId": currentUser.id,
+        "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
+            " " +
+            currentUser.id,
+        "gid": gid,
+        "millis": DateTime.now().millisecondsSinceEpoch.toString()
+      });
+      commentController.clear();
     }
   }
 
@@ -160,7 +164,7 @@ class Comment extends StatelessWidget {
       child: CupertinoAlertDialog(
         title: Text("Delete?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nMOOV to trash can?"),
+        content: Text("\nRemove your message?"),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,

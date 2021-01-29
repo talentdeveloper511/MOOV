@@ -360,25 +360,17 @@ class Database {
   }
 
   deletePost(String postId, String ownerId, String title) {
-    // final FirebaseStorage _storage =
-    //     FirebaseStorage(storageBucket: 'gs://moov4-4d3c4.appspot.com');
-    // String filePath = 'images/$ownerId$title';
     String filePath = 'images/$ownerId$title';
 
     firebase_storage.Reference ref =
         firebase_storage.FirebaseStorage.instance.ref().child(filePath);
 
-    // groupsRef
-    //     .where('nextMOOV', isEqualTo: postId)
-    //     .get()
-    //     .then((QuerySnapshot snapshot) {});
-
-    // notificationFeedRef.where("postId", isEqualTo: postId).get().then((doc) {
-    //   print(doc);
-     
-      
+    // groupsRef.get().then((snap) {
+    //   snap.docs.forEach((group) {
+    //     // group.data().suggestedMOOVs.collection('suggestedMOOVs/$postId').delete();
+    //     print(group['suggestedMOOVs']);
+    //   });
     // });
-    ///this is gonna be a little more complicated to delete notifs
 
     postsRef.doc(postId).get().then((doc) {
       if (doc.exists) {

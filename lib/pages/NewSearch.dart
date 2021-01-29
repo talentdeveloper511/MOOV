@@ -98,31 +98,27 @@ class _SearchBarState extends State<SearchBar> {
                         });
                       },
                       child: IconButton(
-                        onPressed: null,
+                          onPressed: null,
                           icon: Icon(
-                        Icons.clear,
-                        color: Colors.black,
-                      ))),
+                            Icons.clear,
+                            color: Colors.black,
+                          ))),
                 )),
             StreamBuilder<List<AlgoliaObjectSnapshot>>(
-              stream: Stream.fromFuture(_operation(_searchTerm)),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return Container(height: 2000, child: TrendingSegment());
-                if (snapshot.data.length == 0) {
-                  return Container(height: 2000, child: TrendingSegment());
-                }
-       
-      
+                stream: Stream.fromFuture(_operation(_searchTerm)),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData)
+                    return Container(height: 2000, child: TrendingSegment());
+                  if (snapshot.data.length == 0) {
+                    return Container(height: 2000, child: TrendingSegment());
+                  }
+                  if (_searchTerm == null) {
+                    return Container(height: 2000, child: TrendingSegment());
+                  }
+
                   List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
 
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return Container();
-                    default:
-                      if (snapshot.hasError)
-                        return new Text('Error: ${snapshot.error}');
-                      else
+                
                         return CustomScrollView(
                           shrinkWrap: true,
                           slivers: <Widget>[
@@ -149,9 +145,7 @@ class _SearchBarState extends State<SearchBar> {
                           ],
                         );
                   }
-                }
-            
-            ),
+                ),
           ]),
         ),
       ),

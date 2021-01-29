@@ -192,7 +192,7 @@ class _EditPostState extends State<EditPost> {
           String typeDropdownValue = snapshot.data['type'];
 
           return Scaffold(
-            backgroundColor: Colors.white,
+              backgroundColor: Colors.white,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
 
@@ -790,7 +790,7 @@ void showAlertDialog2(BuildContext context, postId, userId, title) {
     child: CupertinoAlertDialog(
       title: Text("Delete?",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-      content: Text("\nMOOV to trash can?"),
+      content: Text("\nRemove this post from the feed?"),
       actions: [
         CupertinoDialogAction(
           isDefaultAction: true,

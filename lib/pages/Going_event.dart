@@ -141,13 +141,13 @@ class GoingPage extends StatelessWidget {
                                                         isAmbassador
                                                             ? Padding(
                                                                 padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            2.0),
+                                                                    EdgeInsets
+                                                                        .only(
+                                                                  left: 5,
+                                                                ),
                                                                 child: Image.asset(
-                                                                    'lib/assets/verif.png',
-                                                                    height: 24),
+                                                                    'lib/assets/verif2.png',
+                                                                    height: 15),
                                                               )
                                                             : Text("")
                                                       ],
@@ -377,15 +377,14 @@ class GoingPageFriends extends StatelessWidget {
                                                                           .none)),
                                                           isAmbassador
                                                               ? Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      left:
-                                                                          2.0),
+                                                                  padding: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              5),
                                                                   child: Image.asset(
-                                                                      'lib/assets/verif.png',
+                                                                      'lib/assets/verif2.png',
                                                                       height:
-                                                                          21),
-                                                                )
+                                                                          15))
                                                               : Text("")
                                                         ],
                                                       ),

@@ -280,7 +280,7 @@ class _MOOVSPageState extends State<MOOVSPage>
       child: CupertinoAlertDialog(
         title: Text("Delete?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nMOOV to trash can?"),
+        content: Text("\nRemove this post from the feed?"),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,
