@@ -48,6 +48,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
 
           if (!snapshot.hasData) return CircularProgressIndicator();
           userBio = snapshot.data['bio'];
+          int score = snapshot.data['score'];
           userDorm = snapshot.data['dorm'];
           userHeader = snapshot.data['header'];
           strUserPic = snapshot.data['photoUrl'];
@@ -204,33 +205,33 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MOOVSPage()));
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  '0',
-                                  style: TextThemes.extraBold,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4.0),
-                                  child: Text(
-                                    'Next MOOVs   ',
-                                    style: TextThemes.bodyText1,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => LeaderBoardPage()));
+                              },
+                              child: Column(
+                                children: [
+                                  Text(
+                                    score.toString(),
+                                    style: TextThemes.extraBold,
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Text(
+                                      '       Score       ',
+                                      style: TextThemes.bodyText1,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
+                            GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
@@ -260,32 +261,37 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                 ],
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => FriendGroupsPage()));
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  userGroups.length == null ||
-                                          userGroups.length == 0
-                                      ? "0"
-                                      : userGroups.length.toString(),
-                                  style: TextThemes.extraBold,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4.0),
-                                  child: Text(
-                                    'Friend Groups',
-                                    style: TextThemes.bodyText1,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => FriendGroupsPage()));
+                              },
+                              child: Column(
+                                children: [
+                                  Text(
+                                    userGroups.length == null ||
+                                            userGroups.length == 0
+                                        ? "0"
+                                        : userGroups.length.toString(),
+                                    style: TextThemes.extraBold,
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: userGroups.length == 1
+                                        ? Text(
+                                            'Friend Group',
+                                            style: TextThemes.bodyText1,
+                                          )
+                                        : Text(
+                                            'Friend Groups',
+                                            style: TextThemes.bodyText1,
+                                          ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       GestureDetector(
                         onTap: () {

@@ -830,7 +830,7 @@ class PostOnFeed extends StatelessWidget {
                                         radius: 22.0,
                                         backgroundImage:
                                             CachedNetworkImageProvider(
-                                                strUserPic),
+                                                proPic),
                                         backgroundColor: Colors.transparent,
                                       ),
                                     )),

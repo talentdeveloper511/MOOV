@@ -354,8 +354,9 @@ class _AuthorContent extends StatelessWidget {
         if (snapshot2.hasError) {
           return Text("Something went wrong");
         }
+     if (!snapshot2.hasData) return CircularProgressIndicator();
 
-        if (snapshot2.connectionState == ConnectionState.done) {
+
           Map<String, dynamic> course1 = snapshot2.data.data();
           bool isAmbassador = snapshot2.data['isAmbassador'];
 
@@ -456,8 +457,7 @@ class _AuthorContent extends StatelessWidget {
           );
         }
 
-        return Text("loading");
-      },
+    
     );
   }
 }

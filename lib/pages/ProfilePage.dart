@@ -235,12 +235,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                         : userGroups.length.toString(),
                                     style: TextThemes.extraBold,
                                   ),
-                                  Padding(
+                                 Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: Text(
-                                      'Friend Groups',
-                                      style: TextThemes.bodyText1,
-                                    ),
+                                    child: userGroups.length == 1
+                                        ? Text(
+                                            'Friend Group',
+                                            style: TextThemes.bodyText1,
+                                          )
+                                        : Text(
+                                            'Friend Groups',
+                                            style: TextThemes.bodyText1,
+                                          ),
                                   ),
                                 ],
                               ),

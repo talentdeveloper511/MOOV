@@ -98,6 +98,7 @@ class _SearchBarState extends State<SearchBar> {
                         });
                       },
                       child: IconButton(
+                        onPressed: null,
                           icon: Icon(
                         Icons.clear,
                         color: Colors.black,
@@ -107,12 +108,12 @@ class _SearchBarState extends State<SearchBar> {
               stream: Stream.fromFuture(_operation(_searchTerm)),
               builder: (context, snapshot) {
                 if (!snapshot.hasData)
-                  return Container(height: 20000, child: TrendingSegment());
-                // return Text(
-                //   "Start Typing",
-                //   style: TextStyle(color: Colors.black),
-                // );
-                else {
+                  return Container(height: 2000, child: TrendingSegment());
+                if (snapshot.data.length == 0) {
+                  return Container(height: 2000, child: TrendingSegment());
+                }
+       
+      
                   List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
 
                   switch (snapshot.connectionState) {
@@ -149,7 +150,7 @@ class _SearchBarState extends State<SearchBar> {
                         );
                   }
                 }
-              },
+            
             ),
           ]),
         ),
@@ -197,14 +198,15 @@ class DisplaySearchResult extends StatelessWidget {
           padding: const EdgeInsets.only(left: 12.5),
           child: Text(
             displayName ?? "",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
           ),
         ),
         isAmbassador
             ? Padding(
-              padding: const EdgeInsets.only(top: 3, left: 3),
-              child: Image.asset('lib/assets/verif.png', height: 30),
-            )
+                padding: const EdgeInsets.only(top: 3, left: 3),
+                child: Image.asset('lib/assets/verif.png', height: 30),
+              )
             : Text(""),
         // Text(
         //   email ?? "",

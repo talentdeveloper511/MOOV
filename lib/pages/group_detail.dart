@@ -8,6 +8,7 @@ import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/NextMOOV.dart';
+import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/chat.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/set_moov.dart';
@@ -206,8 +207,8 @@ class _GroupDetailState extends State<GroupDetail> {
                                       context,
                                       PageTransition(
                                           type: PageTransitionType.bottomToTop,
-                                          child: AddUsers(groupName, gid,
-                                              groupPic, members, nextMOOV)));
+                                          child: SearchUsersGroup(groupName, gid,
+                                              groupPic, nextMOOV, members)));
                                 },
                               ),
                               FocusedMenuHolder(
