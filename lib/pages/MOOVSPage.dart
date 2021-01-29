@@ -131,10 +131,10 @@ class _MOOVSPageState extends State<MOOVSPage>
                           // .orderBy("startDate")
                           .snapshots(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData || snapshot.data == null)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                               child: Text(
-                                  "You have no posts. Go post the MOOV!",
+                                  "You have no posts. \n\nGo post the MOOV!",
                                   style: TextStyle(fontSize: 20)));
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,

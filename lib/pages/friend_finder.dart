@@ -53,14 +53,13 @@ class _FriendFinderState extends State<FriendFinder>
 
   AppBar buildSearchField() {
     return AppBar(
-      toolbarHeight: 100,
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: EdgeInsets.all(2),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
+              padding: const EdgeInsets.only(bottom: 2.5),
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
@@ -120,31 +119,7 @@ class _FriendFinderState extends State<FriendFinder>
           },
         )
       ],
-      bottom: PreferredSize(
-        preferredSize: null,
-        child: TextFormField(
-           onChanged: (value) {
-            handleSearch(value);
-          },
-          controller: searchController,
-          decoration: InputDecoration(
-            fillColor: Colors.white,
-            hintStyle: TextStyle(fontSize: 15),
-            contentPadding: EdgeInsets.only(top: 18, bottom: 10),
-            hintText: "Find your friends...",
-            filled: true,
-            prefixIcon: Icon(
-              Icons.account_box,
-              size: 28.0,
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: clearSearch,
-            ),
-          ),
-          onFieldSubmitted: handleSearch,
-        ),
-      ),
+      
     );
   }
 

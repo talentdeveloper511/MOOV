@@ -358,7 +358,10 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                   return (hide == false)
                                       ? PostOnFeed(course)
-                                      : Container();
+                                      : Text(
+                                          "\n\nNo featured MOOVs, right now.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 20));
                                 },
                               );
                             }),
@@ -458,8 +461,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               .orderBy("startDate")
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData ||
-                                snapshot.data.docs.length == 0)
+                            if (!snapshot.hasData)
                               return Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -549,11 +551,17 @@ class _CategoryFeedState extends State<CategoryFeed>
                                     privacy == "Friends Only") {
                                   hide = false;
                                 }
-                                // // print(hide);
+                                // print(hide);
 
                                 return (hide == false)
                                     ? PostOnFeed(course)
-                                    : Container();
+                                    : Container(
+                                        child: Center(
+                                        child: Text(
+                                            "\n\nHere's where your friends' private MOOVs will be",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 20)),
+                                      ));
                               },
                             );
                           }),
@@ -828,8 +836,7 @@ class PostOnFeed extends StatelessWidget {
                                       child: CircleAvatar(
                                         radius: 22.0,
                                         backgroundImage:
-                                            CachedNetworkImageProvider(
-                                                proPic),
+                                            CachedNetworkImageProvider(proPic),
                                         backgroundColor: Colors.transparent,
                                       ),
                                     )),

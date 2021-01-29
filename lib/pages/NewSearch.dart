@@ -108,12 +108,15 @@ class _SearchBarState extends State<SearchBar> {
                 stream: Stream.fromFuture(_operation(_searchTerm)),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
-                    return Container(height: 2000, child: TrendingSegment());
+                    return Container(height: 4000, child: TrendingSegment());
                   if (snapshot.data.length == 0) {
-                    return Container(height: 2000, child: TrendingSegment());
+                    return Container(height: 4000, child: TrendingSegment());
                   }
                   if (_searchTerm == null) {
-                    return Container(height: 2000, child: TrendingSegment());
+                    return Container(height: 4000, child: TrendingSegment());
+                  }
+                   if (_searchTerm.length <= 0) {
+                    return Container(height: 4000, child: TrendingSegment());
                   }
 
                   List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
@@ -137,7 +140,7 @@ class _SearchBarState extends State<SearchBar> {
                                               currSearchStuff[index].data["id"],
                                           isAmbassador: currSearchStuff[index]
                                               .data["isAmbassador"])
-                                      : Container();
+                                      : Container(height: 4000, child: TrendingSegment());
                                 },
                                 childCount: currSearchStuff.length ?? 0,
                               ),
