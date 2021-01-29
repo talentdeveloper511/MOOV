@@ -358,8 +358,7 @@ class _CategoryFeedState extends State<CategoryFeed>
 
                                   return (hide == false)
                                       ? PostOnFeed(course)
-                                      : Text(
-                                          "\n\nNo featured MOOVs, right now.",
+                                      : Text("",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(fontSize: 20));
                                 },
@@ -557,8 +556,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                     ? PostOnFeed(course)
                                     : Container(
                                         child: Center(
-                                        child: Text(
-                                            "\n\nHere's where your friends' private MOOVs will be",
+                                        child: Text("",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(fontSize: 20)),
                                       ));
@@ -957,11 +955,11 @@ class PostOnFeed extends StatelessWidget {
                                               PageTransition(
                                                   type: PageTransitionType
                                                       .bottomToTop,
-                                                  child: SendMOOV(
+                                                  child: SendMOOVSearch(
                                                     course['userId'],
                                                     course['image'],
-                                                    course['postId'],
                                                     course['startDate'],
+                                                    course['postId'],
                                                     course['title'],
                                                     proPic,
                                                     displayName,

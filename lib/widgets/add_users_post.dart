@@ -144,14 +144,56 @@ class _SearchUsersPostState extends State<SearchUsersPost> {
           StreamBuilder<List<AlgoliaObjectSnapshot>>(
               stream: Stream.fromFuture(_operation(_searchTerm)),
               builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return Container(height: 2000, child: TrendingSegment());
-                if (snapshot.data.length == 0) {
-                  return Container(height: 2000, child: TrendingSegment());
-                }
-                if (_searchTerm == null) {
-                  return Container(height: 2000, child: TrendingSegment());
-                }
+                if (!snapshot.hasData ||
+                    snapshot.data.length == 0 ||
+                    _searchTerm == null)
+                  return Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.pink[300], Colors.pink[200]],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(50.0),
+                                  child: RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                          style: TextThemes.mediumbody,
+                                          children: [
+                                            TextSpan(
+                                                text:
+                                                    "Invite 'em,",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300)),
+                                            TextSpan(
+                                                text: " now",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            TextSpan(
+                                                text: ".",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300))
+                                          ]))),
+                              Image.asset('lib/assets/ff.png')
+                            ],
+                          ),
+                        ),
+                      ));
 
                 List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
 
@@ -267,6 +309,7 @@ class _UserPostResultState extends State<UserPostResult> {
             color: Colors.black,
           ),
         ]),
+        userId == currentUser.id ? Container():
         status
             ? Positioned(
                 right: 20,
@@ -319,38 +362,20 @@ class _UserPostResultState extends State<UserPostResult> {
 }
 
 class SearchUsersGroup extends StatefulWidget {
-
   String gname, gid, pic, moov;
   List<dynamic> members;
-  SearchUsersGroup(
-
-      this.gname,
-      this.gid,
-      this.pic,
-      this.moov,
-      this.members);
+  SearchUsersGroup(this.gname, this.gid, this.pic, this.moov, this.members);
 
   @override
   _SearchUsersGroupState createState() => _SearchUsersGroupState(
-  
-      this.gname,
-      this.gid,
-      this.pic,
-      this.moov,
-      this.members);
+      this.gname, this.gid, this.pic, this.moov, this.members);
 }
 
 class _SearchUsersGroupState extends State<SearchUsersGroup> {
-
   String gname, gid, pic, moov;
   List<dynamic> members;
   _SearchUsersGroupState(
-  
-      this.gname,
-      this.gid,
-      this.pic,
-      this.moov,
-      this.members);
+      this.gname, this.gid, this.pic, this.moov, this.members);
 
   final TextEditingController searchController = TextEditingController();
   final textFieldFocusNode = FocusNode();
@@ -449,7 +474,6 @@ class _SearchUsersGroupState extends State<SearchUsersGroup> {
                       // Disable text field's focus node request
 
                       //Enable the text field's focus node request after some delay
-                
                     },
                     child: IconButton(
                         onPressed: null,
@@ -461,15 +485,56 @@ class _SearchUsersGroupState extends State<SearchUsersGroup> {
           StreamBuilder<List<AlgoliaObjectSnapshot>>(
               stream: Stream.fromFuture(_operation(_searchTerm)),
               builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return Container(height: 2000, child: TrendingSegment());
-                if (snapshot.data.length == 0) {
-                  return Container(height: 2000, child: TrendingSegment());
-                }
-                if (_searchTerm == null) {
-                  return Container(height: 2000, child: TrendingSegment());
-                }
-
+               if (!snapshot.hasData ||
+                    snapshot.data.length == 0 ||
+                    _searchTerm == null)
+                  return Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.pink[300], Colors.pink[200]],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(50.0),
+                                  child: RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                          style: TextThemes.mediumbody,
+                                          children: [
+                                            TextSpan(
+                                                text:
+                                                    "Squad",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300)),
+                                            TextSpan(
+                                                text: " up",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            TextSpan(
+                                                text: ".",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300))
+                                          ]))),
+                              Image.asset('lib/assets/ff.png')
+                            ],
+                          ),
+                        ),
+                      ));
                 List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
 
                 switch (snapshot.connectionState) {
@@ -628,46 +693,44 @@ class _UserGroupResultState extends State<UserGroupResult> {
                 right: 20,
                 top: 10,
                 child: RaisedButton(
-                      padding: const EdgeInsets.all(2.0),
-                      color: Colors.green,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                      onPressed: () {
-                        setState(() {
-                          status = false;
-                        });
-                      },
-                      child: Text(
-                        "Added",
-                        style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                        ),
-                      ))
-                  
-              )
+                    padding: const EdgeInsets.all(2.0),
+                    color: Colors.green,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                    onPressed: () {
+                      setState(() {
+                        status = false;
+                      });
+                    },
+                    child: Text(
+                      "Added",
+                      style: new TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.0,
+                      ),
+                    )))
             : Positioned(
                 right: 20,
                 top: 10,
-                child:RaisedButton(
-                      padding: const EdgeInsets.all(2.0),
-                      color: TextThemes.ndBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                      onPressed: () {
-                        Database().addUser(userId, gname, gid);
-                        Database().addedToGroup(userId, gname, gid, pic);
-                        setState(() {
-                          status = true;
-                        });
-                      },
-                      child: Text(
-                        "Add to Group",
-                        style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                        ),
-                      )),
+                child: RaisedButton(
+                    padding: const EdgeInsets.all(2.0),
+                    color: TextThemes.ndBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                    onPressed: () {
+                      Database().addUser(userId, gname, gid);
+                      Database().addedToGroup(userId, gname, gid, pic);
+                      setState(() {
+                        status = true;
+                      });
+                    },
+                    child: Text(
+                      "Add to Group",
+                      style: new TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.0,
+                      ),
+                    )),
               ),
       ]),
     );

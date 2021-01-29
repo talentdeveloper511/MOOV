@@ -348,14 +348,13 @@ class _AuthorContent extends StatelessWidget {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return FutureBuilder<DocumentSnapshot>(
-      future: usersRef.doc(userId).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot2) {
-        if (snapshot2.hasError) {
-          return Text("Something went wrong");
-        }
-     if (!snapshot2.hasData) return CircularProgressIndicator();
-
+        future: usersRef.doc(userId).get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot2) {
+          if (snapshot2.hasError) {
+            return Text("Something went wrong");
+          }
+          if (!snapshot2.hasData) return CircularProgressIndicator();
 
           Map<String, dynamic> course1 = snapshot2.data.data();
           bool isAmbassador = snapshot2.data['isAmbassador'];
@@ -427,14 +426,14 @@ class _AuthorContent extends StatelessWidget {
                             context,
                             PageTransition(
                                 type: PageTransitionType.bottomToTop,
-                                child: SendMOOV(
+                                child: SendMOOVSearch(
                                   course['userId'],
                                   course['image'],
-                                  course['postId'],
                                   course['startDate'],
+                                  course['postId'],
                                   course['title'],
-                                  course['profilePic'],
-                                  course['userName'],
+                                  course1['photoUrl'],
+                                  course1['displayName'],
                                 )));
                       },
                       color: Colors.white,
@@ -455,10 +454,7 @@ class _AuthorContent extends StatelessWidget {
               )),
             ),
           );
-        }
-
-    
-    );
+        });
   }
 }
 
