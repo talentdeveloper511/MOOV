@@ -207,8 +207,12 @@ class _GroupDetailState extends State<GroupDetail> {
                                       context,
                                       PageTransition(
                                           type: PageTransitionType.bottomToTop,
-                                          child: SearchUsersGroup(groupName, gid,
-                                              groupPic, nextMOOV, members)));
+                                          child: SearchUsersGroup(
+                                              groupName,
+                                              gid,
+                                              groupPic,
+                                              nextMOOV,
+                                              members)));
                                 },
                               ),
                               FocusedMenuHolder(
@@ -907,10 +911,15 @@ class _SuggestionsState extends State<Suggestions> {
       shape: DotShape.Circle,
       spacing: 8,
     );
+
     return StreamBuilder(
         stream: groupsRef.doc(groupId).collection("suggestedMOOVs").snapshots(),
+        // ignore: missing_return
         builder: (context, snapshot4) {
-          if (!snapshot4.hasData || snapshot4.data == null) return Container();
+          if (!snapshot4.hasData || snapshot4.data == null) {
+            return Container();
+          }
+
           if (snapshot4.data.docs.length == 0) {
             return Padding(
               padding: const EdgeInsets.only(top: 18.0),
@@ -971,6 +980,7 @@ class _SuggestionsState extends State<Suggestions> {
           int count = snapshot4.data.docs.length;
           for (int i = 0; i < count; i++) {
             DocumentSnapshot course4 = snapshot4.data.docs[pageNumber];
+
             voters = course4['voters'];
             String suggestorName = course4['suggestorName'];
             String suggestorId = course4['suggestorId'];
