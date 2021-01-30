@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
@@ -47,6 +48,13 @@ class _SearchBarState extends State<SearchBar>
 
   final Algolia _algoliaApp = AlgoliaApplication.algolia;
   String _searchTerm;
+
+  Future<List<AlgoliaObjectSnapshot>> _operation0(String input) async {
+    AlgoliaQuery query = _algoliaApp.instance.index("groups").search(input);
+    AlgoliaQuerySnapshot querySnap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> results = querySnap.hits;
+    return results;
+  }
 
   Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
     AlgoliaQuery query = _algoliaApp.instance.index("users").search(input);
@@ -222,158 +230,220 @@ class _SearchBarState extends State<SearchBar>
             backgroundColor: Colors.white,
             body: _searchTerm == null
                 ? TrendingSegment()
-                : Container(
-                    child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
-                        stream: Stream.fromFuture(_operation(_searchTerm)),
-                        builder: (context, snapshot) {
-                          // if (!snapshot.hasData)
-                          //   return Container(
-                          //       height: 4000, child: TrendingSegment());
-                          // if (snapshot.data.length == 0) {
-                          //   return Container(
-                          //       height: 4000, child: TrendingSegment());
-                          // }
+                : StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                    stream: Stream.fromFuture(_operation0(_searchTerm)),
+                    builder: (context, snapshot0) {
+                      // if (!snapshot.hasData)
+                      //   return Container(
+                      //       height: 4000, child: TrendingSegment());
+                      // if (snapshot.data.length == 0) {
+                      //   return Container(
+                      //       height: 4000, child: TrendingSegment());
+                      // }
 
-                          // if (_searchTerm.length <= 0) {
-                          //   return Container(
-                          //       height: 4000, child: TrendingSegment());
-                          // }
+                      // if (_searchTerm.length <= 0) {
+                      //   return Container(
+                      //       height: 4000, child: TrendingSegment());
+                      // }
 
-                          List<AlgoliaObjectSnapshot> currSearchStuff =
-                              snapshot.data;
-
-                          return StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                      List<AlgoliaObjectSnapshot> currSearchStuff0 =
+                          snapshot0.data;
+                      return Container(
+                          child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
                               stream:
-                                  Stream.fromFuture(_operation2(_searchTerm)),
-                              builder: (context, snapshot2) {
-                                if (_searchTerm == null ||
-                                    _searchTerm.length < 0) {
-                                  return Container(
-                                      height: 4000, child: TrendingSegment());
-                                }
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.waiting:
-                                    return LinearProgressIndicator(
-                                        backgroundColor: TextThemes.ndBlue,
-                                        valueColor:
-                                            new AlwaysStoppedAnimation<Color>(
-                                                Colors.blue[200]));
-                                  default:
-                                    if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else {
-                                      // if (_searchTerm.length <= 0) {
-                                      //   return Container(
-                                      //       height: 4000, child: TrendingSegment());
-                                      // }
+                                  Stream.fromFuture(_operation(_searchTerm)),
+                              builder: (context, snapshot) {
+                                // if (!snapshot.hasData)
+                                //   return Container(
+                                //       height: 4000, child: TrendingSegment());
+                                // if (snapshot.data.length == 0) {
+                                //   return Container(
+                                //       height: 4000, child: TrendingSegment());
+                                // }
 
-                                      List<AlgoliaObjectSnapshot>
-                                          currSearchStuff2 = snapshot2.data;
+                                // if (_searchTerm.length <= 0) {
+                                //   return Container(
+                                //       height: 4000, child: TrendingSegment());
+                                // }
 
-                                      return Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.90,
-                                        child: TabBarView(
-                                            controller: _tabController,
-                                            children: [
-                                              CustomScrollView(
-                                                shrinkWrap: true,
-                                                slivers: <Widget>[
-                                                  SliverList(
-                                                    delegate:
-                                                        SliverChildBuilderDelegate(
-                                                      (context, index) {
-                                                        return _searchTerm.length !=
-                                                                    null &&
-                                                                _searchTerm.length >
-                                                                    0
-                                                            ? DisplaySearchResult(
-                                                                displayName: currSearchStuff[index]
-                                                                        .data[
-                                                                    "displayName"],
-                                                                email: currSearchStuff[index]
-                                                                        .data[
-                                                                    "email"],
-                                                                proPic: currSearchStuff[index]
-                                                                        .data[
-                                                                    "photoUrl"],
-                                                                userId: currSearchStuff[index]
-                                                                    .data["id"],
-                                                                isAmbassador:
-                                                                    currSearchStuff[index]
-                                                                            .data[
-                                                                        "isAmbassador"])
-                                                            : Container(
-                                                                height: 4000,
-                                                                child: TrendingSegment());
-                                                      },
-                                                      childCount:
-                                                          currSearchStuff
-                                                                  .length ??
-                                                              0,
+                                List<AlgoliaObjectSnapshot> currSearchStuff =
+                                    snapshot.data;
+
+                                return StreamBuilder<
+                                        List<AlgoliaObjectSnapshot>>(
+                                    stream: Stream.fromFuture(
+                                        _operation2(_searchTerm)),
+                                    builder: (context, snapshot2) {
+                                      if (_searchTerm == null ||
+                                          _searchTerm.length < 0) {
+                                        return Container(
+                                            height: 4000,
+                                            child: TrendingSegment());
+                                      }
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return LinearProgressIndicator(
+                                              backgroundColor:
+                                                  TextThemes.ndBlue,
+                                              valueColor:
+                                                  new AlwaysStoppedAnimation<
+                                                      Color>(Colors.blue[200]));
+                                        default:
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            // if (_searchTerm.length <= 0) {
+                                            //   return Container(
+                                            //       height: 4000, child: TrendingSegment());
+                                            // }
+
+                                            List<AlgoliaObjectSnapshot>
+                                                currSearchStuff2 =
+                                                snapshot2.data;
+
+                                            return Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.90,
+                                              child: TabBarView(
+                                                  controller: _tabController,
+                                                  children: [
+                                                    CustomScrollView(
+                                                      shrinkWrap: true,
+                                                      slivers: <Widget>[
+                                                        SliverList(
+                                                          delegate:
+                                                              SliverChildBuilderDelegate(
+                                                            (context, index) {
+                                                              return _searchTerm.length !=
+                                                                          null &&
+                                                                      _searchTerm.length >
+                                                                          0
+                                                                  ? DisplaySearchResult(
+                                                                      displayName:
+                                                                          currSearchStuff[index].data[
+                                                                              "displayName"],
+                                                                      email: currSearchStuff[index]
+                                                                              .data[
+                                                                          "email"],
+                                                                      proPic: currSearchStuff[index]
+                                                                              .data[
+                                                                          "photoUrl"],
+                                                                      userId: currSearchStuff[index]
+                                                                              .data[
+                                                                          "id"],
+                                                                      isAmbassador:
+                                                                          currSearchStuff[index].data[
+                                                                              "isAmbassador"])
+                                                                  : Container(
+                                                                      height:
+                                                                          4000,
+                                                                      child:
+                                                                          TrendingSegment());
+                                                            },
+                                                            childCount:
+                                                                currSearchStuff
+                                                                        .length ??
+                                                                    0,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              CustomScrollView(
-                                                shrinkWrap: true,
-                                                slivers: <Widget>[
-                                                  SliverList(
-                                                    delegate:
-                                                        SliverChildBuilderDelegate(
-                                                      (context, index) {
-                                                        return _searchTerm
-                                                                        .length !=
-                                                                    null &&
-                                                                _searchTerm
-                                                                        .length >
-                                                                    0
-                                                            ? DisplayMOOVResult(
-                                                                title: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "title"],
-                                                                description: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "description"],
-                                                                type: currSearchStuff2[
-                                                                        index]
-                                                                    .data["type"],
-                                                                image: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "image"],
-                                                                userId: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "userId"],
-                                                                postId: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "postId"],
-                                                              )
-                                                            : Container(
-                                                                height: 4000,
-                                                                child:
-                                                                    TrendingSegment());
-                                                      },
-                                                      childCount:
-                                                          currSearchStuff2
-                                                                  .length ??
-                                                              0,
+                                                    CustomScrollView(
+                                                      shrinkWrap: true,
+                                                      slivers: <Widget>[
+                                                        SliverList(
+                                                          delegate:
+                                                              SliverChildBuilderDelegate(
+                                                            (context, index) {
+                                                              return _searchTerm
+                                                                              .length !=
+                                                                          null &&
+                                                                      _searchTerm
+                                                                              .length >
+                                                                          0
+                                                                  ? DisplayMOOVResult(
+                                                                      title: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "title"],
+                                                                      description:
+                                                                          currSearchStuff2[index]
+                                                                              .data["description"],
+                                                                      type: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "type"],
+                                                                      image: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "image"],
+                                                                      userId: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "userId"],
+                                                                      postId: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "postId"],
+                                                                    )
+                                                                  : Container(
+                                                                      height:
+                                                                          4000,
+                                                                      child:
+                                                                          TrendingSegment());
+                                                            },
+                                                            childCount:
+                                                                currSearchStuff2
+                                                                        .length ??
+                                                                    0,
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Container()
-                                            ]),
-                                      );
-                                    }
-                                }
-                              });
-                        }))));
+                                                    CustomScrollView(
+                                                      shrinkWrap: true,
+                                                      slivers: <Widget>[
+                                                        SliverList(
+                                                          delegate:
+                                                              SliverChildBuilderDelegate(
+                                                            (context, index) {
+                                                              return _searchTerm
+                                                                              .length !=
+                                                                          null &&
+                                                                      _searchTerm
+                                                                              .length >
+                                                                          0
+                                                                  ? DisplayGroupResult(
+                                                                      groupName: currSearchStuff0[index]
+                                                                              .data[
+                                                                          "groupName"],
+                                                                      groupId:
+                                                                          currSearchStuff0[index]
+                                                                              .data["groupId"],
+                                                                      groupPic: currSearchStuff0[index]
+                                                                              .data[
+                                                                          "groupPic"],
+                                                                     
+                                                                    )
+                                                                  : Container(
+                                                                      height:
+                                                                          4000,
+                                                                      child:
+                                                                          TrendingSegment());
+                                                            },
+                                                            childCount:
+                                                                currSearchStuff0
+                                                                        .length ??
+                                                                    0,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ]),
+                                            );
+                                          }
+                                      }
+                                    });
+                              }));
+                    })));
   }
 }
 
@@ -487,15 +557,15 @@ class DisplayMOOVResult extends StatelessWidget {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: GestureDetector(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => PostDetail(postId))),
+        onTap: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => PostDetail(postId))),
         child: Stack(alignment: Alignment.center, children: <Widget>[
           SizedBox(
             width: isLargePhone
-                ? MediaQuery.of(context).size.width * 0.7
-                : MediaQuery.of(context).size.width * 0.7,
+                ? MediaQuery.of(context).size.width * 0.8
+                : MediaQuery.of(context).size.width * 0.8,
             height: isLargePhone
                 ? MediaQuery.of(context).size.height * 0.15
                 : MediaQuery.of(context).size.height * 0.17,
@@ -544,6 +614,129 @@ class DisplayMOOVResult extends StatelessWidget {
                     maxWidth: MediaQuery.of(context).size.width * .3),
                 child: Text(
                   title,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontFamily: 'Solway',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: isLargePhone ? 17.0 : 14),
+                ),
+              ),
+            ),
+          ),
+          // isToday == false
+          //     ? Positioned(
+          //         top: 0,
+          //         right: 0,
+          //         child: Container(
+          //           height: 30,
+          //           padding: EdgeInsets.all(4),
+          //           decoration: BoxDecoration(
+          //               gradient: LinearGradient(
+          //                 colors: [Colors.pink[400], Colors.purple[300]],
+          //                 begin: Alignment.centerLeft,
+          //                 end: Alignment.centerRight,
+          //               ),
+          //               borderRadius: BorderRadius.circular(10.0)),
+          //           child: isNextWeek ? Text("") : Text(""),
+          //         ),
+          //       )
+          //     : Container(),
+          // isToday == true
+          //     ? Positioned(
+          //         top: 0,
+          //         right: 0,
+          //         child: Container(
+          //           height: 30,
+          //           padding: EdgeInsets.all(4),
+          //           decoration: BoxDecoration(
+          //               gradient: LinearGradient(
+          //                 colors: [Colors.red[400], Colors.red[600]],
+          //                 begin: Alignment.centerLeft,
+          //                 end: Alignment.centerRight,
+          //               ),
+          //               borderRadius: BorderRadius.circular(10.0)),
+          //           child: Text(""),
+          //         ),
+          //       )
+          //     : Text(""),
+        ]),
+      ),
+    );
+  }
+}
+
+class DisplayGroupResult extends StatelessWidget {
+  final String groupName;
+  final String groupId;
+  final String groupPic;
+
+  DisplayGroupResult({Key key, this.groupName, this.groupId, this.groupPic}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+     bool isLargePhone = Screen.diagonal(context) > 766;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: GestureDetector(
+        onTap: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => GroupDetail(groupId))),
+        child: Stack(alignment: Alignment.center, children: <Widget>[
+          SizedBox(
+            width: isLargePhone
+                ? MediaQuery.of(context).size.width * 0.8
+                : MediaQuery.of(context).size.width * 0.8,
+            height: isLargePhone
+                ? MediaQuery.of(context).size.height * 0.15
+                : MediaQuery.of(context).size.height * 0.17,
+            child: Container(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: groupPic,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              margin: EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[
+                  Colors.black.withAlpha(0),
+                  Colors.black,
+                  Colors.black12,
+                ],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * .3),
+                child: Text(
+                  groupName,
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
