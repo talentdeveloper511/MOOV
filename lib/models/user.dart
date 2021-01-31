@@ -18,6 +18,7 @@ class User {
   final String venmo;
   final bool isAmbassador;
   final String referral;
+  final String venmoUsername;
 
   User(
       {this.id,
@@ -36,7 +37,8 @@ class User {
       this.venmo,
       this.isAmbassador,
       this.friendGroups,
-      this.referral});
+      this.referral,
+      this.venmoUsername});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -56,6 +58,7 @@ class User {
         venmo: doc.data()['venmo'],
         isAmbassador: doc.data()['isAmbassador'],
         friendGroups: doc.data()['friendGroups'],
-        referral: doc.data()['referral']);
+        referral: doc.data()['referral'],
+        venmoUsername: doc.data()['venmoUsername']);
   }
 }

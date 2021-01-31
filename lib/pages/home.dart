@@ -177,6 +177,7 @@ class _HomeState extends State<Home> {
       final String year = result[2];
       final String gender = result[1];
       final String referral = result[3];
+      final String venmoUsername = result[4];
 
       // 3) get username from create account, use it to make new user document in users collection
       usersRef.doc(user.id).set({
@@ -197,7 +198,7 @@ class _HomeState extends State<Home> {
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],
-        "venmo": "",
+        "venmoUsername": venmoUsername,
       });
       doc = await usersRef.doc(user.id).get();
     }
@@ -429,11 +430,14 @@ class _HomeState extends State<Home> {
                   MaterialPageRoute(builder: (context) => LeaderBoardPage()));
             },
           ),
-          NamedIcon(iconData: Icons.notifications_active, onTap: () {
-            Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationFeed()));
-
-          }),
+          NamedIcon(
+              iconData: Icons.notifications_active,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationFeed()));
+              }),
         ],
         flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.all(5),
@@ -597,7 +601,6 @@ class NamedIcon extends StatelessWidget {
         });
   }
 }
-
 
 class SharedPreferencesDemo extends StatefulWidget {
   SharedPreferencesDemo({Key key}) : super(key: key);

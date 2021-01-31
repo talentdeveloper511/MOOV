@@ -78,6 +78,10 @@ dependencies:
   firebase_messaging: ^6.0.16
   worm_indicator: ^0.2.4
   algolia: ^0.1.7
+  currency_text_input_formatter: ^1.0.3
+
+
+
 
 
 
@@ -170,6 +174,7 @@ flutter:
     - lib/assets/virtual1.png
     - lib/assets/show3.png
     - lib/assets/clemson.HEIC
+    - lib/assets/venmo-icon.png
     
 
 

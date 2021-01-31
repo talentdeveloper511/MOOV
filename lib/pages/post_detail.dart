@@ -165,7 +165,7 @@ class _NonImageContents extends StatelessWidget {
         children: <Widget>[
           _Title(title),
           _Description(description),
-          PostTimeAndPlace(startDate, address),
+          PostTimeAndPlace(startDate, address, course['venmo']),
           _AuthorContent(userId, course),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.0),
@@ -290,8 +290,9 @@ class _Description extends StatelessWidget {
 
 class PostTimeAndPlace extends StatelessWidget {
   dynamic startDate, address;
+  int venmo;
 
-  PostTimeAndPlace(this.startDate, this.address);
+  PostTimeAndPlace(this.startDate, this.address, this.venmo);
 
   @override
   Widget build(BuildContext context) {
@@ -299,40 +300,78 @@ class PostTimeAndPlace extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 4.0),
-                child: Icon(Icons.timer, color: TextThemes.ndGold),
-              ),
-              Text('WHEN: ', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(
-                DateFormat('MMMd').add_jm().format(startDate.toDate()),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
+      child: Stack(children: [
+        Column(
+          children: [
+            Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 4.0),
-                  child: Icon(
-                    Icons.place,
-                    color: TextThemes.ndGold,
-                  ),
+                  child: Icon(Icons.timer, color: TextThemes.ndGold),
                 ),
-                Text('WHERE: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(address)
+                Text('WHEN: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                  DateFormat('MMMd').add_jm().format(startDate.toDate()),
+                ),
               ],
             ),
-          )
-        ],
-      ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 4.0),
+                    child: Icon(
+                      Icons.place,
+                      color: TextThemes.ndGold,
+                    ),
+                  ),
+                  Text('WHERE: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(address)
+                ],
+              ),
+            )
+          ],
+        ),
+        venmo != null && venmo != 0
+            ? Positioned(
+                top: 0,
+                right: 40,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 40,
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.fromRGBO(061, 149, 206, 1.0),
+                              Color.fromRGBO(061, 149, 215, 1.0),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: Row(
+                        children: [
+                          Image.asset('lib/assets/venmo-icon.png'),
+                          Text(
+                            "\$$venmo ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text("@")
+                  ],
+                ),
+              )
+            : Text(""),
+      ]),
     );
   }
 }

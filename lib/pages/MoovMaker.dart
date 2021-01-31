@@ -21,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:page_transition/page_transition.dart';
 import 'home.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 class MoovMaker extends StatefulWidget {
   final PostModel postModel;
@@ -257,6 +258,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   final descriptionController = TextEditingController();
   final startDateController = DatePicker().startDate1;
   final maxOccupancyController = TextEditingController();
+  final venmoController = TextEditingController();
 
   final format = DateFormat("EEE, MMM d,' at' h:mm a");
   Map<String, int> invitees = {};
@@ -268,6 +270,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   bool barcode = false;
   String maxOccupancy;
   int maxOccupancyInt;
+  String venmo;
+  int venmoInt;
 
   String generateRandomString(int len) {
     var r = Random();
@@ -584,10 +588,38 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                 Expanded(
                                   flex: 1,
                                   child: TextField(
+                                    textAlign: TextAlign.center,
                                     controller: maxOccupancyController,
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) =>
                                         setState(() => maxOccupancy = value),
+
+                                    // your TextField's Content
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            title: Row(
+                              children: <Widget>[
+                                Expanded(
+                                    flex: 4, child: Text('Venmo Per Person')),
+                                Expanded(
+                                  flex: 1,
+                                  child: TextField(
+                                    textAlign: TextAlign.center,
+                                    inputFormatters: [
+                                      CurrencyTextInputFormatter(
+                                        decimalDigits: 0,
+                                        symbol: '\$',
+                                      )
+                                    ],
+
+                                    controller: venmoController,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) =>
+                                        setState(() => venmo = value),
 
                                     // your TextField's Content
                                   ),
@@ -927,6 +959,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                     maxOccupancyInt =
                                         int.parse(maxOccupancyController.text);
                                   }
+                                  if (venmoController.text.isNotEmpty) {
+                                    String x = venmoController.text.substring(1);
+                                    venmoInt = int.parse(x);
+                                  }
 
                                   firebase_storage.UploadTask uploadTask;
 
@@ -948,6 +984,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         startDate: currentValue,
                                         invitees: inviteesNameList,
                                         maxOccupancy: maxOccupancyInt,
+                                        venmo: venmoInt,
                                         barcode: barcode,
                                         imageUrl: downloadUrl,
                                         userId: strUserId,

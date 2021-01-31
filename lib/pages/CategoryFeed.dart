@@ -495,6 +495,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course["privacy"];
+                                int venmo = course["venmo"];
                                 List<dynamic> friends = currentUser.friendArray;
 
                                 var strUserPic = currentUser.photoUrl;
@@ -609,6 +610,7 @@ class PostOnFeed extends StatelessWidget {
     String privacy;
     Timestamp startDate = course["startDate"];
     privacy = course['privacy'];
+    int venmo = course['venmo'];
     Map<String, dynamic> invitees = course['invitees'];
     int status = 0;
     List<dynamic> inviteesIds = invitees.keys.toList();
@@ -666,114 +668,149 @@ class PostOnFeed extends StatelessWidget {
               },
               child: Column(
                 children: [
-                  Card(
-                    color: Colors.white,
-                    child: Row(children: <Widget>[
-                      Expanded(
-                          child: Padding(
+                  Stack(children: [
+                    Card(
+                      color: Colors.white,
+                      child: Row(children: <Widget>[
+                        Expanded(
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 5),
+                                child: Container(
+                                  height: 170,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                      border: Border.all(
+                                        color: Color(0xff000000),
+                                        width: 1,
+                                      )),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Image.network(course['image'],
+                                        fit: BoxFit.cover, width: 50),
+                                  ),
+                                ))),
+                        Expanded(
+                            child: Column(children: <Widget>[
+                          Padding(padding: const EdgeInsets.all(8.0)),
+                          SizedBox(
+                            width: 165,
+                            child: Padding(
                               padding:
-                                  const EdgeInsets.only(top: 0.0, right: 5),
-                              child: Container(
-                                height: 170,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    border: Border.all(
-                                      color: Color(0xff000000),
-                                      width: 1,
-                                    )),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: Image.network(course['image'],
-                                      fit: BoxFit.cover, width: 50),
-                                ),
-                              ))),
-                      Expanded(
-                          child: Column(children: <Widget>[
-                        Padding(padding: const EdgeInsets.all(8.0)),
-                        SizedBox(
-                          width: 165,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 4.0, right: 4),
-                            child: AutoSizeText(course['title'].toString(),
-                                minFontSize: 17,
-                                style: TextStyle(
-                                    color: TextThemes.ndBlue,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w800),
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10.0, right: 10, top: 10, bottom: 5),
-                          child: Text(
-                            course['description'].toString(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(fontSize: 12.0, color: Colors.black),
-                          ),
-                        ),
-                        Padding(padding: const EdgeInsets.all(5.0)),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 4.0),
-                                  child: Icon(Icons.timer,
-                                      color: TextThemes.ndGold, size: 20),
-                                ),
-                                Text('WHEN: ',
-                                    style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.bold)),
-                                Text(
-                                    DateFormat('MMMd')
-                                        .add_jm()
-                                        .format(course['startDate'].toDate()),
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                    )),
-                              ],
+                                  const EdgeInsets.only(left: 4.0, right: 4),
+                              child: AutoSizeText(course['title'].toString(),
+                                  minFontSize: 17,
+                                  style: TextStyle(
+                                      color: TextThemes.ndBlue,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w800),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 4.0),
-                              child: Row(
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10.0, right: 10, top: 10, bottom: 5),
+                            child: Text(
+                              course['description'].toString(),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 12.0, color: Colors.black),
+                            ),
+                          ),
+                          Padding(padding: const EdgeInsets.all(5.0)),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 0.0),
-                                    child: Icon(Icons.place,
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: Icon(Icons.timer,
                                         color: TextThemes.ndGold, size: 20),
                                   ),
-                                  Text(' WHERE: ',
+                                  Text('WHEN: ',
                                       style: TextStyle(
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.bold)),
-                                  SizedBox(
-                                    width: isLargePhone ? 115 : 90,
-                                    child: Text(course['address'],
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
+                                  Text(
+                                      DateFormat('MMMd')
+                                          .add_jm()
+                                          .format(course['startDate'].toDate()),
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                      )),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 0.0),
+                                      child: Icon(Icons.place,
+                                          color: TextThemes.ndGold, size: 20),
+                                    ),
+                                    Text(' WHERE: ',
                                         style: TextStyle(
-                                          fontSize: 12.0,
-                                        )),
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(
+                                      width: isLargePhone ? 115 : 90,
+                                      child: Text(course['address'],
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ]))
+                      ]),
+                    ),
+                    venmo != null && venmo != 0
+                        ? Positioned(
+                            top: 0,
+                            left: 3,
+                            child: Container(
+                              height: 30,
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromRGBO(061, 149, 206, 1.0),
+                                      Color.fromRGBO(061, 149, 215, 1.0),
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: Row(
+                                children: [
+                                  Image.asset('lib/assets/venmo-icon.png'),
+                                  Text(
+                                    "\$$venmo",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ]))
-                    ]),
-                  ),
+                          )
+                        : Text(""),
+                  ]),
                   // Padding(
                   //   padding: EdgeInsets.symmetric(
                   //       horizontal: 1.0),
