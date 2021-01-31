@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:MOOV/main.dart';
+import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
@@ -277,8 +278,7 @@ class _SearchBarState extends State<SearchBar>
                                     stream: Stream.fromFuture(
                                         _operation2(_searchTerm)),
                                     builder: (context, snapshot2) {
-                                      if (_searchTerm == null ||
-                                          _searchTerm.length < 0) {
+                                      if (_searchTerm == null) {
                                         return Container(
                                             height: 4000,
                                             child: TrendingSegment());
@@ -320,10 +320,8 @@ class _SearchBarState extends State<SearchBar>
                                                           delegate:
                                                               SliverChildBuilderDelegate(
                                                             (context, index) {
-                                                              return _searchTerm.length !=
-                                                                          null &&
-                                                                      _searchTerm.length >
-                                                                          0
+                                                              return _searchTerm !=
+                                                                      null
                                                                   ? DisplaySearchResult(
                                                                       displayName:
                                                                           currSearchStuff[index].data[
@@ -424,6 +422,9 @@ class _SearchBarState extends State<SearchBar>
                                                                       groupPic:
                                                                           currSearchStuff0[index]
                                                                               .data["groupPic"],
+                                                                      members: currSearchStuff0[index]
+                                                                              .data[
+                                                                          "members"],
                                                                     )
                                                                   : Container(
                                                                       height:
@@ -672,7 +673,8 @@ class DisplayMOOVResult extends StatelessWidget {
                 //       )
                 //     : Text(""),
                 Positioned(
-                  bottom: 8.5, right: isLargePhone ? 60: 55,
+                  bottom: 8.5,
+                  right: isLargePhone ? 60 : 55,
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25.0),
@@ -706,132 +708,190 @@ class DisplayGroupResult extends StatelessWidget {
   final String groupName;
   final String groupId;
   final String groupPic;
+  final List members;
 
-  DisplayGroupResult({Key key, this.groupName, this.groupId, this.groupPic})
+  DisplayGroupResult(
+      {Key key, this.groupName, this.groupId, this.groupPic, this.members})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
+    for (int i = 0; i < members.length; i++) {
+      return StreamBuilder(
+          stream: usersRef
+              .where('friendGroups', arrayContains: groupId)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return CircularProgressIndicator();
+            if (snapshot.data.docs == null) return Container();
+            var length = members.length - 2;
+            var course = snapshot.data.docs;
 
-    return StreamBuilder(
-        stream:
-            usersRef.where('friendGroups', arrayContains: groupId).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return CircularProgressIndicator();
-          if (snapshot.data == null) return Container();
-
-          return Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: GestureDetector(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => GroupDetail(groupId))),
-              child: Stack(alignment: Alignment.center, children: <Widget>[
-                SizedBox(
-                  width: isLargePhone
-                      ? MediaQuery.of(context).size.width * 0.8
-                      : MediaQuery.of(context).size.width * 0.8,
-                  height: isLargePhone
-                      ? MediaQuery.of(context).size.height * 0.15
-                      : MediaQuery.of(context).size.height * 0.17,
-                  child: Container(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl: groupPic,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    margin:
-                        EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
+            return Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => members.contains(currentUser.id)
+                        ? GroupDetail(groupId)
+                        : OtherGroup(groupId))),
+                child: Stack(alignment: Alignment.center, children: <Widget>[
+                  SizedBox(
+                    width: isLargePhone
+                        ? MediaQuery.of(context).size.width * 0.8
+                        : MediaQuery.of(context).size.width * 0.8,
+                    height: isLargePhone
+                        ? MediaQuery.of(context).size.height * 0.15
+                        : MediaQuery.of(context).size.height * 0.17,
+                    child: Container(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl: groupPic,
+                          fit: BoxFit.cover,
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        Colors.black.withAlpha(0),
-                        Colors.black,
-                        Colors.black12,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * .3),
-                      child: Text(
-                        groupName,
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontFamily: 'Solway',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: isLargePhone ? 17.0 : 14),
+                      ),
+                      margin: EdgeInsets.only(
+                          left: 10, top: 0, right: 10, bottom: 0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-                // isToday == false
-                //     ? Positioned(
-                //         top: 0,
-                //         right: 0,
-                //         child: Container(
-                //           height: 30,
-                //           padding: EdgeInsets.all(4),
-                //           decoration: BoxDecoration(
-                //               gradient: LinearGradient(
-                //                 colors: [Colors.pink[400], Colors.purple[300]],
-                //                 begin: Alignment.centerLeft,
-                //                 end: Alignment.centerRight,
-                //               ),
-                //               borderRadius: BorderRadius.circular(10.0)),
-                //           child: isNextWeek ? Text("") : Text(""),
-                //         ),
-                //       )
-                //     : Container(),
-                // isToday == true
-                //     ? Positioned(
-                //         top: 0,
-                //         right: 0,
-                //         child: Container(
-                //           height: 30,
-                //           padding: EdgeInsets.all(4),
-                //           decoration: BoxDecoration(
-                //               gradient: LinearGradient(
-                //                 colors: [Colors.red[400], Colors.red[600]],
-                //                 begin: Alignment.centerLeft,
-                //                 end: Alignment.centerRight,
-                //               ),
-                //               borderRadius: BorderRadius.circular(10.0)),
-                //           child: Text(""),
-                //         ),
-                //       )
-                //     : Text(""),
-              ]),
-            ),
-          );
-        });
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Colors.black.withAlpha(0),
+                          Colors.black,
+                          Colors.black12,
+                        ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * .3),
+                        child: Text(
+                          groupName,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontFamily: 'Solway',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: isLargePhone ? 17.0 : 14),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // isToday == false
+                  //     ? Positioned(
+                  //         top: 0,
+                  //         right: 0,
+                  //         child: Container(
+                  //           height: 30,
+                  //           padding: EdgeInsets.all(4),
+                  //           decoration: BoxDecoration(
+                  //               gradient: LinearGradient(
+                  //                 colors: [Colors.pink[400], Colors.purple[300]],
+                  //                 begin: Alignment.centerLeft,
+                  //                 end: Alignment.centerRight,
+                  //               ),
+                  //               borderRadius: BorderRadius.circular(10.0)),
+                  //           child: isNextWeek ? Text("") : Text(""),
+                  //         ),
+                  //       )
+                  //     : Container(),
+                  // isToday == true
+                  //     ? Positioned(
+                  //         top: 0,
+                  //         right: 0,
+                  //         child: Container(
+                  //           height: 30,
+                  //           padding: EdgeInsets.all(4),
+                  //           decoration: BoxDecoration(
+                  //               gradient: LinearGradient(
+                  //                 colors: [Colors.red[400], Colors.red[600]],
+                  //                 begin: Alignment.centerLeft,
+                  //                 end: Alignment.centerRight,
+                  //               ),
+                  //               borderRadius: BorderRadius.circular(10.0)),
+                  //           child: Text(""),
+                  //         ),
+                  //       )
+                  //     : Text(""),
+                  Positioned(
+                    bottom: isLargePhone ? 0 : 0,
+                    right: 55,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Stack(children: [
+                          Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: members.length > 1
+                                  ? CircleAvatar(
+                                      radius: 25.0,
+                                      backgroundImage: NetworkImage(
+                                        course[1]['photoUrl'],
+                                      ),
+                                    )
+                                  : Container()),
+                          Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 4, left: 25.0),
+                              child: CircleAvatar(
+                                radius: 25.0,
+                                backgroundImage: NetworkImage(
+                                  course[0]['photoUrl'],
+                                ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4, left: 50.0),
+                            child: CircleAvatar(
+                              radius: 25.0,
+                              child: members.length > 2
+                                  ? Text(
+                                      "+" + (length.toString()),
+                                      style: TextStyle(
+                                          color: TextThemes.ndGold,
+                                          fontWeight: FontWeight.w500),
+                                    )
+                                  : Text(
+                                      (members.length.toString()),
+                                      style: TextStyle(
+                                          color: TextThemes.ndGold,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                              backgroundColor: TextThemes.ndBlue,
+                            ),
+                          ),
+                        ])
+                      ],
+                    ),
+                  ),
+                ]),
+              ),
+            );
+          });
+    }
   }
 }
 
