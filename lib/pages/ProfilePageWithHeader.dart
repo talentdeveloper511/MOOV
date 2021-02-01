@@ -56,6 +56,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
           userFriends = snapshot.data['friendArray'];
           // userMoovs = snapshot.data['likedMoovs'];
           userGroups = snapshot.data['friendGroups'];
+          String venmo = snapshot.data['venmoUsername'];
 
           return Scaffold(
             appBar: AppBar(
@@ -295,6 +296,25 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                           ],
                         ),
                       ),
+                                          venmo != null && venmo != "" ?
+
+                        Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('lib/assets/venmo-icon.png', height: 35),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "@" +venmo,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ) : Text(""),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(

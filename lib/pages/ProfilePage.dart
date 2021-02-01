@@ -53,6 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
           userFriends = snapshot.data['friendArray'];
           // userMoovs = snapshot.data['likedMoovs'];
           userGroups = snapshot.data['friendGroups'];
+          String venmo = snapshot.data['venmoUsername'];
 
           return Scaffold(
             backgroundColor: Colors.white,
@@ -237,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         : userGroups.length.toString(),
                                     style: TextThemes.extraBold,
                                   ),
-                                 Padding(
+                                  Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
                                     child: userGroups.length == 1
                                         ? Text(
@@ -255,6 +256,26 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
+                      venmo != null && venmo != ""
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset('lib/assets/venmo-icon.png',
+                                      height: 35),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "@" + venmo,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Text(""),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(

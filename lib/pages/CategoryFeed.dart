@@ -496,6 +496,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 Timestamp startDate = course["startDate"];
                                 privacy = course["privacy"];
                                 int venmo = course["venmo"];
+                                int maxOccupancy = course['maxOccupancy'];
                                 List<dynamic> friends = currentUser.friendArray;
 
                                 var strUserPic = currentUser.photoUrl;
@@ -596,6 +597,8 @@ class _CategoryFeedState extends State<CategoryFeed>
       ),
     );
   }
+
+  
 }
 
 class PostOnFeed extends StatelessWidget {
@@ -611,6 +614,9 @@ class PostOnFeed extends StatelessWidget {
     Timestamp startDate = course["startDate"];
     privacy = course['privacy'];
     int venmo = course['venmo'];
+    int maxOccupancy = course['maxOccupancy'];
+    int goingCount = course['going'].length ?? 0;
+
     Map<String, dynamic> invitees = course['invitees'];
     int status = 0;
     List<dynamic> inviteesIds = invitees.keys.toList();
@@ -801,6 +807,40 @@ class PostOnFeed extends StatelessWidget {
                                   Image.asset('lib/assets/venmo-icon.png'),
                                   Text(
                                     "\$$venmo",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : Text(""),
+                    maxOccupancy != null && maxOccupancy != 0
+                        ? Positioned(
+                            top: 0,
+                            left: 145,
+                            child: Container(
+                              height: 30,
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.orange,
+                                      Colors.orange[300],
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.supervisor_account,
+                                    color: Colors.white,
+                                  ),
+                                  Text(
+                                    "$goingCount/$maxOccupancy",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 18),
@@ -1033,7 +1073,10 @@ class PostOnFeed extends StatelessWidget {
                                         //splashRadius: 7.0,
                                         highlightColor: Colors.green,
                                         onPressed: () {
-                                          if (invitees != null && status != 3) {
+                                          if (goingCount == maxOccupancy) {
+                                            showMax(context);
+                                          }
+                                          if (invitees != null && status != 3 && goingCount < maxOccupancy) {
                                             Database().addGoingGood(
                                                 currentUser.id,
                                                 course['userId'],
@@ -1118,6 +1161,31 @@ class PostOnFeed extends StatelessWidget {
                   )
                 : Text(""),
       ]),
+    );
+  }
+  void showMax(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("This MOOV is currently full",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nHate to see it"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Fuck me", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Navigator.pop(context);
+
+              // Database().deletePost(postId, userId);
+            },
+          ),
+          // CupertinoDialogAction(
+          //   child: Text("Cancel"),
+          //   onPressed: () => Navigator.of(context).pop(true),
+          // )
+        ],
+      ),
     );
   }
 }

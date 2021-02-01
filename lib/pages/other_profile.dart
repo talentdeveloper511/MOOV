@@ -136,6 +136,7 @@ class _OtherProfileState extends State<OtherProfile> {
           photoUrl = snapshot.data['photoUrl'];
           userFriends = snapshot.data['friendArray'];
           score = snapshot.data['score'];
+          String venmo = snapshot.data['venmoUsername'];
 
           return Scaffold(
               backgroundColor: Colors.white,
@@ -347,6 +348,24 @@ class _OtherProfileState extends State<OtherProfile> {
                         ),
                       ],
                     ),
+                    venmo != null && venmo != "" ?
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('lib/assets/venmo-icon.png', height: 35),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "@" +venmo,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ) : Text(""),
                     snapshot.data['bio'] != "Create a bio here"
                         ? Card(
                             margin: EdgeInsets.only(

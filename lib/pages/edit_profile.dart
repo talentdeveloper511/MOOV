@@ -17,7 +17,6 @@ import 'package:image_picker/image_picker.dart';
 class EditProfile extends StatefulWidget {
   final Home user;
 
-
   EditProfile({Key key, this.user}) : super(key: key);
 
   @override
@@ -221,6 +220,7 @@ class _EditProfileState extends State<EditProfile> {
     dynamic likeCount;
     final dormController = TextEditingController();
     final bioController = TextEditingController();
+    final venmoController = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -402,6 +402,25 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
                 Padding(
+                  padding: const EdgeInsets.only(top: 30.0, bottom: 5),
+                  child: Text(
+                    "Venmo",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: TextFormField(
+                    controller: venmoController,
+                    decoration: InputDecoration(
+                      labelText: "What's your @?",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: RaisedButton(
                       color: TextThemes.ndBlue,
@@ -422,7 +441,8 @@ class _EditProfileState extends State<EditProfile> {
 
                           uploadTask = ref.putFile(_image);
 
-                          firebase_storage.TaskSnapshot taskSnapshot = await uploadTask;
+                          firebase_storage.TaskSnapshot taskSnapshot =
+                              await uploadTask;
                           if (uploadTask.snapshot.state ==
                               firebase_storage.TaskState.success) {
                             print("added to Firebase Storage");
@@ -470,6 +490,11 @@ class _EditProfileState extends State<EditProfile> {
                         if (bioController.text != "") {
                           usersRef.doc(currentUser.id).update({
                             "bio": bioController.text,
+                          });
+                        }
+                          if (venmoController.text != "") {
+                          usersRef.doc(currentUser.id).update({
+                            "venmoUsername": venmoController.text,
                           });
                         }
                         Navigator.pop(context);

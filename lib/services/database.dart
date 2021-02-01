@@ -72,7 +72,8 @@ class Database {
       'image': imageUrl,
       'userId': userId,
       "featured": false,
-      "postId": postId
+      "postId": postId,
+      "going": []
     }).then(inviteesNotification(postId, imageUrl, title, invitees));
 
     postsRef.orderBy("startDate", descending: true);

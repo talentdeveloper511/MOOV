@@ -7,6 +7,7 @@ import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/send_moov.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -98,11 +99,13 @@ class _PostDetailState extends State<PostDetail> {
                   address = course['address'];
                   userId = course['userId'];
                   postId = course['postId'];
+                  int maxOccupancy = course['maxOccupancy'];
+                  int goingCount = course['going'].length;
                   return Container(
                     color: Colors.white,
                     child: ListView(
                       children: <Widget>[
-                        _BannerImage(bannerImage),
+                        _BannerImage(bannerImage, maxOccupancy, goingCount),
                         _NonImageContents(title, description, startDate,
                             address, userId, postId, course),
                       ],
@@ -116,7 +119,8 @@ class _PostDetailState extends State<PostDetail> {
 
 class _BannerImage extends StatelessWidget {
   String bannerImage;
-  _BannerImage(this.bannerImage);
+  int maxOccupancy, goingCount;
+  _BannerImage(this.bannerImage, this.maxOccupancy, this.goingCount);
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +148,41 @@ class _BannerImage extends StatelessWidget {
           ),
         ),
       ),
+      maxOccupancy != null && maxOccupancy != 0
+          ? Positioned(
+              bottom: 0,
+              right: 50,
+              child: Container(
+                height: 45,
+                width: 70,
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.orange,
+                        Colors.orange[300],
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.supervisor_account,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      "$goingCount/$maxOccupancy",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : Text(""),
     ]);
   }
 }
@@ -165,7 +204,8 @@ class _NonImageContents extends StatelessWidget {
         children: <Widget>[
           _Title(title),
           _Description(description),
-          PostTimeAndPlace(startDate, address, course['venmo']),
+          PostTimeAndPlace(
+              startDate, address, course['venmo'], course['userId']),
           _AuthorContent(userId, course),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.0),
@@ -291,8 +331,9 @@ class _Description extends StatelessWidget {
 class PostTimeAndPlace extends StatelessWidget {
   dynamic startDate, address;
   int venmo;
+  String userId;
 
-  PostTimeAndPlace(this.startDate, this.address, this.venmo);
+  PostTimeAndPlace(this.startDate, this.address, this.venmo, this.userId);
 
   @override
   Widget build(BuildContext context) {
@@ -339,11 +380,12 @@ class PostTimeAndPlace extends StatelessWidget {
         venmo != null && venmo != 0
             ? Positioned(
                 top: 0,
-                right: 40,
+                right: 20,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      height: 40,
+                      height: 35,
                       padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -357,16 +399,32 @@ class PostTimeAndPlace extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Row(
                         children: [
-                          Image.asset('lib/assets/venmo-icon.png'),
+                          Image.asset(
+                            'lib/assets/venmo-icon.png',
+                            height: 25,
+                          ),
                           Text(
                             "\$$venmo ",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            style: TextStyle(color: Colors.white, fontSize: 19),
                           ),
                         ],
                       ),
                     ),
-                    Text("@")
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: StreamBuilder(
+                          stream: usersRef.doc(userId).snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) return circularProgress();
+
+                            String name = snapshot.data['venmoUsername'];
+                            return Text(
+                              "@$name",
+                              textAlign: TextAlign.center,
+                            );
+                          }),
+                    )
                   ],
                 ),
               )
@@ -630,10 +688,12 @@ class Buttons extends StatelessWidget {
         builder: (context, snapshot) {
           // title = snapshot.data['title'];
           // pic = snapshot.data['pic'];
-          if (!snapshot.hasData) return Text('Loading data...');
+          if (!snapshot.hasData) return circularProgress();
 
           DocumentSnapshot course = snapshot.data;
           Map<String, dynamic> invitees = course['invitees'];
+          int maxOccupancy = course['maxOccupancy'];
+          int goingCount = course['going'].length;
 
           List<dynamic> inviteesIds = invitees.keys.toList();
 
@@ -805,7 +865,12 @@ class Buttons extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                        if (invitees != null && status != 3) {
+                        if (goingCount == maxOccupancy) {
+                          showMax(context);
+                        }
+                        if (invitees != null &&
+                            status != 3 &&
+                            goingCount < maxOccupancy) {
                           Database().addGoingGood(
                               currentUser.id,
                               course['userId'],
@@ -851,5 +916,31 @@ class Buttons extends StatelessWidget {
             );
           }
         });
+  }
+
+  void showMax(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("This MOOV is currently full",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nHate to see it"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Fuck me", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Navigator.pop(context);
+
+              // Database().deletePost(postId, userId);
+            },
+          ),
+          // CupertinoDialogAction(
+          //   child: Text("Cancel"),
+          //   onPressed: () => Navigator.of(context).pop(true),
+          // )
+        ],
+      ),
+    );
   }
 }
