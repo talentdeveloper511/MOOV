@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:MOOV/main.dart';
+import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/group_detail.dart';
@@ -837,6 +838,7 @@ class DisplayGroupResult extends StatelessWidget {
                   //         ),
                   //       )
                   //     : Text(""),
+
                   Positioned(
                     bottom: isLargePhone ? 0 : 0,
                     right: 55,
@@ -895,6 +897,8 @@ class DisplayGroupResult extends StatelessWidget {
   }
 }
 
+
+
 class GradientText extends StatelessWidget {
   GradientText(
     this.text, {
@@ -919,5 +923,469 @@ class GradientText extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SearchBarWithHeader extends StatefulWidget {
+  SearchBarWithHeader({Key key}) : super(key: key);
+
+  @override
+  _SearchBarWithHeaderState createState() => _SearchBarWithHeaderState();
+}
+
+class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
+    with SingleTickerProviderStateMixin {
+  // TabController to control and switch tabs
+  TabController _tabController;
+  int _currentIndex = 0;
+  Map<int, Widget> map =
+      new Map(); // Cupertino Segmented Control takes children in form of Map.
+  List<Widget>
+      childWidgets; //The Widgets that has to be loaded when a tab is selected.
+  int selectedIndex = 0;
+
+  Widget getChildWidget() => childWidgets[selectedIndex];
+
+  final TextEditingController searchController = TextEditingController();
+  final textFieldFocusNode = FocusNode();
+
+  final Algolia _algoliaApp = AlgoliaApplication.algolia;
+  String _searchTerm;
+
+  Future<List<AlgoliaObjectSnapshot>> _operation0(String input) async {
+    AlgoliaQuery query = _algoliaApp.instance.index("groups").search(input);
+    AlgoliaQuerySnapshot querySnap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> results = querySnap.hits;
+    return results;
+  }
+
+  Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
+    AlgoliaQuery query = _algoliaApp.instance.index("users").search(input);
+    AlgoliaQuerySnapshot querySnap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> results = querySnap.hits;
+    return results;
+  }
+
+  Future<List<AlgoliaObjectSnapshot>> _operation2(String input) async {
+    AlgoliaQuery query = _algoliaApp.instance.index("events").search(input);
+    AlgoliaQuerySnapshot querySnap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> results = querySnap.hits;
+    return results;
+  }
+
+  clearSearch() {
+    searchController.clear();
+
+    setState(() {
+      _searchTerm = null;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        new TabController(vsync: this, length: 3, initialIndex: _currentIndex);
+    _tabController.animation
+      ..addListener(() {
+        setState(() {
+          _currentIndex = (_tabController.animation.value).round();
+        });
+      });
+
+    // Simple declarations
+    TextEditingController searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+
+    searchController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+                (Route<dynamic> route) => false,
+              );
+            },
+          ),
+          backgroundColor: TextThemes.ndBlue,
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.all(5),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  child: Image.asset(
+                    'lib/assets/moovblue.png',
+                    fit: BoxFit.cover,
+                    height: 50.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              toolbarHeight: 96,
+              bottom: PreferredSize(
+                  preferredSize: null,
+                  child: Column(children: <Widget>[
+                    TextField(
+                        style: TextStyle(fontSize: 20),
+                        controller: searchController,
+                        onChanged: (val) {
+                          setState(() {
+                            _searchTerm = val;
+                          });
+                        },
+                        // Set Focus Node
+                        focusNode: textFieldFocusNode,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(fontSize: 20),
+                          border: InputBorder.none,
+                          hintText: 'Search MOOV',
+                          hintStyle:
+                              TextStyle(color: Colors.grey, fontSize: 20),
+                          prefixIcon:
+                              const Icon(Icons.search, color: Colors.black),
+                          suffixIcon: GestureDetector(
+                              onTap: () {
+                                clearSearch();
+                                // Unfocus all focus nodes
+                                textFieldFocusNode.unfocus();
+
+                                // Disable text field's focus node request
+                                textFieldFocusNode.canRequestFocus = false;
+
+                                //Enable the text field's focus node request after some delay
+                                Future.delayed(Duration(milliseconds: 10), () {
+                                  textFieldFocusNode.canRequestFocus = true;
+                                });
+                              },
+                              child: IconButton(
+                                  onPressed: null,
+                                  icon: Icon(
+                                    Icons.clear,
+                                    color: Colors.black,
+                                  ))),
+                        )),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        // Sign In Button
+                        new FlatButton(
+                          splashColor: Colors.white,
+                          color: Colors.white,
+                          onPressed: () {
+                            _tabController.animateTo(0);
+                            setState(() {
+                              _currentIndex = (_tabController.animation.value)
+                                  .round(); //_tabController.animation.value returns double
+
+                              _currentIndex = 0;
+                            });
+                          },
+                          child: _currentIndex == 0
+                              ? GradientText(
+                                  '     People  ',
+                                  gradient: LinearGradient(colors: [
+                                    Colors.blue.shade400,
+                                    Colors.blue.shade900,
+                                  ]),
+                                )
+                              : Text(
+                                  "     People  ",
+                                  style: TextStyle(fontSize: 16.5),
+                                ),
+                        ),
+                        // Sign Up Button
+                        new FlatButton(
+                          splashColor: Colors.white,
+                          color: Colors.white,
+                          onPressed: () {
+                            _tabController.animateTo(1);
+                            setState(() {
+                              _currentIndex = 1;
+                            });
+                          },
+                          child: _currentIndex == 1
+                              ? GradientText(
+                                  "    MOOVs",
+                                  gradient: LinearGradient(colors: [
+                                    Colors.blue.shade400,
+                                    Colors.blue.shade900,
+                                  ]),
+                                )
+                              : Text(
+                                  "    MOOVs",
+                                  style: TextStyle(fontSize: 16.5),
+                                ),
+                        ),
+                        FlatButton(
+                          splashColor: Colors.white,
+                          color: Colors.white,
+                          onPressed: () {
+                            _tabController.animateTo(2);
+                            setState(() {
+                              _currentIndex = 2;
+                            });
+                          },
+                          child: _currentIndex == 2
+                              ? GradientText(
+                                  "Friend Groups",
+                                  gradient: LinearGradient(colors: [
+                                    Colors.blue.shade400,
+                                    Colors.blue.shade900,
+                                  ]),
+                                )
+                              : Text(
+                                  "Friend Groups",
+                                  style: TextStyle(fontSize: 16.5),
+                                ),
+                        )
+                      ],
+                    ),
+                  ])),
+            ),
+            backgroundColor: Colors.white,
+            body: _searchTerm == null
+                ? TrendingSegment()
+                : StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                    stream: Stream.fromFuture(_operation0(_searchTerm)),
+                    builder: (context, snapshot0) {
+                      // if (!snapshot.hasData)
+                      //   return Container(
+                      //       height: 4000, child: TrendingSegment());
+                      // if (snapshot.data.length == 0) {
+                      //   return Container(
+                      //       height: 4000, child: TrendingSegment());
+                      // }
+
+                      // if (_searchTerm.length <= 0) {
+                      //   return Container(
+                      //       height: 4000, child: TrendingSegment());
+                      // }
+
+                      List<AlgoliaObjectSnapshot> currSearchStuff0 =
+                          snapshot0.data;
+                      return Container(
+                          child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                              stream:
+                                  Stream.fromFuture(_operation(_searchTerm)),
+                              builder: (context, snapshot) {
+                                // if (!snapshot.hasData)
+                                //   return Container(
+                                //       height: 4000, child: TrendingSegment());
+                                // if (snapshot.data.length == 0) {
+                                //   return Container(
+                                //       height: 4000, child: TrendingSegment());
+                                // }
+
+                                // if (_searchTerm.length <= 0) {
+                                //   return Container(
+                                //       height: 4000, child: TrendingSegment());
+                                // }
+
+                                List<AlgoliaObjectSnapshot> currSearchStuff =
+                                    snapshot.data;
+
+                                return StreamBuilder<
+                                        List<AlgoliaObjectSnapshot>>(
+                                    stream: Stream.fromFuture(
+                                        _operation2(_searchTerm)),
+                                    builder: (context, snapshot2) {
+                                      if (_searchTerm == null) {
+                                        return Container(
+                                            height: 4000,
+                                            child: TrendingSegment());
+                                      }
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return LinearProgressIndicator(
+                                              backgroundColor:
+                                                  TextThemes.ndBlue,
+                                              valueColor:
+                                                  new AlwaysStoppedAnimation<
+                                                      Color>(Colors.blue[200]));
+                                        default:
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            // if (_searchTerm.length <= 0) {
+                                            //   return Container(
+                                            //       height: 4000, child: TrendingSegment());
+                                            // }
+
+                                            List<AlgoliaObjectSnapshot>
+                                                currSearchStuff2 =
+                                                snapshot2.data;
+
+                                            return Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.90,
+                                              child: TabBarView(
+                                                  controller: _tabController,
+                                                  children: [
+                                                    CustomScrollView(
+                                                      shrinkWrap: true,
+                                                      slivers: <Widget>[
+                                                        SliverList(
+                                                          delegate:
+                                                              SliverChildBuilderDelegate(
+                                                            (context, index) {
+                                                              return _searchTerm !=
+                                                                      null
+                                                                  ? DisplaySearchResult(
+                                                                      displayName:
+                                                                          currSearchStuff[index].data[
+                                                                              "displayName"],
+                                                                      email: currSearchStuff[index]
+                                                                              .data[
+                                                                          "email"],
+                                                                      proPic: currSearchStuff[index]
+                                                                              .data[
+                                                                          "photoUrl"],
+                                                                      userId: currSearchStuff[index]
+                                                                              .data[
+                                                                          "id"],
+                                                                      isAmbassador:
+                                                                          currSearchStuff[index].data[
+                                                                              "isAmbassador"])
+                                                                  : Container(
+                                                                      height:
+                                                                          4000,
+                                                                      child:
+                                                                          TrendingSegment());
+                                                            },
+                                                            childCount:
+                                                                currSearchStuff
+                                                                        .length ??
+                                                                    0,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    CustomScrollView(
+                                                      shrinkWrap: true,
+                                                      slivers: <Widget>[
+                                                        SliverList(
+                                                          delegate:
+                                                              SliverChildBuilderDelegate(
+                                                            (context, index) {
+                                                              return _searchTerm
+                                                                              .length !=
+                                                                          null &&
+                                                                      _searchTerm
+                                                                              .length >
+                                                                          0
+                                                                  ? DisplayMOOVResult(
+                                                                      title: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "title"],
+                                                                      description:
+                                                                          currSearchStuff2[index]
+                                                                              .data["description"],
+                                                                      type: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "type"],
+                                                                      image: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "image"],
+                                                                      userId: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "userId"],
+                                                                      postId: currSearchStuff2[index]
+                                                                              .data[
+                                                                          "postId"],
+                                                                    )
+                                                                  : Container(
+                                                                      height:
+                                                                          4000,
+                                                                      child:
+                                                                          TrendingSegment());
+                                                            },
+                                                            childCount:
+                                                                currSearchStuff2
+                                                                        .length ??
+                                                                    0,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    CustomScrollView(
+                                                      shrinkWrap: true,
+                                                      slivers: <Widget>[
+                                                        SliverList(
+                                                          delegate:
+                                                              SliverChildBuilderDelegate(
+                                                            (context, index) {
+                                                              return _searchTerm
+                                                                              .length !=
+                                                                          null &&
+                                                                      _searchTerm
+                                                                              .length >
+                                                                          0
+                                                                  ? DisplayGroupResult(
+                                                                      groupName:
+                                                                          currSearchStuff0[index]
+                                                                              .data["groupName"],
+                                                                      groupId: currSearchStuff0[index]
+                                                                              .data[
+                                                                          "groupId"],
+                                                                      groupPic:
+                                                                          currSearchStuff0[index]
+                                                                              .data["groupPic"],
+                                                                      members: currSearchStuff0[index]
+                                                                              .data[
+                                                                          "members"],
+                                                                    )
+                                                                  : Container(
+                                                                      height:
+                                                                          4000,
+                                                                      child:
+                                                                          TrendingSegment());
+                                                            },
+                                                            childCount:
+                                                                currSearchStuff0
+                                                                        .length ??
+                                                                    0,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ]),
+                                            );
+                                          }
+                                      }
+                                    });
+                              }));
+                    })));
   }
 }

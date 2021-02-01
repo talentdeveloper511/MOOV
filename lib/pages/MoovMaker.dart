@@ -3,11 +3,14 @@ import 'dart:io';
 import 'dart:math';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/pages/OtherGroup.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/progress.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
@@ -272,6 +275,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   int maxOccupancyInt;
   String venmo;
   int venmoInt;
+  bool noHeight = true;
+  List<String> groupList = [];
+  List groupMembers = [];
 
   String generateRandomString(int len) {
     var r = Random();
@@ -640,156 +646,414 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      child: SearchUsersPost(inviteesNameList)))
-                              .then(onGoBack);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 5),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      IconButton(
-                                        padding: EdgeInsets.all(0.0),
-                                        icon: Icon(
-                                          Icons.person_add,
-                                          size: 35,
-                                        ),
-                                        color: TextThemes.ndBlue,
-                                        splashColor:
-                                            Color.fromRGBO(220, 180, 57, 1.0),
-                                        onPressed: () {
-                                          Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                      type: PageTransitionType
-                                                          .bottomToTop,
-                                                      child: SearchUsersPost(
-                                                          inviteesNameList)))
-                                              .then(onGoBack);
-                                        },
+                      onTap: () {
+                        Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.bottomToTop,
+                                    child: SearchUsersPost(inviteesNameList)))
+                            .then(onGoBack);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    IconButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      icon: Icon(
+                                        Icons.person_add,
+                                        size: 35,
                                       ),
-                                      Text("Invite",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                    ],
-                                  ),
+                                      color: TextThemes.ndBlue,
+                                      splashColor:
+                                          Color.fromRGBO(220, 180, 57, 1.0),
+                                      onPressed: () {
+                                        Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: SearchUsersPost(
+                                                        inviteesNameList)))
+                                            .then(onGoBack);
+                                      },
+                                    ),
+                                    Text("Invite",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ],
                                 ),
-                                Container(
-                                  height: 100,
-                                  width: inviteesNameList.length == 0
-                                      ? 0
-                                      : MediaQuery.of(context).size.width * .74,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      physics: AlwaysScrollableScrollPhysics(),
-                                      itemCount: inviteesNameList.length,
-                                      itemBuilder: (_, index) {
-                                        return StreamBuilder(
-                                            stream: usersRef
-                                                .doc(inviteesNameList[index])
-                                                .snapshots(),
-                                            builder: (context, snapshot) {
-                                              // bool isLargePhone = Screen.diagonal(context) > 766;
+                              ),
+                              Container(
+                                height: 100,
+                                width: inviteesNameList.length == 0
+                                    ? 0
+                                    : MediaQuery.of(context).size.width * .74,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    itemCount: inviteesNameList.length,
+                                    itemBuilder: (_, index) {
+                                      bool hide = false;
+                                      if (!_isNumeric(
+                                          inviteesNameList[index])) {
+                                        hide = true;
+                                      }
+                                      return (hide == false)
+                                          ? StreamBuilder(
+                                              stream: usersRef
+                                                  .doc(inviteesNameList[index])
+                                                  .snapshots(),
+                                              builder: (context, snapshot) {
+                                                // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                              if (!snapshot.hasData)
-                                                return CircularProgressIndicator();
-                                              userName =
-                                                  snapshot.data['displayName'];
-                                              userPic =
-                                                  snapshot.data['photoUrl'];
+                                                if (!snapshot.hasData)
+                                                  return CircularProgressIndicator();
 
-                                              // userMoovs = snapshot.data['likedMoovs'];
+                                                userName = snapshot
+                                                    .data['displayName'];
+                                                userPic =
+                                                    snapshot.data['photoUrl'];
 
-                                              return Container(
-                                                height: 50,
-                                                child: Column(
-                                                  children: <Widget>[
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        OtherProfile(
-                                                                          inviteesNameList[
-                                                                              index],
-                                                                        )));
-                                                      },
-                                                      child: CircleAvatar(
-                                                        radius: 34,
-                                                        backgroundColor:
-                                                            TextThemes.ndGold,
+                                                // userMoovs = snapshot.data['likedMoovs'];
+
+                                                return Container(
+                                                  height: 50,
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          OtherProfile(
+                                                                            inviteesNameList[index],
+                                                                          )));
+                                                        },
                                                         child: CircleAvatar(
-                                                          backgroundImage:
-                                                              NetworkImage(
-                                                                  userPic),
-                                                          radius: 32,
+                                                          radius: 34,
                                                           backgroundColor:
-                                                              TextThemes.ndBlue,
+                                                              TextThemes.ndGold,
                                                           child: CircleAvatar(
-                                                            // backgroundImage: snapshot.data
-                                                            //     .documents[index].data['photoUrl'],
                                                             backgroundImage:
                                                                 NetworkImage(
                                                                     userPic),
                                                             radius: 32,
+                                                            backgroundColor:
+                                                                TextThemes
+                                                                    .ndBlue,
+                                                            child: CircleAvatar(
+                                                              // backgroundImage: snapshot.data
+                                                              //     .documents[index].data['photoUrl'],
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                      userPic),
+                                                              radius: 32,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5.0),
+                                                        child: Center(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        5.0),
+                                                            child: RichText(
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              textScaleFactor:
+                                                                  1.0,
+                                                              text: TextSpan(
+                                                                  style: TextThemes
+                                                                      .mediumbody,
+                                                                  children: [
+                                                                    TextSpan(
+                                                                        text:
+                                                                            userName,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontWeight: FontWeight.w500)),
+                                                                  ]),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              })
+                                          : Container();
+                                    }),
+                              ),
+                            ]),
+                      ),
+                    )),
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 23.0),
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemCount: inviteesNameList.length,
+                        itemBuilder: (_, index) {
+                          bool hide = false;
+                          if (_isNumeric(inviteesNameList[index])) {
+                            hide = true;
+                          }
+                          if (inviteesNameList.length == 0) {
+                            noHeight = true;
+                          }
+                          if (inviteesNameList.length != 0) {
+                            noHeight = false;
+                          }
+                          return (hide == false)
+                              ? StreamBuilder(
+                                  stream: groupsRef
+                                      .doc(inviteesNameList[index])
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    // bool isLargePhone = Screen.diagonal(context) > 766;
+
+                                    if (!snapshot.hasData)
+                                      return CircularProgressIndicator();
+
+                                    userName = snapshot.data['groupName'];
+                                    userPic = snapshot.data['groupPic'];
+                                    String groupId = snapshot.data['groupId'];
+                                    List members = snapshot.data['members'];
+
+                                    // userMoovs = snapshot.data['likedMoovs'];
+
+                                    return Container(
+                                      height: 50,
+                                      child: Column(
+                                        children: <Widget>[
+                                          GestureDetector(
+                                            onTap: () => Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        members.contains(
+                                                                currentUser.id)
+                                                            ? GroupDetail(
+                                                                groupId)
+                                                            : OtherGroup(
+                                                                groupId))),
+                                            child: Stack(
+                                                alignment: Alignment.center,
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    width: isLargePhone
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.3
+                                                        : MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.3,
+                                                    height: isLargePhone
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.09
+                                                        : MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.07,
+                                                    child: Container(
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl: userPic,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                      margin: EdgeInsets.only(
+                                                          left: 10,
+                                                          top: 0,
+                                                          right: 10,
+                                                          bottom: 0),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                          Radius.circular(10),
+                                                        ),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.5),
+                                                            spreadRadius: 5,
+                                                            blurRadius: 7,
+                                                            offset: Offset(0,
+                                                                3), // changes position of shadow
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    Padding(
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20)),
+                                                      gradient: LinearGradient(
+                                                        begin:
+                                                            Alignment.topCenter,
+                                                        end: Alignment
+                                                            .bottomCenter,
+                                                        colors: <Color>[
+                                                          Colors.black
+                                                              .withAlpha(0),
+                                                          Colors.black,
+                                                          Colors.black12,
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    child: Padding(
                                                       padding:
                                                           const EdgeInsets.all(
-                                                              5.0),
-                                                      child: Center(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      5.0),
-                                                          child: RichText(
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            textScaleFactor:
-                                                                1.0,
-                                                            text: TextSpan(
-                                                                style: TextThemes
-                                                                    .mediumbody,
-                                                                children: [
-                                                                  TextSpan(
-                                                                      text:
-                                                                          userName,
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          fontWeight:
-                                                                              FontWeight.w500)),
-                                                                ]),
-                                                          ),
+                                                              4.0),
+                                                      child: ConstrainedBox(
+                                                        constraints: BoxConstraints(
+                                                            maxWidth: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                .2),
+                                                        child: Text(
+                                                          userName,
+                                                          maxLines: 2,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Solway',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize:
+                                                                  isLargePhone
+                                                                      ? 11.0
+                                                                      : 9),
                                                         ),
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
-                                              );
-                                            });
-                                      }),
-                                ),
-                              ]),
-                        ))),
+                                                  ),
+                                                  // Positioned(
+                                                  //   bottom: isLargePhone ? 0 : 0,
+                                                  //   right: 55,
+                                                  //   child: Row(
+                                                  //     mainAxisAlignment:
+                                                  //         MainAxisAlignment
+                                                  //             .center,
+                                                  //     children: [
+                                                  //       Stack(children: [
+                                                  //         Padding(
+                                                  //             padding:
+                                                  //                 const EdgeInsets
+                                                  //                     .all(4.0),
+                                                  //             child: members
+                                                  //                         .length >
+                                                  //                     1
+                                                  //                 ? CircleAvatar(
+                                                  //                     radius:
+                                                  //                         25.0,
+                                                  //                     backgroundImage:
+                                                  //                         NetworkImage(
+                                                  //                       course[1][
+                                                  //                           'photoUrl'],
+                                                  //                     ),
+                                                  //                   )
+                                                  //                 : Container()),
+                                                  //         Padding(
+                                                  //             padding:
+                                                  //                 const EdgeInsets
+                                                  //                         .only(
+                                                  //                     top: 4,
+                                                  //                     left: 25.0),
+                                                  //             child: CircleAvatar(
+                                                  //               radius: 25.0,
+                                                  //               backgroundImage:
+                                                  //                   NetworkImage(
+                                                  //                 course[0][
+                                                  //                     'photoUrl'],
+                                                  //               ),
+                                                  //             )),
+                                                  //         Padding(
+                                                  //           padding:
+                                                  //               const EdgeInsets
+                                                  //                       .only(
+                                                  //                   top: 4,
+                                                  //                   left: 50.0),
+                                                  //           child: CircleAvatar(
+                                                  //             radius: 25.0,
+                                                  //             child:
+                                                  //                 members.length >
+                                                  //                         2
+                                                  //                     ? Text(
+                                                  //                         "+" +
+                                                  //                             (length.toString()),
+                                                  //                         style: TextStyle(
+                                                  //                             color:
+                                                  //                                 TextThemes.ndGold,
+                                                  //                             fontWeight: FontWeight.w500),
+                                                  //                       )
+                                                  //                     : Text(
+                                                  //                         (members
+                                                  //                             .length
+                                                  //                             .toString()),
+                                                  //                         style: TextStyle(
+                                                  //                             color:
+                                                  //                                 TextThemes.ndGold,
+                                                  //                             fontWeight: FontWeight.w500),
+                                                  //                       ),
+                                                  //             backgroundColor:
+                                                  //                 TextThemes
+                                                  //                     .ndBlue,
+                                                  //           ),
+                                                  //         ),
+                                                  //       ])
+                                                  //     ],
+                                                  //   ),
+                                                  // ),
+                                                ]),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  })
+                              : Container();
+                        }),
+                  ),
+                  height: noHeight ? 0 : 100,
+                  width: noHeight ? 0 : MediaQuery.of(context).size.width * .74,
+                ),
 
                 // Padding(
                 //   padding: const EdgeInsets.all(20.0),
@@ -929,6 +1193,22 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
+                              // for (int i = 0;
+                              //     i < inviteesNameList.length;
+                              //     i++) {
+                              //   if (!_isNumeric(inviteesNameList[i]) &&
+                              //       inviteesNameList.length > 0) {
+                              //     final DocumentSnapshot result =
+                              //         await groupsRef
+                              //             .doc(inviteesNameList[i])
+                              //             .get();
+                              //     result.data()['members'].forEach(
+                              //         (element) => groupList.add(element));
+                              //   }
+                              // }
+                              // print(groupList);
+                         
+
                               if (_image == null) {
                                 setState(() {
                                   noImage = true;
@@ -960,7 +1240,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         int.parse(maxOccupancyController.text);
                                   }
                                   if (venmoController.text.isNotEmpty) {
-                                    String x = venmoController.text.substring(1);
+                                    String x =
+                                        venmoController.text.substring(1);
                                     venmoInt = int.parse(x);
                                   }
 
@@ -1002,6 +1283,13 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
               ]),
             ),
     );
+  }
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return double.tryParse(result) != null;
   }
 
   @override

@@ -1073,7 +1073,7 @@ class PostOnFeed extends StatelessWidget {
                                         //splashRadius: 7.0,
                                         highlightColor: Colors.green,
                                         onPressed: () {
-                                          if (goingCount == maxOccupancy) {
+                                          if (goingCount == maxOccupancy && status != 3) {
                                             showMax(context);
                                           }
                                           if (invitees != null && status != 3 && goingCount < maxOccupancy) {

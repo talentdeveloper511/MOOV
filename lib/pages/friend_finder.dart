@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
@@ -407,7 +408,7 @@ class _FriendFinderState extends State<FriendFinder>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            SearchNoTrending()),
+                                          SearchBarWithHeader()),
                                     (Route<dynamic> route) => false,
                                   );
                                 },

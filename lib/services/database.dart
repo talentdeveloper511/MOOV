@@ -56,6 +56,7 @@ class Database {
       imageUrl,
       userId,
       postId}) async {
+        
     DocumentReference ref = await postsRef.doc(postId).set({
       'title': title,
       'type': type,

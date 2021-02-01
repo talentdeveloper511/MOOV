@@ -4,6 +4,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/Comment.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
+import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
@@ -105,7 +106,8 @@ class _PostDetailState extends State<PostDetail> {
                     color: Colors.white,
                     child: ListView(
                       children: <Widget>[
-                        _BannerImage(bannerImage, maxOccupancy, goingCount),
+                        _BannerImage(bannerImage, userId, postId, maxOccupancy,
+                            goingCount),
                         _NonImageContents(title, description, startDate,
                             address, userId, postId, course),
                       ],
@@ -118,9 +120,10 @@ class _PostDetailState extends State<PostDetail> {
 }
 
 class _BannerImage extends StatelessWidget {
-  String bannerImage;
+  String bannerImage, userId, postId;
   int maxOccupancy, goingCount;
-  _BannerImage(this.bannerImage, this.maxOccupancy, this.goingCount);
+  _BannerImage(this.bannerImage, this.userId, this.postId, this.maxOccupancy,
+      this.goingCount);
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +186,7 @@ class _BannerImage extends StatelessWidget {
               ),
             )
           : Text(""),
+      
     ]);
   }
 }
@@ -865,7 +869,7 @@ class Buttons extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                        if (goingCount == maxOccupancy) {
+                        if (goingCount == maxOccupancy && status != 3) {
                           showMax(context);
                         }
                         if (invitees != null &&

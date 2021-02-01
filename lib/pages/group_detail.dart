@@ -5,6 +5,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
+import 'package:MOOV/pages/notification_feed_group.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/NextMOOV.dart';
@@ -197,24 +198,7 @@ class _GroupDetailState extends State<GroupDetail> {
                               //         style: TextStyle(color: Colors.red),
                               //       )),
                               // ),
-                              IconButton(
-                                padding: EdgeInsets.all(5.0),
-                                icon: Icon(Icons.person_add),
-                                color: Colors.white,
-                                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.bottomToTop,
-                                          child: SearchUsersGroup(
-                                              groupName,
-                                              gid,
-                                              groupPic,
-                                              nextMOOV,
-                                              members)));
-                                },
-                              ),
+
                               FocusedMenuHolder(
                                 menuWidth:
                                     MediaQuery.of(context).size.width * 0.50,
@@ -235,6 +219,23 @@ class _GroupDetailState extends State<GroupDetail> {
                                     80.0, // Offset height to consider, for showing the menu item ( for Suggestions bottom navigation bar), so that the popup menu will be shown on top of selected item.
                                 menuItems: <FocusedMenuItem>[
                                   // Add Each FocusedMenuItem  for Menu Options
+
+                                  FocusedMenuItem(
+                                      title: Text("Add Friends"),
+                                      trailingIcon: Icon(Icons.person_add),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                type: PageTransitionType
+                                                    .bottomToTop,
+                                                child: SearchUsersGroup(
+                                                    groupName,
+                                                    gid,
+                                                    groupPic,
+                                                    nextMOOV,
+                                                    members)));
+                                      }),
 
                                   FocusedMenuItem(
                                       title: Text("Share"),
@@ -279,6 +280,26 @@ class _GroupDetailState extends State<GroupDetail> {
                                   ),
                                 ),
                               ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 8.0, right: 5),
+                                child: GestureDetector(
+                                  onTap: () {
+                                      Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationFeedGroup(gid)));
+                                  },
+                                  child: Column(children: [
+                                    NotifIconGroup(iconData: Icons.notifications_active,
+                                        ),
+                                    Text(
+                                      "GROUP",
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ]),
+                                ),
+                              )
                             ]),
                         body: SingleChildScrollView(
                           child: Container(
@@ -436,10 +457,9 @@ class _GroupDetailState extends State<GroupDetail> {
                                                   PageTransition(
                                                       type: PageTransitionType
                                                           .bottomToTop,
-                                                      child: SetMOOV(
-                                                          nextMOOV,
-                                                          gid,
+                                                      child: SearchSetMOOV(
                                                           members,
+                                                          gid,
                                                           snapshot2.data[
                                                               'groupName'])))
                                               .then(onGoBack);

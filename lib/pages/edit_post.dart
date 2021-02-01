@@ -8,6 +8,7 @@ import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/date_picker.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
@@ -62,6 +63,9 @@ class _EditPostState extends State<EditPost> {
   final titleController = TextEditingController();
   final addressController = TextEditingController();
   final descriptionController = TextEditingController();
+  final venmoController = TextEditingController();
+  final maxOccupancyController = TextEditingController();
+
   final startDateController = DatePicker();
   final format = DateFormat("EEE, MMM d,' at' h:mm a");
   File _image;
@@ -186,6 +190,12 @@ class _EditPostState extends State<EditPost> {
           String address = snapshot.data['address'];
           String visibility = snapshot.data['privacy'];
           String description = snapshot.data['description'];
+          String maxOccupancy = snapshot.data['maxOccupancy'].toString();
+          String venmo = snapshot.data['venmo'].toString();
+          int maxOccupancyInt;
+          int venmoInt;
+          bool negativeOccupancy = false;
+
           dynamic startDate = snapshot.data['startDate'];
           String image = snapshot.data['image'];
           privacyDropdownValue;
@@ -432,144 +442,252 @@ class _EditPostState extends State<EditPost> {
                                 //       ),
                                 //     )),
                                 Padding(
-                                    padding: EdgeInsets.all(20.0),
-                                    child: Container(
-                                      width: 250,
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButtonFormField(
-                                          icon: Icon(Icons.arrow_downward,
-                                              color: TextThemes.ndGold),
-                                          decoration: InputDecoration(
-                                            labelText: "Privacy",
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
+                                    padding: EdgeInsets.only(
+                                        left: 50,
+                                        top: 20,
+                                        right: 20,
+                                        bottom: 20),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .37,
+                                          child: ButtonTheme(
+                                            alignedDropdown: true,
+                                            child: DropdownButtonFormField(
+                                              icon: Icon(Icons.arrow_downward,
+                                                  color: TextThemes.ndGold),
+                                              decoration: InputDecoration(
+                                                labelText: "Privacy",
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                              ),
+                                              items: privacyList
+                                                  .map((String value) {
+                                                return new DropdownMenuItem<
+                                                    String>(
+                                                  value: value,
+                                                  child: new Text(value),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  privacyDropdownValue =
+                                                      newValue;
+                                                });
+                                              },
+                                              validator: (value) {
+                                                if (value.isEmpty) {
+                                                  return 'Who can come?';
+                                                }
+                                                return null;
+                                              },
                                             ),
                                           ),
-                                          items:
-                                              privacyList.map((String value) {
-                                            return new DropdownMenuItem<String>(
-                                              value: value,
-                                              child: new Text(value),
-                                            );
-                                          }).toList(),
-                                          onChanged: (String newValue) {
-                                            setState(() {
-                                              privacyDropdownValue = newValue;
-                                            });
-                                          },
-                                          validator: (value) {
-                                            if (value.isEmpty) {
-                                              return 'Who can come?';
-                                            }
-                                            return null;
-                                          },
                                         ),
-                                      ),
-                                    )),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 0.0,
-                                      left: 20,
-                                      right: 20,
-                                      bottom: 10),
-                                  child: Container(
-                                    width: 250,
-                                    child: ButtonTheme(
-                                      child: DateTimeField(
-                                        format: format,
-                                        keyboardType: TextInputType.datetime,
-                                        decoration: InputDecoration(
-                                            suffixIcon: Icon(
-                                              Icons.arrow_downward,
-                                              color: TextThemes.ndGold,
-                                            ),
-                                            labelText: 'Enter Start Time',
-                                            enabledBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        10.0)),
-                                            floatingLabelBehavior:
-                                                FloatingLabelBehavior.always),
-                                        onChanged: (DateTime newValue) {
-                                          setState(() {
-                                            currentValue =
-                                                currentValues; // = newValue;
-                                            //   newValue = currentValue;
-                                          });
-                                        },
-                                        onShowPicker:
-                                            (context, currentValue) async {
-                                          final date = await showDatePicker(
-                                            context: context,
-                                            firstDate: DateTime(1970),
-                                            currentDate: startDate.toDate(),
-                                            initialDate: startDate.toDate(),
-                                            lastDate: DateTime(2100),
-                                            builder: (BuildContext context,
-                                                Widget child) {
-                                              return Theme(
-                                                data:
-                                                    ThemeData.light().copyWith(
-                                                  primaryColor:
-                                                      TextThemes.ndGold,
-                                                  accentColor:
-                                                      TextThemes.ndGold,
-                                                  colorScheme:
-                                                      ColorScheme.light(
-                                                          primary: TextThemes
-                                                              .ndBlue),
-                                                  buttonTheme: ButtonThemeData(
-                                                      textTheme: ButtonTextTheme
-                                                          .primary),
-                                                ),
-                                                child: child,
-                                              );
-                                            },
-                                          );
-                                          if (date != null) {
-                                            final time = await showTimePicker(
-                                              context: context,
-                                              initialTime:
-                                                  TimeOfDay.fromDateTime(
-                                                      currentValue ??
-                                                          DateTime.now()),
-                                              builder: (BuildContext context,
-                                                  Widget child) {
-                                                return Theme(
-                                                  data: ThemeData.light()
-                                                      .copyWith(
-                                                    primaryColor:
-                                                        TextThemes.ndGold,
-                                                    accentColor:
-                                                        TextThemes.ndGold,
-                                                    colorScheme:
-                                                        ColorScheme.light(
-                                                            primary: TextThemes
-                                                                .ndBlue),
-                                                    buttonTheme:
-                                                        ButtonThemeData(
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .37,
+                                          child: ButtonTheme(
+                                            child: DateTimeField(
+                                              format: format,
+                                              keyboardType:
+                                                  TextInputType.datetime,
+                                              decoration: InputDecoration(
+                                                  suffixIcon: Icon(
+                                                    Icons.arrow_downward,
+                                                    color: TextThemes.ndGold,
+                                                  ),
+                                                  labelText: 'Enter Start Time',
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0)),
+                                                  floatingLabelBehavior:
+                                                      FloatingLabelBehavior
+                                                          .always),
+                                              onChanged: (DateTime newValue) {
+                                                setState(() {
+                                                  currentValue =
+                                                      currentValues; // = newValue;
+                                                  //   newValue = currentValue;
+                                                });
+                                              },
+                                              onShowPicker: (context,
+                                                  currentValue) async {
+                                                final date =
+                                                    await showDatePicker(
+                                                  context: context,
+                                                  firstDate: DateTime(1970),
+                                                  currentDate:
+                                                      startDate.toDate(),
+                                                  initialDate:
+                                                      startDate.toDate(),
+                                                  lastDate: DateTime(2100),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          Widget child) {
+                                                    return Theme(
+                                                      data: ThemeData.light()
+                                                          .copyWith(
+                                                        primaryColor:
+                                                            TextThemes.ndGold,
+                                                        accentColor:
+                                                            TextThemes.ndGold,
+                                                        colorScheme:
+                                                            ColorScheme.light(
+                                                                primary:
+                                                                    TextThemes
+                                                                        .ndBlue),
+                                                        buttonTheme: ButtonThemeData(
                                                             textTheme:
                                                                 ButtonTextTheme
                                                                     .primary),
-                                                  ),
-                                                  child: child,
+                                                      ),
+                                                      child: child,
+                                                    );
+                                                  },
                                                 );
+                                                if (date != null) {
+                                                  final time =
+                                                      await showTimePicker(
+                                                    context: context,
+                                                    initialTime:
+                                                        TimeOfDay.fromDateTime(
+                                                            currentValue ??
+                                                                DateTime.now()),
+                                                    builder:
+                                                        (BuildContext context,
+                                                            Widget child) {
+                                                      return Theme(
+                                                        data: ThemeData.light()
+                                                            .copyWith(
+                                                          primaryColor:
+                                                              TextThemes.ndGold,
+                                                          accentColor:
+                                                              TextThemes.ndGold,
+                                                          colorScheme:
+                                                              ColorScheme.light(
+                                                                  primary:
+                                                                      TextThemes
+                                                                          .ndBlue),
+                                                          buttonTheme: ButtonThemeData(
+                                                              textTheme:
+                                                                  ButtonTextTheme
+                                                                      .primary),
+                                                        ),
+                                                        child: child,
+                                                      );
+                                                    },
+                                                  );
+                                                  currentValues =
+                                                      DateTimeField.combine(
+                                                          date, time);
+                                                  return currentValues;
+                                                } else {
+                                                  return currentValue;
+                                                }
                                               },
-                                            );
-                                            currentValues =
-                                                DateTimeField.combine(
-                                                    date, time);
-                                            return currentValues;
-                                          } else {
-                                            return currentValue;
-                                          }
-                                        },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20, bottom: 20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .37,
+                                        child: ButtonTheme(
+                                          child: TextFormField(
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              onChanged: (text) {
+                                                setState(() {
+                                                  maxOccupancy = text;
+                                                });
+                                              },
+                                              controller:
+                                                  maxOccupancyController,
+                                              decoration: InputDecoration(
+                                                floatingLabelBehavior:
+                                                    FloatingLabelBehavior.never,
+                                                icon: Text("Max \nOccup."),
+                                                labelStyle:
+                                                    TextThemes.mediumbody,
+                                                labelText: "$maxOccupancy",
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                              ),
+                                              // The validator receives the text that the user has entered.
+                                              validator: numberValidator),
+                                        ),
                                       ),
-                                    ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .37,
+                                        child: ButtonTheme(
+                                          child: TextFormField(
+                                            onChanged: (text) {
+                                              setState(() {
+                                                venmo = text;
+                                              });
+                                            },
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: [
+                                              CurrencyTextInputFormatter(
+                                                decimalDigits: 0,
+                                                symbol: '\$',
+                                              )
+                                            ],
+                                            controller: venmoController,
+                                            decoration: InputDecoration(
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.never,
+                                              icon: Text("Venmo"),
+                                              labelStyle: TextThemes.mediumbody,
+                                              labelText: "\$$venmo",
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                            ),
+                                            // The validator receives the text that the user has entered.
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
+                                (negativeOccupancy == true)
+                                    ? Row(children: [
+                                        Text("Negative heads??",
+                                            style: TextStyle(color: Colors.red))
+                                      ])
+                                    : Text(""),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: RaisedButton(
@@ -606,6 +724,7 @@ class _EditPostState extends State<EditPost> {
                                         setState(() {
                                           isUploading = true;
                                         });
+
                                         if (_formKey.currentState != null) {
                                           if (_image != null) {
                                             firebase_storage.Reference ref =
@@ -655,6 +774,22 @@ class _EditPostState extends State<EditPost> {
                                             postsRef.doc(postId).update({
                                               "description":
                                                   descriptionController.text,
+                                            });
+                                          }
+                                          if (maxOccupancyController.text !=
+                                              "") {
+                                            maxOccupancyInt = int.parse(
+                                                maxOccupancyController.text);
+                                            postsRef.doc(postId).update({
+                                              "maxOccupancy": maxOccupancyInt,
+                                            });
+                                          }
+                                          if (venmoController.text != "") {
+                                            String x = venmoController.text
+                                                .substring(1);
+                                            venmoInt = int.parse(x);
+                                            postsRef.doc(postId).update({
+                                              "venmo": venmoInt,
                                             });
                                           }
 
@@ -741,6 +876,17 @@ class _EditPostState extends State<EditPost> {
                       ),
               ));
         });
+  }
+
+  String numberValidator(String value) {
+    if (value == null) {
+      return null;
+    }
+    final n = num.tryParse(value);
+    if (n < 0) {
+      return '"$value" is not a valid number';
+    } else
+      return null;
   }
 }
 
