@@ -246,7 +246,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                             _buildDivider(),
                                             ListTile(
                                               leading: Icon(
-                                                Icons.location_on,
+                                                Icons.data_usage_sharp,
                                                 color: TextThemes.ndBlue,
                                               ),
                                               title: Text("See Your Data"),
