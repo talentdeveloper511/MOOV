@@ -161,7 +161,7 @@ class _PollViewState extends State<PollView> {
                           height: 100,
                           width: voters.length == 0
                               ? 0
-                              : MediaQuery.of(context).size.width * .74,
+                              : MediaQuery.of(context).size.width * .6,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               physics: AlwaysScrollableScrollPhysics(),
@@ -249,7 +249,7 @@ class _PollViewState extends State<PollView> {
                           height: 100,
                           width: voters.length == 0
                               ? 0
-                              : MediaQuery.of(context).size.width * .74,
+                              : MediaQuery.of(context).size.width * .6,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               physics: AlwaysScrollableScrollPhysics(),
