@@ -18,27 +18,23 @@ import 'group_detail.dart';
 import 'home.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-
 class NotificationFeedGroup extends StatefulWidget {
   String groupId;
 
   NotificationFeedGroup(this.groupId);
-
 
   @override
   State<StatefulWidget> createState() {
     return _NotificationFeedGroupState(this.groupId);
   }
 }
+
 class _NotificationFeedGroupState extends State<NotificationFeedGroup> {
   String docId, groupId;
   List<String> docIds;
   bool gotNotifs = true;
-    _NotificationFeedGroupState(this.groupId);
-      @override
-
-
-
+  _NotificationFeedGroupState(this.groupId);
+  @override
   getNotificationFeed() async {
     QuerySnapshot snapshot = await notificationFeedRef
         .doc(groupId)
@@ -543,7 +539,6 @@ class NotificationFeedItem extends StatelessWidget {
 
 class NotifIconGroup extends StatelessWidget {
   final IconData iconData;
-  final int notifs;
   final VoidCallback onTap;
   int notificationCount;
   String gid;
@@ -552,7 +547,6 @@ class NotifIconGroup extends StatelessWidget {
     Key key,
     this.onTap,
     this.gid,
-    this.notifs,
     @required this.iconData,
     this.notificationCount,
   }) : super(key: key);
@@ -562,10 +556,8 @@ class NotifIconGroup extends StatelessWidget {
     final GoogleSignInAccount user = googleSignIn.currentUser;
 
     return StreamBuilder(
-        stream: notificationFeedRef
-            .doc(gid)
-            .collection('feedItems')
-            .snapshots(),
+        stream:
+            notificationFeedRef.doc(gid).collection('feedItems').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return CircularProgressIndicator();
           if (!snapshot.hasData) return CircularProgressIndicator();
@@ -575,7 +567,7 @@ class NotifIconGroup extends StatelessWidget {
             onTap: onTap,
             child: Container(
               width: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -586,7 +578,7 @@ class NotifIconGroup extends StatelessWidget {
                           right: 0,
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 2),
+                                horizontal: 6, vertical: 0),
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle, color: Colors.red),
                             alignment: Alignment.center,

@@ -292,10 +292,11 @@ class _GroupDetailState extends State<GroupDetail> {
                                   },
                                   child: Column(children: [
                                     NotifIconGroup(iconData: Icons.notifications_active,
+                                    gid: gid,
                                         ),
                                     Text(
                                       "GROUP",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.white, fontSize: 10),
                                     )
                                   ]),
                                 ),

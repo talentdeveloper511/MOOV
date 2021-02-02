@@ -43,7 +43,7 @@ class _EditPostState extends State<EditPost> {
     "Sports",
     "Shows",
     "Virtual",
-    "Dorm Life",
+    "Recreation",
     "Shopping",
     "Games",
     "Music",
@@ -725,6 +725,7 @@ class _EditPostState extends State<EditPost> {
                                           isUploading = true;
                                         });
 
+
                                         if (_formKey.currentState != null) {
                                           if (_image != null) {
                                             firebase_storage.Reference ref =
@@ -740,23 +741,21 @@ class _EditPostState extends State<EditPost> {
                                             //         .child("images/" +
                                             //             titleController.text);
 
-                                            firebase_storage.UploadTask
-                                                uploadTask;
+                                            firebase_storage.UploadTask uploadTask;
 
                                             uploadTask = ref.putFile(_image);
 
                                             firebase_storage
-                                                .UploadTask /*!*/ task;
+                                                .TaskSnapshot /*!*/ taskSnapshot = 
 
-                                            firebase_storage.TaskSnapshot
-                                                taskSnapshot = await task;
-                                            if (task.snapshot.state ==
+                                           await uploadTask;
+                                            if (uploadTask.snapshot.state ==
                                                 firebase_storage
                                                     .TaskState.success) {
                                               print(
                                                   "added to Firebase Storage");
                                               final String downloadUrl =
-                                                  await ref.getDownloadURL();
+                                                  await taskSnapshot.ref.getDownloadURL();
                                               postsRef.doc(postId).update({
                                                 "image": downloadUrl,
                                               });

@@ -144,6 +144,7 @@ flutter:
     - lib/assets/govbutton1.png
     - lib/assets/massbutton1.png
     - lib/assets/dorm1.png
+    - lib/assets/rec.png
     - lib/assets/charitybutton1.png
     - lib/assets/tailgatebutton1.png
     - lib/assets/gamesbutton1.png

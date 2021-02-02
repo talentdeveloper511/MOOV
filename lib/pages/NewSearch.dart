@@ -8,6 +8,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:algolia/algolia.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,6 +35,7 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar>
     with SingleTickerProviderStateMixin {
+  bool showTabs = false;
   // TabController to control and switch tabs
   TabController _tabController;
   int _currentIndex = 0;
@@ -47,6 +49,19 @@ class _SearchBarState extends State<SearchBar>
 
   final TextEditingController searchController = TextEditingController();
   final textFieldFocusNode = FocusNode();
+  void _onFocusChange() {
+    if (textFieldFocusNode.hasFocus) {
+      setState(() {
+        showTabs = true;
+      });
+    } else {
+      setState(() {
+        showTabs = false;
+      });
+    }
+
+    // print("Focus: " + textFieldFocusNode.hasFocus.toString());
+  }
 
   final Algolia _algoliaApp = AlgoliaApplication.algolia;
   String _searchTerm;
@@ -83,6 +98,8 @@ class _SearchBarState extends State<SearchBar>
   @override
   void initState() {
     super.initState();
+    textFieldFocusNode.addListener(_onFocusChange);
+
     _tabController =
         new TabController(vsync: this, length: 3, initialIndex: _currentIndex);
     _tabController.animation
@@ -110,7 +127,7 @@ class _SearchBarState extends State<SearchBar>
         child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
-              toolbarHeight: 96,
+              toolbarHeight: showTabs == true ? 96 : 50,
               bottom: PreferredSize(
                   preferredSize: null,
                   child: Column(children: <Widget>[
@@ -153,83 +170,86 @@ class _SearchBarState extends State<SearchBar>
                                     color: Colors.black,
                                   ))),
                         )),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        // Sign In Button
-                        new FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(0);
-                            setState(() {
-                              _currentIndex = (_tabController.animation.value)
-                                  .round(); //_tabController.animation.value returns double
+                    showTabs == true
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              // Sign In Button
+                              new FlatButton(
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                onPressed: () {
+                                  _tabController.animateTo(0);
+                                  setState(() {
+                                    _currentIndex = (_tabController
+                                            .animation.value)
+                                        .round(); //_tabController.animation.value returns double
 
-                              _currentIndex = 0;
-                            });
-                          },
-                          child: _currentIndex == 0
-                              ? GradientText(
-                                  '     People  ',
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "     People  ",
-                                  style: TextStyle(fontSize: 16.5),
-                                ),
-                        ),
-                        // Sign Up Button
-                        new FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(1);
-                            setState(() {
-                              _currentIndex = 1;
-                            });
-                          },
-                          child: _currentIndex == 1
-                              ? GradientText(
-                                  "    MOOVs",
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "    MOOVs",
-                                  style: TextStyle(fontSize: 16.5),
-                                ),
-                        ),
-                        FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(2);
-                            setState(() {
-                              _currentIndex = 2;
-                            });
-                          },
-                          child: _currentIndex == 2
-                              ? GradientText(
-                                  "Friend Groups",
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "Friend Groups",
-                                  style: TextStyle(fontSize: 16.5),
-                                ),
-                        )
-                      ],
-                    ),
+                                    _currentIndex = 0;
+                                  });
+                                },
+                                child: _currentIndex == 0
+                                    ? GradientText(
+                                        '     People  ',
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]),
+                                      )
+                                    : Text(
+                                        "     People  ",
+                                        style: TextStyle(fontSize: 16.5),
+                                      ),
+                              ),
+                              // Sign Up Button
+                              new FlatButton(
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                onPressed: () {
+                                  _tabController.animateTo(1);
+                                  setState(() {
+                                    _currentIndex = 1;
+                                  });
+                                },
+                                child: _currentIndex == 1
+                                    ? GradientText(
+                                        "    MOOVs",
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]),
+                                      )
+                                    : Text(
+                                        "    MOOVs",
+                                        style: TextStyle(fontSize: 16.5),
+                                      ),
+                              ),
+                              FlatButton(
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                onPressed: () {
+                                  _tabController.animateTo(2);
+                                  setState(() {
+                                    _currentIndex = 2;
+                                  });
+                                },
+                                child: _currentIndex == 2
+                                    ? GradientText(
+                                        "Friend Groups",
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]),
+                                      )
+                                    : Text(
+                                        "Friend Groups",
+                                        style: TextStyle(fontSize: 16.5),
+                                      ),
+                              )
+                            ],
+                          )
+                        : Container(),
                   ])),
             ),
             backgroundColor: Colors.white,
@@ -280,9 +300,7 @@ class _SearchBarState extends State<SearchBar>
                                         _operation2(_searchTerm)),
                                     builder: (context, snapshot2) {
                                       if (_searchTerm == null) {
-                                        return Container(
-                                            height: 4000,
-                                            child: TrendingSegment());
+                                        return linearProgress();
                                       }
                                       switch (snapshot.connectionState) {
                                         case ConnectionState.waiting:
@@ -896,8 +914,6 @@ class DisplayGroupResult extends StatelessWidget {
     }
   }
 }
-
-
 
 class GradientText extends StatelessWidget {
   GradientText(

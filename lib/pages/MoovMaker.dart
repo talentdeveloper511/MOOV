@@ -238,7 +238,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
     "Sports",
     "Shows",
     "Virtual",
-    "Dorm Life",
+    "Recreation",
     "Shopping",
     "Games",
     "Music",
@@ -1207,7 +1207,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               //   }
                               // }
                               // print(groupList);
-                         
 
                               if (_image == null) {
                                 setState(() {

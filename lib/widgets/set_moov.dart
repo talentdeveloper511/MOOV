@@ -178,13 +178,13 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
                                           style: TextThemes.mediumbody,
                                           children: [
                                             TextSpan(
-                                                text: "Invite 'em,",
+                                                text: "Suggest the",
                                                 style: TextStyle(
                                                     fontSize: 30,
                                                     fontWeight:
                                                         FontWeight.w300)),
                                             TextSpan(
-                                                text: " now",
+                                                text: " MOOV",
                                                 style: TextStyle(
                                                     fontSize: 30,
                                                     fontWeight:
