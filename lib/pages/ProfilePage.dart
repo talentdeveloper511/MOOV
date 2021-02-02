@@ -3,6 +3,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
+import 'package:MOOV/pages/SettingsPage.dart';
 import 'package:MOOV/pages/contactsPage.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/home.dart';
@@ -113,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top: 30.0, bottom: 10),
+                        padding: const EdgeInsets.only(top: 30.0, bottom: 0),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -139,7 +140,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                        padding: const EdgeInsets.only(right: 35.0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                                                child: SizedBox(height: 18,
+                          child: GestureDetector(
+                            onTap: () =>  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => SettingsPage())),
+                            child: Icon(Icons.settings)),),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,

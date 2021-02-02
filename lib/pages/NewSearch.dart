@@ -357,11 +357,7 @@ class _SearchBarState extends State<SearchBar>
                                                                       isAmbassador:
                                                                           currSearchStuff[index].data[
                                                                               "isAmbassador"])
-                                                                  : Container(
-                                                                      height:
-                                                                          4000,
-                                                                      child:
-                                                                          TrendingSegment());
+                                                                  : Container();
                                                             },
                                                             childCount:
                                                                 currSearchStuff
@@ -378,12 +374,8 @@ class _SearchBarState extends State<SearchBar>
                                                           delegate:
                                                               SliverChildBuilderDelegate(
                                                             (context, index) {
-                                                              return _searchTerm
-                                                                              .length !=
-                                                                          null &&
-                                                                      _searchTerm
-                                                                              .length >
-                                                                          0
+                                                              return _searchTerm !=
+                                                                      null
                                                                   ? DisplayMOOVResult(
                                                                       title: currSearchStuff2[index]
                                                                               .data[
@@ -404,11 +396,7 @@ class _SearchBarState extends State<SearchBar>
                                                                               .data[
                                                                           "postId"],
                                                                     )
-                                                                  : Container(
-                                                                      height:
-                                                                          4000,
-                                                                      child:
-                                                                          TrendingSegment());
+                                                                  : Container();
                                                             },
                                                             childCount:
                                                                 currSearchStuff2
@@ -426,11 +414,8 @@ class _SearchBarState extends State<SearchBar>
                                                               SliverChildBuilderDelegate(
                                                             (context, index) {
                                                               return _searchTerm
-                                                                              .length !=
-                                                                          null &&
-                                                                      _searchTerm
-                                                                              .length >
-                                                                          0
+                                                                               !=
+                                                                          null
                                                                   ? DisplayGroupResult(
                                                                       groupName:
                                                                           currSearchStuff0[index]
@@ -445,11 +430,7 @@ class _SearchBarState extends State<SearchBar>
                                                                               .data[
                                                                           "members"],
                                                                     )
-                                                                  : Container(
-                                                                      height:
-                                                                          4000,
-                                                                      child:
-                                                                          TrendingSegment());
+                                                                  : Container();
                                                             },
                                                             childCount:
                                                                 currSearchStuff0
@@ -1292,13 +1273,9 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                                                               .data[
                                                                           "id"],
                                                                       isAmbassador:
-                                                                          currSearchStuff[index].data[
-                                                                              "isAmbassador"])
-                                                                  : Container(
-                                                                      height:
-                                                                          4000,
-                                                                      child:
-                                                                          TrendingSegment());
+                                                                          currSearchStuff[index]
+                                                                              .data["isAmbassador"])
+                                                                  : Container();
                                                             },
                                                             childCount:
                                                                 currSearchStuff
