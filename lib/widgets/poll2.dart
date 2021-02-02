@@ -45,7 +45,9 @@ class _PollViewState extends State<PollView> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('notreDame').doc('data')
+        stream: FirebaseFirestore.instance
+            .collection('notreDame')
+            .doc('data')
             .collection('poll')
             .doc('jan12')
             .snapshots(),
@@ -122,7 +124,9 @@ class _PollViewState extends State<PollView> {
                               x = choice;
                             });
 
-                            FirebaseFirestore.instance.collection('notreDame').doc('data')
+                            FirebaseFirestore.instance
+                                .collection('notreDame')
+                                .doc('data')
                                 .collection('poll')
                                 .doc('jan12')
                                 .set({
@@ -161,7 +165,9 @@ class _PollViewState extends State<PollView> {
                           height: 100,
                           width: voters.length == 0
                               ? 0
-                              : MediaQuery.of(context).size.width * .6,
+                              : isLargePhone
+                                  ? MediaQuery.of(context).size.width * .6
+                                  : MediaQuery.of(context).size.width * .53,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               physics: AlwaysScrollableScrollPhysics(),
@@ -175,9 +181,7 @@ class _PollViewState extends State<PollView> {
                                 var p = voters.keys.toList();
 
                                 return StreamBuilder(
-                                    stream: usersRef
-                                        .doc(p[index])
-                                        .snapshots(),
+                                    stream: usersRef.doc(p[index]).snapshots(),
                                     builder: (context, snapshot2) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
 
@@ -249,7 +253,9 @@ class _PollViewState extends State<PollView> {
                           height: 100,
                           width: voters.length == 0
                               ? 0
-                              : MediaQuery.of(context).size.width * .6,
+                              : isLargePhone
+                                  ? MediaQuery.of(context).size.width * .6
+                                  : MediaQuery.of(context).size.width * .53,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               physics: AlwaysScrollableScrollPhysics(),
@@ -263,9 +269,7 @@ class _PollViewState extends State<PollView> {
                                 var w = voters.keys.toList();
 
                                 return StreamBuilder(
-                                    stream: usersRef
-                                        .doc(w[index])
-                                        .snapshots(),
+                                    stream: usersRef.doc(w[index]).snapshots(),
                                     builder: (context, snapshot3) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
 
