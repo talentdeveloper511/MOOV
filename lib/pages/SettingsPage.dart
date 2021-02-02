@@ -1,8 +1,8 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/edit_profile.dart';
-import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/sign_in.dart' as x;
+import 'package:MOOV/pages/home.dart' as home;
+import 'package:MOOV/pages/sign_in.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,7 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => Home()),
+                    MaterialPageRoute(builder: (context) => home.Home()),
                     (Route<dynamic> route) => false,
                   );
                 },
@@ -94,8 +94,10 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream:
-              usersRef.orderBy('score', descending: true).limit(50).snapshots(),
+          stream: home.usersRef
+              .orderBy('score', descending: true)
+              .limit(50)
+              .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -118,60 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
             } else {
               var prize;
 
-              return StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('notreDame')
-                      .doc('data')
-                      .collection('leaderboard')
-                      .doc('prizes')
-                      .snapshots(),
-                  builder: (context, snapshot2) {
-                    if (!snapshot2.hasData) return CircularProgressIndicator();
-
-                    for (int i = 0; i < snapshot.data.docs.length; i++) {
-                      if (snapshot.data.docs[i]['id'] == currentUser.id) {
-                        myIndex = i;
-                      }
-                    }
-
-                    var prize = snapshot2.data['prize'];
-                    return
-                        // Container(
-                        //   child: Column(
-                        //     children: [
-                        //       Padding(
-                        //           padding: const EdgeInsets.all(8.0),
-                        //           child: Icon(
-                        //             Icons.settings,
-                        //             color: TextThemes.ndBlue,
-                        //             size: 50,
-                        //           )),
-                        //       Padding(
-                        //         padding: const EdgeInsets.only(bottom: 8.0),
-                        //         child:
-                        //             Text("Settings", style: TextThemes.headline1),
-                        //       ),
-                        //       Text(
-                        //         "Your MOOV, your way",
-                        //       ),
-                        //       Padding(
-                        //         padding: const EdgeInsets.all(15.0),
-                        //         child: Row(
-                        //           mainAxisAlignment: MainAxisAlignment.center,
-                        //           children: [
-                        //             ClipOval(
-                        //                 child: Material(
-                        //                     child: InkWell(
-                        //                         splashColor: TextThemes
-                        //                             .ndGold, // inkwell color
-                        //                         child: SizedBox(
-                        //                           width: 20,
-                        //                           height: 10,
-                        //                         )))),
-                        //           ],
-                        //         ),
-                        //       ),]))
-                        Scaffold(
+              return Scaffold(
                       body: Stack(
                         fit: StackFit.expand,
                         children: <Widget>[
@@ -311,7 +260,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               height: 80,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: TextThemes.ndBlue,
+                                color: Colors.red,
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -332,12 +281,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         ],
                       ),
                     );
-                  });
-            }
-          },
-        ),
-      ),
-    );
+                  }
+        })));
+         
   }
 
   Container _buildDivider() {
@@ -364,8 +310,10 @@ class _SettingsPageState extends State<SettingsPage> {
               child:
                   Text("Yes, sign me out", style: TextStyle(color: Colors.red)),
               onPressed: () {
-                x.googleSignIn.signOut();
-                Navigator.of(context).pop(true);
+                home.googleSignIn.signOut();
+
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => home.Home()));
               }),
           CupertinoDialogAction(
             child: Text("Nah, my mistake"),

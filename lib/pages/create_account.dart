@@ -93,15 +93,24 @@ class _CreateAccountState extends State<CreateAccount> {
           Container(
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 25.0, bottom: 10),
-                  child: Center(
-                    child: Text(
-                      "Tell us about you",
-                      style: TextStyle(fontSize: 25.0),
-                    ),
+                   Container(
+                          child: Container(
+                    child: Column(children: [
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.accessibility_new,
+                        color: TextThemes.ndBlue,
+                        size: 50,
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text("Welcome to MOOV", style: TextThemes.headline1),
                   ),
-                ),
+                  Text(
+                    "Tell us about you",
+                  ),
+                ])),),
                 Padding(
                   padding: EdgeInsets.only(top: 16.0, left: 50, right: 50),
                   child: Container(
@@ -109,6 +118,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       key: _formKey,
                       autovalidate: true,
                       child: TextFormField(
+                        autocorrect: false,
                         textCapitalization: TextCapitalization.words,
                         validator: (val) {
                           if (val.trim().length < 2 || val.isEmpty) {
@@ -216,7 +226,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 50),
                 Text("Optional Details"),
                 Padding(
                   padding: EdgeInsets.all(16.0),
@@ -231,6 +241,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             width: MediaQuery.of(context).size.width * .4,
                             child: ButtonTheme(
                               child: TextFormField(
+                                autocorrect: false,
                                 validator: (val) {
                                   if (val.trim().length > 2 &&
                                       !val.contains("@nd.edu")) {
@@ -260,7 +271,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             width: MediaQuery.of(context).size.width * .4,
                             child: ButtonTheme(
                               child: TextFormField(
-                                
+                                autocorrect: false,
                                 onSaved: (val) => venmoUsername = val,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
@@ -275,6 +286,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ],
                   ),
                 ),
+                SizedBox(height: 30),
                 GestureDetector(
                   onTap: submit,
                   child: Padding(
