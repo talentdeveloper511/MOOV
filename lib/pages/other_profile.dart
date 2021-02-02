@@ -348,24 +348,26 @@ class _OtherProfileState extends State<OtherProfile> {
                         ),
                       ],
                     ),
-                    venmo != null && venmo != "" ?
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('lib/assets/venmo-icon.png', height: 35),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "@" +venmo,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 16),
-                              ),
+                    venmo != null && venmo != ""
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 30.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('lib/assets/venmo-icon.png',
+                                    height: 35),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Venmo: @" + venmo,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ) : Text(""),
+                          )
+                        : Text(""),
                     snapshot.data['bio'] != "Create a bio here"
                         ? Card(
                             margin: EdgeInsets.only(
@@ -498,7 +500,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                 )
                               : RaisedButton(
                                   padding: const EdgeInsets.all(12.0),
-                                  color: Color.fromRGBO(0, 100, 0, 1.0),
+                                  color: Colors.green,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(3.0))),
