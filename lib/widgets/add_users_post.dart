@@ -368,7 +368,6 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                                                       .length >
                                                                   0
                                                           ? InviteGroup(
-                                                             
                                                               currSearchStuff0[
                                                                           index]
                                                                       .data[
@@ -920,8 +919,8 @@ class InviteGroup extends StatefulWidget {
   List<dynamic> members;
   List<String> invitees;
 
-  InviteGroup(this.gname, this.gid, this.pic, this.moov,
-      this.members, this.invitees);
+  InviteGroup(
+      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
 
   @override
   _InviteGroupState createState() => _InviteGroupState(
@@ -935,7 +934,7 @@ class _InviteGroupState extends State<InviteGroup> {
   List<String> invitees;
 
   _InviteGroupState(
-   this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
+      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
 
   @override
   Widget build(BuildContext context) {
@@ -1073,7 +1072,7 @@ class _InviteGroupState extends State<InviteGroup> {
                               padding: const EdgeInsets.all(4.0),
                               child: members.length > 1
                                   ? CircleAvatar(
-                                      radius: 25.0,
+                                      radius: isLargePhone ? 25 : 15.0,
                                       backgroundImage: NetworkImage(
                                         course[1]['photoUrl'],
                                       ),
@@ -1083,7 +1082,7 @@ class _InviteGroupState extends State<InviteGroup> {
                               padding:
                                   const EdgeInsets.only(top: 4, left: 25.0),
                               child: CircleAvatar(
-                                radius: 25.0,
+                                      radius: isLargePhone ? 25 : 15.0,
                                 backgroundImage: NetworkImage(
                                   course[0]['photoUrl'],
                                 ),
@@ -1091,7 +1090,7 @@ class _InviteGroupState extends State<InviteGroup> {
                           Padding(
                             padding: const EdgeInsets.only(top: 4, left: 50.0),
                             child: CircleAvatar(
-                              radius: 25.0,
+                                      radius: isLargePhone ? 25 : 15.0,
                               child: members.length > 2
                                   ? Text(
                                       "+" + (length.toString()),
@@ -1157,7 +1156,6 @@ class _InviteGroupState extends State<InviteGroup> {
                                 ),
                               )),
                         ),
-                  
                 ]),
               ),
             );

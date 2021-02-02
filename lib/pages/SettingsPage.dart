@@ -311,9 +311,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   Text("Yes, sign me out", style: TextStyle(color: Colors.red)),
               onPressed: () {
                 home.googleSignIn.signOut();
-
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => home.Home()));
+   Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => home.Home()),
+                      (Route<dynamic> route) => false,
+                    );
               }),
           CupertinoDialogAction(
             child: Text("Nah, my mistake"),
