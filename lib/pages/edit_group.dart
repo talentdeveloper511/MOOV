@@ -167,7 +167,7 @@ class _EditGroupState extends State<EditGroup> {
   leaveGroup() {
     if (members.length == 1) {
       Database().leaveGroup(currentUser.id, displayName, gid);
-      Database().destroyGroup(gid);
+      Database().destroyGroup(gid, displayName);
     } else {
       Database().leaveGroup(currentUser.id, displayName, gid);
     }

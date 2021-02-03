@@ -64,7 +64,7 @@ class _OtherGroupState extends State<OtherGroup> {
             isDefaultAction: true,
             child: Text("Ask", style: TextStyle(color: Colors.green)),
             onPressed: () {
-              leaveGroup();
+             
               Navigator.of(context).pop(true);
             },
           ),
@@ -588,18 +588,7 @@ class _OtherGroupState extends State<OtherGroup> {
     );
   }
 
-  leaveGroup() {
-    if (members.length == 1) {
-      Database().leaveGroup(currentUser.id, groupName, gid);
-      Database().destroyGroup(gid);
-    } else {
-      Database().leaveGroup(currentUser.id, groupName, gid);
-    }
-    Navigator.pop(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
-  }
+  
 }
 
 class Suggestions extends StatefulWidget {

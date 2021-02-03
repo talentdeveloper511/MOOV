@@ -390,25 +390,29 @@ class Database {
     //   });
     // });
 
-    FirebaseFirestore.instance ///this is for deleting related notifications
+    FirebaseFirestore.instance
+
+        ///this is for deleting related notifications
         .collectionGroup("feedItems")
         .where("postId", isEqualTo: postId)
         .get()
-          .then((snapshot) {
-            for (DocumentSnapshot ds in snapshot.docs) {
-              ds.reference.delete();
-            }
-          });
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
 
-           FirebaseFirestore.instance ///this is for deleted related suggested moovs
+    FirebaseFirestore.instance
+
+        ///this is for deleted related suggested moovs
         .collectionGroup("suggestedMOOVs")
         .where("nextMOOV", isEqualTo: postId)
         .get()
-          .then((snapshot) {
-            for (DocumentSnapshot ds in snapshot.docs) {
-              ds.reference.delete();
-            }
-          });
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
 
     postsRef.doc(postId).get().then((doc) {
       if (doc.exists) {
@@ -534,10 +538,24 @@ class Database {
     });
   }
 
-  Future<void> destroyGroup(gid) async {
-    return dbRef.runTransaction((transaction) async {
-      dbRef.doc('notreDame/data/friendGroups/$gid').delete();
+  Future<void> destroyGroup(gid, groupName) async {
+    String filePath = "images/group" + groupName;
+
+    firebase_storage.Reference ref =
+        firebase_storage.FirebaseStorage.instance.ref().child(filePath);
+    
+    groupsRef.doc(gid).get().then((doc) {
+      if (doc.exists) {
+        // _storage.ref().child(filePath).delete();
+        ref.delete();
+
+        doc.reference.delete();
+      }
     });
+
+    // return dbRef.runTransaction((transaction) async {
+    //   dbRef.doc('notreDame/data/friendGroups/$gid').delete();
+    // });
   }
 
   Future<void> sendChat(user, message, gid) async {

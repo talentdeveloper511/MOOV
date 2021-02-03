@@ -842,7 +842,7 @@ class _GroupDetailState extends State<GroupDetail> {
   leaveGroup() {
     if (members.length == 1) {
       Database().leaveGroup(currentUser.id, groupName, gid);
-      Database().destroyGroup(gid);
+      Database().destroyGroup(gid, groupName);
     } else {
       Database().leaveGroup(currentUser.id, groupName, gid);
     }
