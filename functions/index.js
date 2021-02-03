@@ -181,6 +181,94 @@ exports.onCreateActivityFeedItem = functions.firestore
       }
     });
 
+exports.onCreateGroupFeedItem = functions.firestore
+    .document("{college}/data/notificationFeed/{groupId}/feedItems/{activityFeedItem}")
+    .onCreate(async (snapshot, context) => {
+      console.log("Activity Feed Item Created", snapshot.data());
+
+      // 1) Get user connected to the feed
+      const groupId = context.params.groupId;
+      const college = context.params.college;
+
+      const groupRef = admin.firestore().doc(`${college}/data/friendGroups/${groupId}`);
+      const doc = await groupRef.get();
+      const name = doc.data().groupName;
+      let userId;
+
+      // 2) check if they have a notification token
+      const members = doc.data().members;
+      const createdActivityFeedItem = snapshot.data();
+      for (let i = 0; i < members.length; i++) {
+        const userRef = admin.firestore().doc(`${college}/data/users/${members[i]}`);
+        const userdoc = await userRef.get();
+        userId = userdoc.data().id;
+        if (userdoc.data().androidNotificationToken) {
+          sendNotification(userdoc.data().androidNotificationToken, createdActivityFeedItem);
+        } else {
+          console.log("No token for user, cannot send notification");
+        }
+      }
+      /**
+       * Adds two numbers together.
+       * @param {string} androidNotificationToken The first number.
+       * @param {string} activityFeedItem The second number.
+       * @return {void} The sum of the two numbers.
+       */
+      function sendNotification(androidNotificationToken, activityFeedItem) {
+        let body;
+        let title;
+
+        // 3) switch body value based off of notification type
+        switch (activityFeedItem.type) {
+          case "invite":
+            title = `${name}`;
+            body = `${activityFeedItem.username} has invited you guys to ${activityFeedItem.title}`;
+            break;
+          case "going":
+            title = `${activityFeedItem.title}`;
+            body = `${activityFeedItem.username} is going`;
+            break;
+          case "friendGroup":
+            title = `${activityFeedItem.username}`;
+            body = `added you to ${activityFeedItem.groupName}`;
+            break;
+          case "suggestion":
+            title = `${activityFeedItem.groupName}`;
+            body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
+            break;
+          case "request":
+            title = `${activityFeedItem.username}`;
+            body = "sent you a friend request";
+            break;
+          case "accept":
+            title = `${activityFeedItem.username} `;
+            body = "accepted your friend request";
+            break;
+          default:
+            break;
+        }
+
+        // 4) Create message for push notification
+        const message = {
+          notification: {title, body},
+          token: androidNotificationToken,
+          data: {recipient: userId},
+        };
+
+        // 5) Send message with admin.messaging()
+        admin
+            .messaging()
+            .send(message)
+            .then((response) => {
+              // Response is a message ID string
+              console.log("Successfully sent message!", response);
+            })
+            .catch((error) => {
+              console.log("Error sending message", error);
+            });
+      }
+    });
+
 exports.resetScore = functions.pubsub.schedule("55 23 * * 5").timeZone("America/New_York")
     .onRun(async (context) => {
       const querySnapshot = admin
@@ -252,7 +340,7 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                         });
                   } else if ((data.startDate.toDate().getHours() + 1 == now.toDate().getHours()) && data.scheduled != "true") {
                     admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).delete();
-                    // admin.firestore().collection("notreDame").doc("data").collection("friendGroups").doc(`${data.postId}`).delete();
+                    admin.firestore().collection("notreDame").doc("data").collection("food").doc("comments").delete();
                   }
                   console.log(querySnapshot, message);
                 }

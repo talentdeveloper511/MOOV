@@ -34,11 +34,13 @@ class PostDetail extends StatefulWidget {
 class _PostDetailState extends State<PostDetail> {
   String postId;
   _PostDetailState(this.postId);
-
+  var commentCount = 0;
   int segmentedControlValue = 0;
 
   @override
   Widget build(BuildContext context) {
+    postsRef.doc(postId).collection("comments").get().then(
+        (querySnapshot) async => {commentCount = await querySnapshot.size});
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -109,7 +111,7 @@ class _PostDetailState extends State<PostDetail> {
                         _BannerImage(bannerImage, userId, postId, maxOccupancy,
                             goingCount),
                         _NonImageContents(title, description, startDate,
-                            address, userId, postId, course),
+                            address, userId, postId, course, commentCount),
                       ],
                     ),
                   );
@@ -186,7 +188,6 @@ class _BannerImage extends StatelessWidget {
               ),
             )
           : Text(""),
-      
     ]);
   }
 }
@@ -195,9 +196,10 @@ class _NonImageContents extends StatelessWidget {
   String title, description, userId;
   dynamic startDate, address, moovId;
   DocumentSnapshot course;
+  var commentCount;
 
   _NonImageContents(this.title, this.description, this.startDate, this.address,
-      this.userId, this.moovId, this.course);
+      this.userId, this.moovId, this.course, this.commentCount);
 
   @override
   Widget build(BuildContext context) {
@@ -229,11 +231,17 @@ class _NonImageContents extends StatelessWidget {
                     mediaUrl: currentUser.photoUrl);
               },
               child: Align(
-                  child: Text("Comments",
-                      style: TextStyle(
-                          color: TextThemes.ndBlue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold))),
+                  child: commentCount != null && commentCount != 0
+                      ? Text("Comments " + "(" + commentCount.toString() + ")",
+                          style: TextStyle(
+                              color: TextThemes.ndBlue,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))
+                      : Text("Comments",
+                          style: TextStyle(
+                              color: TextThemes.ndBlue,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))),
             ),
           ),
           Padding(
@@ -543,9 +551,9 @@ class _AuthorContent extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 4.0),
                         child: Column(
                           children: [
-                            Text('Send'),
                             Icon(Icons.send_rounded,
                                 color: Colors.blue[500], size: 25),
+                            Text('Send'),
                           ],
                         ),
                       ),
