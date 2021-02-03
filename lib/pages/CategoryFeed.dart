@@ -816,7 +816,7 @@ class PostOnFeed extends StatelessWidget {
                             ),
                           )
                         : Text(""),
-                    maxOccupancy != null && maxOccupancy != 0
+                    maxOccupancy != null && maxOccupancy != 8000000 && maxOccupancy != 0
                         ? Positioned(
                             top: 0,
                             left: 145,

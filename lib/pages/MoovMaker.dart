@@ -1234,6 +1234,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                           .child("images/" +
                                               user.id +
                                               titleController.text);
+                                               if (maxOccupancyController.text.isEmpty) {
+                                    maxOccupancyInt = 8000000;
+                                  }
+
                                   if (maxOccupancyController.text.isNotEmpty) {
                                     maxOccupancyInt =
                                         int.parse(maxOccupancyController.text);

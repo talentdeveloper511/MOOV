@@ -443,19 +443,19 @@ class _EditPostState extends State<EditPost> {
                                 //     )),
                                 Padding(
                                     padding: EdgeInsets.only(
-                                        left: 50,
+                                        left: 10,
                                         top: 20,
-                                        right: 20,
+                                        right: 10,
                                         bottom: 20),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Container(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .37,
+                                              .43,
                                           child: ButtonTheme(
                                             alignedDropdown: true,
                                             child: DropdownButtonFormField(
@@ -497,7 +497,7 @@ class _EditPostState extends State<EditPost> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .37,
+                                              .43,
                                           child: ButtonTheme(
                                             child: DateTimeField(
                                               format: format,
@@ -633,7 +633,7 @@ class _EditPostState extends State<EditPost> {
                                                 icon: Text("Max \nOccup."),
                                                 labelStyle:
                                                     TextThemes.mediumbody,
-                                                labelText: "$maxOccupancy",
+                                                labelText: maxOccupancy.toString() == "8000000" ? "0" : "$maxOccupancy",
                                                 enabledBorder:
                                                     OutlineInputBorder(
                                                   borderRadius:
@@ -669,7 +669,7 @@ class _EditPostState extends State<EditPost> {
                                                   FloatingLabelBehavior.never,
                                               icon: Text("Venmo"),
                                               labelStyle: TextThemes.mediumbody,
-                                              labelText: "\$$venmo",
+                                              labelText: venmo.toString() == "null" ? "0" : "\$$venmo",
                                               enabledBorder: OutlineInputBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10.0),

@@ -153,7 +153,7 @@ class _BannerImage extends StatelessWidget {
           ),
         ),
       ),
-      maxOccupancy != null && maxOccupancy != 0
+      maxOccupancy != null && maxOccupancy != 8000000 && maxOccupancy != 0
           ? Positioned(
               bottom: 0,
               right: 50,
