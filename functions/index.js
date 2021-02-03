@@ -240,6 +240,10 @@ exports.onCreateGroupFeedItem = functions.firestore
             title = `${activityFeedItem.username}`;
             body = "sent you a friend request";
             break;
+          case "sent":
+            title = `${activityFeedItem.username}`;
+            body = `sent you ${activityFeedItem.title}`;
+            break;
           case "accept":
             title = `${activityFeedItem.username} `;
             body = "accepted your friend request";

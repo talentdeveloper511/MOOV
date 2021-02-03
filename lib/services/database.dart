@@ -27,7 +27,7 @@ class Database {
         notificationFeedRef
             .doc(invitees[i])
             .collection('feedItems')
-            .doc(postId + 'eventinvite')
+            .doc('invite' + postId)
             .set({
           "type": "invite",
           "postId": postId,
@@ -327,9 +327,9 @@ class Database {
     notificationFeedRef
         .doc(ownerId)
         .collection("feedItems")
-        .doc('invite ' + moovId)
+        .doc('sent ' + moovId)
         .set({
-      "type": "invite",
+      "type": "sent",
       "username": currentUser.displayName,
       "userId": currentUser.id,
       "userProfilePic": currentUser.photoUrl,
@@ -543,7 +543,7 @@ class Database {
 
     firebase_storage.Reference ref =
         firebase_storage.FirebaseStorage.instance.ref().child(filePath);
-    
+
     groupsRef.doc(gid).get().then((doc) {
       if (doc.exists) {
         // _storage.ref().child(filePath).delete();

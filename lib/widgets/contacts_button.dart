@@ -109,7 +109,7 @@ class SeeContactsButton extends StatelessWidget {
         title: Text("Invite Friends, \nWin Cash",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text(
-            "\nEarn \$3 for each friend you bring on! Bring on enough and we'll consider you for an ambassador position. \n\n Just have them put you as their referral when creating their account."),
+            "\nEarn cash for each friend you bring on! Bring on enough and we'll consider you for an ambassador position that earns more benefits. \n\n Just have them put you as their referral when creating their account."),
         actions: [
           CupertinoDialogAction(
               isDefaultAction: true,
