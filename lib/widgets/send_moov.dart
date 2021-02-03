@@ -398,7 +398,7 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
                                 BorderRadius.all(Radius.circular(3.0))),
                         onPressed: () {
                           Database().sendMOOVNotification(
-                            ownerId,
+                            userId,
                             previewImg,
                             moovId,
                             startDate,

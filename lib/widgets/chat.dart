@@ -28,6 +28,7 @@ class ChatState extends State<Chat> {
   TextEditingController commentController = TextEditingController();
   final String gid;
   final String groupPic;
+  bool messages = false;
 
   ChatState({
     this.gid,
@@ -82,7 +83,7 @@ class ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: messages ? 300 : 100,
       child: Column(
         children: <Widget>[
           Expanded(child: buildChat()),

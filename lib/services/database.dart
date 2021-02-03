@@ -56,7 +56,6 @@ class Database {
       imageUrl,
       userId,
       postId}) async {
-        
     DocumentReference ref = await postsRef.doc(postId).set({
       'title': title,
       'type': type,
@@ -390,6 +389,26 @@ class Database {
     //     print(group['suggestedMOOVs']);
     //   });
     // });
+
+    FirebaseFirestore.instance ///this is for deleting related notifications
+        .collectionGroup("feedItems")
+        .where("postId", isEqualTo: postId)
+        .get()
+          .then((snapshot) {
+            for (DocumentSnapshot ds in snapshot.docs) {
+              ds.reference.delete();
+            }
+          });
+
+           FirebaseFirestore.instance ///this is for deleted related suggested moovs
+        .collectionGroup("suggestedMOOVs")
+        .where("nextMOOV", isEqualTo: postId)
+        .get()
+          .then((snapshot) {
+            for (DocumentSnapshot ds in snapshot.docs) {
+              ds.reference.delete();
+            }
+          });
 
     postsRef.doc(postId).get().then((doc) {
       if (doc.exists) {

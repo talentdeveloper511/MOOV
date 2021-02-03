@@ -392,6 +392,7 @@ class _EditProfileState extends State<EditProfile> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: TextFormField(
+                    autocorrect: false,
                     controller: bioController,
                     decoration: InputDecoration(
                       labelText: "What's your party trick?",
@@ -411,6 +412,7 @@ class _EditProfileState extends State<EditProfile> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: TextFormField(
+                    autocorrect: false,
                     controller: venmoController,
                     decoration: InputDecoration(
                       labelText: "What's your @?",
@@ -492,7 +494,7 @@ class _EditProfileState extends State<EditProfile> {
                             "bio": bioController.text,
                           });
                         }
-                          if (venmoController.text != "") {
+                        if (venmoController.text != "") {
                           usersRef.doc(currentUser.id).update({
                             "venmoUsername": venmoController.text,
                           });

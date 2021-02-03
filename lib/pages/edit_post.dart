@@ -607,7 +607,7 @@ class _EditPostState extends State<EditPost> {
                                     )),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 20, bottom: 20),
+                                      top: 0, bottom: 5),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
@@ -615,7 +615,7 @@ class _EditPostState extends State<EditPost> {
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                .37,
+                                                .4,
                                         child: ButtonTheme(
                                           child: TextFormField(
                                               keyboardType:
@@ -648,7 +648,7 @@ class _EditPostState extends State<EditPost> {
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                .37,
+                                                .4,
                                         child: ButtonTheme(
                                           child: TextFormField(
                                             onChanged: (text) {
