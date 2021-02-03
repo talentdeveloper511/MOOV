@@ -187,7 +187,7 @@ class _BannerImage extends StatelessWidget {
                 ),
               ),
             )
-          : Text(""),
+          : Container()
     ]);
   }
 }

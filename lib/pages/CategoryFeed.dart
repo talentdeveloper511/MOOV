@@ -322,8 +322,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                                       Timestamp.now().millisecondsSinceEpoch -
                                           3600000) {
                                     print("Expired. See ya later.");
-                                    Database().deletePost(course['postId'],
-                                        course['userId'], course['title']);
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1000), () {
+                                      Database().deletePost(course['postId'],
+                                          course['userId'], course['title']);
+                                    });
                                   }
                                   final now = DateTime.now();
                                   bool isToday = false;
@@ -416,8 +419,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                                     Timestamp.now().millisecondsSinceEpoch -
                                         3600000) {
                                   print("Expired. See ya later.");
-                                  Database().deletePost(course['postId'],
-                                      course['userId'], course['title']);
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(course['postId'],
+                                        course['userId'], course['title']);
+                                  });
                                 }
                                 final now = DateTime.now();
                                 bool isToday = false;
@@ -514,8 +520,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                                     Timestamp.now().millisecondsSinceEpoch -
                                         3600000) {
                                   print("Expired. See ya later.");
-                                  Database().deletePost(course['postId'],
-                                      course['userId'], course['title']);
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(course['postId'],
+                                        course['userId'], course['title']);
+                                  });
                                 }
                                 final now = DateTime.now();
                                 bool isToday = false;
@@ -597,8 +606,6 @@ class _CategoryFeedState extends State<CategoryFeed>
       ),
     );
   }
-
-  
 }
 
 class PostOnFeed extends StatelessWidget {
@@ -638,8 +645,10 @@ class PostOnFeed extends StatelessWidget {
     if (startDate.millisecondsSinceEpoch <
         Timestamp.now().millisecondsSinceEpoch - 3600000) {
       print("Expired. See ya later.");
-      Database()
-          .deletePost(course['postId'], course['userId'], course['title']);
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        Database()
+            .deletePost(course['postId'], course['userId'], course['title']);
+      });
     }
     final now = DateTime.now();
     bool isToday = false;
@@ -816,10 +825,12 @@ class PostOnFeed extends StatelessWidget {
                             ),
                           )
                         : Text(""),
-                    maxOccupancy != null && maxOccupancy != 8000000 && maxOccupancy != 0
+                    maxOccupancy != null &&
+                            maxOccupancy != 8000000 &&
+                            maxOccupancy != 0
                         ? Positioned(
                             top: 0,
-                            left: 145,
+                            left: isLargePhone ? 145 : 118,
                             child: Container(
                               height: 30,
                               padding: EdgeInsets.all(4),
@@ -1073,10 +1084,13 @@ class PostOnFeed extends StatelessWidget {
                                         //splashRadius: 7.0,
                                         highlightColor: Colors.green,
                                         onPressed: () {
-                                          if (goingCount == maxOccupancy && status != 3) {
+                                          if (goingCount == maxOccupancy &&
+                                              status != 3) {
                                             showMax(context);
                                           }
-                                          if (invitees != null && status != 3 && goingCount < maxOccupancy) {
+                                          if (invitees != null &&
+                                              status != 3 &&
+                                              goingCount < maxOccupancy) {
                                             Database().addGoingGood(
                                                 currentUser.id,
                                                 course['userId'],
@@ -1163,6 +1177,7 @@ class PostOnFeed extends StatelessWidget {
       ]),
     );
   }
+
   void showMax(BuildContext context) {
     showDialog(
       context: context,

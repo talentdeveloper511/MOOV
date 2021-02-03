@@ -83,7 +83,7 @@ class ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: messages ? 300 : 100,
+      height: 300,
       child: Column(
         children: <Widget>[
           Expanded(child: buildChat()),
