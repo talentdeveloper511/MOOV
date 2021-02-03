@@ -236,9 +236,9 @@ class _NotificationFeedState extends State<NotificationFeed> {
     showDialog(
       context: context,
       child: CupertinoAlertDialog(
-        title: Text("Clear?",
+        title: Text("Clear Notifications?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nCleanin' up?"),
+        content: Text("\nCleaning up?"),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,
@@ -260,7 +260,7 @@ class _NotificationFeedState extends State<NotificationFeed> {
             },
           ),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nevermind"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],

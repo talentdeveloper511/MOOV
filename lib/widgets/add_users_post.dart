@@ -102,8 +102,9 @@ class _SearchUsersPostState extends State<SearchUsersPost>
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          iconSize: 35,
           icon: Icon(
-            Icons.arrow_back,
+            Icons.arrow_drop_down_outlined,
             color: Colors.white,
           ),
           onPressed: () {
@@ -259,14 +260,14 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                  padding: const EdgeInsets.all(50.0),
+                                  padding: const EdgeInsets.only(bottom: 50),
                                   child: RichText(
                                       textAlign: TextAlign.center,
                                       text: TextSpan(
                                           style: TextThemes.mediumbody,
                                           children: [
                                             TextSpan(
-                                                text: "Invite 'em,",
+                                                text: "Invite them,",
                                                 style: TextStyle(
                                                     fontSize: 30,
                                                     fontWeight:
@@ -284,7 +285,9 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                                     fontWeight:
                                                         FontWeight.w300))
                                           ]))),
-                              Image.asset('lib/assets/ff.png')
+                              Padding(
+                                  padding: EdgeInsets.only(bottom: 250),
+                                  child: Image.asset('lib/assets/ff.png'))
                             ],
                           ),
                         ),
@@ -368,7 +371,6 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                                                       .length >
                                                                   0
                                                           ? InviteGroup(
-                                                             
                                                               currSearchStuff0[
                                                                           index]
                                                                       .data[
@@ -920,8 +922,8 @@ class InviteGroup extends StatefulWidget {
   List<dynamic> members;
   List<String> invitees;
 
-  InviteGroup(this.gname, this.gid, this.pic, this.moov,
-      this.members, this.invitees);
+  InviteGroup(
+      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
 
   @override
   _InviteGroupState createState() => _InviteGroupState(
@@ -935,7 +937,7 @@ class _InviteGroupState extends State<InviteGroup> {
   List<String> invitees;
 
   _InviteGroupState(
-   this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
+      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
 
   @override
   Widget build(BuildContext context) {
@@ -1157,7 +1159,6 @@ class _InviteGroupState extends State<InviteGroup> {
                                 ),
                               )),
                         ),
-                  
                 ]),
               ),
             );
