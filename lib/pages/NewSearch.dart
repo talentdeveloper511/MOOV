@@ -144,7 +144,7 @@ class _SearchBarState extends State<SearchBar>
                         decoration: InputDecoration(
                           labelStyle: TextStyle(fontSize: 20),
                           border: InputBorder.none,
-                          hintText: 'Search MOOV',
+                          hintText: 'Search ',
                           hintStyle:
                               TextStyle(color: Colors.grey, fontSize: 20),
                           prefixIcon:
@@ -355,8 +355,8 @@ class _SearchBarState extends State<SearchBar>
                                                                               .data[
                                                                           "id"],
                                                                       isAmbassador:
-                                                                          currSearchStuff[index].data[
-                                                                              "isAmbassador"])
+                                                                          currSearchStuff[index]
+                                                                              .data["isAmbassador"])
                                                                   : Container();
                                                             },
                                                             childCount:
@@ -413,9 +413,8 @@ class _SearchBarState extends State<SearchBar>
                                                           delegate:
                                                               SliverChildBuilderDelegate(
                                                             (context, index) {
-                                                              return _searchTerm
-                                                                               !=
-                                                                          null
+                                                              return _searchTerm !=
+                                                                      null
                                                                   ? DisplayGroupResult(
                                                                       groupName:
                                                                           currSearchStuff0[index]

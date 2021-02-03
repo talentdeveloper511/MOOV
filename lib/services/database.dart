@@ -81,7 +81,7 @@ class Database {
     dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       print('$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(30)});
+      transaction.update(ref2, {'score': FieldValue.increment(2000)});
       transaction.update(ref, {'postId': ref.id});
     });
   }
@@ -90,7 +90,7 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(1)});
+      transaction.update(ref2, {'score': FieldValue.increment(100)});
 
       // addGoingToNotificationFeed(
       //     userId,
@@ -117,7 +117,7 @@ class Database {
             if (snap.data()['score'] == 0) {checkZero = "true"}
           });
       if (checkZero != "true") {
-        transaction.update(ref2, {'score': FieldValue.increment(-1)});
+        transaction.update(ref2, {'score': FieldValue.increment(-100)});
       }
       // addGoingToNotificationFeed(
       //     userId,
@@ -139,7 +139,7 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(1)});
+      transaction.update(ref2, {'score': FieldValue.increment(100)});
 
       postsRef.doc(postId).set({
         "invitees": {userId: 2}
@@ -162,7 +162,7 @@ class Database {
             if (snap.data()['score'] == 0) {checkZero = "true"}
           });
       if (checkZero != "true") {
-        transaction.update(ref2, {'score': FieldValue.increment(-1)});
+        transaction.update(ref2, {'score': FieldValue.increment(-100)});
       }
       postsRef.doc(postId).set({
         "invitees": {user.id: FieldValue.delete()}
@@ -180,7 +180,7 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(5)});
+      transaction.update(ref2, {'score': FieldValue.increment(500)});
 
       await postsRef.doc(postId).set({
         "invitees": {userId: 3}
@@ -222,7 +222,7 @@ class Database {
             if (snap.data()['score'] == 0) {checkZero = "true"}
           });
       if (checkZero != "true") {
-        transaction.update(ref2, {'score': FieldValue.increment(-5)});
+        transaction.update(ref2, {'score': FieldValue.increment(-500)});
       }
       notificationFeedRef
           .doc(ownerId)
@@ -580,6 +580,7 @@ class Database {
           dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayUnion([gid]),
+        'score': FieldValue.increment(1000)
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayUnion([id]),
@@ -601,7 +602,7 @@ class Database {
       userId, gid, postId, userName, members, title, pic, groupName) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(1)});
+      transaction.update(ref2, {'score': FieldValue.increment(300)});
 
       groupsRef.doc(gid).collection("suggestedMOOVs").doc(userId).set({
         "voters": {userId: 2},
@@ -629,8 +630,6 @@ class Database {
           });
         }
       }
-
-      transaction.update(ref2, {'score': FieldValue.increment(1)});
     });
   }
 

@@ -51,6 +51,7 @@ class _PollViewState extends State<PollView> {
             .collection('poll')
             .doc('jan12')
             .snapshots(),
+        // ignore: missing_return
         builder: (context, snapshot) {
           // dynamic moovId;
           bool isLargePhone = Screen.diagonal(context) > 766;
