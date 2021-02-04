@@ -16,8 +16,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'package:MOOV/pages/Going_event.dart';
+import 'package:MOOV/widgets/going_statuses.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
 
@@ -103,6 +102,7 @@ class _PostDetailState extends State<PostDetail> {
                   userId = course['userId'];
                   postId = course['postId'];
                   int maxOccupancy = course['maxOccupancy'];
+                  int venmo = course['venmo'];
                   int goingCount = course['going'].length;
                   return Container(
                     color: Colors.white,
@@ -153,13 +153,52 @@ class _BannerImage extends StatelessWidget {
           ),
         ),
       ),
+      userId == currentUser.id
+          ? Positioned(
+              top: 5,
+              left: 5,
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => EditPost(postId))),
+                child: Container(
+                height: 45,
+                width: 70,
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.red,
+                        Colors.red[300],
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      "Edit",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ],
+                ),
+              ),
+              ),
+            )
+          : Text(''),
       maxOccupancy != null && maxOccupancy != 8000000 && maxOccupancy != 0
           ? Positioned(
               bottom: 0,
               right: 50,
               child: Container(
                 height: 45,
-                width: 70,
+                width: maxOccupancy > 99 ? 100 : 70,
                 padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -221,37 +260,37 @@ class _NonImageContents extends StatelessWidget {
               color: Colors.grey[700],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {
-                showComments(context,
-                    postId: moovId,
-                    ownerId: currentUser.id,
-                    mediaUrl: currentUser.photoUrl);
-              },
-              child: Align(
-                  child: commentCount != null && commentCount != 0
-                      ? Text("Comments " + "(" + commentCount.toString() + ")",
-                          style: TextStyle(
-                              color: TextThemes.ndBlue,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold))
-                      : Text("Comments",
-                          style: TextStyle(
-                              color: TextThemes.ndBlue,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold))),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 1.0),
-            child: Container(
-              height: 1.0,
-              width: 500.0,
-              color: Colors.grey[700],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: GestureDetector(
+          //     onTap: () {
+          //       showComments(context,
+          //           postId: moovId,
+          //           ownerId: currentUser.id,
+          //           mediaUrl: currentUser.photoUrl);
+          //     },
+          //     child: Align(
+          //         child: commentCount != null && commentCount != 0
+          //             ? Text("Comments " + "(" + commentCount.toString() + ")",
+          //                 style: TextStyle(
+          //                     color: TextThemes.ndBlue,
+          //                     fontSize: 20,
+          //                     fontWeight: FontWeight.bold))
+          //             : Text("Comments",
+          //                 style: TextStyle(
+          //                     color: TextThemes.ndBlue,
+          //                     fontSize: 20,
+          //                     fontWeight: FontWeight.bold))),
+          //   ),
+          // ),
+          // Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 1.0),
+          //   child: Container(
+          //     height: 1.0,
+          //     width: 500.0,
+          //     color: Colors.grey[700],
+          //   ),
+          // ),
           Buttons(moovId),
           Padding(
             padding: EdgeInsets.only(bottom: 10),
@@ -261,26 +300,48 @@ class _NonImageContents extends StatelessWidget {
               color: Colors.grey[700],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 0.0, right: 4.0),
-                  child: Icon(Icons.directions_run, color: Colors.green),
-                ),
-                Text(
-                  'Going List',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: TextThemes.ndBlue),
-                ),
-              ],
+          Stack(children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0, right: 4.0),
+                    child: Icon(Icons.directions_run, color: Colors.green),
+                  ),
+                  Text(
+                    'Going List',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: TextThemes.ndBlue),
+                  ),
+                ],
+              ),
             ),
-          ),
+            Positioned(
+                right: 10,
+                top: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    showComments(context,
+                        postId: moovId,
+                        ownerId: currentUser.id,
+                        mediaUrl: currentUser.photoUrl);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.comment, size: 20, color: TextThemes.ndBlue),
+                      Text(
+                        "Comments",
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ))
+          ]),
           Seg2(moovId: moovId),
         ],
       ),
@@ -431,10 +492,10 @@ class PostTimeAndPlace extends StatelessWidget {
                             if (!snapshot.hasData) return circularProgress();
 
                             String name = snapshot.data['venmoUsername'];
-                            return Text(
+                            return (name != "" && name != null) ? Text(
                               "@$name",
                               textAlign: TextAlign.center,
-                            );
+                            ): Text("");
                           }),
                     )
                   ],
@@ -551,9 +612,9 @@ class _AuthorContent extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 4.0),
                         child: Column(
                           children: [
+                            Text('Send'),
                             Icon(Icons.send_rounded,
                                 color: Colors.blue[500], size: 25),
-                            Text('Send'),
                           ],
                         ),
                       ),
@@ -703,35 +764,35 @@ class Buttons extends StatelessWidget {
           if (!snapshot.hasData) return circularProgress();
 
           DocumentSnapshot course = snapshot.data;
-          Map<String, dynamic> invitees = course['invitees'];
+          Map<String, dynamic> statuses = course['statuses'];
           int maxOccupancy = course['maxOccupancy'];
           int goingCount = course['going'].length;
 
-          List<dynamic> inviteesIds = invitees.keys.toList();
+          List<dynamic> statusesIds = statuses.keys.toList();
 
-          List<dynamic> inviteesValues = invitees.values.toList();
+          List<dynamic> statusesValues = statuses.values.toList();
 
-          if (invitees != null) {
-            for (int i = 0; i < invitees.length; i++) {
-              if (inviteesIds[i] == currentUser.id) {
-                if (inviteesValues[i] == 1) {
+          if (statuses != null) {
+            for (int i = 0; i < statuses.length; i++) {
+              if (statusesIds[i] == currentUser.id) {
+                if (statusesValues[i] == 1) {
                   status = 1;
                 }
               }
             }
-            if (invitees != null) {
-              for (int i = 0; i < invitees.length; i++) {
-                if (inviteesIds[i] == currentUser.id) {
-                  if (inviteesValues[i] == 2) {
+            if (statuses != null) {
+              for (int i = 0; i < statuses.length; i++) {
+                if (statusesIds[i] == currentUser.id) {
+                  if (statusesValues[i] == 2) {
                     status = 2;
                   }
                 }
               }
             }
-            if (invitees != null) {
-              for (int i = 0; i < invitees.length; i++) {
-                if (inviteesIds[i] == currentUser.id) {
-                  if (inviteesValues[i] == 3) {
+            if (statuses != null) {
+              for (int i = 0; i < statuses.length; i++) {
+                if (statusesIds[i] == currentUser.id) {
+                  if (statusesValues[i] == 3) {
                     status = 3;
                   }
                 }
@@ -748,11 +809,11 @@ class Buttons extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5),
                         side: BorderSide(color: Colors.black)),
                     onPressed: () {
-                      if (invitees != null && status != 1) {
+                      if (statuses != null && status != 1) {
                         Database().addNotGoing(currentUser.id, moovId);
                         status = 1;
                         print(status);
-                      } else if (invitees != null && status == 1) {
+                      } else if (statuses != null && status == 1) {
                         Database().removeNotGoing(currentUser.id, moovId);
                         status = 0;
                       }
@@ -838,11 +899,11 @@ class Buttons extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                        if (invitees != null && status != 2) {
+                        if (statuses != null && status != 2) {
                           Database().addUndecided(currentUser.id, moovId);
                           status = 2;
                           print(status);
-                        } else if (invitees != null && status == 2) {
+                        } else if (statuses != null && status == 2) {
                           Database().removeUndecided(currentUser.id, moovId);
                           status = 0;
                         }
@@ -880,7 +941,7 @@ class Buttons extends StatelessWidget {
                         if (goingCount == maxOccupancy && status != 3) {
                           showMax(context);
                         }
-                        if (invitees != null &&
+                        if (statuses != null &&
                             status != 3 &&
                             goingCount < maxOccupancy) {
                           Database().addGoingGood(
@@ -891,7 +952,7 @@ class Buttons extends StatelessWidget {
                               course['image']);
                           status = 3;
                           print(status);
-                        } else if (invitees != null && status == 3) {
+                        } else if (statuses != null && status == 3) {
                           Database().removeGoingGood(
                               currentUser.id,
                               course['userId'],

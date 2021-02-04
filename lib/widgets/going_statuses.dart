@@ -18,7 +18,7 @@ class GoingPage extends StatelessWidget {
   GoingPage(this.moovId);
 
   bool _isPressed;
-  int status = 2;
+  int status = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,39 +30,41 @@ class GoingPage extends StatelessWidget {
           DocumentSnapshot course = snapshot.data;
           if (snapshot.hasError) return CircularProgressIndicator();
 
-          Map<String, dynamic> invitees = course['invitees'];
+          Map<String, dynamic> statuses = course['statuses'];
 
-          var sortedKeys = invitees.keys.toList(growable: false)
-            ..sort((k1, k2) => invitees[k2].compareTo(invitees[k1]));
+          var sortedKeys = statuses.keys.toList(growable: false)
+            ..sort((k1, k2) => statuses[k2].compareTo(statuses[k1]));
           LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
-              key: (k) => k, value: (k) => invitees[k]);
+              key: (k) => k, value: (k) => statuses[k]);
 
-          List<dynamic> inviteesIds = sortedMap.keys.toList();
+          List<dynamic> statusesIds = sortedMap.keys.toList();
 
-          List<dynamic> inviteesValues = sortedMap.values.toList();
+          List<dynamic> statusesValues = sortedMap.values.toList();
 
           return Column(
             children: [
-              invitees != null
+              statuses != null
                   ? ListView.builder(
                       shrinkWrap: true, //MUST TO ADDED
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: inviteesIds.length,
+                      itemCount: statusesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
                             stream:
-                                usersRef.doc(inviteesIds[index]).snapshots(),
+                                usersRef.doc(statusesIds[index]).snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData)
                                 return CircularProgressIndicator();
 
-                              inviteesValues[index] == (2)
+                              statusesValues[index] == (2)
                                   ? status = 2
-                                  : inviteesValues[index] == 1
+                                  : statusesValues[index] == 1
                                       ? status = 1
-                                      : inviteesValues[index] == 3
+                                      : statusesValues[index] == 3
                                           ? status = 3
-                                          : status = 0;
+                                          : statusesValues[index] == -1
+                                          ? status = -1 :
+                                          status = 0;
 
                               var pic = snapshot.data['photoUrl'];
                               var name = snapshot.data['displayName'];
@@ -75,7 +77,7 @@ class GoingPage extends StatelessWidget {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        if (inviteesIds[index] ==
+                                        if (statusesIds[index] ==
                                             currentUser.id) {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
@@ -86,7 +88,7 @@ class GoingPage extends StatelessWidget {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       OtherProfile(
-                                                          inviteesIds[index])));
+                                                          statusesIds[index])));
                                         }
                                       },
                                       child: Container(
@@ -97,7 +99,7 @@ class GoingPage extends StatelessWidget {
                                                   ? Colors.red[50]
                                                   : status == 3
                                                       ? Colors.green[50]
-                                                      : Colors.white,
+                                                      : Colors.blue[50],
                                           child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -231,6 +233,27 @@ class GoingPage extends StatelessWidget {
                                                                       )
                                                                     ],
                                                                   )
+                                                                  : status == -1
+                                                                ? Row(
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.only(right: 8.0),
+                                                                        child: Icon(
+                                                                            Icons
+                                                                                .redeem,
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      Text(
+                                                                        "Invited",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue,
+                                                                            fontWeight: FontWeight.w700),
+                                                                      )
+                                                                    ],
+                                                                  )
                                                                 : Container())
                                               ])),
                                     ),
@@ -248,7 +271,7 @@ class GoingPage extends StatelessWidget {
 
 class GoingPageFriends extends StatelessWidget {
   dynamic moovId, likeCount;
-  int status = 2;
+  int status = 0;
 
   GoingPageFriends(this.moovId);
 
@@ -262,40 +285,42 @@ class GoingPageFriends extends StatelessWidget {
           DocumentSnapshot course = snapshot.data;
           if (snapshot.hasError) return CircularProgressIndicator();
 
-          Map<String, dynamic> invitees = course['invitees'];
+          Map<String, dynamic> statuses = course['statuses'];
 
-          var sortedKeys = invitees.keys.toList(growable: false)
-            ..sort((k1, k2) => invitees[k2].compareTo(invitees[k1]));
+          var sortedKeys = statuses.keys.toList(growable: false)
+            ..sort((k1, k2) => statuses[k2].compareTo(statuses[k1]));
           LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
-              key: (k) => k, value: (k) => invitees[k]);
+              key: (k) => k, value: (k) => statuses[k]);
 
-          List<dynamic> inviteesIds = sortedMap.keys.toList();
+          List<dynamic> statusesIds = sortedMap.keys.toList();
 
-          List<dynamic> inviteesValues = sortedMap.values.toList();
+          List<dynamic> statusesValues = sortedMap.values.toList();
 
           return Column(
             children: [
-              invitees != null
+              statuses != null
                   ? ListView.builder(
                       shrinkWrap: true, //MUST TO ADDED
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: inviteesIds.length,
+                      itemCount: statusesIds.length,
                       itemBuilder: (context, index) {
                         return StreamBuilder(
                             stream:
-                                usersRef.doc(inviteesIds[index]).snapshots(),
+                                usersRef.doc(statusesIds[index]).snapshots(),
                             builder: (context, snapshot2) {
                               if (!snapshot2.hasData)
                                 return CircularProgressIndicator();
                               if (snapshot2.data['friendArray']
                                   .contains(currentUser.id)) {
-                                inviteesValues[index] == (2)
+                                statusesValues[index] == (2)
                                     ? status = 2
-                                    : inviteesValues[index] == 1
+                                    : statusesValues[index] == 1
                                         ? status = 1
-                                        : inviteesValues[index] == 3
-                                            ? status = 3
-                                            : status = 2;
+                                        : statusesValues[index] == 3
+                                            ? status = 3 :
+                                            statusesValues[index] == -1
+                                            ? status = -1 
+                                            : status = 0;
 
                                 var pic = snapshot2.data['photoUrl'];
                                 var name = snapshot2.data['displayName'];
@@ -313,7 +338,7 @@ class GoingPageFriends extends StatelessWidget {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          if (inviteesIds[index] ==
+                                          if (statusesIds[index] ==
                                               currentUser.id) {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
@@ -324,7 +349,7 @@ class GoingPageFriends extends StatelessWidget {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         OtherProfile(
-                                                            inviteesIds[
+                                                            statusesIds[
                                                                 index])));
                                           }
                                         },
@@ -333,7 +358,9 @@ class GoingPageFriends extends StatelessWidget {
                                                 ? Colors.yellow[50]
                                                 : status == 1
                                                     ? Colors.red[50]
-                                                    : Colors.green[50],
+                                                     : status == 3
+                                                    ? Colors.green[50]
+                                                    : Colors.blue[50],
                                             child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -445,6 +472,27 @@ class GoingPageFriends extends StatelessWidget {
                                                                     )
                                                                   ],
                                                                 )
+                                                                 : status == -1
+                                                                ? Row(
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.only(right: 8.0),
+                                                                        child: Icon(
+                                                                            Icons
+                                                                                .redeem,
+                                                                            color:
+                                                                                Colors.blue),
+                                                                      ),
+                                                                      Text(
+                                                                        "Invited",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.blue,
+                                                                            fontWeight: FontWeight.w700),
+                                                                      )
+                                                                    ],
+                                                                  )
                                                               : Row(
                                                                   children: [
                                                                     Padding(

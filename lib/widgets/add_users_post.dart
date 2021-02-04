@@ -307,7 +307,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                   return Container();
                                 default:
                                   if (snapshot.hasError || !snapshot.hasData)
-                                    return new Text('Error: ${snapshot.error}');
+                                    return linearProgress();
                                   else {
                                     List<AlgoliaObjectSnapshot>
                                         currSearchStuff = snapshot.data;
@@ -386,16 +386,13 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                                               currSearchStuff0[
                                                                           index]
                                                                       .data[
-                                                                  "groupPic"],
+                                                                  "nextMOOV"],
                                                               currSearchStuff0[
                                                                           index]
                                                                       .data[
                                                                   "members"],
                                                               invitees)
-                                                          : Container(
-                                                              height: 4000,
-                                                              child:
-                                                                  TrendingSegment());
+                                                          : Container();
                                                     },
                                                     childCount: currSearchStuff0
                                                             .length ??
@@ -1085,7 +1082,7 @@ class _InviteGroupState extends State<InviteGroup> {
                               padding:
                                   const EdgeInsets.only(top: 4, left: 25.0),
                               child: CircleAvatar(
-                                      radius: isLargePhone ? 25 : 15.0,
+                                radius: isLargePhone ? 25 : 15.0,
                                 backgroundImage: NetworkImage(
                                   course[0]['photoUrl'],
                                 ),
@@ -1093,7 +1090,7 @@ class _InviteGroupState extends State<InviteGroup> {
                           Padding(
                             padding: const EdgeInsets.only(top: 4, left: 50.0),
                             child: CircleAvatar(
-                                      radius: isLargePhone ? 25 : 15.0,
+                              radius: isLargePhone ? 25 : 15.0,
                               child: members.length > 2
                                   ? Text(
                                       "+" + (length.toString()),
@@ -1164,5 +1161,6 @@ class _InviteGroupState extends State<InviteGroup> {
             );
           });
     }
+    return Container();
   }
 }
