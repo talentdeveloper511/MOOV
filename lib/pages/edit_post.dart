@@ -1278,7 +1278,13 @@ class _EditPostState extends State<EditPost> {
                                             for (var item in invitees)
                                               postsRef.doc(postId).set({
                                                 "statuses": {item: -1}
-                                              }, SetOptions(merge: true)).then(Database().inviteesNotification(postId, image, title, invitees));
+                                              }, SetOptions(merge: true)).then(
+                                                  Database()
+                                                      .inviteesNotification(
+                                                          postId,
+                                                          image,
+                                                          title,
+                                                          invitees));
                                           }
 
                                           if (currentValues != null) {
@@ -1342,12 +1348,11 @@ class _EditPostState extends State<EditPost> {
                                         ),
                                       ),
                                       onPressed: () => {
-                                            showAlertDialog2(context, postId,
-                                                currentUser.id, title),
-                                            Database().canceledNotification(
-                                                snapshot.data['postId'],
-                                                snapshot.data['image'],
-                                                snapshot.data['title'],
+                                            showAlertDialog2(
+                                                context,
+                                                postId,
+                                                currentUser.id,
+                                                title,
                                                 snapshot.data['going']),
                                           }),
                                 ),
@@ -1413,9 +1418,11 @@ class _BannerImage extends StatelessWidget {
   }
 }
 
-void showAlertDialog2(BuildContext context, postId, userId, title) {
+void showAlertDialog2(BuildContext context, postId, userId, title, going) {
   delete() {
     Future.delayed(const Duration(milliseconds: 1000), () {
+      Database().canceledNotification(postId, title, going);
+
       Database().deletePost(postId, userId, title);
     });
   }

@@ -222,7 +222,7 @@ exports.onCreateGroupFeedItem = functions.firestore
         switch (activityFeedItem.type) {
           case "invite":
             title = `${name}`;
-            body = `${activityFeedItem.username} has invited you guys to ${activityFeedItem.title}`;
+            body = `${activityFeedItem.username} has invited you all to ${activityFeedItem.title}`;
             break;
           case "going":
             title = `${activityFeedItem.title}`;

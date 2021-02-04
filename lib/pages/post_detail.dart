@@ -161,34 +161,34 @@ class _BannerImage extends StatelessWidget {
                 onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => EditPost(postId))),
                 child: Container(
-                height: 45,
-                width: 70,
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.red,
-                        Colors.red[300],
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      "Edit",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ],
+                  height: 45,
+                  width: 70,
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.red,
+                          Colors.red[300],
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        "Edit",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               ),
             )
           : Text(''),
@@ -492,10 +492,12 @@ class PostTimeAndPlace extends StatelessWidget {
                             if (!snapshot.hasData) return circularProgress();
 
                             String name = snapshot.data['venmoUsername'];
-                            return (name != "" && name != null) ? Text(
-                              "@$name",
-                              textAlign: TextAlign.center,
-                            ): Text("");
+                            return (name != "" && name != null)
+                                ? Text(
+                                    "@$name",
+                                    textAlign: TextAlign.center,
+                                  )
+                                : Text("");
                           }),
                     )
                   ],
@@ -612,9 +614,9 @@ class _AuthorContent extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 4.0),
                         child: Column(
                           children: [
-                            Text('Send'),
                             Icon(Icons.send_rounded,
                                 color: Colors.blue[500], size: 25),
+                            Text('Send'),
                           ],
                         ),
                       ),

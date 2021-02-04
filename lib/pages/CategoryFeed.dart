@@ -554,10 +554,13 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 privacy == "Friends Only") {
                               hide = false;
                             }
-                            if (privacy == "Invite Only" && course['userId'] == currentUser.id) {
+                            if (privacy == "Invite Only" &&
+                                course['userId'] == currentUser.id) {
                               hide = false;
                             }
-                            if (privacy == "Invite Only" && course['statuses'].containsKey(currentUser.id)) {
+                            if (privacy == "Invite Only" &&
+                                course['statuses']
+                                    .containsKey(currentUser.id)) {
                               hide = false;
                             }
                             // print(hide);
@@ -781,7 +784,7 @@ class PostOnFeed extends StatelessWidget {
                                     SizedBox(
                                       width: isLargePhone ? 115 : 90,
                                       child: Text(course['address'],
-                                          maxLines: 2,
+                                          maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontSize: 12.0,
