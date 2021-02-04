@@ -606,8 +606,8 @@ class _EditPostState extends State<EditPost> {
                                       ],
                                     )),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 0, bottom: 5),
+                                  padding:
+                                      const EdgeInsets.only(top: 0, bottom: 5),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
@@ -633,7 +633,11 @@ class _EditPostState extends State<EditPost> {
                                                 icon: Text("Max \nOccup."),
                                                 labelStyle:
                                                     TextThemes.mediumbody,
-                                                labelText: maxOccupancy.toString() == "8000000" ? "0" : "$maxOccupancy",
+                                                labelText:
+                                                    maxOccupancy.toString() ==
+                                                            "8000000"
+                                                        ? "0"
+                                                        : "$maxOccupancy",
                                                 enabledBorder:
                                                     OutlineInputBorder(
                                                   borderRadius:
@@ -669,7 +673,10 @@ class _EditPostState extends State<EditPost> {
                                                   FloatingLabelBehavior.never,
                                               icon: Text("Venmo"),
                                               labelStyle: TextThemes.mediumbody,
-                                              labelText: venmo.toString() == "null" ? "0" : "\$$venmo",
+                                              labelText:
+                                                  venmo.toString() == "null"
+                                                      ? "0"
+                                                      : "\$$venmo",
                                               enabledBorder: OutlineInputBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10.0),
@@ -725,7 +732,6 @@ class _EditPostState extends State<EditPost> {
                                           isUploading = true;
                                         });
 
-
                                         if (_formKey.currentState != null) {
                                           if (_image != null) {
                                             firebase_storage.Reference ref =
@@ -741,21 +747,22 @@ class _EditPostState extends State<EditPost> {
                                             //         .child("images/" +
                                             //             titleController.text);
 
-                                            firebase_storage.UploadTask uploadTask;
+                                            firebase_storage.UploadTask
+                                                uploadTask;
 
                                             uploadTask = ref.putFile(_image);
 
                                             firebase_storage
-                                                .TaskSnapshot /*!*/ taskSnapshot = 
-
-                                           await uploadTask;
+                                                    .TaskSnapshot /*!*/ taskSnapshot =
+                                                await uploadTask;
                                             if (uploadTask.snapshot.state ==
                                                 firebase_storage
                                                     .TaskState.success) {
                                               print(
                                                   "added to Firebase Storage");
                                               final String downloadUrl =
-                                                  await taskSnapshot.ref.getDownloadURL();
+                                                  await taskSnapshot.ref
+                                                      .getDownloadURL();
                                               postsRef.doc(postId).update({
                                                 "image": downloadUrl,
                                               });
@@ -865,8 +872,15 @@ class _EditPostState extends State<EditPost> {
                                           ),
                                         ),
                                       ),
-                                      onPressed: () => showAlertDialog2(context,
-                                          postId, currentUser.id, title)),
+                                      onPressed: () => {
+                                            showAlertDialog2(context, postId,
+                                                currentUser.id, title),
+                                            Database().canceledNotification(
+                                                snapshot.data['postId'],
+                                                snapshot.data['image'],
+                                                snapshot.data['title'],
+                                                snapshot.data['going']),
+                                          }),
                                 ),
                               ],
                             ),

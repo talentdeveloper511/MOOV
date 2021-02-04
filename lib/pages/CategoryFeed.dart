@@ -9,7 +9,6 @@ import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/widgets/post_card.dart';
 import 'package:MOOV/widgets/send_moov.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -734,7 +733,9 @@ class PostOnFeed extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 12.0, color: Colors.black),
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 12.0,
+                                  color: Colors.black),
                             ),
                           ),
                           Padding(padding: const EdgeInsets.all(5.0)),
@@ -1014,7 +1015,7 @@ class PostOnFeed extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             color: Colors.red,
                                             borderRadius:
-                                                BorderRadius.circular(20.0)),
+                                                BorderRadius.circular(5)),
 
                                         // showAlertDialog(context, postId, userId),
                                         child: Padding(

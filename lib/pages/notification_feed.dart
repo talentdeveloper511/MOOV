@@ -447,7 +447,9 @@ class NotificationFeedItem extends StatelessWidget {
     } else if (type == 'invite') {
       activityItemText = 'has invited you to ';
     } else if (type == 'suggestion') {
-      activityItemText = 'suggested a MOOV, ';
+      activityItemText = 'suggested ';
+    } else if (type == 'deleted') {
+      activityItemText = 'has been canceled';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }

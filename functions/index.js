@@ -240,6 +240,10 @@ exports.onCreateGroupFeedItem = functions.firestore
             title = `${activityFeedItem.username}`;
             body = "sent you a friend request";
             break;
+          case "canceled":
+            title = `${activityFeedItem.title}`;
+            body = "has been canceled";
+            break;
           case "sent":
             title = `${activityFeedItem.username}`;
             body = `sent you ${activityFeedItem.title}`;
