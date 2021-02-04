@@ -27,9 +27,30 @@ class Database {
         notificationFeedRef
             .doc(statuses[i])
             .collection('feedItems')
-            .doc('invite' + postId)
+            .doc('invite ' + postId)
             .set({
           "type": "invite",
+          "postId": postId,
+          "previewImg": previewImg,
+          "title": title,
+          "username": currentUser.displayName,
+          "userId": currentUser.id,
+          "userProfilePic": currentUser.photoUrl,
+          "timestamp": DateTime.now()
+        });
+      }
+    }
+  }
+
+  FutureOr canceledNotification(postId, previewImg, title, going) {
+    if (going.length > 0) {
+      for (int i = 0; i < going.length; i++) {
+        notificationFeedRef
+            .doc(going[i])
+            .collection('feedItems')
+            .doc('canceled ' + postId)
+            .set({
+          "type": "canceled",
           "postId": postId,
           "previewImg": previewImg,
           "title": title,

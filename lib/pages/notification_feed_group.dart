@@ -447,15 +447,17 @@ class NotificationFeedItem extends StatelessWidget {
     if (type == 'going') {
       activityItemText = "is going to ";
     } else if (type == 'request') {
-      activityItemText = "sent you a friend request.";
+      activityItemText = "sent you a friend request";
     } else if (type == 'accept') {
-      activityItemText = "accepted your friend request.";
+      activityItemText = "accepted your friend request";
     } else if (type == 'friendGroup') {
       activityItemText = 'has added you to ';
     } else if (type == 'invite') {
       activityItemText = 'has invited you to ';
     } else if (type == 'suggestion') {
-      activityItemText = 'suggested a MOOV, ';
+      activityItemText = 'suggested ';
+    } else if (type == 'deleted') {
+      activityItemText = 'has been canceled';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }

@@ -1341,8 +1341,15 @@ class _EditPostState extends State<EditPost> {
                                           ),
                                         ),
                                       ),
-                                      onPressed: () => showAlertDialog2(context,
-                                          postId, currentUser.id, title)),
+                                      onPressed: () => {
+                                            showAlertDialog2(context, postId,
+                                                currentUser.id, title),
+                                            Database().canceledNotification(
+                                                snapshot.data['postId'],
+                                                snapshot.data['image'],
+                                                snapshot.data['title'],
+                                                snapshot.data['going']),
+                                          }),
                                 ),
                               ],
                             ),
