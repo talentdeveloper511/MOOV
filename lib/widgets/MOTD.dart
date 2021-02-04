@@ -11,7 +11,6 @@ import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MOOV/pages/notification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MOTD extends StatefulWidget {

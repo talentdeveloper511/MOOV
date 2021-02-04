@@ -477,7 +477,7 @@ class NotificationFeedItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RichText(
-                  overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.visible,
                   text: TextSpan(
                       style: TextStyle(
                         fontSize: isLargePhone ? 13.5 : 12,
@@ -491,17 +491,15 @@ class NotificationFeedItem extends StatelessWidget {
                         TextSpan(
                           text: ' $activityItemText',
                         ),
+                        title != null || groupName != null
+                            ? TextSpan(
+                                text: type == 'friendGroup' ? groupName : title,
+                                style: TextStyle(
+                                    color: TextThemes.ndBlue,
+                                    fontWeight: FontWeight.bold))
+                            : TextSpan(text: '')
                       ]),
                 ),
-                title != null
-                    ? RichText(
-                        overflow: TextOverflow.ellipsis,
-                        text: TextSpan(
-                            text: type == 'friendGroup' ? groupName : title,
-                            style: TextStyle(
-                                color: TextThemes.ndBlue,
-                                fontWeight: FontWeight.bold)))
-                    : Container()
               ],
             ),
           ),
