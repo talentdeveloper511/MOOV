@@ -75,216 +75,222 @@ class TrendingSegmentState extends State<TrendingSegment> {
     dynamic likeCount;
 
     return Container(
-        color: Colors.white,
-        child: Column(
-    children: [
-      Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [Colors.pinkAccent[200], TextThemes.ndBlue])),
-          child: Center(
-              child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text('T R E N D I N G',
-                style: GoogleFonts.sriracha(
-                    color: Colors.white, fontSize: 30)),
-          ))),
-      Expanded(
-        child: ListView(children: [
+      color: Colors.white,
+      child: Column(
+        children: [
           Container(
-            child: StreamBuilder(
-                stream: postsRef
-                    .where('type', isEqualTo: 'Restaurants & Bars')
-                    .where('privacy', isEqualTo: 'Public')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data.docs.length == 0) return Text('');
-                  return Container(
-                    height: (snapshot.data.docs.length <= 3 && isLargePhone)
-                        ? 210
-                        : (snapshot.data.docs.length >= 3 && isLargePhone)
-                            ? 345
-                            : (snapshot.data.docs.length <= 3 &&
-                                    !isLargePhone)
-                                ? 190
-                                : (snapshot.data.docs.length >= 3 &&
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.pinkAccent[200], TextThemes.ndBlue])),
+              child: Center(
+                  child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text('T R E N D I N G',
+                    style: GoogleFonts.sriracha(
+                        color: Colors.white, fontSize: 30)),
+              ))),
+          Expanded(
+            child: ListView(children: [
+              Container(
+                child: StreamBuilder(
+                    stream: postsRef
+                        .where('type', isEqualTo: 'Restaurants & Bars')
+                        .where('privacy', isEqualTo: 'Public')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
+                        return Text('');
+                      return Container(
+                        height: (snapshot.data.docs.length <= 3 && isLargePhone)
+                            ? 210
+                            : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                ? 345
+                                : (snapshot.data.docs.length <= 3 &&
                                         !isLargePhone)
-                                    ? 310
-                                    : 350,
-                    child: Column(
-                      children: [
-                        Expanded(
-                            child: CustomScrollView(
-                          physics: NeverScrollableScrollPhysics(),
-                          slivers: [
-                            SliverToBoxAdapter(
-                                child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Image.asset('lib/assets/plate.png',
-                                      height: 40),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 8.0),
-                                    child: Text('Restaurants & Bars',
-                                        style: TextThemes.extraBold),
+                                    ? 190
+                                    : (snapshot.data.docs.length >= 3 &&
+                                            !isLargePhone)
+                                        ? 310
+                                        : 350,
+                        child: Column(
+                          children: [
+                            Expanded(
+                                child: CustomScrollView(
+                              physics: NeverScrollableScrollPhysics(),
+                              slivers: [
+                                SliverToBoxAdapter(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Image.asset('lib/assets/plate.png',
+                                          height: 40),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text('Restaurants & Bars',
+                                            style: TextThemes.extraBold),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            )),
-                            SliverGrid(
-                                delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
-                                  DocumentSnapshot course =
-                                      snapshot.data.docs[index];
-
-                                  return PostOnTrending(course);
-                                }, childCount: snapshot.data.docs.length),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
                                 )),
-                          ],
-                        )),
-                      ],
-                    ),
-                  );
-                }),
-          ),
-          Container(
-            child: StreamBuilder(
-                stream: postsRef
-                    .where('type', isEqualTo: "Pregames & Parties")
-                    .where('privacy', isEqualTo: "Public")
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data.docs.length == 0) return Text('');
+                                SliverGrid(
+                                    delegate: SliverChildBuilderDelegate(
+                                        (BuildContext context, int index) {
+                                      DocumentSnapshot course =
+                                          snapshot.data.docs[index];
 
-                  return Container(
-                   height: (snapshot.data.docs.length <= 3 && isLargePhone)
-                        ? 210
-                        : (snapshot.data.docs.length >= 3 && isLargePhone)
-                            ? 345
-                            : (snapshot.data.docs.length <= 3 &&
-                                    !isLargePhone)
-                                ? 190
-                                : (snapshot.data.docs.length >= 3 &&
+                                      return PostOnTrending(course);
+                                    }, childCount: snapshot.data.docs.length),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                    )),
+                              ],
+                            )),
+                          ],
+                        ),
+                      );
+                    }),
+              ),
+              Container(
+                child: StreamBuilder(
+                    stream: postsRef
+                        .where('type', isEqualTo: "Pregames & Parties")
+                        .where('privacy', isEqualTo: "Public")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
+                        return Text('');
+
+                      return Container(
+                        height: (snapshot.data.docs.length <= 3 && isLargePhone)
+                            ? 210
+                            : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                ? 345
+                                : (snapshot.data.docs.length <= 3 &&
                                         !isLargePhone)
-                                    ? 310
-                                    : 350,
-                    child: Column(
-                      children: [
-                        Expanded(
-                            child: CustomScrollView(
-                          physics: NeverScrollableScrollPhysics(),
-                          slivers: [
-                            SliverToBoxAdapter(
-                                child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Image.asset('lib/assets/dance.png',
-                                      height: 40),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 8.0),
-                                    child: Text('Pregames & Parties',
-                                        style: TextThemes.extraBold),
+                                    ? 190
+                                    : (snapshot.data.docs.length >= 3 &&
+                                            !isLargePhone)
+                                        ? 310
+                                        : 350,
+                        child: Column(
+                          children: [
+                            Expanded(
+                                child: CustomScrollView(
+                              physics: NeverScrollableScrollPhysics(),
+                              slivers: [
+                                SliverToBoxAdapter(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Image.asset('lib/assets/dance.png',
+                                          height: 40),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text('Pregames & Parties',
+                                            style: TextThemes.extraBold),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            )),
-                            SliverGrid(
-                                delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
-                                  DocumentSnapshot course =
-                                      snapshot.data.docs[index];
-
-                                  return PostOnTrending(course);
-                                }, childCount: snapshot.data.docs.length),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
                                 )),
+                                SliverGrid(
+                                    delegate: SliverChildBuilderDelegate(
+                                        (BuildContext context, int index) {
+                                      DocumentSnapshot course =
+                                          snapshot.data.docs[index];
+
+                                      return PostOnTrending(course);
+                                    }, childCount: snapshot.data.docs.length),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                    )),
+                              ],
+                            )),
                           ],
-                        )),
-                      ],
-                    ),
-                  );
-                }),
-          ),
-          Container(
-            child: StreamBuilder(
-                stream: postsRef
-                    .where('type', isEqualTo: 'Shows')
-                    .where('privacy', isEqualTo: 'Public')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.data.docs.length == 0) return Text('');
-                  return Container(
-                     height: (snapshot.data.docs.length <= 3 && isLargePhone)
-                        ? 210
-                        : (snapshot.data.docs.length >= 3 && isLargePhone)
-                            ? 345
-                            : (snapshot.data.docs.length <= 3 &&
-                                    !isLargePhone)
-                                ? 190
-                                : (snapshot.data.docs.length >= 3 &&
+                        ),
+                      );
+                    }),
+              ),
+              Container(
+                child: StreamBuilder(
+                    stream: postsRef
+                        // .where('type', isEqualTo: 'Shows')
+                        .where('type', isEqualTo: 'Recreation')
+                        .where('privacy', isEqualTo: 'Public')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
+                        return Text('');
+                      return Container(
+                        height: (snapshot.data.docs.length <= 3 && isLargePhone)
+                            ? 210
+                            : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                ? 345
+                                : (snapshot.data.docs.length <= 3 &&
                                         !isLargePhone)
-                                    ? 310
-                                    : 350,
-                    child: Column(
-                      children: [
-                        Expanded(
-                            child: CustomScrollView(
-                          physics: NeverScrollableScrollPhysics(),
-                          slivers: [
-                            SliverToBoxAdapter(
-                                child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 2.0),
-                                    child: Image.asset('lib/assets/show3.png',
-                                        height: 40),
+                                    ? 190
+                                    : (snapshot.data.docs.length >= 3 &&
+                                            !isLargePhone)
+                                        ? 310
+                                        : 350,
+                        child: Column(
+                          children: [
+                            Expanded(
+                                child: CustomScrollView(
+                              physics: NeverScrollableScrollPhysics(),
+                              slivers: [
+                                SliverToBoxAdapter(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 2.0),
+                                        child: Image.asset(
+                                            'lib/assets/show3.png',
+                                            height: 40),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Text('More',
+                                            style: TextThemes.extraBold),
+                                      ),
+                                    ],
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 8.0),
-                                    child: Text('More',
-                                        style: TextThemes.extraBold),
-                                  ),
-                                ],
-                              ),
-                            )),
-                            SliverGrid(
-                                delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
-                                  DocumentSnapshot course =
-                                      snapshot.data.docs[index];
-
-                                  return PostOnTrending(course);
-                                }, childCount: snapshot.data.docs.length),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
                                 )),
+                                SliverGrid(
+                                    delegate: SliverChildBuilderDelegate(
+                                        (BuildContext context, int index) {
+                                      DocumentSnapshot course =
+                                          snapshot.data.docs[index];
+
+                                      return PostOnTrending(course);
+                                    }, childCount: snapshot.data.docs.length),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                    )),
+                              ],
+                            )),
                           ],
-                        )),
-                      ],
-                    ),
-                  );
-                }),
+                        ),
+                      );
+                    }),
+              ),
+            ]),
           ),
-        ]),
+        ],
       ),
-    ],
-        ),
-      );
+    );
   }
 }
 

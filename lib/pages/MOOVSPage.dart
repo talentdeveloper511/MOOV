@@ -141,16 +141,16 @@ class _MOOVSPageState extends State<MOOVSPage>
                           itemBuilder: (context, index) {
                             DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
-                            Map<String, dynamic> invitees = course['invitees'];
-                            List<dynamic> inviteesIds = invitees.keys.toList();
-                            List<dynamic> inviteesValues =
-                                invitees.values.toList();
+                            Map<String, dynamic> statuses = course['statuses'];
+                            List<dynamic> statusesIds = statuses.keys.toList();
+                            List<dynamic> statusesValues =
+                                statuses.values.toList();
 
                             bool hide = false;
-                            if (invitees != null) {
-                              for (int i = 0; i < invitees.length; i++) {
-                                if (inviteesIds[i] == currentUser.id) {
-                                  if (inviteesValues[i] != 3) {
+                            if (statuses != null) {
+                              for (int i = 0; i < statuses.length; i++) {
+                                if (statusesIds[i] == currentUser.id) {
+                                  if (statusesValues[i] != 3) {
                                     hide = true;
                                   }
                                 }

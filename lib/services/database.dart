@@ -21,11 +21,11 @@ class Database {
   final strUserName = googleSignIn.currentUser.displayName;
   final strPic = googleSignIn.currentUser.photoUrl;
 
-  FutureOr inviteesNotification(postId, previewImg, title, invitees) {
-    if (invitees.length > 0) {
-      for (int i = 0; i < invitees.length; i++) {
+  FutureOr inviteesNotification(postId, previewImg, title, statuses) {
+    if (statuses.length > 0) {
+      for (int i = 0; i < statuses.length; i++) {
         notificationFeedRef
-            .doc(invitees[i])
+            .doc(statuses[i])
             .collection('feedItems')
             .doc(postId + 'eventinvite')
             .set({
@@ -49,7 +49,7 @@ class Database {
       privacy,
       address,
       DateTime startDate,
-      invitees,
+      statuses,
       int maxOccupancy,
       int venmo,
       bool barcode,
@@ -63,8 +63,8 @@ class Database {
       'description': description,
       'address': address,
       'startDate': startDate,
-      'invitees': {
-        for (var item in invitees) item.toString(): 2,
+      'statuses': {
+        for (var item in statuses) item.toString(): -1,
       },
       'maxOccupancy': maxOccupancy,
       'venmo': venmo,
@@ -74,7 +74,7 @@ class Database {
       "featured": false,
       "postId": postId,
       "going": []
-    }).then(inviteesNotification(postId, imageUrl, title, invitees));
+    }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     postsRef.orderBy("startDate", descending: true);
 
@@ -97,11 +97,13 @@ class Database {
       //     postId
       //     );
       postsRef.doc(postId).set({
-        "invitees": {userId: 1}
+        "statuses": {userId: 1}
       }, SetOptions(merge: true));
 
       String serialUser = userId;
       transaction.update(ref, {
+        'going': FieldValue.arrayRemove([serialUser]),
+
         // 'notGoing': FieldValue.arrayUnion([serialUser]),
         // 'notGoingCounter': FieldValue.increment(1)
       });
@@ -124,7 +126,7 @@ class Database {
       //     postId
       //     );
       postsRef.doc(postId).set({
-        "invitees": {user.id: FieldValue.delete()}
+        "statuses": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));
 
       String serialUser = userId;
@@ -142,11 +144,14 @@ class Database {
       transaction.update(ref2, {'score': FieldValue.increment(1)});
 
       postsRef.doc(postId).set({
-        "invitees": {userId: 2}
+        "statuses": {userId: 2}
       }, SetOptions(merge: true));
 
       String serialUser = userId;
+
       transaction.update(ref, {
+        'going': FieldValue.arrayRemove([serialUser]),
+
         // 'undecided': FieldValue.arrayUnion([serialUser]),
         // 'undecidedCounter': FieldValue.increment(1)
       });
@@ -165,7 +170,7 @@ class Database {
         transaction.update(ref2, {'score': FieldValue.increment(-1)});
       }
       postsRef.doc(postId).set({
-        "invitees": {user.id: FieldValue.delete()}
+        "statuses": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));
 
       String serialUser = userId;
@@ -183,7 +188,7 @@ class Database {
       transaction.update(ref2, {'score': FieldValue.increment(5)});
 
       await postsRef.doc(postId).set({
-        "invitees": {userId: 3}
+        "statuses": {userId: 3}
       }, SetOptions(merge: true));
 
       ///NOTIF FUNCTION BELOW
@@ -241,7 +246,7 @@ class Database {
       //     );
 
       postsRef.doc(postId).set({
-        "invitees": {user.id: FieldValue.delete()}
+        "statuses": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));
 
       String serialUser = userId;
@@ -543,7 +548,7 @@ class Database {
 
     firebase_storage.Reference ref =
         firebase_storage.FirebaseStorage.instance.ref().child(filePath);
-    
+
     groupsRef.doc(gid).get().then((doc) {
       if (doc.exists) {
         // _storage.ref().child(filePath).delete();
