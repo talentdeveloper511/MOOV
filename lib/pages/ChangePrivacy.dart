@@ -15,14 +15,14 @@ import 'HomePage.dart';
 import 'ProfilePageWithHeader.dart';
 import 'UserData.dart';
 
-class SettingsPage extends StatefulWidget {
+class ChangePrivacy extends StatefulWidget {
   @override
-  _SettingsPageState createState() {
-    return _SettingsPageState();
+  _ChangePrivacyState createState() {
+    return _ChangePrivacyState();
   }
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _ChangePrivacyState extends State<ChangePrivacy> {
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
 
@@ -136,17 +136,17 @@ class _SettingsPageState extends State<SettingsPage> {
                                   Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Icon(
-                                        Icons.settings,
+                                        Icons.lock_outline,
                                         color: TextThemes.ndBlue,
                                         size: 50,
                                       )),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Text("Settings",
+                                    child: Text("Change Your Privacy",
                                         style: TextThemes.headline1),
                                   ),
                                   Text(
-                                    "Your MOOV, your way",
+                                    "Go as incognito as you want. It's your choice.",
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -159,74 +159,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                 ])),
                                 const SizedBox(height: 10.0),
-                                Card(
-                                  elevation: 4.0,
-                                  margin: const EdgeInsets.fromLTRB(
-                                      32.0, 8.0, 32.0, 16.0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10.0)),
-                                  child: Column(
-                                    children: <Widget>[
-                                      ListTile(
-                                        leading: Icon(
-                                          Icons.lock_outline,
-                                          color: TextThemes.ndBlue,
-                                        ),
-                                        title: Text("Change Privacy"),
-                                        trailing:
-                                            Icon(Icons.keyboard_arrow_right),
-                                        onTap: () {
-                                          //open change password
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChangePrivacy()));
-                                        },
-                                      ),
-                                      _buildDivider(),
-                                      ListTile(
-                                        leading: Icon(
-                                          Icons.edit,
-                                          color: TextThemes.ndBlue,
-                                        ),
-                                        title: Text("Edit Profile"),
-                                        trailing:
-                                            Icon(Icons.keyboard_arrow_right),
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditProfile()));
-                                        },
-                                      ),
-                                      _buildDivider(),
-                                      ListTile(
-                                        leading: Icon(
-                                          Icons.data_usage_sharp,
-                                          color: TextThemes.ndBlue,
-                                        ),
-                                        title: Text("See Your Data"),
-                                        trailing:
-                                            Icon(Icons.keyboard_arrow_right),
-                                        onTap: () {
-                                          //open change location
-
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      UserData()));
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
                                 const SizedBox(height: 20.0),
                                 Text(
-                                  "Notification Settings",
+                                  "Privacy Settings",
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
@@ -237,60 +172,38 @@ class _SettingsPageState extends State<SettingsPage> {
                                   activeColor: TextThemes.ndBlue,
                                   contentPadding: const EdgeInsets.all(0),
                                   value: false,
-                                  title: Text("Pause All"),
+                                  title: Text(
+                                      "Only friends can see my going status"),
+                                  onChanged: (val) {},
+                                ),
+                                SwitchListTile(
+                                  activeColor: TextThemes.ndBlue,
+                                  contentPadding: const EdgeInsets.all(0),
+                                  value: false,
+                                  title: Text(
+                                      "Nobody can see my going status (incognito)"),
                                   onChanged: (val) {},
                                 ),
                                 SwitchListTile(
                                   activeColor: TextThemes.ndBlue,
                                   contentPadding: const EdgeInsets.all(0),
                                   value: true,
-                                  title: Text("Going to your MOOV"),
+                                  title: Text(
+                                      "Show my dorm and class year on my profile"),
                                   onChanged: (val) {},
                                 ),
                                 SwitchListTile(
                                   activeColor: TextThemes.ndBlue,
                                   contentPadding: const EdgeInsets.all(0),
                                   value: true,
-                                  title: Text("Hour before MOOV starts"),
-                                  onChanged: (val) {},
-                                ),
-                                SwitchListTile(
-                                  activeColor: TextThemes.ndBlue,
-                                  contentPadding: const EdgeInsets.all(0),
-                                  value: true,
-                                  title: Text("Friend Group Suggestions"),
+                                  title: Text(
+                                      "Friends can see my plans on the friend finder"),
                                   onChanged: (val) {},
                                 ),
                                 const SizedBox(height: 60.0),
                               ],
                             ),
                           ),
-                          Positioned(
-                            bottom: -20,
-                            left: -20,
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 00,
-                            left: 00,
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.power_off,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                showAlertDialog(context);
-                              },
-                            ),
-                          )
                         ],
                       ),
                     );
@@ -306,35 +219,6 @@ class _SettingsPageState extends State<SettingsPage> {
       width: double.infinity,
       height: 1.0,
       color: Colors.grey.shade400,
-    );
-  }
-
-  void showAlertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      child: CupertinoAlertDialog(
-        title: Text("Sign out?",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nWhere you goin'?"),
-        actions: [
-          CupertinoDialogAction(
-              isDefaultAction: true,
-              child:
-                  Text("Yes, sign me out", style: TextStyle(color: Colors.red)),
-              onPressed: () {
-                home.googleSignIn.signOut();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => home.Home()),
-                  (Route<dynamic> route) => false,
-                );
-              }),
-          CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
-            onPressed: () => Navigator.of(context).pop(true),
-          )
-        ],
-      ),
     );
   }
 }

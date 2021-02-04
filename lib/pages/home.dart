@@ -395,7 +395,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            Image.asset('lib/assets/ndlogo.png', height: 35),
+            Image.asset('lib/assets/ndlogo1.png', height: 45),
           ].map((i) {
             return Builder(
               builder: (BuildContext context) {

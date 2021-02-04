@@ -17,7 +17,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
-import 'package:MOOV/pages/notification_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
 
