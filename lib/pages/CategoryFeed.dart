@@ -1018,13 +1018,17 @@ class PostOnFeed extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             color: Colors.red,
                                             borderRadius:
+<<<<<<< HEAD
+                                                BorderRadius.circular(2.0)),
+=======
                                                 BorderRadius.circular(5)),
+>>>>>>> bd4afa753428dd511da5b5f8710198d4982ba661
 
                                         // showAlertDialog(context, postId, userId),
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Text(
-                                            "Edit",
+                                            " Edit ",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 13),

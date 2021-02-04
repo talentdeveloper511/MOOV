@@ -352,7 +352,7 @@ class _GroupFormState extends State<GroupForm> {
                                                             type:
                                                                 PageTransitionType
                                                                     .bottomToTop,
-                                                            child: SearchUsersPost(
+                                                            child: AddUsersFromCreateGroup(
                                                                 memberoonis)))
                                                     .then(onGoBack);
                                               },

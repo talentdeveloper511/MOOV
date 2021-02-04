@@ -189,30 +189,24 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                     children: <Widget>[
                       // Sign In Button
                       new FlatButton(
-                        splashColor: Colors.white,
-                        color: Colors.white,
-                        onPressed: () {
-                          _tabController.animateTo(0);
-                          setState(() {
-                            _currentIndex = (_tabController.animation.value)
-                                .round(); //_tabController.animation.value returns double
+                          splashColor: Colors.white,
+                          color: Colors.white,
+                          onPressed: () {
+                            _tabController.animateTo(0);
+                            setState(() {
+                              _currentIndex = (_tabController.animation.value)
+                                  .round(); //_tabController.animation.value returns double
 
-                            _currentIndex = 0;
-                          });
-                        },
-                        child: _currentIndex == 0
-                            ? GradientText(
-                                '     People  ',
-                                gradient: LinearGradient(colors: [
-                                  Colors.blue.shade400,
-                                  Colors.blue.shade900,
-                                ]),
-                              )
-                            : Text(
-                                "     People  ",
-                                style: TextStyle(fontSize: 16.5),
-                              ),
-                      ),
+                              _currentIndex = 0;
+                            });
+                          },
+                          child: GradientText(
+                            'People',
+                            gradient: LinearGradient(colors: [
+                              Colors.blue.shade400,
+                              Colors.blue.shade900,
+                            ]),
+                          )),
                       // Sign Up Button
 
                       FlatButton(
@@ -395,6 +389,314 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                                           : Container();
                                                     },
                                                     childCount: currSearchStuff0
+                                                            .length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ]),
+                                    );
+                                  }
+                              }
+                            }));
+                  })),
+    );
+  }
+}
+
+class AddUsersFromCreateGroup extends StatefulWidget {
+  List<String> invitees;
+  AddUsersFromCreateGroup(this.invitees);
+
+  @override
+  _AddUsersFromCreateGroupState createState() =>
+      _AddUsersFromCreateGroupState(this.invitees);
+}
+
+class _AddUsersFromCreateGroupState extends State<AddUsersFromCreateGroup>
+    with SingleTickerProviderStateMixin {
+  // TabController to control and switch tabs
+  TabController _tabController;
+  int _currentIndex = 0;
+  Map<int, Widget> map =
+      new Map(); // Cupertino Segmented Control takes children in form of Map.
+  List<Widget>
+      childWidgets; //The Widgets that has to be loaded when a tab is selected.
+  int selectedIndex = 0;
+
+  Widget getChildWidget() => childWidgets[selectedIndex];
+
+  List<String> invitees;
+  _AddUsersFromCreateGroupState(this.invitees);
+
+  final TextEditingController searchController = TextEditingController();
+  final textFieldFocusNode = FocusNode();
+
+  final Algolia _algoliaApp = AlgoliaApplication.algolia;
+  String _searchTerm;
+
+  Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
+    AlgoliaQuery query = _algoliaApp.instance.index("users").search(input);
+    AlgoliaQuerySnapshot querySnap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> results = querySnap.hits;
+    return results;
+  }
+
+  clearSearch() {
+    searchController.clear();
+
+    setState(() {
+      _searchTerm = null;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        new TabController(vsync: this, length: 1, initialIndex: _currentIndex);
+    _tabController.animation
+      ..addListener(() {
+        setState(() {
+          _currentIndex = (_tabController.animation.value).round();
+        });
+      });
+
+    // Simple declarations
+    TextEditingController searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.dispose();
+    _tabController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          iconSize: 35,
+          icon: Icon(
+            Icons.arrow_drop_down_outlined,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
+        backgroundColor: TextThemes.ndBlue,
+        flexibleSpace: FlexibleSpaceBar(
+          titlePadding: EdgeInsets.all(5),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            toolbarHeight: 96,
+            bottom: PreferredSize(
+                preferredSize: null,
+                child: Column(children: <Widget>[
+                  TextField(
+                      style: TextStyle(fontSize: 20),
+                      controller: searchController,
+                      onChanged: (val) {
+                        setState(() {
+                          _searchTerm = val;
+                        });
+                      },
+                      // Set Focus Node
+                      focusNode: textFieldFocusNode,
+                      decoration: InputDecoration(
+                        labelStyle: TextStyle(fontSize: 20),
+                        border: InputBorder.none,
+                        hintText: 'Search MOOV',
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.black),
+                        suffixIcon: GestureDetector(
+                            onTap: () {
+                              clearSearch();
+                              // Unfocus all focus nodes
+                              textFieldFocusNode.unfocus();
+
+                              // Disable text field's focus node request
+                              textFieldFocusNode.canRequestFocus = false;
+
+                              //Enable the text field's focus node request after some delay
+                              Future.delayed(Duration(milliseconds: 10), () {
+                                textFieldFocusNode.canRequestFocus = true;
+                              });
+                            },
+                            child: IconButton(
+                                onPressed: null,
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: Colors.black,
+                                ))),
+                      )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      // Sign In Button
+                      new FlatButton(
+                          splashColor: Colors.white,
+                          color: Colors.white,
+                          onPressed: () {
+                            _tabController.animateTo(0);
+                            setState(() {
+                              _currentIndex = (_tabController.animation.value)
+                                  .round(); //_tabController.animation.value returns double
+
+                              _currentIndex = 0;
+                            });
+                          },
+                          child: GradientText(
+                            '     People  ',
+                            gradient: LinearGradient(colors: [
+                              Colors.blue.shade400,
+                              Colors.blue.shade900,
+                            ]),
+                          )),
+                      // Sign Up Button
+                    ],
+                  ),
+                ])),
+          ),
+          backgroundColor: Colors.white,
+          body: _searchTerm == null
+              ? SingleChildScrollView(
+                  child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.pink[300], Colors.pink[200]],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(bottom: 50),
+                                  child: RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                          style: TextThemes.mediumbody,
+                                          children: [
+                                            TextSpan(
+                                                text: "Invite the squad,",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300)),
+                                            TextSpan(
+                                                text: " now",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            TextSpan(
+                                                text: ".",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300))
+                                          ]))),
+                              Padding(
+                                  padding: EdgeInsets.only(bottom: 250),
+                                  child: Image.asset('lib/assets/ff.png'))
+                            ],
+                          ),
+                        ),
+                      )),
+                )
+              : StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                  stream: Stream.fromFuture(_operation(_searchTerm)),
+                  builder: (context, snapshot0) {
+                    return Container(
+                        child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                            stream: Stream.fromFuture(_operation(_searchTerm)),
+                            builder: (context, snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.waiting:
+                                  return Container();
+                                default:
+                                  if (snapshot.hasError || !snapshot.hasData)
+                                    return linearProgress();
+                                  else {
+                                    List<AlgoliaObjectSnapshot>
+                                        currSearchStuff = snapshot.data;
+
+                                    return Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.90,
+                                      child: TabBarView(
+                                          controller: _tabController,
+                                          children: [
+                                            CustomScrollView(
+                                              shrinkWrap: true,
+                                              slivers: <Widget>[
+                                                SliverList(
+                                                  delegate:
+                                                      SliverChildBuilderDelegate(
+                                                    (context, index) {
+                                                      return _searchTerm != null
+                                                          ? UserPostResult(
+                                                              currSearchStuff[
+                                                                          index]
+                                                                      .data[
+                                                                  "displayName"],
+                                                              currSearchStuff[
+                                                                          index]
+                                                                      .data[
+                                                                  "email"],
+                                                              currSearchStuff[
+                                                                          index]
+                                                                      .data[
+                                                                  "photoUrl"],
+                                                              currSearchStuff[
+                                                                      index]
+                                                                  .data["id"],
+                                                              currSearchStuff[
+                                                                          index]
+                                                                      .data[
+                                                                  "isAmbassador"],
+                                                              invitees)
+                                                          : Container();
+                                                    },
+                                                    childCount: currSearchStuff
                                                             .length ??
                                                         0,
                                                   ),
