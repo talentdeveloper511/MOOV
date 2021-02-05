@@ -252,6 +252,10 @@ exports.onCreateGroupFeedItem = functions.firestore
             title = `${activityFeedItem.username} `;
             body = "accepted your friend request";
             break;
+          case "created":
+            title = `${activityFeedItem.username} `;
+            body = `just posted ${activityFeedItem.title}`;
+            break;
           default:
             break;
         }

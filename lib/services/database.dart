@@ -53,7 +53,6 @@ class Database {
             .set({
           "type": "canceled",
           "postId": postId,
-          "previewImg": "",
           "title": title,
           "username": currentUser.displayName,
           "userId": currentUser.id,
