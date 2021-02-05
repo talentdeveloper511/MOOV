@@ -27,7 +27,7 @@ class GroupCarousel extends StatelessWidget {
 
     bool isLargePhone = Screen.diagonal(context) > 766;
 
-    return (!currentUser.friendGroups.isEmpty)
+    return (currentUser.friendGroups.isEmpty)
         ? Container(
             height: 110,
             child: Center(
