@@ -132,7 +132,7 @@ class _NotificationFeedGroupState extends State<NotificationFeedGroup> {
                           return Container(
                               child: Center(
                                   child: Text(
-                            "You're up to date on your notifications! Let's go!",
+                            "You're all up to date on notifications!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: TextThemes.ndBlue, fontSize: 25),
@@ -453,7 +453,7 @@ class NotificationFeedItem extends StatelessWidget {
     } else if (type == 'friendGroup') {
       activityItemText = 'has added you to ';
     } else if (type == 'invite') {
-      activityItemText = 'has invited you to ';
+      activityItemText = 'has invited you all to ';
     } else if (type == 'suggestion') {
       activityItemText = 'suggested ';
     } else if (type == 'deleted') {

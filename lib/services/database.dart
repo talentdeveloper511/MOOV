@@ -42,9 +42,10 @@ class Database {
     }
   }
 
-  FutureOr canceledNotification(postId, previewImg, title, going) {
+  void canceledNotification(postId, title, going) {
     if (going.length > 0) {
       for (int i = 0; i < going.length; i++) {
+        print(going[i]);
         notificationFeedRef
             .doc(going[i])
             .collection('feedItems')
@@ -52,7 +53,7 @@ class Database {
             .set({
           "type": "canceled",
           "postId": postId,
-          "previewImg": previewImg,
+          "previewImg": "",
           "title": title,
           "username": currentUser.displayName,
           "userId": currentUser.id,
