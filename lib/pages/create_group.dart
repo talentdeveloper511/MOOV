@@ -87,19 +87,29 @@ class _GroupFormState extends State<GroupForm> {
   }
 
   createGroupInFirestore(gname, cid, pic) async {
+    List<String> memberNames = [];
     final String groupName = gname;
     final groupId = generateRandomString(20);
 
+    for (int i = 0; i < memberoonis.length; i++) {
+      usersRef
+          .doc(memberoonis[i])
+          .get()
+          .then((snap) => {memberNames.add(snap.data()['displayName']),
     groupsRef.doc(groupId).set({
       "groupName": groupName,
       "members": memberoonis,
+      "memberNames": memberNames,
       "groupPic": pic,
       "groupId": groupId,
       // "chat": {'messages': []},
       "nextMOOV": "",
       "voters": {}
       // "gid": id
+    })
     });
+    }
+
 
     // .then((value) {
     //   String data = value.documentID;
@@ -352,8 +362,9 @@ class _GroupFormState extends State<GroupForm> {
                                                             type:
                                                                 PageTransitionType
                                                                     .bottomToTop,
-                                                            child: AddUsersFromCreateGroup(
-                                                                memberoonis)))
+                                                            child:
+                                                                AddUsersFromCreateGroup(
+                                                                    memberoonis)))
                                                     .then(onGoBack);
                                               },
                                             ),
@@ -504,7 +515,8 @@ class _GroupFormState extends State<GroupForm> {
                                     child: Text(
                                       "Create Friend Group",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.white, fontSize: 20),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
                                     ),
                                   ),
                                 ),

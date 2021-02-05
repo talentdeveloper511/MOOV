@@ -561,20 +561,20 @@ class _GroupDetailState extends State<GroupDetail> {
                               //         style: TextStyle(color: Colors.red),
                               //       )),
                               // ),
-                              IconButton(
-                                padding: EdgeInsets.all(5.0),
-                                icon: Icon(Icons.person_add),
-                                color: Colors.white,
-                                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.bottomToTop,
-                                          child: AddUsers(groupName, gid,
-                                              groupPic, members, nextMOOV)));
-                                },
-                              ),
+                              // IconButton(
+                              //   padding: EdgeInsets.all(5.0),
+                              //   icon: Icon(Icons.person_add),
+                              //   color: Colors.white,
+                              //   splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                              //   onPressed: () {
+                              //     Navigator.push(
+                              //         context,
+                              //         PageTransition(
+                              //             type: PageTransitionType.bottomToTop,
+                              //             child: AddUsers(groupName, gid,
+                              //                 groupPic, members, nextMOOV)));
+                              //   },
+                              // ),
                               FocusedMenuHolder(
                                 menuWidth:
                                     MediaQuery.of(context).size.width * 0.50,
@@ -844,10 +844,10 @@ class _GroupDetailState extends State<GroupDetail> {
 
   leaveGroup() {
     if (members.length == 1) {
-      Database().leaveGroup(currentUser.id, groupName, gid);
+      Database().leaveGroup(currentUser.id, groupName, gid, currentUser.displayName);
       Database().destroyGroup(gid, groupName);
     } else {
-      Database().leaveGroup(currentUser.id, groupName, gid);
+      Database().leaveGroup(currentUser.id, groupName, gid, currentUser.displayName);
     }
     Navigator.pop(
       context,

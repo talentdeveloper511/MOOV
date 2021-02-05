@@ -552,7 +552,7 @@ class Database {
         .get();
   }
 
-  Future<void> leaveGroup(id, gname, gid) async {
+  Future<void> leaveGroup(id, gname, gid, displayName) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
       final DocumentReference ref2 =
@@ -562,6 +562,8 @@ class Database {
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayRemove([id]),
+                'memberNames': FieldValue.arrayRemove([displayName]),
+
       });
     });
   }
@@ -601,7 +603,7 @@ class Database {
     });
   }
 
-  Future<void> addUser(id, gname, gid) async {
+  Future<void> addUser(id, gname, gid, displayName) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
       final DocumentReference ref2 =
@@ -612,6 +614,8 @@ class Database {
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayUnion([id]),
+                'memberNames': FieldValue.arrayUnion([displayName]),
+
       });
     });
   }

@@ -352,7 +352,8 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                                                           index]
                                                                       .data[
                                                                   "isAmbassador"],
-                                                              invitees)
+                                                              invitees,
+                                                            )
                                                           : Container();
                                                     },
                                                     childCount: currSearchStuff
@@ -396,7 +397,11 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                                                           index]
                                                                       .data[
                                                                   "members"],
-                                                              invitees)
+                                                              invitees,
+                                                              currSearchStuff0[
+                                                                          index]
+                                                                      .data[
+                                                                  "memberNames"])
                                                           : Container();
                                                     },
                                                     childCount: currSearchStuff0
@@ -418,7 +423,9 @@ class _SearchUsersPostState extends State<SearchUsersPost>
 
 class AddUsersFromCreateGroup extends StatefulWidget {
   List<String> invitees;
-  AddUsersFromCreateGroup(this.invitees);
+  AddUsersFromCreateGroup(
+    this.invitees,
+  );
 
   @override
   _AddUsersFromCreateGroupState createState() =>
@@ -747,6 +754,7 @@ class _UserPostResultState extends State<UserPostResult> {
   String userId;
   bool isAmbassador;
   List<String> invitees;
+
   bool status = false;
 
   _UserPostResultState(this.displayName, this.email, this.proPic, this.userId,
@@ -812,6 +820,7 @@ class _UserPostResultState extends State<UserPostResult> {
                                 BorderRadius.all(Radius.circular(3.0))),
                         onPressed: () {
                           invitees.remove(userId);
+
                           setState(() {
                             status = false;
                           });
@@ -1189,7 +1198,7 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
                         borderRadius: BorderRadius.all(Radius.circular(3.0))),
                     onPressed: () {
                       setState(() {
-                        status = false;
+                        status = true;
                       });
                     },
                     child: Text(
@@ -1208,7 +1217,7 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(3.0))),
                     onPressed: () {
-                      Database().addUser(userId, gname, gid);
+                      Database().addUser(userId, gname, gid, displayName);
                       Database().addedToGroup(userId, gname, gid, pic);
                       setState(() {
                         status = true;
@@ -1231,13 +1240,14 @@ class InviteGroup extends StatefulWidget {
   String gname, gid, pic, moov;
   List<dynamic> members;
   List<String> invitees;
+  List<String> memberNames;
 
   InviteGroup(
-      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
+      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees, this.memberNames);
 
   @override
   _InviteGroupState createState() => _InviteGroupState(
-      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
+      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees, this.memberNames);
 }
 
 class _InviteGroupState extends State<InviteGroup> {
@@ -1245,9 +1255,11 @@ class _InviteGroupState extends State<InviteGroup> {
   List members, friendGroups;
   bool status = false;
   List<String> invitees;
+    List<String> memberNames;
+
 
   _InviteGroupState(
-      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees);
+      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees, this.memberNames);
 
   @override
   Widget build(BuildContext context) {
