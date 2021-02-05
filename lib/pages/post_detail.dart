@@ -161,34 +161,34 @@ class _BannerImage extends StatelessWidget {
                 onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => EditPost(postId))),
                 child: Container(
-                height: 45,
-                width: 70,
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.red,
-                        Colors.red[300],
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      "Edit",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ],
+                  height: 45,
+                  width: 70,
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.red,
+                          Colors.red[300],
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        "Edit",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               ),
             )
           : Text(''),
@@ -252,6 +252,95 @@ class _NonImageContents extends StatelessWidget {
           PostTimeAndPlace(
               startDate, address, course['venmo'], course['userId']),
           _AuthorContent(userId, course),
+          GestureDetector(
+            onTap: () {
+              showComments(context,
+                  postId: moovId,
+                  ownerId: currentUser.id,
+                  mediaUrl: currentUser.photoUrl);
+            },
+            child: GestureDetector(
+              onTap: () {
+                showComments(context,
+                    postId: moovId,
+                    ownerId: currentUser.id,
+                    mediaUrl: currentUser.photoUrl);
+              },
+              child: StreamBuilder(
+                  stream:
+                      postsRef.doc(moovId).collection('comments').snapshots(),
+                  builder: (context, snapshot) {
+                    bool isLargePhone = Screen.diagonal(context) > 766;
+                    if (!snapshot.hasData || snapshot.data.docs.length == 0)
+                      return Container();
+                    String commentCount = snapshot.data.docs.length.toString();
+                    return Stack(children: [
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 1.0),
+                            child: Container(
+                              height: 1.0,
+                              width: 500.0,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 34,
+                                    backgroundColor: TextThemes.ndGold,
+                                    child: CircleAvatar(
+                                      // backgroundImage: snapshot.data
+                                      //     .documents[index].data['photoUrl'],
+                                      backgroundImage: NetworkImage(
+                                          snapshot.data.docs[0]['avatarUrl']),
+                                      radius: 32,
+                                    ),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text("said")),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 1),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .5,
+                                        child: Text(
+                                          " \"" +
+                                              snapshot.data.docs[0]['comment'] +
+                                              "\"",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          // textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                      )),
+                                ],
+                              )),
+                        ],
+                      ),
+                      Positioned(
+                          right: 5,
+                          bottom: 5,
+                          child: commentCount == "1" ? 
+                          Text("View $commentCount\n Comment",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: TextThemes.ndBlue),
+                          ):
+                           Text("View all $commentCount\n Comments",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: TextThemes.ndBlue),
+                          ))
+                    ]);
+                  }),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.0),
             child: Container(
@@ -260,37 +349,6 @@ class _NonImageContents extends StatelessWidget {
               color: Colors.grey[700],
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: GestureDetector(
-          //     onTap: () {
-          //       showComments(context,
-          //           postId: moovId,
-          //           ownerId: currentUser.id,
-          //           mediaUrl: currentUser.photoUrl);
-          //     },
-          //     child: Align(
-          //         child: commentCount != null && commentCount != 0
-          //             ? Text("Comments " + "(" + commentCount.toString() + ")",
-          //                 style: TextStyle(
-          //                     color: TextThemes.ndBlue,
-          //                     fontSize: 20,
-          //                     fontWeight: FontWeight.bold))
-          //             : Text("Comments",
-          //                 style: TextStyle(
-          //                     color: TextThemes.ndBlue,
-          //                     fontSize: 20,
-          //                     fontWeight: FontWeight.bold))),
-          //   ),
-          // ),
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: 1.0),
-          //   child: Container(
-          //     height: 1.0,
-          //     width: 500.0,
-          //     color: Colors.grey[700],
-          //   ),
-          // ),
           Buttons(moovId),
           Padding(
             padding: EdgeInsets.only(bottom: 10),
@@ -322,7 +380,7 @@ class _NonImageContents extends StatelessWidget {
               ),
             ),
             Positioned(
-                right: 10,
+                right: 25,
                 top: 0,
                 child: GestureDetector(
                   onTap: () {
@@ -333,11 +391,7 @@ class _NonImageContents extends StatelessWidget {
                   },
                   child: Column(
                     children: [
-                      Icon(Icons.comment, size: 20, color: TextThemes.ndBlue),
-                      Text(
-                        "Comments",
-                        style: TextStyle(fontSize: 12),
-                      ),
+                      Icon(Icons.comment, size: 30, color: TextThemes.ndBlue),
                     ],
                   ),
                 ))
@@ -492,10 +546,12 @@ class PostTimeAndPlace extends StatelessWidget {
                             if (!snapshot.hasData) return circularProgress();
 
                             String name = snapshot.data['venmoUsername'];
-                            return (name != "" && name != null) ? Text(
-                              "@$name",
-                              textAlign: TextAlign.center,
-                            ): Text("");
+                            return (name != "" && name != null)
+                                ? Text(
+                                    "@$name",
+                                    textAlign: TextAlign.center,
+                                  )
+                                : Text("");
                           }),
                     )
                   ],
