@@ -912,10 +912,14 @@ class GradientText extends StatelessWidget {
       ),
       child: Text(
         text,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
         style: TextStyle(
           // The color must be set to white for this to work
           color: Colors.white,
           fontSize: 16.5,
+          
         ),
       ),
     );

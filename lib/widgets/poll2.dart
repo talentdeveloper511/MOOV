@@ -85,82 +85,85 @@ class _PollViewState extends State<PollView> {
               child: Stack(children: [
                 Container(
                   height: 200,
-                  child: Column(
-                    children: [
-                      Text(
-                        question,
-                        textAlign: TextAlign.center,
-                        style: TextThemes.headline1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Polls(
-                          children: [
-                            // This cannot be less than 2, else will throw an exception
-                            Polls.options(title: choice1, value: option1),
-                            Polls.options(title: choice2, value: option2),
-                          ],
-                          question: Text(
-                            'ON or OFF Campus Tonight?',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 0),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          pollStyle: TextStyle(color: TextThemes.ndBlue),
-                          currentUser: userId,
-                          creatorID: this.creator,
-                          voteData: voters,
-                          // voteData: usersWhoVoted,
-                          // userChoice: usersWhoVoted[this.userId],
-                          userChoice: voters[userId],
-                          onVoteBackgroundColor: Colors.blue,
-                          leadingBackgroundColor: TextThemes.ndGold,
-                          backgroundColor: Colors.white,
-                          onVote: (choice) {
-                            for (var entry in voters.entries) {
-                              x = entry.key;
-                              y = entry.value;
-                            }
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          question,
+                          textAlign: TextAlign.center,
+                          style: TextThemes.headline1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Polls(
+                            children: [
+                              // This cannot be less than 2, else will throw an exception
+                              Polls.options(title: choice1, value: option1),
+                              Polls.options(title: choice2, value: option2),
+                            ],
+                            question: Text(
+                              'ON or OFF Campus Tonight?',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 0),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            pollStyle: TextStyle(color: TextThemes.ndBlue),
+                            currentUser: userId,
+                            creatorID: this.creator,
+                            voteData: voters,
+                            // voteData: usersWhoVoted,
+                            // userChoice: usersWhoVoted[this.userId],
+                            userChoice: voters[userId],
+                            onVoteBackgroundColor: Colors.blue,
+                            leadingBackgroundColor: TextThemes.ndGold,
+                            backgroundColor: Colors.white,
+                            onVote: (choice) {
+                              for (var entry in voters.entries) {
+                                x = entry.key;
+                                y = entry.value;
+                              }
 
-                            setState(() {
-                              x = choice;
-                            });
-
-                            FirebaseFirestore.instance
-                                .collection('notreDame')
-                                .doc('data')
-                                .collection('poll')
-                                .doc('jan12')
-                                .set({
-                              "voters": {user.id: choice}
-                            }, SetOptions(merge: true));
-
-                            if (choice == 1) {
                               setState(() {
-                                option1 += 1.0;
+                                x = choice;
                               });
-                            }
-                            if (choice == 2) {
-                              setState(() {
-                                option2 += 1.0;
-                              });
-                            }
-                            // if (choice == 3) {
-                            //   setState(() {
-                            //     option3 += 1.0;
-                            //   });
-                            // }
-                            // if (choice == 4) {
-                            //   setState(() {
-                            //     option4 += 1.0;
-                            //   });
-                            // }
-                          }),
-                    ],
+
+                              FirebaseFirestore.instance
+                                  .collection('notreDame')
+                                  .doc('data')
+                                  .collection('poll')
+                                  .doc('jan12')
+                                  .set({
+                                "voters": {user.id: choice}
+                              }, SetOptions(merge: true));
+
+                              if (choice == 1) {
+                                setState(() {
+                                  option1 += 1.0;
+                                });
+                              }
+                              if (choice == 2) {
+                                setState(() {
+                                  option2 += 1.0;
+                                });
+                              }
+                              // if (choice == 3) {
+                              //   setState(() {
+                              //     option3 += 1.0;
+                              //   });
+                              // }
+                              // if (choice == 4) {
+                              //   setState(() {
+                              //     option4 += 1.0;
+                              //   });
+                              // }
+                            }),
+                      ],
+                    ),
                   ),
                 ),
                 voters.containsKey(userId)
                     ? Positioned(
-                        top: isLargePhone ? 45 : 45,
+                        top: isLargePhone ? 60 : 60,
                         left: isLargePhone ? 90 : 90,
                         child: Container(
                           height: 100,
@@ -248,7 +251,7 @@ class _PollViewState extends State<PollView> {
                     : Container(),
                 voters.containsKey(userId)
                     ? Positioned(
-                        bottom: isLargePhone ? -20 : -20,
+                        bottom: isLargePhone ? -35 : -35,
                         left: isLargePhone ? 90 : 90,
                         child: Container(
                           height: 100,

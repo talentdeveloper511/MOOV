@@ -1,6 +1,7 @@
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/create_group.dart';
 import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
@@ -26,16 +27,16 @@ class GroupCarousel extends StatelessWidget {
 
     bool isLargePhone = Screen.diagonal(context) > 766;
 
-    return (currentUser.friendGroups.isEmpty)
+    return (!currentUser.friendGroups.isEmpty)
         ? Container(
             height: 110,
             child: Center(
                 child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 40.0),
+                    padding: const EdgeInsets.only(top: 35.0),
                     child: RaisedButton(
                       onPressed: () {
                         Navigator.push(
@@ -66,211 +67,382 @@ class GroupCarousel extends StatelessWidget {
                 ],
               ),
             )))
-        : Container(
-            child: StreamBuilder(
-                stream: groupsRef
-                    .where('members', arrayContains: user.id)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return CircularProgressIndicator();
-                  if (snapshot.data.docs.length == 0 ||
-                      currentUser.friendGroups.length == 0) {
-                    return Container();
-                  }
-                  DocumentSnapshot course = snapshot.data.docs[0];
-                  int length = course['members'].length - 2;
+        : Padding(
+          padding: const EdgeInsets.only(top: 28.0),
+          child: Container(
+              child: StreamBuilder(
+                  stream: groupsRef
+                      .where('members', arrayContains: user.id)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return CircularProgressIndicator();
+                    if (snapshot.data.docs.length == 0 ||
+                        currentUser.friendGroups.length == 0) {
+                      return Container();
+                    }
+                    DocumentSnapshot course = snapshot.data.docs[0];
+                    int length = course['members'].length - 2;
 
-                  return StreamBuilder(
-                      stream: usersRef
-                          .where('friendGroups',
-                              arrayContains: course['groupId'])
-                          .snapshots(),
-                      builder: (context, snapshot3) {
-                        if (!snapshot3.hasData)
-                          return CircularProgressIndicator();
-                        if (snapshot3.hasError || snapshot3.data == null)
-                          return CircularProgressIndicator();
+                    return StreamBuilder(
+                        stream: usersRef
+                            .where('friendGroups',
+                                arrayContains: course['groupId'])
+                            .snapshots(),
+                        builder: (context, snapshot3) {
+                          if (!snapshot3.hasData)
+                            return CircularProgressIndicator();
+                          if (snapshot3.hasError || snapshot3.data == null)
+                            return CircularProgressIndicator();
 
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                // color: Colors.white,
-                                clipBehavior: Clip.none,
-                                child: Stack(
-                                  children: <Widget>[
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    GroupDetail(
-                                                        course['groupId'])));
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 5.0),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(20)),
-                                                  border: Border.all(
-                                                    color: TextThemes.ndBlue,
-                                                    width: 3,
-                                                  )),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(15)),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: course['groupPic'],
-                                                  fit: BoxFit.cover,
-                                                  height: isLargePhone
-                                                      ? MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          0.08
-                                                      : MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          0.12,
-                                                  width: isLargePhone
-                                                      ? MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.33
-                                                      : MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.3,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(7.5),
-                                            child: Center(
-                                              child: FittedBox(
-                                                child: Text(
-                                                  course['groupName']
-                                                      .toString(),
-                                                  maxLines: 2,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: isLargePhone
-                                                          ? 20.0
-                                                          : 18,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.center,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: isLargePhone ? 65 : 60,
-                                      right: 0,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Stack(children: [
-                                            Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child:
-                                                    course['members'].length > 1
-                                                        ? CircleAvatar(
-                                                            radius: 15.0,
-                                                            backgroundImage:
-                                                                NetworkImage(
-                                                              snapshot3.data
-                                                                      .docs[1]
-                                                                  ['photoUrl'],
-                                                            ),
-                                                          )
-                                                        : Container()),
-                                            Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 4, left: 20.0),
-                                                child: CircleAvatar(
-                                                  radius: 15.0,
-                                                  backgroundImage: NetworkImage(
-                                                    snapshot3.data.docs[0]
-                                                        ['photoUrl'],
-                                                  ),
-                                                )),
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width * .33,
+                                  // color: Colors.white,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      GroupDetail(
+                                                          course['groupId'])));
+                                        },
+                                        child: Column(
+                                          children: [
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 4, left: 40.0),
-                                              child: CircleAvatar(
-                                                radius: 15.0,
-                                                child: course['members']
-                                                            .length >
-                                                        2
-                                                    ? Text(
-                                                        "+" +
-                                                            (length.toString()),
-                                                        style: TextStyle(
-                                                            color: TextThemes
-                                                                .ndGold,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      )
-                                                    : Text(
-                                                        (course['members']
-                                                            .length
-                                                            .toString()),
-                                                        style: TextStyle(
-                                                            color: TextThemes
-                                                                .ndGold,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      ),
-                                                backgroundColor:
-                                                    TextThemes.ndBlue,
+                                                  top: 10.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(20)),
+                                                    border: Border.all(
+                                                      color: TextThemes.ndBlue,
+                                                      width: 3,
+                                                    )),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(15)),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: course['groupPic'],
+                                                    fit: BoxFit.cover,
+                                                    height: isLargePhone
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.08
+                                                        : MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.12,
+                                                    width: isLargePhone
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.33
+                                                        : MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.33,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ]),
-                                        ],
+                                           
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Positioned(
+                                        bottom: isLargePhone ? 25 : 25,
+                                        right: 0,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Stack(children: [
+                                              Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child:
+                                                      course['members'].length > 1
+                                                          ? CircleAvatar(
+                                                              radius: 15.0,
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                snapshot3.data
+                                                                        .docs[1]
+                                                                    ['photoUrl'],
+                                                              ),
+                                                            )
+                                                          : Container()),
+                                              Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      top: 4, left: 20.0),
+                                                  child: CircleAvatar(
+                                                    radius: 15.0,
+                                                    backgroundImage: NetworkImage(
+                                                      snapshot3.data.docs[0]
+                                                          ['photoUrl'],
+                                                    ),
+                                                  )),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 4, left: 40.0),
+                                                child: CircleAvatar(
+                                                  radius: 15.0,
+                                                  child: course['members']
+                                                              .length >
+                                                          2
+                                                      ? Text(
+                                                          "+" +
+                                                              (length.toString()),
+                                                          style: TextStyle(
+                                                              color: TextThemes
+                                                                  .ndGold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        )
+                                                      : Text(
+                                                          (course['members']
+                                                              .length
+                                                              .toString()),
+                                                          style: TextStyle(
+                                                              color: TextThemes
+                                                                  .ndGold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
+                                                  backgroundColor:
+                                                      TextThemes.ndBlue,
+                                                ),
+                                              ),
+                                            ]),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            course['nextMOOV'] == "" ?
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 35.0),
-                              child: Text(
-                                "needs a MOOV \ntonight!",
-                                style: TextStyle(fontSize: 16),
-                                textAlign: TextAlign.center,
-                              ),
-                            ):
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 35.0),
-                              child: Text(
-                                "needs you to vote \non tonight's MOOV!",
-                                style: TextStyle(fontSize: 16),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        );
-                      });
-                }));
+                              StreamBuilder(
+                                  stream: groupsRef
+                                      .doc(course['groupId'])
+                                      .collection("suggestedMOOVs")
+                                      .snapshots(),
+                                  builder: (context, snapshot2) {
+                                    if (!snapshot2.hasData)
+                                      return CircularProgressIndicator();
+                                    if (snapshot2.data.docs.length == 0 ||
+                                        currentUser.friendGroups.length == 0) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20.0),
+                                        child: Text(
+                                          "needs a MOOV \ntonight!",
+                                          style: TextStyle(fontSize: 16),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+                                    }
+                                    DocumentSnapshot course2 =
+                                        snapshot2.data.docs[0];
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 35.0),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 15.0),
+                                            child: Text(
+                                              " next MOOV: ",
+                                              style: TextStyle(fontSize: 16),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          StreamBuilder(
+                                              stream: postsRef
+                                                  .doc(course2['nextMOOV'])
+                                                  .snapshots(),
+                                              builder: (context, snapshot3) {
+                                                 if (!snapshot3.hasData)
+                                      return CircularProgressIndicator();
+                                    if (!snapshot3.hasData ||
+                                        currentUser.friendGroups.length == 0) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 0.0),
+                                        child: Text(
+                                          "  needs one \ntonight!",
+                                          style: TextStyle(fontSize: 16, color: TextThemes.ndBlue),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+                                    }
+                                                return GestureDetector(
+                                                  onTap: () => Navigator.of(
+                                                          context)
+                                                      .push(MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PostDetail(course2[
+                                                                  'nextMOOV']))),
+                                                  child: Stack(
+                                                      alignment: Alignment.center,
+                                                      children: <Widget>[
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(top: 15.0),
+                                                          child: SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.33,
+                                                            height: isLargePhone
+                                                                ? MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.09
+                                                                : MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.13,
+                                                            child: Container(
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      snapshot3.data[
+                                                                          'image'],
+                                                                  fit: BoxFit.cover,
+                                                                ),
+                                                              ),
+                                                              margin:
+                                                                  EdgeInsets.only(
+                                                                      left: 10,
+                                                                      top: 0,
+                                                                      right: 10,
+                                                                      bottom: 0),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors.white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                                  Radius.circular(
+                                                                      10),
+                                                                ),
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    spreadRadius: 5,
+                                                                    blurRadius: 7,
+                                                                    offset: Offset(
+                                                                        0,
+                                                                        3), // changes position of shadow
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(top: 10.0),
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius.all(
+                                                                      Radius
+                                                                          .circular(
+                                                                              20)),
+                                                              gradient:
+                                                                  LinearGradient(
+                                                                begin: Alignment
+                                                                    .topCenter,
+                                                                end: Alignment
+                                                                    .bottomCenter,
+                                                                colors: <Color>[
+                                                                  Colors.black
+                                                                      .withAlpha(0),
+                                                                  Colors.black,
+                                                                  Colors.black12,
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(4.0),
+                                                              child: ConstrainedBox(
+                                                                constraints: BoxConstraints(
+                                                                    maxWidth: MediaQuery.of(
+                                                                                context)
+                                                                            .size
+                                                                            .width *
+                                                                        .4),
+                                                                child: Text(
+                                                                  snapshot3.data[
+                                                                      'title'],
+                                                                  maxLines: 2,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'Solway',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          isLargePhone
+                                                                              ? 14.0
+                                                                              : 13),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ]),
+                                                );
+
+                                                //   return SizedBox(
+                                                //     width: MediaQuery.of(context).size.width * .33,
+                                                //     child: GradientText(" " +snapshot.data['title'],   gradient: LinearGradient(colors: [
+                                                //     Colors.purple.shade400,
+                                                //     Colors.purple.shade900,
+                                                // ]),),
+                                                //   );
+                                              })
+                                        ],
+                                      ),
+                                    );
+                                  })
+                            ],
+                          );
+                        });
+                  })),
+        );
   }
 }

@@ -11,6 +11,7 @@ import 'package:MOOV/pages/map_test.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
+import 'package:MOOV/widgets/hottestMOOV.dart';
 import 'package:MOOV/widgets/poll2.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -250,7 +251,7 @@ class _HomePageState extends State<HomePage>
               crossAxisCount: 2,
               mainAxisSpacing: 0.0,
               crossAxisSpacing: 10.0,
-              childAspectRatio: .97,
+              childAspectRatio: 1.1,
               children: <Widget>[
                 Container(
                   child: Column(
@@ -315,10 +316,10 @@ class _HomePageState extends State<HomePage>
                   viewportFraction: 1,
                   initialPage: 0,
                   enableInfiniteScroll: true,
-                  scrollPhysics: NeverScrollableScrollPhysics(),
+                  // scrollPhysics: NeverScrollableScrollPhysics(),
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
-                  autoPlay: true,
+                  autoPlay: false,
                   autoPlayInterval: Duration(seconds: 6),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
@@ -460,10 +461,11 @@ class _HomePageState extends State<HomePage>
                   // MapTest(),
                   PollView(),
                   GroupCarousel(),
+                  HottestMOOV()
                 ]),
           ),
           SliverPadding(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            padding: EdgeInsets.only(left: 10, right: 10, top: 20),
             sliver: SliverGrid.count(
               crossAxisCount: 3,
               mainAxisSpacing: 0.0,
