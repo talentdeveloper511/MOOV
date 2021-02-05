@@ -632,7 +632,7 @@ class Database {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(300)});
 
-      groupsRef.doc(gid).collection("suggestedMOOVs").doc(unix.toString() + " from " + userName).set({
+      groupsRef.doc(gid).collection("suggestedMOOVs").doc(unix.toString() + " from " + userId).set({
         "voters": {userId: 2},
         "nextMOOV": postId,
         "unix": unix,

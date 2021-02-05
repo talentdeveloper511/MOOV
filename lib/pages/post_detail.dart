@@ -328,15 +328,17 @@ class _NonImageContents extends StatelessWidget {
                       Positioned(
                           right: 5,
                           bottom: 5,
-                          child: commentCount == "1" ? 
-                          Text("View $commentCount\n Comment",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: TextThemes.ndBlue),
-                          ):
-                           Text("View all $commentCount\n Comments",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: TextThemes.ndBlue),
-                          ))
+                          child: commentCount == "1"
+                              ? Text(
+                                  "View $commentCount\n Comment",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: TextThemes.ndBlue),
+                                )
+                              : Text(
+                                  "View all $commentCount\n Comments",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: TextThemes.ndBlue),
+                                ))
                     ]);
                   }),
             ),
@@ -668,9 +670,9 @@ class _AuthorContent extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 4.0),
                         child: Column(
                           children: [
+                            Text('Send'),
                             Icon(Icons.send_rounded,
                                 color: Colors.blue[500], size: 25),
-                            Text('Send'),
                           ],
                         ),
                       ),
