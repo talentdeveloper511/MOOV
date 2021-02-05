@@ -1018,7 +1018,7 @@ class PostOnFeed extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             color: Colors.red,
                                             borderRadius:
-                                                BorderRadius.circular(5)),
+                                                BorderRadius.circular(2.0)),
 
                                         // showAlertDialog(context, postId, userId),
                                         child: Padding(

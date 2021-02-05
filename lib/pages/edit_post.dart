@@ -1420,9 +1420,9 @@ class _BannerImage extends StatelessWidget {
 
 void showAlertDialog2(BuildContext context, postId, userId, title, going) {
   delete() {
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      Database().canceledNotification(postId, title, going);
+    Database().canceledNotification(postId, title, going);
 
+    Future.delayed(const Duration(milliseconds: 1000), () {
       Database().deletePost(postId, userId, title);
     });
   }
