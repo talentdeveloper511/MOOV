@@ -285,18 +285,21 @@ class _GroupDetailState extends State<GroupDetail> {
                                     const EdgeInsets.only(top: 8.0, right: 5),
                                 child: GestureDetector(
                                   onTap: () {
-                                      Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationFeedGroup(gid)));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                NotificationFeedGroup(gid)));
                                   },
                                   child: Column(children: [
-                                    NotifIconGroup(iconData: Icons.notifications_active,
-                                    gid: gid,
-                                        ),
+                                    NotifIconGroup(
+                                      iconData: Icons.notifications_active,
+                                      gid: gid,
+                                    ),
                                     Text(
                                       "GROUP",
-                                      style: TextStyle(color: Colors.white, fontSize: 10),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 10),
                                     )
                                   ]),
                                 ),
@@ -1005,6 +1008,7 @@ class _SuggestionsState extends State<Suggestions> {
             voters = course4['voters'];
             String suggestorName = course4['suggestorName'];
             String suggestorId = course4['suggestorId'];
+            int unix = course4['unix'];
 
             List<dynamic> votersIds = voters.keys.toList();
             List<dynamic> votersValues = voters.values.toList();
@@ -1093,11 +1097,11 @@ class _SuggestionsState extends State<Suggestions> {
                           onPressed: () {
                             if (voters != null && status != 1) {
                               Database().addNoVote(
-                                  currentUser.id, groupId, suggestorId);
+                                 unix, currentUser.id, groupId, suggestorId);
                               status = 1;
                             } else if (voters != null && status == 1) {
                               Database().removeNoVote(
-                                  currentUser.id, groupId, suggestorId);
+                                  unix, currentUser.id, groupId, suggestorId);
                               status = 0;
                             }
                           },
@@ -1134,11 +1138,11 @@ class _SuggestionsState extends State<Suggestions> {
                           onPressed: () {
                             if (voters != null && status != 2) {
                               Database().addYesVote(
-                                  currentUser.id, groupId, suggestorId);
+                                  unix, currentUser.id, groupId, suggestorId);
                               status = 2;
                             } else if (voters != null && status == 2) {
                               Database().removeYesVote(
-                                  currentUser.id, groupId, suggestorId);
+                                  unix, currentUser.id, groupId, suggestorId);
                               status = 0;
                             }
                           },

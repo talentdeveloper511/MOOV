@@ -227,6 +227,7 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
                                         currSearchStuff[index].data["image"],
                                         members,
                                         currSearchStuff[index].data["postId"],
+                                        currSearchStuff[index].data["unix"],
                                         gid,
                                         groupName)
                                     : Container();
@@ -252,9 +253,19 @@ class SetMOOVResult extends StatefulWidget {
   final String image;
   final List members;
   final String moov, gid, groupName;
+  final int unix;
 
-  SetMOOVResult(this.title, this.userId, this.description, this.type,
-      this.image, this.members, this.moov, this.gid, this.groupName);
+  SetMOOVResult(
+      this.title,
+      this.userId,
+      this.description,
+      this.type,
+      this.image,
+      this.members,
+      this.moov,
+      this.unix,
+      this.gid,
+      this.groupName);
 
   @override
   _SetMOOVResultState createState() => _SetMOOVResultState(
@@ -265,6 +276,7 @@ class SetMOOVResult extends StatefulWidget {
       this.image,
       this.members,
       this.moov,
+      this.unix,
       this.gid,
       this.groupName);
 }
@@ -277,9 +289,19 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
   final String image;
   final List members;
   final String moov, gid, groupName;
+  final int unix;
 
-  _SetMOOVResultState(this.title, this.userId, this.description, this.type,
-      this.image, this.members, this.moov, this.gid, this.groupName);
+  _SetMOOVResultState(
+      this.title,
+      this.userId,
+      this.description,
+      this.type,
+      this.image,
+      this.members,
+      this.moov,
+      this.unix,
+      this.gid,
+      this.groupName);
 
   @override
   Widget build(BuildContext context) {
@@ -427,39 +449,38 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                   bottom: 7.5,
                   child: GestureDetector(
                     onTap: () {
-                  Database().suggestMOOV(
+                      Database().suggestMOOV(
                           currentUser.id,
                           gid,
                           moov,
+                          unix,
                           currentUser.displayName,
                           members,
                           title,
                           image,
                           groupName);
-                      Navigator.pop(context, moov);      
+                      Navigator.pop(context, moov);
                     },
-                                      child: Container(
-                    height: 30,
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.pink[400], Colors.purple[300]],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
+                    child: Container(
+                      height: 30,
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.pink[400], Colors.purple[300]],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 2.0, right: 2.0),
+                        child: Text(
+                          "Suggest",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 2.0, right: 2.0),
-                      child: Text(
-                        "Suggest",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                ),
                   ),
-                  
-                 
                 ),
               ]),
             ),
@@ -624,6 +645,7 @@ class EventResult extends StatelessWidget {
                       currentUser.id,
                       gid,
                       moov['postId'],
+                      moov['startDate'],
                       currentUser.displayName,
                       members,
                       moov['title'],

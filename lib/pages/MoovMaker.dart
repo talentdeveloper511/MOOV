@@ -1266,6 +1266,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         description: descriptionController.text,
                                         address: addressController.text,
                                         startDate: currentValue,
+                                        unix: currentValue.millisecondsSinceEpoch,
                                         statuses: inviteesNameList,
                                         maxOccupancy: maxOccupancyInt,
                                         venmo: venmoInt,

@@ -822,90 +822,90 @@ class _SuggestionsState extends State<Suggestions> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: BorderSide(color: Colors.black)),
-                          onPressed: () {
-                            if (voters != null && status != 1) {
-                              Database().addNoVote(
-                                  currentUser.id, groupId, suggestorId);
-                              status = 1;
-                            } else if (voters != null && status == 1) {
-                              Database().removeNoVote(
-                                  currentUser.id, groupId, suggestorId);
-                              status = 0;
-                            }
-                          },
-                          color: (status == 1) ? Colors.red : Colors.white,
-                          padding: EdgeInsets.all(5.0),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 3.0, right: 3),
-                            child: (status == 1)
-                                ? Column(
-                                    children: [
-                                      Text('No',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      Icon(Icons.thumb_down,
-                                          color: Colors.white, size: 30),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Text('No'),
-                                      Icon(Icons.thumb_down,
-                                          color: Colors.red, size: 30),
-                                    ],
-                                  ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: BorderSide(color: Colors.black)),
-                          onPressed: () {
-                            if (voters != null && status != 2) {
-                              Database().addYesVote(
-                                  currentUser.id, groupId, suggestorId);
-                              status = 2;
-                            } else if (voters != null && status == 2) {
-                              Database().removeYesVote(
-                                  currentUser.id, groupId, suggestorId);
-                              status = 0;
-                            }
-                          },
-                          color: (status == 2) ? Colors.green : Colors.white,
-                          padding: EdgeInsets.all(5.0),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 3.0, right: 3),
-                            child: (status == 2)
-                                ? Column(
-                                    children: [
-                                      Text('Yes',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      Icon(Icons.thumb_up,
-                                          color: Colors.white, size: 30),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Text('Yes',
-                                          style:
-                                              TextStyle(color: Colors.black)),
-                                      Icon(Icons.thumb_up,
-                                          color: Colors.green, size: 30),
-                                    ],
-                                  ),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: RaisedButton(
+                      //     shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(5),
+                      //         side: BorderSide(color: Colors.black)),
+                      //     onPressed: () {
+                      //       if (voters != null && status != 1) {
+                      //         Database().addNoVote(
+                      //             currentUser.id, groupId, suggestorId);
+                      //         status = 1;
+                      //       } else if (voters != null && status == 1) {
+                      //         Database().removeNoVote(
+                      //             currentUser.id, groupId, suggestorId);
+                      //         status = 0;
+                      //       }
+                      //     },
+                      //     color: (status == 1) ? Colors.red : Colors.white,
+                      //     padding: EdgeInsets.all(5.0),
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.only(left: 3.0, right: 3),
+                      //       child: (status == 1)
+                      //           ? Column(
+                      //               children: [
+                      //                 Text('No',
+                      //                     style:
+                      //                         TextStyle(color: Colors.white)),
+                      //                 Icon(Icons.thumb_down,
+                      //                     color: Colors.white, size: 30),
+                      //               ],
+                      //             )
+                      //           : Column(
+                      //               children: [
+                      //                 Text('No'),
+                      //                 Icon(Icons.thumb_down,
+                      //                     color: Colors.red, size: 30),
+                      //               ],
+                      //             ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: RaisedButton(
+                      //     shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(5),
+                      //         side: BorderSide(color: Colors.black)),
+                      //     onPressed: () {
+                      //       if (voters != null && status != 2) {
+                      //         Database().addYesVote(
+                      //             currentUser.id, groupId, suggestorId);
+                      //         status = 2;
+                      //       } else if (voters != null && status == 2) {
+                      //         Database().removeYesVote(
+                      //             currentUser.id, groupId, suggestorId);
+                      //         status = 0;
+                      //       }
+                      //     },
+                      //     color: (status == 2) ? Colors.green : Colors.white,
+                      //     padding: EdgeInsets.all(5.0),
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.only(left: 3.0, right: 3),
+                      //       child: (status == 2)
+                      //           ? Column(
+                      //               children: [
+                      //                 Text('Yes',
+                      //                     style:
+                      //                         TextStyle(color: Colors.white)),
+                      //                 Icon(Icons.thumb_up,
+                      //                     color: Colors.white, size: 30),
+                      //               ],
+                      //             )
+                      //           : Column(
+                      //               children: [
+                      //                 Text('Yes',
+                      //                     style:
+                      //                         TextStyle(color: Colors.black)),
+                      //                 Icon(Icons.thumb_up,
+                      //                     color: Colors.green, size: 30),
+                      //               ],
+                      //             ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

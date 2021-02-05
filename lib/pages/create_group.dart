@@ -504,7 +504,7 @@ class _GroupFormState extends State<GroupForm> {
                                     child: Text(
                                       "Create Friend Group",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.white, fontSize: 20),
                                     ),
                                   ),
                                 ),

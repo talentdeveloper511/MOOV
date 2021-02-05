@@ -71,6 +71,7 @@ class Database {
       privacy,
       address,
       DateTime startDate,
+      int unix,
       statuses,
       int maxOccupancy,
       int venmo,
@@ -85,6 +86,7 @@ class Database {
       'description': description,
       'address': address,
       'startDate': startDate,
+      'unix': unix,
       'statuses': {
         for (var item in statuses) item.toString(): -1,
       },
@@ -626,14 +628,15 @@ class Database {
   }
 
   Future<void> suggestMOOV(
-      userId, gid, postId, userName, members, title, pic, groupName) async {
+      userId, gid, postId, unix, userName, members, title, pic, groupName) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(300)});
 
-      groupsRef.doc(gid).collection("suggestedMOOVs").doc(userId).set({
+      groupsRef.doc(gid).collection("suggestedMOOVs").doc(unix.toString() + " from " + userName).set({
         "voters": {userId: 2},
         "nextMOOV": postId,
+        "unix": unix,
         "suggestorName": userName,
         "suggestorId": userId
       }, SetOptions(merge: true));
@@ -675,33 +678,33 @@ class Database {
     });
   }
 
-  Future<void> addNoVote(userId, gid, suggestorId) async {
+  Future<void> addNoVote(unix, userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef.doc(gid).collection('suggestedMOOVs').doc(suggestorId).set({
+      groupsRef.doc(gid).collection('suggestedMOOVs').doc(unix.toString() + " from " + suggestorId).set({
         "voters": {userId: 1}
       }, SetOptions(merge: true));
     });
   }
 
-  Future<void> removeNoVote(userId, gid, suggestorId) async {
+  Future<void> removeNoVote(unix, userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef.doc(gid).collection('suggestedMOOVs').doc(suggestorId).set({
+      groupsRef.doc(gid).collection('suggestedMOOVs').doc(unix.toString() + " from " + suggestorId).set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });
   }
 
-  Future<void> addYesVote(userId, gid, suggestorId) async {
+  Future<void> addYesVote(unix, userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef.doc(gid).collection('suggestedMOOVs').doc(suggestorId).set({
+      groupsRef.doc(gid).collection('suggestedMOOVs').doc(unix.toString() + " from " + suggestorId).set({
         "voters": {userId: 2}
       }, SetOptions(merge: true));
     });
   }
 
-  Future<void> removeYesVote(userId, gid, suggestorId) async {
+  Future<void> removeYesVote(unix, userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef.doc(gid).collection('suggestedMOOVs').doc(suggestorId).set({
+      groupsRef.doc(gid).collection('suggestedMOOVs').doc(unix.toString() + " from " + suggestorId).set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });
