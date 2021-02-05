@@ -1037,7 +1037,7 @@ class _EditPostState extends State<EditPost> {
                                                                             BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .2),
                                                                         child:
                                                                             Text(
-                                                                          groupPic,
+                                                                          groupName,
                                                                           maxLines:
                                                                               2,
                                                                           textAlign:

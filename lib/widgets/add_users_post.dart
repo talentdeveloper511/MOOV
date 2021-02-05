@@ -189,24 +189,30 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                     children: <Widget>[
                       // Sign In Button
                       new FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(0);
-                            setState(() {
-                              _currentIndex = (_tabController.animation.value)
-                                  .round(); //_tabController.animation.value returns double
+                        splashColor: Colors.white,
+                        color: Colors.white,
+                        onPressed: () {
+                          _tabController.animateTo(0);
+                          setState(() {
+                            _currentIndex = (_tabController.animation.value)
+                                .round(); //_tabController.animation.value returns double
 
-                              _currentIndex = 0;
-                            });
-                          },
-                          child: GradientText(
-                            'People',
-                            gradient: LinearGradient(colors: [
-                              Colors.blue.shade400,
-                              Colors.blue.shade900,
-                            ]),
-                          )),
+                            _currentIndex = 0;
+                          });
+                        },
+                        child: _currentIndex == 0
+                            ? GradientText(
+                                "People",
+                                gradient: LinearGradient(colors: [
+                                  Colors.blue.shade400,
+                                  Colors.blue.shade900,
+                                ]),
+                              )
+                            : Text(
+                                "People",
+                                style: TextStyle(fontSize: 16.5),
+                              ),
+                      ),
                       // Sign Up Button
 
                       FlatButton(
@@ -215,6 +221,8 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                         onPressed: () {
                           _tabController.animateTo(1);
                           setState(() {
+                            _currentIndex =
+                                (_tabController.animation.value).round();
                             _currentIndex = 1;
                           });
                         },
@@ -292,6 +300,9 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                   builder: (context, snapshot0) {
                     List<AlgoliaObjectSnapshot> currSearchStuff0 =
                         snapshot0.data;
+                    if (currSearchStuff0 == null) {
+                      return linearProgress();
+                    }
                     return Container(
                         child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
                             stream: Stream.fromFuture(_operation(_searchTerm)),

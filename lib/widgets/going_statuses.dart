@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
+import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
@@ -49,146 +51,132 @@ class GoingPage extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: statusesIds.length,
                       itemBuilder: (context, index) {
-                        return StreamBuilder(
-                            stream:
-                                usersRef.doc(statusesIds[index]).snapshots(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData)
-                                return CircularProgressIndicator();
+                        bool hide = false;
+                        if (!_isNumeric(statusesIds[index])) {
+                          hide = true;
+                        }
+                        return (hide == false)
+                            ? StreamBuilder(
+                                stream: usersRef
+                                    .doc(statusesIds[index])
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData)
+                                    return CircularProgressIndicator();
 
-                              statusesValues[index] == (2)
-                                  ? status = 2
-                                  : statusesValues[index] == 1
-                                      ? status = 1
-                                      : statusesValues[index] == 3
-                                          ? status = 3
-                                          : statusesValues[index] == -1
-                                          ? status = -1 :
-                                          status = 0;
+                                  statusesValues[index] == (2)
+                                      ? status = 2
+                                      : statusesValues[index] == 1
+                                          ? status = 1
+                                          : statusesValues[index] == 3
+                                              ? status = 3
+                                              : statusesValues[index] == -1
+                                                  ? status = -1
+                                                  : status = 0;
 
-                              var pic = snapshot.data['photoUrl'];
-                              var name = snapshot.data['displayName'];
-                              bool isAmbassador = snapshot.data['isAmbassador'];
+                                  var pic = snapshot.data['photoUrl'];
+                                  var name = snapshot.data['displayName'];
+                                  bool isAmbassador =
+                                      snapshot.data['isAmbassador'];
 
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 2.0),
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (statusesIds[index] ==
-                                            currentUser.id) {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ProfilePageWithHeader()));
-                                        } else {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      OtherProfile(
-                                                          statusesIds[index])));
-                                        }
-                                      },
-                                      child: Container(
-                                          height: status == 0 ? 0 : 55,
-                                          color: status == 2
-                                              ? Colors.yellow[50]
-                                              : status == 1
-                                                  ? Colors.red[50]
-                                                  : status == 3
-                                                      ? Colors.green[50]
-                                                      : Colors.blue[50],
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 12,
-                                                            top: 4,
-                                                            bottom: 4),
-                                                    child: CircleAvatar(
-                                                        radius: 22,
-                                                        backgroundColor:
-                                                            TextThemes.ndBlue,
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.0),
+                                    child: Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (statusesIds[index] ==
+                                                currentUser.id) {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ProfilePageWithHeader()));
+                                            } else {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          OtherProfile(
+                                                              statusesIds[
+                                                                  index])));
+                                            }
+                                          },
+                                          child: Container(
+                                              height: status == 0 ? 0 : 55,
+                                              color: status == 2
+                                                  ? Colors.yellow[50]
+                                                  : status == 1
+                                                      ? Colors.red[50]
+                                                      : status == 3
+                                                          ? Colors.green[50]
+                                                          : Colors.blue[50],
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 12,
+                                                                top: 4,
+                                                                bottom: 4),
                                                         child: CircleAvatar(
-                                                          radius: 22.0,
-                                                          backgroundImage:
-                                                              NetworkImage(pic),
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                        )),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 16.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Text(name,
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                color:
-                                                                    TextThemes
-                                                                        .ndBlue,
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none)),
-                                                        isAmbassador
-                                                            ? Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .only(
-                                                                  left: 5,
-                                                                ),
-                                                                child: Image.asset(
-                                                                    'lib/assets/verif2.png',
-                                                                    height: 15),
-                                                              )
-                                                            : Text("")
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ]),
-                                                Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 8.0),
-                                                    child: status == 2
-                                                        ? Row(
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        right:
-                                                                            8.0),
-                                                                child: Icon(
-                                                                    Icons
-                                                                        .accessibility,
-                                                                    color: Colors
-                                                                            .yellow[
-                                                                        600]),
-                                                              ),
-                                                              Text(
-                                                                "Undecided",
+                                                            radius: 22,
+                                                            backgroundColor:
+                                                                TextThemes
+                                                                    .ndBlue,
+                                                            child: CircleAvatar(
+                                                              radius: 22.0,
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                      pic),
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                            )),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 16.0),
+                                                        child: Row(
+                                                          children: [
+                                                            Text(name,
                                                                 style: TextStyle(
-                                                                    color: Colors
-                                                                            .yellow[
-                                                                        600],
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700),
-                                                              )
-                                                            ],
-                                                          )
-                                                        : status == 1
+                                                                    fontSize:
+                                                                        16,
+                                                                    color: TextThemes
+                                                                        .ndBlue,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .none)),
+                                                            isAmbassador
+                                                                ? Padding(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .only(
+                                                                      left: 5,
+                                                                    ),
+                                                                    child: Image.asset(
+                                                                        'lib/assets/verif2.png',
+                                                                        height:
+                                                                            15),
+                                                                  )
+                                                                : Text("")
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ]),
+                                                    Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                right: 8.0),
+                                                        child: status == 2
                                                             ? Row(
                                                                 children: [
                                                                   Padding(
@@ -198,21 +186,21 @@ class GoingPage extends StatelessWidget {
                                                                             8.0),
                                                                     child: Icon(
                                                                         Icons
-                                                                            .directions_walk,
+                                                                            .accessibility,
                                                                         color: Colors
-                                                                            .red),
+                                                                            .yellow[600]),
                                                                   ),
                                                                   Text(
-                                                                    "Not going",
+                                                                    "Undecided",
                                                                     style: TextStyle(
-                                                                        color: Colors
-                                                                            .red,
+                                                                        color: Colors.yellow[
+                                                                            600],
                                                                         fontWeight:
                                                                             FontWeight.w700),
                                                                   )
                                                                 ],
                                                               )
-                                                            : status == 3
+                                                            : status == 1
                                                                 ? Row(
                                                                     children: [
                                                                       Padding(
@@ -220,52 +208,259 @@ class GoingPage extends StatelessWidget {
                                                                             const EdgeInsets.only(right: 8.0),
                                                                         child: Icon(
                                                                             Icons
-                                                                                .directions_run,
+                                                                                .directions_walk,
                                                                             color:
-                                                                                Colors.green),
+                                                                                Colors.red),
                                                                       ),
                                                                       Text(
-                                                                        "Going!",
+                                                                        "Not going",
                                                                         style: TextStyle(
                                                                             color:
-                                                                                Colors.green,
+                                                                                Colors.red,
                                                                             fontWeight: FontWeight.w700),
                                                                       )
                                                                     ],
                                                                   )
-                                                                  : status == -1
-                                                                ? Row(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.only(right: 8.0),
-                                                                        child: Icon(
-                                                                            Icons
-                                                                                .redeem,
-                                                                            color:
-                                                                                Colors.blue),
-                                                                      ),
-                                                                      Text(
-                                                                        "Invited",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.blue,
-                                                                            fontWeight: FontWeight.w700),
+                                                                : status == 3
+                                                                    ? Row(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.only(right: 8.0),
+                                                                            child:
+                                                                                Icon(Icons.directions_run, color: Colors.green),
+                                                                          ),
+                                                                          Text(
+                                                                            "Going!",
+                                                                            style:
+                                                                                TextStyle(color: Colors.green, fontWeight: FontWeight.w700),
+                                                                          )
+                                                                        ],
                                                                       )
-                                                                    ],
-                                                                  )
-                                                                : Container())
-                                              ])),
+                                                                    : status ==
+                                                                            -1
+                                                                        ? Row(
+                                                                            children: [
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(right: 8.0),
+                                                                                child: Icon(Icons.redeem, color: Colors.blue),
+                                                                              ),
+                                                                              Text(
+                                                                                "Invited",
+                                                                                style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w700),
+                                                                              )
+                                                                            ],
+                                                                          )
+                                                                        : Container())
+                                                  ])),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            });
+                                  );
+                                })
+                            : StreamBuilder(
+                                stream: groupsRef
+                                    .doc(statusesIds[index])
+                                    .snapshots(),
+                                builder: (context, snapshot2) {
+                                  if (!snapshot2.hasData)
+                                    return CircularProgressIndicator();
+
+                                  statusesValues[index] == (2)
+                                      ? status = 2
+                                      : statusesValues[index] == 1
+                                          ? status = 1
+                                          : statusesValues[index] == 3
+                                              ? status = 3
+                                              : statusesValues[index] == -1
+                                                  ? status = -1
+                                                  : status = 0;
+
+                                  var pic = snapshot2.data['groupPic'];
+                                  var name = snapshot2.data['groupName'];
+                                  var members = snapshot2.data['members'];
+                                  String groupId = snapshot2.data['groupId'];
+
+                                  if (status == 0) {
+                                    return Container();
+                                  }
+
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.0),
+                                    child: Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (members
+                                                .contains(currentUser.id)) {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          GroupDetail(groupId)));
+                                            } else {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          OtherGroup(
+                                                              groupId)));
+                                            }
+                                          },
+                                          child: Container(
+                                              color: status == 2
+                                                  ? Colors.yellow[50]
+                                                  : status == 1
+                                                      ? Colors.red[50]
+                                                      : status == 3
+                                                          ? Colors.green[50]
+                                                          : Colors.blue[50],
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 12,
+                                                                top: 4,
+                                                                bottom: 4),
+                                                        child: CircleAvatar(
+                                                            radius: 22,
+                                                            backgroundColor:
+                                                                TextThemes
+                                                                    .ndBlue,
+                                                            child: CircleAvatar(
+                                                              radius: 22.0,
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                      pic),
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                            )),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 16.0),
+                                                        child: Row(
+                                                          children: [
+                                                            Text(name,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    color: TextThemes
+                                                                        .ndBlue,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .none)),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ]),
+                                                    Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                right: 8.0),
+                                                        child: status == 2
+                                                            ? Row(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            8.0),
+                                                                    child: Icon(
+                                                                        Icons
+                                                                            .accessibility,
+                                                                        color: Colors
+                                                                            .yellow[600]),
+                                                                  ),
+                                                                  Text(
+                                                                    "Undecided",
+                                                                    style: TextStyle(
+                                                                        color: Colors.yellow[
+                                                                            600],
+                                                                        fontWeight:
+                                                                            FontWeight.w700),
+                                                                  )
+                                                                ],
+                                                              )
+                                                            : status == 1
+                                                                ? Row(
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.only(right: 8.0),
+                                                                        child: Icon(
+                                                                            Icons
+                                                                                .directions_walk,
+                                                                            color:
+                                                                                Colors.red),
+                                                                      ),
+                                                                      Text(
+                                                                        "Not going",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.red,
+                                                                            fontWeight: FontWeight.w700),
+                                                                      )
+                                                                    ],
+                                                                  )
+                                                                : status == -1
+                                                                    ? Row(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.only(right: 8.0),
+                                                                            child:
+                                                                                Icon(Icons.redeem, color: Colors.blue),
+                                                                          ),
+                                                                          Text(
+                                                                            "Invited",
+                                                                            style:
+                                                                                TextStyle(color: Colors.blue, fontWeight: FontWeight.w700),
+                                                                          )
+                                                                        ],
+                                                                      )
+                                                                    : Row(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.only(right: 8.0),
+                                                                            child:
+                                                                                Icon(Icons.directions_run, color: Colors.green),
+                                                                          ),
+                                                                          Text(
+                                                                            "Going!",
+                                                                            style:
+                                                                                TextStyle(color: Colors.green, fontWeight: FontWeight.w700),
+                                                                          )
+                                                                        ],
+                                                                      ))
+                                                  ])),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
                       })
                   : Center(child: Text('')),
             ],
           );
         });
+  }
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return double.tryParse(result) != null;
   }
 }
 
@@ -304,151 +499,135 @@ class GoingPageFriends extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: statusesIds.length,
                       itemBuilder: (context, index) {
-                        return StreamBuilder(
-                            stream:
-                                usersRef.doc(statusesIds[index]).snapshots(),
-                            builder: (context, snapshot2) {
-                              if (!snapshot2.hasData)
-                                return CircularProgressIndicator();
-                              if (snapshot2.data['friendArray']
-                                  .contains(currentUser.id)) {
-                                statusesValues[index] == (2)
-                                    ? status = 2
-                                    : statusesValues[index] == 1
-                                        ? status = 1
-                                        : statusesValues[index] == 3
-                                            ? status = 3 :
-                                            statusesValues[index] == -1
-                                            ? status = -1 
-                                            : status = 0;
+                        bool hide = false;
+                        if (!_isNumeric(statusesIds[index])) {
+                          hide = true;
+                        }
 
-                                var pic = snapshot2.data['photoUrl'];
-                                var name = snapshot2.data['displayName'];
-                                bool isAmbassador =
-                                    snapshot2.data['isAmbassador'];
+                        return (hide == false)
+                            ? StreamBuilder(
+                                stream: usersRef
+                                    .doc(statusesIds[index])
+                                    .snapshots(),
+                                builder: (context, snapshot2) {
+                                  if (!snapshot2.hasData)
+                                    return CircularProgressIndicator();
+                                  if (snapshot2.data['friendArray']
+                                      .contains(currentUser.id)) {
+                                    statusesValues[index] == (2)
+                                        ? status = 2
+                                        : statusesValues[index] == 1
+                                            ? status = 1
+                                            : statusesValues[index] == 3
+                                                ? status = 3
+                                                : statusesValues[index] == -1
+                                                    ? status = -1
+                                                    : status = 0;
 
-                                if (status == 0) {
-                                  return Container();
-                                }
+                                    var pic = snapshot2.data['photoUrl'];
+                                    var name = snapshot2.data['displayName'];
+                                    bool isAmbassador =
+                                        snapshot2.data['isAmbassador'];
 
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                  child: Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (statusesIds[index] ==
-                                              currentUser.id) {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ProfilePageWithHeader()));
-                                          } else {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        OtherProfile(
-                                                            statusesIds[
-                                                                index])));
-                                          }
-                                        },
-                                        child: Container(
-                                            color: status == 2
-                                                ? Colors.yellow[50]
-                                                : status == 1
-                                                    ? Colors.red[50]
-                                                     : status == 3
-                                                    ? Colors.green[50]
-                                                    : Colors.blue[50],
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 12,
-                                                              top: 4,
-                                                              bottom: 4),
-                                                      child: CircleAvatar(
-                                                          radius: 22,
-                                                          backgroundColor:
-                                                              TextThemes.ndBlue,
-                                                          child: CircleAvatar(
-                                                            radius: 22.0,
-                                                            backgroundImage:
-                                                                NetworkImage(
-                                                                    pic),
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                          )),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 16.0),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(name,
-                                                              style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  color:
-                                                                      TextThemes
-                                                                          .ndBlue,
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .none)),
-                                                          isAmbassador
-                                                              ? Padding(
-                                                                  padding: EdgeInsets
+                                    if (status == 0) {
+                                      return Container();
+                                    }
+
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 2.0),
+                                      child: Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (statusesIds[index] ==
+                                                  currentUser.id) {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ProfilePageWithHeader()));
+                                              } else {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OtherProfile(
+                                                                statusesIds[
+                                                                    index])));
+                                              }
+                                            },
+                                            child: Container(
+                                                color: status == 2
+                                                    ? Colors.yellow[50]
+                                                    : status == 1
+                                                        ? Colors.red[50]
+                                                        : status == 3
+                                                            ? Colors.green[50]
+                                                            : Colors.blue[50],
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Row(children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
                                                                       .only(
+                                                                  left: 12,
+                                                                  top: 4,
+                                                                  bottom: 4),
+                                                          child: CircleAvatar(
+                                                              radius: 22,
+                                                              backgroundColor:
+                                                                  TextThemes
+                                                                      .ndBlue,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                radius: 22.0,
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        pic),
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                              )),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 16.0),
+                                                          child: Row(
+                                                            children: [
+                                                              Text(name,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      color: TextThemes
+                                                                          .ndBlue,
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .none)),
+                                                              isAmbassador
+                                                                  ? Padding(
+                                                                      padding: EdgeInsets.only(
                                                                           left:
                                                                               5),
-                                                                  child: Image.asset(
-                                                                      'lib/assets/verif2.png',
-                                                                      height:
-                                                                          15))
-                                                              : Text("")
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ]),
-                                                  Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              right: 8.0),
-                                                      child: status == 2
-                                                          ? Row(
-                                                              children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      right:
-                                                                          8.0),
-                                                                  child: Icon(
-                                                                      Icons
-                                                                          .accessibility,
-                                                                      color: Colors
-                                                                              .yellow[
-                                                                          600]),
-                                                                ),
-                                                                Text(
-                                                                  "Undecided",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                              .yellow[
-                                                                          600],
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700),
-                                                                )
-                                                              ],
-                                                            )
-                                                          : status == 1
+                                                                      child: Image.asset(
+                                                                          'lib/assets/verif2.png',
+                                                                          height:
+                                                                              15))
+                                                                  : Text("")
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ]),
+                                                      Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 8.0),
+                                                          child: status == 2
                                                               ? Row(
                                                                   children: [
                                                                     Padding(
@@ -458,77 +637,84 @@ class GoingPageFriends extends StatelessWidget {
                                                                               8.0),
                                                                       child: Icon(
                                                                           Icons
-                                                                              .directions_walk,
+                                                                              .accessibility,
                                                                           color:
-                                                                              Colors.red),
+                                                                              Colors.yellow[600]),
                                                                     ),
                                                                     Text(
-                                                                      "Not going",
+                                                                      "Undecided",
                                                                       style: TextStyle(
-                                                                          color: Colors
-                                                                              .red,
+                                                                          color: Colors.yellow[
+                                                                              600],
                                                                           fontWeight:
                                                                               FontWeight.w700),
                                                                     )
                                                                   ],
                                                                 )
-                                                                 : status == -1
-                                                                ? Row(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.only(right: 8.0),
-                                                                        child: Icon(
-                                                                            Icons
-                                                                                .redeem,
-                                                                            color:
-                                                                                Colors.blue),
-                                                                      ),
-                                                                      Text(
-                                                                        "Invited",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.blue,
-                                                                            fontWeight: FontWeight.w700),
-                                                                      )
-                                                                    ],
-                                                                  )
-                                                              : Row(
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .only(
-                                                                          right:
-                                                                              8.0),
-                                                                      child: Icon(
-                                                                          Icons
-                                                                              .directions_run,
-                                                                          color:
-                                                                              Colors.green),
-                                                                    ),
-                                                                    Text(
-                                                                      "Going!",
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .green,
-                                                                          fontWeight:
-                                                                              FontWeight.w700),
+                                                              : status == 1
+                                                                  ? Row(
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.only(right: 8.0),
+                                                                          child: Icon(
+                                                                              Icons.directions_walk,
+                                                                              color: Colors.red),
+                                                                        ),
+                                                                        Text(
+                                                                          "Not going",
+                                                                          style: TextStyle(
+                                                                              color: Colors.red,
+                                                                              fontWeight: FontWeight.w700),
+                                                                        )
+                                                                      ],
                                                                     )
-                                                                  ],
-                                                                ))
-                                                ])),
+                                                                  : status == -1
+                                                                      ? Row(
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.only(right: 8.0),
+                                                                              child: Icon(Icons.redeem, color: Colors.blue),
+                                                                            ),
+                                                                            Text(
+                                                                              "Invited",
+                                                                              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w700),
+                                                                            )
+                                                                          ],
+                                                                        )
+                                                                      : Row(
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.only(right: 8.0),
+                                                                              child: Icon(Icons.directions_run, color: Colors.green),
+                                                                            ),
+                                                                            Text(
+                                                                              "Going!",
+                                                                              style: TextStyle(color: Colors.green, fontWeight: FontWeight.w700),
+                                                                            )
+                                                                          ],
+                                                                        ))
+                                                    ])),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            });
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                })
+                            : Text("");
                       })
                   : Center(child: Text('')),
             ],
           );
         });
+  }
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return double.tryParse(result) != null;
   }
 }
