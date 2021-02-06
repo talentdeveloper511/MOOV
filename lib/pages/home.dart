@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
         "dorm": dorm,
         "referral": referral,
         "postLimit": 3,
-        "isAmbassador": false,
+        "verifiedStatus": 0,
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],

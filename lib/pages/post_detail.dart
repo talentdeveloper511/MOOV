@@ -585,7 +585,7 @@ class _AuthorContent extends StatelessWidget {
           if (!snapshot2.hasData) return CircularProgressIndicator();
 
           Map<String, dynamic> course1 = snapshot2.data.data();
-          bool isAmbassador = snapshot2.data['isAmbassador'];
+          int verifiedStatus = snapshot2.data['verifiedStatus'];
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -619,13 +619,39 @@ class _AuthorContent extends StatelessWidget {
                                       fontSize: 14,
                                       color: TextThemes.ndBlue,
                                       decoration: TextDecoration.none)),
-                              isAmbassador
-                                  ? Padding(
-                                      padding: EdgeInsets.only(left: 5),
-                                      child: Image.asset(
-                                          'lib/assets/verif2.png',
-                                          height: 15))
-                                  : Text('')
+                              verifiedStatus == 3 ? 
+                                                    Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 3,
+                                                        ),
+                                                        child: Icon(Icons.store,
+                                                            size: 20, 
+                                                            color: TextThemes.ndGold,),
+                                                      ):
+                                                                                              
+                                                verifiedStatus == 2
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 5,
+                                                        ),
+                                                        child: Image.asset(
+                                                            'lib/assets/verif2.png',
+                                                            height: 15),
+                                                      )
+                                                    : verifiedStatus == 1
+                                                        ? Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              left: 2.5,
+                                                              top: 2.5
+                                                            ),
+                                                            child: Image.asset(
+                                                                'lib/assets/verif.png',
+                                                                height: 25),
+                                                          )
+                                                        : Text("")
                             ],
                           ),
                         ),

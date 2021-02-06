@@ -212,7 +212,6 @@ class _MOOVSPageState extends State<MOOVSPage>
 
                             var strUserPic = currentUser.photoUrl;
 
-                            bool isAmbassador;
                             bool hide = false;
                             // var y = startDate;
                             // var x = Timestamp.now();

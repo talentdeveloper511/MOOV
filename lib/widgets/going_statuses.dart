@@ -76,8 +76,8 @@ class GoingPage extends StatelessWidget {
 
                                   var pic = snapshot.data['photoUrl'];
                                   var name = snapshot.data['displayName'];
-                                  bool isAmbassador =
-                                      snapshot.data['isAmbassador'];
+                                  int verifiedStatus =
+                                      snapshot.data['verifiedStatus'];
 
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -154,19 +154,39 @@ class GoingPage extends StatelessWidget {
                                                                     decoration:
                                                                         TextDecoration
                                                                             .none)),
-                                                            isAmbassador
-                                                                ? Padding(
-                                                                    padding:
-                                                                        EdgeInsets
-                                                                            .only(
-                                                                      left: 5,
-                                                                    ),
-                                                                    child: Image.asset(
-                                                                        'lib/assets/verif2.png',
-                                                                        height:
-                                                                            15),
-                                                                  )
-                                                                : Text("")
+                                                         verifiedStatus == 3 ? 
+                                                    Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 4,
+                                                        ),
+                                                        child: Icon(Icons.store,
+                                                            size: 20, 
+                                                            color: TextThemes.ndGold,),
+                                                      ):
+                                                                                              
+                                                verifiedStatus == 2
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 5,
+                                                        ),
+                                                        child: Image.asset(
+                                                            'lib/assets/verif2.png',
+                                                            height: 15),
+                                                      )
+                                                    : verifiedStatus == 1
+                                                        ? Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              left: 2.5,
+                                                              top: 2.5
+                                                            ),
+                                                            child: Image.asset(
+                                                                'lib/assets/verif.png',
+                                                                height: 25),
+                                                          )
+                                                        : Text("")
                                                           ],
                                                         ),
                                                       ),
@@ -526,8 +546,8 @@ class GoingPageFriends extends StatelessWidget {
 
                                     var pic = snapshot2.data['photoUrl'];
                                     var name = snapshot2.data['displayName'];
-                                    bool isAmbassador =
-                                        snapshot2.data['isAmbassador'];
+                                    int verifiedStatus =
+                                        snapshot2.data['verifiedStatus'];
 
                                     if (status == 0) {
                                       return Container();
@@ -608,7 +628,7 @@ class GoingPageFriends extends StatelessWidget {
                                                                       decoration:
                                                                           TextDecoration
                                                                               .none)),
-                                                              isAmbassador
+                                                              verifiedStatus == 2
                                                                   ? Padding(
                                                                       padding: EdgeInsets.only(
                                                                           left:

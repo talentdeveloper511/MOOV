@@ -16,7 +16,7 @@ class User {
   final postLimit;
   final List<dynamic> friendGroups;
   final String venmo;
-  final bool isAmbassador;
+  final int verifiedStatus;
   final Timestamp timestamp;
   final String referral;
   final String venmoUsername;
@@ -37,7 +37,7 @@ class User {
       this.postLimit,
       this.venmo,
       this.timestamp,
-      this.isAmbassador,
+      this.verifiedStatus,
       this.friendGroups,
       this.referral,
       this.venmoUsername});
@@ -58,7 +58,7 @@ class User {
         friendRequests: doc.data()['friendRequests'],
         postLimit: doc.data()['postLimit'],
         venmo: doc.data()['venmo'],
-        isAmbassador: doc.data()['isAmbassador'],
+        verifiedStatus: doc.data()['verifiedStatus'],
         timestamp: doc.data()['timestamp'],
         friendGroups: doc.data()['friendGroups'],
         referral: doc.data()['referral'],

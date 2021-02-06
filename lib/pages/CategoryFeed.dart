@@ -320,8 +320,12 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 print("Expired. See ya later.");
                                 Future.delayed(
                                     const Duration(milliseconds: 1000), () {
-                                  Database().deletePost(course['postId'],
-                                      course['userId'], course['title'], course['statuses'], course['posterName']);
+                                  Database().deletePost(
+                                      course['postId'],
+                                      course['userId'],
+                                      course['title'],
+                                      course['statuses'],
+                                      course['posterName']);
                                 });
                               }
                               final now = DateTime.now();
@@ -405,7 +409,6 @@ class _CategoryFeedState extends State<CategoryFeed>
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
 
-                            bool isAmbassador;
                             bool isLiked1;
                             bool hide = false;
 
@@ -415,8 +418,12 @@ class _CategoryFeedState extends State<CategoryFeed>
                               print("Expired. See ya later.");
                               Future.delayed(const Duration(milliseconds: 1000),
                                   () {
-                                Database().deletePost(course['postId'],
-                                    course['userId'], course['title'],course['statuses'], course['posterName']);
+                                Database().deletePost(
+                                    course['postId'],
+                                    course['userId'],
+                                    course['title'],
+                                    course['statuses'],
+                                    course['posterName']);
                               });
                             }
                             final now = DateTime.now();
@@ -496,12 +503,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                             privacy = course["privacy"];
                             int venmo = course["venmo"];
                             int maxOccupancy = course['maxOccupancy'];
-                            List<dynamic> friends = currentUser.friendArray;
 
-                            var strUserPic = currentUser.photoUrl;
-
-                            bool isAmbassador;
-                            bool isLiked1;
                             bool hide = false;
 
                             // var y = startDate;
@@ -515,8 +517,12 @@ class _CategoryFeedState extends State<CategoryFeed>
                               print("Expired. See ya later.");
                               Future.delayed(const Duration(milliseconds: 1000),
                                   () {
-                                Database().deletePost(course['postId'],
-                                    course['userId'], course['title'], course['statuses'], course['posterName']);
+                                Database().deletePost(
+                                    course['postId'],
+                                    course['userId'],
+                                    course['title'],
+                                    course['statuses'],
+                                    course['posterName']);
                               });
                             }
                             final now = DateTime.now();
@@ -648,8 +654,8 @@ class PostOnFeed extends StatelessWidget {
         Timestamp.now().millisecondsSinceEpoch - 3600000) {
       print("Expired. See ya later.");
       Future.delayed(const Duration(milliseconds: 1000), () {
-        Database()
-            .deletePost(course['postId'], course['userId'], course['title'], course['statuses'], course['posterName']);
+        Database().deletePost(course['postId'], course['userId'],
+            course['title'], course['statuses'], course['posterName']);
       });
     }
     final now = DateTime.now();
@@ -887,7 +893,7 @@ class PostOnFeed extends StatelessWidget {
                         if (!snapshot2.hasData)
                           return CircularProgressIndicator();
 
-                        bool isAmbassador = snapshot2.data['isAmbassador'];
+                        int verifiedStatus = snapshot2.data['verifiedStatus'];
                         String userYear = snapshot2.data['year'];
                         String userDorm = snapshot2.data['dorm'];
                         String displayName = snapshot2.data['displayName'];
@@ -975,7 +981,19 @@ class PostOnFeed extends StatelessWidget {
                                                         decoration:
                                                             TextDecoration
                                                                 .none)),
-                                                isAmbassador
+                                                
+                                                    verifiedStatus == 3 ? 
+                                                    Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 2.5,
+                                                        ),
+                                                        child: Icon(Icons.store,
+                                                            size: 20, 
+                                                            color: TextThemes.ndGold,),
+                                                      ):
+                                                                                              
+                                                verifiedStatus == 2
                                                     ? Padding(
                                                         padding:
                                                             EdgeInsets.only(
@@ -985,7 +1003,18 @@ class PostOnFeed extends StatelessWidget {
                                                             'lib/assets/verif2.png',
                                                             height: 15),
                                                       )
-                                                    : Text("")
+                                                    : verifiedStatus == 1
+                                                        ? Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              left: 2.5,
+                                                              top: 0
+                                                            ),
+                                                            child: Image.asset(
+                                                                'lib/assets/verif.png',
+                                                                height: 22),
+                                                          )
+                                                        : Text("")
                                               ],
                                             ),
                                           ),
