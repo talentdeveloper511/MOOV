@@ -330,7 +330,6 @@ class Database {
     });
   }
 
-  
   askToJoinGroup(
     String asker,
     String askerPic,
@@ -354,7 +353,6 @@ class Database {
       "timestamp": DateTime.now()
     });
   }
-
 
   friendRequestNotification(
       String ownerId, String senderProPic, String ownerName, String sender) {
@@ -496,6 +494,12 @@ class Database {
 
         doc.reference.delete();
       }
+    });
+    postsRef.doc(postId).collection('comments').get().then((doc) {
+      for (DocumentSnapshot ds in doc.docs) {
+        ds.reference.delete();
+      }
+      
     });
 
     groupsRef.where("nextMOOV", isEqualTo: postId).get().then((doc) {
