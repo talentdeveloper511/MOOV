@@ -707,7 +707,7 @@ class DisplayGroupResult extends StatelessWidget {
   final String groupName;
   final String groupId;
   final String groupPic;
-  final List members;
+  final List<String> members;
 
   DisplayGroupResult(
       {Key key, this.groupName, this.groupId, this.groupPic, this.members})

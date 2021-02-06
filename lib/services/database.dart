@@ -77,7 +77,9 @@ class Database {
       bool barcode,
       imageUrl,
       userId,
-      postId}) async {
+      postId,
+      posterName //BETA
+      }) async {
     DocumentReference ref = await postsRef.doc(postId).set({
       'title': title,
       'type': type,
@@ -96,6 +98,7 @@ class Database {
       'userId': userId,
       "featured": false,
       "postId": postId,
+      "posterName": posterName,
       "going": []
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
@@ -327,6 +330,32 @@ class Database {
     });
   }
 
+  
+  askToJoinGroup(
+    String asker,
+    String askerPic,
+    String askerId,
+    String groupName,
+    String groupId,
+  ) {
+    notificationFeedRef
+        .doc(groupId)
+        .collection("feedItems")
+        .doc('asked to join ' + groupId)
+        .set({
+      "type": "askToJoin",
+      "title": groupName,
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userProfilePic": currentUser.photoUrl,
+      "previewImg": askerPic,
+      "groupId": groupId,
+      "groupName": groupName,
+      "timestamp": DateTime.now()
+    });
+  }
+
+
   friendRequestNotification(
       String ownerId, String senderProPic, String ownerName, String sender) {
     notificationFeedRef
@@ -405,7 +434,8 @@ class Database {
     }
   }
 
-  deletePost(String postId, String ownerId, String title) {
+  deletePost(String postId, String ownerId, String title, Map statuses,
+      String posterName) {
     String filePath = 'images/$ownerId$title';
 
     firebase_storage.Reference ref =
@@ -418,9 +448,26 @@ class Database {
     //   });
     // });
 
-    FirebaseFirestore.instance
+    //BETA ACTIVITY
+    if (statuses.length >= 5) {
+      betaActivityTracker(posterName, Timestamp.now(), "5+ statuses");
+    }
+    List<String> statusNames = statuses.keys.toList();
 
-        ///this is for deleting related notifications
+    if (statuses != null && statuses.length != 0)
+      for (int i = 0; i < statuses.length; i++) {
+        String who;
+
+        usersRef.doc(statusNames[i]).get().then((snap) => {
+              who = snap.data()['displayName'],
+              betaActivityTracker(
+                  who, Timestamp.now(), "responded to post " + postId)
+            });
+      }
+    //BETA
+
+    ///this is for deleting related notifications
+    FirebaseFirestore.instance
         .collectionGroup("feedItems")
         .where("postId", isEqualTo: postId)
         .get()
@@ -562,8 +609,7 @@ class Database {
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayRemove([id]),
-                'memberNames': FieldValue.arrayRemove([displayName]),
-
+        'memberNames': FieldValue.arrayRemove([displayName]),
       });
     });
   }
@@ -604,6 +650,7 @@ class Database {
   }
 
   Future<void> addUser(id, gname, gid, displayName) async {
+    betaActivityTracker(displayName, Timestamp.now(), "joined Friend Group");
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
       final DocumentReference ref2 =
@@ -614,8 +661,7 @@ class Database {
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayUnion([id]),
-                'memberNames': FieldValue.arrayUnion([displayName]),
-
+        'memberNames': FieldValue.arrayUnion([displayName]),
       });
     });
   }
@@ -630,13 +676,17 @@ class Database {
     });
   }
 
-  Future<void> suggestMOOV(
-      userId, gid, postId, unix, userName, members, title, pic, groupName) async {
+  Future<void> suggestMOOV(userId, gid, postId, unix, userName, members, title,
+      pic, groupName) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(300)});
 
-      groupsRef.doc(gid).collection("suggestedMOOVs").doc(unix.toString() + " from " + userId).set({
+      groupsRef
+          .doc(gid)
+          .collection("suggestedMOOVs")
+          .doc(unix.toString() + " from " + userId)
+          .set({
         "voters": {userId: 2},
         "nextMOOV": postId,
         "unix": unix,
@@ -666,6 +716,31 @@ class Database {
     });
   }
 
+  Future<void> betaActivityTracker(
+      //BETA ACTIVITY TRACKER
+      String who,
+      Timestamp when,
+      String what) async {
+    final dateToCheck = when.toDate();
+    final aDate =
+        DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
+
+    print(DateFormat('MMMd').add_jm().format(aDate));
+    String whenString = DateFormat('MMMd').format(aDate);
+    // if (who != "Alvin Alaphat" && who != "Kevin Camson" && who != "MOOV Team") {
+    FirebaseFirestore.instance
+        .collection(who)
+        .doc(whenString)
+        .collection(what)
+        .doc(what)
+        .set({
+      "who": who,
+      "when": when,
+      "what": what,
+    });
+    //}
+  }
+
   Future<void> updateGroupNames(members, newName, gid, old) async {
     return dbRef.runTransaction((transaction) async {
       for (var i = 0; i < members.length; i++) {
@@ -683,7 +758,11 @@ class Database {
 
   Future<void> addNoVote(unix, userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef.doc(gid).collection('suggestedMOOVs').doc(unix.toString() + " from " + suggestorId).set({
+      groupsRef
+          .doc(gid)
+          .collection('suggestedMOOVs')
+          .doc(unix.toString() + " from " + suggestorId)
+          .set({
         "voters": {userId: 1}
       }, SetOptions(merge: true));
     });
@@ -691,7 +770,11 @@ class Database {
 
   Future<void> removeNoVote(unix, userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef.doc(gid).collection('suggestedMOOVs').doc(unix.toString() + " from " + suggestorId).set({
+      groupsRef
+          .doc(gid)
+          .collection('suggestedMOOVs')
+          .doc(unix.toString() + " from " + suggestorId)
+          .set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });
@@ -699,7 +782,11 @@ class Database {
 
   Future<void> addYesVote(unix, userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef.doc(gid).collection('suggestedMOOVs').doc(unix.toString() + " from " + suggestorId).set({
+      groupsRef
+          .doc(gid)
+          .collection('suggestedMOOVs')
+          .doc(unix.toString() + " from " + suggestorId)
+          .set({
         "voters": {userId: 2}
       }, SetOptions(merge: true));
     });
@@ -707,7 +794,11 @@ class Database {
 
   Future<void> removeYesVote(unix, userId, gid, suggestorId) async {
     return dbRef.runTransaction((transaction) async {
-      groupsRef.doc(gid).collection('suggestedMOOVs').doc(unix.toString() + " from " + suggestorId).set({
+      groupsRef
+          .doc(gid)
+          .collection('suggestedMOOVs')
+          .doc(unix.toString() + " from " + suggestorId)
+          .set({
         "voters": {userId: FieldValue.delete()}
       }, SetOptions(merge: true));
     });

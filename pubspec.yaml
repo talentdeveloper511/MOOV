@@ -159,6 +159,7 @@ flutter:
     - lib/assets/bag1.png
     - lib/assets/fg1.png
     - lib/assets/ff.png
+    - lib/assets/egg.png
     - lib/assets/moovblue.png
     - lib/assets/sendmoov.png
     - lib/assets/launchscreen1.png

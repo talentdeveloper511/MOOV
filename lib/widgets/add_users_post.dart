@@ -1240,7 +1240,7 @@ class InviteGroup extends StatefulWidget {
   String gname, gid, pic, moov;
   List<dynamic> members;
   List<String> invitees;
-  List<String> memberNames;
+  List<dynamic> memberNames;
 
   InviteGroup(
       this.gname, this.gid, this.pic, this.moov, this.members, this.invitees, this.memberNames);
@@ -1255,7 +1255,7 @@ class _InviteGroupState extends State<InviteGroup> {
   List members, friendGroups;
   bool status = false;
   List<String> invitees;
-    List<String> memberNames;
+    List<dynamic> memberNames;
 
 
   _InviteGroupState(

@@ -321,7 +321,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 Future.delayed(
                                     const Duration(milliseconds: 1000), () {
                                   Database().deletePost(course['postId'],
-                                      course['userId'], course['title']);
+                                      course['userId'], course['title'], course['statuses'], course['posterName']);
                                 });
                               }
                               final now = DateTime.now();
@@ -416,7 +416,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               Future.delayed(const Duration(milliseconds: 1000),
                                   () {
                                 Database().deletePost(course['postId'],
-                                    course['userId'], course['title']);
+                                    course['userId'], course['title'],course['statuses'], course['posterName']);
                               });
                             }
                             final now = DateTime.now();
@@ -516,7 +516,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               Future.delayed(const Duration(milliseconds: 1000),
                                   () {
                                 Database().deletePost(course['postId'],
-                                    course['userId'], course['title']);
+                                    course['userId'], course['title'], course['statuses'], course['posterName']);
                               });
                             }
                             final now = DateTime.now();
@@ -649,7 +649,7 @@ class PostOnFeed extends StatelessWidget {
       print("Expired. See ya later.");
       Future.delayed(const Duration(milliseconds: 1000), () {
         Database()
-            .deletePost(course['postId'], course['userId'], course['title']);
+            .deletePost(course['postId'], course['userId'], course['title'], course['statuses'], course['posterName']);
       });
     }
     final now = DateTime.now();
@@ -669,6 +669,7 @@ class PostOnFeed extends StatelessWidget {
     } else if (aDate == tomorrow) {
       isTomorrow = true;
     }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Stack(overflow: Overflow.visible, children: [

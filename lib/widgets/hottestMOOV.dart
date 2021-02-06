@@ -62,7 +62,7 @@ class HottestMOOV extends StatelessWidget {
                     print("Expired. See ya later.");
                     Future.delayed(const Duration(milliseconds: 1000), () {
                       Database().deletePost(
-                          course['postId'], course['userId'], course['title']);
+                          course['postId'], course['userId'], course['title'], course['statuses'], course['posterName']);
                     });
                   }
                   final now = DateTime.now();

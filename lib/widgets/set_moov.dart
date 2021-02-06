@@ -255,17 +255,8 @@ class SetMOOVResult extends StatefulWidget {
   final String moov, gid, groupName;
   final int unix;
 
-  SetMOOVResult(
-      this.title,
-      this.userId,
-      this.description,
-      this.type,
-      this.image,
-      this.members,
-      this.moov,
-      this.unix,
-      this.gid,
-      this.groupName);
+  SetMOOVResult(this.title, this.userId, this.description, this.type,
+      this.image, this.members, this.moov, this.unix, this.gid, this.groupName);
 
   @override
   _SetMOOVResultState createState() => _SetMOOVResultState(
@@ -291,17 +282,8 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
   final String moov, gid, groupName;
   final int unix;
 
-  _SetMOOVResultState(
-      this.title,
-      this.userId,
-      this.description,
-      this.type,
-      this.image,
-      this.members,
-      this.moov,
-      this.unix,
-      this.gid,
-      this.groupName);
+  _SetMOOVResultState(this.title, this.userId, this.description, this.type,
+      this.image, this.members, this.moov, this.unix, this.gid, this.groupName);
 
   @override
   Widget build(BuildContext context) {
@@ -459,6 +441,9 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                           title,
                           image,
                           groupName);
+                      Database().betaActivityTracker(
+                          currentUser.displayName, Timestamp.now(), "suggest");
+
                       Navigator.pop(context, moov);
                     },
                     child: Container(

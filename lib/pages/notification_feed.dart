@@ -411,6 +411,26 @@ class NotificationFeedItem extends StatelessWidget {
                 ),
               )),
         ),
+      );}
+      else if (type == 'askToJoin') {
+      mediaPreview = GestureDetector(
+        onTap: () => showProfile(context),
+        child: Container(
+          height: 50.0,
+          width: 50.0,
+          child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: previewImg != null
+                        ? CachedNetworkImageProvider(previewImg)
+                        : AssetImage("lib/assets/otherbutton1.png"),
+                  ),
+                ),
+              )),
+        ),
       );
     } else if (type == 'suggestion') {
       mediaPreview = GestureDetector(
@@ -450,7 +470,11 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'suggested ';
     } else if (type == 'deleted') {
       activityItemText = 'has been canceled';
-    } else {
+    } 
+     else if (type == 'askToJoin') {
+      activityItemText = 'has asked to join your group';
+    } 
+    else {
       activityItemText = "Error: Unknown type '$type'";
     }
   }
@@ -468,7 +492,7 @@ class NotificationFeedItem extends StatelessWidget {
         child: ListTile(
           title: GestureDetector(
             onTap: () {
-              (type == 'request' || type == 'accept')
+              (type == 'request' || type == 'accept' || type == 'askToJoin')
                   ? showProfile(context)
                   : (type == 'suggestion' || type == 'friendGroup')
                       ? showGroup(context)
