@@ -99,6 +99,8 @@ class _SearchUsersPostState extends State<SearchUsersPost>
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -262,7 +264,8 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                  padding: const EdgeInsets.only(bottom: 50),
+                                  padding: isLargePhone ? 
+                                  const EdgeInsets.only(bottom: 50) :  const EdgeInsets.only(bottom: 20),
                                   child: RichText(
                                       textAlign: TextAlign.center,
                                       text: TextSpan(

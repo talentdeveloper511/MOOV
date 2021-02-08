@@ -647,6 +647,7 @@ class PostOnFeed extends StatelessWidget {
         }
       }
     }
+    
 
     var strUserPic = currentUser.photoUrl;
 
@@ -981,40 +982,41 @@ class PostOnFeed extends StatelessWidget {
                                                         decoration:
                                                             TextDecoration
                                                                 .none)),
-                                                
-                                                    verifiedStatus == 3 ? 
-                                                    Padding(
+                                                verifiedStatus == 3
+                                                    ? Padding(
                                                         padding:
                                                             EdgeInsets.only(
                                                           left: 2.5,
                                                         ),
-                                                        child: Icon(Icons.store,
-                                                            size: 20, 
-                                                            color: TextThemes.ndGold,),
-                                                      ):
-                                                                                              
-                                                verifiedStatus == 2
-                                                    ? Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 5,
+                                                        child: Icon(
+                                                          Icons.store,
+                                                          size: 20,
+                                                          color:
+                                                              TextThemes.ndGold,
                                                         ),
-                                                        child: Image.asset(
-                                                            'lib/assets/verif2.png',
-                                                            height: 15),
                                                       )
-                                                    : verifiedStatus == 1
+                                                    : verifiedStatus == 2
                                                         ? Padding(
                                                             padding:
                                                                 EdgeInsets.only(
-                                                              left: 2.5,
-                                                              top: 0
+                                                              left: 5,
                                                             ),
                                                             child: Image.asset(
-                                                                'lib/assets/verif.png',
-                                                                height: 22),
+                                                                'lib/assets/verif2.png',
+                                                                height: 15),
                                                           )
-                                                        : Text("")
+                                                        : verifiedStatus == 1
+                                                            ? Padding(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        left:
+                                                                            2.5,
+                                                                        top: 0),
+                                                                child: Image.asset(
+                                                                    'lib/assets/verif.png',
+                                                                    height: 22),
+                                                              )
+                                                            : Text("")
                                               ],
                                             ),
                                           ),
@@ -1130,7 +1132,9 @@ class PostOnFeed extends StatelessWidget {
                                                 course['userId'],
                                                 course.id,
                                                 course['title'],
-                                                course['image']);
+                                                course['image'],
+                                                course['push'],
+                                                );
                                             status = 3;
                                           } else if (statuses != null &&
                                               status == 3) {

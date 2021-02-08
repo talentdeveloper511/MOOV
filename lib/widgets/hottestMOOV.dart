@@ -21,7 +21,7 @@ class HottestMOOV extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: StreamBuilder(
-          stream: postsRef.limit(1).snapshots(),
+          stream: postsRef.orderBy("goingCount", descending: true).limit(1).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data.docs.length == 0)
               return Center(

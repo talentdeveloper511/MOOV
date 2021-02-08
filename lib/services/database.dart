@@ -78,7 +78,9 @@ class Database {
       imageUrl,
       userId,
       postId,
-      posterName //BETA
+      posterName,
+      bool push,
+      int goingCount //BETA
       }) async {
     DocumentReference ref = await postsRef.doc(postId).set({
       'title': title,
@@ -99,6 +101,8 @@ class Database {
       "featured": false,
       "postId": postId,
       "posterName": posterName,
+      "push": push,
+      "goingCount": 0,
       "going": []
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
@@ -112,11 +116,14 @@ class Database {
     });
   }
 
-  Future<void> addNotGoing(userId, postId) async {
+  Future<void> addNotGoing(userId, postId, List<dynamic>goingList) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(100)});
+      if (goingList.contains(userId)) {
+        transaction.update(ref, {'goingCount': FieldValue.increment(-1)});
+      }
 
       // addGoingToNotificationFeed(
       //     userId,
@@ -163,11 +170,15 @@ class Database {
     });
   }
 
-  Future<void> addUndecided(userId, postId) async {
+  Future<void> addUndecided(userId, postId, List<dynamic> goingList) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(100)});
+
+      if (goingList.contains(userId)) {
+        transaction.update(ref, {'goingCount': FieldValue.increment(-1)});
+      }
 
       postsRef.doc(postId).set({
         "statuses": {userId: 2}
@@ -183,6 +194,7 @@ class Database {
       });
     });
   }
+  
 
   Future<void> removeUndecided(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
@@ -207,11 +219,13 @@ class Database {
     });
   }
 
-  Future<void> addGoingGood(userId, ownerId, postId, title, pic) async {
+  Future<void> addGoingGood(
+      userId, ownerId, postId, title, pic, bool push) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(500)});
+      transaction.update(ref, {'goingCount': FieldValue.increment(1)});
 
       await postsRef.doc(postId).set({
         "statuses": {userId: 3}
@@ -228,6 +242,7 @@ class Database {
           "type": "going",
           "postId": postId,
           "previewImg": pic,
+          "push": push,
           "title": title,
           "username": currentUser.displayName,
           "userId": currentUser.id,
@@ -248,6 +263,8 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      transaction.update(ref, {'goingCount': FieldValue.increment(-1)});
+
       var checkZero;
       ref2.get().then((snap) => {
             if (snap.data()['score'] == 0) {checkZero = "true"}
@@ -307,6 +324,21 @@ class Database {
   //     });
   //   });
   // }
+
+  Future<void> goingPushSetting(newValue) async {
+    return dbRef.runTransaction((transaction) async {
+      usersRef.doc(currentUser.id).set({
+        "pushSettings": {"going": newValue}
+      }, SetOptions(merge: true));
+    });
+  }
+  Future<void> hourPushSetting(newValue) async {
+    return dbRef.runTransaction((transaction) async {
+      usersRef.doc(currentUser.id).set({
+        "pushSettings": {"hourBefore": newValue}
+      }, SetOptions(merge: true));
+    });
+  }
 
   addedToGroup(
     String addee,
@@ -499,7 +531,6 @@ class Database {
       for (DocumentSnapshot ds in doc.docs) {
         ds.reference.delete();
       }
-      
     });
 
     groupsRef.where("nextMOOV", isEqualTo: postId).get().then((doc) {

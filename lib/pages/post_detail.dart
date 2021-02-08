@@ -156,7 +156,7 @@ class _BannerImage extends StatelessWidget {
       userId == currentUser.id
           ? Positioned(
               top: 5,
-              left: 5,
+              right: 5,
               child: GestureDetector(
                 onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => EditPost(postId))),
@@ -318,7 +318,8 @@ class _NonImageContents extends StatelessWidget {
                                           overflow: TextOverflow.ellipsis,
                                           // textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              fontStyle: FontStyle.italic),
+                                              fontStyle: FontStyle.italic,
+                                              fontSize: isLargePhone ? 14 : 12),
                                         ),
                                       )),
                                 ],
@@ -619,39 +620,35 @@ class _AuthorContent extends StatelessWidget {
                                       fontSize: 14,
                                       color: TextThemes.ndBlue,
                                       decoration: TextDecoration.none)),
-                              verifiedStatus == 3 ? 
-                                                    Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 3,
-                                                        ),
-                                                        child: Icon(Icons.store,
-                                                            size: 20, 
-                                                            color: TextThemes.ndGold,),
-                                                      ):
-                                                                                              
-                                                verifiedStatus == 2
-                                                    ? Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 5,
-                                                        ),
-                                                        child: Image.asset(
-                                                            'lib/assets/verif2.png',
-                                                            height: 15),
-                                                      )
-                                                    : verifiedStatus == 1
-                                                        ? Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                              left: 2.5,
-                                                              top: 2.5
-                                                            ),
-                                                            child: Image.asset(
-                                                                'lib/assets/verif.png',
-                                                                height: 25),
-                                                          )
-                                                        : Text("")
+                              verifiedStatus == 3
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 3,
+                                      ),
+                                      child: Icon(
+                                        Icons.store,
+                                        size: 20,
+                                        color: TextThemes.ndGold,
+                                      ),
+                                    )
+                                  : verifiedStatus == 2
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 5,
+                                          ),
+                                          child: Image.asset(
+                                              'lib/assets/verif2.png',
+                                              height: 15),
+                                        )
+                                      : verifiedStatus == 1
+                                          ? Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 2.5, top: 2.5),
+                                              child: Image.asset(
+                                                  'lib/assets/verif.png',
+                                                  height: 25),
+                                            )
+                                          : Text("")
                             ],
                           ),
                         ),
@@ -835,8 +832,8 @@ class Buttons extends StatelessWidget {
 
   Buttons(this.moovId);
 
-  bool _isPressed;
   int status;
+  bool push = true;
 
   @override
   Widget build(BuildContext context) {
@@ -851,10 +848,15 @@ class Buttons extends StatelessWidget {
           Map<String, dynamic> statuses = course['statuses'];
           int maxOccupancy = course['maxOccupancy'];
           int goingCount = course['going'].length;
+          List<dynamic> goingList = course['going'];
 
           List<dynamic> statusesIds = statuses.keys.toList();
 
           List<dynamic> statusesValues = statuses.values.toList();
+          List pushList = currentUser.pushSettings.values.toList();
+          if (pushList[0] == false) {
+            push = false;
+          }
 
           if (statuses != null) {
             for (int i = 0; i < statuses.length; i++) {
@@ -894,7 +896,7 @@ class Buttons extends StatelessWidget {
                         side: BorderSide(color: Colors.black)),
                     onPressed: () {
                       if (statuses != null && status != 1) {
-                        Database().addNotGoing(currentUser.id, moovId);
+                        Database().addNotGoing(currentUser.id, moovId, goingList);
                         status = 1;
                         print(status);
                       } else if (statuses != null && status == 1) {
@@ -984,7 +986,11 @@ class Buttons extends StatelessWidget {
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
                         if (statuses != null && status != 2) {
-                          Database().addUndecided(currentUser.id, moovId);
+                          Database().addUndecided(
+                            currentUser.id,
+                            moovId,
+                            goingList
+                          );
                           status = 2;
                           print(status);
                         } else if (statuses != null && status == 2) {
@@ -1033,7 +1039,8 @@ class Buttons extends StatelessWidget {
                               course['userId'],
                               moovId,
                               course['title'],
-                              course['image']);
+                              course['image'],
+                              course['push']);
                           status = 3;
                           print(status);
                         } else if (statuses != null && status == 3) {

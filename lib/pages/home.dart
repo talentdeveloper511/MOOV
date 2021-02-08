@@ -199,6 +199,7 @@ class _HomeState extends State<Home> {
         "friendRequests": [],
         "friendGroups": [],
         "venmoUsername": venmoUsername,
+        "pushSettings": {"going": true, "hourBefore": true, "suggestions": true}
       });
       doc = await usersRef.doc(user.id).get();
     }
@@ -396,7 +397,6 @@ class _HomeState extends State<Home> {
             //   ),
             // ),
             Image.asset('lib/assets/egg.png', height: 45),
-
           ].map((i) {
             return Builder(
               builder: (BuildContext context) {

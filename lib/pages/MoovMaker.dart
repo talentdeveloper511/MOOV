@@ -278,6 +278,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   bool noHeight = true;
   List<String> groupList = [];
   List groupMembers = [];
+  bool push = true;
+
+
 
   String generateRandomString(int len) {
     var r = Random();
@@ -299,6 +302,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
+      List pushList = currentUser.pushSettings.values.toList();
+    if (pushList[0] == false) {
+      push = false;
+    }
 
     return Form(
       key: _formKey,
@@ -1275,7 +1282,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         imageUrl: downloadUrl,
                                         userId: strUserId,
                                         postId: generateRandomString(20),
-                                        posterName: currentUser.displayName);
+                                        posterName: currentUser.displayName,
+                                        push: push);
 
                                     Database().betaActivityTracker(
                                         currentUser.displayName,

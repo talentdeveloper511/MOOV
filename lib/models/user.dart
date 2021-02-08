@@ -20,6 +20,7 @@ class User {
   final Timestamp timestamp;
   final String referral;
   final String venmoUsername;
+  final Map pushSettings;
 
   User(
       {this.id,
@@ -40,7 +41,8 @@ class User {
       this.verifiedStatus,
       this.friendGroups,
       this.referral,
-      this.venmoUsername});
+      this.venmoUsername,
+      this.pushSettings});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -62,6 +64,7 @@ class User {
         timestamp: doc.data()['timestamp'],
         friendGroups: doc.data()['friendGroups'],
         referral: doc.data()['referral'],
-        venmoUsername: doc.data()['venmoUsername']);
+        venmoUsername: doc.data()['venmoUsername'],
+        pushSettings: doc.data()['pushSettings']);
   }
 }
