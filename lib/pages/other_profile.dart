@@ -135,6 +135,7 @@ class _OtherProfileState extends State<OtherProfile> {
           displayName = snapshot.data['displayName'];
           photoUrl = snapshot.data['photoUrl'];
           userFriends = snapshot.data['friendArray'];
+          List<dynamic> userGroups = snapshot.data['friendGroups'];
           score = snapshot.data['score'];
           String venmo = snapshot.data['venmoUsername'];
 
@@ -254,41 +255,34 @@ class _OtherProfileState extends State<OtherProfile> {
                                 : "Username not found",
                             style: TextThemes.extraBold,
                           ),
-                         verifiedStatus == 3 ? 
-                                                    Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 5,
-                                                          top: 2.5,
-                                                        ),
-                                                        child: Icon(Icons.store,
-                                                            size: 25, 
-                                                            color: TextThemes.ndGold,),
-                                                      ):
-                                                                                              
-                                                verifiedStatus == 2
-                                                    ? Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 5,
-                                                          top: 5
-                                                        ),
-                                                        child: Image.asset(
-                                                            'lib/assets/verif2.png',
-                                                            height: 20),
-                                                      )
-                                                    : verifiedStatus == 1
-                                                        ? Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                              left: 2.5,
-                                                              top: 0
-                                                            ),
-                                                            child: Image.asset(
-                                                                'lib/assets/verif.png',
-                                                                height: 30),
-                                                          )
-                                                        : Text("")
+                          verifiedStatus == 3
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 5,
+                                    top: 2.5,
+                                  ),
+                                  child: Icon(
+                                    Icons.store,
+                                    size: 25,
+                                    color: TextThemes.ndGold,
+                                  ),
+                                )
+                              : verifiedStatus == 2
+                                  ? Padding(
+                                      padding: EdgeInsets.only(left: 5, top: 5),
+                                      child: Image.asset(
+                                          'lib/assets/verif2.png',
+                                          height: 20),
+                                    )
+                                  : verifiedStatus == 1
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 2.5, top: 0),
+                                          child: Image.asset(
+                                              'lib/assets/verif.png',
+                                              height: 30),
+                                        )
+                                      : Text("")
                         ],
                       ),
                     ),
@@ -360,20 +354,30 @@ class _OtherProfileState extends State<OtherProfile> {
                             ],
                           ),
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '0',
-                              style: TextThemes.extraBold,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(
-                                'Friend Groups',
-                                style: TextThemes.bodyText1,
+                        GestureDetector(
+
+                 onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => GroupsList(id)));
+                          },          
+                                                  child: Column(
+                            children: [
+                              Text(
+                                userGroups.length == null ||
+                                        userGroups.length == 0
+                                    ? "0"
+                                    : userGroups.length.toString(),
+                                style: TextThemes.extraBold,
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Text(
+                                  'Friend Groups',
+                                  style: TextThemes.bodyText1,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

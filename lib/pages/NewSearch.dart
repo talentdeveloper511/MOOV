@@ -412,8 +412,22 @@ class _SearchBarState extends State<SearchBar>
                                                           delegate:
                                                               SliverChildBuilderDelegate(
                                                             (context, index) {
+                                                              String privacy =
+                                                                  currSearchStuff2[
+                                                                              index]
+                                                                          .data[
+                                                                      "privacy"];
+                                                              bool hide = false;
+                                                              if (privacy ==
+                                                                      "Friends Only" ||
+                                                                  privacy ==
+                                                                      "Invite Only") {
+                                                                hide = true;
+                                                              }
                                                               return _searchTerm !=
-                                                                      null
+                                                                          null &&
+                                                                      hide ==
+                                                                          false
                                                                   ? DisplayMOOVResult(
                                                                       title: currSearchStuff2[index]
                                                                               .data[
@@ -745,7 +759,7 @@ class DisplayGroupResult extends StatelessWidget {
   final String groupName;
   final String groupId;
   final String groupPic;
-  final List<String> members;
+  final List<dynamic> members;
 
   DisplayGroupResult(
       {Key key, this.groupName, this.groupId, this.groupPic, this.members})
@@ -930,6 +944,7 @@ class DisplayGroupResult extends StatelessWidget {
             );
           });
     }
+    return Container();
   }
 }
 
