@@ -21,7 +21,7 @@ class HottestMOOV extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: StreamBuilder(
-          stream: postsRef.limit(1).snapshots(),
+          stream: postsRef.orderBy("goingCount", descending: true).limit(1).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data.docs.length == 0)
               return Center(
@@ -62,7 +62,7 @@ class HottestMOOV extends StatelessWidget {
                     print("Expired. See ya later.");
                     Future.delayed(const Duration(milliseconds: 1000), () {
                       Database().deletePost(
-                          course['postId'], course['userId'], course['title']);
+                          course['postId'], course['userId'], course['title'], course['statuses'], course['posterName']);
                     });
                   }
                   final now = DateTime.now();

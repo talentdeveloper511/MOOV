@@ -159,12 +159,16 @@ flutter:
     - lib/assets/bag1.png
     - lib/assets/fg1.png
     - lib/assets/ff.png
+    - lib/assets/egg.png
     - lib/assets/moovblue.png
     - lib/assets/sendmoov.png
     - lib/assets/launchscreen1.png
     - lib/assets/landingpage.png
     - lib/assets/moovlogo2.png
     - lib/assets/fire.png
+    - lib/assets/welcomePage.png
+    - lib/assets/betaWelcome.png
+    - lib/assets/betaDisclaimer.png
     - lib/assets/plate.png
     - lib/assets/dance.png
     - lib/assets/trophy.png

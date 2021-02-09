@@ -99,6 +99,8 @@ class _SearchUsersPostState extends State<SearchUsersPost>
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -262,7 +264,8 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                  padding: const EdgeInsets.only(bottom: 50),
+                                  padding: isLargePhone ? 
+                                  const EdgeInsets.only(bottom: 50) :  const EdgeInsets.only(bottom: 20),
                                   child: RichText(
                                       textAlign: TextAlign.center,
                                       text: TextSpan(
@@ -351,7 +354,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                                               currSearchStuff[
                                                                           index]
                                                                       .data[
-                                                                  "isAmbassador"],
+                                                                  "verifiedStatus"],
                                                               invitees,
                                                             )
                                                           : Container();
@@ -710,7 +713,7 @@ class _AddUsersFromCreateGroupState extends State<AddUsersFromCreateGroup>
                                                               currSearchStuff[
                                                                           index]
                                                                       .data[
-                                                                  "isAmbassador"],
+                                                                  "verifiedStatus"],
                                                               invitees)
                                                           : Container();
                                                     },
@@ -736,15 +739,15 @@ class UserPostResult extends StatefulWidget {
   final String email;
   final String proPic;
   final String userId;
-  final bool isAmbassador;
+  final int verifiedStatus;
   List<String> invitees;
 
   UserPostResult(this.displayName, this.email, this.proPic, this.userId,
-      this.isAmbassador, this.invitees);
+      this.verifiedStatus, this.invitees);
 
   @override
   _UserPostResultState createState() => _UserPostResultState(this.displayName,
-      this.email, this.proPic, this.userId, this.isAmbassador, this.invitees);
+      this.email, this.proPic, this.userId, this.verifiedStatus, this.invitees);
 }
 
 class _UserPostResultState extends State<UserPostResult> {
@@ -752,13 +755,13 @@ class _UserPostResultState extends State<UserPostResult> {
   String email;
   String proPic;
   String userId;
-  bool isAmbassador;
+  int verifiedStatus;
   List<String> invitees;
 
   bool status = false;
 
   _UserPostResultState(this.displayName, this.email, this.proPic, this.userId,
-      this.isAmbassador, this.invitees);
+      this.verifiedStatus, this.invitees);
 
   @override
   Widget build(BuildContext context) {
@@ -792,12 +795,39 @@ class _UserPostResultState extends State<UserPostResult> {
                   fontSize: 20),
             ),
           ),
-          isAmbassador
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 3, left: 3),
-                  child: Image.asset('lib/assets/verif.png', height: 30),
-                )
-              : Text(""),
+          verifiedStatus == 3 ? 
+                                                    Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 2.5,
+                                                        ),
+                                                        child: Icon(Icons.store,
+                                                            size: 25, 
+                                                            color: TextThemes.ndGold,),
+                                                      ):
+                                                                                              
+                                                verifiedStatus == 2
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 5,
+                                                        ),
+                                                        child: Image.asset(
+                                                            'lib/assets/verif2.png',
+                                                            height: 20),
+                                                      )
+                                                    : verifiedStatus == 1
+                                                        ? Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              left: 2.5,
+                                                              top: 2.5
+                                                            ),
+                                                            child: Image.asset(
+                                                                'lib/assets/verif.png',
+                                                                height: 30),
+                                                          )
+                                                        : Text(""),
           // Text(
           //   email ?? "",
           //   style: TextStyle(color: Colors.black),
@@ -1057,7 +1087,7 @@ class _SearchUsersGroupState extends State<SearchUsersGroup> {
                                         currSearchStuff[index].data["photoUrl"],
                                         currSearchStuff[index].data["id"],
                                         currSearchStuff[index]
-                                            .data["isAmbassador"],
+                                            .data["verifiedStatus"],
                                         currSearchStuff[index]
                                             .data["friendGroups"],
                                         gname,
@@ -1085,7 +1115,7 @@ class UserGroupResultAdd extends StatefulWidget {
   final String email;
   final String proPic;
   final String userId;
-  final bool isAmbassador;
+  final int verifiedStatus;
   final List<dynamic> friendGroups;
   String gname, gid, pic, moov;
   List<dynamic> members;
@@ -1095,7 +1125,7 @@ class UserGroupResultAdd extends StatefulWidget {
       this.email,
       this.proPic,
       this.userId,
-      this.isAmbassador,
+      this.verifiedStatus,
       this.friendGroups,
       this.gname,
       this.gid,
@@ -1109,7 +1139,7 @@ class UserGroupResultAdd extends StatefulWidget {
       this.email,
       this.proPic,
       this.userId,
-      this.isAmbassador,
+      this.verifiedStatus,
       this.friendGroups,
       this.gname,
       this.gid,
@@ -1123,7 +1153,7 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
   String email;
   String proPic;
   String userId;
-  bool isAmbassador;
+  int verifiedStatus;
   String gname, gid, pic, moov;
   List<dynamic> members, friendGroups;
   bool status = false;
@@ -1133,7 +1163,7 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
       this.email,
       this.proPic,
       this.userId,
-      this.isAmbassador,
+      this.verifiedStatus,
       this.friendGroups,
       this.gname,
       this.gid,
@@ -1173,7 +1203,7 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
                   fontSize: 20),
             ),
           ),
-          isAmbassador
+          verifiedStatus == 2
               ? Padding(
                   padding: const EdgeInsets.only(top: 3, left: 3),
                   child: Image.asset('lib/assets/verif.png', height: 30),
@@ -1240,7 +1270,7 @@ class InviteGroup extends StatefulWidget {
   String gname, gid, pic, moov;
   List<dynamic> members;
   List<String> invitees;
-  List<String> memberNames;
+  List<dynamic> memberNames;
 
   InviteGroup(
       this.gname, this.gid, this.pic, this.moov, this.members, this.invitees, this.memberNames);
@@ -1255,7 +1285,7 @@ class _InviteGroupState extends State<InviteGroup> {
   List members, friendGroups;
   bool status = false;
   List<String> invitees;
-    List<String> memberNames;
+    List<dynamic> memberNames;
 
 
   _InviteGroupState(

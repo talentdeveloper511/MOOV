@@ -161,7 +161,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                     3600000) {
                               print("Expired. See ya later.");
                               Database().deletePost(course['postId'],
-                                  course['userId'], course['title']);
+                                  course['userId'], course['title'], course['statuses'], course['posterName']);
                             }
                             final now = DateTime.now();
                             bool isToday = false;
@@ -212,7 +212,6 @@ class _MOOVSPageState extends State<MOOVSPage>
 
                             var strUserPic = currentUser.photoUrl;
 
-                            bool isAmbassador;
                             bool hide = false;
                             // var y = startDate;
                             // var x = Timestamp.now();
@@ -224,7 +223,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                                     3600000) {
                               print("Expired. See ya later.");
                               Database().deletePost(course['postId'],
-                                  course['userId'], course['title']);
+                                  course['userId'], course['title'], course['statuses'], course['posterName']);
                             }
                             final now = DateTime.now();
                             bool isToday = false;
@@ -273,7 +272,7 @@ class _MOOVSPageState extends State<MOOVSPage>
     //     backgroundColor: Color.fromRGBO(220, 180, 57, 1.0))
   }
 
-  void showAlertDialog(BuildContext context, postId, userId, title) {
+  void showAlertDialog(BuildContext context, postId, userId, title, statuses, posterName) {
     showDialog(
       context: context,
       child: CupertinoAlertDialog(
@@ -285,7 +284,7 @@ class _MOOVSPageState extends State<MOOVSPage>
             isDefaultAction: true,
             child: Text("Yeah", style: TextStyle(color: Colors.red)),
             onPressed: () {
-              Database().deletePost(postId, userId, title);
+              Database().deletePost(postId, userId, title, statuses, posterName);
             },
           ),
           CupertinoDialogAction(

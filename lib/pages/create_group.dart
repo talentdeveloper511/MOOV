@@ -57,8 +57,7 @@ class _GroupFormState extends State<GroupForm> {
       groupNames.add(result.docs[i].data()['groupName']);
     }
     if (groupNames.contains(groupName))
-      // return true;
-      print("Yes, this name exists already!");
+      return true;
     else
       // return false;
       print("No, this name does not exist, we're good to go.");
@@ -92,24 +91,21 @@ class _GroupFormState extends State<GroupForm> {
     final groupId = generateRandomString(20);
 
     for (int i = 0; i < memberoonis.length; i++) {
-      usersRef
-          .doc(memberoonis[i])
-          .get()
-          .then((snap) => {memberNames.add(snap.data()['displayName']),
-    groupsRef.doc(groupId).set({
-      "groupName": groupName,
-      "members": memberoonis,
-      "memberNames": memberNames,
-      "groupPic": pic,
-      "groupId": groupId,
-      // "chat": {'messages': []},
-      "nextMOOV": "",
-      "voters": {}
-      // "gid": id
-    })
-    });
+      usersRef.doc(memberoonis[i]).get().then((snap) => {
+            memberNames.add(snap.data()['displayName']),
+            groupsRef.doc(groupId).set({
+              "groupName": groupName,
+              "members": memberoonis,
+              "memberNames": memberNames,
+              "groupPic": pic,
+              "groupId": groupId,
+              // "chat": {'messages': []},
+              "nextMOOV": "",
+              "voters": {}
+              // "gid": id
+            })
+          });
     }
-
 
     // .then((value) {
     //   String data = value.documentID;
@@ -590,6 +586,9 @@ class _GroupFormState extends State<GroupForm> {
       final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
       createGroupInFirestore(groupName, currentUser.id, downloadUrl);
     }
+    Database().betaActivityTracker(
+        currentUser.displayName, Timestamp.now(), "created Friend Group");
+        
     setState(() {
       isUploading = false;
     });

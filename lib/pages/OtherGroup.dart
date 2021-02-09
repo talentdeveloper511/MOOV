@@ -64,7 +64,9 @@ class _OtherGroupState extends State<OtherGroup> {
             isDefaultAction: true,
             child: Text("Ask", style: TextStyle(color: Colors.green)),
             onPressed: () {
-             
+              Database().askToJoinGroup(currentUser.id, currentUser.photoUrl,
+                  currentUser.id, groupName, gid);
+
               Navigator.of(context).pop(true);
             },
           ),
@@ -471,37 +473,38 @@ class _OtherGroupState extends State<OtherGroup> {
                                         ),
                                       ),
                                       Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  alignment: Alignment(0.0, 0.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: <Color>[
-                                          Colors.black.withAlpha(0),
-                                          Colors.black,
-                                          Colors.black12,
-                                        ],
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          alignment: Alignment(0.0, 0.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: <Color>[
+                                                  Colors.black.withAlpha(0),
+                                                  Colors.black,
+                                                  Colors.black12,
+                                                ],
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(
+                                                "Clemson vs. Notre Dame",
+                                                style: TextStyle(
+                                                    fontFamily: 'Solway',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                    fontSize: 20.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        "Clemson vs. Notre Dame",
-                                        style: TextStyle(
-                                            fontFamily: 'Solway',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 20.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
                                     ]),
                               ),
                             ]),
@@ -587,8 +590,6 @@ class _OtherGroupState extends State<OtherGroup> {
       ),
     );
   }
-
-  
 }
 
 class Suggestions extends StatefulWidget {

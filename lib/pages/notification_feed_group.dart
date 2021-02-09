@@ -291,6 +291,7 @@ class NotificationFeedItem extends StatelessWidget {
   final String groupId;
   final String groupPic;
   final String groupName;
+  final bool push;
 
   //for redirecting to PostDetail
   final String title;
@@ -311,6 +312,7 @@ class NotificationFeedItem extends StatelessWidget {
       this.groupId,
       this.groupPic,
       this.groupName,
+      this.push,
       this.userId,
       this.type,
       this.previewImg,
@@ -345,6 +347,7 @@ class NotificationFeedItem extends StatelessWidget {
       groupId: doc.data()['groupId'],
       groupPic: doc.data()['groupPic'],
       groupName: doc.data()['groupName'],
+      push: doc.data()['push']
     );
   }
 

@@ -77,7 +77,11 @@ class Database {
       bool barcode,
       imageUrl,
       userId,
-      postId}) async {
+      postId,
+      posterName,
+      bool push,
+      int goingCount //BETA
+      }) async {
     DocumentReference ref = await postsRef.doc(postId).set({
       'title': title,
       'type': type,
@@ -96,6 +100,9 @@ class Database {
       'userId': userId,
       "featured": false,
       "postId": postId,
+      "posterName": posterName,
+      "push": push,
+      "goingCount": 0,
       "going": []
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
@@ -109,7 +116,7 @@ class Database {
     });
   }
 
-  Future<void> addNotGoing(userId, postId) async {
+  Future<void> addNotGoing(userId, postId, List<dynamic> goingList) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
@@ -160,11 +167,15 @@ class Database {
     });
   }
 
-  Future<void> addUndecided(userId, postId) async {
+  Future<void> addUndecided(userId, postId, List<dynamic> goingList) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref2, {'score': FieldValue.increment(10)});
+
+      if (goingList.contains(userId)) {
+        transaction.update(ref, {'goingCount': FieldValue.increment(-1)});
+      }
 
       postsRef.doc(postId).set({
         "statuses": {userId: 2}
@@ -204,11 +215,13 @@ class Database {
     });
   }
 
-  Future<void> addGoingGood(userId, ownerId, postId, title, pic) async {
+  Future<void> addGoingGood(
+      userId, ownerId, postId, title, pic, bool push) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(50)});
+      transaction.update(ref2, {'score': FieldValue.increment(500)});
+      transaction.update(ref, {'goingCount': FieldValue.increment(1)});
 
       await postsRef.doc(postId).set({
         "statuses": {userId: 3}
@@ -225,6 +238,7 @@ class Database {
           "type": "going",
           "postId": postId,
           "previewImg": pic,
+          "push": push,
           "title": title,
           "username": currentUser.displayName,
           "userId": currentUser.id,
@@ -245,6 +259,8 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      transaction.update(ref, {'goingCount': FieldValue.increment(-1)});
+
       var checkZero;
       ref2.get().then((snap) => {
             if (snap.data()['score'] == 0) {checkZero = "true"}
@@ -305,6 +321,30 @@ class Database {
   //   });
   // }
 
+  Future<void> goingPushSetting(newValue) async {
+    return dbRef.runTransaction((transaction) async {
+      usersRef.doc(currentUser.id).set({
+        "pushSettings": {"going": newValue}
+      }, SetOptions(merge: true));
+    });
+  }
+
+  Future<void> hourPushSetting(newValue) async {
+    return dbRef.runTransaction((transaction) async {
+      usersRef.doc(currentUser.id).set({
+        "pushSettings": {"hourBefore": newValue}
+      }, SetOptions(merge: true));
+    });
+  }
+
+  Future<void> suggestionsPushSetting(newValue) async {
+    return dbRef.runTransaction((transaction) async {
+      usersRef.doc(currentUser.id).set({
+        "pushSettings": {"suggestions": newValue}
+      }, SetOptions(merge: true));
+    });
+  }
+
   addedToGroup(
     String addee,
     String groupName,
@@ -321,6 +361,30 @@ class Database {
       "userId": currentUser.id,
       "userProfilePic": currentUser.photoUrl,
       "previewImg": groupPic,
+      "groupId": groupId,
+      "groupName": groupName,
+      "timestamp": DateTime.now()
+    });
+  }
+
+  askToJoinGroup(
+    String asker,
+    String askerPic,
+    String askerId,
+    String groupName,
+    String groupId,
+  ) {
+    notificationFeedRef
+        .doc(groupId)
+        .collection("feedItems")
+        .doc('asked to join ' + groupId)
+        .set({
+      "type": "askToJoin",
+      "title": groupName,
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userProfilePic": currentUser.photoUrl,
+      "previewImg": askerPic,
       "groupId": groupId,
       "groupName": groupName,
       "timestamp": DateTime.now()
@@ -410,7 +474,8 @@ class Database {
     }
   }
 
-  deletePost(String postId, String ownerId, String title) {
+  deletePost(String postId, String ownerId, String title, Map statuses,
+      String posterName) {
     String filePath = 'images/$ownerId$title';
 
     firebase_storage.Reference ref =
@@ -423,9 +488,26 @@ class Database {
     //   });
     // });
 
-    FirebaseFirestore.instance
+    //BETA ACTIVITY
+    if (statuses.length >= 5) {
+      betaActivityTracker(posterName, Timestamp.now(), "5+ statuses");
+    }
+    List<String> statusNames = statuses.keys.toList();
 
-        ///this is for deleting related notifications
+    if (statuses != null && statuses.length != 0)
+      for (int i = 0; i < statuses.length; i++) {
+        String who;
+
+        usersRef.doc(statusNames[i]).get().then((snap) => {
+              who = snap.data()['displayName'],
+              betaActivityTracker(
+                  who, Timestamp.now(), "responded to post " + postId)
+            });
+      }
+    //BETA
+
+    ///this is for deleting related notifications
+    FirebaseFirestore.instance
         .collectionGroup("feedItems")
         .where("postId", isEqualTo: postId)
         .get()
@@ -453,6 +535,11 @@ class Database {
         ref.delete();
 
         doc.reference.delete();
+      }
+    });
+    postsRef.doc(postId).collection('comments').get().then((doc) {
+      for (DocumentSnapshot ds in doc.docs) {
+        ds.reference.delete();
       }
     });
 
@@ -608,6 +695,7 @@ class Database {
   }
 
   Future<void> addUser(id, gname, gid, displayName) async {
+    betaActivityTracker(displayName, Timestamp.now(), "joined Friend Group");
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
       final DocumentReference ref2 =
@@ -671,6 +759,31 @@ class Database {
         }
       }
     });
+  }
+
+  Future<void> betaActivityTracker(
+      //BETA ACTIVITY TRACKER
+      String who,
+      Timestamp when,
+      String what) async {
+    final dateToCheck = when.toDate();
+    final aDate =
+        DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
+
+    print(DateFormat('MMMd').add_jm().format(aDate));
+    String whenString = DateFormat('MMMd').format(aDate);
+    // if (who != "Alvin Alaphat" && who != "Kevin Camson" && who != "MOOV Team") {
+    FirebaseFirestore.instance
+        .collection(who)
+        .doc(whenString)
+        .collection(what)
+        .doc(what)
+        .set({
+      "who": who,
+      "when": when,
+      "what": what,
+    });
+    //}
   }
 
   Future<void> updateGroupNames(members, newName, gid, old) async {

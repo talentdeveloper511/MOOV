@@ -1,8 +1,10 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart' as home;
 import 'package:MOOV/pages/sign_in.dart';
+import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,9 +54,13 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
-    var myIndex = 0;
-    var score;
-    var pic;
+    List pushList;
+    bool goingBool = true;
+    bool hourBool = true;
+    bool suggestionsBool = true;
+
+    final DocumentReference ref2 = home.usersRef.doc(home.currentUser.id);
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -95,32 +101,34 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
         body: Container(
-            child: StreamBuilder<QuerySnapshot>(
-                stream: home.usersRef
-                    .orderBy('score', descending: true)
-                    .limit(50)
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+            child: StreamBuilder(
+                stream: home.usersRef.doc(home.currentUser.id).snapshots(),
+                builder: (BuildContext context, snapshot) {
                   if (snapshot.hasError) {
                     return new Text('Error: ${snapshot.error}');
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Text("Loading..."),
-                          SizedBox(
-                            height: 50.0,
-                          ),
-                          CircularProgressIndicator()
-                        ],
-                      ),
-                    );
+                    return linearProgress();
                   } else {
-                    var prize;
+                    DocumentSnapshot course = snapshot.data;
+                    ref2.get().then((snap) => {
+                          pushList =
+                              snap.data()['pushSettings'].values.toList(),
+                          if (pushList[0] == false)
+                            {
+                              goingBool = false,
+                            }
+                          else
+                            [goingBool = true],
+                          if (pushList[1] == false)
+                            {hourBool = false}
+                          else
+                            {hourBool = true},
+                          if (pushList[2] == false)
+                            {suggestionsBool = false}
+                          else
+                            {suggestionsBool = true},
+                        });
 
                     return Scaffold(
                       body: Stack(
@@ -236,30 +244,30 @@ class _SettingsPageState extends State<SettingsPage> {
                                 SwitchListTile(
                                   activeColor: TextThemes.ndBlue,
                                   contentPadding: const EdgeInsets.all(0),
-                                  value: false,
-                                  title: Text("Pause All"),
-                                  onChanged: (val) {},
-                                ),
-                                SwitchListTile(
-                                  activeColor: TextThemes.ndBlue,
-                                  contentPadding: const EdgeInsets.all(0),
-                                  value: true,
+                                  value: goingBool,
                                   title: Text("Going to your MOOV"),
-                                  onChanged: (val) {},
+                                  onChanged: (val) {
+                                    Database().goingPushSetting(val);
+                                  },
                                 ),
+                                SwitchListTile(
+                                    activeColor: TextThemes.ndBlue,
+                                    contentPadding: const EdgeInsets.all(0),
+                                    value: hourBool,
+                                    title: Text("Hour before MOOV starts"),
+                                    onChanged: (value) {
+                                      Database().hourPushSetting(value);
+                                      hourBool = value;
+                                    }),
                                 SwitchListTile(
                                   activeColor: TextThemes.ndBlue,
                                   contentPadding: const EdgeInsets.all(0),
-                                  value: true,
-                                  title: Text("Hour before MOOV starts"),
-                                  onChanged: (val) {},
-                                ),
-                                SwitchListTile(
-                                  activeColor: TextThemes.ndBlue,
-                                  contentPadding: const EdgeInsets.all(0),
-                                  value: true,
+                                  value: suggestionsBool,
                                   title: Text("Friend Group Suggestions"),
-                                  onChanged: (val) {},
+                                  onChanged: (val) {
+                                    Database().suggestionsPushSetting(val);
+                                    suggestionsBool = val;
+                                  },
                                 ),
                                 const SizedBox(height: 60.0),
                               ],

@@ -278,6 +278,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   bool noHeight = true;
   List<String> groupList = [];
   List groupMembers = [];
+  bool push = true;
+
+
 
   String generateRandomString(int len) {
     var r = Random();
@@ -299,6 +302,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
+      List pushList = currentUser.pushSettings.values.toList();
+    if (pushList[0] == false) {
+      push = false;
+    }
 
     return Form(
       key: _formKey,
@@ -1234,7 +1241,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                           .child("images/" +
                                               user.id +
                                               titleController.text);
-                                               if (maxOccupancyController.text.isEmpty) {
+                                  if (maxOccupancyController.text.isEmpty) {
                                     maxOccupancyInt = 8000000;
                                   }
 
@@ -1266,14 +1273,22 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         description: descriptionController.text,
                                         address: addressController.text,
                                         startDate: currentValue,
-                                        unix: currentValue.millisecondsSinceEpoch,
+                                        unix:
+                                            currentValue.millisecondsSinceEpoch,
                                         statuses: inviteesNameList,
                                         maxOccupancy: maxOccupancyInt,
                                         venmo: venmoInt,
                                         barcode: barcode,
                                         imageUrl: downloadUrl,
                                         userId: strUserId,
-                                        postId: generateRandomString(20));
+                                        postId: generateRandomString(20),
+                                        posterName: currentUser.displayName,
+                                        push: push);
+
+                                    Database().betaActivityTracker(
+                                        currentUser.displayName,
+                                        Timestamp.now(),
+                                        "post");
                                     setState(() {
                                       isUploading = false;
                                     });

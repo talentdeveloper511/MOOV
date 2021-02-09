@@ -844,10 +844,12 @@ class _GroupDetailState extends State<GroupDetail> {
 
   leaveGroup() {
     if (members.length == 1) {
-      Database().leaveGroup(currentUser.id, groupName, gid, currentUser.displayName);
+      Database()
+          .leaveGroup(currentUser.id, groupName, gid, currentUser.displayName);
       Database().destroyGroup(gid, groupName);
     } else {
-      Database().leaveGroup(currentUser.id, groupName, gid, currentUser.displayName);
+      Database()
+          .leaveGroup(currentUser.id, groupName, gid, currentUser.displayName);
     }
     Navigator.pop(
       context,
@@ -1096,8 +1098,12 @@ class _SuggestionsState extends State<Suggestions> {
                               side: BorderSide(color: Colors.black)),
                           onPressed: () {
                             if (voters != null && status != 1) {
+                              Database().betaActivityTracker(
+                                  currentUser.displayName,
+                                  Timestamp.now(),
+                                  "vote on " + suggestorId);
                               Database().addNoVote(
-                                 unix, currentUser.id, groupId, suggestorId);
+                                  unix, currentUser.id, groupId, suggestorId);
                               status = 1;
                             } else if (voters != null && status == 1) {
                               Database().removeNoVote(
@@ -1137,6 +1143,10 @@ class _SuggestionsState extends State<Suggestions> {
                               side: BorderSide(color: Colors.black)),
                           onPressed: () {
                             if (voters != null && status != 2) {
+                                 Database().betaActivityTracker(
+                                  currentUser.displayName,
+                                  Timestamp.now(),
+                                  "vote on " + suggestorId);
                               Database().addYesVote(
                                   unix, currentUser.id, groupId, suggestorId);
                               status = 2;

@@ -354,9 +354,9 @@ class _SearchBarState extends State<SearchBar>
                                                                       userId: currSearchStuff[index]
                                                                               .data[
                                                                           "id"],
-                                                                      isAmbassador:
+                                                                      verifiedStatus:
                                                                           currSearchStuff[index]
-                                                                              .data["isAmbassador"])
+                                                                              .data["verifiedStatusador"])
                                                                   : Container();
                                                             },
                                                             childCount:
@@ -454,7 +454,7 @@ class DisplaySearchResult extends StatelessWidget {
   final String email;
   final String proPic;
   final String userId;
-  final bool isAmbassador;
+  final int verifiedStatus;
 
   DisplaySearchResult({
     Key key,
@@ -462,7 +462,7 @@ class DisplaySearchResult extends StatelessWidget {
     this.displayName,
     this.proPic,
     this.userId,
-    this.isAmbassador,
+    this.verifiedStatus,
   }) : super(key: key);
 
   @override
@@ -517,7 +517,7 @@ class DisplayMOOVResult extends StatelessWidget {
   final String image;
   final String userId;
   final String postId;
-  final bool isAmbassador;
+  final int verifiedStatus;
   var startDate;
 
   DisplayMOOVResult(
@@ -528,7 +528,7 @@ class DisplayMOOVResult extends StatelessWidget {
       this.image,
       this.userId,
       this.postId,
-      this.isAmbassador,
+      this.verifiedStatus,
       this.startDate})
       : super(key: key);
 
@@ -707,7 +707,7 @@ class DisplayGroupResult extends StatelessWidget {
   final String groupName;
   final String groupId;
   final String groupPic;
-  final List members;
+  final List<String> members;
 
   DisplayGroupResult(
       {Key key, this.groupName, this.groupId, this.groupPic, this.members})
@@ -1274,9 +1274,9 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                                                       userId: currSearchStuff[index]
                                                                               .data[
                                                                           "id"],
-                                                                      isAmbassador:
+                                                                      verifiedStatus:
                                                                           currSearchStuff[index]
-                                                                              .data["isAmbassador"])
+                                                                              .data["verifiedStatus"])
                                                                   : Container();
                                                             },
                                                             childCount:

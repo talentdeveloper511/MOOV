@@ -1353,7 +1353,9 @@ class _EditPostState extends State<EditPost> {
                                                 postId,
                                                 currentUser.id,
                                                 title,
-                                                snapshot.data['going']),
+                                                snapshot.data['going'],
+                                                snapshot.data['statuses'],
+                                                snapshot.data['posterName']),
                                           }),
                                 ),
                               ],
@@ -1418,11 +1420,11 @@ class _BannerImage extends StatelessWidget {
   }
 }
 
-void showAlertDialog2(BuildContext context, postId, userId, title, going) {
+void showAlertDialog2(
+    BuildContext context, postId, userId, title, going, statuses, posterName) {
   delete() {
     Future.delayed(const Duration(milliseconds: 1000), () {
-      Database().canceledNotification(postId, title, going);
-      Database().deletePost(postId, userId, title);
+      Database().deletePost(postId, userId, title, statuses, posterName);
     });
   }
 

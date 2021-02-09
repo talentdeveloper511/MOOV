@@ -38,7 +38,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
     // var userMoovs = currentUser.likedMoovs;
     var userGroups = currentUser.friendGroups;
     // var userFriendsLength = "0";
-    bool isAmbassador = currentUser.isAmbassador;
+    int verifiedStatus = currentUser.verifiedStatus;
 
     return StreamBuilder(
         stream: usersRef.doc(currentUser.id).snapshots(),
@@ -53,7 +53,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
           userDorm = snapshot.data['dorm'];
           userHeader = snapshot.data['header'];
           strUserPic = snapshot.data['photoUrl'];
-          isAmbassador = snapshot.data['isAmbassador'];
+          verifiedStatus = snapshot.data['verifiedStatus'];
           userFriends = snapshot.data['friendArray'];
           // userMoovs = snapshot.data['likedMoovs'];
           userGroups = snapshot.data['friendGroups'];
@@ -202,12 +202,41 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                   : "Username not found",
                               style: TextThemes.extraBold,
                             ),
-                            isAmbassador
-                                ? Padding(
-                                    padding: EdgeInsets.only(left: 5, top: 5),
-                                    child: Image.asset('lib/assets/verif2.png',
-                                        height: 20))
-                                : Text("")
+                             verifiedStatus == 3 ? 
+                                                    Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 5,
+                                                          top: 2.5,
+                                                        ),
+                                                        child: Icon(Icons.store,
+                                                            size: 25, 
+                                                            color: TextThemes.ndGold,),
+                                                      ):
+                                                                                              
+                                                verifiedStatus == 2
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 5,
+                                                          top: 5
+                                                        ),
+                                                        child: Image.asset(
+                                                            'lib/assets/verif2.png',
+                                                            height: 20),
+                                                      )
+                                                    : verifiedStatus == 1
+                                                        ? Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              left: 2.5,
+                                                              top: 0
+                                                            ),
+                                                            child: Image.asset(
+                                                                'lib/assets/verif.png',
+                                                                height: 30),
+                                                          )
+                                                        : Text("")
                           ],
                         ),
                       ),

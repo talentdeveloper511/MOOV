@@ -4,6 +4,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/map_test.dart';
 import 'dart:async';
 import 'dart:io';
@@ -56,6 +57,7 @@ final chatRef = FirebaseFirestore.instance
     .collection('chat');
 final DateTime timestamp = DateTime.now();
 User currentUser;
+
 
 class Home extends StatefulWidget {
   @override
@@ -171,8 +173,10 @@ class _HomeState extends State<Home> {
 
     if (!doc.exists) {
       // 2) if the user doesn't exist, then we want to take them to the create account page
-      final result = await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => CreateAccount()));
+      final result = await  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WelcomePage()),
+                  );
 
       final String dorm = result[0];
       final String year = result[2];
@@ -195,11 +199,12 @@ class _HomeState extends State<Home> {
         "dorm": dorm,
         "referral": referral,
         "postLimit": 3,
-        "isAmbassador": false,
+        "verifiedStatus": 0,
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],
         "venmoUsername": venmoUsername,
+        "pushSettings": {"going": true, "hourBefore": true, "suggestions": true}
       });
       doc = await usersRef.doc(user.id).get();
     }
@@ -344,59 +349,59 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            FocusedMenuHolder(
-              menuWidth: MediaQuery.of(context).size.width * .95,
+            // FocusedMenuHolder(
+            //   menuWidth: MediaQuery.of(context).size.width * .95,
 
-              blurSize: 5.0,
-              menuItemExtent: 200,
-              menuBoxDecoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
-              duration: Duration(milliseconds: 100),
-              animateMenuItems: true,
-              blurBackgroundColor: Colors.black54,
-              openWithTap:
-                  true, // Open Focused-Menu on Tap rather than Long Press
-              menuOffset:
-                  10.0, // Offset value to show menuItem from the selected item
-              bottomOffsetHeight:
-                  80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
-              menuItems: <FocusedMenuItem>[
-                // Add Each FocusedMenuItem  for Menu Options
+            //   blurSize: 5.0,
+            //   menuItemExtent: 200,
+            //   menuBoxDecoration: BoxDecoration(
+            //       color: Colors.grey,
+            //       borderRadius: BorderRadius.all(Radius.circular(15.0))),
+            //   duration: Duration(milliseconds: 100),
+            //   animateMenuItems: true,
+            //   blurBackgroundColor: Colors.black54,
+            //   openWithTap:
+            //       true, // Open Focused-Menu on Tap rather than Long Press
+            //   menuOffset:
+            //       10.0, // Offset value to show menuItem from the selected item
+            //   bottomOffsetHeight:
+            //       80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+            //   menuItems: <FocusedMenuItem>[
+            //     // Add Each FocusedMenuItem  for Menu Options
 
-                FocusedMenuItem(
-                    title: Center(
-                        child: Text(
-                      "     Lowkey / Chill",
-                      style: GoogleFonts.robotoSlab(fontSize: 40),
-                    )),
-                    // trailingIcon: Icon(Icons.edit),
-                    onPressed: () {
-                      navigateToCategoryFeed(context, "Shows");
-                    }),
-                FocusedMenuItem(
-                    backgroundColor: Colors.red[50],
-                    title: Text("          Rage",
-                        style: GoogleFonts.yeonSung(
-                            fontSize: 50, color: Colors.red)),
-                    onPressed: () {
-                      navigateToCategoryFeed(context, "Pregames & Parties");
-                    }),
-              ],
-              onPressed: () {},
-              child: Container(
-                margin: const EdgeInsets.all(7.0),
-                padding: const EdgeInsets.all(7.0),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(7)),
-                child: Text(
-                  "Mood",
-                  style: TextStyle(fontSize: 14.0, color: Colors.white),
-                ),
-              ),
-            ),
-            Image.asset('lib/assets/ndlogo1.png', height: 45),
+            //     FocusedMenuItem(
+            //         title: Center(
+            //             child: Text(
+            //           "     Lowkey / Chill",
+            //           style: GoogleFonts.robotoSlab(fontSize: 40),
+            //         )),
+            //         // trailingIcon: Icon(Icons.edit),
+            //         onPressed: () {
+            //           navigateToCategoryFeed(context, "Shows");
+            //         }),
+            //     FocusedMenuItem(
+            //         backgroundColor: Colors.red[50],
+            //         title: Text("          Rage",
+            //             style: GoogleFonts.yeonSung(
+            //                 fontSize: 50, color: Colors.red)),
+            //         onPressed: () {
+            //           navigateToCategoryFeed(context, "Pregames & Parties");
+            //         }),
+            //   ],
+            //   onPressed: () {},
+            //   child: Container(
+            //     margin: const EdgeInsets.all(7.0),
+            //     padding: const EdgeInsets.all(7.0),
+            //     decoration: BoxDecoration(
+            //         border: Border.all(color: Colors.white),
+            //         borderRadius: BorderRadius.circular(7)),
+            //     child: Text(
+            //       "Mood",
+            //       style: TextStyle(fontSize: 14.0, color: Colors.white),
+            //     ),
+            //   ),
+            // ),
+            Image.asset('lib/assets/egg.png', height: 45),
           ].map((i) {
             return Builder(
               builder: (BuildContext context) {

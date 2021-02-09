@@ -16,10 +16,11 @@ class User {
   final postLimit;
   final List<dynamic> friendGroups;
   final String venmo;
-  final bool isAmbassador;
+  final int verifiedStatus;
   final Timestamp timestamp;
   final String referral;
   final String venmoUsername;
+  final Map pushSettings;
 
   User(
       {this.id,
@@ -37,10 +38,11 @@ class User {
       this.postLimit,
       this.venmo,
       this.timestamp,
-      this.isAmbassador,
+      this.verifiedStatus,
       this.friendGroups,
       this.referral,
-      this.venmoUsername});
+      this.venmoUsername,
+      this.pushSettings});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -58,10 +60,11 @@ class User {
         friendRequests: doc.data()['friendRequests'],
         postLimit: doc.data()['postLimit'],
         venmo: doc.data()['venmo'],
-        isAmbassador: doc.data()['isAmbassador'],
+        verifiedStatus: doc.data()['verifiedStatus'],
         timestamp: doc.data()['timestamp'],
         friendGroups: doc.data()['friendGroups'],
         referral: doc.data()['referral'],
-        venmoUsername: doc.data()['venmoUsername']);
+        venmoUsername: doc.data()['venmoUsername'],
+        pushSettings: doc.data()['pushSettings']);
   }
 }

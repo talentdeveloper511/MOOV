@@ -40,7 +40,7 @@ class _OtherProfileState extends State<OtherProfile> {
   final strUserId = currentUser.id;
   final strPic = currentUser.photoUrl;
   final strUserName = currentUser.displayName;
-  bool isAmbassador = currentUser.isAmbassador;
+  int verifiedStatus = currentUser.verifiedStatus;
   var iter = 1;
 
   void showAlertDialog(BuildContext context) {
@@ -131,7 +131,7 @@ class _OtherProfileState extends State<OtherProfile> {
             checkFunction3();
             iter = iter - 1;
           }
-          isAmbassador = snapshot.data['isAmbassador'];
+          verifiedStatus = snapshot.data['verifiedStatus'];
           displayName = snapshot.data['displayName'];
           photoUrl = snapshot.data['photoUrl'];
           userFriends = snapshot.data['friendArray'];
@@ -254,12 +254,41 @@ class _OtherProfileState extends State<OtherProfile> {
                                 : "Username not found",
                             style: TextThemes.extraBold,
                           ),
-                          isAmbassador
-                              ? Padding(
-                                  padding: EdgeInsets.only(left: 5, top: 5),
-                                  child: Image.asset('lib/assets/verif2.png',
-                                      height: 20))
-                              : Text("")
+                         verifiedStatus == 3 ? 
+                                                    Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 5,
+                                                          top: 2.5,
+                                                        ),
+                                                        child: Icon(Icons.store,
+                                                            size: 25, 
+                                                            color: TextThemes.ndGold,),
+                                                      ):
+                                                                                              
+                                                verifiedStatus == 2
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          left: 5,
+                                                          top: 5
+                                                        ),
+                                                        child: Image.asset(
+                                                            'lib/assets/verif2.png',
+                                                            height: 20),
+                                                      )
+                                                    : verifiedStatus == 1
+                                                        ? Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              left: 2.5,
+                                                              top: 0
+                                                            ),
+                                                            child: Image.asset(
+                                                                'lib/assets/verif.png',
+                                                                height: 30),
+                                                          )
+                                                        : Text("")
                         ],
                       ),
                     ),
