@@ -339,6 +339,13 @@ class Database {
       }, SetOptions(merge: true));
     });
   }
+  Future<void> suggestionsPushSetting(newValue) async {
+    return dbRef.runTransaction((transaction) async {
+      usersRef.doc(currentUser.id).set({
+        "pushSettings": {"suggestions": newValue}
+      }, SetOptions(merge: true));
+    });
+  }
 
   addedToGroup(
     String addee,

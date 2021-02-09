@@ -4,6 +4,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/map_test.dart';
 import 'dart:async';
 import 'dart:io';
@@ -56,6 +57,7 @@ final chatRef = FirebaseFirestore.instance
     .collection('chat');
 final DateTime timestamp = DateTime.now();
 User currentUser;
+
 
 class Home extends StatefulWidget {
   @override
@@ -170,8 +172,10 @@ class _HomeState extends State<Home> {
 
     if (!doc.exists) {
       // 2) if the user doesn't exist, then we want to take them to the create account page
-      final result = await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => CreateAccount()));
+      final result = await  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WelcomePage()),
+                  );
 
       final String dorm = result[0];
       final String year = result[2];

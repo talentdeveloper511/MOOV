@@ -1,5 +1,6 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart' as home;
 import 'package:MOOV/pages/sign_in.dart';
@@ -24,9 +25,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool goingBool = true;
-  bool hourBool = true;
-
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
 
@@ -56,9 +54,12 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
-    var myIndex = 0;
-    var score;
-    var pic;
+    List pushList;
+    bool goingBool = true;
+    bool hourBool = true;
+    bool suggestionsBool = true;
+
+    final DocumentReference ref2 = home.usersRef.doc(home.currentUser.id);
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -101,208 +102,206 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         body: Container(
             child: StreamBuilder(
-                stream: home.usersRef
-                    .orderBy('score', descending: true)
-                    .limit(50)
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                stream: home.usersRef.doc(home.currentUser.id).snapshots(),
+                builder: (BuildContext context, snapshot) {
                   if (snapshot.hasError) {
                     return new Text('Error: ${snapshot.error}');
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return linearProgress();
                   } else {
-                    for (int i = 0; i < snapshot.data.docs.length; i++) {
-                      DocumentSnapshot course = snapshot.data.docs[i];
-                      print(course['pushSettings']);
-                      List pushList = course['pushSettings'].values.toList();
-                      if (pushList[0] == false) {
-                        goingBool = false;
-                      }
-                      if (pushList[1] == false) {
-                        hourBool = false;
-                      }
+                    DocumentSnapshot course = snapshot.data;
+                    ref2.get().then((snap) => {
+                          pushList =
+                              snap.data()['pushSettings'].values.toList(),
+                          if (pushList[0] == false)
+                            {
+                              goingBool = false,
+                            }
+                          else
+                            [goingBool = true],
+                          if (pushList[1] == false)
+                            {hourBool = false}
+                          else
+                            {hourBool = true},
+                          if (pushList[2] == false)
+                            {suggestionsBool = false}
+                          else
+                            {suggestionsBool = true},
+                        });
 
-                      return Scaffold(
-                        body: Stack(
-                          fit: StackFit.expand,
-                          children: <Widget>[
-                            SingleChildScrollView(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                      child: Column(children: [
-                                    Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(
-                                          Icons.settings,
-                                          color: TextThemes.ndBlue,
-                                          size: 50,
-                                        )),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 8.0),
-                                      child: Text("Settings",
-                                          style: TextThemes.headline1),
-                                    ),
-                                    Text(
-                                      "Your MOOV, your way",
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15.0, vertical: 7.5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [],
-                                      ),
-                                    ),
-                                  ])),
-                                  const SizedBox(height: 10.0),
-                                  Card(
-                                    elevation: 4.0,
-                                    margin: const EdgeInsets.fromLTRB(
-                                        32.0, 8.0, 32.0, 16.0),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    child: Column(
-                                      children: <Widget>[
-                                        ListTile(
-                                          leading: Icon(
-                                            Icons.lock_outline,
-                                            color: TextThemes.ndBlue,
-                                          ),
-                                          title: Text("Change Privacy"),
-                                          trailing:
-                                              Icon(Icons.keyboard_arrow_right),
-                                          onTap: () {
-                                            //open change password
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ChangePrivacy()));
-                                          },
-                                        ),
-                                        _buildDivider(),
-                                        ListTile(
-                                          leading: Icon(
-                                            Icons.edit,
-                                            color: TextThemes.ndBlue,
-                                          ),
-                                          title: Text("Edit Profile"),
-                                          trailing:
-                                              Icon(Icons.keyboard_arrow_right),
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditProfile()));
-                                          },
-                                        ),
-                                        _buildDivider(),
-                                        ListTile(
-                                          leading: Icon(
-                                            Icons.data_usage_sharp,
-                                            color: TextThemes.ndBlue,
-                                          ),
-                                          title: Text("See Your Data"),
-                                          trailing:
-                                              Icon(Icons.keyboard_arrow_right),
-                                          onTap: () {
-                                            //open change location
-
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        UserData()));
-                                          },
-                                        ),
-                                      ],
-                                    ),
+                    return Scaffold(
+                      body: Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          SingleChildScrollView(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Column(children: [
+                                  Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.settings,
+                                        color: TextThemes.ndBlue,
+                                        size: 50,
+                                      )),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Text("Settings",
+                                        style: TextThemes.headline1),
                                   ),
-                                  const SizedBox(height: 20.0),
                                   Text(
-                                    "Notification Settings",
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                    "Your MOOV, your way",
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 7.5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [],
                                     ),
                                   ),
-                                  SwitchListTile(
+                                ])),
+                                const SizedBox(height: 10.0),
+                                Card(
+                                  elevation: 4.0,
+                                  margin: const EdgeInsets.fromLTRB(
+                                      32.0, 8.0, 32.0, 16.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  child: Column(
+                                    children: <Widget>[
+                                      ListTile(
+                                        leading: Icon(
+                                          Icons.lock_outline,
+                                          color: TextThemes.ndBlue,
+                                        ),
+                                        title: Text("Change Privacy"),
+                                        trailing:
+                                            Icon(Icons.keyboard_arrow_right),
+                                        onTap: () {
+                                          //open change password
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChangePrivacy()));
+                                        },
+                                      ),
+                                      _buildDivider(),
+                                      ListTile(
+                                        leading: Icon(
+                                          Icons.edit,
+                                          color: TextThemes.ndBlue,
+                                        ),
+                                        title: Text("Edit Profile"),
+                                        trailing:
+                                            Icon(Icons.keyboard_arrow_right),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditProfile()));
+                                        },
+                                      ),
+                                      _buildDivider(),
+                                      ListTile(
+                                        leading: Icon(
+                                          Icons.data_usage_sharp,
+                                          color: TextThemes.ndBlue,
+                                        ),
+                                        title: Text("See Your Data"),
+                                        trailing:
+                                            Icon(Icons.keyboard_arrow_right),
+                                        onTap: () {
+                                          //open change location
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      UserData()));
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 20.0),
+                                Text(
+                                  "Notification Settings",
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SwitchListTile(
+                                  activeColor: TextThemes.ndBlue,
+                                  contentPadding: const EdgeInsets.all(0),
+                                  value: goingBool,
+                                  title: Text("Going to your MOOV"),
+                                  onChanged: (val) {
+                                    Database().goingPushSetting(val);
+                                  },
+                                ),
+                                SwitchListTile(
                                     activeColor: TextThemes.ndBlue,
                                     contentPadding: const EdgeInsets.all(0),
-                                    value: false,
-                                    title: Text("Pause All"),
-                                    onChanged: (val) {},
-                                  ),
-                                  SwitchListTile(
-                                    activeColor: TextThemes.ndBlue,
-                                    contentPadding: const EdgeInsets.all(0),
-                                    value: goingBool,
-                                    title: Text("Going to your MOOV"),
-                                    onChanged: (val) {
-                                      Database().goingPushSetting(val);
-                                      goingBool = val;
-                                    },
-                                  ),
-                                  SwitchListTile(
-                                      activeColor: TextThemes.ndBlue,
-                                      contentPadding: const EdgeInsets.all(0),
-                                      value: hourBool,
-                                      title: Text("Hour before MOOV starts"),
-                                      onChanged: (val) {
-                                        Database().hourPushSetting(val);
-                                        hourBool = val;
-                                      }),
-                                  SwitchListTile(
-                                    activeColor: TextThemes.ndBlue,
-                                    contentPadding: const EdgeInsets.all(0),
-                                    value: true,
-                                    title: Text("Friend Group Suggestions"),
-                                    onChanged: (val) {},
-                                  ),
-                                  const SizedBox(height: 60.0),
-                                ],
+                                    value: hourBool,
+                                    title: Text("Hour before MOOV starts"),
+                                    onChanged: (value) {
+                                      Database().hourPushSetting(value);
+                                      hourBool = value;
+                                    }),
+                                SwitchListTile(
+                                  activeColor: TextThemes.ndBlue,
+                                  contentPadding: const EdgeInsets.all(0),
+                                  value: suggestionsBool,
+                                  title: Text("Friend Group Suggestions"),
+                                  onChanged: (val) {
+                                    Database().suggestionsPushSetting(val);
+                                    suggestionsBool = val;
+                                  },
+                                ),
+                                const SizedBox(height: 60.0),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            bottom: -20,
+                            left: -20,
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            Positioned(
-                              bottom: -20,
-                              left: -20,
-                              child: Container(
-                                width: 80,
-                                height: 80,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
+                          ),
+                          Positioned(
+                            bottom: 00,
+                            left: 00,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.power_off,
+                                color: Colors.white,
                               ),
+                              onPressed: () {
+                                showAlertDialog(context);
+                              },
                             ),
-                            Positioned(
-                              bottom: 00,
-                              left: 00,
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.power_off,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  showAlertDialog(context);
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    }
+                          )
+                        ],
+                      ),
+                    );
                   }
                 })));
   }

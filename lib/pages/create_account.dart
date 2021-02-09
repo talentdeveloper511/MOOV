@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/main.dart';
+import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:MOOV/pages/HomePage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class CreateAccount extends StatefulWidget {
   @override
@@ -48,14 +52,58 @@ class _CreateAccountState extends State<CreateAccount> {
       SnackBar snackbar = SnackBar(
           backgroundColor: Colors.green, content: Text("Welcome to MOOV!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
+      createUserInFirestore();
+
       Timer(Duration(seconds: 1), () {
-        Navigator.pop(context, [dorm, gender, year, referral, venmoUsername]);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context,
+                        [dorm, gender, year, referral, venmoUsername, auth]) =>
+                    Home()));
       });
     }
   }
 
+  createUserInFirestore() async {
+    // 1) check if user exists in users collection in database (according to their id)
+    final GoogleSignInAccount user = googleSignIn.currentUser;
+    DocumentSnapshot doc = await usersRef.doc(user.id).get();
+
+    if (!doc.exists) {
+      // 2) if the user doesn't exist, then we want to take them to the create account page
+
+      // 3) get username from create account, use it to make new user document in users collection
+      usersRef.doc(user.id).set({
+        "id": user.id,
+        "photoUrl": user.photoUrl,
+        "email": user.email,
+        "displayName": user.displayName,
+        "bio": "Create a bio here",
+        "header": "",
+        "timestamp": timestamp,
+        "score": 0,
+        "gender": gender,
+        "year": year,
+        "dorm": dorm,
+        "referral": referral,
+        "postLimit": 3,
+        "verifiedStatus": 0,
+        "friendArray": [],
+        "friendRequests": [],
+        "friendGroups": [],
+        "venmoUsername": venmoUsername,
+        "pushSettings": {"going": true, "hourBefore": true, "suggestions": true}
+      });
+      doc = await usersRef.doc(user.id).get();
+    }
+    currentUser = User.fromDocument(doc);
+  }
+
   @override
   Widget build(BuildContext parentContext) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Scaffold(
       backgroundColor: Colors.white,
       key: _scaffoldKey,
@@ -93,24 +141,28 @@ class _CreateAccountState extends State<CreateAccount> {
           Container(
             child: Column(
               children: <Widget>[
-                   Container(
-                          child: Container(
-                    child: Column(children: [
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.accessibility_new,
-                        color: TextThemes.ndBlue,
-                        size: 50,
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text("Welcome to MOOV", style: TextThemes.headline1),
-                  ),
-                  Text(
-                    "Tell us about you",
-                  ),
-                ])),),
+                SizedBox(height: isLargePhone ? 30 : 15),
+                Container(
+                  child: Container(
+                      child: Column(children: [
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.accessibility_new,
+                          color: TextThemes.ndBlue,
+                          size: 50,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child:
+                          Text("Welcome to MOOV", style: TextThemes.headline1),
+                    ),
+                    Text(
+                      "Tell us about you",
+                    ),
+                  ])),
+                ),
+                SizedBox(height: 30),
                 Padding(
                   padding: EdgeInsets.only(top: 16.0, left: 50, right: 50),
                   child: Container(
@@ -286,7 +338,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     ],
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: isLargePhone ? 30 : 0),
                 GestureDetector(
                   onTap: submit,
                   child: Padding(
