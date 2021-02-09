@@ -849,4 +849,25 @@ class Database {
       }, SetOptions(merge: true));
     });
   }
+  updateAllDocs() async {
+                      var snapshots = usersRef.snapshots();
+                      try {
+                        await snapshots.forEach((snapshot) async {
+                          List<DocumentSnapshot> documents = snapshot.docs;
+
+                          for (var document in documents) {
+                            await document.reference.set({
+                              "privacySettings": {
+                                "friendsOnly": false,
+                                "incognito": false,
+                                "showDorm": true,
+                                "friendFinderVisibility": true,
+                              }
+                            }, SetOptions(merge: true));
+                          }
+                        });
+                      } catch (e) {
+                        print(e.toString());
+                      }
+                    }
 }

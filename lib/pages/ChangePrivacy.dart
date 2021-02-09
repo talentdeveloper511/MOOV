@@ -30,11 +30,13 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
 
           if (!snapshot.hasData) return CircularProgressIndicator();
 
-          incognito = snapshot.data['privacySettings']['incognito'];
-          friendsSeeOnly = snapshot.data['privacySettings']['friendsOnly'];
-          showDorm = snapshot.data['privacySettings']['showDorm'];
-          friendFinderVisibility =
-              snapshot.data['privacySettings']['friendFinderVisibility'];
+          incognito = snapshot.data['privacySettings']['incognito'] ?? false;
+          friendsSeeOnly =
+              snapshot.data['privacySettings']['friendsOnly'] ?? false;
+          showDorm = snapshot.data['privacySettings']['showDorm'] ?? true;
+          friendFinderVisibility = snapshot.data['privacySettings']
+                  ['friendFinderVisibility'] ??
+              true;
 
           return Scaffold(
               appBar: AppBar(
@@ -44,6 +46,8 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                     color: Colors.white,
                   ),
                   onPressed: () {
+                 
+
                     Navigator.pop(
                       context,
                       MaterialPageRoute(builder: (context) => HomePage()),
@@ -281,7 +285,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Nobody can see my going status (incognito)",
+                          Text("One hour before MOOV starts",
                               style: TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.w600)),
                           Switch(
@@ -302,7 +306,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Show my dorm and class year on my profile",
+                          Text("Friend Group suggestions",
                               style: TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.w600)),
                           Switch(

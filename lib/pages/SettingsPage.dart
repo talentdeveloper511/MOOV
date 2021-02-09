@@ -49,14 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLargePhone = Screen.diagonal(context) > 766;
-
-    List pushList;
-    bool goingBool = true;
-    bool hourBool = true;
-    bool suggestionsBool = true;
-
-    final DocumentReference ref2 = home.usersRef.doc(home.currentUser.id);
+    // bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -80,13 +73,16 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => home.Home()),
-                      (Route<dynamic> route) => false,
-                    );
+                  onTap: () async {
+                    
                   },
+
+                  //   Navigator.pushAndRemoveUntil(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => home.Home()),
+                  //     (Route<dynamic> route) => false,
+                  //   );
+                  // },
                   child: Image.asset(
                     'lib/assets/moovblue.png',
                     fit: BoxFit.cover,
@@ -107,25 +103,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return linearProgress();
                   } else {
-                    ref2.get().then((snap) => {
-                          pushList =
-                              snap.data()['pushSettings'].values.toList(),
-                          if (pushList[0] == false)
-                            {
-                              goingBool = false,
-                            }
-                          else
-                            {goingBool = true},
-                          if (pushList[1] == false)
-                            {hourBool = false}
-                          else
-                            {hourBool = true},
-                          if (pushList[2] == false)
-                            {suggestionsBool = false}
-                          else
-                            {suggestionsBool = true},
-                        });
-
                     return Scaffold(
                       body: Stack(
                         fit: StackFit.expand,
@@ -241,7 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
-                              NotificationSettings()
+                                NotificationSettings()
                               ],
                             ),
                           ),
