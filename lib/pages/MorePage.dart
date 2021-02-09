@@ -330,7 +330,7 @@ class _MorePageState extends State<MorePage>
                             content: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                  "Our app is run by current students. Would you like to join the team? Email kcamson@nd.edu."),
+                                  "Our app is run by current students. Would you like to join the team? Email admin@whatsthemoov.com."),
                             ),
                           ),
                       barrierDismissible: true);
@@ -704,7 +704,7 @@ class Motd extends StatelessWidget {
                             content: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                  "Do you have the MOOV of the Day? Email kcamson@nd.edu."),
+                                  "Do you have the MOOV of the Day? Email admin@whatsthemoov.com."),
                             ),
                           ),
                       barrierDismissible: true);

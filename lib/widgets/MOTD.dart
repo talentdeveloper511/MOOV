@@ -200,7 +200,7 @@ class _MOTDState extends State<MOTD> {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                  "Do you have the MOOV of the Day? Email kcamson@nd.edu."),
+                                                  "Do you have the MOOV of the Day? Email admin@whatsthemoov.com."),
                                             ),
                                           ),
                                       barrierDismissible: true);

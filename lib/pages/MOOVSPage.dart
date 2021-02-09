@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
@@ -19,6 +21,9 @@ import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 class MOOVSPage extends StatefulWidget {
   @override
@@ -27,6 +32,8 @@ class MOOVSPage extends StatefulWidget {
 
 class _MOOVSPageState extends State<MOOVSPage>
     with SingleTickerProviderStateMixin {
+  GlobalKey _myPostsKey = GlobalKey();
+  GlobalKey _goingKey = GlobalKey();
   // TabController to control and switch tabs
   TabController _tabController;
   dynamic moovId;
@@ -62,6 +69,26 @@ class _MOOVSPageState extends State<MOOVSPage>
   Widget getChildWidget() => childWidgets[selectedIndex];
   @override
   Widget build(BuildContext context) {
+    SharedPreferences preferences;
+
+    displayShowCase() async {
+      preferences = await SharedPreferences.getInstance();
+      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase3");
+      if (showCaseVisibilityStatus == null) {
+        preferences.setBool("displayShowCase3", false);
+        return true;
+      }
+      return false;
+    }
+
+    displayShowCase().then((status) {
+      if (status) {
+        Timer(Duration(seconds: 1), () {
+          ShowCaseWidget.of(context).startShowCase([_myPostsKey, _goingKey]);
+        });
+      }
+    });
+
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Scaffold(
@@ -91,28 +118,58 @@ class _MOOVSPageState extends State<MOOVSPage>
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     // Sign In Button
-                    new FlatButton(
-                      color:
-                          _currentIndex == 0 ? Colors.blue[100] : Colors.white,
-                      onPressed: () {
-                        _tabController.animateTo(0);
-                        setState(() {
-                          _currentIndex = 0;
-                        });
-                      },
-                      child: new Text("My Posts"),
+                    Showcase(
+                      key: _myPostsKey,
+                      title: "YOUR POSTS",
+                      description:
+                          "\nHere's where your own posts will be — until they expire",
+                      titleTextStyle: TextStyle(
+                          color: TextThemes.ndBlue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                      descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                      contentPadding: EdgeInsets.all(10),
+                      shapeBorder: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: new FlatButton(
+                        color: _currentIndex == 0
+                            ? Colors.blue[100]
+                            : Colors.white,
+                        onPressed: () {
+                          _tabController.animateTo(0);
+                          setState(() {
+                            _currentIndex = 0;
+                          });
+                        },
+                        child: new Text("My Posts"),
+                      ),
                     ),
                     // Sign Up Button
-                    new FlatButton(
-                      color:
-                          _currentIndex == 1 ? Colors.blue[100] : Colors.white,
-                      onPressed: () {
-                        _tabController.animateTo(1);
-                        setState(() {
-                          _currentIndex = 1;
-                        });
-                      },
-                      child: new Text("Going"),
+                    Showcase(
+                      key: _goingKey,
+                      title: "YOU STILL DOWN?",
+                      description:
+                          "\nMOOVs you are \"going\" to will feed here ",
+                      titleTextStyle: TextStyle(
+                          color: TextThemes.ndBlue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                      descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                      contentPadding: EdgeInsets.all(10),
+                      shapeBorder: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: new FlatButton(
+                        color: _currentIndex == 1
+                            ? Colors.blue[100]
+                            : Colors.white,
+                        onPressed: () {
+                          _tabController.animateTo(1);
+                          setState(() {
+                            _currentIndex = 1;
+                          });
+                        },
+                        child: new Text("Going"),
+                      ),
                     )
                   ],
                 ),
@@ -160,8 +217,12 @@ class _MOOVSPageState extends State<MOOVSPage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Database().deletePost(course['postId'],
-                                  course['userId'], course['title'], course['statuses'], course['posterName']);
+                              Database().deletePost(
+                                  course['postId'],
+                                  course['userId'],
+                                  course['title'],
+                                  course['statuses'],
+                                  course['posterName']);
                             }
                             final now = DateTime.now();
                             bool isToday = false;
@@ -222,8 +283,12 @@ class _MOOVSPageState extends State<MOOVSPage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Database().deletePost(course['postId'],
-                                  course['userId'], course['title'], course['statuses'], course['posterName']);
+                              Database().deletePost(
+                                  course['postId'],
+                                  course['userId'],
+                                  course['title'],
+                                  course['statuses'],
+                                  course['posterName']);
                             }
                             final now = DateTime.now();
                             bool isToday = false;
@@ -272,7 +337,8 @@ class _MOOVSPageState extends State<MOOVSPage>
     //     backgroundColor: Color.fromRGBO(220, 180, 57, 1.0))
   }
 
-  void showAlertDialog(BuildContext context, postId, userId, title, statuses, posterName) {
+  void showAlertDialog(
+      BuildContext context, postId, userId, title, statuses, posterName) {
     showDialog(
       context: context,
       child: CupertinoAlertDialog(
@@ -284,7 +350,8 @@ class _MOOVSPageState extends State<MOOVSPage>
             isDefaultAction: true,
             child: Text("Yeah", style: TextStyle(color: Colors.red)),
             onPressed: () {
-              Database().deletePost(postId, userId, title, statuses, posterName);
+              Database()
+                  .deletePost(postId, userId, title, statuses, posterName);
             },
           ),
           CupertinoDialogAction(

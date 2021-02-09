@@ -147,7 +147,7 @@ class _CategoryFeedState extends State<CategoryFeed>
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 7.5),
+                padding: const EdgeInsets.only(top: 15.0, bottom: 12.5),
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
@@ -280,7 +280,7 @@ class _CategoryFeedState extends State<CategoryFeed>
                               snapshot.data.docs.length == 0)
                             return Center(
                               child: Text(
-                                  "No featured MOOVs. \n\n Got a feature? Email kcamson@nd.edu.",
+                                  "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontSize: 20)),
                             );
@@ -702,7 +702,7 @@ class PostOnFeed extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 5),
                                 child: Container(
-                                  height: isLargePhone ? 130 : 170,
+                                  height: isLargePhone ? 145 : 170,
                                   decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5)),

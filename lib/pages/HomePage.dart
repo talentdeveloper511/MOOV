@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage>
                             key: _friendFinderKey,
                             title: "NO MORE FOMO",
                             description:
-                                "\nFind your friends plans for tonight",
+                                "\nFind your friends' plans for tonight",
                             titleTextStyle: TextStyle(
                                 color: TextThemes.ndBlue,
                                 fontWeight: FontWeight.bold,

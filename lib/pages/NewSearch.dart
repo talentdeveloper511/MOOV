@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:algolia/algolia.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 class AlgoliaApplication {
   static final Algolia algolia = Algolia.init(
@@ -36,6 +38,7 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar>
     with SingleTickerProviderStateMixin {
+  GlobalKey _searchKey = GlobalKey();
   bool showTabs = false;
   // TabController to control and switch tabs
   TabController _tabController;
@@ -124,6 +127,25 @@ class _SearchBarState extends State<SearchBar>
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferences preferences;
+
+    displayShowCase2() async {
+      preferences = await SharedPreferences.getInstance();
+      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase2");
+      if (showCaseVisibilityStatus == null) {
+        preferences.setBool("displayShowCase2", false);
+        return true;
+      }
+      return false;
+    }
+
+    displayShowCase2().then((status) {
+      if (status) {
+        Timer(Duration(seconds: 1), () {
+          ShowCaseWidget.of(context).startShowCase([_searchKey]);
+        });
+      }
+    });
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
@@ -132,45 +154,60 @@ class _SearchBarState extends State<SearchBar>
               bottom: PreferredSize(
                   preferredSize: null,
                   child: Column(children: <Widget>[
-                    TextField(
-                        style: TextStyle(fontSize: 20),
-                        controller: searchController,
-                        onChanged: (val) {
-                          setState(() {
-                            _searchTerm = val;
-                          });
-                        },
-                        // Set Focus Node
-                        focusNode: textFieldFocusNode,
-                        decoration: InputDecoration(
-                          labelStyle: TextStyle(fontSize: 20),
-                          border: InputBorder.none,
-                          hintText: 'Search MOOV',
-                          hintStyle:
-                              TextStyle(color: Colors.grey, fontSize: 20),
-                          prefixIcon:
-                              const Icon(Icons.search, color: Colors.black),
-                          suffixIcon: GestureDetector(
-                              onTap: () {
-                                clearSearch();
-                                // Unfocus all focus nodes
-                                textFieldFocusNode.unfocus();
+                    Showcase(
+                      title: "NO MOOV LEFT BEHIND",
+                      description:
+                          "\nSearch for people, MOOVs, and Friend Groups",
+                      titleTextStyle: TextStyle(
+                          color: TextThemes.ndBlue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                      descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                      contentPadding: EdgeInsets.all(10),
+                      shapeBorder: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      key: _searchKey,
+                      child: TextField(
+                          style: TextStyle(fontSize: 20),
+                          controller: searchController,
+                          onChanged: (val) {
+                            setState(() {
+                              _searchTerm = val;
+                            });
+                          },
+                          // Set Focus Node
+                          focusNode: textFieldFocusNode,
+                          decoration: InputDecoration(
+                            labelStyle: TextStyle(fontSize: 20),
+                            border: InputBorder.none,
+                            hintText: 'Search MOOV',
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 20),
+                            prefixIcon:
+                                const Icon(Icons.search, color: Colors.black),
+                            suffixIcon: GestureDetector(
+                                onTap: () {
+                                  clearSearch();
+                                  // Unfocus all focus nodes
+                                  textFieldFocusNode.unfocus();
 
-                                // Disable text field's focus node request
-                                textFieldFocusNode.canRequestFocus = false;
+                                  // Disable text field's focus node request
+                                  textFieldFocusNode.canRequestFocus = false;
 
-                                //Enable the text field's focus node request after some delay
-                                Future.delayed(Duration(milliseconds: 10), () {
-                                  textFieldFocusNode.canRequestFocus = true;
-                                });
-                              },
-                              child: IconButton(
-                                  onPressed: null,
-                                  icon: Icon(
-                                    Icons.clear,
-                                    color: Colors.black,
-                                  ))),
-                        )),
+                                  //Enable the text field's focus node request after some delay
+                                  Future.delayed(Duration(milliseconds: 10),
+                                      () {
+                                    textFieldFocusNode.canRequestFocus = true;
+                                  });
+                                },
+                                child: IconButton(
+                                    onPressed: null,
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: Colors.black,
+                                    ))),
+                          )),
+                    ),
                     showTabs == true
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,

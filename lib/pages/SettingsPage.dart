@@ -1,18 +1,15 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/WelcomePage.dart';
+import 'package:MOOV/pages/ChangePrivacy.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart' as home;
-import 'package:MOOV/pages/sign_in.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/progress.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:MOOV/helpers/themes.dart';
-import 'ChangePrivacy.dart';
 import 'HomePage.dart';
 import 'ProfilePageWithHeader.dart';
 import 'UserData.dart';
@@ -155,6 +152,18 @@ class _SettingsPageState extends State<SettingsPage> {
                                   Text(
                                     "Your MOOV, your way",
                                   ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(top: 8.0),
+                                  //   child: Row(
+                                  //     mainAxisAlignment: MainAxisAlignment.center,
+                                  //     children: [
+                                  //       Icon(Icons.flag, color: Colors.red),
+                                  //       Text(
+                                  //         " Page and features here are still in development", style: TextStyle(color: Colors.red),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15.0, vertical: 7.5),
@@ -232,44 +241,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
-                                Text(
-                                  "Notification Settings",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SwitchListTile(
-                                  activeColor: TextThemes.ndBlue,
-                                  contentPadding: const EdgeInsets.all(0),
-                                  value: goingBool,
-                                  title: Text("Going to your MOOV"),
-                                  onChanged: (val) {
-                                      goingBool = val;
-                                    Database().goingPushSetting(val);
-                                  },
-                                ),
-                                SwitchListTile(
-                                    activeColor: TextThemes.ndBlue,
-                                    contentPadding: const EdgeInsets.all(0),
-                                    value: hourBool,
-                                    title: Text("Hour before MOOV starts"),
-                                    onChanged: (value) {
-                                      Database().hourPushSetting(value);
-                                      hourBool = value;
-                                    }),
-                                // SwitchListTile(
-                                //   activeColor: TextThemes.ndBlue,
-                                //   contentPadding: const EdgeInsets.all(0),
-                                //   value: suggestionsBool,
-                                //   title: Text("Friend Group Suggestions"),
-                                //   onChanged: (val) {
-                                //     Database().suggestionsPushSetting(val);
-                                //     suggestionsBool = val;
-                                //   },
-                                // ),
-                                const SizedBox(height: 60.0),
+                              NotificationSettings()
                               ],
                             ),
                           ),

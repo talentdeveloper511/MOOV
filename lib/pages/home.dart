@@ -103,7 +103,6 @@ class _HomeState extends State<Home> {
       });
     } else {
       createUserInFirestore();
-      configurePushNotifications();
     }
   }
 
@@ -168,9 +167,10 @@ class _HomeState extends State<Home> {
 
     if (!doc.exists) {
       // 2) if the user doesn't exist, then we want to take them to the create account page
-      final result = await Navigator.push(
+      final result = await Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => WelcomePage()),
+                      PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
+                    (Route<dynamic> route) => false,
       );
 
       final String dorm = result[0];
@@ -204,9 +204,11 @@ class _HomeState extends State<Home> {
       doc = await usersRef.doc(user.id).get();
     }
     currentUser = User.fromDocument(doc);
-     setState(() {
-        isAuth = true;
-      });
+    setState(() {
+      isAuth = true;
+    });
+   configurePushNotifications();
+
   }
 
   @override
@@ -237,8 +239,6 @@ class _HomeState extends State<Home> {
       curve: Curves.easeInOut,
     );
   }
-
-
 
   Scaffold buildAuthScreen() {
     // Future<int> notifCount() async {
@@ -464,20 +464,20 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           // Timeline(),
           ShowCaseWidget(
-            onStart: (index, key) {
-              print('onStart: $index, $key');
-            },
-            onComplete: (index, key) {
-              print('onComplete: $index, $key');
-            },
             builder: Builder(builder: (context) => HomePage()),
             autoPlay: false,
             autoPlayLockEnable: true,
           ),
 
-          SearchBar(),
+          ShowCaseWidget(
+             builder: Builder(builder: (context) => SearchBar()),
+            autoPlay: false,
+            autoPlayLockEnable: true),
 
-          MOOVSPage(),
+          ShowCaseWidget(
+               builder: Builder(builder: (context) => MOOVSPage()),
+            autoPlay: false,
+            autoPlayLockEnable: true),
           ProfilePage()
         ],
         controller: pageController,

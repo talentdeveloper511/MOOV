@@ -328,6 +328,7 @@ class Database {
       }, SetOptions(merge: true));
     });
   }
+ 
 
   Future<void> hourPushSetting(newValue) async {
     return dbRef.runTransaction((transaction) async {
