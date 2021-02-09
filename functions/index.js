@@ -114,7 +114,7 @@ exports.onCreateActivityFeedItem = functions.firestore
       // 2) check if they have a notification token
       const androidNotificationToken = doc.data().androidNotificationToken;
       const createdActivityFeedItem = snapshot.data();
-      if (androidNotificationToken) {
+      if (androidNotificationToken && createdActivityFeedItem.push == true) {
         sendNotification(androidNotificationToken, createdActivityFeedItem);
       } else {
         console.log("No token for user, cannot send notification");
@@ -152,6 +152,10 @@ exports.onCreateActivityFeedItem = functions.firestore
             title = `${activityFeedItem.username}`;
             body = "sent you a friend request";
             break;
+          case "created":
+            title = `${activityFeedItem.username} `;
+            body = `just posted ${activityFeedItem.title}`;
+            break;
           case "accept":
             title = `${activityFeedItem.username} `;
             body = "accepted your friend request";
@@ -168,6 +172,7 @@ exports.onCreateActivityFeedItem = functions.firestore
         };
 
         // 5) Send message with admin.messaging()
+        if (activityFeedItem.push == true) {
         admin
             .messaging()
             .send(message)
@@ -178,6 +183,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             .catch((error) => {
               console.log("Error sending message", error);
             });
+        }
       }
     });
 
@@ -224,21 +230,9 @@ exports.onCreateGroupFeedItem = functions.firestore
             title = `${name}`;
             body = `${activityFeedItem.username} has invited you all to ${activityFeedItem.title}`;
             break;
-          case "going":
-            title = `${activityFeedItem.title}`;
-            body = `${activityFeedItem.username} is going`;
-            break;
-          case "friendGroup":
-            title = `${activityFeedItem.username}`;
-            body = `added you to ${activityFeedItem.groupName}`;
-            break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
-            break;
-          case "request":
-            title = `${activityFeedItem.username}`;
-            body = "sent you a friend request";
             break;
           case "canceled":
             title = `${activityFeedItem.title}`;
@@ -248,13 +242,9 @@ exports.onCreateGroupFeedItem = functions.firestore
             title = `${activityFeedItem.username}`;
             body = `sent you ${activityFeedItem.title}`;
             break;
-          case "accept":
-            title = `${activityFeedItem.username} `;
-            body = "accepted your friend request";
-            break;
-          case "created":
-            title = `${activityFeedItem.username} `;
-            body = `just posted ${activityFeedItem.title}`;
+          case "askToJoin":
+            title = `${activityFeedItem.groupName} `;
+            body = `${activityFeedItem.username} requested to join`;
             break;
           default:
             break;
@@ -350,10 +340,12 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                         .catch((error) => {
                           console.log("Error sending message", error);
                         });
-                  } else if ((data.startDate.toDate().getHours() + 1 == now.toDate().getHours()) && data.scheduled != "true") {
-                    admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).delete();
-                    admin.firestore().collection("notreDame").doc("data").collection("food").doc("comments").delete();
                   }
+                  // else if ((data.startDate.toDate().getHours() + 1 == now.toDate().getHours()) && data.scheduled != "true") {
+                  //   console.log("deleting post!");
+                  //   // admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).collection("comments").delete();
+                  //   // admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).delete();
+                  // }
                   console.log(querySnapshot, message);
                 }
               });

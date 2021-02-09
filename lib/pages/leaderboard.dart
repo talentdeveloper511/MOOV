@@ -224,12 +224,12 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                                     child: Text(
                                                       "Your score is calculated as follows:"
                                                       "\n"
-                                                      "\n100pts: Leave status on a MOOV"
-                                                      "\n300pts: Suggest a MOOV to your group"
-                                                      "\n\n500pts: Going to a MOOV"
-                                                      "\n\n750pts: Sending a MOOV to a friend"
-                                                      "\n\n1000pts: Joining a friend group"
-                                                      "\n\n2000pts: Posting a MOOV"
+                                                      "\n10pts: Leave status on a MOOV"
+                                                      "\n\n30pts: Suggest a MOOV to the group"
+                                                      "\n\n50pts: Going to a MOOV"
+                                                      "\n\n75pts: Sending a MOOV to a friend"
+                                                      "\n\n100pts: Joining a friend group"
+                                                      "\n\n200pts: Posting a MOOV"
                                                       "\n\n\n**Negative pts arise from gaming the system or undoing actions. If you are suspected of cheating, your score will be set to zero"
                                                       "",
                                                       textAlign:

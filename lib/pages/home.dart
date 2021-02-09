@@ -120,11 +120,12 @@ class _HomeState extends State<Home> {
     });
 
     _fcm.configure(onLaunch: (Map<String, dynamic> message) async {
-      print('on message: $message');
+      print('message: $message');
       final String recipientId = message['data']['recipient'];
       final String body = message['notification']['body'];
-      if (recipientId == user.id) {
+      if (recipientId == currentUser.id) {
         print('Notification shown');
+
         SnackBar snackbar =
             SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
         _scaffoldKey.currentState.showSnackBar(snackbar);
@@ -134,7 +135,7 @@ class _HomeState extends State<Home> {
       print('message: $message');
       final String recipientId = message['data']['recipient'];
       final String body = message['notification']['body'];
-      if (recipientId == user.id) {
+      if (recipientId == currentUser.id) {
         print('Notification shown');
         SnackBar snackbar =
             SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
@@ -145,7 +146,7 @@ class _HomeState extends State<Home> {
       print('message: $message');
       final String recipientId = message['data']['recipient'];
       final String body = message['notification']['body'];
-      if (recipientId == user.id) {
+      if (recipientId == currentUser.id) {
         print('Notification shown');
         SnackBar snackbar =
             SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));

@@ -919,7 +919,6 @@ class GradientText extends StatelessWidget {
           // The color must be set to white for this to work
           color: Colors.white,
           fontSize: 16.5,
-          
         ),
       ),
     );
