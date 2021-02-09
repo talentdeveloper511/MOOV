@@ -81,7 +81,7 @@ dependencies:
   worm_indicator: ^0.2.4
   algolia: ^0.1.7
   currency_text_input_formatter: ^1.0.3
-
+  get: ^3.24.0
 
 
 
