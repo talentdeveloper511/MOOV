@@ -1192,7 +1192,7 @@ class PostOnFeed extends StatelessWidget {
               )
             : isTomorrow == true
                 ? Positioned(
-                    top: -7,
+                    top: 0,
                     right: 0,
                     child: Container(
                       height: 30,

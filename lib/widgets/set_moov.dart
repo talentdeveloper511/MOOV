@@ -217,7 +217,19 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                return _searchTerm.length > 0
+                                String privacy =
+                                    currSearchStuff[index].data["privacy"];
+                                bool hide = false;
+                                if (privacy == "Friends Only" ||
+                                    privacy == "Invite Only") {
+                                  hide = true;
+                                }
+                                if (currSearchStuff[index].data['userId'] ==
+                                    currentUser.id) {
+                                  hide = false;
+                                }
+
+                                return _searchTerm != null && hide == false
                                     ? SetMOOVResult(
                                         currSearchStuff[index].data["title"],
                                         currSearchStuff[index].data["userId"],

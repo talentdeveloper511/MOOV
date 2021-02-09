@@ -328,7 +328,6 @@ class Database {
       }, SetOptions(merge: true));
     });
   }
- 
 
   Future<void> hourPushSetting(newValue) async {
     return dbRef.runTransaction((transaction) async {
@@ -739,7 +738,14 @@ class Database {
         "suggestorName": userName,
         "suggestorId": userId
       }, SetOptions(merge: true));
+      bool push = true;
+
       for (var i = 0; i < members.length; i++) {
+        usersRef.doc(members[i]).get().then((snap) => {
+              if (snap.data()['pushSettings']['suggestions'] == false)
+                {push = false},
+          
+
         if (members[i] != currentUser.id) {
           notificationFeedRef
               .doc(members[i])
@@ -747,6 +753,7 @@ class Database {
               .doc('suggest ' + postId)
               .set({
             "type": "suggestion",
+            "push": push,
             "postId": postId,
             "previewImg": pic,
             "title": title,
@@ -756,8 +763,9 @@ class Database {
             "userId": currentUser.id,
             "userProfilePic": currentUser.photoUrl,
             "timestamp": DateTime.now()
-          });
+          })
         }
+          });
       }
     });
   }
@@ -849,25 +857,26 @@ class Database {
       }, SetOptions(merge: true));
     });
   }
-  updateAllDocs() async {
-                      var snapshots = usersRef.snapshots();
-                      try {
-                        await snapshots.forEach((snapshot) async {
-                          List<DocumentSnapshot> documents = snapshot.docs;
 
-                          for (var document in documents) {
-                            await document.reference.set({
-                              "privacySettings": {
-                                "friendsOnly": false,
-                                "incognito": false,
-                                "showDorm": true,
-                                "friendFinderVisibility": true,
-                              }
-                            }, SetOptions(merge: true));
-                          }
-                        });
-                      } catch (e) {
-                        print(e.toString());
-                      }
-                    }
+  updateAllDocs() async {
+    var snapshots = usersRef.snapshots();
+    try {
+      await snapshots.forEach((snapshot) async {
+        List<DocumentSnapshot> documents = snapshot.docs;
+
+        for (var document in documents) {
+          await document.reference.set({
+            "privacySettings": {
+              "friendsOnly": false,
+              "incognito": false,
+              "showDorm": true,
+              "friendFinderVisibility": true,
+            }
+          }, SetOptions(merge: true));
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

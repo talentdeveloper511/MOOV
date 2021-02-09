@@ -1,5 +1,11 @@
+import 'package:MOOV/main.dart';
+import 'package:MOOV/pages/OtherGroup.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
+import 'package:MOOV/services/database.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -31,9 +37,7 @@ class FriendsListState extends State<FriendsList> {
     // TODO: implement build
 
     return StreamBuilder(
-        stream: usersRef
-            .where("friendArray", arrayContains: id)
-            .snapshots(),
+        stream: usersRef.where("friendArray", arrayContains: id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           if (snapshot.data == null) return Container();
@@ -54,15 +58,15 @@ class FriendsListState extends State<FriendsList> {
                   },
                 ),
                 backgroundColor: TextThemes.ndBlue,
-                title: snapshot.data.docs.length == 1 ?
-                Text(
-                  "Friend",
-                  style: TextStyle(color: Colors.white),
-                ):
-                Text(
-                  "Friends",
-                  style: TextStyle(color: Colors.white),
-                ),
+                title: snapshot.data.docs.length == 1
+                    ? Text(
+                        "Friend",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : Text(
+                        "Friends",
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
               body: ListView.builder(
                   itemCount: snapshot.data.docs.length,
@@ -88,9 +92,7 @@ class FriendsListState extends State<FriendsList> {
                                                           (BuildContext
                                                               context) {
                                                     return OtherProfile(snapshot
-                                                        .data
-                                                        .docs[index]
-                                                        ['id']
+                                                        .data.docs[index]['id']
                                                         .toString());
                                                   })); //Material
                                                 },
@@ -102,8 +104,7 @@ class FriendsListState extends State<FriendsList> {
                                                             NetworkImage(snapshot
                                                                     .data
                                                                     .docs[index]
-                                                                    [
-                                                                'photoUrl'])
+                                                                ['photoUrl'])
 
                                                         // NetworkImage(likedArray[index]['strPic']),
 
@@ -119,15 +120,15 @@ class FriendsListState extends State<FriendsList> {
                                                           (BuildContext
                                                               context) {
                                                     return OtherProfile(snapshot
-                                                        .data
-                                                        .docs[index]
-                                                        ['id']
+                                                        .data.docs[index]['id']
                                                         .toString());
                                                   })); //Material
                                                 },
                                                 child: Text(
-                                                    snapshot.data.docs[index]
-                                                        ['displayName']
+                                                    snapshot
+                                                        .data
+                                                        .docs[index]
+                                                            ['displayName']
                                                         .toString(),
                                                     style: TextStyle(
                                                         fontSize: 18,
@@ -157,7 +158,7 @@ class FriendsListState extends State<FriendsList> {
                                                             OtherProfile(snapshot
                                                                 .data
                                                                 .docs[index]
-                                                                ['id']
+                                                                    ['id']
                                                                 .toString())));
                                               },
                                               child: Text(
@@ -176,5 +177,247 @@ class FriendsListState extends State<FriendsList> {
                             )),
                       )));
         });
+  }
+}
+
+class GroupsList extends StatefulWidget {
+  TextEditingController searchController = TextEditingController();
+  final String userId;
+
+  GroupsList(String id, {this.userId});
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return GroupsListState(this.userId);
+  }
+}
+
+class GroupsListState extends State<GroupsList> {
+  TextEditingController searchController = TextEditingController();
+  var iter = 0;
+  final String userId;
+
+  GroupsListState(this.userId);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+
+    return StreamBuilder(
+        stream: groupsRef.where("members", arrayContains: userId).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (snapshot.data == null) return Container();
+
+          return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfilePageWithHeader()),
+                    );
+                  },
+                ),
+                backgroundColor: TextThemes.ndBlue,
+                title: snapshot.data.docs.length == 1
+                    ? Text(
+                        "Friend Group",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : Text(
+                        "Friend Groups",
+                        style: TextStyle(color: Colors.white),
+                      ),
+              ),
+              body: ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (_, index) {
+                    bool isLargePhone = Screen.diagonal(context) > 766;
+
+                    DocumentSnapshot course = snapshot.data.docs[index];
+                    String groupPic = course['groupPic'];
+                    String groupName = course['groupName'];
+                    List<dynamic> members = course['members'];
+                    String groupId = course['groupId'];
+
+                    return Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                          margin: EdgeInsets.all(0.0),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                    color: Colors.grey[300],
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              if (members
+                                                  .contains(currentUser.id)) {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(builder:
+                                                        (BuildContext context) {
+                                                  return OtherGroup(groupId);
+                                                }));
+                                              } else {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(builder:
+                                                        (BuildContext context) {
+                                                  return GroupDetail(groupId);
+                                                }));
+                                              }
+                                            },
+                                            child: SizedBox(
+                                              width: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.3
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.3,
+                                              height: isLargePhone
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.1
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.1,
+                                              child: Container(
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: groupPic,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                margin: EdgeInsets.only(
+                                                    left: 10,
+                                                    top: 0,
+                                                    right: 10,
+                                                    bottom: 0),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(10),
+                                                  ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 5,
+                                                      blurRadius: 7,
+                                                      offset: Offset(0,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10.0),
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(builder:
+                                                        (BuildContext context) {
+                                                  return OtherGroup(groupId);
+                                                })); //Material
+                                              },
+                                              child: Text(groupName,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: TextThemes.ndBlue,
+                                                      decoration: TextDecoration
+                                                          .none))),
+                                        ),
+                                        Spacer(),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8),
+                                          child: RaisedButton(
+                                            padding: const EdgeInsets.all(2.0),
+                                            color: Colors.green,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(3.0))),
+                                            onPressed: () {
+                                              showAlertDialog(
+                                                  context, groupName, groupId);
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 3.0),
+                                                  child: Icon(
+                                                    Icons.accessibility_new,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  " Ask to Join? ",
+                                                  style: new TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            ),
+                          )),
+                    );
+                  }));
+        });
+  }
+
+  void showAlertDialog(BuildContext context, groupName, groupId) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Ask to Join?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nYou cool enough?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Ask", style: TextStyle(color: Colors.green)),
+            onPressed: () {
+              Database().askToJoinGroup(currentUser.id, currentUser.photoUrl,
+                  currentUser.id, groupName, groupId);
+
+              Navigator.of(context).pop(true);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, my mistake"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 }

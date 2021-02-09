@@ -322,7 +322,7 @@ class _NonImageContents extends StatelessWidget {
                                           // textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontStyle: FontStyle.italic,
-                                              fontSize: isLargePhone ? 14 : 12),
+                                              fontSize: isLargePhone ? 14 : 13),
                                         ),
                                       )),
                                 ],
