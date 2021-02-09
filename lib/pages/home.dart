@@ -8,6 +8,7 @@ import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/map_test.dart';
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
@@ -23,6 +24,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -117,36 +119,49 @@ class _HomeState extends State<Home> {
 
     _fcm.configure(onLaunch: (Map<String, dynamic> message) async {
       print('message: $message');
+      FlutterAppBadger.removeBadge();
       final String recipientId = message['data']['recipient'];
       final String body = message['notification']['body'];
+      print(recipientId);
+      print(currentUser.id);
       if (recipientId == currentUser.id) {
         print('Notification shown');
 
-        SnackBar snackbar =
-            SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-        _scaffoldKey.currentState.showSnackBar(snackbar);
+        // SnackBar snackbar =
+        //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+        // _scaffoldKey.currentState.showSnackBar(snackbar);
+        Get.snackbar("Message", body);
       }
       print('Notification not shown :(');
     }, onResume: (Map<String, dynamic> message) async {
       print('message: $message');
+
       final String recipientId = message['data']['recipient'];
       final String body = message['notification']['body'];
+      print(recipientId);
+      print(currentUser.id);
       if (recipientId == currentUser.id) {
         print('Notification shown');
-        SnackBar snackbar =
-            SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-        _scaffoldKey.currentState.showSnackBar(snackbar);
+        // SnackBar snackbar =
+        //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+
+        // _scaffoldKey.currentState.showSnackBar(snackbar);
+        Get.snackbar("Message", body);
       }
       print('Notification not shown :(');
     }, onMessage: (Map<String, dynamic> message) async {
       print('message: $message');
+      FlutterAppBadger.updateBadgeCount(1);
       final String recipientId = message['data']['recipient'];
       final String body = message['notification']['body'];
+      print(recipientId);
+      print(currentUser.id);
       if (recipientId == currentUser.id) {
         print('Notification shown');
-        SnackBar snackbar =
-            SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-        _scaffoldKey.currentState.showSnackBar(snackbar);
+        // SnackBar snackbar =
+        //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+        // _scaffoldKey.currentState.showSnackBar(snackbar);
+        Get.snackbar("Message", body);
       }
       print('Notification not shown :(');
     });
@@ -169,8 +184,8 @@ class _HomeState extends State<Home> {
       // 2) if the user doesn't exist, then we want to take them to the create account page
       final result = await Navigator.pushAndRemoveUntil(
         context,
-                      PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
-                    (Route<dynamic> route) => false,
+        PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
+        (Route<dynamic> route) => false,
       );
 
       final String dorm = result[0];
@@ -207,8 +222,7 @@ class _HomeState extends State<Home> {
     setState(() {
       isAuth = true;
     });
-   configurePushNotifications();
-
+    configurePushNotifications();
   }
 
   @override
@@ -470,14 +484,14 @@ class _HomeState extends State<Home> {
           ),
 
           ShowCaseWidget(
-             builder: Builder(builder: (context) => SearchBar()),
-            autoPlay: false,
-            autoPlayLockEnable: true),
+              builder: Builder(builder: (context) => SearchBar()),
+              autoPlay: false,
+              autoPlayLockEnable: true),
 
           ShowCaseWidget(
-               builder: Builder(builder: (context) => MOOVSPage()),
-            autoPlay: false,
-            autoPlayLockEnable: true),
+              builder: Builder(builder: (context) => MOOVSPage()),
+              autoPlay: false,
+              autoPlayLockEnable: true),
           ProfilePage()
         ],
         controller: pageController,

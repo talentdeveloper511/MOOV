@@ -280,8 +280,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   List groupMembers = [];
   bool push = true;
 
-
-
   String generateRandomString(int len) {
     var r = Random();
     const _chars =
@@ -302,7 +300,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
-      List pushList = currentUser.pushSettings.values.toList();
+    List pushList = currentUser.pushSettings.values.toList();
     if (pushList[0] == false) {
       push = false;
     }
