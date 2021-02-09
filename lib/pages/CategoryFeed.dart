@@ -147,7 +147,7 @@ class _CategoryFeedState extends State<CategoryFeed>
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 12.5),
+                padding: const EdgeInsets.only(top: 10.0, bottom: 7.5),
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
@@ -678,7 +678,7 @@ class PostOnFeed extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(0.0),
       child: Stack(overflow: Overflow.visible, children: [
         Card(
             color: Colors.white,
@@ -702,7 +702,7 @@ class PostOnFeed extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.only(top: 0.0, right: 5),
                                 child: Container(
-                                  height: 170,
+                                  height: isLargePhone ? 130 : 170,
                                   decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5)),
@@ -1171,7 +1171,7 @@ class PostOnFeed extends StatelessWidget {
             )),
         isToday == true
             ? Positioned(
-                top: -7,
+                top: 0,
                 right: 0,
                 child: Container(
                   height: 30,

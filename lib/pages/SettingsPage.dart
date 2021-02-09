@@ -110,7 +110,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return linearProgress();
                   } else {
-                    DocumentSnapshot course = snapshot.data;
                     ref2.get().then((snap) => {
                           pushList =
                               snap.data()['pushSettings'].values.toList(),
@@ -119,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               goingBool = false,
                             }
                           else
-                            [goingBool = true],
+                            {goingBool = true},
                           if (pushList[1] == false)
                             {hourBool = false}
                           else
@@ -247,6 +246,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   value: goingBool,
                                   title: Text("Going to your MOOV"),
                                   onChanged: (val) {
+                                      goingBool = val;
                                     Database().goingPushSetting(val);
                                   },
                                 ),
@@ -259,16 +259,16 @@ class _SettingsPageState extends State<SettingsPage> {
                                       Database().hourPushSetting(value);
                                       hourBool = value;
                                     }),
-                                SwitchListTile(
-                                  activeColor: TextThemes.ndBlue,
-                                  contentPadding: const EdgeInsets.all(0),
-                                  value: suggestionsBool,
-                                  title: Text("Friend Group Suggestions"),
-                                  onChanged: (val) {
-                                    Database().suggestionsPushSetting(val);
-                                    suggestionsBool = val;
-                                  },
-                                ),
+                                // SwitchListTile(
+                                //   activeColor: TextThemes.ndBlue,
+                                //   contentPadding: const EdgeInsets.all(0),
+                                //   value: suggestionsBool,
+                                //   title: Text("Friend Group Suggestions"),
+                                //   onChanged: (val) {
+                                //     Database().suggestionsPushSetting(val);
+                                //     suggestionsBool = val;
+                                //   },
+                                // ),
                                 const SizedBox(height: 60.0),
                               ],
                             ),

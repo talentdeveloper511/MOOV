@@ -18,7 +18,6 @@ import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/post_detail.dart';
-import 'package:MOOV/pages/search.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -31,6 +30,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase_widget.dart';
 import 'create_account.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -57,7 +57,6 @@ final chatRef = FirebaseFirestore.instance
     .collection('chat');
 final DateTime timestamp = DateTime.now();
 User currentUser;
-
 
 class Home extends StatefulWidget {
   @override
@@ -95,20 +94,16 @@ class _HomeState extends State<Home> {
     }).catchError((err) {
       print('Error signing in: $err');
     });
-    getAllSavedData();
   }
 
   handleSignIn(GoogleSignInAccount account) {
-    if (account != null) {
-      createUserInFirestore();
-      setState(() {
-        isAuth = true;
-      });
-      configurePushNotifications();
-    } else {
+    if (account == null) {
       setState(() {
         isAuth = false;
       });
+    } else {
+      createUserInFirestore();
+      configurePushNotifications();
     }
   }
 
@@ -172,10 +167,10 @@ class _HomeState extends State<Home> {
 
     if (!doc.exists) {
       // 2) if the user doesn't exist, then we want to take them to the create account page
-      final result = await  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WelcomePage()),
-                  );
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomePage()),
+      );
 
       final String dorm = result[0];
       final String year = result[2];
@@ -208,6 +203,9 @@ class _HomeState extends State<Home> {
       doc = await usersRef.doc(user.id).get();
     }
     currentUser = User.fromDocument(doc);
+     setState(() {
+        isAuth = true;
+      });
   }
 
   @override
@@ -239,17 +237,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  getAllSavedData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    bool value = prefs.getBool("youKey");
-
-    // For first time you get null data so no value
-    // is assigned so it will not assign anything
-    if (value != null) stringValue = value.toString();
-
-    setState(() {});
-  }
 
   Scaffold buildAuthScreen() {
     // Future<int> notifCount() async {
@@ -474,8 +462,20 @@ class _HomeState extends State<Home> {
       body: PageView(
         children: <Widget>[
           // Timeline(),
-          HomePage(),
+          ShowCaseWidget(
+            onStart: (index, key) {
+              print('onStart: $index, $key');
+            },
+            onComplete: (index, key) {
+              print('onComplete: $index, $key');
+            },
+            builder: Builder(builder: (context) => HomePage()),
+            autoPlay: false,
+            autoPlayLockEnable: true,
+          ),
+
           SearchBar(),
+
           MOOVSPage(),
           ProfilePage()
         ],
@@ -543,7 +543,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return isAuth ? buildAuthScreen() : buildUnAuthScreen();
+    return (isAuth == false) ? buildUnAuthScreen() : buildAuthScreen();
   }
 }
 

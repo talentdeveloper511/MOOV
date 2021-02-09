@@ -3,6 +3,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
+import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
@@ -20,6 +21,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase.dart';
+import 'package:showcaseview/showcase_widget.dart';
 import 'MorePage.dart';
 
 import 'friend_finder.dart';
@@ -37,6 +41,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
+  GlobalKey _categoryButtonKey = GlobalKey();
+  GlobalKey _friendFinderKey = GlobalKey();
+  GlobalKey _friendGroupsKey = GlobalKey();
+  GlobalKey _motdKey = GlobalKey();
+    GlobalKey _leaderboardKey = GlobalKey();
+
+
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
   List<dynamic> likedArray;
@@ -76,6 +87,25 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget build(BuildContext context) {
+    SharedPreferences preferences;
+
+    displayShowCase() async {
+      preferences = await SharedPreferences.getInstance();
+      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase");
+      if (showCaseVisibilityStatus == null) {
+        preferences.setBool("displayShowCase", false);
+        return true;
+      }
+      return false;
+    }
+
+    displayShowCase().then((status) {
+      if (status) {
+        ShowCaseWidget.of(context).startShowCase(
+            [_categoryButtonKey, _friendFinderKey, _friendGroupsKey, _motdKey, _leaderboardKey]);
+      }
+    });
+
     SizeConfig().init(context);
     bool isLargePhone = Screen.diagonal(context) > 720;
     bool isNarrow = Screen.widthInches(context) < 3.5;
@@ -125,8 +155,21 @@ class _HomePageState extends State<HomePage>
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => MOTD()));
                     },
-                    child: Container(
-                      child: MOTD(),
+                    child: Showcase(
+                      key: _motdKey,
+                      title: "BIGGEST MOOV TODAY",
+                      description: "\n     You won't want to miss this     ",
+                      titleTextStyle: TextStyle(
+                          color: TextThemes.ndBlue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                      descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                      contentPadding: EdgeInsets.all(10),
+                      shapeBorder: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Container(
+                        child: MOTD(),
+                      ),
                     )),
               ],
             ),
@@ -152,42 +195,57 @@ class _HomePageState extends State<HomePage>
                                 MaterialPageRoute(
                                     builder: (context) => FriendFinder()));
                           },
-                          child: Card(
-                            elevation: 10,
-                            color: Colors.pink[50],
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  padding: EdgeInsets.all(5.0),
-                                  icon: Image.asset('lib/assets/ff.png'),
-                                  color: Colors.white,
-                                  splashColor:
-                                      Color.fromRGBO(220, 180, 57, 1.0),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                FriendFinder()));
-                                    // Implement navigation to shopping cart page here...
-                                  },
-                                ),
-                                Align(
-                                    alignment: Alignment.center,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        "Friend Finder",
-                                        style: TextStyle(
-                                            fontFamily: 'Open Sans',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 16.0),
-                                      ),
-                                    )),
-                              ],
+                          child: Showcase(
+                            key: _friendFinderKey,
+                            title: "NO MORE FOMO",
+                            description:
+                                "\nFind your friends plans for tonight",
+                            titleTextStyle: TextStyle(
+                                color: TextThemes.ndBlue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                            descTextStyle:
+                                TextStyle(fontStyle: FontStyle.italic),
+                            contentPadding: EdgeInsets.all(10),
+                            shapeBorder: ContinuousRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Card(
+                              elevation: 10,
+                              color: Colors.pink[50],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    padding: EdgeInsets.all(5.0),
+                                    icon: Image.asset('lib/assets/ff.png'),
+                                    color: Colors.white,
+                                    splashColor:
+                                        Color.fromRGBO(220, 180, 57, 1.0),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FriendFinder()));
+                                      // Implement navigation to shopping cart page here...
+                                    },
+                                  ),
+                                  Align(
+                                      alignment: Alignment.center,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Text(
+                                          "Friend Finder",
+                                          style: TextStyle(
+                                              fontFamily: 'Open Sans',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16.0),
+                                        ),
+                                      )),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -205,39 +263,53 @@ class _HomePageState extends State<HomePage>
                               MaterialPageRoute(
                                   builder: (context) => FriendGroupsPage()));
                         },
-                        child: Card(
-                          elevation: 10,
-                          color: Colors.purple[50],
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                padding: EdgeInsets.all(5.0),
-                                icon: Image.asset('lib/assets/fg1.png'),
-                                splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              FriendGroupsPage()));
-                                },
-                              ),
-                              Align(
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      "Friend Groups",
-                                      style: TextStyle(
-                                          fontFamily: 'Open Sans',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                          fontSize: 16.0),
-                                    ),
-                                  )),
-                            ],
+                        child: Showcase(
+                          key: _friendGroupsKey,
+                          title: "SQUAD UP",
+                          description: "\niMessage and Snap had a baby",
+                          titleTextStyle: TextStyle(
+                              color: TextThemes.ndBlue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                          descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                          contentPadding: EdgeInsets.all(10),
+                          shapeBorder: ContinuousRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Card(
+                            elevation: 10,
+                            color: Colors.purple[50],
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  padding: EdgeInsets.all(5.0),
+                                  icon: Image.asset('lib/assets/fg1.png'),
+                                  splashColor:
+                                      Color.fromRGBO(220, 180, 57, 1.0),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                FriendGroupsPage()));
+                                  },
+                                ),
+                                Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        "Friend Groups",
+                                        style: TextStyle(
+                                            fontFamily: 'Open Sans',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                            fontSize: 16.0),
+                                      ),
+                                    )),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -253,31 +325,44 @@ class _HomePageState extends State<HomePage>
               crossAxisSpacing: 10.0,
               childAspectRatio: 1.1,
               children: <Widget>[
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {},
-                          child: Bounce(
-                              duration: Duration(milliseconds: 100),
-                              onPressed: () {
-                                navigateToCategoryFeed(
-                                    context, "Restaurants & Bars");
-                              },
-                              child: CategoryButton(
-                                  asset: 'lib/assets/food5.png'))),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Restaurants & Bars",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
-                          ))
-                    ],
+                Showcase(
+                  key: _categoryButtonKey,
+                  description: "\nFind MOOVs of any category",
+                  title: "ANY VIBE",
+                  titleTextStyle: TextStyle(
+                      color: TextThemes.ndBlue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                  descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                  contentPadding: EdgeInsets.all(10),
+                  shapeBorder: ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        GestureDetector(
+                            onTap: () {},
+                            child: Bounce(
+                                duration: Duration(milliseconds: 100),
+                                onPressed: () {
+                                  navigateToCategoryFeed(
+                                      context, "Restaurants & Bars");
+                                },
+                                child: CategoryButton(
+                                    asset: 'lib/assets/food5.png'))),
+                        Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Restaurants & Bars",
+                              style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 16.0),
+                            ))
+                      ],
+                    ),
                   ),
                 ),
                 Column(

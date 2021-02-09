@@ -70,7 +70,7 @@ class _MOOVSPageState extends State<MOOVSPage>
           height: MediaQuery.of(context).size.height * 0.90,
           child: Column(children: <Widget>[
             new Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(

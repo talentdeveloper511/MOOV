@@ -7,7 +7,6 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/post_detail.dart';
-import 'package:MOOV/pages/search.dart';
 import 'package:MOOV/pages/searchNoTrending.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
