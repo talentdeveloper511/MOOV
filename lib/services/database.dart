@@ -459,18 +459,14 @@ class Database {
   }
 
   commentNotification(String ownerId, String message) {
-    notificationFeedRef
-        .doc(ownerId)
-        .collection("feedItems")
-        .doc('comment ' + currentUser.id)
-        .set({
+    notificationFeedRef.doc(ownerId).collection("feedItems").doc(message).set({
       "type": "comment",
       "username": currentUser.displayName,
       "userId": currentUser.id,
       "userEmail": currentUser.email,
       "userProfilePic": currentUser.photoUrl,
       "timestamp": DateTime.now(),
-      "groupName": message,
+      "message": message,
     });
   }
 

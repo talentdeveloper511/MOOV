@@ -283,6 +283,7 @@ class NotificationFeedItem extends StatelessWidget {
   final String groupId;
   final String groupPic;
   final String groupName;
+  final String message;
 
   //for redirecting to PostDetail
   final String title;
@@ -303,6 +304,7 @@ class NotificationFeedItem extends StatelessWidget {
       this.groupId,
       this.groupPic,
       this.groupName,
+      this.message,
       this.userId,
       this.type,
       this.previewImg,
@@ -337,6 +339,7 @@ class NotificationFeedItem extends StatelessWidget {
       groupId: doc.data()['groupId'],
       groupPic: doc.data()['groupPic'],
       groupName: doc.data()['groupName'],
+      message: doc.data()['message'],
     );
   }
 
@@ -470,6 +473,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'suggested ';
     } else if (type == 'sent') {
       activityItemText = 'sent you ';
+    } else if (type == 'comment') {
+      activityItemText = 'commented: ';
     } else if (type == 'deleted') {
       activityItemText = 'has been canceled';
     } else if (type == 'askToJoin') {
@@ -526,7 +531,9 @@ class NotificationFeedItem extends StatelessWidget {
                                 style: TextStyle(
                                     color: TextThemes.ndBlue,
                                     fontWeight: FontWeight.bold))
-                            : TextSpan(text: '')
+                            : TextSpan(
+                                text: '\"$message\"',
+                              )
                       ]),
                 ),
               ],
