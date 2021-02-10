@@ -137,7 +137,7 @@ class _PostDetailState extends State<PostDetail>
                        usersRef.doc(currentUser.id).set({
                                 "privacySettings": {"incognito": false}
                               }, SetOptions(merge: true)):usersRef.doc(currentUser.id).set({
-                                "privacySettings": {"incognito": true}
+                                "privacySettings": {"incognito": true, "friendsOnly": false}
                               }, SetOptions(merge: true));
                           
                       },

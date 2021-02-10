@@ -245,7 +245,7 @@ class GroupCarousel extends StatelessWidget {
                                         currentUser.friendGroups.length == 0) {
                                       return Padding(
                                         padding:
-                                            const EdgeInsets.only(bottom: 20.0),
+                                            const EdgeInsets.only(bottom: 20.0, left: 10),
                                         child: Text(
                                           "needs a MOOV \ntonight!",
                                           style: TextStyle(fontSize: 16),
