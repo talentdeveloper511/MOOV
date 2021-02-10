@@ -435,7 +435,7 @@ class Database {
     });
     dbRef.runTransaction((transaction) async {
       final DocumentReference ref =
-          dbRef.doc('notreDame/data/users/$currentUser.id');
+          dbRef.doc('notreDame/data/users/${currentUser.id}');
       transaction.update(ref, {'score': FieldValue.increment(75)});
     });
   }
@@ -744,28 +744,27 @@ class Database {
         usersRef.doc(members[i]).get().then((snap) => {
               if (snap.data()['pushSettings']['suggestions'] == false)
                 {push = false},
-          
-
-        if (members[i] != currentUser.id) {
-          notificationFeedRef
-              .doc(members[i])
-              .collection('feedItems')
-              .doc('suggest ' + postId)
-              .set({
-            "type": "suggestion",
-            "push": push,
-            "postId": postId,
-            "previewImg": pic,
-            "title": title,
-            "groupId": gid,
-            "groupName": groupName,
-            "username": currentUser.displayName,
-            "userId": currentUser.id,
-            "userProfilePic": currentUser.photoUrl,
-            "timestamp": DateTime.now()
-          })
-        }
-          });
+              if (members[i] != currentUser.id)
+                {
+                  notificationFeedRef
+                      .doc(members[i])
+                      .collection('feedItems')
+                      .doc('suggest ' + postId)
+                      .set({
+                    "type": "suggestion",
+                    "push": push,
+                    "postId": postId,
+                    "previewImg": pic,
+                    "title": title,
+                    "groupId": gid,
+                    "groupName": groupName,
+                    "username": currentUser.displayName,
+                    "userId": currentUser.id,
+                    "userProfilePic": currentUser.photoUrl,
+                    "timestamp": DateTime.now()
+                  })
+                }
+            });
       }
     });
   }

@@ -15,6 +15,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/widgets/going_statuses.dart';
 import 'package:page_transition/page_transition.dart';
@@ -33,94 +34,180 @@ class PostDetail extends StatefulWidget {
   }
 }
 
-class _PostDetailState extends State<PostDetail> {
+class _PostDetailState extends State<PostDetail>
+    with SingleTickerProviderStateMixin {
+  ScrollController _scrollController;
+  AnimationController _hideFabAnimController;
+
   String postId;
   _PostDetailState(this.postId);
   var commentCount = 0;
   int segmentedControlValue = 0;
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    _hideFabAnimController.dispose();
+    super.dispose();
+  }
+
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _hideFabAnimController = AnimationController(
+      vsync: this,
+      duration: kThemeAnimationDuration,
+      value: 1,
+    );
+
+    _scrollController.addListener(() {
+      switch (_scrollController.position.userScrollDirection) {
+        // Scrolling up - forward the animation (value goes to 1)
+        case ScrollDirection.forward:
+          _hideFabAnimController.forward();
+          break;
+        // Scrolling down - reverse the animation (value goes to 0)
+        case ScrollDirection.reverse:
+          _hideFabAnimController.reverse();
+          break;
+        // Idle - keep FAB visibility unchanged
+        case ScrollDirection.idle:
+          break;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    postsRef.doc(postId).collection("comments").get().then(
-        (querySnapshot) async => {commentCount = await querySnapshot.size});
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-            },
-          ),
-          backgroundColor: TextThemes.ndBlue,
-          flexibleSpace: FlexibleSpaceBar(
-            titlePadding: EdgeInsets.all(5),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
+    bool isIncognito;
+
+    return StreamBuilder(
+        stream: usersRef.doc(currentUser.id).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          isIncognito = snapshot.data['privacySettings']['incognito'];
+
+          return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                      (Route<dynamic> route) => false,
+                      MaterialPageRoute(builder: (context) => HomePage()),
                     );
                   },
-                  child: Image.asset(
-                    'lib/assets/moovblue.png',
-                    fit: BoxFit.cover,
-                    height: 50.0,
+                ),
+                backgroundColor: TextThemes.ndBlue,
+                flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: EdgeInsets.all(5),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: Image.asset(
+                          'lib/assets/moovblue.png',
+                          fit: BoxFit.cover,
+                          height: 50.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-        body: SafeArea(
-          top: false,
-          child: Stack(children: [
-            StreamBuilder(
-                stream: postsRef.doc(postId).snapshots(),
-                builder: (context, snapshot) {
-                  String title,
-                      description,
-                      bannerImage,
-                      address,
-                      userId,
-                      postId;
-                  dynamic startDate;
+              ),
+              floatingActionButton: FadeTransition(
+                opacity: _hideFabAnimController,
+                child: ScaleTransition(
+                  scale: _hideFabAnimController,
+                  child: FloatingActionButton.extended(
+                      backgroundColor:
+                          isIncognito ? Colors.black : Colors.white,
+                      onPressed: () {
+                        isIncognito ?
+                       usersRef.doc(currentUser.id).set({
+                                "privacySettings": {"incognito": false}
+                              }, SetOptions(merge: true)):usersRef.doc(currentUser.id).set({
+                                "privacySettings": {"incognito": true}
+                              }, SetOptions(merge: true));
+                          
+                      },
+                      label: !isIncognito
+                          ? Text("Go Incognito",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black))
+                          : Row(
+                              children: [
+                                Image.asset('lib/assets/incognito.png',
+                                    height: 20),
+                                Text(" Incognito",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white)),
+                              ],
+                            )),
+                ),
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              body: SafeArea(
+                top: false,
+                child: Stack(children: [
+                  StreamBuilder(
+                      stream: postsRef.doc(postId).snapshots(),
+                      builder: (context, snapshot) {
+                        String title,
+                            description,
+                            bannerImage,
+                            address,
+                            userId,
+                            postId;
+                        dynamic startDate;
 
-                  if (!snapshot.hasData) return CircularProgressIndicator();
-                  DocumentSnapshot course = snapshot.data;
-                  title = course['title'];
-                  bannerImage = course['image'];
-                  description = course['description'];
-                  startDate = course['startDate'];
-                  address = course['address'];
-                  userId = course['userId'];
-                  postId = course['postId'];
-                  int maxOccupancy = course['maxOccupancy'];
-                  int venmo = course['venmo'];
-                  int goingCount = course['going'].length;
-                  return Container(
-                    color: Colors.white,
-                    child: ListView(
-                      children: <Widget>[
-                        _BannerImage(bannerImage, userId, postId, maxOccupancy,
-                            goingCount),
-                        _NonImageContents(title, description, startDate,
-                            address, userId, postId, course, commentCount),
-                      ],
-                    ),
-                  );
-                }),
-          ]),
-        ));
+                        if (!snapshot.hasData)
+                          return CircularProgressIndicator();
+                        DocumentSnapshot course = snapshot.data;
+                        title = course['title'];
+                        bannerImage = course['image'];
+                        description = course['description'];
+                        startDate = course['startDate'];
+                        address = course['address'];
+                        userId = course['userId'];
+                        postId = course['postId'];
+                        int maxOccupancy = course['maxOccupancy'];
+                        int venmo = course['venmo'];
+                        int goingCount = course['going'].length;
+                        return Container(
+                          color: Colors.white,
+                          child: ListView(
+                            controller: _scrollController,
+                            children: <Widget>[
+                              _BannerImage(bannerImage, userId, postId,
+                                  maxOccupancy, goingCount),
+                              _NonImageContents(
+                                  title,
+                                  description,
+                                  startDate,
+                                  address,
+                                  userId,
+                                  postId,
+                                  course,
+                                  commentCount),
+                            ],
+                          ),
+                        );
+                      }),
+                ]),
+              ));
+        });
   }
 }
 
@@ -356,9 +443,9 @@ class _NonImageContents extends StatelessWidget {
             ),
           ),
           ShowCaseWidget(
-            builder: Builder(builder: (context) => Buttons(moovId)),
-            autoPlay: false,
-            autoPlayLockEnable: true),
+              builder: Builder(builder: (context) => Buttons(moovId)),
+              autoPlay: false,
+              autoPlayLockEnable: true),
           Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: Container(
@@ -840,8 +927,7 @@ class Buttons extends StatelessWidget {
 
   int status;
   bool push = true;
-    GlobalKey _buttonsKey = GlobalKey();
-
+  GlobalKey _buttonsKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -913,17 +999,17 @@ class Buttons extends StatelessWidget {
             return Showcase(
               key: _buttonsKey,
               overlayColor: TextThemes.ndBlue,
-                title: "NO MORE GUESSING",
-                          description: "\nIs she coming? Now you know.",
-                          titleTextStyle: TextStyle(
-                              color: TextThemes.ndBlue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
-                          descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-                          contentPadding: EdgeInsets.all(10),
-                          shapeBorder: ContinuousRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Padding(
+              title: "NO MORE GUESSING",
+              description: "\nIs she coming? Now you know.",
+              titleTextStyle: TextStyle(
+                  color: TextThemes.ndBlue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+              descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+              contentPadding: EdgeInsets.all(10),
+              shapeBorder: ContinuousRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -934,7 +1020,8 @@ class Buttons extends StatelessWidget {
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
                         if (statuses != null && status != 1) {
-                          Database().addNotGoing(currentUser.id, moovId, goingList);
+                          Database()
+                              .addNotGoing(currentUser.id, moovId, goingList);
                           status = 1;
                           print(status);
                         } else if (statuses != null && status == 1) {
@@ -1025,10 +1112,7 @@ class Buttons extends StatelessWidget {
                         onPressed: () {
                           if (statuses != null && status != 2) {
                             Database().addUndecided(
-                              currentUser.id,
-                              moovId,
-                              goingList
-                            );
+                                currentUser.id, moovId, goingList);
                             status = 2;
                             print(status);
                           } else if (statuses != null && status == 2) {
@@ -1036,7 +1120,8 @@ class Buttons extends StatelessWidget {
                             status = 0;
                           }
                         },
-                        color: (status == 2) ? Colors.yellow[600] : Colors.white,
+                        color:
+                            (status == 2) ? Colors.yellow[600] : Colors.white,
                         padding: EdgeInsets.all(5.0),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 3.0, right: 3),
@@ -1099,7 +1184,8 @@ class Buttons extends StatelessWidget {
                                 ? Column(
                                     children: [
                                       Text('Going!',
-                                          style: TextStyle(color: Colors.white)),
+                                          style:
+                                              TextStyle(color: Colors.white)),
                                       Icon(Icons.directions_run_outlined,
                                           color: Colors.white, size: 30),
                                     ],
