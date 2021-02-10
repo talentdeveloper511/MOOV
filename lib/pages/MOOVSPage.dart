@@ -129,8 +129,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                           fontSize: 20),
                       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                       contentPadding: EdgeInsets.all(10),
-                      shapeBorder: ContinuousRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
+                      
                       child: new FlatButton(
                         color: _currentIndex == 0
                             ? Colors.blue[100]
@@ -156,8 +155,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                           fontSize: 20),
                       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                       contentPadding: EdgeInsets.all(10),
-                      shapeBorder: ContinuousRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
+                      
                       child: new FlatButton(
                         color: _currentIndex == 1
                             ? Colors.blue[100]

@@ -238,8 +238,11 @@ class _CategoryFeedState extends State<CategoryFeed>
                               ],
                             ),
                           ),
+                    
                           shape: RoundedRectangleBorder(
+                            
                               borderRadius: BorderRadius.circular(8.0)),
+                              
                         )
                       : RaisedButton(
                           onPressed: () {

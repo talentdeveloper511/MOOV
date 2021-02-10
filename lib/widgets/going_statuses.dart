@@ -307,7 +307,7 @@ class GoingPage extends StatelessWidget {
                                                               bottom: 2.5,
                                                               left: 72.5,
                                                               child: Text(
-                                                                "YOU'RE INCOGNITO. NO ONE CAN SEE",
+                                                                "YOU'RE INCOGNITO. NO ONE CAN SEE.",
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         10,
