@@ -348,38 +348,33 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
                   fontSize: 20),
             ),
           ),
-          verifiedStatus == 3 ? 
-                                                    Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 2.5,
-                                                        ),
-                                                        child: Icon(Icons.store,
-                                                            size: 20, 
-                                                            color: TextThemes.ndGold,),
-                                                      ):
-                                                                                              
-                                                verifiedStatus == 2
-                                                    ? Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 5,
-                                                        ),
-                                                        child: Image.asset(
-                                                            'lib/assets/verif2.png',
-                                                            height: 15),
-                                                      )
-                                                    : verifiedStatus == 1
-                                                        ? Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                              left: 2.5,
-                                                            ),
-                                                            child: Image.asset(
-                                                                'lib/assets/verif.png',
-                                                                height: 25),
-                                                          )
-                                                        : Text(""),
+          verifiedStatus == 3
+              ? Padding(
+                  padding: EdgeInsets.only(
+                    left: 2.5,
+                  ),
+                  child: Icon(
+                    Icons.store,
+                    size: 20,
+                    color: TextThemes.ndGold,
+                  ),
+                )
+              : verifiedStatus == 2
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                        left: 5,
+                      ),
+                      child: Image.asset('lib/assets/verif2.png', height: 15),
+                    )
+                  : verifiedStatus == 1
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                            left: 2.5,
+                          ),
+                          child:
+                              Image.asset('lib/assets/verif.png', height: 25),
+                        )
+                      : Text(""),
           // Text(
           //   email ?? "",
           //   style: TextStyle(color: Colors.black),
