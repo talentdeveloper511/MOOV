@@ -99,7 +99,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
 
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Scaffold(
       appBar: AppBar(
@@ -264,8 +264,9 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                  padding: isLargePhone ? 
-                                  const EdgeInsets.only(bottom: 50) :  const EdgeInsets.only(bottom: 20),
+                                  padding: isLargePhone
+                                      ? const EdgeInsets.only(bottom: 50)
+                                      : const EdgeInsets.only(bottom: 20),
                                   child: RichText(
                                       textAlign: TextAlign.center,
                                       text: TextSpan(
@@ -795,39 +796,31 @@ class _UserPostResultState extends State<UserPostResult> {
                   fontSize: 20),
             ),
           ),
-          verifiedStatus == 3 ? 
-                                                    Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 2.5,
-                                                        ),
-                                                        child: Icon(Icons.store,
-                                                            size: 25, 
-                                                            color: TextThemes.ndGold,),
-                                                      ):
-                                                                                              
-                                                verifiedStatus == 2
-                                                    ? Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 5,
-                                                        ),
-                                                        child: Image.asset(
-                                                            'lib/assets/verif2.png',
-                                                            height: 20),
-                                                      )
-                                                    : verifiedStatus == 1
-                                                        ? Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                              left: 2.5,
-                                                              top: 2.5
-                                                            ),
-                                                            child: Image.asset(
-                                                                'lib/assets/verif.png',
-                                                                height: 30),
-                                                          )
-                                                        : Text(""),
+          verifiedStatus == 3
+              ? Padding(
+                  padding: EdgeInsets.only(
+                    left: 2.5,
+                  ),
+                  child: Icon(
+                    Icons.store,
+                    size: 25,
+                    color: TextThemes.ndGold,
+                  ),
+                )
+              : verifiedStatus == 2
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                        left: 5,
+                      ),
+                      child: Image.asset('lib/assets/verif2.png', height: 20),
+                    )
+                  : verifiedStatus == 1
+                      ? Padding(
+                          padding: EdgeInsets.only(left: 2.5, top: 2.5),
+                          child:
+                              Image.asset('lib/assets/verif.png', height: 30),
+                        )
+                      : Text(""),
           // Text(
           //   email ?? "",
           //   style: TextStyle(color: Colors.black),
@@ -947,7 +940,7 @@ class _SearchUsersGroupState extends State<SearchUsersGroup> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_drop_up_outlined,
+            icon: Icon(Icons.arrow_drop_down_outlined,
                 color: Colors.white, size: 35),
             onPressed: () {
               Navigator.pop(context);
@@ -1272,12 +1265,12 @@ class InviteGroup extends StatefulWidget {
   List<String> invitees;
   List<dynamic> memberNames;
 
-  InviteGroup(
-      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees, this.memberNames);
+  InviteGroup(this.gname, this.gid, this.pic, this.moov, this.members,
+      this.invitees, this.memberNames);
 
   @override
-  _InviteGroupState createState() => _InviteGroupState(
-      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees, this.memberNames);
+  _InviteGroupState createState() => _InviteGroupState(this.gname, this.gid,
+      this.pic, this.moov, this.members, this.invitees, this.memberNames);
 }
 
 class _InviteGroupState extends State<InviteGroup> {
@@ -1285,11 +1278,10 @@ class _InviteGroupState extends State<InviteGroup> {
   List members, friendGroups;
   bool status = false;
   List<String> invitees;
-    List<dynamic> memberNames;
+  List<dynamic> memberNames;
 
-
-  _InviteGroupState(
-      this.gname, this.gid, this.pic, this.moov, this.members, this.invitees, this.memberNames);
+  _InviteGroupState(this.gname, this.gid, this.pic, this.moov, this.members,
+      this.invitees, this.memberNames);
 
   @override
   Widget build(BuildContext context) {
