@@ -395,7 +395,7 @@ class _EditProfileState extends State<EditProfile> {
                     autocorrect: false,
                     controller: bioController,
                     decoration: InputDecoration(
-                      labelText: "What's your party trick?",
+                      labelText: "Uncensored words to live by...",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),

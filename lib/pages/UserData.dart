@@ -169,15 +169,44 @@ class _UserDataState extends State<UserData> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold)),
                                       Text(
+                                          "Joined: " +
+                                              currentUser.timestamp
+                                                  .toDate()
+                                                  .toUtc()
+                                                  .toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
                                           "Demographic: " +
                                               currentUser.year +
                                               " " +
-                                              currentUser.gender.toLowerCase() +
+                                              currentUser.gender +
                                               " in " +
                                               currentUser.dorm,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold)),
                                       Text("Email: " + currentUser.email,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      Text("Google ID: " + currentUser.id,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+
+                                      Text(
+                                          "Venmo: @" +
+                                              currentUser.venmoUsername
+                                                  .toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                          "Score: " +
+                                              currentUser.score.toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                          "Verified Status: " +
+                                              currentUser.verifiedStatus
+                                                  .toString(),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold)),
                                       // Text("Joined MOOV on " +
@@ -225,7 +254,7 @@ class _UserDataState extends State<UserData> {
                 );
               }),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],

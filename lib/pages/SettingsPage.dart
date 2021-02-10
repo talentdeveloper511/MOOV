@@ -73,9 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () async {
-                    
-                  },
+                  onTap: () async {},
 
                   //   Navigator.pushAndRemoveUntil(
                   //     context,
@@ -287,7 +285,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               }),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],

@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const algoliasearch = require("algoliasearch");
+// const {user} = require("firebase-functions/lib/providers/auth");
 admin.initializeApp(functions.config().firebase);
 
 const ALGOLIA_APP_ID = "CUWBHO409I";
@@ -114,8 +115,10 @@ exports.onCreateActivityFeedItem = functions.firestore
       // 2) check if they have a notification token
       const androidNotificationToken = doc.data().androidNotificationToken;
       const createdActivityFeedItem = snapshot.data();
-      if (androidNotificationToken && createdActivityFeedItem.push == true) {
-        sendNotification(androidNotificationToken, createdActivityFeedItem);
+      if (androidNotificationToken) {
+        if (doc.data().pushSettings["going"] == true || createdActivityFeedItem.type != "going") {
+          sendNotification(androidNotificationToken, createdActivityFeedItem);
+        }
       } else {
         console.log("No token for user, cannot send notification");
       }
@@ -148,6 +151,10 @@ exports.onCreateActivityFeedItem = functions.firestore
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
             break;
+          case "comment":
+            title = `${activityFeedItem.title}`;
+            body = `${activityFeedItem.username} commented: \"${activityFeedItem.groupName}\"`;
+            break;
           case "request":
             title = `${activityFeedItem.username}`;
             body = "sent you a friend request";
@@ -172,7 +179,6 @@ exports.onCreateActivityFeedItem = functions.firestore
         };
 
         // 5) Send message with admin.messaging()
-        if (activityFeedItem.push == true) {
         admin
             .messaging()
             .send(message)
@@ -183,7 +189,6 @@ exports.onCreateActivityFeedItem = functions.firestore
             .catch((error) => {
               console.log("Error sending message", error);
             });
-        }
       }
     });
 
@@ -208,7 +213,7 @@ exports.onCreateGroupFeedItem = functions.firestore
         const userRef = admin.firestore().doc(`${college}/data/users/${members[i]}`);
         const userdoc = await userRef.get();
         userId = userdoc.data().id;
-        if (userdoc.data().androidNotificationToken) {
+        if (userdoc.data().androidNotificationToken && userdoc.data().pushSettings["suggestions"] == true) {
           sendNotification(userdoc.data().androidNotificationToken, createdActivityFeedItem);
         } else {
           console.log("No token for user, cannot send notification");
@@ -243,8 +248,12 @@ exports.onCreateGroupFeedItem = functions.firestore
             body = `sent you ${activityFeedItem.title}`;
             break;
           case "askToJoin":
-            title = `${activityFeedItem.groupName} `;
+            title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username} requested to join`;
+            break;
+          case "chat":
+            title = `${activityFeedItem.groupName}`;
+            body = `${activityFeedItem.username}: ${activityFeedItem.title}`;
             break;
           default:
             break;

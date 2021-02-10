@@ -268,7 +268,7 @@ class _NotificationFeedGroupState extends State<NotificationFeedGroup> {
             },
           ),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],
@@ -328,27 +328,26 @@ class NotificationFeedItem extends StatelessWidget {
 
   factory NotificationFeedItem.fromDocument(DocumentSnapshot doc) {
     return NotificationFeedItem(
-      username: doc.data()['username'],
-      userEmail: doc.data()['userEmail'],
-      userId: doc.data()['userId'],
-      type: doc.data()['type'],
-      postId: doc.data()['postId'],
-      userProfilePic: doc.data()['userProfilePic'],
-      timestamp: doc.data()['timestamp'],
-      title: doc.data()['title'],
-      description: doc.data()['description'],
-      ownerProPic: doc.data()['ownerProPic'],
-      ownerName: doc.data()['ownerName'],
-      ownerEmail: doc.data()['ownerEmail'],
-      address: doc.data()['address'],
-      moovId: doc.data()['moovId'],
-      previewImg: doc.data()['previewImg'],
-      members: doc.data()['members'],
-      groupId: doc.data()['groupId'],
-      groupPic: doc.data()['groupPic'],
-      groupName: doc.data()['groupName'],
-      push: doc.data()['push']
-    );
+        username: doc.data()['username'],
+        userEmail: doc.data()['userEmail'],
+        userId: doc.data()['userId'],
+        type: doc.data()['type'],
+        postId: doc.data()['postId'],
+        userProfilePic: doc.data()['userProfilePic'],
+        timestamp: doc.data()['timestamp'],
+        title: doc.data()['title'],
+        description: doc.data()['description'],
+        ownerProPic: doc.data()['ownerProPic'],
+        ownerName: doc.data()['ownerName'],
+        ownerEmail: doc.data()['ownerEmail'],
+        address: doc.data()['address'],
+        moovId: doc.data()['moovId'],
+        previewImg: doc.data()['previewImg'],
+        members: doc.data()['members'],
+        groupId: doc.data()['groupId'],
+        groupPic: doc.data()['groupPic'],
+        groupName: doc.data()['groupName'],
+        push: doc.data()['push']);
   }
 
   showPost(context) {

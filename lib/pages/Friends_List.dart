@@ -367,7 +367,9 @@ class GroupsListState extends State<GroupsList> {
                                             child: Row(
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 3.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 3.0),
                                                   child: Icon(
                                                     Icons.accessibility_new,
                                                     color: Colors.white,
@@ -413,7 +415,7 @@ class GroupsListState extends State<GroupsList> {
             },
           ),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],

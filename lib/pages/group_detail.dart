@@ -70,7 +70,7 @@ class _GroupDetailState extends State<GroupDetail> {
             },
           ),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],
@@ -1143,7 +1143,7 @@ class _SuggestionsState extends State<Suggestions> {
                               side: BorderSide(color: Colors.black)),
                           onPressed: () {
                             if (voters != null && status != 2) {
-                                 Database().betaActivityTracker(
+                              Database().betaActivityTracker(
                                   currentUser.displayName,
                                   Timestamp.now(),
                                   "vote on " + suggestorId);

@@ -156,7 +156,7 @@ class _EditGroupState extends State<EditGroup> {
             },
           ),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],
@@ -166,10 +166,12 @@ class _EditGroupState extends State<EditGroup> {
 
   leaveGroup() {
     if (members.length == 1) {
-      Database().leaveGroup(currentUser.id, displayName, gid, currentUser.displayName);
+      Database().leaveGroup(
+          currentUser.id, displayName, gid, currentUser.displayName);
       Database().destroyGroup(gid, displayName);
     } else {
-      Database().leaveGroup(currentUser.id, displayName, gid, currentUser.displayName);
+      Database().leaveGroup(
+          currentUser.id, displayName, gid, currentUser.displayName);
     }
     Navigator.pop(
       context,
@@ -252,7 +254,9 @@ class _EditGroupState extends State<EditGroup> {
                                         ? GestureDetector(
                                             onTap: () {
                                               showAlertDialog2(
-                                                  context, course['id'], course['displayName']);
+                                                  context,
+                                                  course['id'],
+                                                  course['displayName']);
                                             },
                                             child: Stack(children: [
                                               ShakeAnimatedWidget(
@@ -483,7 +487,7 @@ class _EditGroupState extends State<EditGroup> {
             },
           ),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],

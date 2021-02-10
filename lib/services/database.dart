@@ -458,6 +458,22 @@ class Database {
     });
   }
 
+  commentNotification(String ownerId, String message) {
+    notificationFeedRef
+        .doc(ownerId)
+        .collection("feedItems")
+        .doc('comment ' + currentUser.id)
+        .set({
+      "type": "comment",
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userEmail": currentUser.email,
+      "userProfilePic": currentUser.photoUrl,
+      "timestamp": DateTime.now(),
+      "groupName": message,
+    });
+  }
+
   removeGoingFromNotificationFeed(String ownerId, String moovId) {
     bool isNotPostOwner = strUserId != ownerId;
     if (isNotPostOwner) {
