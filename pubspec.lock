@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  another_flushbar:
+    dependency: "direct main"
+    description:
+      name: another_flushbar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.10.8"
   archive:
     dependency: transitive
     description:
@@ -471,13 +478,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  get:
-    dependency: "direct main"
-    description:
-      name: get
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.24.0"
   google_fonts:
     dependency: "direct main"
     description:

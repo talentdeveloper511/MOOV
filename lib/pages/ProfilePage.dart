@@ -200,17 +200,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 2.0, bottom: 14.0),
-                        child: showDorm == false ?
-                        Text(
-                              "Top secret year and dorm",
-                          style: TextStyle(fontSize: 15),
-                        ):
-                         Text(
-                          userYear != "" && userDorm != ""
-                              ? userYear + ' in ' + userDorm
-                              : "",
-                          style: TextStyle(fontSize: 15),
-                        ),
+                        child: showDorm == false
+                            ? Text(
+                                "Top secret year and dorm",
+                                style: TextStyle(fontSize: 15),
+                              )
+                            : Text(
+                                userYear != "" && userDorm != ""
+                                    ? userYear + ' in ' + userDorm
+                                    : "",
+                                style: TextStyle(fontSize: 15),
+                              ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
@@ -407,7 +407,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.of(context).pop(true);
               }),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],

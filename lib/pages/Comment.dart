@@ -1,6 +1,7 @@
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/other_profile.dart';
+import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -78,6 +79,7 @@ class PostCommentsState extends State<PostComments> {
             currentUser.id,
         "millis": DateTime.now().millisecondsSinceEpoch.toString()
       });
+      Database().commentNotification(postOwnerId, commentController.text);
       commentController.clear();
     }
   }

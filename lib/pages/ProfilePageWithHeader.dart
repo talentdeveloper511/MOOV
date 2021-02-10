@@ -179,15 +179,18 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                           ),
                         ),
                       ),
-                        Padding(
+                      Padding(
                         padding: const EdgeInsets.only(right: 35.0),
                         child: Align(
                           alignment: Alignment.centerRight,
-                                                child: SizedBox(height: 18,
-                          child: GestureDetector(
-                            onTap: () =>  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => SettingsPage())),
-                            child: Icon(Icons.settings)),),
+                          child: SizedBox(
+                            height: 18,
+                            child: GestureDetector(
+                                onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => SettingsPage())),
+                                child: Icon(Icons.settings)),
+                          ),
                         ),
                       ),
                       Padding(
@@ -202,41 +205,35 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                   : "Username not found",
                               style: TextThemes.extraBold,
                             ),
-                             verifiedStatus == 3 ? 
-                                                    Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 5,
-                                                          top: 2.5,
-                                                        ),
-                                                        child: Icon(Icons.store,
-                                                            size: 25, 
-                                                            color: TextThemes.ndGold,),
-                                                      ):
-                                                                                              
-                                                verifiedStatus == 2
-                                                    ? Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 5,
-                                                          top: 5
-                                                        ),
-                                                        child: Image.asset(
-                                                            'lib/assets/verif2.png',
-                                                            height: 20),
-                                                      )
-                                                    : verifiedStatus == 1
-                                                        ? Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                              left: 2.5,
-                                                              top: 0
-                                                            ),
-                                                            child: Image.asset(
-                                                                'lib/assets/verif.png',
-                                                                height: 30),
-                                                          )
-                                                        : Text("")
+                            verifiedStatus == 3
+                                ? Padding(
+                                    padding: EdgeInsets.only(
+                                      left: 5,
+                                      top: 2.5,
+                                    ),
+                                    child: Icon(
+                                      Icons.store,
+                                      size: 25,
+                                      color: TextThemes.ndGold,
+                                    ),
+                                  )
+                                : verifiedStatus == 2
+                                    ? Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 5, top: 5),
+                                        child: Image.asset(
+                                            'lib/assets/verif2.png',
+                                            height: 20),
+                                      )
+                                    : verifiedStatus == 1
+                                        ? Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 2.5, top: 0),
+                                            child: Image.asset(
+                                                'lib/assets/verif.png',
+                                                height: 30),
+                                          )
+                                        : Text("")
                           ],
                         ),
                       ),
@@ -337,25 +334,26 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                           ],
                         ),
                       ),
-                                          venmo != null && venmo != "" ?
-
-                        Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('lib/assets/venmo-icon.png', height: 35),
-                            Padding(
+                      venmo != null && venmo != ""
+                          ? Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "@" +venmo,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset('lib/assets/venmo-icon.png',
+                                      height: 35),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "@" + venmo,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ) : Text(""),
+                            )
+                          : Text(""),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -443,7 +441,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                 Navigator.of(context).pop(true);
               }),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],

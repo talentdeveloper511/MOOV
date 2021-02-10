@@ -8,6 +8,10 @@ import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/map_test.dart';
 import 'dart:async';
 import 'dart:io';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:another_flushbar/flushbar_route.dart';
+import 'package:another_flushbar/main.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,7 +28,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -117,50 +120,112 @@ class _HomeState extends State<Home> {
       usersRef.doc(user.id).update({'androidNotificationToken': token});
     });
 
-    _fcm.configure(onLaunch: (Map<String, dynamic> message) async {
-      print('message: $message');
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['body'];
-      print(recipientId);
-      print(currentUser.id);
-      if (recipientId == currentUser.id) {
-        print('Notification shown');
+    Future<dynamic> myBackgroundMessageHandler(
+        Map<String, dynamic> message) async {
+      FlutterAppBadger.updateBadgeCount(1);
+    }
 
-        // SnackBar snackbar =
-        //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-        // _scaffoldKey.currentState.showSnackBar(snackbar);
-        Get.snackbar("Message", body);
-      }
-      print('Notification not shown :(');
-    }, onResume: (Map<String, dynamic> message) async {
-      print('message: $message');
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['body'];
-      print(recipientId);
-      print(currentUser.id);
-      if (recipientId == currentUser.id) {
-        print('Notification shown');
-        // SnackBar snackbar =
-        //     SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
+    _fcm.configure(
+        onLaunch: (Map<String, dynamic> message) async {
+          print('message: $message');
+          final String recipientId = message['recipient'];
+          final String body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+          FlutterAppBadger.removeBadge();
+          if (recipientId == currentUser.id) {
+            print('Notification shown');
 
-        // _scaffoldKey.currentState.showSnackBar(snackbar);
-        Get.snackbar("Message", body);
-      }
-      print('Notification not shown :(');
-    }, onMessage: (Map<String, dynamic> message) async {
-      print('message: $message');
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['body'];
-      print(recipientId);
-      print(currentUser.id);
-      if (recipientId == currentUser.id) {
-        print('Notification shown');
-        SnackBar snackbar =
-            SnackBar(content: Text(body, overflow: TextOverflow.ellipsis));
-        _scaffoldKey.currentState.showSnackBar(snackbar);
-      }
-      print('Notification not shown :(');
-    });
+            Flushbar snackbar = Flushbar(
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                backgroundGradient:
+                    LinearGradient(colors: [Colors.white, Colors.green]),
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.green[700],
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.green,
+                messageText: Text(body, overflow: TextOverflow.ellipsis));
+            // _scaffoldKey.currentState.showSnackBar(snackbar);
+            snackbar.show(context);
+            // Get.snackbar("Message", body);
+          }
+          print('Notification not shown :(');
+        },
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onResume: (Map<String, dynamic> message) async {
+          print('message: $message');
+          final String recipientId = message['recipient'];
+          final String body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+
+          if (recipientId == currentUser.id) {
+            print('Notification shown');
+            Flushbar snackbar = Flushbar(
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                backgroundGradient:
+                    LinearGradient(colors: [Colors.white, Colors.green]),
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.green[700],
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.green,
+                messageText: Text(body, overflow: TextOverflow.ellipsis));
+            // _scaffoldKey.currentState.showSnackBar(snackbar);
+            snackbar.show(context);
+            // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
+          }
+          print('Notification not shown :(');
+        },
+        onMessage: (Map<String, dynamic> message) async {
+          print('message: $message');
+          final String recipientId = message['recipient'];
+          final String body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+          FlutterAppBadger.updateBadgeCount(1);
+          if (recipientId == currentUser.id) {
+            print('Notification shown');
+            Flushbar snackbar = Flushbar(
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                backgroundGradient:
+                    LinearGradient(colors: [Colors.white, Colors.green]),
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.green[700],
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.green,
+                messageText: Text(body, overflow: TextOverflow.ellipsis));
+            // _scaffoldKey.currentState.showSnackBar(snackbar);
+            snackbar.show(context);
+          }
+          print('Notification not shown :(');
+        });
   }
 
   getiOSPermission() {

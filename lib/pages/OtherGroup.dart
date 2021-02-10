@@ -71,7 +71,7 @@ class _OtherGroupState extends State<OtherGroup> {
             },
           ),
           CupertinoDialogAction(
-            child: Text("Nah, my mistake"),
+            child: Text("Nah, my bad"),
             onPressed: () => Navigator.of(context).pop(true),
           )
         ],
