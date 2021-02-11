@@ -901,11 +901,11 @@ class Database {
 
         for (var document in documents) {
           await document.reference.set({
-            "privacySettings": {
-              "friendsOnly": false,
-              "incognito": false,
-              "showDorm": true,
-              "friendFinderVisibility": true,
+            "pushSettings": {
+              "friendPosts": true,
+              // "incognito": false,
+              // "showDorm": true,
+              // "friendFinderVisibility": true,
             }
           }, SetOptions(merge: true));
         }

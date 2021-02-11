@@ -447,48 +447,50 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                           .collection("suggestedMOOVs")
                           .snapshots(),
                       builder: (context, snapshot4) {
-                        if (!snapshot4.hasData || snapshot4.data == null || snapshot4.data.docs.length == 0) {
-                          return  GestureDetector(
+                        if (!snapshot4.hasData ||
+                            snapshot4.data == null ||
+                            snapshot4.data.docs.length == 0) {
+                          return GestureDetector(
                             onTap: () {
-                                    Database().suggestMOOV(
-                                        currentUser.id,
-                                        gid,
-                                        moov,
-                                        unix,
-                                        currentUser.displayName,
-                                        members,
-                                        title,
-                                        image,
-                                        groupName);
-                                    Database().betaActivityTracker(
-                                        currentUser.displayName,
-                                        Timestamp.now(),
-                                        "suggest");
+                              Database().suggestMOOV(
+                                  currentUser.id,
+                                  gid,
+                                  moov,
+                                  unix,
+                                  currentUser.displayName,
+                                  members,
+                                  title,
+                                  image,
+                                  groupName);
+                              Database().betaActivityTracker(
+                                  currentUser.displayName,
+                                  Timestamp.now(),
+                                  "suggest");
 
-                                    Navigator.pop(context, moov);
-                                  },
+                              Navigator.pop(context, moov);
+                            },
                             child: Container(
                               height: 30,
                               padding: EdgeInsets.all(4),
                               decoration: BoxDecoration(
-                                  gradient:LinearGradient(
-                                          colors: [
-                                            Colors.pink[400],
-                                            Colors.purple[300]
-                                          ],
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
-                                        ),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      TextThemes.ndBlue,
+                                      TextThemes.ndBlue
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
                                   borderRadius: BorderRadius.circular(10.0)),
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                     left: 2.0, right: 2.0),
                                 child: Text(
-                                        "Suggest",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
+                                  "Suggest",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                ),
                               ),
                             ),
                           );
@@ -538,8 +540,8 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                                         )
                                       : LinearGradient(
                                           colors: [
-                                            Colors.pink[400],
-                                            Colors.purple[300]
+                                            TextThemes.ndBlue,
+                                            TextThemes.ndBlue
                                           ],
                                           begin: Alignment.centerLeft,
                                           end: Alignment.centerRight,

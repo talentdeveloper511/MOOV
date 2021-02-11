@@ -21,6 +21,7 @@ class NextMOOV extends StatefulWidget {
   String suggestorId;
   String groupId;
   int unix;
+  
 
   NextMOOV(this.selected, this.suggestorId, this.groupId, this.unix);
 
