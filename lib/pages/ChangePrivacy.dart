@@ -269,6 +269,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 10),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
