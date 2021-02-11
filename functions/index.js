@@ -115,8 +115,9 @@ exports.onCreateActivityFeedItem = functions.firestore
       // 2) check if they have a notification token
       const androidNotificationToken = doc.data().androidNotificationToken;
       const createdActivityFeedItem = snapshot.data();
+      const pushSettings = doc.data().pushSettings.going;
       if (androidNotificationToken) {
-        if (doc.data().pushSettings["going"] == true || createdActivityFeedItem.type != "going") {
+        if (pushSettings == true || createdActivityFeedItem.type != "going") {
           sendNotification(androidNotificationToken, createdActivityFeedItem);
         }
       } else {
@@ -139,6 +140,10 @@ exports.onCreateActivityFeedItem = functions.firestore
             title = `${activityFeedItem.username}`;
             body = `invited you to ${activityFeedItem.title}`;
             break;
+          case "sent":
+            title = `${activityFeedItem.username}`;
+            body = `sent you ${activityFeedItem.title}`;
+            break;
           case "going":
             title = `${activityFeedItem.title}`;
             body = `${activityFeedItem.username} is going`;
@@ -153,7 +158,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             break;
           case "comment":
             title = `${activityFeedItem.title}`;
-            body = `${activityFeedItem.username} commented: \"${activityFeedItem.groupName}\"`;
+            body = `${activityFeedItem.username} commented: "${activityFeedItem.groupName}"`;
             break;
           case "request":
             title = `${activityFeedItem.username}`;
@@ -280,6 +285,67 @@ exports.onCreateGroupFeedItem = functions.firestore
       }
     });
 
+exports.groupChat = functions.firestore
+    .document("{college}/data/friendGroups/{groupId}/chat/{activityFeedItem}")
+    .onCreate(async (snapshot, context) => {
+      console.log("Activity Feed Item Created", snapshot.data());
+
+      // 1) Get user connected to the feed
+      const groupId = context.params.groupId;
+      const college = context.params.college;
+
+      const groupRef = admin.firestore().doc(`${college}/data/friendGroups/${groupId}`);
+      const doc = await groupRef.get();
+      const groupName = doc.data().groupName;
+      let userId;
+
+      // 2) check if they have a notification token
+      const members = doc.data().members;
+      const createdActivityFeedItem = snapshot.data();
+      const senderId = createdActivityFeedItem.userId;
+      for (let i = 0; i < members.length; i++) {
+        const userRef = admin.firestore().doc(`${college}/data/users/${members[i]}`);
+        const userdoc = await userRef.get();
+        userId = userdoc.data().id;
+        console.log("sender id:", senderId);
+        console.log("user id: ", userId);
+        if (userdoc.data().androidNotificationToken && userdoc.data().pushSettings["suggestions"] == true && userId != senderId) {
+          sendNotification(userdoc.data().androidNotificationToken, createdActivityFeedItem, groupName);
+        } else {
+          console.log("No token for user, cannot send notification");
+        }
+      }
+      /**
+       * Adds two numbers together.
+       * @param {string} androidNotificationToken The first number.
+       * @param {string} activityFeedItem The second number.
+       * @param {string} groupName The second number.
+       * @return {void} The sum of the two numbers.
+       */
+      function sendNotification(androidNotificationToken, activityFeedItem, groupName) {
+        const body = `${activityFeedItem.displayName}: "${activityFeedItem.comment}"`;
+        const title = `${groupName}`;
+        // 4) Create message for push notification
+        const message = {
+          notification: {title, body},
+          token: androidNotificationToken,
+          data: {recipient: userId},
+        };
+
+        // 5) Send message with admin.messaging()
+        admin
+            .messaging()
+            .send(message)
+            .then((response) => {
+              // Response is a message ID string
+              console.log("Successfully sent message!", response);
+            })
+            .catch((error) => {
+              console.log("Error sending message", error);
+            });
+      }
+    });
+
 exports.resetScore = functions.pubsub.schedule("55 23 * * 5").timeZone("America/New_York")
     .onRun(async (context) => {
       const querySnapshot = admin
@@ -288,27 +354,27 @@ exports.resetScore = functions.pubsub.schedule("55 23 * * 5").timeZone("America/
           .then((snapshot) => {
             snapshot.docs.forEach(async (doc) => {
               const data = doc.data();
-              let prize;
-              let winner;
-              let idx = 0;
-              admin.firestore().collection("notreDame").doc("data").collection("users").orderBy("score").get().then((snap) => {
-                if (idx == 0) {
-                  winner = snap.data().winner;
-                  console.log(winner);
-                }
-                idx += 1;
-              });
-              admin.firestore().collection("notreDame").doc("data").collection("leaderboard").doc("log").get().then((snap) => {
-                prize = snap.data().prize;
-                console.log(prize);
-              });
-              admin.firestore().collection("notreDame").doc("data").collection("leaderboard").doc("log").set({
-                winner: winner,
-                prize: prize,
-              }, {merge: true});
+              // let prize;
+              // let winner;
+              // let idx = 0;
               admin.firestore().collection("notreDame").doc("data").collection("users").doc(`${data.id}`).set({
                 score: 0,
               }, {merge: true});
+              // admin.firestore().collection("notreDame").doc("data").collection("users").orderBy("score").get().then((snap) => {
+              //   if (idx == 0) {
+              //     winner = snap.data().winner;
+              //     console.log(winner);
+              //   }
+              //   idx += 1;
+              // });
+              // admin.firestore().collection("notreDame").doc("data").collection("leaderboard").doc("log").get().then((snap) => {
+              //   prize = snap.data().prize;
+              //   console.log(prize);
+              // });
+              // admin.firestore().collection("notreDame").doc("data").collection("leaderboard").doc("log").set({
+              //   winner: winner,
+              //   prize: prize,
+              // }, {merge: true});
             });
             console.log(querySnapshot);
           });
