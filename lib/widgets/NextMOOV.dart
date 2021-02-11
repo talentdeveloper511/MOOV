@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
@@ -16,17 +18,24 @@ import 'package:intl/intl.dart';
 
 class NextMOOV extends StatefulWidget {
   String selected;
+  String suggestorId;
+  String groupId;
+  int unix;
 
-  NextMOOV(this.selected);
+  NextMOOV(this.selected, this.suggestorId, this.groupId, this.unix);
 
   @override
-  _NextMOOVState createState() => _NextMOOVState(this.selected);
+  _NextMOOVState createState() =>
+      _NextMOOVState(this.selected, this.suggestorId, this.groupId, this.unix);
 }
 
 class _NextMOOVState extends State<NextMOOV> {
   String selected;
+  String suggestorId;
+  String groupId;
+  int unix;
 
-  _NextMOOVState(this.selected);
+  _NextMOOVState(this.selected, this.suggestorId, this.groupId, this.unix);
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
@@ -167,10 +176,52 @@ class _NextMOOVState extends State<NextMOOV> {
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                left: 20,
-                                child: Text("JI"),
-                              ),
+                              suggestorId == currentUser.id
+                                  ? Positioned(
+                                      left: 20,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          groupsRef
+                                              .doc(groupId)
+                                              .collection("suggestedMOOVs")
+                                              .doc(unix.toString() +
+                                                  " from " +
+                                                  currentUser.id)
+                                              .get()
+                                              .then((doc) {
+                                            if (doc.exists) {
+                                              Navigator.pop(context);
+                                            }
+                                            Timer(Duration(seconds: 1), () {
+                                              doc.reference.delete();
+                                            });
+                                          });
+                                        },
+                                        child: Container(
+                                            height: 30,
+                                            padding: EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Colors.red[400],
+                                                    Colors.red[300]
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10.0)),
+                                            child: Text(
+                                              "Unsuggest",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            )),
+                                      ),
+                                    )
+                                  : Text(""),
                               isToday == false
                                   ? Positioned(
                                       top: 0,
