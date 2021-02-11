@@ -259,7 +259,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Notification Settings",
+                        "Push Notification Settings",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,

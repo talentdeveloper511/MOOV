@@ -168,6 +168,10 @@ exports.onCreateActivityFeedItem = functions.firestore
             title = `${activityFeedItem.username} `;
             body = `just posted ${activityFeedItem.title}`;
             break;
+          case "deleted":
+            title = `${activityFeedItem.title} `;
+            body = `has been canceled`;
+            break;
           case "accept":
             title = `${activityFeedItem.username} `;
             body = "accepted your friend request";

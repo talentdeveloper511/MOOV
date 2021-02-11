@@ -42,20 +42,19 @@ class Database {
     }
   }
 
-  FutureOr canceledNotification(postId, title, going) {
-    if (going.length > 0) {
-      for (int i = 0; i < going.length; i++) {
-        print(going[i]);
+  canceledNotification(String postId, String title, List<dynamic> going) {
+    for (var i = 0; i < going.length; i++) {
+      if (going[i] != currentUser.id) {
         notificationFeedRef
             .doc(going[i])
-            .collection('feedItems')
+            .collection("feedItems")
             .doc('canceled ' + postId)
             .set({
-          "type": "canceled",
-          "postId": postId,
-          "title": title,
-          "username": currentUser.displayName,
+          "type": "deleted",
+          "username": title,
           "userId": currentUser.id,
+          "userEmail": currentUser.email,
+          "postId": postId,
           "userProfilePic": currentUser.photoUrl,
           "timestamp": DateTime.now()
         });
@@ -114,6 +113,10 @@ class Database {
       transaction.update(ref2, {'score': FieldValue.increment(200)});
       transaction.update(ref, {'postId': ref.id});
     });
+    if (privacy == 'Public') {
+      friendCreatedNotification(
+          postId, title, imageUrl, currentUser.friendArray);
+    }
   }
 
   Future<void> addNotGoing(userId, postId, List<dynamic> goingList) async {
@@ -468,6 +471,27 @@ class Database {
       "timestamp": DateTime.now(),
       "message": message,
     });
+  }
+
+  friendCreatedNotification(String postId, String title, String previewImg,
+      List<dynamic> friendArray) {
+    for (var i = 0; i < friendArray.length; i++) {
+      notificationFeedRef
+          .doc(friendArray[i])
+          .collection("feedItems")
+          .doc('created ' + postId)
+          .set({
+        "type": "created",
+        "username": currentUser.displayName,
+        "userId": currentUser.id,
+        "userEmail": currentUser.email,
+        "previewImg": previewImg,
+        "postId": postId,
+        "title": title,
+        "userProfilePic": currentUser.photoUrl,
+        "timestamp": DateTime.now()
+      });
+    }
   }
 
   removeGoingFromNotificationFeed(String ownerId, String moovId) {
