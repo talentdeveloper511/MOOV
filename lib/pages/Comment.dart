@@ -80,9 +80,9 @@ class PostCommentsState extends State<PostComments> {
             currentUser.id,
         "millis": DateTime.now().millisecondsSinceEpoch.toString()
       });
-      // if (currentUser.id != postOwnerId) {
-      Database().commentNotification(postOwnerId, commentController.text);
-      // }
+      if (currentUser.id != postOwnerId) {
+        Database().commentNotification(postOwnerId, commentController.text);
+      }
       commentController.clear();
     }
   }
