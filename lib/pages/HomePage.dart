@@ -45,8 +45,7 @@ class _HomePageState extends State<HomePage>
   GlobalKey _friendFinderKey = GlobalKey();
   GlobalKey _friendGroupsKey = GlobalKey();
   GlobalKey _motdKey = GlobalKey();
-    GlobalKey _leaderboardKey = GlobalKey();
-
+  GlobalKey _leaderboardKey = GlobalKey();
 
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
@@ -101,8 +100,13 @@ class _HomePageState extends State<HomePage>
 
     displayShowCase().then((status) {
       if (status) {
-        ShowCaseWidget.of(context).startShowCase(
-            [_categoryButtonKey, _friendFinderKey, _friendGroupsKey, _motdKey, _leaderboardKey]);
+        ShowCaseWidget.of(context).startShowCase([
+          _categoryButtonKey,
+          _friendFinderKey,
+          _friendGroupsKey,
+          _motdKey,
+          _leaderboardKey
+        ]);
       }
     });
 
@@ -165,8 +169,6 @@ class _HomePageState extends State<HomePage>
                           fontSize: 20),
                       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                       contentPadding: EdgeInsets.all(10),
-                      shapeBorder: ContinuousRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
                       child: Container(
                         child: MOTD(),
                       ),
@@ -207,8 +209,8 @@ class _HomePageState extends State<HomePage>
                             descTextStyle:
                                 TextStyle(fontStyle: FontStyle.italic),
                             contentPadding: EdgeInsets.all(10),
-                            shapeBorder: ContinuousRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
+                            // shapeBorder: ContinuousRectangleBorder(
+                            //     borderRadius: BorderRadius.circular(15)),
                             child: Card(
                               elevation: 10,
                               color: Colors.pink[50],
@@ -273,8 +275,8 @@ class _HomePageState extends State<HomePage>
                               fontSize: 20),
                           descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                           contentPadding: EdgeInsets.all(10),
-                          shapeBorder: ContinuousRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
+                          // shapeBorder: ContinuousRectangleBorder(
+                          //     borderRadius: BorderRadius.circular(15)),
                           child: Card(
                             elevation: 10,
                             color: Colors.purple[50],
@@ -335,8 +337,8 @@ class _HomePageState extends State<HomePage>
                       fontSize: 20),
                   descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                   contentPadding: EdgeInsets.all(10),
-                  shapeBorder: ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
+                  // shapeBorder: ContinuousRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(15)),
                   child: Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

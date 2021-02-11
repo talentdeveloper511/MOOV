@@ -137,7 +137,7 @@ class _PostDetailState extends State<PostDetail>
                        usersRef.doc(currentUser.id).set({
                                 "privacySettings": {"incognito": false}
                               }, SetOptions(merge: true)):usersRef.doc(currentUser.id).set({
-                                "privacySettings": {"incognito": true}
+                                "privacySettings": {"incognito": true, "friendsOnly": false}
                               }, SetOptions(merge: true));
                           
                       },
@@ -346,14 +346,14 @@ class _NonImageContents extends StatelessWidget {
             onTap: () {
               showComments(context,
                   postId: moovId,
-                  ownerId: currentUser.id,
+                  ownerId: course['userId'],
                   mediaUrl: currentUser.photoUrl);
             },
             child: GestureDetector(
               onTap: () {
                 showComments(context,
                     postId: moovId,
-                    ownerId: currentUser.id,
+                    ownerId: course['userId'],
                     mediaUrl: currentUser.photoUrl);
               },
               child: StreamBuilder(
@@ -404,7 +404,7 @@ class _NonImageContents extends StatelessWidget {
                                           " \"" +
                                               snapshot.data.docs[0]['comment'] +
                                               "\"",
-                                          maxLines: 2,
+                                          maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           // textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -442,10 +442,7 @@ class _NonImageContents extends StatelessWidget {
               color: Colors.grey[700],
             ),
           ),
-          ShowCaseWidget(
-              builder: Builder(builder: (context) => Buttons(moovId)),
-              autoPlay: false,
-              autoPlayLockEnable: true),
+          Buttons(moovId),
           Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: Container(
@@ -482,7 +479,7 @@ class _NonImageContents extends StatelessWidget {
                   onTap: () {
                     showComments(context,
                         postId: moovId,
-                        ownerId: currentUser.id,
+                        ownerId: course['userId'],
                         mediaUrl: currentUser.photoUrl);
                   },
                   child: Column(
@@ -931,23 +928,24 @@ class Buttons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SharedPreferences preferences;
+    // SharedPreferences preferences;
 
-    displayShowCase() async {
-      preferences = await SharedPreferences.getInstance();
-      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase4");
-      if (showCaseVisibilityStatus == null) {
-        preferences.setBool("displayShowCase4", false);
-        return true;
-      }
-      return false;
-    }
+    // displayShowCase() async {
+    //   preferences = await SharedPreferences.getInstance();
+    //   bool showCaseVisibilityStatus = preferences.getBool("displayShowCase4");
+    //   if (showCaseVisibilityStatus == null) {
+    //     preferences.setBool("displayShowCase4", false);
+    //     return true;
+    //   }
+    //   return false;
+    // }
 
-    displayShowCase().then((status) {
-      if (status) {
-        ShowCaseWidget.of(context).startShowCase([_buttonsKey]);
-      }
-    });
+    // displayShowCase().then((status) {
+    //   if (status) {
+        
+    //     ShowCaseWidget.of(context).startShowCase([_buttonsKey]);
+    //   }
+    // });
     return StreamBuilder(
         stream: postsRef.doc(moovId).snapshots(),
         builder: (context, snapshot) {
@@ -996,211 +994,197 @@ class Buttons extends StatelessWidget {
               }
             }
 
-            return Showcase(
-              key: _buttonsKey,
-              overlayColor: TextThemes.ndBlue,
-              title: "NO MORE GUESSING",
-              description: "\nIs she coming? Now you know.",
-              titleTextStyle: TextStyle(
-                  color: TextThemes.ndBlue,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
-              descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-              contentPadding: EdgeInsets.all(10),
-              shapeBorder: ContinuousRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    RaisedButton(
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        side: BorderSide(color: Colors.black)),
+                    onPressed: () {
+                      if (statuses != null && status != 1) {
+                        Database()
+                            .addNotGoing(currentUser.id, moovId, goingList);
+                        status = 1;
+                        print(status);
+                      } else if (statuses != null && status == 1) {
+                        Database().removeNotGoing(currentUser.id, moovId);
+                        status = 0;
+                      }
+                    },
+                    //   if (likedArray != null) {
+                    //     likeCount = likedArray.length;
+                    //     for (int i = 0; i < likeCount; i++) {
+                    //       var id = likedArray[i]["uid"];
+                    //       uidArray.add(id);
+                    //     }
+                    //   }
+
+                    //   if (uidArray != null && uidArray.contains(currentUser.id)) {
+                    //     Database().removeGoing(
+                    //         course["userId"],
+                    //         course["image"],
+                    //         currentUser.id,
+                    //         course.documentID,
+                    //         currentUser.displayName,
+                    //         currentUser.photoUrl,
+                    //         course["startDate"],
+                    //         course["title"],
+                    //         course["description"],
+                    //         course["address"],
+                    //         course["profilePic"],
+                    //         course["userName"],
+                    //         course["userEmail"],
+                    //         likedArray);
+                    //   } else {
+                    //     Database().addGoing(
+                    //         course["userId"],
+                    //         course["image"],
+                    //         currentUser.id,
+                    //         course.documentID,
+                    //         currentUser.displayName,
+                    //         currentUser.photoUrl,
+                    //         course["startDate"],
+                    //         course["title"],
+                    //         course["description"],
+                    //         course["address"],
+                    //         course["profilePic"],
+                    //         course["userName"],
+                    //         course["userEmail"],
+                    //         likedArray);
+                    //   }
+                    // },
+                    color: (status == 1) ? Colors.red : Colors.white,
+                    padding: EdgeInsets.all(5.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
+                      child: (status == 1)
+                          ? Column(
+                              children: [
+                                Text(
+                                  'Not going',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 3.0, top: 3.0),
+                                  child: Icon(Icons.directions_run,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Text('Not going'),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 3.0, top: 3.0),
+                                  child: Icon(Icons.directions_walk,
+                                      color: Colors.red),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
+                    child: RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                        if (statuses != null && status != 1) {
-                          Database()
-                              .addNotGoing(currentUser.id, moovId, goingList);
-                          status = 1;
+                        if (statuses != null && status != 2) {
+                          Database().addUndecided(
+                              currentUser.id, moovId, goingList);
+                          status = 2;
                           print(status);
-                        } else if (statuses != null && status == 1) {
-                          Database().removeNotGoing(currentUser.id, moovId);
+                        } else if (statuses != null && status == 2) {
+                          Database().removeUndecided(currentUser.id, moovId);
                           status = 0;
                         }
                       },
-                      //   if (likedArray != null) {
-                      //     likeCount = likedArray.length;
-                      //     for (int i = 0; i < likeCount; i++) {
-                      //       var id = likedArray[i]["uid"];
-                      //       uidArray.add(id);
-                      //     }
-                      //   }
-
-                      //   if (uidArray != null && uidArray.contains(currentUser.id)) {
-                      //     Database().removeGoing(
-                      //         course["userId"],
-                      //         course["image"],
-                      //         currentUser.id,
-                      //         course.documentID,
-                      //         currentUser.displayName,
-                      //         currentUser.photoUrl,
-                      //         course["startDate"],
-                      //         course["title"],
-                      //         course["description"],
-                      //         course["address"],
-                      //         course["profilePic"],
-                      //         course["userName"],
-                      //         course["userEmail"],
-                      //         likedArray);
-                      //   } else {
-                      //     Database().addGoing(
-                      //         course["userId"],
-                      //         course["image"],
-                      //         currentUser.id,
-                      //         course.documentID,
-                      //         currentUser.displayName,
-                      //         currentUser.photoUrl,
-                      //         course["startDate"],
-                      //         course["title"],
-                      //         course["description"],
-                      //         course["address"],
-                      //         course["profilePic"],
-                      //         course["userName"],
-                      //         course["userEmail"],
-                      //         likedArray);
-                      //   }
-                      // },
-                      color: (status == 1) ? Colors.red : Colors.white,
+                      color:
+                          (status == 2) ? Colors.yellow[600] : Colors.white,
                       padding: EdgeInsets.all(5.0),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: (status == 1)
+                        padding: const EdgeInsets.only(left: 3.0, right: 3),
+                        child: (status == 2)
                             ? Column(
                                 children: [
-                                  Text(
-                                    'Not going',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 3.0, top: 3.0),
-                                    child: Icon(Icons.directions_run,
-                                        color: Colors.white),
-                                  ),
+                                  Text('Undecided',
+                                      style: TextStyle(color: Colors.white)),
+                                  Icon(Icons.accessibility,
+                                      color: Colors.white, size: 30),
                                 ],
                               )
                             : Column(
                                 children: [
-                                  Text('Not going'),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 3.0, top: 3.0),
-                                    child: Icon(Icons.directions_walk,
-                                        color: Colors.red),
-                                  ),
+                                  Text('Undecided'),
+                                  Icon(Icons.accessibility,
+                                      color: Colors.yellow[600], size: 30),
                                 ],
                               ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.black)),
-                        onPressed: () {
-                          if (statuses != null && status != 2) {
-                            Database().addUndecided(
-                                currentUser.id, moovId, goingList);
-                            status = 2;
-                            print(status);
-                          } else if (statuses != null && status == 2) {
-                            Database().removeUndecided(currentUser.id, moovId);
-                            status = 0;
-                          }
-                        },
-                        color:
-                            (status == 2) ? Colors.yellow[600] : Colors.white,
-                        padding: EdgeInsets.all(5.0),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 3.0, right: 3),
-                          child: (status == 2)
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(color: Colors.black)),
+                      onPressed: () {
+                        if (goingCount == maxOccupancy && status != 3) {
+                          showMax(context);
+                        }
+                        if (statuses != null &&
+                            status != 3 &&
+                            goingCount < maxOccupancy) {
+                          Database().addGoingGood(
+                              currentUser.id,
+                              course['userId'],
+                              moovId,
+                              course['title'],
+                              course['image'],
+                              course['push']);
+                          status = 3;
+                          print(status);
+                        } else if (statuses != null && status == 3) {
+                          Database().removeGoingGood(
+                              currentUser.id,
+                              course['userId'],
+                              moovId,
+                              course['title'],
+                              course['image']);
+                          status = 0;
+                        }
+                      },
+                      color: (status == 3) ? Colors.green : Colors.white,
+                      padding: EdgeInsets.all(5.0),
+                      child: Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: (status == 3)
                               ? Column(
                                   children: [
-                                    Text('Undecided',
-                                        style: TextStyle(color: Colors.white)),
-                                    Icon(Icons.accessibility,
+                                    Text('Going!',
+                                        style:
+                                            TextStyle(color: Colors.white)),
+                                    Icon(Icons.directions_run_outlined,
                                         color: Colors.white, size: 30),
                                   ],
                                 )
                               : Column(
                                   children: [
-                                    Text('Undecided'),
-                                    Icon(Icons.accessibility,
-                                        color: Colors.yellow[600], size: 30),
+                                    Text('Going'),
+                                    Icon(Icons.directions_run_outlined,
+                                        color: Colors.green[500], size: 30),
                                   ],
-                                ),
-                        ),
-                      ),
+                                )),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            side: BorderSide(color: Colors.black)),
-                        onPressed: () {
-                          if (goingCount == maxOccupancy && status != 3) {
-                            showMax(context);
-                          }
-                          if (statuses != null &&
-                              status != 3 &&
-                              goingCount < maxOccupancy) {
-                            Database().addGoingGood(
-                                currentUser.id,
-                                course['userId'],
-                                moovId,
-                                course['title'],
-                                course['image'],
-                                course['push']);
-                            status = 3;
-                            print(status);
-                          } else if (statuses != null && status == 3) {
-                            Database().removeGoingGood(
-                                currentUser.id,
-                                course['userId'],
-                                moovId,
-                                course['title'],
-                                course['image']);
-                            status = 0;
-                          }
-                        },
-                        color: (status == 3) ? Colors.green : Colors.white,
-                        padding: EdgeInsets.all(5.0),
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: (status == 3)
-                                ? Column(
-                                    children: [
-                                      Text('Going!',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      Icon(Icons.directions_run_outlined,
-                                          color: Colors.white, size: 30),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Text('Going'),
-                                      Icon(Icons.directions_run_outlined,
-                                          color: Colors.green[500], size: 30),
-                                    ],
-                                  )),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }

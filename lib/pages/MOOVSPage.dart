@@ -97,7 +97,7 @@ class _MOOVSPageState extends State<MOOVSPage>
           height: MediaQuery.of(context).size.height * 0.90,
           child: Column(children: <Widget>[
             new Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
@@ -129,8 +129,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                           fontSize: 20),
                       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                       contentPadding: EdgeInsets.all(10),
-                      shapeBorder: ContinuousRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
+                      
                       child: new FlatButton(
                         color: _currentIndex == 0
                             ? Colors.blue[100]
@@ -156,8 +155,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                           fontSize: 20),
                       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                       contentPadding: EdgeInsets.all(10),
-                      shapeBorder: ContinuousRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
+                      
                       child: new FlatButton(
                         color: _currentIndex == 1
                             ? Colors.blue[100]

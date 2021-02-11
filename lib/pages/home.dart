@@ -145,7 +145,7 @@ class _HomeState extends State<Home> {
                       blurRadius: 3.0)
                 ],
                 backgroundGradient:
-                    LinearGradient(colors: [Colors.white, Colors.green]),
+                    LinearGradient(colors: [TextThemes.ndBlue, TextThemes.ndBlue]),
                 icon: Icon(
                   Icons.directions_run,
                   color: Colors.green[700],
@@ -179,7 +179,7 @@ class _HomeState extends State<Home> {
                       blurRadius: 3.0)
                 ],
                 backgroundGradient:
-                    LinearGradient(colors: [Colors.white, Colors.green]),
+                    LinearGradient(colors: [TextThemes.ndBlue, TextThemes.ndBlue]),
                 icon: Icon(
                   Icons.directions_run,
                   color: Colors.green[700],
@@ -212,7 +212,7 @@ class _HomeState extends State<Home> {
                       blurRadius: 3.0)
                 ],
                 backgroundGradient:
-                    LinearGradient(colors: [Colors.white, Colors.green]),
+                    LinearGradient(colors: [TextThemes.ndBlue, TextThemes.ndBlue]),
                 icon: Icon(
                   Icons.directions_run,
                   color: Colors.green[700],

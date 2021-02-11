@@ -155,6 +155,7 @@ flutter:
     - lib/assets/gamesbutton1.png
     - lib/assets/otherbutton2.png
     - lib/assets/me.jpg
+    - lib/assets/incognitoCircle.png
     - lib/assets/incognito.png
     - lib/assets/friendfinder.png
     - lib/assets/alvin.png

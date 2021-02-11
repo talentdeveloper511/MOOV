@@ -46,8 +46,6 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                 
-
                     Navigator.pop(
                       context,
                       MaterialPageRoute(builder: (context) => HomePage()),
@@ -148,7 +146,7 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                         children: [
                           Text("Nobody can see my going status (incognito)",
                               style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600)),
+                                  fontSize: 13, fontWeight: FontWeight.w600)),
                           Switch(
                             value: incognito != true ? isSwitch2 : incognito,
                             onChanged: (val) {
@@ -159,6 +157,14 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                               usersRef.doc(currentUser.id).set({
                                 "privacySettings": {"incognito": val}
                               }, SetOptions(merge: true));
+                              if (incognito == true) {
+                                setState(() {
+                                  friendsSeeOnly = false;
+                                });
+                                usersRef.doc(currentUser.id).set({
+                                  "privacySettings": {"friendsOnly": false}
+                                }, SetOptions(merge: true));
+                              }
                             },
                             activeTrackColor: Colors.blueGrey[500],
                             activeColor: TextThemes.ndBlue,
@@ -169,7 +175,7 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                         children: [
                           Text("Show my dorm and class year on my profile",
                               style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600)),
+                                  fontSize: 13, fontWeight: FontWeight.w600)),
                           Switch(
                             value: showDorm != true ? isSwitch3 : showDorm,
                             onChanged: (val) {
@@ -190,7 +196,7 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                         children: [
                           Text("Friends can see my plans on Friend Finder",
                               style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600)),
+                                  fontSize: 13, fontWeight: FontWeight.w600)),
                           Switch(
                             value: friendFinderVisibility != true
                                 ? isSwitch4
@@ -266,7 +272,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                         children: [
                           Text("Going to your MOOV",
                               style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600)),
+                                  fontSize: 13, fontWeight: FontWeight.w600)),
                           Switch(
                             value: going != true ? isSwitch : going,
                             onChanged: (val) {
@@ -287,7 +293,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                         children: [
                           Text("One hour before MOOV starts",
                               style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600)),
+                                  fontSize: 13, fontWeight: FontWeight.w600)),
                           Switch(
                             value: hourBefore != true ? isSwitch2 : hourBefore,
                             onChanged: (val) {
@@ -308,7 +314,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                         children: [
                           Text("Friend Group suggestions",
                               style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600)),
+                                  fontSize: 13, fontWeight: FontWeight.w600)),
                           Switch(
                             value:
                                 suggestions != true ? isSwitch3 : suggestions,

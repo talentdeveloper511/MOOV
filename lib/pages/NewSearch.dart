@@ -127,25 +127,25 @@ class _SearchBarState extends State<SearchBar>
 
   @override
   Widget build(BuildContext context) {
-    SharedPreferences preferences;
+    // SharedPreferences preferences;
 
-    displayShowCase2() async {
-      preferences = await SharedPreferences.getInstance();
-      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase2");
-      if (showCaseVisibilityStatus == null) {
-        preferences.setBool("displayShowCase2", false);
-        return true;
-      }
-      return false;
-    }
+    // displayShowCase2() async {
+    //   preferences = await SharedPreferences.getInstance();
+    //   bool showCaseVisibilityStatus = preferences.getBool("displayShowCase2");
+    //   if (showCaseVisibilityStatus == null) {
+    //     preferences.setBool("displayShowCase2", false);
+    //     return true;
+    //   }
+    //   return false;
+    // }
 
-    displayShowCase2().then((status) {
-      if (status) {
-        Timer(Duration(seconds: 1), () {
-          ShowCaseWidget.of(context).startShowCase([_searchKey]);
-        });
-      }
-    });
+    // displayShowCase2().then((status) {
+    //   if (status) {
+    //     Timer(Duration(seconds: 1), () {
+    //       ShowCaseWidget.of(context).startShowCase([_searchKey]);
+    //     });
+    //   }
+    // });
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
@@ -164,10 +164,9 @@ class _SearchBarState extends State<SearchBar>
                           fontSize: 20),
                       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                       contentPadding: EdgeInsets.all(10),
-                      shapeBorder: ContinuousRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
                       key: _searchKey,
                       child: TextField(
+                        
                           style: TextStyle(fontSize: 20),
                           controller: searchController,
                           onChanged: (val) {
