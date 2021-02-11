@@ -234,6 +234,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
   bool isSwitch = false;
   bool isSwitch2 = false;
   bool isSwitch3 = false;
+  bool friendPosts;
   bool going;
   bool hourBefore;
   bool suggestions;
@@ -247,6 +248,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
 
           if (!snapshot.hasData) return CircularProgressIndicator();
 
+          friendPosts = snapshot.data['pushSettings']['friendPosts'];
           going = snapshot.data['pushSettings']['going'];
           hourBefore = snapshot.data['pushSettings']['hourBefore'];
           suggestions = snapshot.data['pushSettings']['suggestions'];
@@ -267,6 +269,27 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                         ),
                       ),
                     ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("When a friend posts a MOOV",
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w600)),
+                          Switch(
+                            value: friendPosts != true ? isSwitch : friendPosts,
+                            onChanged: (val) {
+                              setState(() {
+                                isSwitch = val;
+                                friendPosts = val;
+                              });
+                              usersRef.doc(currentUser.id).set({
+                                "pushSettings": {"friendPosts": val}
+                              }, SetOptions(merge: true));
+                            },
+                            activeTrackColor: Colors.blueGrey[500],
+                            activeColor: TextThemes.ndBlue,
+                          ),
+                        ]),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
