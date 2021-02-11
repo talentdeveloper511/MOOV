@@ -78,7 +78,7 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_drop_up_outlined,
+            icon: Icon(Icons.arrow_drop_down_outlined,
                 color: Colors.white, size: 35),
             onPressed: () {
               Navigator.pop(context);

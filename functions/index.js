@@ -154,7 +154,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
-            body = `${activityFeedItem.username} suggested the MOOV, ${activityFeedItem.title}`;
+            body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
             break;
           case "comment":
             title = `${activityFeedItem.title}`;
@@ -165,8 +165,12 @@ exports.onCreateActivityFeedItem = functions.firestore
             body = "sent you a friend request";
             break;
           case "created":
+            title = `${activityFeedItem.username}`;
+            body = `just posted ${activityFeedItem.title}`;
+            break;
+          case "deleted":
             title = `${activityFeedItem.username} `;
-            body = `just posted the MOOV, ${activityFeedItem.title}`;
+            body = "has been canceled";
             break;
           case "accept":
             title = `${activityFeedItem.username} `;
