@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
@@ -16,6 +18,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   User user;
@@ -26,8 +31,33 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  GlobalKey _settingsKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
+    bool bigHeight = true;
+    SharedPreferences preferences;
+
+    displayShowCase4() async {
+      preferences = await SharedPreferences.getInstance();
+      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase4");
+      if (showCaseVisibilityStatus == null) {
+        preferences.setBool("displayShowCase4", false);
+        bigHeight = false;
+        return true;
+      }
+      return false;
+    }
+
+
+    displayShowCase4().then((status) {
+      if (status) {
+        Timer(Duration(seconds: 1), () {
+          ShowCaseWidget.of(context).startShowCase([_settingsKey]);
+        });
+      }
+    });
+
     var strUserPic = currentUser.photoUrl;
     var userYear = currentUser.year;
     var userDorm = currentUser.dorm;
@@ -145,12 +175,24 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: SizedBox(
-                            height: 18,
+                            height: bigHeight ? 24 : 18,
                             child: GestureDetector(
                                 onTap: () => Navigator.of(context).push(
                                     MaterialPageRoute(
                                         builder: (context) => SettingsPage())),
-                                child: Icon(Icons.settings)),
+                                child: Showcase(
+                                    key: _settingsKey,
+                                    title: "MOOV OFF THE GRID",
+                                    description:
+                                        "\nHere's where you can completely \ncustomize your privacy settings",
+                                    titleTextStyle: TextStyle(
+                                        color: TextThemes.ndBlue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                    descTextStyle:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                    contentPadding: EdgeInsets.all(10),
+                                    child: Icon(Icons.settings))),
                           ),
                         ),
                       ),

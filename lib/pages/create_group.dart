@@ -57,10 +57,13 @@ class _GroupFormState extends State<GroupForm> {
       groupNames.add(result.docs[i].data()['groupName']);
     }
     if (groupNames.contains(groupName))
-      return true;
+        {  nameExists = true;
+
+      return true;}
     else
-      // return false;
-      print("No, this name does not exist, we're good to go.");
+   
+    // return false;
+    print("No, this name does not exist, we're good to go.");
   }
 
   Future handleTakePhoto() async {
@@ -200,6 +203,7 @@ class _GroupFormState extends State<GroupForm> {
   bool _autoValidate = false;
   int id = 0;
   bool noImage = false;
+  bool nameExists = false;
 
   void refreshData() {
     id++;
@@ -543,13 +547,16 @@ class _GroupFormState extends State<GroupForm> {
     // The pattern of the email didn't match the regex above.
   }
 
-  void _validateInputs() {
+   _validateInputs() {
+    
     if (_image == null) {
       setState(() {
         noImage = true;
       });
     }
-    if (_formKey.currentState.validate() && _image != null) {
+    if (_formKey.currentState.validate() &&
+        _image != null &&
+        nameExists == false) {
       setState(() {
         isUploading = true;
       });
@@ -588,7 +595,7 @@ class _GroupFormState extends State<GroupForm> {
     }
     Database().betaActivityTracker(
         currentUser.displayName, Timestamp.now(), "created Friend Group");
-        
+
     setState(() {
       isUploading = false;
     });

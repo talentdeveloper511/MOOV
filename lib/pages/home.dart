@@ -561,7 +561,10 @@ class _HomeState extends State<Home> {
               builder: Builder(builder: (context) => MOOVSPage()),
               autoPlay: false,
               autoPlayLockEnable: true),
-          ProfilePage()
+          ShowCaseWidget(
+              builder: Builder(builder: (context) => ProfilePage()),
+              autoPlay: false,
+              autoPlayLockEnable: true),
         ],
         controller: pageController,
         onPageChanged: onPageChanged,
