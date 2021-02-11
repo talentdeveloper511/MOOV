@@ -441,43 +441,131 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                 ),
                 Positioned(
                   bottom: 7.5,
-                  child: GestureDetector(
-                    onTap: () {
-                      Database().suggestMOOV(
-                          currentUser.id,
-                          gid,
-                          moov,
-                          unix,
-                          currentUser.displayName,
-                          members,
-                          title,
-                          image,
-                          groupName);
-                      Database().betaActivityTracker(
-                          currentUser.displayName, Timestamp.now(), "suggest");
+                  child: StreamBuilder(
+                      stream: groupsRef
+                          .doc(gid)
+                          .collection("suggestedMOOVs")
+                          .snapshots(),
+                      builder: (context, snapshot4) {
+                        if (!snapshot4.hasData || snapshot4.data == null || snapshot4.data.docs.length == 0) {
+                          return  GestureDetector(
+                            onTap: () {
+                                    Database().suggestMOOV(
+                                        currentUser.id,
+                                        gid,
+                                        moov,
+                                        unix,
+                                        currentUser.displayName,
+                                        members,
+                                        title,
+                                        image,
+                                        groupName);
+                                    Database().betaActivityTracker(
+                                        currentUser.displayName,
+                                        Timestamp.now(),
+                                        "suggest");
 
-                      Navigator.pop(context, moov);
-                    },
-                    child: Container(
-                      height: 30,
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.pink[400], Colors.purple[300]],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 2.0, right: 2.0),
-                        child: Text(
-                          "Suggest",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ),
-                    ),
-                  ),
+                                    Navigator.pop(context, moov);
+                                  },
+                            child: Container(
+                              height: 30,
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  gradient:LinearGradient(
+                                          colors: [
+                                            Colors.pink[400],
+                                            Colors.purple[300]
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 2.0, right: 2.0),
+                                child: Text(
+                                        "Suggest",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        for (int i = 0; i < snapshot4.data.docs.length; i++) {
+                          String suggestedAlready =
+                              snapshot4.data.docs[i]["nextMOOV"];
+                          bool isSuggested = false;
+                          if (suggestedAlready == moov) {
+                            isSuggested = true;
+                          }
+
+                          return GestureDetector(
+                            onTap: isSuggested
+                                ? null
+                                : () {
+                                    Database().suggestMOOV(
+                                        currentUser.id,
+                                        gid,
+                                        moov,
+                                        unix,
+                                        currentUser.displayName,
+                                        members,
+                                        title,
+                                        image,
+                                        groupName);
+                                    Database().betaActivityTracker(
+                                        currentUser.displayName,
+                                        Timestamp.now(),
+                                        "suggest");
+
+                                    Navigator.pop(context, moov);
+                                  },
+                            child: Container(
+                              height: 30,
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  gradient: isSuggested
+                                      ? LinearGradient(
+                                          colors: [
+                                            Colors.red[400],
+                                            Colors.red[300]
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        )
+                                      : LinearGradient(
+                                          colors: [
+                                            Colors.pink[400],
+                                            Colors.purple[300]
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 2.0, right: 2.0),
+                                child: isSuggested
+                                    ? Text(
+                                        "Suggested Already",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      )
+                                    : Text(
+                                        "Suggest",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                              ),
+                            ),
+                          );
+                        }
+                      }),
                 ),
               ]),
             ),

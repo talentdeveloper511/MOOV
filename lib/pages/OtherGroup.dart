@@ -632,13 +632,22 @@ class _SuggestionsState extends State<Suggestions> {
       itemBuilder: (BuildContext context, int pos) {
         DocumentSnapshot course = snapshot4.data.docs[pos];
         String nextMOOV = course['nextMOOV'];
+        String suggestorId = course['suggestorId'];
+        int unix = course['unix'];
 
         return (nextMOOV != null && nextMOOV.isNotEmpty)
             ? Container(
                 margin: EdgeInsets.all(5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[NextMOOV(nextMOOV)],
+                  children: <Widget>[
+                    NextMOOV(
+                      nextMOOV,
+                      suggestorId,
+                      groupId,
+                      unix
+                    )
+                  ],
                 ),
               )
             : Container();

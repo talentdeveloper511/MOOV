@@ -500,12 +500,13 @@ class _GroupDetailState extends State<GroupDetail> {
                                               style: TextStyle(
                                                   color: TextThemes.ndBlue,
                                                   fontSize: 20)),
-                                            SizedBox(height: 10),
+                                          SizedBox(height: 10),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                border: Border.all(color: TextThemes.ndBlue),
+                                                border: Border.all(
+                                                    color: TextThemes.ndBlue),
                                                 borderRadius:
                                                     BorderRadius.circular(30.0),
                                               ),
@@ -913,13 +914,17 @@ class _SuggestionsState extends State<Suggestions> {
       itemBuilder: (BuildContext context, int pos) {
         DocumentSnapshot course = snapshot4.data.docs[pos];
         String nextMOOV = course['nextMOOV'];
+        String suggestorId = course['suggestorId'];
+        int unix = course['unix'];
 
         return (nextMOOV != null && nextMOOV.isNotEmpty)
             ? Container(
                 margin: EdgeInsets.all(5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[NextMOOV(nextMOOV)],
+                  children: <Widget>[
+                    NextMOOV(nextMOOV, suggestorId, groupId, unix)
+                  ],
                 ),
               )
             : Container();
