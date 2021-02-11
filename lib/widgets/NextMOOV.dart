@@ -167,6 +167,10 @@ class _NextMOOVState extends State<NextMOOV> {
                                   ),
                                 ),
                               ),
+                              Positioned(
+                                left: 20,
+                                child: Text("JI"),
+                              ),
                               isToday == false
                                   ? Positioned(
                                       top: 0,
