@@ -171,7 +171,7 @@ class _HomeState extends State<Home> {
           final String body = message['notification']['title'] +
               ' ' +
               message['notification']['body'];
-
+          FlutterAppBadger.updateBadgeCount(1);
           if (recipientId == currentUser.id) {
             print('Notification shown');
             Flushbar snackbar = Flushbar(
