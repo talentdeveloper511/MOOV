@@ -453,7 +453,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                     ),
                                     Suggestions(gid),
                                     Padding(
-                                      padding: const EdgeInsets.all(30),
+                                      padding: const EdgeInsets.all(20),
                                       child: RaisedButton(
                                         onPressed: () {
                                           Navigator.push(
@@ -478,7 +478,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                   color: TextThemes.ndGold),
                                               Padding(
                                                 padding:
-                                                    const EdgeInsets.all(10.0),
+                                                    const EdgeInsets.all(8.0),
                                                 child: Text('Suggest a MOOV',
                                                     style: TextStyle(
                                                         color: Colors.white,
@@ -493,25 +493,27 @@ class _GroupDetailState extends State<GroupDetail> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(0.0),
+                                      padding: const EdgeInsets.only(top: 0.0),
                                       child: Column(
                                         children: [
                                           Text("Talk about it",
                                               style: TextStyle(
                                                   color: TextThemes.ndBlue,
-                                                  fontSize: 20)),
-                                            SizedBox(height: 10),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
+                                          SizedBox(height: 10),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                border: Border.all(color: TextThemes.ndBlue),
+                                                border: Border.all(
+                                                    color: TextThemes.ndBlue),
                                                 borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                                    BorderRadius.circular(10.0),
                                               ),
                                               child: Padding(
                                                 padding:
-                                                    const EdgeInsets.all(8.0),
+                                                    const EdgeInsets.all(4.0),
                                                 child: Chat(
                                                   gid: gid,
                                                   groupPic: groupPic,

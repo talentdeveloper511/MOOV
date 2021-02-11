@@ -473,6 +473,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'suggested ';
     } else if (type == 'sent') {
       activityItemText = 'sent you ';
+    } else if (type == 'created') {
+      activityItemText = 'just posted ';
     } else if (type == 'comment') {
       activityItemText = 'commented: ';
     } else if (type == 'deleted') {
