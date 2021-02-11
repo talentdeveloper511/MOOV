@@ -144,8 +144,8 @@ class _HomeState extends State<Home> {
                       offset: Offset(0.0, 2.0),
                       blurRadius: 3.0)
                 ],
-                backgroundGradient:
-                    LinearGradient(colors: [TextThemes.ndBlue, TextThemes.ndBlue]),
+                backgroundGradient: LinearGradient(
+                    colors: [TextThemes.ndGold, TextThemes.ndGold]),
                 icon: Icon(
                   Icons.directions_run,
                   color: Colors.green[700],
@@ -153,7 +153,11 @@ class _HomeState extends State<Home> {
                 duration: Duration(seconds: 4),
                 flushbarPosition: FlushbarPosition.TOP,
                 backgroundColor: Colors.green,
-                messageText: Text(body, overflow: TextOverflow.ellipsis));
+                messageText: Text(
+                  body,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white),
+                ));
             // _scaffoldKey.currentState.showSnackBar(snackbar);
             snackbar.show(context);
             // Get.snackbar("Message", body);
@@ -178,8 +182,8 @@ class _HomeState extends State<Home> {
                       offset: Offset(0.0, 2.0),
                       blurRadius: 3.0)
                 ],
-                backgroundGradient:
-                    LinearGradient(colors: [TextThemes.ndBlue, TextThemes.ndBlue]),
+                backgroundGradient: LinearGradient(
+                    colors: [TextThemes.ndGold, TextThemes.ndGold]),
                 icon: Icon(
                   Icons.directions_run,
                   color: Colors.green[700],
@@ -187,7 +191,9 @@ class _HomeState extends State<Home> {
                 duration: Duration(seconds: 4),
                 flushbarPosition: FlushbarPosition.TOP,
                 backgroundColor: Colors.green,
-                messageText: Text(body, overflow: TextOverflow.ellipsis));
+                messageText: Text(body,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white)));
             // _scaffoldKey.currentState.showSnackBar(snackbar);
             snackbar.show(context);
             // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
@@ -195,7 +201,7 @@ class _HomeState extends State<Home> {
           print('Notification not shown :(');
         },
         onMessage: (Map<String, dynamic> message) async {
-          print('message: $message');
+          print('message1: $message');
           final String recipientId = message['recipient'];
           final String body = message['notification']['title'] +
               ' ' +
@@ -211,8 +217,8 @@ class _HomeState extends State<Home> {
                       offset: Offset(0.0, 2.0),
                       blurRadius: 3.0)
                 ],
-                backgroundGradient:
-                    LinearGradient(colors: [TextThemes.ndBlue, TextThemes.ndBlue]),
+                backgroundGradient: LinearGradient(
+                    colors: [TextThemes.ndGold, TextThemes.ndGold]),
                 icon: Icon(
                   Icons.directions_run,
                   color: Colors.green[700],
@@ -220,7 +226,9 @@ class _HomeState extends State<Home> {
                 duration: Duration(seconds: 4),
                 flushbarPosition: FlushbarPosition.TOP,
                 backgroundColor: Colors.green,
-                messageText: Text(body, overflow: TextOverflow.ellipsis));
+                messageText: Text(body,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white)));
             // _scaffoldKey.currentState.showSnackBar(snackbar);
             snackbar.show(context);
           }

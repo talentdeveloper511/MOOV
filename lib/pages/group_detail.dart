@@ -500,9 +500,24 @@ class _GroupDetailState extends State<GroupDetail> {
                                               style: TextStyle(
                                                   color: TextThemes.ndBlue,
                                                   fontSize: 20)),
-                                          Chat(
-                                            gid: gid,
-                                            groupPic: groupPic,
+                                            SizedBox(height: 10),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: TextThemes.ndBlue),
+                                                borderRadius:
+                                                    BorderRadius.circular(30.0),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Chat(
+                                                  gid: gid,
+                                                  groupPic: groupPic,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),

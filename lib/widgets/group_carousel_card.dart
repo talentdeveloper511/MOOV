@@ -396,7 +396,7 @@ class GroupCarousel extends StatelessWidget {
                                                                                 context)
                                                                             .size
                                                                             .width *
-                                                                        .4),
+                                                                        .25),
                                                                 child: Text(
                                                                   snapshot3.data[
                                                                       'title'],
@@ -418,7 +418,7 @@ class GroupCarousel extends StatelessWidget {
                                                                       fontSize:
                                                                           isLargePhone
                                                                               ? 14.0
-                                                                              : 13),
+                                                                              : 11),
                                                                 ),
                                                               ),
                                                             ),

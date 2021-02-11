@@ -97,7 +97,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 child: StreamBuilder(
                     stream: postsRef
                         .where('type', isEqualTo: 'Restaurants & Bars')
-                        .where('privacy', isEqualTo: 'Public')
+                        // .orderBy("goingCount")
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData || snapshot.data.docs.length == 0)
@@ -160,8 +160,10 @@ class TrendingSegmentState extends State<TrendingSegment> {
                     stream: postsRef
                         .where('type', isEqualTo: "Pregames & Parties")
                         .where('privacy', isEqualTo: "Public")
+                        // .orderBy("goingCount")
                         .snapshots(),
                     builder: (context, snapshot) {
+                      bool hide = false;
                       if (!snapshot.hasData || snapshot.data.docs.length == 0)
                         return Text('');
 
@@ -204,8 +206,14 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
                                           snapshot.data.docs[index];
+                                      if (course['privacy'] == "Friends Only" ||
+                                          course['privacy'] == "Invite Only") {
+                                        hide = true;
+                                      }
 
-                                      return PostOnTrending(course);
+                                      return (hide == false)
+                                          ? PostOnTrending(course)
+                                          : Container();
                                     }, childCount: snapshot.data.docs.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
@@ -221,11 +229,11 @@ class TrendingSegmentState extends State<TrendingSegment> {
               Container(
                 child: StreamBuilder(
                     stream: postsRef
-                        // .where('type', isEqualTo: 'Shows')
                         .where('type', isEqualTo: 'Recreation')
                         .where('privacy', isEqualTo: 'Public')
                         .snapshots(),
                     builder: (context, snapshot) {
+                      bool hide = false;
                       if (!snapshot.hasData || snapshot.data.docs.length == 0)
                         return Text('');
                       return Container(
@@ -272,8 +280,12 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
                                           snapshot.data.docs[index];
+                                          if (course['privacy'] == "Friends Only" ||
+                                          course['privacy'] == "Invite Only") {
+                                        hide = true;
+                                      }
 
-                                      return PostOnTrending(course);
+                                      return(hide == false) ? PostOnTrending(course) : Container();
                                     }, childCount: snapshot.data.docs.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
