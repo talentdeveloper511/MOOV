@@ -95,7 +95,7 @@ class HottestMOOV extends StatelessWidget {
                             PostOnFeed(course),
                             Positioned(
                               top: 140,
-                              left: 25,
+                              left: isLargePhone ? 22.5 : 20,
                               // left: isLargePhone ? 145 : 118,
                               child: Container(
                                 height: 30,

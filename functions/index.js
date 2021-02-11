@@ -141,15 +141,15 @@ exports.onCreateActivityFeedItem = functions.firestore
             break;
           case "going":
             title = `${activityFeedItem.title}`;
-            body = `${activityFeedItem.username} is going`;
+            body = `${activityFeedItem.username} is going to your MOOV!`;
             break;
           case "friendGroup":
             title = `${activityFeedItem.username}`;
-            body = `added you to ${activityFeedItem.groupName}`;
+            body = `added you to their Friend Group, ${activityFeedItem.groupName}`;
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
-            body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
+            body = `${activityFeedItem.username} suggested the MOOV, ${activityFeedItem.title}`;
             break;
           case "comment":
             title = `${activityFeedItem.title}`;
@@ -161,7 +161,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             break;
           case "created":
             title = `${activityFeedItem.username} `;
-            body = `just posted ${activityFeedItem.title}`;
+            body = `just posted the MOOV, ${activityFeedItem.title}`;
             break;
           case "accept":
             title = `${activityFeedItem.username} `;
@@ -237,7 +237,7 @@ exports.onCreateGroupFeedItem = functions.firestore
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
-            body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
+            body = `${activityFeedItem.username} suggested the MOOV, ${activityFeedItem.title}`;
             break;
           case "canceled":
             title = `${activityFeedItem.title}`;
