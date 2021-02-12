@@ -43,7 +43,6 @@ class PostCommentsState extends State<PostComments> {
   });
 
   buildPostComments() {
-
     return StreamBuilder(
         stream: postsRef.doc(postId).collection('comments').snapshots(),
         builder: (context, snapshot) {
@@ -81,7 +80,8 @@ class PostCommentsState extends State<PostComments> {
         "millis": DateTime.now().millisecondsSinceEpoch.toString()
       });
       if (currentUser.id != postOwnerId) {
-        Database().commentNotification(postOwnerId, commentController.text);
+        Database()
+            .commentNotification(postOwnerId, commentController.text, postId);
       }
       commentController.clear();
     }

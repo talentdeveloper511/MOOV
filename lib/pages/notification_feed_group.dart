@@ -456,6 +456,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'has added you to ';
     } else if (type == 'invite') {
       activityItemText = 'has invited you all to ';
+    } else if (type == 'askToJoin') {
+      activityItemText = 'wants to join ';
     } else if (type == 'suggestion') {
       activityItemText = 'suggested ';
     } else if (type == 'deleted') {
@@ -478,7 +480,7 @@ class NotificationFeedItem extends StatelessWidget {
         child: ListTile(
           title: GestureDetector(
             onTap: () {
-              (type == 'request' || type == 'accept')
+              (type == 'request' || type == 'accept' || type == 'askToJoin')
                   ? showProfile(context)
                   : (type == 'suggestion' || type == 'friendGroup')
                       ? showGroup(context)

@@ -217,11 +217,11 @@ class _HomeState extends State<Home> {
                       offset: Offset(0.0, 2.0),
                       blurRadius: 3.0)
                 ],
-                backgroundGradient: LinearGradient(
-                    colors: [TextThemes.ndGold, TextThemes.ndGold]),
+                backgroundGradient:
+                    LinearGradient(colors: [Colors.green, Colors.green]),
                 icon: Icon(
                   Icons.directions_run,
-                  color: Colors.green[700],
+                  color: Colors.white,
                 ),
                 duration: Duration(seconds: 4),
                 flushbarPosition: FlushbarPosition.TOP,

@@ -133,13 +133,16 @@ class _PostDetailState extends State<PostDetail>
                       backgroundColor:
                           isIncognito ? Colors.black : Colors.white,
                       onPressed: () {
-                        isIncognito ?
-                       usersRef.doc(currentUser.id).set({
+                        isIncognito
+                            ? usersRef.doc(currentUser.id).set({
                                 "privacySettings": {"incognito": false}
-                              }, SetOptions(merge: true)):usersRef.doc(currentUser.id).set({
-                                "privacySettings": {"incognito": true, "friendsOnly": false}
+                              }, SetOptions(merge: true))
+                            : usersRef.doc(currentUser.id).set({
+                                "privacySettings": {
+                                  "incognito": true,
+                                  "friendsOnly": false
+                                }
                               }, SetOptions(merge: true));
-                          
                       },
                       label: !isIncognito
                           ? Text("Go Incognito",
@@ -402,7 +405,9 @@ class _NonImageContents extends StatelessWidget {
                                                 .5,
                                         child: Text(
                                           " \"" +
-                                              snapshot.data.docs[0]['comment'] +
+                                              snapshot.data.docs[
+                                                  snapshot.data.docs.length -
+                                                      1]['comment'] +
                                               "\"",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -942,7 +947,7 @@ class Buttons extends StatelessWidget {
 
     // displayShowCase().then((status) {
     //   if (status) {
-        
+
     //     ShowCaseWidget.of(context).startShowCase([_buttonsKey]);
     //   }
     // });
@@ -1096,8 +1101,8 @@ class Buttons extends StatelessWidget {
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
                         if (statuses != null && status != 2) {
-                          Database().addUndecided(
-                              currentUser.id, moovId, goingList);
+                          Database()
+                              .addUndecided(currentUser.id, moovId, goingList);
                           status = 2;
                           print(status);
                         } else if (statuses != null && status == 2) {
@@ -1105,8 +1110,7 @@ class Buttons extends StatelessWidget {
                           status = 0;
                         }
                       },
-                      color:
-                          (status == 2) ? Colors.yellow[600] : Colors.white,
+                      color: (status == 2) ? Colors.yellow[600] : Colors.white,
                       padding: EdgeInsets.all(5.0),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 3.0, right: 3),
@@ -1169,8 +1173,7 @@ class Buttons extends StatelessWidget {
                               ? Column(
                                   children: [
                                     Text('Going!',
-                                        style:
-                                            TextStyle(color: Colors.white)),
+                                        style: TextStyle(color: Colors.white)),
                                     Icon(Icons.directions_run_outlined,
                                         color: Colors.white, size: 30),
                                   ],

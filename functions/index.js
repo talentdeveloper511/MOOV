@@ -150,7 +150,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             break;
           case "friendGroup":
             title = `${activityFeedItem.username}`;
-            body = `added you to their Friend Group, ${activityFeedItem.groupName}`;
+            body = `added you to their friend group, ${activityFeedItem.groupName}`;
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
@@ -158,7 +158,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             break;
           case "comment":
             title = `${activityFeedItem.title}`;
-            body = `${activityFeedItem.username} commented: "${activityFeedItem.groupName}"`;
+            body = `${activityFeedItem.username} commented: "${activityFeedItem.message}"`;
             break;
           case "request":
             title = `${activityFeedItem.username}`;

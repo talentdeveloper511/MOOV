@@ -479,8 +479,6 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'commented: ';
     } else if (type == 'deleted') {
       activityItemText = 'has been canceled';
-    } else if (type == 'askToJoin') {
-      activityItemText = 'has asked to join your group';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
@@ -499,10 +497,7 @@ class NotificationFeedItem extends StatelessWidget {
         child: ListTile(
           title: GestureDetector(
             onTap: () {
-              (type == 'request' ||
-                      type == 'sent' ||
-                      type == 'accept' ||
-                      type == 'askToJoin')
+              (type == 'request' || type == 'sent' || type == 'accept')
                   ? showProfile(context)
                   : (type == 'suggestion' || type == 'friendGroup')
                       ? showGroup(context)

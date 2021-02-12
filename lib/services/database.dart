@@ -461,16 +461,25 @@ class Database {
     });
   }
 
-  commentNotification(String ownerId, String message) {
-    notificationFeedRef.doc(ownerId).collection("feedItems").doc(message).set({
-      "type": "comment",
-      "username": currentUser.displayName,
-      "userId": currentUser.id,
-      "userEmail": currentUser.email,
-      "userProfilePic": currentUser.photoUrl,
-      "timestamp": DateTime.now(),
-      "message": message,
-    });
+  commentNotification(String ownerId, String message, String postId) {
+    var title;
+    postsRef.doc(postId).get().then((snap) => {
+          title = snap.data()['title'],
+          notificationFeedRef
+              .doc(ownerId)
+              .collection("feedItems")
+              .doc(message)
+              .set({
+            "type": "comment",
+            "username": currentUser.displayName,
+            "userId": currentUser.id,
+            "title": title,
+            "userEmail": currentUser.email,
+            "userProfilePic": currentUser.photoUrl,
+            "timestamp": DateTime.now(),
+            "message": message,
+          })
+        });
   }
 
   friendCreatedNotification(String postId, String title, String previewImg,
