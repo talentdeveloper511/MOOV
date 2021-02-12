@@ -9,6 +9,7 @@ import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/map_test.dart';
+import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
@@ -131,6 +132,7 @@ class _HomePageState extends State<HomePage>
           scale: _hideFabAnimController,
           child: FloatingActionButton.extended(
               onPressed: () {
+                // Database().updateAllDocs();
                 Navigator.push(
                     context,
                     PageTransition(

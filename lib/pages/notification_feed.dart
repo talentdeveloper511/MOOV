@@ -497,9 +497,11 @@ class NotificationFeedItem extends StatelessWidget {
         child: ListTile(
           title: GestureDetector(
             onTap: () {
-              (type == 'request' || type == 'sent' || type == 'accept')
+              (type == 'request' || type == 'accept')
                   ? showProfile(context)
-                  : (type == 'suggestion' || type == 'friendGroup')
+                  : (type == 'suggestion' ||
+                          type == 'friendGroup' ||
+                          type == 'sent')
                       ? showGroup(context)
                       : showPost(context);
             },

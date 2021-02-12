@@ -910,8 +910,11 @@ class Database {
 
         for (var document in documents) {
           await document.reference.set({
-            "pushSettings": {
-              "friendPosts": true,
+            "privacySettings": {
+              "friendFinderVisibility": true,
+              "friendsOnly": false,
+              "incognito": false,
+              "showDorm": true
               // "incognito": false,
               // "showDorm": true,
               // "friendFinderVisibility": true,
