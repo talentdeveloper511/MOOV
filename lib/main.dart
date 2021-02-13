@@ -40,6 +40,10 @@ class MOOV extends StatelessWidget {
           }
         },
         child: MaterialApp(
+           builder: (context, widget) {
+      return MediaQuery(
+        child: widget,
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),);}, //for accessibility larger text size
           title: 'Whats the MOOV?',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(

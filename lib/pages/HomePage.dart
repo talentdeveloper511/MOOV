@@ -405,7 +405,7 @@ class _HomePageState extends State<HomePage>
                   viewportFraction: 1,
                   initialPage: 0,
                   enableInfiniteScroll: true,
-                  scrollPhysics: NeverScrollableScrollPhysics(),
+                  // scrollPhysics: NeverScrollableScrollPhysics(),
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
                   autoPlay: true,

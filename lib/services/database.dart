@@ -461,14 +461,14 @@ class Database {
     });
   }
 
-  commentNotification(String ownerId, String message, String postId) {
+  commentNotification(String ownerId, String message, String postId, DateTime timestamp, String previewImg) {
     var title;
     postsRef.doc(postId).get().then((snap) => {
           title = snap.data()['title'],
           notificationFeedRef
               .doc(ownerId)
               .collection("feedItems")
-              .doc(message)
+              .doc(currentUser.id + timestamp.toString())
               .set({
             "type": "comment",
             "username": currentUser.displayName,
@@ -476,7 +476,9 @@ class Database {
             "title": title,
             "userEmail": currentUser.email,
             "userProfilePic": currentUser.photoUrl,
-            "timestamp": DateTime.now(),
+            "timestamp": timestamp,
+            "previewImg": previewImg,
+            "postId": postId,
             "message": message,
           })
         });

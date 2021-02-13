@@ -93,7 +93,13 @@ class _CreateAccountState extends State<CreateAccount> {
         "friendRequests": [],
         "friendGroups": [],
         "venmoUsername": venmoUsername,
-        "pushSettings": {"going": true, "hourBefore": true, "suggestions": true}
+        "pushSettings": {"going": true, "hourBefore": true, "suggestions": true},
+        "privacySettings":  {
+          "friendFinderVisibility": true,
+          "friendsOnly": false,
+          "incognito": false,
+          "showDorm": true
+        }
       });
       doc = await usersRef.doc(user.id).get();
     }

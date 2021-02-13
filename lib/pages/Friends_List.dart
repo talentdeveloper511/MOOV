@@ -86,7 +86,9 @@ class FriendsListState extends State<FriendsList> {
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: GestureDetector(
-                                                onTap: () {
+                                                onTap: 
+                                              
+                                                () {
                                                   Navigator.of(context).push(
                                                       MaterialPageRoute(builder:
                                                           (BuildContext
@@ -268,13 +270,13 @@ class GroupsListState extends State<GroupsList> {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(builder:
                                                         (BuildContext context) {
-                                                  return OtherGroup(groupId);
+                                                  return GroupDetail(groupId);
                                                 }));
                                               } else {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(builder:
                                                         (BuildContext context) {
-                                                  return GroupDetail(groupId);
+                                                  return OtherGroup(groupId);
                                                 }));
                                               }
                                             },

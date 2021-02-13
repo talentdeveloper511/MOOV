@@ -1,3 +1,4 @@
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,6 +24,8 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return StreamBuilder(
         stream: usersRef.doc(currentUser.id).snapshots(),
         builder: (context, snapshot) {
@@ -77,7 +80,9 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                 ),
               ),
               body: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: isLargePhone
+                    ? EdgeInsets.symmetric(horizontal: 20.0)
+                    : EdgeInsets.symmetric(horizontal: 15.0),
                 child: Column(
                   children: [
                     Column(children: [

@@ -71,6 +71,7 @@ class PostCommentsState extends State<PostComments> {
         "displayName": currentUser.displayName,
         "comment": commentController.text,
         "postId": postId,
+        "previewImg": postMediaUrl,
         "timestamp": timestamp,
         "avatarUrl": currentUser.photoUrl,
         "userId": currentUser.id,
@@ -81,7 +82,7 @@ class PostCommentsState extends State<PostComments> {
       });
       if (currentUser.id != postOwnerId) {
         Database()
-            .commentNotification(postOwnerId, commentController.text, postId);
+            .commentNotification(postOwnerId, commentController.text, postId, timestamp, postMediaUrl);
       }
       commentController.clear();
     }

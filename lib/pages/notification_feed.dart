@@ -395,7 +395,7 @@ class NotificationFeedItem extends StatelessWidget {
               )),
         ),
       );
-    } else if (type == 'invite') {
+    } else if (type == 'invite' || type == 'comment' || type == 'sent') {
       mediaPreview = GestureDetector(
         onTap: () => showPost(context),
         child: Container(
@@ -500,8 +500,8 @@ class NotificationFeedItem extends StatelessWidget {
               (type == 'request' || type == 'accept')
                   ? showProfile(context)
                   : (type == 'suggestion' ||
-                          type == 'friendGroup' ||
-                          type == 'sent')
+                          type == 'friendGroup'
+                          )
                       ? showGroup(context)
                       : showPost(context);
             },
@@ -530,9 +530,9 @@ class NotificationFeedItem extends StatelessWidget {
                                 style: TextStyle(
                                     color: TextThemes.ndBlue,
                                     fontWeight: FontWeight.bold))
-                            : TextSpan(
+                            : message != null ? TextSpan(
                                 text: '\"$message\"',
-                              )
+                              ) : TextSpan(text: "")
                       ]),
                 ),
               ],

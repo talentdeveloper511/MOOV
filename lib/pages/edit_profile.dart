@@ -24,6 +24,9 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  final dormController = TextEditingController();
+  final bioController = TextEditingController();
+  final venmoController = TextEditingController();
   get firestoreInstance => null;
   File _image;
   File _image2;
@@ -217,11 +220,6 @@ class _EditProfileState extends State<EditProfile> {
     final strUserPic = user.photoUrl;
     var userHeader = currentUser.header;
 
-    dynamic likeCount;
-    final dormController = TextEditingController();
-    final bioController = TextEditingController();
-    final venmoController = TextEditingController();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -411,15 +409,24 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: TextFormField(
-                    autocorrect: false,
-                    controller: venmoController,
-                    decoration: InputDecoration(
-                      labelText: "What's your @?",
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                  child: Row(
+                    children: [
+                      Text("@  ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      Expanded(
+                        child: TextFormField(
+                          
+                          autocorrect: false,
+                          controller: venmoController,
+                          decoration: InputDecoration(
+                            
+                            labelText: "What's your @?",
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -508,5 +515,12 @@ class _EditProfileState extends State<EditProfile> {
         ]),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    venmoController.dispose();
+    bioController.dispose();
   }
 }

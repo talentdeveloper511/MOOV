@@ -1071,6 +1071,32 @@ class PostOnFeed extends StatelessWidget {
                               children: [
                                 Column(
                                   children: [
+                                    currentUser.id == course['postId'] ? //work on this later invite for post ower
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 6.0,
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  type: PageTransitionType
+                                                      .bottomToTop,
+                                                  child: SendMOOVSearch(
+                                                    course['userId'],
+                                                    course['image'],
+                                                    course['startDate'],
+                                                    course['postId'],
+                                                    course['title'],
+                                                    proPic,
+                                                    displayName,
+                                                  )));
+                                        },
+                                        child: Icon(Icons.send_rounded,
+                                            color: Colors.blue[500], size: 30),
+                                      ),
+                                    ):
                                     Padding(
                                       padding: const EdgeInsets.only(
                                         bottom: 6.0,
