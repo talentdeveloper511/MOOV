@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage>
           scale: _hideFabAnimController,
           child: FloatingActionButton.extended(
               onPressed: () {
-                Database().updateAllDocs();
+                // Database().updateAllDocs();
                 Navigator.push(
                     context,
                     PageTransition(
