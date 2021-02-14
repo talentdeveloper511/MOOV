@@ -147,7 +147,6 @@ class Database {
   Future<void> removeNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
-<<<<<<< HEAD
       // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       // var checkZero;
       // ref2.get().then((snap) => {
@@ -160,12 +159,6 @@ class Database {
       //     userId,
       //     postId
       //     );
-=======
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-
-      transaction.update(ref2, {'score': FieldValue.increment(-10)});
-
->>>>>>> 71113acb9485a0af244153af3e73ffdb36227f5a
       postsRef.doc(postId).set({
         "statuses": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));

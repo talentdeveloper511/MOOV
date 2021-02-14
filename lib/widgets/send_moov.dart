@@ -1,3 +1,4 @@
+import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/home.dart';
@@ -320,69 +321,81 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => userId != currentUser.id
               ? OtherProfile(userId)
               : ProfilePageWithHeader())),
       child: Stack(children: [
-        Row(children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, top: 5, bottom: 5),
-            child: CircleAvatar(
-                radius: 27,
-                backgroundColor: TextThemes.ndGold,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(proPic),
-                  radius: 25,
-                  backgroundColor: TextThemes.ndBlue,
-                )),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12.5),
-            child: Text(
-              displayName ?? "",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * .72,
+          child: Row(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 5, bottom: 5),
+              child: CircleAvatar(
+                  radius: 27,
+                  backgroundColor: TextThemes.ndGold,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(proPic),
+                    radius: 25,
+                    backgroundColor: TextThemes.ndBlue,
+                  )),
             ),
-          ),
-          verifiedStatus == 3
-              ? Padding(
-                  padding: EdgeInsets.only(
-                    left: 2.5,
-                  ),
-                  child: Icon(
-                    Icons.store,
-                    size: 20,
-                    color: TextThemes.ndGold,
-                  ),
-                )
-              : verifiedStatus == 2
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                        left: 5,
-                      ),
-                      child: Image.asset('lib/assets/verif2.png', height: 15),
-                    )
-                  : verifiedStatus == 1
-                      ? Padding(
-                          padding: EdgeInsets.only(
-                            left: 2.5,
-                          ),
-                          child:
-                              Image.asset('lib/assets/verif.png', height: 25),
-                        )
-                      : Text(""),
-          // Text(
-          //   email ?? "",
-          //   style: TextStyle(color: Colors.black),
-          // ),
-          Divider(
-            color: Colors.black,
-          ),
-        ]),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.5),
+              child: SizedBox(
+                child: Text(
+                  displayName ?? "",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: isLargePhone ? TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18):TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16),
+                ),
+              ),
+            ),
+            verifiedStatus == 3
+                ? Padding(
+                    padding: EdgeInsets.only(
+                      left: 2.5,
+                    ),
+                    child: Icon(
+                      Icons.store,
+                      size: 20,
+                      color: TextThemes.ndGold,
+                    ),
+                  )
+                : verifiedStatus == 2
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                          left: 5,
+                        ),
+                        child: Image.asset('lib/assets/verif2.png', height: 15),
+                      )
+                    : verifiedStatus == 1
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                              left: 2.5,
+                            ),
+                            child:
+                                Image.asset('lib/assets/verif.png', height: 25),
+                          )
+                        : Text(""),
+            // Text(
+            //   email ?? "",
+            //   style: TextStyle(color: Colors.black),
+            // ),
+            Divider(
+              color: Colors.black,
+            ),
+          ]),
+        ),
         userId == currentUser.id
             ? Container()
             : status
