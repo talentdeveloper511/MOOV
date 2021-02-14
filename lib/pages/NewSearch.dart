@@ -155,9 +155,9 @@ class _SearchBarState extends State<SearchBar>
                   preferredSize: null,
                   child: Column(children: <Widget>[
                     Showcase(
-                      title: "NO MOOV LEFT BEHIND",
+                      title: "A DYNAMIC SEARCH",
                       description:
-                          "\nSearch for people, MOOVs, and Friend Groups",
+                          "\nSearch for Users, Friend Groups, and MOOVs",
                       titleTextStyle: TextStyle(
                           color: TextThemes.ndBlue,
                           fontWeight: FontWeight.bold,
@@ -166,7 +166,6 @@ class _SearchBarState extends State<SearchBar>
                       contentPadding: EdgeInsets.all(10),
                       key: _searchKey,
                       child: TextField(
-                        
                           style: TextStyle(fontSize: 20),
                           controller: searchController,
                           onChanged: (val) {
@@ -179,7 +178,7 @@ class _SearchBarState extends State<SearchBar>
                           decoration: InputDecoration(
                             labelStyle: TextStyle(fontSize: 20),
                             border: InputBorder.none,
-                            hintText: 'Search MOOV',
+                            hintText: 'Search Users, Groups, or MOOVs',
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 20),
                             prefixIcon:
@@ -228,40 +227,19 @@ class _SearchBarState extends State<SearchBar>
                                 },
                                 child: _currentIndex == 0
                                     ? GradientText(
-                                        '     People  ',
+                                        '     Users    ',
                                         gradient: LinearGradient(colors: [
                                           Colors.blue.shade400,
                                           Colors.blue.shade900,
                                         ]),
                                       )
                                     : Text(
-                                        "     People  ",
+                                        "     Users    ",
                                         style: TextStyle(fontSize: 16.5),
                                       ),
                               ),
                               // Sign Up Button
-                              new FlatButton(
-                                splashColor: Colors.white,
-                                color: Colors.white,
-                                onPressed: () {
-                                  _tabController.animateTo(1);
-                                  setState(() {
-                                    _currentIndex = 1;
-                                  });
-                                },
-                                child: _currentIndex == 1
-                                    ? GradientText(
-                                        "    MOOVs",
-                                        gradient: LinearGradient(colors: [
-                                          Colors.blue.shade400,
-                                          Colors.blue.shade900,
-                                        ]),
-                                      )
-                                    : Text(
-                                        "    MOOVs",
-                                        style: TextStyle(fontSize: 16.5),
-                                      ),
-                              ),
+
                               FlatButton(
                                 splashColor: Colors.white,
                                 color: Colors.white,
@@ -283,7 +261,29 @@ class _SearchBarState extends State<SearchBar>
                                         "Friend Groups",
                                         style: TextStyle(fontSize: 16.5),
                                       ),
-                              )
+                              ),
+                              new FlatButton(
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                onPressed: () {
+                                  _tabController.animateTo(1);
+                                  setState(() {
+                                    _currentIndex = 1;
+                                  });
+                                },
+                                child: _currentIndex == 1
+                                    ? GradientText(
+                                        "   MOOVs",
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]),
+                                      )
+                                    : Text(
+                                        "   MOOVs",
+                                        style: TextStyle(fontSize: 16.5),
+                                      ),
+                              ),
                             ],
                           )
                         : Container(),
@@ -1162,14 +1162,14 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                           },
                           child: _currentIndex == 0
                               ? GradientText(
-                                  '     People  ',
+                                  '     Users  ',
                                   gradient: LinearGradient(colors: [
                                     Colors.blue.shade400,
                                     Colors.blue.shade900,
                                   ]),
                                 )
                               : Text(
-                                  "     People  ",
+                                  "     Users  ",
                                   style: TextStyle(fontSize: 16.5),
                                 ),
                         ),

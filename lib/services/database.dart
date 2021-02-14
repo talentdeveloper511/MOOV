@@ -15,7 +15,6 @@ class Database {
   bool featured;
   String postId;
   String previewImg;
-  
 
   final GoogleSignInAccount user = googleSignIn.currentUser;
   final strUserId = googleSignIn.currentUser.id;
@@ -110,8 +109,16 @@ class Database {
 
     dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      print('$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(200)});
+      var postLimit;
+      ref2.get().then((snap) => {
+            postLimit = snap.data()['postLimit'],
+            if (postLimit != 0)
+              {
+                transaction
+                    .update(ref2, {'postLimit': FieldValue.increment(-1)}),
+                transaction.update(ref2, {'score': FieldValue.increment(200)}),
+              }
+          });
       transaction.update(ref, {'postId': ref.id});
     });
     if (privacy == 'Public' || privacy == 'Friends Only') {
@@ -265,23 +272,17 @@ class Database {
       // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref, {'goingCount': FieldValue.increment(-1)});
 
-      // var checkZero;
-      // ref2.get().then((snap) => {
-      //       if (snap.data()['score'] == 0) {checkZero = "true"}
-      //     });
-      // if (checkZero != "true") {
-      //   transaction.update(ref2, {'score': FieldValue.increment(-50)});
-      // }
-      notificationFeedRef
-          .doc(ownerId)
-          .collection("feedItems")
-          .doc(postId + ' from ' + currentUser.id)
-          .get()
-          .then((doc) {
-        if (doc.exists) {
-          doc.reference.delete();
-        }
-      });
+      // transaction.update(ref2, {'score': FieldValue.increment(-50)});
+      // notificationFeedRef
+      //     .doc(ownerId)
+      //     .collection("feedItems")
+      //     .doc(postId + ' from ' + currentUser.id)
+      //     .get()
+      //     .then((doc) {
+      //   if (doc.exists) {
+      //     doc.reference.delete();
+      //   }
+      // });
 
       // addGoingToNotificationFeed(
       //     userId,
@@ -440,7 +441,16 @@ class Database {
     dbRef.runTransaction((transaction) async {
       final DocumentReference ref =
           dbRef.doc('notreDame/data/users/${currentUser.id}');
-      transaction.update(ref, {'score': FieldValue.increment(50)});
+      var sendLimit;
+      ref.get().then((snap) => {
+            sendLimit = snap.data()['sendLimit'],
+            if (sendLimit != 0)
+              {
+                transaction
+                    .update(ref, {'sendLimit': FieldValue.increment(-1)}),
+                transaction.update(ref, {'score': FieldValue.increment(75)}),
+              }
+          });
     });
   }
 
@@ -507,35 +517,12 @@ class Database {
     }
   }
 
-  removeGoingFromNotificationFeed(String ownerId, String moovId) {
-    bool isNotPostOwner = strUserId != ownerId;
-    if (isNotPostOwner) {
-      notificationFeedRef
-          .doc(ownerId)
-          .collection("feedItems")
-          .doc('going ' + moovId)
-          .get()
-          .then((doc) {
-        if (doc.exists) {
-          doc.reference.delete();
-        }
-      });
-    }
-  }
-
   deletePost(String postId, String ownerId, String title, Map statuses,
       String posterName) {
     String filePath = 'images/$ownerId$title';
 
     firebase_storage.Reference ref =
         firebase_storage.FirebaseStorage.instance.ref().child(filePath);
-
-    // groupsRef.get().then((snap) {
-    //   snap.docs.forEach((group) {
-    //     // group.data().suggestedMOOVs.collection('suggestedMOOVs/$postId').delete();
-    //     print(group['suggestedMOOVs']);
-    //   });
-    // });
 
     //BETA ACTIVITY
     if (statuses.length >= 5) {
@@ -914,15 +901,13 @@ class Database {
 
         for (var document in documents) {
           await document.reference.set({
-            "privacySettings": {
-              "friendFinderVisibility": true,
-              "friendsOnly": false,
-              "incognito": false,
-              "showDorm": true
-              // "incognito": false,
-              // "showDorm": true,
-              // "friendFinderVisibility": true,
-            }
+            // "sendLimit": {
+            //   "friendFinderVisibility": true,
+            //   "friendsOnly": false,
+            //   "incognito": false,
+            //   "showDorm": true
+            // }
+            "sendLimit": 5
           }, SetOptions(merge: true));
         }
       });

@@ -88,13 +88,18 @@ class _CreateAccountState extends State<CreateAccount> {
         "dorm": dorm,
         "referral": referral,
         "postLimit": 3,
+        "sendLimit": 5,
         "verifiedStatus": 0,
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],
         "venmoUsername": venmoUsername,
-        "pushSettings": {"going": true, "hourBefore": true, "suggestions": true},
-        "privacySettings":  {
+        "pushSettings": {
+          "going": true,
+          "hourBefore": true,
+          "suggestions": true
+        },
+        "privacySettings": {
           "friendFinderVisibility": true,
           "friendsOnly": false,
           "incognito": false,
