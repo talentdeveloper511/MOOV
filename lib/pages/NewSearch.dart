@@ -166,7 +166,6 @@ class _SearchBarState extends State<SearchBar>
                       contentPadding: EdgeInsets.all(10),
                       key: _searchKey,
                       child: TextField(
-                        
                           style: TextStyle(fontSize: 20),
                           controller: searchController,
                           onChanged: (val) {
@@ -179,7 +178,7 @@ class _SearchBarState extends State<SearchBar>
                           decoration: InputDecoration(
                             labelStyle: TextStyle(fontSize: 20),
                             border: InputBorder.none,
-                            hintText: 'Search MOOV',
+                            hintText: 'Search Users, Groups, or MOOVs',
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 20),
                             prefixIcon:
