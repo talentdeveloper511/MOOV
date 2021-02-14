@@ -438,20 +438,34 @@ class Database {
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
-    dbRef.runTransaction((transaction) async {
-      final DocumentReference ref =
-          dbRef.doc('notreDame/data/users/${currentUser.id}');
-      var sendLimit;
-      ref.get().then((snap) => {
-            sendLimit = snap.data()['sendLimit'],
-            if (sendLimit != 0)
-              {
-                transaction
-                    .update(ref, {'sendLimit': FieldValue.increment(-1)}),
-                transaction.update(ref, {'score': FieldValue.increment(75)}),
-              }
-          });
+    if (currentUser.postLimit <= 0) {
+      print(currentUser.postLimit);
+    }
+    usersRef.doc(currentUser.id).get().then((value) {
+      if (value['sendLimit'] >= 0) {
+        usersRef
+            .doc(currentUser.id)
+            .update({"sendLimit": FieldValue.increment(-1)});
+        usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(50)});
+      }
     });
+
+    // dbRef.runTransaction((transaction) async {
+    //   final DocumentReference ref =
+    //       dbRef.doc('notreDame/data/users/${currentUser.id}');
+    //   var sendLimit;
+    //   ref.get().then((snap) => {
+    //         sendLimit = snap.data()['sendLimit'],
+    //         if (sendLimit != 0)
+    //           {
+    //             transaction
+    //                 .update(ref, {'sendLimit': FieldValue.increment(-1)}),
+    //             transaction.update(ref, {'score': FieldValue.increment(75)}),
+    //           }
+    //       });
+    // });
   }
 
   friendAcceptNotification(
