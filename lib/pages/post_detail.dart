@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
@@ -8,8 +9,10 @@ import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/send_moov.dart';
+import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -291,7 +294,11 @@ class _BannerImage extends StatelessWidget {
               right: 50,
               child: Container(
                 height: 45,
-                width: maxOccupancy > 99 ? 100 : 70,
+                width: maxOccupancy > 99
+                    ? 100
+                    : maxOccupancy > 9
+                        ? 80
+                        : 70,
                 padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -921,11 +928,36 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
   }
 }
 
-class Buttons extends StatelessWidget {
+class Buttons extends StatefulWidget {
   dynamic moovId, likeCount;
   String text = 'https://www.whatsthemoov.com';
 
   Buttons(this.moovId);
+  @override
+  _ButtonsState createState() => _ButtonsState(this.moovId);
+}
+
+class _ButtonsState extends State<Buttons> {
+  bool positivePointAnimation = false;
+  bool negativePointAnimation = false;
+  bool positivePointAnimationUndecided = false;
+  bool negativePointAnimationUndecided = false;
+  bool positivePointAnimationNotGoing = false;
+  bool negativePointAnimationNotGoing = false;
+  dynamic moovId;
+  final increaseBy = FieldValue.increment(23.99);
+
+  changeScore(bool increment) {
+    increment
+        ? usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(30)})
+        : usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(-30)});
+  }
+
+  _ButtonsState(this.moovId);
 
   int status;
   bool push = true;
@@ -1004,188 +1036,353 @@ class Buttons extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        side: BorderSide(color: Colors.black)),
-                    onPressed: () {
-                      if (statuses != null && status != 1) {
-                        Database()
-                            .addNotGoing(currentUser.id, moovId, goingList);
-                        status = 1;
-                        print(status);
-                      } else if (statuses != null && status == 1) {
-                        Database().removeNotGoing(currentUser.id, moovId);
-                        status = 0;
-                      }
-                    },
-                    //   if (likedArray != null) {
-                    //     likeCount = likedArray.length;
-                    //     for (int i = 0; i < likeCount; i++) {
-                    //       var id = likedArray[i]["uid"];
-                    //       uidArray.add(id);
-                    //     }
-                    //   }
-
-                    //   if (uidArray != null && uidArray.contains(currentUser.id)) {
-                    //     Database().removeGoing(
-                    //         course["userId"],
-                    //         course["image"],
-                    //         currentUser.id,
-                    //         course.documentID,
-                    //         currentUser.displayName,
-                    //         currentUser.photoUrl,
-                    //         course["startDate"],
-                    //         course["title"],
-                    //         course["description"],
-                    //         course["address"],
-                    //         course["profilePic"],
-                    //         course["userName"],
-                    //         course["userEmail"],
-                    //         likedArray);
-                    //   } else {
-                    //     Database().addGoing(
-                    //         course["userId"],
-                    //         course["image"],
-                    //         currentUser.id,
-                    //         course.documentID,
-                    //         currentUser.displayName,
-                    //         currentUser.photoUrl,
-                    //         course["startDate"],
-                    //         course["title"],
-                    //         course["description"],
-                    //         course["address"],
-                    //         course["profilePic"],
-                    //         course["userName"],
-                    //         course["userEmail"],
-                    //         likedArray);
-                    //   }
-                    // },
-                    color: (status == 1) ? Colors.red : Colors.white,
-                    padding: EdgeInsets.all(5.0),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 4.0),
-                      child: (status == 1)
-                          ? Column(
-                              children: [
-                                Text(
-                                  'Not going',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 3.0, top: 3.0),
-                                  child: Icon(Icons.directions_run,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                Text('Not going'),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 3.0, top: 3.0),
-                                  child: Icon(Icons.directions_walk,
-                                      color: Colors.red),
-                                ),
-                              ],
-                            ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
-                    child: RaisedButton(
+                  Stack(children: [
+                    RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                        if (statuses != null && status != 2) {
+                         if (statuses != null && status == 1){
+                              changeScore(false);
+                            }
+                        if (statuses != null && status != 1) {
+                           
+                          positivePointAnimationNotGoing = true;
+                          if (status == 3) {
+                            //if youre switching statuses we dont double count
+                            negativePointAnimation = true;
+                            Timer(Duration(seconds: 2), () {
+                              setState(() {
+                                negativePointAnimation = false;
+                              });
+                            });
+                          }
+                          if (status == 2) {
+                            //if youre switching statuses we dont double count
+                            negativePointAnimationUndecided = true;
+                            Timer(Duration(seconds: 2), () {
+                              setState(() {
+                                negativePointAnimationUndecided = false;
+                              });
+                            });
+                          }
+
+                          Timer(Duration(seconds: 2), () {
+                            setState(() {
+                              positivePointAnimationNotGoing = false;
+                            });
+                          });
                           Database()
-                              .addUndecided(currentUser.id, moovId, goingList);
-                          status = 2;
+                              .addNotGoing(currentUser.id, moovId, goingList);
+                                if (status != 3 && status != 2) {
+                              changeScore(true);
+                            }
+                          status = 1;
                           print(status);
-                        } else if (statuses != null && status == 2) {
-                          Database().removeUndecided(currentUser.id, moovId);
+                        } else if (statuses != null && status == 1) {
+                          negativePointAnimationNotGoing = true;
+
+                          Timer(Duration(seconds: 2), () {
+                            setState(() {
+                              negativePointAnimationNotGoing = false;
+                            });
+                          });
+
+                          Database().removeNotGoing(currentUser.id, moovId);
                           status = 0;
                         }
                       },
-                      color: (status == 2) ? Colors.yellow[600] : Colors.white,
+                      color: (status == 1) ? Colors.red : Colors.white,
                       padding: EdgeInsets.all(5.0),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 3.0, right: 3),
-                        child: (status == 2)
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: (status == 1)
                             ? Column(
                                 children: [
-                                  Text('Undecided',
-                                      style: TextStyle(color: Colors.white)),
-                                  Icon(Icons.accessibility,
-                                      color: Colors.white, size: 30),
+                                  Text(
+                                    'Not going',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 3.0, top: 3.0),
+                                    child: Icon(Icons.directions_run,
+                                        color: Colors.white),
+                                  ),
                                 ],
                               )
                             : Column(
                                 children: [
-                                  Text('Undecided'),
-                                  Icon(Icons.accessibility,
-                                      color: Colors.yellow[600], size: 30),
+                                  Text('Not going'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 3.0, top: 3.0),
+                                    child: Icon(Icons.directions_walk,
+                                        color: Colors.red),
+                                  ),
                                 ],
                               ),
                       ),
                     ),
-                  ),
+                    TranslationAnimatedWidget(
+                        enabled: this
+                            .positivePointAnimationNotGoing, //update this boolean to forward/reverse the animation
+                        values: [
+                          Offset(20, -20), // disabled value value
+                          Offset(20, -20), //intermediate value
+                          Offset(20, -40) //enabled value
+                        ],
+                        child: OpacityAnimatedWidget.tween(
+                            opacityEnabled: 1, //define start value
+                            opacityDisabled: 0, //and end value
+                            enabled: positivePointAnimationNotGoing,
+                            child: PointAnimation(30, true))),
+                    TranslationAnimatedWidget(
+                        enabled: this
+                            .negativePointAnimationNotGoing, //update this boolean to forward/reverse the animation
+                        values: [
+                          Offset(20, -20), // disabled value value
+                          Offset(20, -20), //intermediate value
+                          Offset(20, -40) //enabled value
+                        ],
+                        child: OpacityAnimatedWidget.tween(
+                            opacityEnabled: 1, //define start value
+                            opacityDisabled: 0, //and end value
+                            enabled: negativePointAnimationNotGoing,
+                            child: PointAnimation(30, false))),
+                  ]),
                   Padding(
                     padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          side: BorderSide(color: Colors.black)),
-                      onPressed: () {
-                        if (goingCount == maxOccupancy && status != 3) {
-                          showMax(context);
-                        }
-                        if (statuses != null &&
-                            status != 3 &&
-                            goingCount < maxOccupancy) {
-                          Database().addGoingGood(
-                              currentUser.id,
-                              course['userId'],
-                              moovId,
-                              course['title'],
-                              course['image'],
-                              course['push']);
-                          status = 3;
-                          print(status);
-                        } else if (statuses != null && status == 3) {
-                          Database().removeGoingGood(
-                              currentUser.id,
-                              course['userId'],
-                              moovId,
-                              course['title'],
-                              course['image']);
-                          status = 0;
-                        }
-                      },
-                      color: (status == 3) ? Colors.green : Colors.white,
-                      padding: EdgeInsets.all(5.0),
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: (status == 3)
+                    child: Stack(children: [
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            side: BorderSide(color: Colors.black)),
+                        onPressed: () {
+                            if (statuses != null && status == 2){
+                              changeScore(false);
+                            }
+                          if (statuses != null && status != 2) {
+                              
+                            positivePointAnimationUndecided = true;
+                            if (status == 3) {
+                              //if youre switching statuses we dont double count
+                              negativePointAnimation = true;
+                              Timer(Duration(seconds: 2), () {
+                                setState(() {
+                                  negativePointAnimation = false;
+                                });
+                              });
+                            }
+                            if (status == 1) {
+                              //if youre switching statuses we dont double count
+                              negativePointAnimationNotGoing = true;
+                              Timer(Duration(seconds: 2), () {
+                                setState(() {
+                                  negativePointAnimationNotGoing = false;
+                                });
+                              });
+                            }
+
+                            Timer(Duration(seconds: 2), () {
+                              setState(() {
+                                positivePointAnimationUndecided = false;
+                              });
+                            });
+                            Database().addUndecided(
+                                currentUser.id, moovId, goingList);
+                                 if (status != 1 && status != 3) {
+                              changeScore(true);
+                            } 
+                            status = 2;
+                            print(status);
+                          } else if (statuses != null && status == 2) {
+                            negativePointAnimationUndecided = true;
+
+                            Timer(Duration(seconds: 2), () {
+                              setState(() {
+                                negativePointAnimationUndecided = false;
+                              });
+                            });
+                            Database().removeUndecided(currentUser.id, moovId);
+                            
+                            status = 0;
+                          }
+                        },
+                        color:
+                            (status == 2) ? Colors.yellow[600] : Colors.white,
+                        padding: EdgeInsets.all(5.0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 3.0, right: 3),
+                          child: (status == 2)
                               ? Column(
                                   children: [
-                                    Text('Going!',
+                                    Text('Undecided',
                                         style: TextStyle(color: Colors.white)),
-                                    Icon(Icons.directions_run_outlined,
+                                    Icon(Icons.accessibility,
                                         color: Colors.white, size: 30),
                                   ],
                                 )
                               : Column(
                                   children: [
-                                    Text('Going'),
-                                    Icon(Icons.directions_run_outlined,
-                                        color: Colors.green[500], size: 30),
+                                    Text('Undecided'),
+                                    Icon(Icons.accessibility,
+                                        color: Colors.yellow[600], size: 30),
                                   ],
-                                )),
-                    ),
+                                ),
+                        ),
+                      ),
+                      TranslationAnimatedWidget(
+                          enabled: this
+                              .positivePointAnimationUndecided, //update this boolean to forward/reverse the animation
+                          values: [
+                            Offset(20, -20), // disabled value value
+                            Offset(20, -20), //intermediate value
+                            Offset(20, -40) //enabled value
+                          ],
+                          child: OpacityAnimatedWidget.tween(
+                              opacityEnabled: 1, //define start value
+                              opacityDisabled: 0, //and end value
+                              enabled: positivePointAnimationUndecided,
+                              child: PointAnimation(30, true))),
+                      TranslationAnimatedWidget(
+                          enabled: this
+                              .negativePointAnimationUndecided, //update this boolean to forward/reverse the animation
+                          values: [
+                            Offset(20, -20), // disabled value value
+                            Offset(20, -20), //intermediate value
+                            Offset(20, -40) //enabled value
+                          ],
+                          child: OpacityAnimatedWidget.tween(
+                              opacityEnabled: 1, //define start value
+                              opacityDisabled: 0, //and end value
+                              enabled: negativePointAnimationUndecided,
+                              child: PointAnimation(30, false))),
+                    ]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
+                    child: Stack(children: [
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            side: BorderSide(color: Colors.black)),
+                        onPressed: () {
+                           if (statuses != null && status == 3){
+                              changeScore(false);
+                            }
+                          if (goingCount == maxOccupancy && status != 3) {
+                            showMax(context);
+                          }
+                          if (statuses != null &&
+                              status != 3 &&
+                              goingCount < maxOccupancy) {
+                            
+                            positivePointAnimation = true;
+                            if (status == 2) {
+                              //if youre switching statuses we dont double count
+                              negativePointAnimationUndecided = true;
+                              Timer(Duration(seconds: 2), () {
+                                setState(() {
+                                  negativePointAnimationUndecided = false;
+                                });
+                              });
+                            }
+                            if (status == 1) {
+                              //if youre switching statuses we dont double count
+                              negativePointAnimationNotGoing = true;
+                              Timer(Duration(seconds: 2), () {
+                                setState(() {
+                                  negativePointAnimationNotGoing = false;
+                                });
+                              });
+                            }
+
+                            Timer(Duration(seconds: 2), () {
+                              setState(() {
+                                positivePointAnimation = false;
+                              });
+                            });
+
+                            Database().addGoingGood(
+                                currentUser.id,
+                                course['userId'],
+                                moovId,
+                                course['title'],
+                                course['image'],
+                                course['push']);
+                                     if (status != 1 && status != 2) {
+                              changeScore(true);
+                            } 
+                            status = 3;
+                            print(status);
+                           
+                          } else if (statuses != null && status == 3) {
+                            negativePointAnimation = true;
+
+                            Timer(Duration(seconds: 2), () {
+                              setState(() {
+                                negativePointAnimation = false;
+                              });
+                            });
+                            Database().removeGoingGood(
+                                currentUser.id,
+                                course['userId'],
+                                moovId,
+                                course['title'],
+                                course['image']);
+                            status = 0;
+                          }
+                        },
+                        color: (status == 3) ? Colors.green : Colors.white,
+                        padding: EdgeInsets.all(5.0),
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: (status == 3)
+                                ? Column(
+                                    children: [
+                                      Text('Going!',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      Icon(Icons.directions_run_outlined,
+                                          color: Colors.white, size: 30),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Text('Going'),
+                                      Icon(Icons.directions_run_outlined,
+                                          color: Colors.green[500], size: 30),
+                                    ],
+                                  )),
+                      ),
+                      TranslationAnimatedWidget(
+                          enabled: this
+                              .positivePointAnimation, //update this boolean to forward/reverse the animation
+                          values: [
+                            Offset(20, -20), // disabled value value
+                            Offset(20, -20), //intermediate value
+                            Offset(20, -40) //enabled value
+                          ],
+                          child: OpacityAnimatedWidget.tween(
+                              opacityEnabled: 1, //define start value
+                              opacityDisabled: 0, //and end value
+                              enabled: positivePointAnimation,
+                              child: PointAnimation(30, true))),
+                      TranslationAnimatedWidget(
+                          enabled: this
+                              .negativePointAnimation, //update this boolean to forward/reverse the animation
+                          values: [
+                            Offset(20, -20), // disabled value value
+                            Offset(20, -20), //intermediate value
+                            Offset(20, -40) //enabled value
+                          ],
+                          child: OpacityAnimatedWidget.tween(
+                              opacityEnabled: 1, //define start value
+                              opacityDisabled: 0, //and end value
+                              enabled: negativePointAnimation,
+                              child: PointAnimation(30, false))),
+                    ]),
                   ),
                 ],
               ),

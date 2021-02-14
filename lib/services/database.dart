@@ -130,8 +130,8 @@ class Database {
   Future<void> addNotGoing(userId, postId, List<dynamic> goingList) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(10)});
+      // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      // transaction.update(ref2, {'score': FieldValue.increment(10)});
 
       // addGoingToNotificationFeed(
       //     userId,
@@ -162,19 +162,19 @@ class Database {
         "statuses": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));
 
-      String serialUser = userId;
-      transaction.update(ref, {
-        // 'notGoing': FieldValue.arrayRemove([serialUser]),
-        // 'notGoingCounter': FieldValue.increment(-1)
-      });
+      // String serialUser = userId;
+      // transaction.update(ref, {
+      //   // 'notGoing': FieldValue.arrayRemove([serialUser]),
+      //   // 'notGoingCounter': FieldValue.increment(-1)
+      // });
     });
   }
 
   Future<void> addUndecided(userId, postId, List<dynamic> goingList) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(10)});
+      // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      // transaction.update(ref2, {'score': FieldValue.increment(10)});
 
       if (goingList.contains(userId)) {
         transaction.update(ref, {'goingCount': FieldValue.increment(-1)});
@@ -198,18 +198,23 @@ class Database {
   Future<void> removeUndecided(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-
-      transaction.update(ref2, {'score': FieldValue.increment(-10)});
+      // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      // var checkZero;
+      // ref2.get().then((snap) => {
+      //       if (snap.data()['score'] == 0) {checkZero = "true"}
+      //     });
+      // if (checkZero != "true") {
+      //   transaction.update(ref2, {'score': FieldValue.increment(-10)});
+      // }
       postsRef.doc(postId).set({
         "statuses": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));
 
-      String serialUser = userId;
-      transaction.update(ref, {
-        // 'undecided': FieldValue.arrayRemove([serialUser]),
-        // 'undecidedCounter': FieldValue.increment(-1)
-      });
+      // String serialUser = userId;
+      // transaction.update(ref, {
+      //   // 'undecided': FieldValue.arrayRemove([serialUser]),
+      //   // 'undecidedCounter': FieldValue.increment(-1)
+      // });
     });
   }
 
@@ -217,8 +222,8 @@ class Database {
       userId, ownerId, postId, title, pic, bool push) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(500)});
+      // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      // transaction.update(ref2, {'score': FieldValue.increment(500)});
       transaction.update(ref, {'goingCount': FieldValue.increment(1)});
 
       await postsRef.doc(postId).set({
@@ -256,10 +261,10 @@ class Database {
   Future<void> removeGoingGood(userId, ownerId, postId, title, pic) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       transaction.update(ref, {'goingCount': FieldValue.increment(-1)});
 
-      transaction.update(ref2, {'score': FieldValue.increment(-50)});
+      // transaction.update(ref2, {'score': FieldValue.increment(-50)});
       // notificationFeedRef
       //     .doc(ownerId)
       //     .collection("feedItems")
