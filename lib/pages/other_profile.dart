@@ -355,12 +355,11 @@ class _OtherProfileState extends State<OtherProfile> {
                           ),
                         ),
                         GestureDetector(
-
-                 onTap: () {
+                          onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => GroupsList(id)));
-                          },          
-                                                  child: Column(
+                          },
+                          child: Column(
                             children: [
                               Text(
                                 userGroups.length == null ||

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:MOOV/helpers/demo_values.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
@@ -9,7 +11,9 @@ import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
+import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/send_moov.dart';
+import 'package:animated_widgets/animated_widgets.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -238,11 +242,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                               ],
                             ),
                           ),
-                    
                           shape: RoundedRectangleBorder(
-                            
                               borderRadius: BorderRadius.circular(8.0)),
-                              
                         )
                       : RaisedButton(
                           onPressed: () {
@@ -623,6 +624,17 @@ class PostOnFeed extends StatelessWidget {
   DocumentSnapshot course;
 
   PostOnFeed(this.course);
+  bool positivePointAnimation = false;
+  bool negativePointAnimation = false;
+  changeScore(bool increment) {
+    increment
+        ? usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(30)})
+        : usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(-30)});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -650,7 +662,6 @@ class PostOnFeed extends StatelessWidget {
         }
       }
     }
-    
 
     var strUserPic = currentUser.photoUrl;
 
@@ -1071,57 +1082,60 @@ class PostOnFeed extends StatelessWidget {
                               children: [
                                 Column(
                                   children: [
-                                    currentUser.id == course['postId'] ? //work on this later invite for post ower
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 6.0,
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                  type: PageTransitionType
-                                                      .bottomToTop,
-                                                  child: SendMOOVSearch(
-                                                    course['userId'],
-                                                    course['image'],
-                                                    course['startDate'],
-                                                    course['postId'],
-                                                    course['title'],
-                                                    proPic,
-                                                    displayName,
-                                                  )));
-                                        },
-                                        child: Icon(Icons.send_rounded,
-                                            color: Colors.blue[500], size: 30),
-                                      ),
-                                    ):
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 6.0,
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                  type: PageTransitionType
-                                                      .bottomToTop,
-                                                  child: SendMOOVSearch(
-                                                    course['userId'],
-                                                    course['image'],
-                                                    course['startDate'],
-                                                    course['postId'],
-                                                    course['title'],
-                                                    proPic,
-                                                    displayName,
-                                                  )));
-                                        },
-                                        child: Icon(Icons.send_rounded,
-                                            color: Colors.blue[500], size: 30),
-                                      ),
-                                    ),
+                                    currentUser.id == course['postId']
+                                        ? //work on this later invite for post ower
+                                        Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 6.0,
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    PageTransition(
+                                                        type: PageTransitionType
+                                                            .bottomToTop,
+                                                        child: SendMOOVSearch(
+                                                          course['userId'],
+                                                          course['image'],
+                                                          course['startDate'],
+                                                          course['postId'],
+                                                          course['title'],
+                                                          proPic,
+                                                          displayName,
+                                                        )));
+                                              },
+                                              child: Icon(Icons.send_rounded,
+                                                  color: Colors.blue[500],
+                                                  size: 30),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 6.0,
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    PageTransition(
+                                                        type: PageTransitionType
+                                                            .bottomToTop,
+                                                        child: SendMOOVSearch(
+                                                          course['userId'],
+                                                          course['image'],
+                                                          course['startDate'],
+                                                          course['postId'],
+                                                          course['title'],
+                                                          proPic,
+                                                          displayName,
+                                                        )));
+                                              },
+                                              child: Icon(Icons.send_rounded,
+                                                  color: Colors.blue[500],
+                                                  size: 30),
+                                            ),
+                                          ),
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 0.0),
@@ -1136,47 +1150,96 @@ class PostOnFeed extends StatelessWidget {
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Column(
                                     children: [
-                                      IconButton(
-                                        icon: (status == 3)
-                                            ? new Icon(Icons.directions_run,
-                                                color: Colors.green)
-                                            : new Icon(Icons.directions_walk),
-                                        color: Colors.red,
-                                        iconSize: 30.0,
-                                        splashColor: (status == 3)
-                                            ? Colors.red
-                                            : Colors.green,
-                                        //splashRadius: 7.0,
-                                        highlightColor: Colors.green,
-                                        onPressed: () {
-                                          if (goingCount == maxOccupancy &&
-                                              status != 3) {
-                                            showMax(context);
-                                          }
-                                          if (statuses != null &&
-                                              status != 3 &&
-                                              goingCount < maxOccupancy) {
-                                            Database().addGoingGood(
+                                      Stack(children: [
+                                        IconButton(
+                                          icon: (status == 3)
+                                              ? new Icon(Icons.directions_run,
+                                                  color: Colors.green)
+                                              : new Icon(Icons.directions_walk),
+                                          color: Colors.red,
+                                          iconSize: 30.0,
+                                          splashColor: (status == 3)
+                                              ? Colors.red
+                                              : Colors.green,
+                                          //splashRadius: 7.0,
+                                          highlightColor: Colors.green,
+                                          onPressed: () {
+                                            if (goingCount == maxOccupancy &&
+                                                status != 3) {
+                                              showMax(context);
+                                            }
+                                            if (statuses != null &&
+                                                status != 3 &&
+                                                goingCount < maxOccupancy) {
+                                              changeScore(true);
+                                              Database().addGoingGood(
                                                 currentUser.id,
                                                 course['userId'],
                                                 course.id,
                                                 course['title'],
                                                 course['image'],
                                                 course['push'],
-                                                );
-                                            status = 3;
-                                          } else if (statuses != null &&
-                                              status == 3) {
-                                            Database().removeGoingGood(
-                                                currentUser.id,
-                                                course['userId'],
-                                                course.id,
-                                                course['title'],
-                                                course['image']);
-                                            status = 0;
-                                          }
-                                        },
-                                      ),
+                                              );
+                                              status = 3;
+                                            } else if (statuses != null &&
+                                                status == 3) {
+                                              changeScore(false);
+                                              if (status == 3) {
+                                                //if youre switching statuses we dont double count
+                                                negativePointAnimation = true;
+                                                // Timer(Duration(seconds: 2), () {
+                                                //   setState(() {
+                                                //     negativePointAnimation = false;
+                                                //   });
+                                                // });
+                                              }
+                                              Database().removeGoingGood(
+                                                  currentUser.id,
+                                                  course['userId'],
+                                                  course.id,
+                                                  course['title'],
+                                                  course['image']);
+                                              status = 0;
+                                            }
+                                          },
+                                        ),
+                                        TranslationAnimatedWidget(
+                                            enabled: this
+                                                .positivePointAnimation, //update this boolean to forward/reverse the animation
+                                            values: [
+                                              Offset(20,
+                                                  -20), // disabled value value
+                                              Offset(
+                                                  20, -20), //intermediate value
+                                              Offset(20, -40) //enabled value
+                                            ],
+                                            child: OpacityAnimatedWidget.tween(
+                                                opacityEnabled:
+                                                    1, //define start value
+                                                opacityDisabled:
+                                                    0, //and end value
+                                                enabled: positivePointAnimation,
+                                                child:
+                                                    PointAnimation(30, true))),
+                                        TranslationAnimatedWidget(
+                                            enabled: this
+                                                .negativePointAnimation, //update this boolean to forward/reverse the animation
+                                            values: [
+                                              Offset(20,
+                                                  -20), // disabled value value
+                                              Offset(
+                                                  20, -20), //intermediate value
+                                              Offset(20, -40) //enabled value
+                                            ],
+                                            child: OpacityAnimatedWidget.tween(
+                                                opacityEnabled:
+                                                    1, //define start value
+                                                opacityDisabled:
+                                                    0, //and end value
+                                                enabled: negativePointAnimation,
+                                                child:
+                                                    PointAnimation(30, false))),
+                                      ]),
                                       Padding(
                                           padding: const EdgeInsets.only(
                                               bottom: 11.0),

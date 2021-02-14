@@ -184,30 +184,30 @@ class FriendsListState extends State<FriendsList> {
 
 class GroupsList extends StatefulWidget {
   TextEditingController searchController = TextEditingController();
-  final String userId;
+  final String id;
 
-  GroupsList(String id, {this.userId});
+  GroupsList(this.id);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return GroupsListState(this.userId);
+    return GroupsListState(this.id);
   }
 }
 
 class GroupsListState extends State<GroupsList> {
   TextEditingController searchController = TextEditingController();
   var iter = 0;
-  final String userId;
+  final String id;
 
-  GroupsListState(this.userId);
+  GroupsListState(this.id);
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
 
     return StreamBuilder(
-        stream: groupsRef.where("members", arrayContains: userId).snapshots(),
+        stream: groupsRef.where("members", arrayContains: id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           if (snapshot.data == null) return Container();
@@ -309,7 +309,7 @@ class GroupsListState extends State<GroupsList> {
                                                   ),
                                                 ),
                                                 margin: EdgeInsets.only(
-                                                    left: 10,
+                                                    left: 5,
                                                     top: 0,
                                                     right: 10,
                                                     bottom: 0),
@@ -336,21 +336,24 @@ class GroupsListState extends State<GroupsList> {
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(left: 10.0),
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(builder:
-                                                        (BuildContext context) {
-                                                  return OtherGroup(groupId);
-                                                })); //Material
-                                              },
-                                              child: Text(groupName,
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: TextThemes.ndBlue,
-                                                      decoration: TextDecoration
-                                                          .none))),
+                                              const EdgeInsets.only(left: 5.0, right: 5),
+                                          child: SizedBox(
+                                            width: 100,
+                                            child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(builder:
+                                                          (BuildContext context) {
+                                                    return OtherGroup(groupId);
+                                                  })); //Material
+                                                },
+                                                child: Text(groupName,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: TextThemes.ndBlue,
+                                                        decoration: TextDecoration
+                                                            .none))),
+                                          ),
                                         ),
                                         Spacer(),
                                         Padding(
