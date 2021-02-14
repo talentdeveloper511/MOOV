@@ -350,7 +350,7 @@ exports.groupChat = functions.firestore
       }
     });
 
-exports.resetScore = functions.pubsub.schedule("55 23 * * 5").timeZone("America/New_York")
+exports.resetScore = functions.pubsub.schedule("55 23 * * 0").timeZone("America/New_York")
     .onRun(async (context) => {
       const querySnapshot = admin
           .firestore().collection("notreDame").doc("data")
@@ -364,6 +364,7 @@ exports.resetScore = functions.pubsub.schedule("55 23 * * 5").timeZone("America/
               admin.firestore().collection("notreDame").doc("data").collection("users").doc(`${data.id}`).set({
                 score: 0,
               }, {merge: true});
+              console.log("Scores wiped!");
               // admin.firestore().collection("notreDame").doc("data").collection("users").orderBy("score").get().then((snap) => {
               //   if (idx == 0) {
               //     winner = snap.data().winner;
@@ -382,6 +383,20 @@ exports.resetScore = functions.pubsub.schedule("55 23 * * 5").timeZone("America/
             });
             console.log(querySnapshot);
           });
+    });
+
+exports.fixPrivacy = functions.firestore
+    .document("{college}/data/users/{userId}")
+    .onCreate(async (snapshot, context) => {
+      const userId = context.params.userId;
+      admin.firestore().collection("notreDame").doc("data").collection("users").doc(`${userId}`).set({
+        "privacySettings": {
+          "friendFinderVisibility": true,
+          "friendsOnly": false,
+          "incognito": false,
+          "showDorm": true,
+        },
+      }, {merge: true});
     });
 
 exports.scheduledFunction = functions.pubsub.schedule("* * * * *")

@@ -114,7 +114,7 @@ class Database {
       transaction.update(ref2, {'score': FieldValue.increment(200)});
       transaction.update(ref, {'postId': ref.id});
     });
-    if (privacy == 'Public') {
+    if (privacy == 'Public' || privacy == 'Friends Only') {
       friendCreatedNotification(
           postId, title, imageUrl, currentUser.friendArray);
     }
@@ -147,6 +147,7 @@ class Database {
   Future<void> removeNotGoing(userId, postId) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
+<<<<<<< HEAD
       // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
       // var checkZero;
       // ref2.get().then((snap) => {
@@ -159,6 +160,12 @@ class Database {
       //     userId,
       //     postId
       //     );
+=======
+      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+
+      transaction.update(ref2, {'score': FieldValue.increment(-10)});
+
+>>>>>>> 71113acb9485a0af244153af3e73ffdb36227f5a
       postsRef.doc(postId).set({
         "statuses": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));
@@ -462,7 +469,8 @@ class Database {
     });
   }
 
-  commentNotification(String ownerId, String message, String postId, DateTime timestamp, String previewImg) {
+  commentNotification(String ownerId, String message, String postId,
+      DateTime timestamp, String previewImg) {
     var title;
     postsRef.doc(postId).get().then((snap) => {
           title = snap.data()['title'],
