@@ -113,7 +113,7 @@ class Database {
       transaction.update(ref2, {'score': FieldValue.increment(200)});
       transaction.update(ref, {'postId': ref.id});
     });
-    if (privacy == 'Public') {
+    if (privacy == 'Public' || privacy == 'Friends Only') {
       friendCreatedNotification(
           postId, title, imageUrl, currentUser.friendArray);
     }
@@ -147,17 +147,9 @@ class Database {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      var checkZero;
-      ref2.get().then((snap) => {
-            if (snap.data()['score'] == 0) {checkZero = "true"}
-          });
-      if (checkZero != "true") {
-        transaction.update(ref2, {'score': FieldValue.increment(-10)});
-      }
-      // addGoingToNotificationFeed(
-      //     userId,
-      //     postId
-      //     );
+
+      transaction.update(ref2, {'score': FieldValue.increment(-10)});
+
       postsRef.doc(postId).set({
         "statuses": {user.id: FieldValue.delete()}
       }, SetOptions(merge: true));
@@ -461,7 +453,8 @@ class Database {
     });
   }
 
-  commentNotification(String ownerId, String message, String postId, DateTime timestamp, String previewImg) {
+  commentNotification(String ownerId, String message, String postId,
+      DateTime timestamp, String previewImg) {
     var title;
     postsRef.doc(postId).get().then((snap) => {
           title = snap.data()['title'],

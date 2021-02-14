@@ -215,27 +215,27 @@ class _NotificationFeedGroupState extends State<NotificationFeedGroup> {
                     );
                   }),
             ),
-            gotNotifs == true
-                ? Padding(
-                    padding: const EdgeInsets.all(28.0),
-                    child: GestureDetector(
-                      onTap: () => showAlertDialog(context),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.red, width: 3),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            "CLEAR NOTIFICATIONS",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : Container()
+            // gotNotifs == true
+            //     ? Padding(
+            //         padding: const EdgeInsets.all(28.0),
+            //         child: GestureDetector(
+            //           onTap: () => showAlertDialog(context),
+            //           child: Container(
+            //             decoration: BoxDecoration(
+            //                 color: Colors.white,
+            //                 border: Border.all(color: Colors.red, width: 3),
+            //                 borderRadius: BorderRadius.circular(10.0)),
+            //             child: Padding(
+            //               padding: const EdgeInsets.all(12.0),
+            //               child: Text(
+            //                 "CLEAR NOTIFICATIONS",
+            //                 style: TextStyle(color: Colors.red),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       )
+            //     : Container()
           ],
         )));
   }
