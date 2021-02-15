@@ -12,6 +12,7 @@ import 'package:MOOV/pages/map_test.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
+import 'package:MOOV/widgets/MOTDAnimated.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/hottestMOOV.dart';
 import 'package:MOOV/widgets/poll2.dart';
@@ -132,7 +133,6 @@ class _HomePageState extends State<HomePage>
           scale: _hideFabAnimController,
           child: FloatingActionButton.extended(
               onPressed: () {
-                // Database().updateAllDocs();
                 Navigator.push(
                     context,
                     PageTransition(
@@ -155,26 +155,27 @@ class _HomePageState extends State<HomePage>
               crossAxisSpacing: 10.0,
               childAspectRatio: 2.25,
               children: <Widget>[
-                Bounce(
-                    duration: Duration(milliseconds: 100),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MOTD()));
-                    },
-                    child: Showcase(
-                      key: _motdKey,
-                      title: "BIGGEST MOOV TODAY",
-                      description: "\n     You won't want to miss this     ",
-                      titleTextStyle: TextStyle(
-                          color: TextThemes.ndBlue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                      descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-                      contentPadding: EdgeInsets.all(10),
-                      child: Container(
-                        child: MOTD(),
-                      ),
-                    )),
+                OpenContainerTransformDemo()
+                // Bounce(
+                //     duration: Duration(milliseconds: 100),
+                //     onPressed: () {
+                //       Navigator.push(context,
+                //           MaterialPageRoute(builder: (context) => MOTD()));
+                //     },
+                //     child: Showcase(
+                //       key: _motdKey,
+                //       title: "BIGGEST MOOV TODAY",
+                //       description: "\n     You won't want to miss this     ",
+                //       titleTextStyle: TextStyle(
+                //           color: TextThemes.ndBlue,
+                //           fontWeight: FontWeight.bold,
+                //           fontSize: 20),
+                //       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                //       contentPadding: EdgeInsets.all(10),
+                //       child: Container(
+                //         child: MOTD(),
+                //       ),
+                //     )),
               ],
             ),
           ),

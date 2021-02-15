@@ -165,7 +165,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                   padding: const EdgeInsets.all(15.0),
                                   child: Text(
                                     "Do you like free stuff?"
-                                    " \nRise to the top of the leaderboard to win. \nPayouts on MOOV Money Monday",
+                                    " \nRise to the top of the leaderboard to win. \nPayouts on MOOV Money Monday.",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: isLargePhone ? 14 : 15,
@@ -226,9 +226,9 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                                       "\n"
                                                       "\n\n30pts: Leaving a status on a MOOV"
                                                       "\n\n30pts: Suggesting a MOOV"
-                                                      "\n\n75pts: Sending a MOOV to a friend"
-                                                      "\n\n100pts: Joining a Friend Group"
-                                                      "\n\n200pts: Posting a MOOV"
+                                                      "\n\n50pts: Sending a MOOV to a friend"
+                                                      "\n\n75pts: Joining a Friend Group"
+                                                      "\n\n100pts: Posting a MOOV"
                                                       "\n\n\n**Negative points arise from gaming the system or undoing actions. If you are suspected of cheating, your score will be reset to zero"
                                                       "",
                                                       textAlign:

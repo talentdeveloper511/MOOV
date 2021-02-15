@@ -117,10 +117,10 @@ class _MOTDState extends State<MOTD> {
                               ? SizeConfig.blockSizeVertical * 15
                               : SizeConfig.blockSizeVertical * 18,
                           child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PostDetail(course.id)));
-                            },
+                            // onTap: () {
+                            //   Navigator.of(context).push(MaterialPageRoute(
+                            //       builder: (context) => PostDetail(course.id)));
+                            // },
                             child: Stack(children: <Widget>[
                               FractionallySizedBox(
                                 widthFactor: 1,

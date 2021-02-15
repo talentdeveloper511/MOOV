@@ -80,8 +80,8 @@ class Database {
       posterName,
       bool push,
       int goingCount //BETA
-      }) async {
-    DocumentReference ref = await postsRef.doc(postId).set({
+      })  {
+    postsRef.doc(postId).set({
       'title': title,
       'type': type,
       'privacy': privacy,
@@ -105,26 +105,21 @@ class Database {
       "going": []
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
-    postsRef.orderBy("startDate", descending: true);
-
-    dbRef.runTransaction((transaction) async {
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      usersRef.doc(currentUser.id).get().then((value) {
-        if (value['postLimit'] >= 0) {
-          usersRef
-              .doc(currentUser.id)
-              .update({"postLimit": FieldValue.increment(-1)});
-          usersRef
-              .doc(currentUser.id)
-              .update({"score": FieldValue.increment(200)});
-        }
-      });
-      transaction.update(ref, {'postId': ref.id});
-    });
     if (privacy == 'Public' || privacy == 'Friends Only') {
       friendCreatedNotification(
           postId, title, imageUrl, currentUser.friendArray);
     }
+    usersRef.doc(currentUser.id).get().then((value) {
+      if (value['postLimit'] >= 1) {
+        print(value['postLimit']);
+        usersRef
+            .doc(currentUser.id)
+            .update({"postLimit": FieldValue.increment(-1)});
+        usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(100)});
+      }
+    });
   }
 
   Future<void> addNotGoing(userId, postId, List<dynamic> goingList) async {
@@ -438,7 +433,7 @@ class Database {
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
-  
+
     usersRef.doc(currentUser.id).get().then((value) {
       if (value['sendLimit'] >= 0) {
         usersRef
@@ -495,22 +490,24 @@ class Database {
 
   friendCreatedNotification(String postId, String title, String previewImg,
       List<dynamic> friendArray) {
-    for (var i = 0; i < friendArray.length; i++) {
-      notificationFeedRef
-          .doc(friendArray[i])
-          .collection("feedItems")
-          .doc('created ' + postId)
-          .set({
-        "type": "created",
-        "username": currentUser.displayName,
-        "userId": currentUser.id,
-        "userEmail": currentUser.email,
-        "previewImg": previewImg,
-        "postId": postId,
-        "title": title,
-        "userProfilePic": currentUser.photoUrl,
-        "timestamp": DateTime.now()
-      });
+    
+      for (var i = 0; i < friendArray.length; i++) {
+        notificationFeedRef
+            .doc(friendArray[i])
+            .collection("feedItems")
+            .doc('created ' + postId)
+            .set({
+          "type": "created",
+          "username": currentUser.displayName,
+          "userId": currentUser.id,
+          "userEmail": currentUser.email,
+          "previewImg": previewImg,
+          "postId": postId,
+          "title": title,
+          "userProfilePic": currentUser.photoUrl,
+          "timestamp": DateTime.now()
+        });
+      
     }
   }
 
@@ -728,6 +725,18 @@ class Database {
   }
 
   Future<void> addUser(id, gname, gid, displayName) async {
+
+usersRef.doc(currentUser.id).get().then((value) {
+      if (value['groupLimit'] >= 1) {
+        usersRef
+            .doc(currentUser.id)
+            .update({"groupLimit": FieldValue.increment(-1)});
+        usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(75)});
+      }
+    });
+
     betaActivityTracker(displayName, Timestamp.now(), "joined Friend Group");
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
@@ -735,13 +744,15 @@ class Database {
           dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayUnion([gid]),
-        'score': FieldValue.increment(100)
+        // 'score': FieldValue.increment(75)
+        
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayUnion([id]),
         'memberNames': FieldValue.arrayUnion([displayName]),
       });
     });
+    
   }
 
   Future<void> setMOOV(gid, moovId) async {
@@ -756,9 +767,21 @@ class Database {
 
   Future<void> suggestMOOV(userId, gid, postId, unix, userName, members, title,
       pic, groupName) async {
+
+usersRef.doc(currentUser.id).get().then((value) {
+      if (value['suggestLimit'] >= 1) {
+        usersRef
+            .doc(currentUser.id)
+            .update({"suggestLimit": FieldValue.increment(-1)});
+        usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(30)});
+      }
+    });
+
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(30)});
+      // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      // transaction.update(ref2, {'score': FieldValue.increment(30)});
 
       groupsRef
           .doc(gid)
@@ -897,6 +920,7 @@ class Database {
         List<DocumentSnapshot> documents = snapshot.docs;
 
         for (var document in documents) {
+          if(currentUser.displayName == 'MOOV Team'){
           await document.reference.set({
             // "sendLimit": {
             //   "friendFinderVisibility": true,
@@ -904,9 +928,10 @@ class Database {
             //   "incognito": false,
             //   "showDorm": true
             // }
-            "sendLimit": 5
+            // "suggestLimit": 5,
+            // "groupLimit": 2
           }, SetOptions(merge: true));
-        }
+        }}
       });
     } catch (e) {
       print(e.toString());

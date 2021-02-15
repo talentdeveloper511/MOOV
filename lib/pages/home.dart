@@ -288,6 +288,8 @@ class _HomeState extends State<Home> {
         "referral": referral,
         "postLimit": 3,
         "sendLimit": 5,
+        "suggestLimit": 5,
+        "groupLimit": 2,
         "verifiedStatus": 0,
         "friendArray": [],
         "friendRequests": [],

@@ -157,7 +157,7 @@ class _SearchBarState extends State<SearchBar>
                     Showcase(
                       title: "A DYNAMIC SEARCH",
                       description:
-                          "\nSearch for Users, Friend Groups, and MOOVs",
+                          "\nSearch for People, Friend Groups, and MOOVs",
                       titleTextStyle: TextStyle(
                           color: TextThemes.ndBlue,
                           fontWeight: FontWeight.bold,
@@ -178,7 +178,7 @@ class _SearchBarState extends State<SearchBar>
                           decoration: InputDecoration(
                             labelStyle: TextStyle(fontSize: 20),
                             border: InputBorder.none,
-                            hintText: 'Search Users, Groups, or MOOVs',
+                            hintText: 'Search',
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 20),
                             prefixIcon:
@@ -206,7 +206,7 @@ class _SearchBarState extends State<SearchBar>
                                     ))),
                           )),
                     ),
-                    showTabs == true
+                   showTabs == true
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -227,19 +227,40 @@ class _SearchBarState extends State<SearchBar>
                                 },
                                 child: _currentIndex == 0
                                     ? GradientText(
-                                        '     Users    ',
+                                        '     People  ',
                                         gradient: LinearGradient(colors: [
                                           Colors.blue.shade400,
                                           Colors.blue.shade900,
                                         ]),
                                       )
                                     : Text(
-                                        "     Users    ",
+                                        "     People  ",
                                         style: TextStyle(fontSize: 16.5),
                                       ),
                               ),
                               // Sign Up Button
-
+                              new FlatButton(
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                onPressed: () {
+                                  _tabController.animateTo(1);
+                                  setState(() {
+                                    _currentIndex = 1;
+                                  });
+                                },
+                                child: _currentIndex == 1
+                                    ? GradientText(
+                                        "    MOOVs",
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]),
+                                      )
+                                    : Text(
+                                        "    MOOVs",
+                                        style: TextStyle(fontSize: 16.5),
+                                      ),
+                              ),
                               FlatButton(
                                 splashColor: Colors.white,
                                 color: Colors.white,
@@ -261,29 +282,7 @@ class _SearchBarState extends State<SearchBar>
                                         "Friend Groups",
                                         style: TextStyle(fontSize: 16.5),
                                       ),
-                              ),
-                              new FlatButton(
-                                splashColor: Colors.white,
-                                color: Colors.white,
-                                onPressed: () {
-                                  _tabController.animateTo(1);
-                                  setState(() {
-                                    _currentIndex = 1;
-                                  });
-                                },
-                                child: _currentIndex == 1
-                                    ? GradientText(
-                                        "   MOOVs",
-                                        gradient: LinearGradient(colors: [
-                                          Colors.blue.shade400,
-                                          Colors.blue.shade900,
-                                        ]),
-                                      )
-                                    : Text(
-                                        "   MOOVs",
-                                        style: TextStyle(fontSize: 16.5),
-                                      ),
-                              ),
+                              )
                             ],
                           )
                         : Container(),
@@ -1117,7 +1116,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                         decoration: InputDecoration(
                           labelStyle: TextStyle(fontSize: 20),
                           border: InputBorder.none,
-                          hintText: 'Search MOOV',
+                          hintText: 'Search',
                           hintStyle:
                               TextStyle(color: Colors.grey, fontSize: 20),
                           prefixIcon:
