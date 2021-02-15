@@ -109,16 +109,16 @@ class Database {
 
     dbRef.runTransaction((transaction) async {
       final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      var postLimit;
-      ref2.get().then((snap) => {
-            postLimit = snap.data()['postLimit'],
-            if (postLimit != 0)
-              {
-                transaction
-                    .update(ref2, {'postLimit': FieldValue.increment(-1)}),
-                transaction.update(ref2, {'score': FieldValue.increment(200)}),
-              }
-          });
+      usersRef.doc(currentUser.id).get().then((value) {
+        if (value['postLimit'] >= 0) {
+          usersRef
+              .doc(currentUser.id)
+              .update({"postLimit": FieldValue.increment(-1)});
+          usersRef
+              .doc(currentUser.id)
+              .update({"score": FieldValue.increment(200)});
+        }
+      });
       transaction.update(ref, {'postId': ref.id});
     });
     if (privacy == 'Public' || privacy == 'Friends Only') {
@@ -438,9 +438,7 @@ class Database {
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
-    if (currentUser.postLimit <= 0) {
-      print(currentUser.postLimit);
-    }
+
     usersRef.doc(currentUser.id).get().then((value) {
       if (value['sendLimit'] >= 0) {
         usersRef
@@ -451,21 +449,6 @@ class Database {
             .update({"score": FieldValue.increment(50)});
       }
     });
-
-    // dbRef.runTransaction((transaction) async {
-    //   final DocumentReference ref =
-    //       dbRef.doc('notreDame/data/users/${currentUser.id}');
-    //   var sendLimit;
-    //   ref.get().then((snap) => {
-    //         sendLimit = snap.data()['sendLimit'],
-    //         if (sendLimit != 0)
-    //           {
-    //             transaction
-    //                 .update(ref, {'sendLimit': FieldValue.increment(-1)}),
-    //             transaction.update(ref, {'score': FieldValue.increment(75)}),
-    //           }
-    //       });
-    // });
   }
 
   friendAcceptNotification(
