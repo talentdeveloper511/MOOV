@@ -438,9 +438,7 @@ class Database {
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
-    if (currentUser.postLimit <= 0) {
-      print(currentUser.postLimit);
-    }
+  
     usersRef.doc(currentUser.id).get().then((value) {
       if (value['sendLimit'] >= 0) {
         usersRef

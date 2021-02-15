@@ -638,6 +638,9 @@ class UserResult extends StatelessWidget {
                                         friendFinderVisibility == false) {
                                       hide = true;
                                     }
+                                    if (course['privacy'] == "Invite Only") {
+                                      hide = true;
+                                    }
 
                                     return (hide == false)
                                         ? GestureDetector(
