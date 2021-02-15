@@ -280,12 +280,14 @@ class TrendingSegmentState extends State<TrendingSegment> {
                                         (BuildContext context, int index) {
                                       DocumentSnapshot course =
                                           snapshot.data.docs[index];
-                                          if (course['privacy'] == "Friends Only" ||
+                                      if (course['privacy'] == "Friends Only" ||
                                           course['privacy'] == "Invite Only") {
                                         hide = true;
                                       }
 
-                                      return(hide == false) ? PostOnTrending(course) : Container();
+                                      return (hide == false)
+                                          ? PostOnTrending(course)
+                                          : Container();
                                     }, childCount: snapshot.data.docs.length),
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
