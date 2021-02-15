@@ -1306,11 +1306,8 @@ class _EditPostState extends State<EditPost> {
                                             isUploading = false;
                                           });
                                         }
-                                        Navigator.pushAndRemoveUntil(
+                                        Navigator.pop(
                                           context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Home()),
-                                          (Route<dynamic> route) => false,
                                         );
                                       }),
                                 ),
