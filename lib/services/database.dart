@@ -438,7 +438,7 @@ class Database {
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
-
+  
     usersRef.doc(currentUser.id).get().then((value) {
       if (value['sendLimit'] >= 0) {
         usersRef
