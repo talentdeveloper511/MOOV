@@ -309,12 +309,148 @@ class _OpenContainerTransformDemoState
 
   @override
   Widget build(BuildContext context) {
-    return _OpenContainerWrapper(
-      transitionType: _transitionType,
-      closedBuilder: (BuildContext _, VoidCallback openContainer) {
-        return _ExampleCardMOTD(openContainer: openContainer);
-      },
-      onClosed: _showMarkedAsDoneSnackbar,
+    return Scaffold(
+      body: ListView(
+        padding: const EdgeInsets.all(8.0),
+        children: <Widget>[
+          _OpenContainerWrapper(
+            transitionType: _transitionType,
+            closedBuilder: (BuildContext _, VoidCallback openContainer) {
+              return _ExampleCardMOTD(openContainer: openContainer);
+            },
+            onClosed: _showMarkedAsDoneSnackbar,
+          ),
+          const SizedBox(height: 16.0),
+          _OpenContainerWrapper(
+            transitionType: _transitionType,
+            closedBuilder: (BuildContext _, VoidCallback openContainer) {
+              return _ExampleSingleTile(openContainer: openContainer);
+            },
+            onClosed: _showMarkedAsDoneSnackbar,
+          ),
+          const SizedBox(height: 16.0),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: _OpenContainerWrapper(
+                  transitionType: _transitionType,
+                  closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                    return _SmallerCard(
+                      openContainer: openContainer,
+                      subtitle: 'Secondary text',
+                    );
+                  },
+                  onClosed: _showMarkedAsDoneSnackbar,
+                ),
+              ),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: _OpenContainerWrapper(
+                  transitionType: _transitionType,
+                  closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                    return _SmallerCard(
+                      openContainer: openContainer,
+                      subtitle: 'Secondary text',
+                    );
+                  },
+                  onClosed: _showMarkedAsDoneSnackbar,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16.0),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: _OpenContainerWrapper(
+                  transitionType: _transitionType,
+                  closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                    return _SmallerCard(
+                      openContainer: openContainer,
+                      subtitle: 'Secondary',
+                    );
+                  },
+                  onClosed: _showMarkedAsDoneSnackbar,
+                ),
+              ),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: _OpenContainerWrapper(
+                  transitionType: _transitionType,
+                  closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                    return _SmallerCard(
+                      openContainer: openContainer,
+                      subtitle: 'Secondary',
+                    );
+                  },
+                  onClosed: _showMarkedAsDoneSnackbar,
+                ),
+              ),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: _OpenContainerWrapper(
+                  transitionType: _transitionType,
+                  closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                    return _SmallerCard(
+                      openContainer: openContainer,
+                      subtitle: 'Secondary',
+                    );
+                  },
+                  onClosed: _showMarkedAsDoneSnackbar,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16.0),
+          ...List<Widget>.generate(10, (int index) {
+            return OpenContainer<bool>(
+              transitionType: _transitionType,
+              openBuilder: (BuildContext _, VoidCallback openContainer) {
+                return PostDetail("hwrAgk600Wwo7nVGqeS6");
+              },
+              tappable: false,
+              closedShape: const RoundedRectangleBorder(),
+              closedElevation: 0.0,
+              closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                return ListTile(
+                  leading: Image.asset(
+                    'assets/avatar_logo.png',
+                    width: 40,
+                  ),
+                  onTap: openContainer,
+                  title: Text('List item ${index + 1}'),
+                  subtitle: const Text('Secondary text'),
+                );
+              },
+            );
+          }),
+        ],
+      ),
+      floatingActionButton: OpenContainer(
+        transitionType: _transitionType,
+        openBuilder: (BuildContext context, VoidCallback _) {
+          return PostDetail("hbOLKkMJLg9YSJeQA0fh");
+        },
+        closedElevation: 6.0,
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(_fabDimension / 2),
+          ),
+        ),
+        closedColor: Theme.of(context).colorScheme.secondary,
+        closedBuilder: (BuildContext context, VoidCallback openContainer) {
+          return SizedBox(
+            height: _fabDimension,
+            width: _fabDimension,
+            child: Center(
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

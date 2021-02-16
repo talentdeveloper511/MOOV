@@ -16,6 +16,7 @@ import 'package:MOOV/widgets/MOTDAnimated.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/hottestMOOV.dart';
 import 'package:MOOV/widgets/poll2.dart';
+import 'package:MOOV/widgets/suggestionBox.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -155,27 +156,27 @@ class _HomePageState extends State<HomePage>
               crossAxisSpacing: 10.0,
               childAspectRatio: 2.25,
               children: <Widget>[
-                OpenContainerTransformDemo()
-                // Bounce(
-                //     duration: Duration(milliseconds: 100),
-                //     onPressed: () {
-                //       Navigator.push(context,
-                //           MaterialPageRoute(builder: (context) => MOTD()));
-                //     },
-                //     child: Showcase(
-                //       key: _motdKey,
-                //       title: "BIGGEST MOOV TODAY",
-                //       description: "\n     You won't want to miss this     ",
-                //       titleTextStyle: TextStyle(
-                //           color: TextThemes.ndBlue,
-                //           fontWeight: FontWeight.bold,
-                //           fontSize: 20),
-                //       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-                //       contentPadding: EdgeInsets.all(10),
-                //       child: Container(
-                //         child: MOTD(),
-                //       ),
-                //     )),
+                // OpenContainerTransformDemo()
+                Bounce(
+                    duration: Duration(milliseconds: 100),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MOTD()));
+                    },
+                    child: Showcase(
+                      key: _motdKey,
+                      title: "BIGGEST MOOV TODAY",
+                      description: "\n     You won't want to miss this     ",
+                      titleTextStyle: TextStyle(
+                          color: TextThemes.ndBlue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                      descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                      contentPadding: EdgeInsets.all(10),
+                      child: Container(
+                        child: MOTD(),
+                      ),
+                    )),
               ],
             ),
           ),
@@ -409,7 +410,7 @@ class _HomePageState extends State<HomePage>
                   // scrollPhysics: NeverScrollableScrollPhysics(),
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
-                  autoPlay: true,
+                  autoPlay: false,
                   autoPlayInterval: Duration(seconds: 6),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
@@ -549,6 +550,7 @@ class _HomePageState extends State<HomePage>
                   //   ),
                   // ),
                   // MapTest(),
+                  SuggestionBoxCarousel(),
                   PollView(),
                   GroupCarousel(),
                   HottestMOOV()

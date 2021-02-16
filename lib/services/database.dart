@@ -80,7 +80,7 @@ class Database {
       posterName,
       bool push,
       int goingCount //BETA
-      })  {
+      }) {
     postsRef.doc(postId).set({
       'title': title,
       'type': type,
@@ -490,24 +490,22 @@ class Database {
 
   friendCreatedNotification(String postId, String title, String previewImg,
       List<dynamic> friendArray) {
-    
-      for (var i = 0; i < friendArray.length; i++) {
-        notificationFeedRef
-            .doc(friendArray[i])
-            .collection("feedItems")
-            .doc('created ' + postId)
-            .set({
-          "type": "created",
-          "username": currentUser.displayName,
-          "userId": currentUser.id,
-          "userEmail": currentUser.email,
-          "previewImg": previewImg,
-          "postId": postId,
-          "title": title,
-          "userProfilePic": currentUser.photoUrl,
-          "timestamp": DateTime.now()
-        });
-      
+    for (var i = 0; i < friendArray.length; i++) {
+      notificationFeedRef
+          .doc(friendArray[i])
+          .collection("feedItems")
+          .doc('created ' + postId)
+          .set({
+        "type": "created",
+        "username": currentUser.displayName,
+        "userId": currentUser.id,
+        "userEmail": currentUser.email,
+        "previewImg": previewImg,
+        "postId": postId,
+        "title": title,
+        "userProfilePic": currentUser.photoUrl,
+        "timestamp": DateTime.now()
+      });
     }
   }
 
@@ -725,8 +723,7 @@ class Database {
   }
 
   Future<void> addUser(id, gname, gid, displayName) async {
-
-usersRef.doc(currentUser.id).get().then((value) {
+    usersRef.doc(currentUser.id).get().then((value) {
       if (value['groupLimit'] >= 1) {
         usersRef
             .doc(currentUser.id)
@@ -745,14 +742,12 @@ usersRef.doc(currentUser.id).get().then((value) {
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayUnion([gid]),
         // 'score': FieldValue.increment(75)
-        
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayUnion([id]),
         'memberNames': FieldValue.arrayUnion([displayName]),
       });
     });
-    
   }
 
   Future<void> setMOOV(gid, moovId) async {
@@ -767,8 +762,7 @@ usersRef.doc(currentUser.id).get().then((value) {
 
   Future<void> suggestMOOV(userId, gid, postId, unix, userName, members, title,
       pic, groupName) async {
-
-usersRef.doc(currentUser.id).get().then((value) {
+    usersRef.doc(currentUser.id).get().then((value) {
       if (value['suggestLimit'] >= 1) {
         usersRef
             .doc(currentUser.id)
@@ -834,9 +828,16 @@ usersRef.doc(currentUser.id).get().then((value) {
     final aDate =
         DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
 
-    print(DateFormat('MMMd').add_jm().format(aDate));
     String whenString = DateFormat('MMMd').format(aDate);
     // if (who != "Alvin Alaphat" && who != "Kevin Camson" && who != "MOOV Team") {
+
+    FirebaseFirestore.instance.collection(who).get().then((value) {
+      print(value);
+      
+    });
+
+    // if (value['postLimit'] >= 1) {
+
     FirebaseFirestore.instance
         .collection(who)
         .doc(whenString)
@@ -920,18 +921,19 @@ usersRef.doc(currentUser.id).get().then((value) {
         List<DocumentSnapshot> documents = snapshot.docs;
 
         for (var document in documents) {
-          if(currentUser.displayName == 'MOOV Team'){
-          await document.reference.set({
-            // "sendLimit": {
-            //   "friendFinderVisibility": true,
-            //   "friendsOnly": false,
-            //   "incognito": false,
-            //   "showDorm": true
-            // }
-            // "suggestLimit": 5,
-            // "groupLimit": 2
-          }, SetOptions(merge: true));
-        }}
+          if (currentUser.displayName == 'MOOV Team') {
+            await document.reference.set({
+              // "sendLimit": {
+              //   "friendFinderVisibility": true,
+              //   "friendsOnly": false,
+              //   "incognito": false,
+              //   "showDorm": true
+              // }
+              // "suggestLimit": 5,
+              // "groupLimit": 2
+            }, SetOptions(merge: true));
+          }
+        }
       });
     } catch (e) {
       print(e.toString());
