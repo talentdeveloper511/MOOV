@@ -84,6 +84,8 @@ dependencies:
   another_flushbar: ^1.10.8
   image_crop: ^0.3.4
   flutter_app_badger: ^1.1.2
+  animations: ^1.1.2
+
 
 
 
@@ -187,7 +189,7 @@ flutter:
     - lib/assets/show3.png
     - lib/assets/clemson.HEIC
     - lib/assets/venmo-icon.png
-    
+    - lib/assets/suggestion.png
 
 
 

@@ -108,19 +108,19 @@ class _MOTDState extends State<MOTD> {
                   pic = course['image'];
                   title = course['title'];
 
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          height: isLargePhone
-                              ? SizeConfig.blockSizeVertical * 15
-                              : SizeConfig.blockSizeVertical * 18,
-                          child: GestureDetector(
-                            onTap: () {
+                  return GestureDetector(
+                     onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => PostDetail(course.id)));
                             },
+                                      child: Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            height: isLargePhone
+                                ? SizeConfig.blockSizeVertical * 15
+                                : SizeConfig.blockSizeVertical * 18,
                             child: Stack(children: <Widget>[
                               FractionallySizedBox(
                                 widthFactor: 1,
@@ -185,40 +185,40 @@ class _MOTDState extends State<MOTD> {
                               ),
                             ]),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Align(
-                              alignment: Alignment.center,
-                              child: GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (_) => CupertinoAlertDialog(
-                                            title: Text("Your MOOV."),
-                                            content: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8.0),
-                                              child: Text(
-                                                  "Do you have the MOOV of the Day? Email admin@whatsthemoov.com."),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) => CupertinoAlertDialog(
+                                              title: Text("Your MOOV."),
+                                              content: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0),
+                                                child: Text(
+                                                    "Do you have the MOOV of the Day? Email admin@whatsthemoov.com."),
+                                              ),
                                             ),
-                                          ),
-                                      barrierDismissible: true);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                    "MOOV of the Day",
-                                    style: TextStyle(
-                                        fontFamily: 'Open Sans',
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16.0),
+                                        barrierDismissible: true);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      "MOOV of the Day",
+                                      style: TextStyle(
+                                          fontFamily: 'Open Sans',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontSize: 16.0),
+                                    ),
                                   ),
-                                ),
-                              )),
-                        ),
-                      ],
+                                )),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }),

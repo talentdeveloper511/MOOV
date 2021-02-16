@@ -89,10 +89,17 @@ class _PostDetailState extends State<PostDetail>
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           isIncognito = snapshot.data['privacySettings']['incognito'];
+  final bool includeMarkAsDoneButton = true;
 
           return Scaffold(
               appBar: AppBar(
-                leading: IconButton(
+                leading: (includeMarkAsDoneButton) ?
+            IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context, true),
+              tooltip: 'Mark as done',
+            ) :
+                 IconButton(
                   icon: Icon(
                     Icons.arrow_back,
                     color: Colors.white,
@@ -604,8 +611,10 @@ class PostTimeAndPlace extends StatelessWidget {
                     ),
                   ),
                   Text('WHERE: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(address)
+                      style: TextStyle(fontWeight: FontWeight.bold),),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width *.65,
+                    child: Text(address, maxLines: 3, overflow: TextOverflow.ellipsis,))
                 ],
               ),
             )

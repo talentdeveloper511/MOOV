@@ -80,8 +80,8 @@ class Database {
       posterName,
       bool push,
       int goingCount //BETA
-      }) async {
-    DocumentReference ref = await postsRef.doc(postId).set({
+      }) {
+    postsRef.doc(postId).set({
       'title': title,
       'type': type,
       'privacy': privacy,
@@ -105,26 +105,21 @@ class Database {
       "going": []
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
-    postsRef.orderBy("startDate", descending: true);
-
-    dbRef.runTransaction((transaction) async {
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      usersRef.doc(currentUser.id).get().then((value) {
-        if (value['postLimit'] >= 0) {
-          usersRef
-              .doc(currentUser.id)
-              .update({"postLimit": FieldValue.increment(-1)});
-          usersRef
-              .doc(currentUser.id)
-              .update({"score": FieldValue.increment(200)});
-        }
-      });
-      transaction.update(ref, {'postId': ref.id});
-    });
     if (privacy == 'Public' || privacy == 'Friends Only') {
       friendCreatedNotification(
           postId, title, imageUrl, currentUser.friendArray);
     }
+    usersRef.doc(currentUser.id).get().then((value) {
+      if (value['postLimit'] >= 1) {
+        print(value['postLimit']);
+        usersRef
+            .doc(currentUser.id)
+            .update({"postLimit": FieldValue.increment(-1)});
+        usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(100)});
+      }
+    });
   }
 
   Future<void> addNotGoing(userId, postId, List<dynamic> goingList) async {
@@ -438,7 +433,7 @@ class Database {
       "ownerProPic": ownerProPic,
       "ownerName": ownerName,
     });
-  
+
     usersRef.doc(currentUser.id).get().then((value) {
       if (value['sendLimit'] >= 0) {
         usersRef
@@ -728,6 +723,17 @@ class Database {
   }
 
   Future<void> addUser(id, gname, gid, displayName) async {
+    usersRef.doc(currentUser.id).get().then((value) {
+      if (value['groupLimit'] >= 1) {
+        usersRef
+            .doc(currentUser.id)
+            .update({"groupLimit": FieldValue.increment(-1)});
+        usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(75)});
+      }
+    });
+
     betaActivityTracker(displayName, Timestamp.now(), "joined Friend Group");
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
@@ -735,7 +741,7 @@ class Database {
           dbRef.doc('notreDame/data/friendGroups/$gid');
       transaction.update(ref, {
         'friendGroups': FieldValue.arrayUnion([gid]),
-        'score': FieldValue.increment(100)
+        // 'score': FieldValue.increment(75)
       });
       transaction.update(ref2, {
         'members': FieldValue.arrayUnion([id]),
@@ -756,9 +762,20 @@ class Database {
 
   Future<void> suggestMOOV(userId, gid, postId, unix, userName, members, title,
       pic, groupName) async {
+    usersRef.doc(currentUser.id).get().then((value) {
+      if (value['suggestLimit'] >= 1) {
+        usersRef
+            .doc(currentUser.id)
+            .update({"suggestLimit": FieldValue.increment(-1)});
+        usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(30)});
+      }
+    });
+
     return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
-      transaction.update(ref2, {'score': FieldValue.increment(30)});
+      // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
+      // transaction.update(ref2, {'score': FieldValue.increment(30)});
 
       groupsRef
           .doc(gid)
@@ -811,9 +828,16 @@ class Database {
     final aDate =
         DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
 
-    print(DateFormat('MMMd').add_jm().format(aDate));
     String whenString = DateFormat('MMMd').format(aDate);
     // if (who != "Alvin Alaphat" && who != "Kevin Camson" && who != "MOOV Team") {
+
+    FirebaseFirestore.instance.collection(who).get().then((value) {
+      print(value);
+      
+    });
+
+    // if (value['postLimit'] >= 1) {
+
     FirebaseFirestore.instance
         .collection(who)
         .doc(whenString)
@@ -897,15 +921,18 @@ class Database {
         List<DocumentSnapshot> documents = snapshot.docs;
 
         for (var document in documents) {
-          await document.reference.set({
-            // "sendLimit": {
-            //   "friendFinderVisibility": true,
-            //   "friendsOnly": false,
-            //   "incognito": false,
-            //   "showDorm": true
-            // }
-            "sendLimit": 5
-          }, SetOptions(merge: true));
+          if (currentUser.displayName == 'MOOV Team') {
+            await document.reference.set({
+              // "sendLimit": {
+              //   "friendFinderVisibility": true,
+              //   "friendsOnly": false,
+              //   "incognito": false,
+              //   "showDorm": true
+              // }
+              // "suggestLimit": 5,
+              // "groupLimit": 2
+            }, SetOptions(merge: true));
+          }
         }
       });
     } catch (e) {

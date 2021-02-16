@@ -12,9 +12,11 @@ import 'package:MOOV/pages/map_test.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
+import 'package:MOOV/widgets/MOTDAnimated.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/hottestMOOV.dart';
 import 'package:MOOV/widgets/poll2.dart';
+import 'package:MOOV/widgets/suggestionBox.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +134,6 @@ class _HomePageState extends State<HomePage>
           scale: _hideFabAnimController,
           child: FloatingActionButton.extended(
               onPressed: () {
-                // Database().updateAllDocs();
                 Navigator.push(
                     context,
                     PageTransition(
@@ -155,6 +156,7 @@ class _HomePageState extends State<HomePage>
               crossAxisSpacing: 10.0,
               childAspectRatio: 2.25,
               children: <Widget>[
+                // OpenContainerTransformDemo()
                 Bounce(
                     duration: Duration(milliseconds: 100),
                     onPressed: () {
@@ -408,7 +410,7 @@ class _HomePageState extends State<HomePage>
                   // scrollPhysics: NeverScrollableScrollPhysics(),
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
-                  autoPlay: true,
+                  autoPlay: false,
                   autoPlayInterval: Duration(seconds: 6),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
@@ -548,6 +550,7 @@ class _HomePageState extends State<HomePage>
                   //   ),
                   // ),
                   // MapTest(),
+                  SuggestionBoxCarousel(),
                   PollView(),
                   GroupCarousel(),
                   HottestMOOV()
