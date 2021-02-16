@@ -396,7 +396,9 @@ class _NonImageContents extends StatelessWidget {
                                       // backgroundImage: snapshot.data
                                       //     .documents[index].data['photoUrl'],
                                       backgroundImage: NetworkImage(
-                                          snapshot.data.docs[0]['avatarUrl']),
+                                          snapshot.data.docs[
+                                                  snapshot.data.docs.length - 1]
+                                              ['avatarUrl']),
                                       radius: 32,
                                     ),
                                   ),
@@ -985,6 +987,7 @@ class _ButtonsState extends State<Buttons> {
     // });
     return StreamBuilder(
         stream: postsRef.doc(moovId).snapshots(),
+        // ignore: missing_return
         builder: (context, snapshot) {
           // title = snapshot.data['title'];
           // pic = snapshot.data['pic'];
@@ -1042,11 +1045,10 @@ class _ButtonsState extends State<Buttons> {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                         if (statuses != null && status == 1){
-                              changeScore(false);
-                            }
+                        if (statuses != null && status == 1) {
+                          changeScore(false);
+                        }
                         if (statuses != null && status != 1) {
-                           
                           positivePointAnimationNotGoing = true;
                           if (status == 3) {
                             //if youre switching statuses we dont double count
@@ -1074,9 +1076,9 @@ class _ButtonsState extends State<Buttons> {
                           });
                           Database()
                               .addNotGoing(currentUser.id, moovId, goingList);
-                                if (status != 3 && status != 2) {
-                              changeScore(true);
-                            }
+                          if (status != 3 && status != 2) {
+                            changeScore(true);
+                          }
                           status = 1;
                           print(status);
                         } else if (statuses != null && status == 1) {
@@ -1159,11 +1161,10 @@ class _ButtonsState extends State<Buttons> {
                             borderRadius: BorderRadius.circular(5),
                             side: BorderSide(color: Colors.black)),
                         onPressed: () {
-                            if (statuses != null && status == 2){
-                              changeScore(false);
-                            }
+                          if (statuses != null && status == 2) {
+                            changeScore(false);
+                          }
                           if (statuses != null && status != 2) {
-                              
                             positivePointAnimationUndecided = true;
                             if (status == 3) {
                               //if youre switching statuses we dont double count
@@ -1191,9 +1192,9 @@ class _ButtonsState extends State<Buttons> {
                             });
                             Database().addUndecided(
                                 currentUser.id, moovId, goingList);
-                                 if (status != 1 && status != 3) {
+                            if (status != 1 && status != 3) {
                               changeScore(true);
-                            } 
+                            }
                             status = 2;
                             print(status);
                           } else if (statuses != null && status == 2) {
@@ -1205,7 +1206,7 @@ class _ButtonsState extends State<Buttons> {
                               });
                             });
                             Database().removeUndecided(currentUser.id, moovId);
-                            
+
                             status = 0;
                           }
                         },
@@ -1268,16 +1269,15 @@ class _ButtonsState extends State<Buttons> {
                             borderRadius: BorderRadius.circular(5),
                             side: BorderSide(color: Colors.black)),
                         onPressed: () {
-                           if (statuses != null && status == 3){
-                              changeScore(false);
-                            }
+                          if (statuses != null && status == 3) {
+                            changeScore(false);
+                          }
                           if (goingCount == maxOccupancy && status != 3) {
                             showMax(context);
                           }
                           if (statuses != null &&
                               status != 3 &&
                               goingCount < maxOccupancy) {
-                            
                             positivePointAnimation = true;
                             if (status == 2) {
                               //if youre switching statuses we dont double count
@@ -1311,12 +1311,11 @@ class _ButtonsState extends State<Buttons> {
                                 course['title'],
                                 course['image'],
                                 course['push']);
-                                     if (status != 1 && status != 2) {
+                            if (status != 1 && status != 2) {
                               changeScore(true);
-                            } 
+                            }
                             status = 3;
                             print(status);
-                           
                           } else if (statuses != null && status == 3) {
                             negativePointAnimation = true;
 

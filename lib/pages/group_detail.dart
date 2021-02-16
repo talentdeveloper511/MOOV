@@ -513,7 +513,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                               ),
                                               child: Padding(
                                                 padding:
-                                                    const EdgeInsets.all(4.0),
+                                                    const EdgeInsets.all(2.0),
                                                 child: Chat(
                                                   gid: gid,
                                                   groupPic: groupPic,
@@ -525,7 +525,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 30,
+                                      height: 50,
                                     )
                                   ]),
                                 )

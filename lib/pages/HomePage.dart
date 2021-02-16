@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage>
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Text(
-                                          "Friend Finder",
+                                          "Friends Plans",
                                           style: TextStyle(
                                               fontFamily: 'Open Sans',
                                               fontWeight: FontWeight.bold,

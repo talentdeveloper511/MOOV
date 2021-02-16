@@ -178,7 +178,7 @@ class _SearchBarState extends State<SearchBar>
                           decoration: InputDecoration(
                             labelStyle: TextStyle(fontSize: 20),
                             border: InputBorder.none,
-                            hintText: 'Search Users, Groups, or MOOVs',
+                            hintText: 'Search',
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 20),
                             prefixIcon:
@@ -1117,7 +1117,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                         decoration: InputDecoration(
                           labelStyle: TextStyle(fontSize: 20),
                           border: InputBorder.none,
-                          hintText: 'Search MOOV',
+                          hintText: 'Search',
                           hintStyle:
                               TextStyle(color: Colors.grey, fontSize: 20),
                           prefixIcon:

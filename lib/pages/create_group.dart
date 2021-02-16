@@ -56,14 +56,14 @@ class _GroupFormState extends State<GroupForm> {
     for (int i = 0; i < result.docs.length; i++) {
       groupNames.add(result.docs[i].data()['groupName']);
     }
-    if (groupNames.contains(groupName))
-        {  nameExists = true;
+    if (groupNames.contains(groupName)) {
+      nameExists = true;
 
-      return true;}
-    else
-   
-    // return false;
-    print("No, this name does not exist, we're good to go.");
+      return true;
+    } else
+
+      // return false;
+      print("No, this name does not exist, we're good to go.");
   }
 
   Future handleTakePhoto() async {
@@ -368,7 +368,7 @@ class _GroupFormState extends State<GroupForm> {
                                                     .then(onGoBack);
                                               },
                                             ),
-                                            Text("Invite",
+                                            Text("Add",
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold)),
@@ -547,8 +547,7 @@ class _GroupFormState extends State<GroupForm> {
     // The pattern of the email didn't match the regex above.
   }
 
-   _validateInputs() {
-    
+  _validateInputs() {
     if (_image == null) {
       setState(() {
         noImage = true;
