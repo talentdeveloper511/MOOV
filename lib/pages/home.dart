@@ -85,6 +85,8 @@ class _HomeState extends State<Home> {
   @override
   Future<void> initState() {
     super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => configurePushNotifications());
     pageController = PageController();
     // Detects when user signed in
     googleSignIn.onCurrentUserChanged.listen((account) {
@@ -136,33 +138,33 @@ class _HomeState extends State<Home> {
           if (recipientId == currentUser.id) {
             print('Notification shown');
 
-            // Flushbar snackbar = Flushbar(
-            //     flushbarStyle: FlushbarStyle.FLOATING,
-            //     boxShadows: [
-            //       BoxShadow(
-            //           color: Colors.blue[800],
-            //           offset: Offset(0.0, 2.0),
-            //           blurRadius: 3.0)
-            //     ],
-            //     backgroundGradient: LinearGradient(
-            //         colors: [TextThemes.ndGold, TextThemes.ndGold]),
-            //     icon: Icon(
-            //       Icons.directions_run,
-            //       color: Colors.green[700],
-            //     ),
-            //     duration: Duration(seconds: 4),
-            //     flushbarPosition: FlushbarPosition.TOP,
-            //     backgroundColor: Colors.green,
-            //     messageText: Text(
-            //       body,
-            //       overflow: TextOverflow.ellipsis,
-            //       style: TextStyle(color: Colors.white),
-            //     ));
-            SnackBar snackybar = SnackBar(
-                content: Text(body, overflow: TextOverflow.ellipsis),
-                backgroundColor: Colors.green);
-            _scaffoldKey.currentState.showSnackBar(snackybar);
-            // snackbar.show(context);
+            Flushbar snackbar = Flushbar(
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                backgroundGradient: LinearGradient(
+                    colors: [TextThemes.ndGold, TextThemes.ndGold]),
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.green[700],
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.green,
+                messageText: Text(
+                  body,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white),
+                ));
+            // SnackBar snackybar = SnackBar(
+            //     content: Text(body, overflow: TextOverflow.ellipsis),
+            //     backgroundColor: Colors.green);
+            // _scaffoldKey.currentState.showSnackBar(snackybar);
+            snackbar.show(context);
             // Get.snackbar("Message", body);
           }
           print('Notification not shown :(');
@@ -177,31 +179,31 @@ class _HomeState extends State<Home> {
           FlutterAppBadger.updateBadgeCount(1);
           if (recipientId == currentUser.id) {
             print('Notification shown');
-            // Flushbar snackbar = Flushbar(
-            //     flushbarStyle: FlushbarStyle.FLOATING,
-            //     boxShadows: [
-            //       BoxShadow(
-            //           color: Colors.blue[800],
-            //           offset: Offset(0.0, 2.0),
-            //           blurRadius: 3.0)
-            //     ],
-            //     backgroundGradient: LinearGradient(
-            //         colors: [TextThemes.ndGold, TextThemes.ndGold]),
-            //     icon: Icon(
-            //       Icons.directions_run,
-            //       color: Colors.green[700],
-            //     ),
-            //     duration: Duration(seconds: 4),
-            //     flushbarPosition: FlushbarPosition.TOP,
-            //     backgroundColor: Colors.green,
-            //     messageText: Text(body,
-            //         overflow: TextOverflow.ellipsis,
-            //         style: TextStyle(color: Colors.white)));
-            SnackBar snackybar = SnackBar(
-                content: Text(body, overflow: TextOverflow.ellipsis),
-                backgroundColor: Colors.green);
-            _scaffoldKey.currentState.showSnackBar(snackybar);
-            // snackbar.show(context);
+            Flushbar snackbar = Flushbar(
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                backgroundGradient: LinearGradient(
+                    colors: [TextThemes.ndGold, TextThemes.ndGold]),
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.green[700],
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.green,
+                messageText: Text(body,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white)));
+            // SnackBar snackybar = SnackBar(
+            //     content: Text(body, overflow: TextOverflow.ellipsis),
+            //     backgroundColor: Colors.green);
+            // _scaffoldKey.currentState.showSnackBar(snackybar);
+            snackbar.show(context);
             // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
           }
           print('Notification not shown :(');
@@ -215,31 +217,31 @@ class _HomeState extends State<Home> {
           FlutterAppBadger.updateBadgeCount(1);
           if (recipientId == currentUser.id) {
             print('Notification shown');
-            // Flushbar snackbar = Flushbar(
-            //     flushbarStyle: FlushbarStyle.FLOATING,
-            //     boxShadows: [
-            //       BoxShadow(
-            //           color: Colors.blue[800],
-            //           offset: Offset(0.0, 2.0),
-            //           blurRadius: 3.0)
-            //     ],
-            //     backgroundGradient:
-            //         LinearGradient(colors: [Colors.green, Colors.green]),
-            //     icon: Icon(
-            //       Icons.directions_run,
-            //       color: Colors.white,
-            //     ),
-            //     duration: Duration(seconds: 4),
-            //     flushbarPosition: FlushbarPosition.TOP,
-            //     backgroundColor: Colors.green,
-            //     messageText: Text(body,
-            //         overflow: TextOverflow.ellipsis,
-            //         style: TextStyle(color: Colors.white)));
-            SnackBar snackybar = SnackBar(
-                content: Text(body, overflow: TextOverflow.ellipsis),
-                backgroundColor: Colors.green);
-            _scaffoldKey.currentState.showSnackBar(snackybar);
-            // snackbar.show(context);
+            Flushbar snackbar = Flushbar(
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                backgroundGradient:
+                    LinearGradient(colors: [Colors.green, Colors.green]),
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.white,
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.green,
+                messageText: Text(body,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white)));
+            // SnackBar snackybar = SnackBar(
+            //     content: Text(body, overflow: TextOverflow.ellipsis),
+            //     backgroundColor: Colors.green);
+            // _scaffoldKey.currentState.showSnackBar(snackybar);
+            snackbar.show(context);
           }
           print('Notification not shown :(');
         });

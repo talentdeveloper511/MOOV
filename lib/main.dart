@@ -9,10 +9,11 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/pages/LoginPage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
+  await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.blue, // navigation bar color
       statusBarColor: TextThemes.ndBlue));
@@ -25,6 +26,7 @@ void main() async {
 class MOOV extends StatelessWidget {
   const MOOV({Key key}) : super(key: key);
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -39,11 +41,14 @@ class MOOV extends StatelessWidget {
             FocusManager.instance.primaryFocus.unfocus();
           }
         },
-        child: MaterialApp(
-           builder: (context, widget) {
-      return MediaQuery(
-        child: widget,
-        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),);}, //for accessibility larger text size
+        child: OverlaySupport(
+            child: MaterialApp(
+          builder: (context, widget) {
+            return MediaQuery(
+              child: widget,
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            );
+          }, //for accessibility larger text size
           title: 'Whats the MOOV?',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
@@ -65,7 +70,7 @@ class MOOV extends StatelessWidget {
           //   body: push.MessageHandler(),
           // )
           home: Home(),
-        ),
+        )),
       ),
     );
   }
