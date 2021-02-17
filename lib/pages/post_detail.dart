@@ -89,28 +89,28 @@ class _PostDetailState extends State<PostDetail>
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           isIncognito = snapshot.data['privacySettings']['incognito'];
-  final bool includeMarkAsDoneButton = true;
+          final bool includeMarkAsDoneButton = true;
 
           return Scaffold(
               appBar: AppBar(
-                leading: (includeMarkAsDoneButton) ?
-            IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Navigator.pop(context, true),
-              tooltip: 'Mark as done',
-            ) :
-                 IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
-                ),
+                leading: (includeMarkAsDoneButton)
+                    ? IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Navigator.pop(context, true),
+                        tooltip: 'Mark as done',
+                      )
+                    : IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                        },
+                      ),
                 backgroundColor: TextThemes.ndBlue,
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: EdgeInsets.all(5),
@@ -608,11 +608,17 @@ class PostTimeAndPlace extends StatelessWidget {
                       color: TextThemes.ndGold,
                     ),
                   ),
-                  Text('WHERE: ',
-                      style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text(
+                    'WHERE: ',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width *.65,
-                    child: Text(address, maxLines: 3, overflow: TextOverflow.ellipsis,))
+                      width: MediaQuery.of(context).size.width * .65,
+                      child: Text(
+                        address,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ))
                 ],
               ),
             )
@@ -954,15 +960,22 @@ class _ButtonsState extends State<Buttons> {
   bool positivePointAnimationNotGoing = false;
   bool negativePointAnimationNotGoing = false;
   dynamic moovId;
-  final increaseBy = FieldValue.increment(23.99);
 
-  changeScore(bool increment) {
-    increment
+  changeScore(String postOwnerId, bool increment) {
+    increment //for status responder
         ? usersRef
             .doc(currentUser.id)
             .update({"score": FieldValue.increment(30)})
         : usersRef
             .doc(currentUser.id)
+            .update({"score": FieldValue.increment(-30)});
+
+    increment //for post owner
+        ? usersRef
+            .doc(postOwnerId)
+            .update({"score": FieldValue.increment(30)})
+        : usersRef
+            .doc(postOwnerId)
             .update({"score": FieldValue.increment(-30)});
   }
 
@@ -1004,6 +1017,7 @@ class _ButtonsState extends State<Buttons> {
           int maxOccupancy = course['maxOccupancy'];
           int goingCount = course['going'].length;
           List<dynamic> goingList = course['going'];
+          String postOwnerId = course['userId'];
 
           List<dynamic> statusesIds = statuses.keys.toList();
 
@@ -1051,11 +1065,10 @@ class _ButtonsState extends State<Buttons> {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
-                         if (statuses != null && status == 1){
-                              changeScore(false);
-                            }
+                        if (statuses != null && status == 1) {
+                          changeScore(postOwnerId, false);
+                        }
                         if (statuses != null && status != 1) {
-                           
                           positivePointAnimationNotGoing = true;
                           if (status == 3) {
                             //if youre switching statuses we dont double count
@@ -1083,9 +1096,9 @@ class _ButtonsState extends State<Buttons> {
                           });
                           Database()
                               .addNotGoing(currentUser.id, moovId, goingList);
-                                if (status != 3 && status != 2) {
-                              changeScore(true);
-                            }
+                          if (status != 3 && status != 2) {
+                            changeScore(postOwnerId,true);
+                          }
                           status = 1;
                           print(status);
                         } else if (statuses != null && status == 1) {
@@ -1168,11 +1181,10 @@ class _ButtonsState extends State<Buttons> {
                             borderRadius: BorderRadius.circular(5),
                             side: BorderSide(color: Colors.black)),
                         onPressed: () {
-                            if (statuses != null && status == 2){
-                              changeScore(false);
-                            }
+                          if (statuses != null && status == 2) {
+                            changeScore(postOwnerId,false);
+                          }
                           if (statuses != null && status != 2) {
-                              
                             positivePointAnimationUndecided = true;
                             if (status == 3) {
                               //if youre switching statuses we dont double count
@@ -1200,9 +1212,9 @@ class _ButtonsState extends State<Buttons> {
                             });
                             Database().addUndecided(
                                 currentUser.id, moovId, goingList);
-                                 if (status != 1 && status != 3) {
-                              changeScore(true);
-                            } 
+                            if (status != 1 && status != 3) {
+                              changeScore(postOwnerId,true);
+                            }
                             status = 2;
                             print(status);
                           } else if (statuses != null && status == 2) {
@@ -1214,7 +1226,7 @@ class _ButtonsState extends State<Buttons> {
                               });
                             });
                             Database().removeUndecided(currentUser.id, moovId);
-                            
+
                             status = 0;
                           }
                         },
@@ -1277,16 +1289,15 @@ class _ButtonsState extends State<Buttons> {
                             borderRadius: BorderRadius.circular(5),
                             side: BorderSide(color: Colors.black)),
                         onPressed: () {
-                           if (statuses != null && status == 3){
-                              changeScore(false);
-                            }
+                          if (statuses != null && status == 3) {
+                            changeScore(postOwnerId,false);
+                          }
                           if (goingCount == maxOccupancy && status != 3) {
                             showMax(context);
                           }
                           if (statuses != null &&
                               status != 3 &&
                               goingCount < maxOccupancy) {
-                            
                             positivePointAnimation = true;
                             if (status == 2) {
                               //if youre switching statuses we dont double count
@@ -1320,12 +1331,11 @@ class _ButtonsState extends State<Buttons> {
                                 course['title'],
                                 course['image'],
                                 course['push']);
-                                     if (status != 1 && status != 2) {
-                              changeScore(true);
-                            } 
+                            if (status != 1 && status != 2) {
+                              changeScore(postOwnerId,true);
+                            }
                             status = 3;
                             print(status);
-                           
                           } else if (statuses != null && status == 3) {
                             negativePointAnimation = true;
 
