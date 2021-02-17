@@ -125,7 +125,7 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
               decoration: InputDecoration(
                 labelStyle: TextStyle(fontSize: 20),
                 border: InputBorder.none,
-                hintText: 'Search MOOV',
+                hintText: 'Search',
                 hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
                 prefixIcon: const Icon(Icons.search, color: Colors.black),
                 suffixIcon: GestureDetector(

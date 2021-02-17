@@ -228,20 +228,17 @@ class Comment extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    left: 20,
-                    top: 30,
-                    child: GestureDetector(
-                        onTap: () {
-                          showAlertDialog(context, chatId, gid, millis);
-                        },
-                        child: Icon(Icons.more_vert_outlined)),
-                  )
+                  // Positioned(
+                  //   left: 20,
+                  //   top: 30,
+                  //   child: GestureDetector(
+                  //       onTap: () {
+                  //         showAlertDialog(context, chatId, gid, millis);
+                  //       },
+                  //       child: Icon(Icons.more_vert_outlined)),
+                  // )
                 ],
               ),
-        Divider(
-          height: 1,
-        ),
       ],
     );
   }

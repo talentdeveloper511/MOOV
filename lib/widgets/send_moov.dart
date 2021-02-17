@@ -37,8 +37,12 @@ class SendMOOVSearch extends StatefulWidget {
       this.ownerProPic);
 }
 
-class _SendMOOVSearchState extends State<SendMOOVSearch> {
+class _SendMOOVSearchState extends State<SendMOOVSearch>
+    with SingleTickerProviderStateMixin {
   String ownerId, previewImg;
+  TabController _tabController;
+  int _currentIndex = 0;
+
   dynamic startDate, moovId;
   String title, ownerProPic, ownerName;
   _SendMOOVSearchState(this.ownerId, this.previewImg, this.startDate,
@@ -49,6 +53,13 @@ class _SendMOOVSearchState extends State<SendMOOVSearch> {
 
   final Algolia _algoliaApp = AlgoliaApplication.algolia;
   String _searchTerm;
+
+  Future<List<AlgoliaObjectSnapshot>> _operation0(String input) async {
+    AlgoliaQuery query = _algoliaApp.instance.index("groups").search(input);
+    AlgoliaQuerySnapshot querySnap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> results = querySnap.hits;
+    return results;
+  }
 
   Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
     AlgoliaQuery query = _algoliaApp.instance.index("users").search(input);
@@ -68,6 +79,14 @@ class _SendMOOVSearchState extends State<SendMOOVSearch> {
   @override
   void initState() {
     super.initState();
+    _tabController =
+        new TabController(vsync: this, length: 2, initialIndex: _currentIndex);
+    _tabController.animation
+      ..addListener(() {
+        setState(() {
+          _currentIndex = (_tabController.animation.value).round();
+        });
+      });
 
     // Simple declarations
     TextEditingController searchController = TextEditingController();
@@ -77,84 +96,118 @@ class _SendMOOVSearchState extends State<SendMOOVSearch> {
   void dispose() {
     super.dispose();
     searchController.dispose();
+    _tabController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_drop_down_outlined,
-                color: Colors.white, size: 35),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 96,
+        bottom: PreferredSize(
+            preferredSize: null,
+            child: Column(children: <Widget>[
+              TextField(
+                  style: TextStyle(fontSize: 20),
+                  controller: searchController,
+                  onChanged: (val) {
+                    setState(() {
+                      _searchTerm = val;
+                    });
+                  },
+                  // Set Focus Node
+                  focusNode: textFieldFocusNode,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(fontSize: 20),
+                    border: InputBorder.none,
+                    hintText: 'Search',
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
+                    prefixIcon: const Icon(Icons.search, color: Colors.black),
+                    suffixIcon: GestureDetector(
+                        onTap: () {
+                          clearSearch();
+                          // Unfocus all focus nodes
+                          textFieldFocusNode.unfocus();
 
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 50.0,
-                ),
+                          // Disable text field's focus node request
+                          textFieldFocusNode.canRequestFocus = false;
+
+                          //Enable the text field's focus node request after some delay
+                          Future.delayed(Duration(milliseconds: 10), () {
+                            textFieldFocusNode.canRequestFocus = true;
+                          });
+                        },
+                        child: IconButton(
+                            onPressed: null,
+                            icon: Icon(
+                              Icons.clear,
+                              color: Colors.black,
+                            ))),
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // Sign In Button
+                  new FlatButton(
+                    splashColor: Colors.white,
+                    color: Colors.white,
+                    onPressed: () {
+                      _tabController.animateTo(0);
+                      setState(() {
+                        _currentIndex = (_tabController.animation.value)
+                            .round(); //_tabController.animation.value returns double
+
+                        _currentIndex = 0;
+                      });
+                    },
+                    child: _currentIndex == 0
+                        ? GradientText(
+                            "People",
+                            gradient: LinearGradient(colors: [
+                              Colors.blue.shade400,
+                              Colors.blue.shade900,
+                            ]),
+                          )
+                        : Text(
+                            "People",
+                            style: TextStyle(fontSize: 16.5),
+                          ),
+                  ),
+                  // Sign Up Button
+
+                  FlatButton(
+                    splashColor: Colors.white,
+                    color: Colors.white,
+                    onPressed: () {
+                      _tabController.animateTo(1);
+                      setState(() {
+                        _currentIndex =
+                            (_tabController.animation.value).round();
+                        _currentIndex = 1;
+                      });
+                    },
+                    child: _currentIndex == 1
+                        ? GradientText(
+                            "Friend Groups",
+                            gradient: LinearGradient(colors: [
+                              Colors.blue.shade400,
+                              Colors.blue.shade900,
+                            ]),
+                          )
+                        : Text(
+                            "Friend Groups",
+                            style: TextStyle(fontSize: 16.5),
+                          ),
+                  )
+                ],
               ),
-            ],
-          ),
-        ),
+            ])),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(children: <Widget>[
-          TextField(
-              style: TextStyle(fontSize: 20),
-              controller: searchController,
-              onChanged: (val) {
-                setState(() {
-                  _searchTerm = val;
-                });
-              },
-              // Set Focus Node
-              focusNode: textFieldFocusNode,
-              decoration: InputDecoration(
-                labelStyle: TextStyle(fontSize: 20),
-                border: InputBorder.none,
-                hintText: 'Search MOOV',
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
-                prefixIcon: const Icon(Icons.search, color: Colors.black),
-                suffixIcon: GestureDetector(
-                    onTap: () {
-                      clearSearch();
-                      // Unfocus all focus nodes
-                      textFieldFocusNode.unfocus();
-
-                      // Disable text field's focus node request
-                      textFieldFocusNode.canRequestFocus = false;
-
-                      //Enable the text field's focus node request after some delay
-                      Future.delayed(Duration(milliseconds: 10), () {
-                        textFieldFocusNode.canRequestFocus = true;
-                      });
-                    },
-                    child: IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          Icons.clear,
-                          color: Colors.black,
-                        ))),
-              )),
           StreamBuilder<List<AlgoliaObjectSnapshot>>(
               stream: Stream.fromFuture(_operation(_searchTerm)),
               builder: (context, snapshot) {
@@ -321,7 +374,7 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
 
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -350,13 +403,15 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
                   displayName ?? "",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: isLargePhone ? TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18):TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16),
+                  style: isLargePhone
+                      ? TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18)
+                      : TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16),
                 ),
               ),
             ),

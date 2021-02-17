@@ -160,7 +160,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                       decoration: InputDecoration(
                         labelStyle: TextStyle(fontSize: 20),
                         border: InputBorder.none,
-                        hintText: 'Search MOOV',
+                        hintText: 'Search',
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
                         prefixIcon:
                             const Icon(Icons.search, color: Colors.black),
@@ -557,7 +557,7 @@ class _AddUsersFromCreateGroupState extends State<AddUsersFromCreateGroup>
                       decoration: InputDecoration(
                         labelStyle: TextStyle(fontSize: 20),
                         border: InputBorder.none,
-                        hintText: 'Search MOOV',
+                        hintText: 'Search',
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
                         prefixIcon:
                             const Icon(Icons.search, color: Colors.black),
@@ -986,7 +986,7 @@ class _SearchUsersGroupState extends State<SearchUsersGroup> {
               decoration: InputDecoration(
                 labelStyle: TextStyle(fontSize: 20),
                 border: InputBorder.none,
-                hintText: 'Search MOOV',
+                hintText: 'Search',
                 hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
                 prefixIcon: const Icon(Icons.search, color: Colors.black),
                 suffixIcon: GestureDetector(
