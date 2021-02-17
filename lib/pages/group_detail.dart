@@ -11,8 +11,10 @@ import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/NextMOOV.dart';
 import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/chat.dart';
+import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/set_moov.dart';
+import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -888,6 +890,22 @@ class Suggestions extends StatefulWidget {
 }
 
 class _SuggestionsState extends State<Suggestions> {
+  changeScore(bool increment) {
+    increment //for status responder
+        ? usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(20)})
+        : usersRef
+            .doc(currentUser.id)
+            .update({"score": FieldValue.increment(-20)});
+  }
+
+  bool positivePointAnimationYes = false;
+  bool negativePointAnimationYes = false;
+
+  bool positivePointAnimationNo = false;
+  bool negativePointAnimationNo = false;
+
   PageController _controller;
   String groupId;
   Map<String, dynamic> voters = {};
@@ -1113,95 +1131,210 @@ class _SuggestionsState extends State<Suggestions> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: BorderSide(color: Colors.black)),
-                          onPressed: () {
-                            if (voters != null && status != 1) {
-                              Database().betaActivityTracker(
-                                  currentUser.displayName,
-                                  Timestamp.now(),
-                                  "vote on " + suggestorId);
-                              Database().addNoVote(
-                                  unix, currentUser.id, groupId, suggestorId);
-                              status = 1;
-                            } else if (voters != null && status == 1) {
-                              Database().removeNoVote(
-                                  unix, currentUser.id, groupId, suggestorId);
-                              status = 0;
-                            }
-                          },
-                          color: (status == 1) ? Colors.red : Colors.white,
-                          padding: EdgeInsets.all(5.0),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 3.0, right: 3),
-                            child: (status == 1)
-                                ? Column(
-                                    children: [
-                                      Text('No',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      Icon(Icons.thumb_down,
-                                          color: Colors.white, size: 30),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Text('No'),
-                                      Icon(Icons.thumb_down,
-                                          color: Colors.red, size: 30),
-                                    ],
-                                  ),
+                        child: Stack(children: [
+                          RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                side: BorderSide(color: Colors.black)),
+                            onPressed: () {
+                              if (voters != null && status != 1) {
+                                positivePointAnimationNo = true;
+                                if (status != 2) {
+                                  changeScore(true);
+                                }
+
+                                if (status == 2) {
+                                  changeScore(false);
+                                  //if youre switching statuses we dont double count
+                                  negativePointAnimationYes = true;
+                                  Timer(Duration(seconds: 2), () {
+                                    setState(() {
+                                      negativePointAnimationYes = false;
+                                    });
+                                  });
+                                }
+
+                                Timer(Duration(seconds: 2), () {
+                                  setState(() {
+                                    positivePointAnimationNo = false;
+                                  });
+                                });
+                                Database().betaActivityTracker(
+                                    currentUser.displayName,
+                                    Timestamp.now(),
+                                    "vote on " + suggestorId);
+                                Database().addNoVote(
+                                    unix, currentUser.id, groupId, suggestorId);
+                                status = 1;
+                              } else if (voters != null && status == 1) {
+                                negativePointAnimationNo = true;
+                                Timer(Duration(seconds: 2), () {
+                                  setState(() {
+                                    negativePointAnimationNo = false;
+                                  });
+                                });
+                                changeScore(false);
+                                Database().removeNoVote(
+                                    unix, currentUser.id, groupId, suggestorId);
+                                status = 0;
+                              }
+                            },
+                            color: (status == 1) ? Colors.red : Colors.white,
+                            padding: EdgeInsets.all(5.0),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 3.0, right: 3),
+                              child: (status == 1)
+                                  ? Column(
+                                      children: [
+                                        Text('No',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        Icon(Icons.thumb_down,
+                                            color: Colors.white, size: 30),
+                                      ],
+                                    )
+                                  : Column(
+                                      children: [
+                                        Text('No'),
+                                        Icon(Icons.thumb_down,
+                                            color: Colors.red, size: 30),
+                                      ],
+                                    ),
+                            ),
                           ),
-                        ),
+                          TranslationAnimatedWidget(
+                              enabled: this
+                                  .positivePointAnimationNo, //update this boolean to forward/reverse the animation
+                              values: [
+                                Offset(20, -20), // disabled value value
+                                Offset(20, -20), //intermediate value
+                                Offset(20, -40) //enabled value
+                              ],
+                              child: OpacityAnimatedWidget.tween(
+                                  opacityEnabled: 1, //define start value
+                                  opacityDisabled: 0, //and end value
+                                  enabled: positivePointAnimationNo,
+                                  child: PointAnimation(20, true))),
+                          TranslationAnimatedWidget(
+                              enabled: this
+                                  .negativePointAnimationNo, //update this boolean to forward/reverse the animation
+                              values: [
+                                Offset(20, -20), // disabled value value
+                                Offset(20, -20), //intermediate value
+                                Offset(20, -40) //enabled value
+                              ],
+                              child: OpacityAnimatedWidget.tween(
+                                  opacityEnabled: 1, //define start value
+                                  opacityDisabled: 0, //and end value
+                                  enabled: negativePointAnimationNo,
+                                  child: PointAnimation(20, false))),
+                        ]),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              side: BorderSide(color: Colors.black)),
-                          onPressed: () {
-                            if (voters != null && status != 2) {
-                              Database().betaActivityTracker(
-                                  currentUser.displayName,
-                                  Timestamp.now(),
-                                  "vote on " + suggestorId);
-                              Database().addYesVote(
-                                  unix, currentUser.id, groupId, suggestorId);
-                              status = 2;
-                            } else if (voters != null && status == 2) {
-                              Database().removeYesVote(
-                                  unix, currentUser.id, groupId, suggestorId);
-                              status = 0;
-                            }
-                          },
-                          color: (status == 2) ? Colors.green : Colors.white,
-                          padding: EdgeInsets.all(5.0),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 3.0, right: 3),
-                            child: (status == 2)
-                                ? Column(
-                                    children: [
-                                      Text('Yes',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      Icon(Icons.thumb_up,
-                                          color: Colors.white, size: 30),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Text('Yes',
-                                          style:
-                                              TextStyle(color: Colors.black)),
-                                      Icon(Icons.thumb_up,
-                                          color: Colors.green, size: 30),
-                                    ],
-                                  ),
+                        child: Stack(children: [
+                          RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                side: BorderSide(color: Colors.black)),
+                            onPressed: () {
+                              if (voters != null && status != 2) {
+                                positivePointAnimationYes = true;
+                                if (status != 1) {
+                                  changeScore(true);
+                                }
+
+                                if (status == 1) {
+                                  changeScore(false);
+                                  //if youre switching statuses we dont double count
+                                  negativePointAnimationNo = true;
+                                  Timer(Duration(seconds: 2), () {
+                                    setState(() {
+                                      negativePointAnimationNo = false;
+                                    });
+                                  });
+                                }
+
+                                Timer(Duration(seconds: 2), () {
+                                  setState(() {
+                                    positivePointAnimationYes = false;
+                                  });
+                                });
+
+                                Database().betaActivityTracker(
+                                    currentUser.displayName,
+                                    Timestamp.now(),
+                                    "vote on " + suggestorId);
+                                Database().addYesVote(
+                                    unix, currentUser.id, groupId, suggestorId);
+                                status = 2;
+                              } else if (voters != null && status == 2) {
+                                negativePointAnimationYes = true;
+                                Timer(Duration(seconds: 2), () {
+                                  setState(() {
+                                    negativePointAnimationYes = false;
+                                  });
+                                });
+                                changeScore(false);
+                                Database().removeYesVote(
+                                    unix, currentUser.id, groupId, suggestorId);
+                                status = 0;
+                              }
+                            },
+                            color: (status == 2) ? Colors.green : Colors.white,
+                            padding: EdgeInsets.all(5.0),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 3.0, right: 3),
+                              child: (status == 2)
+                                  ? Column(
+                                      children: [
+                                        Text('Yes',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        Icon(Icons.thumb_up,
+                                            color: Colors.white, size: 30),
+                                      ],
+                                    )
+                                  : Column(
+                                      children: [
+                                        Text('Yes',
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                        Icon(Icons.thumb_up,
+                                            color: Colors.green, size: 30),
+                                      ],
+                                    ),
+                            ),
                           ),
-                        ),
+                          TranslationAnimatedWidget(
+                              enabled: this
+                                  .positivePointAnimationYes, //update this boolean to forward/reverse the animation
+                              values: [
+                                Offset(20, -20), // disabled value value
+                                Offset(20, -20), //intermediate value
+                                Offset(20, -40) //enabled value
+                              ],
+                              child: OpacityAnimatedWidget.tween(
+                                  opacityEnabled: 1, //define start value
+                                  opacityDisabled: 0, //and end value
+                                  enabled: positivePointAnimationYes,
+                                  child: PointAnimation(20, true))),
+                          TranslationAnimatedWidget(
+                              enabled: this
+                                  .negativePointAnimationYes, //update this boolean to forward/reverse the animation
+                              values: [
+                                Offset(20, -20), // disabled value value
+                                Offset(20, -20), //intermediate value
+                                Offset(20, -40) //enabled value
+                              ],
+                              child: OpacityAnimatedWidget.tween(
+                                  opacityEnabled: 1, //define start value
+                                  opacityDisabled: 0, //and end value
+                                  enabled: negativePointAnimationYes,
+                                  child: PointAnimation(20, false))),
+                        ]),
                       ),
                     ],
                   ),
