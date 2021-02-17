@@ -82,7 +82,6 @@ class GoingPage extends StatelessWidget {
                                       true) {
                                     incognito = true;
                                   }
-                              
 
                                   statusesValues[index] == (2)
                                       ? status = 2
@@ -106,22 +105,26 @@ class GoingPage extends StatelessWidget {
                                           child: Column(
                                             children: [
                                               GestureDetector(
-                                                onTap: incognito ?  null : () {
-                                                  if (statusesIds[index] ==
-                                                      currentUser.id) {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ProfilePageWithHeader()));
-                                                  } else {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                OtherProfile(
-                                                                    statusesIds[
-                                                                        index])));
-                                                  }
-                                                },
+                                                onTap: incognito
+                                                    ? null
+                                                    : () {
+                                                        if (statusesIds[
+                                                                index] ==
+                                                            currentUser.id) {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          ProfilePageWithHeader()));
+                                                        } else {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      OtherProfile(
+                                                                          statusesIds[
+                                                                              index])));
+                                                        }
+                                                      },
                                                 child: Stack(children: [
                                                   Container(
                                                       height:
@@ -176,21 +179,14 @@ class GoingPage extends StatelessWidget {
                                                                             16.0),
                                                                 child: Row(
                                                                   children: [
-                                                                    incognito ? 
-                                                                    Text("A Notre Dame student",
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                16,
-                                                                            color:
-                                                                                TextThemes.ndBlue,
-                                                                            decoration: TextDecoration.none)):
-                                                                    Text(name,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                16,
-                                                                            color:
-                                                                                TextThemes.ndBlue,
-                                                                            decoration: TextDecoration.none)),
+                                                                    incognito
+                                                                        ? Text(
+                                                                            "Notre Dame student",
+                                                                            style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                color: TextThemes.ndBlue,
+                                                                                decoration: TextDecoration.none))
+                                                                        : Text(name, style: TextStyle(fontSize: 16, color: TextThemes.ndBlue, decoration: TextDecoration.none)),
                                                                     verifiedStatus ==
                                                                             3
                                                                         ? Padding(
@@ -289,8 +285,9 @@ class GoingPage extends StatelessWidget {
                                                                                   )
                                                                                 : Container())
                                                           ])),
-                                                  friendsOnly && statusesIds[index] ==
-                                                      currentUser.id
+                                                  friendsOnly &&
+                                                          statusesIds[index] ==
+                                                              currentUser.id
                                                       ? Positioned(
                                                           bottom: 2.5,
                                                           left: 72.5,
@@ -301,8 +298,10 @@ class GoingPage extends StatelessWidget {
                                                                 color:
                                                                     Colors.red),
                                                           ))
-                                                      : incognito && statusesIds[index] ==
-                                                      currentUser.id
+                                                      : incognito &&
+                                                              statusesIds[
+                                                                      index] ==
+                                                                  currentUser.id
                                                           ? Positioned(
                                                               bottom: 2.5,
                                                               left: 72.5,
@@ -587,7 +586,7 @@ class GoingPageFriends extends StatelessWidget {
                                     }
                                     if (incognito == true &&
                                         statusesIds[index] != currentUser.id) {
-                                    bool incognitoHide = true;
+                                      bool incognitoHide = true;
                                     }
 
                                     statusesValues[index] == (2)
@@ -616,22 +615,27 @@ class GoingPageFriends extends StatelessWidget {
                                             child: Column(
                                               children: [
                                                 GestureDetector(
-                                                  onTap: incognito ? null : () {
-                                                    if (statusesIds[index] ==
-                                                        currentUser.id) {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ProfilePageWithHeader()));
-                                                    } else {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  OtherProfile(
-                                                                      statusesIds[
-                                                                          index])));
-                                                    }
-                                                  },
+                                                  onTap: incognito
+                                                      ? null
+                                                      : () {
+                                                          if (statusesIds[
+                                                                  index] ==
+                                                              currentUser.id) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            ProfilePageWithHeader()));
+                                                          } else {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        OtherProfile(
+                                                                            statusesIds[index])));
+                                                          }
+                                                        },
                                                   child: Container(
                                                       color: status == 2
                                                           ? Colors.yellow[50]
@@ -668,7 +672,7 @@ class GoingPageFriends extends StatelessWidget {
                                                                             CircleAvatar(
                                                                           radius:
                                                                               22.0,
-                                                                           backgroundImage: incognito
+                                                                          backgroundImage: incognito
                                                                               ? AssetImage('lib/assets/incognitoCircle.png')
                                                                               : NetworkImage(pic),
                                                                           backgroundColor:
@@ -683,21 +687,14 @@ class GoingPageFriends extends StatelessWidget {
                                                                             16.0),
                                                                 child: Row(
                                                                   children: [
-                                                                      incognito ? 
-                                                                    Text("A Notre Dame student",
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                16,
-                                                                            color:
-                                                                                TextThemes.ndBlue,
-                                                                            decoration: TextDecoration.none)):
-                                                                    Text(name,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                16,
-                                                                            color:
-                                                                                TextThemes.ndBlue,
-                                                                            decoration: TextDecoration.none)),
+                                                                    incognito
+                                                                        ? Text(
+                                                                            "Notre Dame student",
+                                                                            style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                color: TextThemes.ndBlue,
+                                                                                decoration: TextDecoration.none))
+                                                                        : Text(name, style: TextStyle(fontSize: 16, color: TextThemes.ndBlue, decoration: TextDecoration.none)),
                                                                     verifiedStatus ==
                                                                             2
                                                                         ? Padding(
