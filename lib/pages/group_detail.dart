@@ -242,7 +242,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                       trailingIcon: Icon(Icons.send),
                                       onPressed: () {
                                         Share.share(
-                                            "Hey let's put our squad on MOOV");
+                                            "You found the Easter Egg! 🥚");
                                       }),
                                   FocusedMenuItem(
                                       title: Text("Edit Group"),
@@ -618,7 +618,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                       trailingIcon: Icon(Icons.send),
                                       onPressed: () {
                                         Share.share(
-                                            "Hey let's put our squad on MOOV");
+                                            "You found the easter egg 🥚");
                                       }),
                                   FocusedMenuItem(
                                       title: Text("Edit Group"),

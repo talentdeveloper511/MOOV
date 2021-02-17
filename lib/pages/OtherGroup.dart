@@ -646,7 +646,6 @@ class _SuggestionsState extends State<Suggestions> {
                       suggestorId,
                       groupId,
                       unix,
-                      
                     )
                   ],
                 ),

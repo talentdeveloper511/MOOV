@@ -41,8 +41,7 @@ class MOOV extends StatelessWidget {
             FocusManager.instance.primaryFocus.unfocus();
           }
         },
-        child: OverlaySupport(
-            child: MaterialApp(
+        child: MaterialApp(
           builder: (context, widget) {
             return MediaQuery(
               child: widget,
@@ -70,7 +69,7 @@ class MOOV extends StatelessWidget {
           //   body: push.MessageHandler(),
           // )
           home: Home(),
-        )),
+        ),
       ),
     );
   }

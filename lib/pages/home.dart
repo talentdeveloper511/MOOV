@@ -85,8 +85,6 @@ class _HomeState extends State<Home> {
   @override
   Future<void> initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => configurePushNotifications());
     pageController = PageController();
     // Detects when user signed in
     googleSignIn.onCurrentUserChanged.listen((account) {
@@ -134,7 +132,6 @@ class _HomeState extends State<Home> {
           final String body = message['notification']['title'] +
               ' ' +
               message['notification']['body'];
-          FlutterAppBadger.removeBadge();
           if (recipientId == currentUser.id) {
             print('Notification shown');
 
@@ -369,7 +366,8 @@ class _HomeState extends State<Home> {
           .orderBy("postId")
           .limit(1)
           .get();
-      if (result.docs != null && result.docs.first['privacy'] == "Public") randomPost = await result.docs.first['postId'];
+      if (result.docs != null && result.docs.first['privacy'] == "Public")
+        randomPost = await result.docs.first['postId'];
       print(result.docs.first['privacy']);
 
       // if (result.docs == null) {
@@ -496,7 +494,6 @@ class _HomeState extends State<Home> {
             //     ),
             //   ),
             // ),
-            Image.asset('lib/assets/egg.png', height: 45),
           ].map((i) {
             return Builder(
               builder: (BuildContext context) {
@@ -772,7 +769,7 @@ class SharedPreferencesDemoState extends State<SharedPreferencesDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SharedPreferences Demo"),
+        title: const Text("Shared Preferences Demo"),
       ),
       body: Column(
         children: [

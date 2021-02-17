@@ -410,7 +410,7 @@ class _HomePageState extends State<HomePage>
                   // scrollPhysics: NeverScrollableScrollPhysics(),
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
-                  autoPlay: false,
+                  autoPlay: true,
                   autoPlayInterval: Duration(seconds: 6),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
