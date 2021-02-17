@@ -401,6 +401,66 @@ exports.fixPrivacy = functions.firestore
       }, {merge: true});
     });
 
+exports.editPostNotif = functions.firestore
+    .document("{college}/data/food/{postId}")
+    .onUpdate(async (snapshot, context) => {
+      const postId = context.params.postId;
+      const college = context.params.college;
+      const postRef = admin.firestore().doc(`${college}/data/food/${postId}`);
+      const doc = await postRef.get();
+      let userId;
+      const oldTime = snapshot.before.startDate.toDate();
+      console.log("old time: ", oldTime);
+      const newTime = snapshot.after.startDate.toDate();
+
+      // 2) check if they have a notification token
+      const going = doc.data().going;
+      const createdActivityFeedItem = snapshot.data();
+      console.log("created: ", createdActivityFeedItem);
+      const senderId = createdActivityFeedItem.userId;
+      for (let i = 0; i < going.length; i++) {
+        const userRef = admin.firestore().doc(`${college}/data/users/${going[i]}`);
+        const userdoc = await userRef.get();
+        userId = userdoc.data().id;
+        console.log("sender id:", senderId);
+        console.log("user id: ", userId);
+        if (userdoc.data().androidNotificationToken && userId != senderId && oldTime != newTime) {
+          sendNotification(userdoc.data().androidNotificationToken, createdActivityFeedItem, newTime);
+        } else {
+          console.log("No token for user, cannot send notification");
+        }
+      }
+      /**
+       * Adds two numbers together.
+       * @param {string} androidNotificationToken The first number.
+       * @param {string} activityFeedItem The second number.
+       * @param {string} newTime The second number.
+       * @return {void} The sum of the two numbers.
+       */
+      function sendNotification(androidNotificationToken, activityFeedItem, newTime) {
+        const body = `was updated to ${newTime}`;
+        const title = `${activityFeedItem.title}`;
+        // 4) Create message for push notification
+        const message = {
+          notification: {title, body},
+          token: androidNotificationToken,
+          data: {recipient: userId},
+        };
+
+        // 5) Send message with admin.messaging()
+        admin
+            .messaging()
+            .send(message)
+            .then((response) => {
+              // Response is a message ID string
+              console.log("Successfully sent message!", response);
+            })
+            .catch((error) => {
+              console.log("Error sending message", error);
+            });
+      }
+    });
+
 exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
     .onRun(async (context) => {
       const now = admin.firestore.Timestamp.now();

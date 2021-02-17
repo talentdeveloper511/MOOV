@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
@@ -29,12 +31,21 @@ class ChatState extends State<Chat> {
   TextEditingController commentController = TextEditingController();
   final String gid;
   final String groupPic;
+  final _scrollController = ScrollController();
   bool messages = false;
 
   ChatState({
     this.gid,
     this.groupPic,
   });
+
+  adjustChat() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 100),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
 
   buildChat() {
     return StreamBuilder(
@@ -52,12 +63,15 @@ class ChatState extends State<Chat> {
             chat.add(Comment.fromDocument(doc));
           });
           return ListView(
+            controller: _scrollController,
+            // reverse: true,
             children: chat,
           );
         });
   }
 
   addComment() {
+    adjustChat();
     if (commentController.text.isNotEmpty) {
       groupsRef
           .doc(gid)
@@ -77,14 +91,22 @@ class ChatState extends State<Chat> {
         "gid": gid,
         "millis": DateTime.now().millisecondsSinceEpoch.toString()
       });
+      Timer(
+          Duration(milliseconds: 200),
+          () => _scrollController
+              .jumpTo(_scrollController.position.maxScrollExtent));
       commentController.clear();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    Timer(
+        Duration(milliseconds: 200),
+        () => _scrollController
+            .jumpTo(_scrollController.position.maxScrollExtent));
     return Container(
-      height: 300,
+      height: 500,
       child: Column(
         children: <Widget>[
           Expanded(child: buildChat()),
@@ -95,9 +117,9 @@ class ChatState extends State<Chat> {
               decoration: InputDecoration(labelText: "Talk to 'em..."),
             ),
             trailing: OutlineButton(
-                onPressed: addComment,
+                onPressed: () => {addComment(), adjustChat()},
                 borderSide: BorderSide.none,
-                child: Text("Post", style: TextStyle(color: Colors.blue))),
+                child: Text("Send", style: TextStyle(color: Colors.blue))),
           ),
         ],
       ),
@@ -141,21 +163,34 @@ class Comment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ListTile(
-          title: Text(comment),
-          leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(avatarUrl),
-          ),
-          subtitle: Text(timeago.format(timestamp.toDate())),
-          trailing: (userId == currentUser.id)
-              ? GestureDetector(
-                  onTap: () {
-                    showAlertDialog(context, chatId, gid, millis);
-                  },
-                  child: Icon(Icons.more_vert_outlined))
-              : Text(''),
+        (userId != currentUser.id)
+            ? ListTile(
+                tileColor: Colors.blue[100],
+                title: Text(comment),
+                leading: CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(avatarUrl),
+                ),
+                subtitle: Text(timeago.format(timestamp.toDate())),
+                trailing: (userId == currentUser.id)
+                    ? GestureDetector(
+                        onTap: () {
+                          showAlertDialog(context, chatId, gid, millis);
+                        },
+                        child: Icon(Icons.more_vert_outlined))
+                    : Text(''),
+              )
+            : ListTile(
+                tileColor: Colors.blue[100],
+                title: Text(comment, textAlign: TextAlign.right),
+                subtitle: Text(timeago.format(timestamp.toDate()),
+                    textAlign: TextAlign.right),
+                trailing: CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(avatarUrl),
+                ),
+              ),
+        Divider(
+          height: 1,
         ),
-        Divider(),
       ],
     );
   }

@@ -11,6 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'HomePage.dart';
 import 'ProfilePageWithHeader.dart';
+import 'other_profile.dart';
 
 class LeaderBoardPage extends StatefulWidget {
   @override
@@ -262,71 +263,85 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                 pic = snapshot.data.docs[index]
                                     .data()['photoUrl'];
 
-                                return Card(
-                                  color: snapshot.data.docs[index]
-                                              .data()['displayName'] ==
-                                          currentUser.displayName
-                                      ? Colors.green[300]
-                                      : Colors.grey[50],
-                                  child: ListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
+                                return GestureDetector(
+                                    onTap: () => {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      OtherProfile(
+                                                        snapshot
+                                                            .data.docs[index]
+                                                            .data()['id'],
+                                                      )))
+                                        },
+                                    child: Card(
+                                      color: snapshot.data.docs[index]
+                                                  .data()['displayName'] ==
+                                              currentUser.displayName
+                                          ? Colors.green[300]
+                                          : Colors.grey[50],
+                                      child: ListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              (index + 1).toString() + '   ',
-                                              style: TextStyle(fontSize: 20),
-                                            ),
-                                            CircleAvatar(
-                                              radius: 17,
-                                              backgroundColor:
-                                                  TextThemes.ndGold,
-                                              child: CircleAvatar(
-                                                radius: 15,
-                                                backgroundColor:
-                                                    TextThemes.ndBlue,
-                                                child: CircleAvatar(
-                                                  backgroundImage: (pic == null)
-                                                      ? AssetImage(
-                                                          'images/user-avatar.png')
-                                                      : NetworkImage(pic),
-                                                  // backgroundImage: NetworkImage(currentUser.photoUrl),
-                                                  radius: 15,
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  (index + 1).toString() +
+                                                      '   ',
+                                                  style:
+                                                      TextStyle(fontSize: 20),
                                                 ),
-                                              ),
+                                                CircleAvatar(
+                                                  radius: 17,
+                                                  backgroundColor:
+                                                      TextThemes.ndGold,
+                                                  child: CircleAvatar(
+                                                    radius: 15,
+                                                    backgroundColor:
+                                                        TextThemes.ndBlue,
+                                                    child: CircleAvatar(
+                                                      backgroundImage: (pic ==
+                                                              null)
+                                                          ? AssetImage(
+                                                              'images/user-avatar.png')
+                                                          : NetworkImage(pic),
+                                                      // backgroundImage: NetworkImage(currentUser.photoUrl),
+                                                      radius: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    snapshot.data.docs[index]
+                                                        .data()['displayName'],
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                                (index == 0)
+                                                    ? Image.asset(
+                                                        'lib/assets/trophy2.png',
+                                                        height: 25)
+                                                    : Text(''),
+                                              ],
                                             ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                snapshot.data.docs[index]
-                                                    .data()['displayName'],
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
+                                            Text(
+                                              snapshot.data.docs[index]
+                                                  .data()['score']
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: TextThemes.ndBlue,
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                            (index == 0)
-                                                ? Image.asset(
-                                                    'lib/assets/trophy2.png',
-                                                    height: 25)
-                                                : Text(''),
                                           ],
-                                        ),
-                                        Text(
-                                          snapshot.data.docs[index]
-                                              .data()['score']
-                                              .toString(),
-                                          style: TextStyle(
-                                              color: TextThemes.ndBlue,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ), // getting the data from firestore
-                                  ),
-                                );
+                                        ), // getting the data from firestore
+                                      ),
+                                    ));
                               },
                             ),
                           ),

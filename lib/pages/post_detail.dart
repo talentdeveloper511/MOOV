@@ -403,7 +403,9 @@ class _NonImageContents extends StatelessWidget {
                                       // backgroundImage: snapshot.data
                                       //     .documents[index].data['photoUrl'],
                                       backgroundImage: NetworkImage(
-                                          snapshot.data.docs[0]['avatarUrl']),
+                                          snapshot.data.docs[
+                                                  snapshot.data.docs.length - 1]
+                                              ['avatarUrl']),
                                       radius: 32,
                                     ),
                                   ),
@@ -1007,6 +1009,7 @@ class _ButtonsState extends State<Buttons> {
     // });
     return StreamBuilder(
         stream: postsRef.doc(moovId).snapshots(),
+        // ignore: missing_return
         builder: (context, snapshot) {
           // title = snapshot.data['title'];
           // pic = snapshot.data['pic'];
