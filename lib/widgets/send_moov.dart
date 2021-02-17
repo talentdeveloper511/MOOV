@@ -103,205 +103,240 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        toolbarHeight: 96,
-        bottom: PreferredSize(
-            preferredSize: null,
-            child: Column(children: <Widget>[
-              TextField(
-                  style: TextStyle(fontSize: 20),
-                  controller: searchController,
-                  onChanged: (val) {
-                    setState(() {
-                      _searchTerm = val;
-                    });
-                  },
-                  // Set Focus Node
-                  focusNode: textFieldFocusNode,
-                  decoration: InputDecoration(
-                    labelStyle: TextStyle(fontSize: 20),
-                    border: InputBorder.none,
-                    hintText: 'Search',
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
-                    prefixIcon: const Icon(Icons.search, color: Colors.black),
-                    suffixIcon: GestureDetector(
-                        onTap: () {
-                          clearSearch();
-                          // Unfocus all focus nodes
-                          textFieldFocusNode.unfocus();
+        leading: IconButton(
+            icon: Icon(Icons.arrow_drop_up_outlined,
+                color: Colors.white, size: 35),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        backgroundColor: TextThemes.ndBlue,
+        //pinned: true,
 
-                          // Disable text field's focus node request
-                          textFieldFocusNode.canRequestFocus = false;
-
-                          //Enable the text field's focus node request after some delay
-                          Future.delayed(Duration(milliseconds: 10), () {
-                            textFieldFocusNode.canRequestFocus = true;
-                          });
-                        },
-                        child: IconButton(
-                            onPressed: null,
-                            icon: Icon(
-                              Icons.clear,
-                              color: Colors.black,
-                            ))),
-                  )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  // Sign In Button
-                  new FlatButton(
-                    splashColor: Colors.white,
-                    color: Colors.white,
-                    onPressed: () {
-                      _tabController.animateTo(0);
-                      setState(() {
-                        _currentIndex = (_tabController.animation.value)
-                            .round(); //_tabController.animation.value returns double
-
-                        _currentIndex = 0;
-                      });
-                    },
-                    child: _currentIndex == 0
-                        ? GradientText(
-                            "People",
-                            gradient: LinearGradient(colors: [
-                              Colors.blue.shade400,
-                              Colors.blue.shade900,
-                            ]),
-                          )
-                        : Text(
-                            "People",
-                            style: TextStyle(fontSize: 16.5),
-                          ),
-                  ),
-                  // Sign Up Button
-
-                  FlatButton(
-                    splashColor: Colors.white,
-                    color: Colors.white,
-                    onPressed: () {
-                      _tabController.animateTo(1);
-                      setState(() {
-                        _currentIndex =
-                            (_tabController.animation.value).round();
-                        _currentIndex = 1;
-                      });
-                    },
-                    child: _currentIndex == 1
-                        ? GradientText(
-                            "Friend Groups",
-                            gradient: LinearGradient(colors: [
-                              Colors.blue.shade400,
-                              Colors.blue.shade900,
-                            ]),
-                          )
-                        : Text(
-                            "Friend Groups",
-                            style: TextStyle(fontSize: 16.5),
-                          ),
-                  )
-                ],
+        flexibleSpace: FlexibleSpaceBar(
+          titlePadding: EdgeInsets.all(5),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
               ),
-            ])),
+            ],
+          ),
+        ),
       ),
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          StreamBuilder<List<AlgoliaObjectSnapshot>>(
-              stream: Stream.fromFuture(_operation(_searchTerm)),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData ||
-                    snapshot.data.length == 0 ||
-                    _searchTerm == null)
-                  return Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: Container(
+          body: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          toolbarHeight: 96,
+          bottom: PreferredSize(
+              preferredSize: null,
+              child: Column(children: <Widget>[
+                TextField(
+                    style: TextStyle(fontSize: 20),
+                    controller: searchController,
+                    onChanged: (val) {
+                      setState(() {
+                        _searchTerm = val;
+                      });
+                    },
+                    // Set Focus Node
+                    focusNode: textFieldFocusNode,
+                    decoration: InputDecoration(
+                      labelStyle: TextStyle(fontSize: 20),
+                      border: InputBorder.none,
+                      hintText: 'Search',
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
+                      prefixIcon: const Icon(Icons.search, color: Colors.black),
+                      suffixIcon: GestureDetector(
+                          onTap: () {
+                            clearSearch();
+                            // Unfocus all focus nodes
+                            textFieldFocusNode.unfocus();
+
+                            // Disable text field's focus node request
+                            textFieldFocusNode.canRequestFocus = false;
+
+                            //Enable the text field's focus node request after some delay
+                            Future.delayed(Duration(milliseconds: 10), () {
+                              textFieldFocusNode.canRequestFocus = true;
+                            });
+                          },
+                          child: IconButton(
+                              onPressed: null,
+                              icon: Icon(
+                                Icons.clear,
+                                color: Colors.black,
+                              ))),
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    // Sign In Button
+                    new FlatButton(
+                      splashColor: Colors.white,
+                      color: Colors.white,
+                      onPressed: () {
+                        _tabController.animateTo(0);
+                        setState(() {
+                          _currentIndex = (_tabController.animation.value)
+                              .round(); //_tabController.animation.value returns double
+
+                          _currentIndex = 0;
+                        });
+                      },
+                      child: _currentIndex == 0
+                          ? GradientText(
+                              "People",
+                              gradient: LinearGradient(colors: [
+                                Colors.blue.shade400,
+                                Colors.blue.shade900,
+                              ]),
+                            )
+                          : Text(
+                              "People",
+                              style: TextStyle(fontSize: 16.5),
+                            ),
+                    ),
+                    // Sign Up Button
+
+                    FlatButton(
+                      splashColor: Colors.white,
+                      color: Colors.white,
+                      onPressed: () {
+                        _tabController.animateTo(1);
+                        setState(() {
+                          _currentIndex =
+                              (_tabController.animation.value).round();
+                          _currentIndex = 1;
+                        });
+                      },
+                      child: _currentIndex == 1
+                          ? GradientText(
+                              "Friend Groups",
+                              gradient: LinearGradient(colors: [
+                                Colors.blue.shade400,
+                                Colors.blue.shade900,
+                              ]),
+                            )
+                          : Text(
+                              "Friend Groups",
+                              style: TextStyle(fontSize: 16.5),
+                            ),
+                    )
+                  ],
+                ),
+              ])),
+        ),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(children: <Widget>[
+            StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                stream: Stream.fromFuture(_operation(_searchTerm)),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData ||
+                      snapshot.data.length == 0 ||
+                      _searchTerm == null)
+                    return Container(
                         height: MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.pink[300], Colors.pink[200]],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.all(50.0),
-                                  child: RichText(
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                          style: TextThemes.mediumbody,
-                                          children: [
-                                            TextSpan(
-                                                text: "Send the",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w300)),
-                                            TextSpan(
-                                                text: " MOOV",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            TextSpan(
-                                                text: ".",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w300))
-                                          ]))),
-                              Image.asset('lib/assets/ff.png')
-                            ],
-                          ),
-                        ),
-                      ));
-
-                List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
-
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return Container();
-                  default:
-                    if (snapshot.hasError)
-                      return new Text('Error: ${snapshot.error}');
-                    else
-                      return CustomScrollView(
-                        shrinkWrap: true,
-                        slivers: <Widget>[
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                return _searchTerm.length > 0
-                                    ? SendMOOVResult(
-                                        currSearchStuff[index]
-                                            .data["displayName"],
-                                        currSearchStuff[index].data["email"],
-                                        currSearchStuff[index].data["photoUrl"],
-                                        currSearchStuff[index].data["id"],
-                                        currSearchStuff[index]
-                                            .data["verifiedStatus"],
-                                        ownerId,
-                                        previewImg,
-                                        startDate,
-                                        moovId,
-                                        title,
-                                        ownerName,
-                                        ownerProPic)
-                                    : Container();
-                              },
-                              childCount: currSearchStuff.length ?? 0,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Colors.pink[300], Colors.pink[200]],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
                           ),
-                        ],
-                      );
-                }
-              }),
-        ]),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.all(50.0),
+                                    child: RichText(
+                                        textAlign: TextAlign.center,
+                                        text: TextSpan(
+                                            style: TextThemes.mediumbody,
+                                            children: [
+                                              TextSpan(
+                                                  text: "Send the",
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      fontWeight:
+                                                          FontWeight.w300)),
+                                              TextSpan(
+                                                  text: " MOOV",
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              TextSpan(
+                                                  text: ".",
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      fontWeight:
+                                                          FontWeight.w300))
+                                            ]))),
+                                Image.asset('lib/assets/ff.png')
+                              ],
+                            ),
+                          ),
+                        ));
+
+                  List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
+
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return Container();
+                    default:
+                      if (snapshot.hasError)
+                        return new Text('Error: ${snapshot.error}');
+                      else
+                        return CustomScrollView(
+                          shrinkWrap: true,
+                          slivers: <Widget>[
+                            SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  return _searchTerm.length > 0
+                                      ? SendMOOVResult(
+                                          currSearchStuff[index]
+                                              .data["displayName"],
+                                          currSearchStuff[index].data["email"],
+                                          currSearchStuff[index].data["photoUrl"],
+                                          currSearchStuff[index].data["id"],
+                                          currSearchStuff[index]
+                                              .data["verifiedStatus"],
+                                          ownerId,
+                                          previewImg,
+                                          startDate,
+                                          moovId,
+                                          title,
+                                          ownerName,
+                                          ownerProPic)
+                                      : Container();
+                                },
+                                childCount: currSearchStuff.length ?? 0,
+                              ),
+                            ),
+                          ],
+                        );
+                  }
+                }),
+          ]),
+        ),
       ),
     );
   }
