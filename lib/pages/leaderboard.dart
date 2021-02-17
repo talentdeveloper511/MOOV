@@ -225,9 +225,10 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                                     child: Text(
                                                       "Your score is calculated as follows:"
                                                       "\n"
+                                                      "\n\n20pts: Voting on a suggestion"
                                                       "\n\n25pts: Voting on the poll"
                                                       "\n\n30pts: Leaving a status on a MOOV"
-                                                      "\n\n30pts: Receiving a status on a MOOV"
+                                                      "\n\n10pts: Receiving a status on a MOOV"
                                                       "\n\n30pts: Suggesting a MOOV"
                                                       "\n\n50pts: Sending a MOOV to a friend"
                                                       "\n\n75pts: Joining a Friend Group"

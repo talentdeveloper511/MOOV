@@ -173,17 +173,21 @@ class Comment extends StatelessWidget {
             ? ListTile(
                 // tileColor: Colors.blue[100],
                 title: ChatBubble(
-                  alignment: Alignment.centerLeft,
-                    clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
+                    alignment: Alignment.centerLeft,
+                    clipper:
+                        ChatBubbleClipper5(type: BubbleType.receiverBubble),
                     backGroundColor: Colors.grey[200],
                     margin: EdgeInsets.only(top: 20),
                     child: Container(
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width * 0.7,
                         ),
-                  child: Text(comment))),
-                leading: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(avatarUrl),
+                        child: Text(comment))),
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: CircleAvatar(
+                    backgroundImage: CachedNetworkImageProvider(avatarUrl),
+                  ),
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -197,26 +201,43 @@ class Comment extends StatelessWidget {
                         child: Icon(Icons.more_vert_outlined))
                     : Text(''),
               )
-            : ListTile(
-                // tileColor: Colors.blue[100],
-                title: ChatBubble(
-                    alignment: Alignment.centerRight,
-                    clipper: ChatBubbleClipper5(type: BubbleType.sendBubble),
-                    backGroundColor: Colors.blue[200],
-                    margin: EdgeInsets.only(top: 20),
-                    child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.7,
-                        ),
-                        child: Text(comment))),
-                subtitle: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Text(timeago.format(timestamp.toDate()),
-                      textAlign: TextAlign.right),
-                ),
-                trailing: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(avatarUrl),
-                ),
+            : Stack(
+                children: [
+                  ListTile(
+                    // tileColor: Colors.blue[100],
+                    title: ChatBubble(
+                        alignment: Alignment.centerRight,
+                        clipper:
+                            ChatBubbleClipper5(type: BubbleType.sendBubble),
+                        backGroundColor: Colors.blue[200],
+                        margin: EdgeInsets.only(top: 20),
+                        child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.7,
+                            ),
+                            child: Text(comment))),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Text(timeago.format(timestamp.toDate()),
+                          textAlign: TextAlign.right),
+                    ),
+                    trailing: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: CircleAvatar(
+                        backgroundImage: CachedNetworkImageProvider(avatarUrl),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    top: 30,
+                    child: GestureDetector(
+                        onTap: () {
+                          showAlertDialog(context, chatId, gid, millis);
+                        },
+                        child: Icon(Icons.more_vert_outlined)),
+                  )
+                ],
               ),
         Divider(
           height: 1,

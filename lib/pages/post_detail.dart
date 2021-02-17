@@ -975,10 +975,10 @@ class _ButtonsState extends State<Buttons> {
     increment //for post owner
         ? usersRef
             .doc(postOwnerId)
-            .update({"score": FieldValue.increment(30)})
+            .update({"score": FieldValue.increment(10)})
         : usersRef
             .doc(postOwnerId)
-            .update({"score": FieldValue.increment(-30)});
+            .update({"score": FieldValue.increment(-10)});
   }
 
   _ButtonsState(this.moovId);

@@ -97,6 +97,9 @@ class TrendingSegmentState extends State<TrendingSegment> {
                 child: StreamBuilder(
                     stream: postsRef
                         .where('type', isEqualTo: 'Restaurants & Bars')
+                        .where('privacy', isEqualTo: "Public")
+                        .orderBy("goingCount", descending: true)
+                        .limit(6)
                         // .orderBy("goingCount")
                         .snapshots(),
                     builder: (context, snapshot) {
@@ -160,7 +163,8 @@ class TrendingSegmentState extends State<TrendingSegment> {
                     stream: postsRef
                         .where('type', isEqualTo: "Pregames & Parties")
                         .where('privacy', isEqualTo: "Public")
-                        // .orderBy("goingCount")
+                        .orderBy("goingCount", descending: true)
+                        .limit(6)
                         .snapshots(),
                     builder: (context, snapshot) {
                       bool hide = false;
@@ -229,8 +233,10 @@ class TrendingSegmentState extends State<TrendingSegment> {
               Container(
                 child: StreamBuilder(
                     stream: postsRef
-                        .where('type', isEqualTo: 'Recreation')
+                        .where('isPartyOrBar', isEqualTo: false)
                         .where('privacy', isEqualTo: 'Public')
+                        .orderBy("goingCount", descending: true)
+                        .limit(6)
                         .snapshots(),
                     builder: (context, snapshot) {
                       bool hide = false;

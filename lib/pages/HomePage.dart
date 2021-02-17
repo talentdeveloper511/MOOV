@@ -550,8 +550,8 @@ class _HomePageState extends State<HomePage>
                   //   ),
                   // ),
                   // MapTest(),
-                  SuggestionBoxCarousel(),
                   PollView(),
+                  SuggestionBoxCarousel(),
                   GroupCarousel(),
                   HottestMOOV()
                 ]),

@@ -81,6 +81,12 @@ class Database {
       bool push,
       int goingCount //BETA
       }) {
+    bool isPartyOrBar = false;
+    if (type == "Pregames & Parties" || type == "Bars & Restaurants") {
+      isPartyOrBar = true;
+    }
+    print(isPartyOrBar);
+
     postsRef.doc(postId).set({
       'title': title,
       'type': type,
@@ -102,7 +108,8 @@ class Database {
       "posterName": posterName,
       "push": push,
       "goingCount": 0,
-      "going": []
+      "going": [],
+      "isPartyOrBar": isPartyOrBar
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {
@@ -952,9 +959,7 @@ class Database {
             "choice1": "",
             "choice2": "",
             "question": "",
-            "voters": {
-              "107290090512658207959": 1
-            }
+            "voters": {"107290090512658207959": 1}
           }, SetOptions(merge: true));
         }
       });
