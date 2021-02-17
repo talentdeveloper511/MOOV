@@ -410,7 +410,7 @@ class _HomeState extends State<Home> {
             viewportFraction: 1,
             initialPage: 0,
             enableInfiniteScroll: true,
-            // scrollPhysics: NeverScrollableScrollPhysics(),
+            scrollPhysics: NeverScrollableScrollPhysics(),
             pauseAutoPlayOnTouch: false,
             reverse: false,
             autoPlay: false,
