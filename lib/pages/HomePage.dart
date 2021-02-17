@@ -242,7 +242,7 @@ class _HomePageState extends State<HomePage>
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Text(
-                                          "Friends Plans",
+                                          "Friends' Plans",
                                           style: TextStyle(
                                               fontFamily: 'Open Sans',
                                               fontWeight: FontWeight.bold,
@@ -410,7 +410,7 @@ class _HomePageState extends State<HomePage>
                   // scrollPhysics: NeverScrollableScrollPhysics(),
                   pauseAutoPlayOnTouch: false,
                   reverse: false,
-                  autoPlay: false,
+                  autoPlay: true,
                   autoPlayInterval: Duration(seconds: 6),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,

@@ -489,7 +489,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                     onPressed: () {
                                       Database().rejectFriendRequest(
                                           strUserId, id, strUserName, strPic);
-                                      status = null;
+                                      status = 0;
                                     },
                                     child: Text(
                                       "Decline Friend Request",
