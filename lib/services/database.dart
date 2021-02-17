@@ -833,7 +833,6 @@ class Database {
 
     FirebaseFirestore.instance.collection(who).get().then((value) {
       print(value);
-      
     });
 
     // if (value['postLimit'] >= 1) {
@@ -921,18 +920,42 @@ class Database {
         List<DocumentSnapshot> documents = snapshot.docs;
 
         for (var document in documents) {
-          if (currentUser.displayName == 'MOOV Team') {
-            await document.reference.set({
-              // "sendLimit": {
-              //   "friendFinderVisibility": true,
-              //   "friendsOnly": false,
-              //   "incognito": false,
-              //   "showDorm": true
-              // }
-              // "suggestLimit": 5,
-              // "groupLimit": 2
-            }, SetOptions(merge: true));
-          }
+          await document.reference.set({
+            // "sendLimit": {
+            //   "friendFinderVisibility": true,
+            //   "friendsOnly": false,
+            //   "incognito": false,
+            //   "showDorm": true
+            // }
+            // "suggestLimit": 5,
+            // "groupLimit": 2
+          }, SetOptions(merge: true));
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  updatePoll() async {
+    var snapshots = FirebaseFirestore.instance
+        .collection('notreDame')
+        .doc('data')
+        .collection('poll')
+        .snapshots();
+    try {
+      await snapshots.forEach((snapshot) async {
+        List<DocumentSnapshot> documents = snapshot.docs;
+
+        for (var document in documents) {
+          await document.reference.set({
+            "choice1": "",
+            "choice2": "",
+            "question": "",
+            "voters": {
+              "107290090512658207959": 1
+            }
+          }, SetOptions(merge: true));
         }
       });
     } catch (e) {

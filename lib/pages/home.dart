@@ -365,19 +365,21 @@ class _HomeState extends State<Home> {
 
       final QuerySnapshot result = await postsRef
           .where("postId", isGreaterThanOrEqualTo: randomAlpha(1))
+          .where("privacy", isEqualTo: "Public")
           .orderBy("postId")
           .limit(1)
           .get();
-      if (result.docs != null) randomPost = await result.docs.first['postId'];
+      if (result.docs != null && result.docs.first['privacy'] == "Public") randomPost = await result.docs.first['postId'];
+      print(result.docs.first['privacy']);
 
-      if (result.docs == null) {
-        final QuerySnapshot result2 = await postsRef
-            .where("postId", isGreaterThanOrEqualTo: "")
-            .orderBy("postId")
-            .limit(1)
-            .get();
-        randomPost = await result.docs.first['postId'];
-      }
+      // if (result.docs == null) {
+      //   final QuerySnapshot result2 = await postsRef
+      //       .where("postId", isGreaterThanOrEqualTo: "")
+      //       .orderBy("postId")
+      //       .limit(1)
+      //       .get();
+      //   randomPost = await result.docs.first['postId'];
+      // }
       // print(randomPost);
       return randomPost;
     }

@@ -5,9 +5,12 @@ import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/pointAnimation.dart';
+import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 import 'package:polls/polls.dart';
 
 User currentUser;
@@ -18,6 +21,9 @@ class PollView extends StatefulWidget {
 }
 
 class _PollViewState extends State<PollView> {
+  bool positivePointAnimation = false;
+  bool positivePointAnimation2 = false;
+
   double option1 = 1;
   double option2 = 90;
   // double option3 = 2.0;
@@ -43,13 +49,18 @@ class _PollViewState extends State<PollView> {
     userId = user.id;
 
     bool isLargePhone = Screen.diagonal(context) > 766;
+    final dateToCheck = Timestamp.now().toDate();
+    final aDate =
+        DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
+
+    String day = DateFormat('MMMd').format(aDate);
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('notreDame')
             .doc('data')
             .collection('poll')
-            .doc('jan12')
+            .doc(day)
             .snapshots(),
         // ignore: missing_return
         builder: (context, snapshot) {
@@ -131,21 +142,41 @@ class _PollViewState extends State<PollView> {
                                   .collection('notreDame')
                                   .doc('data')
                                   .collection('poll')
-                                  .doc('jan12')
+                                  .doc(day)
                                   .set({
                                 "voters": {user.id: choice}
                               }, SetOptions(merge: true));
 
                               if (choice == 1) {
+                                usersRef.doc(user.id).update(
+                                    {"score": FieldValue.increment(25)});
                                 setState(() {
                                   option1 += 1.0;
                                 });
+                                positivePointAnimation = true;
+
+                                Timer(Duration(seconds: 2), () {
+                                  setState(() {
+                                    positivePointAnimation = false;
+                                  });
+                                });
                               }
                               if (choice == 2) {
+                                usersRef.doc(user.id).update(
+                                    {"score": FieldValue.increment(25)});
+
                                 setState(() {
                                   option2 += 1.0;
                                 });
+                                positivePointAnimation2 = true;
+
+                                Timer(Duration(seconds: 2), () {
+                                  setState(() {
+                                    positivePointAnimation2 = false;
+                                  });
+                                });
                               }
+
                               // if (choice == 3) {
                               //   setState(() {
                               //     option3 += 1.0;
@@ -161,6 +192,32 @@ class _PollViewState extends State<PollView> {
                     ),
                   ),
                 ),
+                TranslationAnimatedWidget(
+                    enabled: this
+                        .positivePointAnimation, //update this boolean to forward/reverse the animation
+                    values: [
+                      Offset(175, 50), // disabled value value
+                      Offset(175, 50), //intermediate value
+                      Offset(175, 20) //enabled value
+                    ],
+                    child: OpacityAnimatedWidget.tween(
+                        opacityEnabled: 1, //define start value
+                        opacityDisabled: 0, //and end value
+                        enabled: positivePointAnimation,
+                        child: PointAnimation(25, true))),
+                TranslationAnimatedWidget(
+                    enabled: this
+                        .positivePointAnimation2, //update this boolean to forward/reverse the animation
+                    values: [
+                      Offset(175, 50), // disabled value value
+                      Offset(175, 50), //intermediate value
+                      Offset(175, 20) //enabled value
+                    ],
+                    child: OpacityAnimatedWidget.tween(
+                        opacityEnabled: 1, //define start value
+                        opacityDisabled: 0, //and end value
+                        enabled: positivePointAnimation2,
+                        child: PointAnimation(25, true))),
                 voters.containsKey(userId)
                     ? Positioned(
                         top: isLargePhone ? 60 : 60,
