@@ -122,6 +122,7 @@ class SuggestionFormState extends State<SuggestionForm> {
                 Text(
                   "Let's make money together",
                   style: TextThemes.headline1,
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 15),
                 Text(

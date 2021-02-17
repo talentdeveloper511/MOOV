@@ -97,7 +97,7 @@ class _PollViewState extends State<PollView> {
                 Container(
                   height: 200,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
+                    padding: const EdgeInsets.only(top: 15.0, left: 7),
                     child: Column(
                       children: [
                         Text(

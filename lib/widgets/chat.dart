@@ -235,7 +235,7 @@ class Comment extends StatelessWidget {
                         onTap: () {
                           showAlertDialog(context, chatId, gid, millis);
                         },
-                        child: Icon(Icons.more_vert_outlined)),
+                        child: Icon(Icons.more_vert_outlined, color: Colors.grey,)),
                   )
                 ],
               ),
