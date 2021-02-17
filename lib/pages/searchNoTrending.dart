@@ -151,7 +151,7 @@ class _SearchNoTrendingState extends State<SearchNoTrending>
             fillColor: Colors.white,
             hintStyle: TextStyle(fontSize: 15),
             contentPadding: EdgeInsets.only(top: 18, bottom: 10),
-            hintText: "Search MOOV",
+            hintText: "Search",
             filled: true,
             prefixIcon: Icon(
               Icons.account_box,

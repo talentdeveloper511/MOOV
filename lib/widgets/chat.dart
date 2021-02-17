@@ -239,9 +239,6 @@ class Comment extends StatelessWidget {
                   )
                 ],
               ),
-        Divider(
-          height: 1,
-        ),
       ],
     );
   }
