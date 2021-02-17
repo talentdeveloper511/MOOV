@@ -86,6 +86,8 @@ dependencies:
   flutter_app_badger: ^1.1.2
   animations: ^1.1.2
   overlay_support: ^1.0.5
+  flutter_chat_bubble: ^1.0.2
+
 
 
 

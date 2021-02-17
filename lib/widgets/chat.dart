@@ -9,6 +9,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_1.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_2.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Chat extends StatefulWidget {
@@ -165,12 +171,24 @@ class Comment extends StatelessWidget {
       children: <Widget>[
         (userId != currentUser.id)
             ? ListTile(
-                tileColor: Colors.blue[100],
-                title: Text(comment),
+                // tileColor: Colors.blue[100],
+                title: ChatBubble(
+                  alignment: Alignment.centerLeft,
+                    clipper: ChatBubbleClipper5(type: BubbleType.receiverBubble),
+                    backGroundColor: Colors.grey[200],
+                    margin: EdgeInsets.only(top: 20),
+                    child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.7,
+                        ),
+                  child: Text(comment))),
                 leading: CircleAvatar(
                   backgroundImage: CachedNetworkImageProvider(avatarUrl),
                 ),
-                subtitle: Text(timeago.format(timestamp.toDate())),
+                subtitle: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(timeago.format(timestamp.toDate())),
+                ),
                 trailing: (userId == currentUser.id)
                     ? GestureDetector(
                         onTap: () {
@@ -180,10 +198,22 @@ class Comment extends StatelessWidget {
                     : Text(''),
               )
             : ListTile(
-                tileColor: Colors.blue[100],
-                title: Text(comment, textAlign: TextAlign.right),
-                subtitle: Text(timeago.format(timestamp.toDate()),
-                    textAlign: TextAlign.right),
+                // tileColor: Colors.blue[100],
+                title: ChatBubble(
+                    alignment: Alignment.centerRight,
+                    clipper: ChatBubbleClipper5(type: BubbleType.sendBubble),
+                    backGroundColor: Colors.blue[200],
+                    margin: EdgeInsets.only(top: 20),
+                    child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.7,
+                        ),
+                        child: Text(comment))),
+                subtitle: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(timeago.format(timestamp.toDate()),
+                      textAlign: TextAlign.right),
+                ),
                 trailing: CircleAvatar(
                   backgroundImage: CachedNetworkImageProvider(avatarUrl),
                 ),
