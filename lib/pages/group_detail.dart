@@ -1144,7 +1144,6 @@ class _SuggestionsState extends State<Suggestions> {
                                 }
 
                                 if (status == 2) {
-                                  changeScore(false);
                                   //if youre switching statuses we dont double count
                                   negativePointAnimationYes = true;
                                   Timer(Duration(seconds: 2), () {
@@ -1246,7 +1245,6 @@ class _SuggestionsState extends State<Suggestions> {
                                 }
 
                                 if (status == 1) {
-                                  changeScore(false);
                                   //if youre switching statuses we dont double count
                                   negativePointAnimationNo = true;
                                   Timer(Duration(seconds: 2), () {
