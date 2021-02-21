@@ -453,8 +453,8 @@ class _EditGroupState extends State<EditGroup> {
                             }
 
                             if (groupNameController.text != "") {
-                              Database().updateGroupNames(members,
-                                  groupNameController.text, gid, displayName);
+                              // Database().updateGroupNames(members,
+                              //     groupNameController.text, gid, displayName);
                               groupsRef.doc(gid).update({
                                 "groupName": groupNameController.text,
                               });

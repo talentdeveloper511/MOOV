@@ -64,8 +64,6 @@ class _EditPostState extends State<EditPost> {
   DateTime currentValues;
   // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
   // DateTime endTimes;
-  String privacyDropdownValue = 'Public';
-  // String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
   final addressController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -209,7 +207,10 @@ class _EditPostState extends State<EditPost> {
           String type = snapshot.data['type'];
           String address = snapshot.data['address'];
           String visibility = snapshot.data['privacy'];
+          String privacyDropdownValue = visibility;
+          List<dynamic> going = snapshot.data['going'];
           String description = snapshot.data['description'];
+
           String maxOccupancy = snapshot.data['maxOccupancy'].toString();
           String venmo = snapshot.data['venmo'].toString();
           final Map statuses = snapshot.data['statuses'];
@@ -231,7 +232,6 @@ class _EditPostState extends State<EditPost> {
 
           dynamic startDate = snapshot.data['startDate'];
           String image = snapshot.data['image'];
-          privacyDropdownValue;
           String typeDropdownValue = snapshot.data['type'];
 
           return Scaffold(
@@ -495,7 +495,7 @@ class _EditPostState extends State<EditPost> {
                                               icon: Icon(Icons.arrow_downward,
                                                   color: TextThemes.ndGold),
                                               decoration: InputDecoration(
-                                                labelText: "Privacy",
+                                                labelText: visibility,
                                                 enabledBorder:
                                                     OutlineInputBorder(
                                                   borderRadius:
@@ -909,8 +909,6 @@ class _EditPostState extends State<EditPost> {
                                                       .doc(invitees[index])
                                                       .snapshots(),
                                                   builder: (context, snapshot) {
-                                                    // bool isLargePhone = Screen.diagonal(context) > 766;
-
                                                     if (!snapshot.hasData)
                                                       return CircularProgressIndicator();
 
@@ -922,8 +920,6 @@ class _EditPostState extends State<EditPost> {
                                                         .data['groupId'];
                                                     List members = snapshot
                                                         .data['members'];
-
-                                                    // userMoovs = snapshot.data['likedMoovs'];
 
                                                     return Container(
                                                       height: 50,
@@ -1053,83 +1049,6 @@ class _EditPostState extends State<EditPost> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  // Positioned(
-                                                                  //   bottom: isLargePhone ? 0 : 0,
-                                                                  //   right: 55,
-                                                                  //   child: Row(
-                                                                  //     mainAxisAlignment:
-                                                                  //         MainAxisAlignment
-                                                                  //             .center,
-                                                                  //     children: [
-                                                                  //       Stack(children: [
-                                                                  //         Padding(
-                                                                  //             padding:
-                                                                  //                 const EdgeInsets
-                                                                  //                     .all(4.0),
-                                                                  //             child: members
-                                                                  //                         .length >
-                                                                  //                     1
-                                                                  //                 ? CircleAvatar(
-                                                                  //                     radius:
-                                                                  //                         25.0,
-                                                                  //                     backgroundImage:
-                                                                  //                         NetworkImage(
-                                                                  //                       course[1][
-                                                                  //                           'photoUrl'],
-                                                                  //                     ),
-                                                                  //                   )
-                                                                  //                 : Container()),
-                                                                  //         Padding(
-                                                                  //             padding:
-                                                                  //                 const EdgeInsets
-                                                                  //                         .only(
-                                                                  //                     top: 4,
-                                                                  //                     left: 25.0),
-                                                                  //             child: CircleAvatar(
-                                                                  //               radius: 25.0,
-                                                                  //               backgroundImage:
-                                                                  //                   NetworkImage(
-                                                                  //                 course[0][
-                                                                  //                     'photoUrl'],
-                                                                  //               ),
-                                                                  //             )),
-                                                                  //         Padding(
-                                                                  //           padding:
-                                                                  //               const EdgeInsets
-                                                                  //                       .only(
-                                                                  //                   top: 4,
-                                                                  //                   left: 50.0),
-                                                                  //           child: CircleAvatar(
-                                                                  //             radius: 25.0,
-                                                                  //             child:
-                                                                  //                 members.length >
-                                                                  //                         2
-                                                                  //                     ? Text(
-                                                                  //                         "+" +
-                                                                  //                             (length.toString()),
-                                                                  //                         style: TextStyle(
-                                                                  //                             color:
-                                                                  //                                 TextThemes.ndGold,
-                                                                  //                             fontWeight: FontWeight.w500),
-                                                                  //                       )
-                                                                  //                     : Text(
-                                                                  //                         (members
-                                                                  //                             .length
-                                                                  //                             .toString()),
-                                                                  //                         style: TextStyle(
-                                                                  //                             color:
-                                                                  //                                 TextThemes.ndGold,
-                                                                  //                             fontWeight: FontWeight.w500),
-                                                                  //                       ),
-                                                                  //             backgroundColor:
-                                                                  //                 TextThemes
-                                                                  //                     .ndBlue,
-                                                                  //           ),
-                                                                  //         ),
-                                                                  //       ])
-                                                                  //     ],
-                                                                  //   ),
-                                                                  // ),
                                                                   Positioned(
                                                                       right: -3,
                                                                       top: 0,
@@ -1301,6 +1220,8 @@ class _EditPostState extends State<EditPost> {
                                             postsRef.doc(postId).update({
                                               "startDate": currentValue,
                                             });
+                                            Database().editPostNotification(
+                                                postId, title, going);
                                           }
                                           setState(() {
                                             isUploading = false;

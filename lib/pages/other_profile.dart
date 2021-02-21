@@ -7,6 +7,7 @@ import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/dm_page.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -489,6 +490,9 @@ class _OtherProfileState extends State<OtherProfile> {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(3.0))),
                                     onPressed: () {
+                                      setState(() {
+                                        status = null;
+                                      });
                                       Database().rejectFriendRequest(
                                           strUserId, id, strUserName, strPic);
                                     },
@@ -502,55 +506,114 @@ class _OtherProfileState extends State<OtherProfile> {
                               ],
                             )
                           : status != 1
-                              ? RaisedButton(
-                                  padding: const EdgeInsets.all(12.0),
-                                  color: Color.fromRGBO(2, 43, 91, 1.0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(3.0))),
-                                  onPressed: () {
-                                    Database().sendFriendRequest(
-                                        strUserId, id, strUserName, strPic);
-                                    status = 0;
-                                    Database().friendRequestNotification(
-                                        id, photoUrl, displayName, strUserId);
-                                  },
-                                  child: status == null
-                                      ? Text(
-                                          "Send Friend Request",
-                                          style: new TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0,
-                                          ),
-                                        )
-                                      : Text(
-                                          "Request Sent",
-                                          style: new TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0,
-                                          ),
-                                        ),
-                                )
-                              : RaisedButton(
-                                  padding: const EdgeInsets.all(12.0),
-                                  color: Colors.green,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(3.0))),
-                                  onPressed: () {
-                                    // unfriend code here
-                                  },
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        showAlertDialog(context);
-                                      },
-                                      child: Text(
-                                        "Friends",
-                                        style: new TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.0,
-                                        ),
-                                      ))),
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                      RaisedButton(
+                                        padding: const EdgeInsets.all(12.0),
+                                        color: Color.fromRGBO(2, 43, 91, 1.0),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(3.0))),
+                                        onPressed: () {
+                                          Database().sendFriendRequest(
+                                              strUserId,
+                                              id,
+                                              strUserName,
+                                              strPic);
+                                          status = 0;
+                                          Database().friendRequestNotification(
+                                              id,
+                                              photoUrl,
+                                              displayName,
+                                              strUserId);
+                                        },
+                                        child: status == null
+                                            ? Text(
+                                                "Send Friend Request",
+                                                style: new TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0,
+                                                ),
+                                              )
+                                            : Text(
+                                                "Request Sent",
+                                                style: new TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0,
+                                                ),
+                                              ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.all(5),
+                                          child: RaisedButton(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              color: TextThemes.ndGold,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              3.0))),
+                                              onPressed: () {
+                                                // nothing goes here
+                                              },
+                                              child: GestureDetector(
+                                                  onTap: () {
+                                                    // DM code here
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return DmPage(
+                                                        otherId: id,
+                                                      );
+                                                    }));
+                                                  },
+                                                  child: Icon(Icons.message))))
+                                    ])
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                      RaisedButton(
+                                          padding: const EdgeInsets.all(12.0),
+                                          color: Colors.green,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(3.0))),
+                                          onPressed: () {
+                                            // unfriend code here
+                                          },
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                showAlertDialog(context);
+                                              },
+                                              child: Text(
+                                                "Friends",
+                                                style: new TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0,
+                                                ),
+                                              ))),
+                                      Padding(
+                                          padding: EdgeInsets.all(5),
+                                          child: RaisedButton(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              color: TextThemes.ndGold,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              3.0))),
+                                              onPressed: () {
+                                                // nothing goes here
+                                              },
+                                              child: GestureDetector(
+                                                  onTap: () {
+                                                    // DM code here
+                                                  },
+                                                  child: Icon(Icons.message))))
+                                    ]),
                     ),
                   ],
                 ),

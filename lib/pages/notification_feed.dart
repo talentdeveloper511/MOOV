@@ -467,6 +467,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = "accepted your friend request.";
     } else if (type == 'friendGroup') {
       activityItemText = 'has added you to ';
+    } else if (type == 'edit') {
+      activityItemText = 'updated the start time of ';
     } else if (type == 'invite') {
       activityItemText = 'has invited you to ';
     } else if (type == 'suggestion') {
@@ -499,9 +501,7 @@ class NotificationFeedItem extends StatelessWidget {
             onTap: () {
               (type == 'request' || type == 'accept')
                   ? showProfile(context)
-                  : (type == 'suggestion' ||
-                          type == 'friendGroup'
-                          )
+                  : (type == 'suggestion' || type == 'friendGroup')
                       ? showGroup(context)
                       : showPost(context);
             },
@@ -530,9 +530,11 @@ class NotificationFeedItem extends StatelessWidget {
                                 style: TextStyle(
                                     color: TextThemes.ndBlue,
                                     fontWeight: FontWeight.bold))
-                            : message != null ? TextSpan(
-                                text: '\"$message\"',
-                              ) : TextSpan(text: "")
+                            : message != null
+                                ? TextSpan(
+                                    text: '\"$message\"',
+                                  )
+                                : TextSpan(text: "")
                       ]),
                 ),
               ],

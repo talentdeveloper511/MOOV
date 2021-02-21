@@ -104,7 +104,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_drop_up_outlined,
+            icon: Icon(Icons.arrow_drop_down_outlined,
                 color: Colors.white, size: 35),
             onPressed: () {
               Navigator.pop(context);
@@ -135,7 +135,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
           ),
         ),
       ),
-          body: Scaffold(
+      body: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           toolbarHeight: 96,
@@ -315,7 +315,8 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                                           currSearchStuff[index]
                                               .data["displayName"],
                                           currSearchStuff[index].data["email"],
-                                          currSearchStuff[index].data["photoUrl"],
+                                          currSearchStuff[index]
+                                              .data["photoUrl"],
                                           currSearchStuff[index].data["id"],
                                           currSearchStuff[index]
                                               .data["verifiedStatus"],

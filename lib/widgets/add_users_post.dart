@@ -321,7 +321,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                     List<AlgoliaObjectSnapshot>
                                         currSearchStuff = snapshot.data;
 
-                                    return Container(
+                                    return Container( 
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.90,

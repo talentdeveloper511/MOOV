@@ -86,9 +86,7 @@ class FriendsListState extends State<FriendsList> {
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: GestureDetector(
-                                                onTap: 
-                                              
-                                                () {
+                                                onTap: () {
                                                   Navigator.of(context).push(
                                                       MaterialPageRoute(builder:
                                                           (BuildContext
@@ -248,6 +246,7 @@ class GroupsListState extends State<GroupsList> {
                     String groupName = course['groupName'];
                     List<dynamic> members = course['members'];
                     String groupId = course['groupId'];
+                    // print(members);
 
                     return Padding(
                       padding: const EdgeInsets.all(2.0),
@@ -265,14 +264,18 @@ class GroupsListState extends State<GroupsList> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: GestureDetector(
                                             onTap: () {
-                                              if (members
-                                                  .contains(currentUser.id)) {
+                                              bool memberStatus = members
+                                                      .contains(currentUser.id)
+                                                  ? true
+                                                  : false;
+                                              if (memberStatus == true) {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(builder:
                                                         (BuildContext context) {
                                                   return GroupDetail(groupId);
                                                 }));
-                                              } else {
+                                              } else if (memberStatus ==
+                                                  false) {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(builder:
                                                         (BuildContext context) {
@@ -335,24 +338,27 @@ class GroupsListState extends State<GroupsList> {
                                           ),
                                         ),
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 5.0, right: 5),
+                                          padding: const EdgeInsets.only(
+                                              left: 5.0, right: 5),
                                           child: SizedBox(
                                             width: 100,
                                             child: GestureDetector(
                                                 onTap: () {
                                                   Navigator.of(context).push(
                                                       MaterialPageRoute(builder:
-                                                          (BuildContext context) {
+                                                          (BuildContext
+                                                              context) {
                                                     return OtherGroup(groupId);
                                                   })); //Material
                                                 },
                                                 child: Text(groupName,
                                                     style: TextStyle(
                                                         fontSize: 18,
-                                                        color: TextThemes.ndBlue,
-                                                        decoration: TextDecoration
-                                                            .none))),
+                                                        color:
+                                                            TextThemes.ndBlue,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .none))),
                                           ),
                                         ),
                                         Spacer(),
@@ -375,18 +381,31 @@ class GroupsListState extends State<GroupsList> {
                                                   padding:
                                                       const EdgeInsets.only(
                                                           left: 3.0),
-                                                  child: Icon(
-                                                    Icons.accessibility_new,
-                                                    color: Colors.white,
-                                                  ),
+                                                  child: members.contains(
+                                                          currentUser.id)
+                                                      ? Icon(Icons.check,
+                                                          color: Colors.white)
+                                                      : Icon(
+                                                          Icons
+                                                              .accessibility_new,
+                                                          color: Colors.white,
+                                                        ),
                                                 ),
-                                                Text(
-                                                  " Ask to Join? ",
-                                                  style: new TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 14.0,
-                                                  ),
-                                                ),
+                                                members.contains(currentUser.id)
+                                                    ? Text(
+                                                        " Member ",
+                                                        style: new TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 14.0,
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        " Ask to Join? ",
+                                                        style: new TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 14.0,
+                                                        ),
+                                                      ),
                                               ],
                                             ),
                                           ),

@@ -62,6 +62,26 @@ class Database {
     }
   }
 
+  editPostNotification(String postId, String title, List<dynamic> going) {
+    for (var i = 0; i < going.length; i++) {
+      if (going[i] != currentUser.id) {
+        notificationFeedRef
+            .doc(going[i])
+            .collection("feedItems")
+            .doc('edit ' + DateTime.now().toString())
+            .set({
+          "type": "edit",
+          "username": title,
+          "userId": currentUser.id,
+          "userEmail": currentUser.email,
+          "postId": postId,
+          "userProfilePic": currentUser.photoUrl,
+          "timestamp": DateTime.now()
+        });
+      }
+    }
+  }
+
   void createPost(
       {title,
       description,
@@ -855,21 +875,6 @@ class Database {
       "what": what,
     });
     //}
-  }
-
-  Future<void> updateGroupNames(members, newName, gid, old) async {
-    return dbRef.runTransaction((transaction) async {
-      for (var i = 0; i < members.length; i++) {
-        final use = members[i];
-        final DocumentReference ref = dbRef.doc('notreDame/data/users/$use');
-        transaction.update(ref, {
-          'friendGroups': FieldValue.arrayRemove([old]),
-        });
-        transaction.update(ref, {
-          'friendGroups': FieldValue.arrayUnion([newName]),
-        });
-      }
-    });
   }
 
   Future<void> addNoVote(unix, userId, gid, suggestorId) async {

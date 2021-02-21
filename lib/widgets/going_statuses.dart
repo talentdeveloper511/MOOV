@@ -165,7 +165,7 @@ class GoingPage extends StatelessWidget {
                                                                           radius:
                                                                               22.0,
                                                                           backgroundImage: incognito
-                                                                              ? AssetImage('lib/assets/incognitoCircle.png')
+                                                                              ? AssetImage('lib/assets/incognitoPic.jpg')
                                                                               : NetworkImage(pic),
                                                                           backgroundColor:
                                                                               Colors.transparent,
@@ -181,7 +181,7 @@ class GoingPage extends StatelessWidget {
                                                                   children: [
                                                                     incognito
                                                                         ? Text(
-                                                                            "Notre Dame student",
+                                                                            "Incognito Student",
                                                                             style: TextStyle(
                                                                                 fontSize: 16,
                                                                                 color: TextThemes.ndBlue,
@@ -673,7 +673,7 @@ class GoingPageFriends extends StatelessWidget {
                                                                           radius:
                                                                               22.0,
                                                                           backgroundImage: incognito
-                                                                              ? AssetImage('lib/assets/incognitoCircle.png')
+                                                                              ? AssetImage('lib/assets/incognitoPic.jpg')
                                                                               : NetworkImage(pic),
                                                                           backgroundColor:
                                                                               Colors.transparent,
@@ -689,7 +689,7 @@ class GoingPageFriends extends StatelessWidget {
                                                                   children: [
                                                                     incognito
                                                                         ? Text(
-                                                                            "Notre Dame student",
+                                                                            "Incognito Student",
                                                                             style: TextStyle(
                                                                                 fontSize: 16,
                                                                                 color: TextThemes.ndBlue,

@@ -115,9 +115,15 @@ exports.onCreateActivityFeedItem = functions.firestore
       // 2) check if they have a notification token
       const androidNotificationToken = doc.data().androidNotificationToken;
       const createdActivityFeedItem = snapshot.data();
-      const pushSettings = doc.data().pushSettings.going;
+      const pushSettings = doc.data().pushSettings;
       if (androidNotificationToken) {
-        if (pushSettings == true || createdActivityFeedItem.type != "going") {
+        if (pushSettings.going == true && createdActivityFeedItem.type == "going") {
+          sendNotification(androidNotificationToken, createdActivityFeedItem);
+        } else if (pushSettings.friendPosts == true && createdActivityFeedItem.type == "created") {
+          sendNotification(androidNotificationToken, createdActivityFeedItem);
+        } else if (pushSettings.suggestions == true && createdActivityFeedItem.type == "suggestion") {
+          sendNotification(androidNotificationToken, createdActivityFeedItem);
+        } else if (createdActivityFeedItem.type != "suggestion" && createdActivityFeedItem.type != "created" && createdActivityFeedItem.type != "going") {
           sendNotification(androidNotificationToken, createdActivityFeedItem);
         }
       } else {
@@ -143,6 +149,10 @@ exports.onCreateActivityFeedItem = functions.firestore
           case "sent":
             title = `${activityFeedItem.username}`;
             body = `sent you ${activityFeedItem.title}`;
+            break;
+          case "edit":
+            title = `${activityFeedItem.username}`;
+            body = "has been updated with a new start time";
             break;
           case "going":
             title = `${activityFeedItem.title}`;
@@ -486,16 +496,18 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                     admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).set({
                       scheduled: "true",
                     }, {merge: true});
-                    admin
-                        .messaging()
-                        .send(message)
-                        .then((response) => {
-                          // Response is a message ID string
-                          console.log("Successfully sent message!", response, querySnapshot);
-                        })
-                        .catch((error) => {
-                          console.log("Error sending message", error);
-                        });
+                    if (user.pushSettings.hourBefore == true) {
+                      admin
+                          .messaging()
+                          .send(message)
+                          .then((response) => {
+                            // Response is a message ID string
+                            console.log("Successfully sent message!", response, querySnapshot);
+                          })
+                          .catch((error) => {
+                            console.log("Error sending message", error);
+                          });
+                    }
                   }
                   // else if ((data.startDate.toDate().getHours() + 1 == now.toDate().getHours()) && data.scheduled != "true") {
                   //   console.log("deleting post!");
