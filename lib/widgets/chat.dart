@@ -18,31 +18,36 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Chat extends StatefulWidget {
-  final String gid;
+  final String gid, directMessageId;
   final String groupPic;
 
   Chat({
     this.gid,
     this.groupPic,
+    this.directMessageId
   });
 
   @override
   ChatState createState() => ChatState(
         gid: this.gid,
         groupPic: this.groupPic,
+        directMessageId: this.directMessageId
       );
 }
 
 class ChatState extends State<Chat> {
   TextEditingController commentController = TextEditingController();
-  final String gid;
+  final String gid, directMessageId;
   final String groupPic;
   final _scrollController = ScrollController();
   bool messages = false;
+  bool isGroupChat = true;
+
 
   ChatState({
     this.gid,
     this.groupPic,
+    this.directMessageId
   });
 
   adjustChat() {
@@ -55,11 +60,13 @@ class ChatState extends State<Chat> {
 
   buildChat() {
     return StreamBuilder(
-        stream: groupsRef
-            .doc(gid)
-            .collection('chat')
-            // .orderBy("timestamp", descending: false)
-            .snapshots(),
+        stream: isGroupChat
+            ? groupsRef
+                .doc(gid)
+                .collection('chat')
+                // .orderBy("timestamp", descending: false)
+                .snapshots()
+            : messagesRef.doc(directMessageId).collection('chat').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return circularProgress();
@@ -79,24 +86,47 @@ class ChatState extends State<Chat> {
   addComment() {
     adjustChat();
     if (commentController.text.isNotEmpty) {
-      groupsRef
-          .doc(gid)
-          .collection("chat")
-          .doc(DateTime.now().millisecondsSinceEpoch.toString() +
-              " " +
-              currentUser.id)
-          .set({
-        "displayName": currentUser.displayName,
-        "comment": commentController.text,
-        "timestamp": timestamp,
-        "avatarUrl": currentUser.photoUrl,
-        "userId": currentUser.id,
-        "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
-            " " +
-            currentUser.id,
-        "gid": gid,
-        "millis": DateTime.now().millisecondsSinceEpoch.toString()
-      });
+      isGroupChat
+          ? groupsRef
+              .doc(gid)
+              .collection("chat")
+              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id)
+              .set({
+              "displayName": currentUser.displayName,
+              "comment": commentController.text,
+              "timestamp": timestamp,
+              "avatarUrl": currentUser.photoUrl,
+              "userId": currentUser.id,
+              "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id,
+              "gid": gid,
+              "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+              "directMessageId": "",
+              "isGroupChat": true
+            
+            })
+          : messagesRef
+              .doc(directMessageId)
+              .collection("chat")
+              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id)
+              .set({
+              "displayName": currentUser.displayName,
+              "comment": commentController.text,
+              "timestamp": timestamp,
+              "avatarUrl": currentUser.photoUrl,
+              "userId": currentUser.id,
+              "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id,
+              "directMessageId": directMessageId,
+              "isGroupChat": false,
+              "millis": DateTime.now().millisecondsSinceEpoch.toString()
+            });
       Timer(
           Duration(milliseconds: 200),
           () => _scrollController
@@ -142,6 +172,8 @@ class Comment extends StatelessWidget {
   final String chatId;
   final String gid;
   final String millis;
+  final String directMessageId;
+  final bool isGroupChat;
 
   Comment(
       {this.displayName,
@@ -151,18 +183,23 @@ class Comment extends StatelessWidget {
       this.timestamp,
       this.chatId,
       this.gid,
-      this.millis});
+      this.millis,
+      this.directMessageId,
+      this.isGroupChat});
 
   factory Comment.fromDocument(DocumentSnapshot doc) {
     return Comment(
-        displayName: doc['displayName'],
-        userId: doc['userId'],
-        comment: doc['comment'],
-        timestamp: doc['timestamp'],
-        avatarUrl: doc['avatarUrl'],
-        chatId: doc['chatId'],
-        gid: doc['gid'],
-        millis: doc['millis']);
+      displayName: doc['displayName'],
+      userId: doc['userId'],
+      comment: doc['comment'],
+      timestamp: doc['timestamp'],
+      avatarUrl: doc['avatarUrl'],
+      chatId: doc['chatId'],
+      gid: doc['gid'],
+      millis: doc['millis'],
+      directMessageId: doc['directMessageId'],
+      isGroupChat: doc['isGroupChat'],
+    );
   }
 
   @override
@@ -196,7 +233,8 @@ class Comment extends StatelessWidget {
                 trailing: (userId == currentUser.id)
                     ? GestureDetector(
                         onTap: () {
-                          showAlertDialog(context, chatId, gid, millis);
+                          showAlertDialog(context, chatId, gid, millis,
+                              isGroupChat, directMessageId);
                         },
                         child: Icon(Icons.more_vert_outlined))
                     : Text(''),
@@ -233,9 +271,13 @@ class Comment extends StatelessWidget {
                     top: 30,
                     child: GestureDetector(
                         onTap: () {
-                          showAlertDialog(context, chatId, gid, millis);
+                          showAlertDialog(context, chatId, gid, millis,
+                              isGroupChat, directMessageId);
                         },
-                        child: Icon(Icons.more_vert_outlined, color: Colors.grey,)),
+                        child: Icon(
+                          Icons.more_vert_outlined,
+                          color: Colors.grey,
+                        )),
                   )
                 ],
               ),
@@ -243,7 +285,8 @@ class Comment extends StatelessWidget {
     );
   }
 
-  void showAlertDialog(BuildContext context, chatId, gid, millis) {
+  void showAlertDialog(
+      BuildContext context, chatId, gid, millis, isGroupChat, directMessageId) {
     showDialog(
       context: context,
       child: CupertinoAlertDialog(

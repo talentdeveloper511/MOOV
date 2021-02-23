@@ -457,7 +457,7 @@ class NotificationFeedItem extends StatelessWidget {
     } else if (type == 'invite') {
       activityItemText = 'has invited you all to ';
     } else if (type == 'askToJoin') {
-      activityItemText = 'wants to join your Friend Group, ';
+      activityItemText = 'wants to join your group, ';
     } else if (type == 'suggestion') {
       activityItemText = 'suggested ';
     } else if (type == 'deleted') {

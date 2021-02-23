@@ -517,6 +517,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                 padding:
                                                     const EdgeInsets.all(2.0),
                                                 child: Chat(
+                                                  directMessageId: "",
                                                   gid: gid,
                                                   groupPic: groupPic,
                                                 ),
@@ -546,7 +547,7 @@ class _GroupDetailState extends State<GroupDetail> {
                               ),
                               onPressed: () {
                                 Navigator.pop(context);
-                              },
+                     },
                             ),
                             backgroundColor: TextThemes.ndBlue,
                             flexibleSpace: FlexibleSpaceBar(

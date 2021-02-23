@@ -1193,11 +1193,13 @@ class _EditPostState extends State<EditPost> {
                                             });
                                           }
 
+                                          
                                           if (invitees != []) {
                                             for (var item in invitees)
                                               postsRef.doc(postId).set({
                                                 "statuses": {item: -1}
                                               }, SetOptions(merge: true)).then(
+                                               
                                                   Database()
                                                       .inviteesNotification(
                                                           postId,

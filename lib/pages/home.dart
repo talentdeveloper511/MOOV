@@ -56,10 +56,11 @@ final notificationFeedRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('notificationFeed');
-final chatRef = FirebaseFirestore.instance
+final messagesRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
-    .collection('chat');
+    .collection('directMessages');
+
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
@@ -683,35 +684,45 @@ class NamedIcon extends StatelessWidget {
           if (!snapshot.hasData) return CircularProgressIndicator();
           int notifs = snapshot.data.docs.length;
 
-          return InkWell(
-            onTap: onTap,
-            child: Container(
-              width: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Icon(iconData, color: Colors.white),
-                  notifs != 0
-                      ? Positioned(
-                          top: 8,
-                          right: 0,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.red),
-                            alignment: Alignment.center,
-                            child: Text("$notifs",
-                                style: TextStyle(color: Colors.white)),
-                          ),
-                        )
-                      : Container()
-                ],
-              ),
-            ),
-          );
-        });
+          // return StreamBuilder(
+          //     stream: FirebaseFirestore.instance.collectionGroup('feedItems')
+          //         .where('groupId', whereIn: currentUser.friendGroups)
+          //         .where("type", isEqualTo: "invite")
+          //         .snapshots(),
+          //     builder: (context, snapshot2) {
+          //       if (snapshot2.hasError) return CircularProgressIndicator();
+          //       if (!snapshot2.hasData) return CircularProgressIndicator();
+                return InkWell(
+                  onTap: onTap,
+                  child: Container(
+                    width: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Icon(iconData, color: Colors.white),
+                        notifs != 0
+                            ? Positioned(
+                                top: 8,
+                                right: 0,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.red),
+                                  alignment: Alignment.center,
+                                  child: Text("$notifs",
+                                      style: TextStyle(color: Colors.white)),
+                                ),
+                              )
+                            : Container()
+                      ],
+                    ),
+                  ),
+                );
+              });
+ 
   }
 }
 

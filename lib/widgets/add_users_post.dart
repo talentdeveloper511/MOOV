@@ -600,7 +600,7 @@ class _AddUsersFromCreateGroupState extends State<AddUsersFromCreateGroup>
                             });
                           },
                           child: GradientText(
-                            '     People  ',
+                            'People',
                             gradient: LinearGradient(colors: [
                               Colors.blue.shade400,
                               Colors.blue.shade900,

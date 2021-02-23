@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
@@ -22,10 +23,41 @@ class NotificationFeed extends StatefulWidget {
   _NotificationFeedState createState() => _NotificationFeedState();
 }
 
-class _NotificationFeedState extends State<NotificationFeed> {
+class _NotificationFeedState extends State<NotificationFeed>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  int _currentIndex = 0;
+  Map<int, Widget> map = new Map();
+  List<Widget> childWidgets;
+  int selectedIndex = 0;
+
+  Widget getChildWidget() => childWidgets[selectedIndex];
+
+  int groupCount;
+  int notificationCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController =
+        new TabController(vsync: this, length: 2, initialIndex: _currentIndex);
+    _tabController.animation
+      ..addListener(() {
+        setState(() {
+          _currentIndex = (_tabController.animation.value).round();
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
   String docId;
   List<String> docIds;
-  bool gotNotifs = true;
 
   getNotificationFeed() async {
     QuerySnapshot snapshot = await notificationFeedRef
@@ -61,8 +93,46 @@ class _NotificationFeedState extends State<NotificationFeed> {
     return docIds;
   }
 
+  getGroupFeed(int groupCount) async {
+    QuerySnapshot snapshot = await notificationFeedRef
+        .doc(currentUser.friendGroups[groupCount - 1])
+        .collection('feedItems')
+        .orderBy('timestamp', descending: true)
+        .limit(50)
+        .get();
+    List<NotificationFeedItem> feedItems = [];
+    List<String> docIds = [];
+    snapshot.docs.forEach((doc) {
+      feedItems.add(NotificationFeedItem.fromDocument(doc));
+      docIds.add(doc.id);
+    });
+
+    return feedItems;
+  }
+
+  getGroupIds(int groupCount) async {
+    QuerySnapshot snapshot = await notificationFeedRef
+        .doc(currentUser.friendGroups[groupCount - 1])
+        .collection('feedItems')
+        .orderBy('timestamp', descending: true)
+        .limit(50)
+        .get();
+    List<NotificationFeedItem> feedItems = [];
+    List<String> docIds = [];
+    snapshot.docs.forEach((doc) {
+      feedItems.add(NotificationFeedItem.fromDocument(doc));
+      docIds.add(doc.id);
+    });
+
+    return docIds;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (currentUser.friendGroups.length != 0 ||
+        currentUser.friendGroups.length != 0) {
+      groupCount = currentUser.friendGroups.length;
+    }
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -103,133 +173,416 @@ class _NotificationFeedState extends State<NotificationFeed> {
           ),
         ),
         body: Container(
-            child: Column(
-          children: [
-            Expanded(
-              child: FutureBuilder(
-                  future: getIds(),
-                  builder: (context, snapshot2) {
-                    if (!snapshot2.hasData) {
-                      return circularProgress();
-                    }
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // Sign In Button
+                  Stack(
+                                      children: [FlatButton(
+                      splashColor: Colors.white,
+                      color: Colors.white,
+                      onPressed: () {
+                        _tabController.animateTo(0);
+                        setState(() {
+                          _currentIndex = (_tabController.animation.value)
+                              .round(); //_tabController.animation.value returns double
 
-                    return FutureBuilder(
-                      future: getNotificationFeed(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return circularProgress();
-                        }
-                        if (snapshot.data.length == 0) {
-                          gotNotifs = false;
-                          return Container(
-                              child: Center(
-                                  child: Text(
-                            "You're up to date on your notifications! Let's go!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: TextThemes.ndBlue, fontSize: 25),
-                          )));
-                        }
-
-                        return ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) {
-                            List<String> docIds = [];
-                            snapshot2.data.forEach((doc) {
-                              docIds.add(doc);
-                            });
-                            final item = snapshot.data[index];
-                            List<NotificationFeedItem> feedItems = [];
-
-                            snapshot.data.forEach((doc) {
-                              feedItems.add(doc);
-                            });
-
-                            if (feedItems.isNotEmpty) {
-                              gotNotifs = true;
-                            }
-
-                            return Dismissible(
-
-                                // Each Dismissible must contain a Key. Keys allow Flutter to
-                                // uniquely identify widgets.
-                                key: Key(item.toString()),
-                                // Provide a function that tells the app
-                                // what to do after an item has been swiped away.
-                                onDismissed: (direction) {
-                                  notificationFeedRef
-                                      .doc(currentUser.id)
-                                      .collection('feedItems')
-                                      .doc(docIds[index])
-                                      .delete();
-
-                                  if (feedItems.contains(docId)) {
-                                    //_personList is list of person shown in ListView
-                                    setState(() {
-                                      feedItems.remove(docId);
-                                    });
-                                  }
-
-                                  // Remove the item from the data source.
-
-                                  // Then show a snackbar.
-                                  Scaffold.of(context).showSnackBar(SnackBar(
-                                      duration: Duration(milliseconds: 1500),
-                                      backgroundColor: TextThemes.ndBlue,
-                                      content: Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: Text("See ya notification."),
-                                      )));
-                                },
-                                // Show a red background as the item is swiped away.
-                                background: Container(
-                                  color: Colors.red,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 8.0),
-                                        child: Icon(CupertinoIcons.trash,
-                                            color: Colors.white, size: 45),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                child: snapshot.hasData
-                                    ? snapshot.data[index]
-                                    : Text(
-                                        'No Notifications',
-                                      ));
-                          },
-                        );
+                          _currentIndex = 0;
+                        });
                       },
-                    );
-                  }),
-            ),
-            gotNotifs == true
-                ? Padding(
-                    padding: const EdgeInsets.all(28.0),
-                    child: GestureDetector(
-                      onTap: () => showAlertDialog(context),
+                      child: _currentIndex == 0
+                          ? GradientText(
+                              'Personal',
+                              gradient: LinearGradient(colors: [
+                                Colors.blue.shade400,
+                                Colors.blue.shade900,
+                              ]),
+                            )
+                          : Text(
+                              "Personal",
+                              style: TextStyle(fontSize: 16.5),
+                            ),
+                    ),
+                    Positioned(
+                                top: 8,
+                                right: 0,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.red),
+                                  alignment: Alignment.center,
+                                  child: Text(" ",
+                                      style: TextStyle(color: Colors.white)),
+                                ),
+                              )]
+                  ),
+                  // Sign Up Button
+                  Stack(
+                                      children:  [FlatButton(
+                      splashColor: Colors.white,
+                      color: Colors.white,
+                      onPressed: () {
+                        _tabController.animateTo(1);
+                        setState(() {
+                          _currentIndex =
+                              (_tabController.animation.value).round();
+
+                          _currentIndex = 1;
+                        });
+                      },
+                      child: _currentIndex == 1
+                          ? GradientText(
+                              "Friend Groups",
+                              gradient: LinearGradient(colors: [
+                                Colors.blue.shade400,
+                                Colors.blue.shade900,
+                              ]),
+                            )
+                          : Text(
+                              "Friend Groups",
+                              style: TextStyle(fontSize: 16.5),
+                            ),
+                    ),
+                     Positioned(
+                                top: 8,
+                                right: 0,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.red),
+                                  alignment: Alignment.center,
+                                  child: Text(" ",
+                                      style: TextStyle(color: Colors.white)),
+                                ),
+                              )]
+                  ),
+                ],
+              ),
+              SingleChildScrollView(
+                child: Container(
+                  height: _currentIndex == 0
+                      ? MediaQuery.of(context).size.height * .65
+                      : MediaQuery.of(context).size.height * .8,
+                  child: TabBarView(controller: _tabController, children: [
+                    FutureBuilder(
+                        future: getIds(),
+                        builder: (context, snapshot2) {
+                          if (!snapshot2.hasData) {
+                            return circularProgress();
+                          }
+
+                          return FutureBuilder(
+                            future: getNotificationFeed(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return circularProgress();
+                              }
+                              if (snapshot.data.length == 0) {
+                                return Container(
+                                    child: Center(
+                                        child: Text(
+                                  "You're up to date on your notifications! Let's go!",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: TextThemes.ndBlue, fontSize: 25),
+                                )));
+                              }
+
+                              return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (context, index) {
+                                  List<String> docIds = [];
+                                  snapshot2.data.forEach((doc) {
+                                    docIds.add(doc);
+                                  });
+                                  final item = snapshot.data[index];
+                                  List<NotificationFeedItem> feedItems = [];
+
+                                  snapshot.data.forEach((doc) {
+                                    feedItems.add(doc);
+                                  });
+
+                                  return Dismissible(
+
+                                      // Each Dismissible must contain a Key. Keys allow Flutter to
+                                      // uniquely identify widgets.
+                                      key: Key(item.toString()),
+                                      // Provide a function that tells the app
+                                      // what to do after an item has been swiped away.
+                                      onDismissed: (direction) {
+                                        notificationFeedRef
+                                            .doc(currentUser.id)
+                                            .collection('feedItems')
+                                            .doc(docIds[index])
+                                            .delete();
+
+                                        if (feedItems.contains(docId)) {
+                                          //_personList is list of person shown in ListView
+                                          setState(() {
+                                            feedItems.remove(docId);
+                                          });
+                                        }
+
+                                        // Remove the item from the data source.
+
+                                        // Then show a snackbar.
+                                        Scaffold.of(context).showSnackBar(
+                                            SnackBar(
+                                                duration: Duration(
+                                                    milliseconds: 1500),
+                                                backgroundColor:
+                                                    TextThemes.ndBlue,
+                                                content: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(2.0),
+                                                  child: Text(
+                                                      "See ya notification."),
+                                                )));
+                                      },
+                                      // Show a red background as the item is swiped away.
+                                      background: Container(
+                                        color: Colors.red,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
+                                              child: Icon(CupertinoIcons.trash,
+                                                  color: Colors.white,
+                                                  size: 45),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      child: snapshot.hasData
+                                          ? snapshot.data[index]
+                                          : Text(
+                                              'No Notifications',
+                                            ));
+                                },
+                              );
+                            },
+                          );
+                        }),
+                    SingleChildScrollView(
                       child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.red, width: 3),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            "CLEAR NOTIFICATIONS",
-                            style: TextStyle(color: Colors.red),
+                          height: _currentIndex == 0
+                              ? MediaQuery.of(context).size.height * .65
+                              : MediaQuery.of(context).size.height * .8,
+                          child: ListView.builder(
+                              itemCount: currentUser.friendGroups.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  height: 200,
+                                  child: StreamBuilder(
+                                      stream: groupsRef
+                                          .doc(currentUser.friendGroups[index])
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasError)
+                                          return CircularProgressIndicator();
+                                        if (!snapshot.hasData)
+                                          return CircularProgressIndicator();
+                                        String groupName =
+                                            snapshot.data['groupName'];
+                                        return Column(
+                                          children: [
+                                            SizedBox(height: 10),
+                                            Text(
+                                              "—— $groupName ——",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            FutureBuilder(
+                                                future: getGroupIds(index + 1),
+                                                builder: (context, snapshot2) {
+                                                  if (!snapshot2.hasData) {
+                                                    return circularProgress();
+                                                  }
+
+                                                  return FutureBuilder(
+                                                    future:
+                                                        getGroupFeed(index + 1),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (!snapshot.hasData) {
+                                                        return circularProgress();
+                                                      }
+                                                      if (snapshot
+                                                              .data.length ==
+                                                          0) {
+                                                        return Container(
+                                                            child: Center(
+                                                                child: Text(
+                                                          "\n\n\nNo notifs here!",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: TextThemes
+                                                                  .ndBlue,
+                                                              fontSize: 18),
+                                                        )));
+                                                      }
+
+                                                      return Container(
+                                                        height: 170,
+                                                        child: ListView.builder(
+                                                          itemCount: snapshot
+                                                              .data.length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                          
+                                                            List<String>
+                                                                docIds = [];
+                                                            snapshot2.data
+                                                                .forEach((doc) {
+                                                              docIds.add(doc);
+                                                            });
+                                                            final item =
+                                                                snapshot.data[
+                                                                    index];
+                                                            List<NotificationFeedItem>
+                                                                feedItems = [];
+
+                                                            snapshot.data
+                                                                .forEach((doc) {
+                                                              feedItems
+                                                                  .add(doc);
+                                                            });
+
+                                                            return Dismissible(
+
+                                                                // Each Dismissible must contain a Key. Keys allow Flutter to
+                                                                // uniquely identify widgets.
+                                                                key: Key(item
+                                                                    .toString()),
+                                                                // Provide a function that tells the app
+                                                                // what to do after an item has been swiped away.
+                                                                onDismissed:
+                                                                    (direction) {
+                                                                  notificationFeedRef
+                                                                      .doc(currentUser
+                                                                              .friendGroups[
+                                                                          groupCount])
+                                                                      .collection(
+                                                                          'feedItems')
+                                                                      .doc(docIds[
+                                                                          index])
+                                                                      .delete();
+
+                                                                  if (feedItems
+                                                                      .contains(
+                                                                          docId)) {
+                                                                    //_personList is list of person shown in ListView
+                                                                    setState(
+                                                                        () {
+                                                                      feedItems
+                                                                          .remove(
+                                                                              docId);
+                                                                    });
+                                                                  }
+
+                                                                  // Remove the item from the data source.
+
+                                                                  // Then show a snackbar.
+                                                                  Scaffold.of(context).showSnackBar(
+                                                                      SnackBar(
+                                                                          duration: Duration(
+                                                                              milliseconds:
+                                                                                  1500),
+                                                                          backgroundColor: TextThemes
+                                                                              .ndBlue,
+                                                                          content:
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(2.0),
+                                                                            child:
+                                                                                Text("See ya notification."),
+                                                                          )));
+                                                                },
+                                                                // Show a red background as the item is swiped away.
+                                                                background:
+                                                                    Container(
+                                                                  color: Colors
+                                                                      .red,
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .end,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.only(right: 8.0),
+                                                                        child: Icon(
+                                                                            CupertinoIcons
+                                                                                .trash,
+                                                                            color:
+                                                                                Colors.white,
+                                                                            size: 45),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                child: snapshot
+                                                                        .hasData
+                                                                    ? snapshot
+                                                                            .data[
+                                                                        index]
+                                                                    : Text(
+                                                                        'No Notifications',
+                                                                      ));
+                                                          },
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                }),
+                                          ],
+                                        );
+                                      }),
+                                );
+                              })),
+                    ),
+                  ]),
+                ),
+              ),
+              _currentIndex == 0
+                  ? Padding(
+                      padding: const EdgeInsets.all(28.0),
+                      child: GestureDetector(
+                        onTap: () => showAlertDialog(context),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.red, width: 3),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              "CLEAR NOTIFICATIONS",
+                              style: TextStyle(color: Colors.red),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                : Container()
-          ],
-        )));
+                    )
+                  : Container(
+                      height: 0,
+                    )
+            ],
+          ),
+        ));
   }
 
   void showAlertDialog(BuildContext context) {
@@ -253,9 +606,6 @@ class _NotificationFeedState extends State<NotificationFeed> {
                 for (DocumentSnapshot ds in snapshot.docs) {
                   ds.reference.delete();
                 }
-              });
-              setState(() {
-                gotNotifs = false;
               });
             },
           ),
@@ -416,25 +766,7 @@ class NotificationFeedItem extends StatelessWidget {
         ),
       );
     } else if (type == 'askToJoin') {
-      mediaPreview = GestureDetector(
-        onTap: () => showProfile(context),
-        child: Container(
-          height: 50.0,
-          width: 50.0,
-          child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: previewImg != null
-                        ? CachedNetworkImageProvider(previewImg)
-                        : AssetImage("lib/assets/otherbutton1.png"),
-                  ),
-                ),
-              )),
-        ),
-      );
+      mediaPreview = null;
     } else if (type == 'suggestion') {
       mediaPreview = GestureDetector(
         onTap: () => showGroup(context),
@@ -473,6 +805,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'has invited you to ';
     } else if (type == 'suggestion') {
       activityItemText = 'suggested ';
+    } else if (type == 'askToJoin') {
+      activityItemText = 'wants to join!';
     } else if (type == 'sent') {
       activityItemText = 'sent you ';
     } else if (type == 'created') {
@@ -499,7 +833,7 @@ class NotificationFeedItem extends StatelessWidget {
         child: ListTile(
           title: GestureDetector(
             onTap: () {
-              (type == 'request' || type == 'accept')
+              (type == 'request' || type == 'accept' || type == 'askToJoin')
                   ? showProfile(context)
                   : (type == 'suggestion' || type == 'friendGroup')
                       ? showGroup(context)
@@ -526,7 +860,11 @@ class NotificationFeedItem extends StatelessWidget {
                         ),
                         title != null || groupName != null
                             ? TextSpan(
-                                text: type == 'friendGroup' ? groupName : title,
+                                text: type == 'askToJoin'
+                                    ? ""
+                                    : type == 'friendGroup'
+                                        ? groupName
+                                        : title,
                                 style: TextStyle(
                                     color: TextThemes.ndBlue,
                                     fontWeight: FontWeight.bold))
