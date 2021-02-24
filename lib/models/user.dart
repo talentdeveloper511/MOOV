@@ -20,6 +20,7 @@ class User {
   final String referral;
   final String venmoUsername;
   final Map pushSettings;
+  final int nameChangeLimit;
 
   User(
       {this.id,
@@ -40,28 +41,31 @@ class User {
       this.friendGroups,
       this.referral,
       this.venmoUsername,
-      this.pushSettings});
+      this.pushSettings,
+      this.nameChangeLimit});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
-        id: doc.data()['id'],
-        email: doc.data()['email'],
-        photoUrl: doc.data()['photoUrl'],
-        displayName: doc.data()['displayName'],
-        bio: doc.data()['bio'],
-        score: doc.data()['score'],
-        dorm: doc.data()['dorm'],
-        header: doc.data()['header'],
-        year: doc.data()['year'],
-        gender: doc.data()['gender'],
-        friendArray: doc.data()['friendArray'],
-        friendRequests: doc.data()['friendRequests'],
-        postLimit: doc.data()['postLimit'],
-        verifiedStatus: doc.data()['verifiedStatus'],
-        timestamp: doc.data()['timestamp'],
-        friendGroups: doc.data()['friendGroups'],
-        referral: doc.data()['referral'],
-        venmoUsername: doc.data()['venmoUsername'],
-        pushSettings: doc.data()['pushSettings']);
+      id: doc.data()['id'],
+      email: doc.data()['email'],
+      photoUrl: doc.data()['photoUrl'],
+      displayName: doc.data()['displayName'],
+      bio: doc.data()['bio'],
+      score: doc.data()['score'],
+      dorm: doc.data()['dorm'],
+      header: doc.data()['header'],
+      year: doc.data()['year'],
+      gender: doc.data()['gender'],
+      friendArray: doc.data()['friendArray'],
+      friendRequests: doc.data()['friendRequests'],
+      postLimit: doc.data()['postLimit'],
+      verifiedStatus: doc.data()['verifiedStatus'],
+      timestamp: doc.data()['timestamp'],
+      friendGroups: doc.data()['friendGroups'],
+      referral: doc.data()['referral'],
+      venmoUsername: doc.data()['venmoUsername'],
+      pushSettings: doc.data()['pushSettings'],
+      nameChangeLimit: doc.data()['nameChangeLimit'],
+    );
   }
 }

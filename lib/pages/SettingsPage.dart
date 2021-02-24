@@ -168,6 +168,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         trailing:
                                             Icon(Icons.keyboard_arrow_right),
                                         onTap: () {
+                                          // Database().updateAllDocs();
                                           //open change password
                                           Navigator.push(
                                               context,

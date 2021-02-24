@@ -256,7 +256,7 @@ exports.onCreateGroupFeedItem = functions.firestore
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
-            body = `${activityFeedItem.username} suggested the MOOV, ${activityFeedItem.title}`;
+            body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
             break;
           case "canceled":
             title = `${activityFeedItem.title}`;
@@ -286,16 +286,18 @@ exports.onCreateGroupFeedItem = functions.firestore
         };
 
         // 5) Send message with admin.messaging()
-        admin
-            .messaging()
-            .send(message)
-            .then((response) => {
-              // Response is a message ID string
-              console.log("Successfully sent message!", response);
-            })
-            .catch((error) => {
-              console.log("Error sending message", error);
-            });
+        if (activityFeedItem.userId != userId) {
+          admin
+              .messaging()
+              .send(message)
+              .then((response) => {
+                // Response is a message ID string
+                console.log("Successfully sent message!", response);
+              })
+              .catch((error) => {
+                console.log("Error sending message", error);
+              });
+        }
       }
     });
 

@@ -321,7 +321,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                                     List<AlgoliaObjectSnapshot>
                                         currSearchStuff = snapshot.data;
 
-                                    return Container( 
+                                    return Container(
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.90,
@@ -1240,6 +1240,7 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(3.0))),
                     onPressed: () {
+                      
                       Database().addUser(userId, gname, gid, displayName);
                       Database().addedToGroup(userId, gname, gid, pic);
                       setState(() {
@@ -1511,3 +1512,379 @@ class _InviteGroupState extends State<InviteGroup> {
     return Container();
   }
 }
+
+class SearchUsersMessage extends StatefulWidget {
+  String id, name;
+  
+  SearchUsersMessage(this.id, name);
+
+  @override
+  _SearchUsersMessageState createState() => _SearchUsersMessageState(
+      this.id, this.name);
+}
+
+class _SearchUsersMessageState extends State<SearchUsersMessage> {
+  String id, name;
+  _SearchUsersMessageState(
+      this.id, this.name);
+
+  final TextEditingController searchController = TextEditingController();
+  final textFieldFocusNode = FocusNode();
+
+  final Algolia _algoliaApp = AlgoliaApplication.algolia;
+  String _searchTerm;
+
+  Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
+    AlgoliaQuery query = _algoliaApp.instance.index("users").search(input);
+    AlgoliaQuerySnapshot querySnap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> results = querySnap.hits;
+    return results;
+  }
+
+  clearSearch() {
+    searchController.clear();
+
+    setState(() {
+      _searchTerm = null;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Simple declarations
+    TextEditingController searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_drop_down_outlined,
+                color: Colors.white, size: 35),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        backgroundColor: TextThemes.ndBlue,
+        //pinned: true,
+
+        flexibleSpace: FlexibleSpaceBar(
+          titlePadding: EdgeInsets.all(5),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(children: <Widget>[
+          TextField(
+              style: TextStyle(fontSize: 20),
+              controller: searchController,
+              onChanged: (val) {
+                setState(() {
+                  _searchTerm = val;
+                });
+              },
+              // Set Focus Node
+              decoration: InputDecoration(
+                labelStyle: TextStyle(fontSize: 20),
+                border: InputBorder.none,
+                hintText: 'Search',
+                hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
+                prefixIcon: const Icon(Icons.search, color: Colors.black),
+                suffixIcon: GestureDetector(
+                    onTap: () {
+                      clearSearch();
+                      // Unfocus all focus nodes
+
+                      // Disable text field's focus node request
+
+                      //Enable the text field's focus node request after some delay
+                    },
+                    child: IconButton(
+                        onPressed: null,
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.black,
+                        ))),
+              )),
+          StreamBuilder<List<AlgoliaObjectSnapshot>>(
+              stream: Stream.fromFuture(_operation(_searchTerm)),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData ||
+                    snapshot.data.length == 0 ||
+                    _searchTerm == null)
+                  return Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.pink[300], Colors.pink[200]],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.all(50.0),
+                                  child: RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                          style: TextThemes.mediumbody,
+                                          children: [
+                                            TextSpan(
+                                                text: "Spark",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300)),
+                                            TextSpan(
+                                                text: " a conversation",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            TextSpan(
+                                                text: ".",
+                                                style: TextStyle(
+                                                    fontSize: 30,
+                                                    fontWeight:
+                                                        FontWeight.w300))
+                                          ]))),
+                              Image.asset('lib/assets/ff.png')
+                            ],
+                          ),
+                        ),
+                      ));
+                List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
+
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Container();
+                  default:
+                    if (snapshot.hasError)
+                      return new Text('Error: ${snapshot.error}');
+                    else
+                      return CustomScrollView(
+                        shrinkWrap: true,
+                        slivers: <Widget>[
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                // return _searchTerm.length > 0
+                                //     ? UserGroupResultAdd(
+                                //         currSearchStuff[index]
+                                //             .data["displayName"],
+                                //         currSearchStuff[index].data["email"],
+                                //         currSearchStuff[index].data["photoUrl"],
+                                //         currSearchStuff[index].data["id"],
+                                //         currSearchStuff[index]
+                                //             .data["verifiedStatus"],
+                                //         currSearchStuff[index]
+                                //             .data["friendGroups"],
+                                //         gname,
+                                //         gid,
+                                //         pic,
+                                //         moov,
+                                //         members)
+                                //     : Container();
+                              },
+                              childCount: currSearchStuff.length ?? 0,
+                            ),
+                          ),
+                        ],
+                      );
+                }
+              }),
+        ]),
+      ),
+    );
+  }
+  
+}
+
+// class MessageResultAdd extends StatefulWidget {
+//   final String displayName;
+//   final String email;
+//   final String proPic;
+//   final String userId;
+//   final int verifiedStatus;
+//   final List<dynamic> friendGroups;
+//   String gname, gid, pic, moov;
+//   List<dynamic> members;
+
+//   MessageResultAdd(
+//       this.displayName,
+//       this.email,
+//       this.proPic,
+//       this.userId,
+//       this.verifiedStatus,
+//       this.friendGroups,
+//       this.gname,
+//       this.gid,
+//       this.pic,
+//       this.moov,
+//       this.members);
+
+//   @override
+//   _UserGroupResultAddState createState() => _UserGroupResultAddState(
+//       this.displayName,
+//       this.email,
+//       this.proPic,
+//       this.userId,
+//       this.verifiedStatus,
+//       this.friendGroups,
+//       this.gname,
+//       this.gid,
+//       this.pic,
+//       this.moov,
+//       this.members);
+// }
+
+// class _UserGroupResultAddState extends State<UserGroupResultAdd> {
+//   String displayName;
+//   String email;
+//   String proPic;
+//   String userId;
+//   int verifiedStatus;
+//   String gname, gid, pic, moov;
+//   List<dynamic> members, friendGroups;
+//   bool status = false;
+
+//   _UserGroupResultAddState(
+//       this.displayName,
+//       this.email,
+//       this.proPic,
+//       this.userId,
+//       this.verifiedStatus,
+//       this.friendGroups,
+//       this.gname,
+//       this.gid,
+//       this.pic,
+//       this.moov,
+//       this.members);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     friendGroups.contains(gid) ? status = true : false;
+
+//     return GestureDetector(
+//       onTap: () => Navigator.of(context).push(MaterialPageRoute(
+//           builder: (context) => userId != currentUser.id
+//               ? OtherProfile(userId)
+//               : ProfilePageWithHeader())),
+//       child: Stack(children: [
+//         Row(children: <Widget>[
+//           Padding(
+//             padding: const EdgeInsets.only(left: 20.0, top: 5, bottom: 5),
+//             child: CircleAvatar(
+//                 radius: 27,
+//                 backgroundColor: TextThemes.ndGold,
+//                 child: CircleAvatar(
+//                   backgroundImage: NetworkImage(proPic),
+//                   radius: 25,
+//                   backgroundColor: TextThemes.ndBlue,
+//                 )),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.only(left: 12.5),
+//             child: Text(
+//               displayName ?? "",
+//               style: TextStyle(
+//                   color: Colors.black,
+//                   fontWeight: FontWeight.w500,
+//                   fontSize: 20),
+//             ),
+//           ),
+//           verifiedStatus == 2
+//               ? Padding(
+//                   padding: const EdgeInsets.only(top: 3, left: 3),
+//                   child: Image.asset('lib/assets/verif.png', height: 30),
+//                 )
+//               : Text(""),
+//           // Text(
+//           //   email ?? "",
+//           //   style: TextStyle(color: Colors.black),
+//           // ),
+//           Divider(
+//             color: Colors.black,
+//           ),
+//         ]),
+//         status
+//             ? Positioned(
+//                 right: 20,
+//                 top: 10,
+//                 child: RaisedButton(
+//                     padding: const EdgeInsets.all(2.0),
+//                     color: Colors.green,
+//                     shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.all(Radius.circular(3.0))),
+//                     onPressed: () {
+//                       setState(() {
+//                         status = true;
+//                       });
+//                     },
+//                     child: Text(
+//                       "Added",
+//                       style: new TextStyle(
+//                         color: Colors.white,
+//                         fontSize: 12.0,
+//                       ),
+//                     )))
+//             : Positioned(
+//                 right: 20,
+//                 top: 10,
+//                 child: RaisedButton(
+//                     padding: const EdgeInsets.all(2.0),
+//                     color: TextThemes.ndBlue,
+//                     shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.all(Radius.circular(3.0))),
+//                     onPressed: () {
+                      
+//                       Database().addUser(userId, gname, gid, displayName);
+//                       Database().addedToGroup(userId, gname, gid, pic);
+//                       setState(() {
+//                         status = true;
+//                       });
+//                     },
+//                     child: Text(
+//                       "Add to Group",
+//                       style: new TextStyle(
+//                         color: Colors.white,
+//                         fontSize: 12.0,
+//                       ),
+//                     )),
+//               ),
+//       ]),
+//     );
+//   }
+// }

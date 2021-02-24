@@ -207,18 +207,18 @@ class _NotificationFeedState extends State<NotificationFeed>
                               style: TextStyle(fontSize: 16.5),
                             ),
                     ),
-                    Positioned(
-                      top: 8,
-                      right: 0,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.red),
-                        alignment: Alignment.center,
-                        child: Text(" ", style: TextStyle(color: Colors.white)),
-                      ),
-                    )
+                    // Positioned(
+                    //   top: 8,
+                    //   right: 0,
+                    //   child: Container(
+                    //     padding:
+                    //         EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    //     decoration: BoxDecoration(
+                    //         shape: BoxShape.circle, color: Colors.red),
+                    //     alignment: Alignment.center,
+                    //     child: Text(" ", style: TextStyle(color: Colors.white)),
+                    //   ),
+                    // )
                   ]),
                   // Sign Up Button
                   Stack(children: [
@@ -247,18 +247,18 @@ class _NotificationFeedState extends State<NotificationFeed>
                               style: TextStyle(fontSize: 16.5),
                             ),
                     ),
-                    Positioned(
-                      top: 8,
-                      right: 0,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.red),
-                        alignment: Alignment.center,
-                        child: Text(" ", style: TextStyle(color: Colors.white)),
-                      ),
-                    )
+                    // Positioned(
+                    //   top: 8,
+                    //   right: 0,
+                    //   child: Container(
+                    //     padding:
+                    //         EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    //     decoration: BoxDecoration(
+                    //         shape: BoxShape.circle, color: Colors.red),
+                    //     alignment: Alignment.center,
+                    //     child: Text(" ", style: TextStyle(color: Colors.white)),
+                    //   ),
+                    // )
                   ]),
                 ],
               ),
@@ -285,7 +285,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                                 return Container(
                                     child: Center(
                                         child: Text(
-                                  "You're up to date on your notifications! Let's go!",
+                                  "Up to date on your notifications.",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: TextThemes.ndBlue, fontSize: 25),
@@ -384,6 +384,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                                       stream: groupsRef
                                           .doc(currentUser.friendGroups[index])
                                           .snapshots(),
+                                      // ignore: missing_return
                                       builder: (context, snapshot) {
                                         if (snapshot.hasError)
                                           return CircularProgressIndicator();
@@ -464,30 +465,30 @@ class _NotificationFeedState extends State<NotificationFeed>
                                                                     backgroundImage:
                                                                         NetworkImage(
                                                                       snapshot7
-                                                                              .data.docs[0][
-                                                                          'photoUrl'],
+                                                                          .data
+                                                                          .docs[0]['photoUrl'],
                                                                     ),
                                                                   )),
-                                                                  members.length > 2?
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        top: 0,
-                                                                        left:
-                                                                            40.0),
-                                                                child:
-                                                                     CircleAvatar(
-                                                                    radius:
-                                                                        10.0,
-                                                                    backgroundImage:
-                                                                        NetworkImage(
-                                                                      snapshot7
-                                                                              .data.docs[2][
-                                                                          'photoUrl'],
-                                                                    ),
-                                                                  )
-                                                              ) : Container(),
+                                                              members.length > 2
+                                                                  ? Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .only(
+                                                                          top:
+                                                                              0,
+                                                                          left:
+                                                                              40.0),
+                                                                      child:
+                                                                          CircleAvatar(
+                                                                        radius:
+                                                                            10.0,
+                                                                        backgroundImage:
+                                                                            NetworkImage(
+                                                                          snapshot7
+                                                                              .data
+                                                                              .docs[2]['photoUrl'],
+                                                                        ),
+                                                                      ))
+                                                                  : Container(),
                                                             ])
                                                           ],
                                                         ),

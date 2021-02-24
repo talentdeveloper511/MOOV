@@ -21,7 +21,6 @@ class NextMOOV extends StatefulWidget {
   String suggestorId;
   String groupId;
   int unix;
-  
 
   NextMOOV(this.selected, this.suggestorId, this.groupId, this.unix);
 
@@ -182,21 +181,7 @@ class _NextMOOVState extends State<NextMOOV> {
                                       left: 20,
                                       child: GestureDetector(
                                         onTap: () {
-                                          groupsRef
-                                              .doc(groupId)
-                                              .collection("suggestedMOOVs")
-                                              .doc(unix.toString() +
-                                                  " from " +
-                                                  currentUser.id)
-                                              .get()
-                                              .then((doc) {
-                                            if (doc.exists) {
-                                              Navigator.pop(context);
-                                            }
-                                            Timer(Duration(seconds: 1), () {
-                                              doc.reference.delete();
-                                            });
-                                          });
+                                          showAlertDialog(context);
                                         },
                                         child: Container(
                                             height: 30,
@@ -303,5 +288,41 @@ class _NextMOOVState extends State<NextMOOV> {
                 }),
           );
         });
+  }
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Unsuggest?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("\nRemove this suggestion?"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Yeah", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              groupsRef
+                  .doc(groupId)
+                  .collection("suggestedMOOVs")
+                  .doc(unix.toString() + " from " + currentUser.id)
+                  .get()
+                  .then((doc) {
+                if (doc.exists) {
+                  Navigator.pop(context);
+                }
+                Timer(Duration(seconds: 1), () {
+                  doc.reference.delete();
+                });
+              });
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Cancel"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
   }
 }

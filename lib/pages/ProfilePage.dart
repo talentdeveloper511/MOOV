@@ -425,7 +425,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => MessagesHub()));
+                                      builder: (context) => MessageList()));
                         },
                         child: Container(
             child: Row(

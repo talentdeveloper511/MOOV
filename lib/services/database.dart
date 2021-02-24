@@ -29,6 +29,7 @@ class Database {
             .collection('feedItems')
             .doc('invite ' + postId)
             .set({
+          "seen": false,
           "type": "invite",
           "postId": postId,
           "previewImg": previewImg,
@@ -50,6 +51,7 @@ class Database {
             .collection("feedItems")
             .doc('canceled ' + postId)
             .set({
+          "seen": false,
           "type": "deleted",
           "username": title,
           "userId": currentUser.id,
@@ -62,6 +64,18 @@ class Database {
     }
   }
 
+  setNotifsSeen() {
+    notificationFeedRef
+        .doc(currentUser.id)
+        .collection('feedItems')
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.set({"seen": true}, SetOptions(merge: true));
+      }
+    });
+  }
+
   editPostNotification(String postId, String title, List<dynamic> going) {
     for (var i = 0; i < going.length; i++) {
       if (going[i] != currentUser.id) {
@@ -70,6 +84,7 @@ class Database {
             .collection("feedItems")
             .doc('edit ' + DateTime.now().toString())
             .set({
+          "seen": false,
           "type": "edit",
           "username": title,
           "userId": currentUser.id,
@@ -268,6 +283,7 @@ class Database {
             .collection('feedItems')
             .doc(postId + ' from ' + currentUser.id)
             .set({
+          "seen": false,
           "type": "going",
           "postId": postId,
           "previewImg": pic,
@@ -383,6 +399,7 @@ class Database {
         .collection("feedItems")
         .doc('added to ' + groupId)
         .set({
+      "seen": false,
       "type": "friendGroup",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -406,6 +423,7 @@ class Database {
         .collection("feedItems")
         .doc('asked to join ' + groupId)
         .set({
+      "seen": false,
       "type": "askToJoin",
       "title": groupName,
       "username": currentUser.displayName,
@@ -425,6 +443,7 @@ class Database {
         .collection("feedItems")
         .doc('request ' + sender)
         .set({
+      "seen": false,
       "type": "request",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -448,6 +467,7 @@ class Database {
         .collection("feedItems")
         .doc('sent ' + moovId)
         .set({
+      "seen": false,
       "type": "sent",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -480,6 +500,7 @@ class Database {
         .collection("feedItems")
         .doc('accept ' + sender)
         .set({
+      "seen": false,
       "type": "accept",
       "username": currentUser.displayName,
       "userId": currentUser.id,
@@ -501,6 +522,7 @@ class Database {
               .collection("feedItems")
               .doc(currentUser.id + timestamp.toString())
               .set({
+            "seen": false,
             "type": "comment",
             "username": currentUser.displayName,
             "userId": currentUser.id,
@@ -523,6 +545,7 @@ class Database {
           .collection("feedItems")
           .doc('created ' + postId)
           .set({
+        "seen": false,
         "type": "created",
         "username": currentUser.displayName,
         "userId": currentUser.id,
@@ -817,32 +840,24 @@ class Database {
       }, SetOptions(merge: true));
       bool push = true;
 
-      for (var i = 0; i < members.length; i++) {
-        usersRef.doc(members[i]).get().then((snap) => {
-              if (snap.data()['pushSettings']['suggestions'] == false)
-                {push = false},
-              if (members[i] != currentUser.id)
-                {
-                  notificationFeedRef
-                      .doc(members[i])
-                      .collection('feedItems')
-                      .doc('suggest ' + postId)
-                      .set({
-                    "type": "suggestion",
-                    "push": push,
-                    "postId": postId,
-                    "previewImg": pic,
-                    "title": title,
-                    "groupId": gid,
-                    "groupName": groupName,
-                    "username": currentUser.displayName,
-                    "userId": currentUser.id,
-                    "userProfilePic": currentUser.photoUrl,
-                    "timestamp": DateTime.now()
-                  })
-                }
-            });
-      }
+      notificationFeedRef
+          .doc(gid)
+          .collection('feedItems')
+          .doc('suggest ' + postId)
+          .set({
+        "seen": false,
+        "type": "suggestion",
+        "push": push,
+        "postId": postId,
+        "previewImg": pic,
+        "title": title,
+        "groupId": gid,
+        "groupName": groupName,
+        "username": currentUser.displayName,
+        "userId": currentUser.id,
+        "userProfilePic": currentUser.photoUrl,
+        "timestamp": DateTime.now()
+      });
     });
   }
 
@@ -939,7 +954,7 @@ class Database {
             //   "incognito": false,
             //   "showDorm": true
             // }
-            // "suggestLimit": 5,
+            "nameChangeLimit": 1,
             // "groupLimit": 2
           }, SetOptions(merge: true));
         }
