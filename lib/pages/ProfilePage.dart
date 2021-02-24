@@ -471,14 +471,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   bottomLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10)),
               gradient: LinearGradient(
-                colors: [Colors.green[300], Colors.green[400]],
+                colors: [Colors.amber[300], Colors.amber[400]],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
             ),
           )),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
+                        padding: const EdgeInsets.only(bottom: 8.0, top: 8),
                         child: SeeContactsButton(),
                       ),
                     ],

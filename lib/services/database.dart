@@ -987,4 +987,13 @@ class Database {
       print(e.toString());
     }
   }
+
+  funnyScreenshot({user, timestamp, venmo, imageUrl}) {
+    FirebaseFirestore.instance.collection("screenshots").doc().set({
+      "user": user,
+      "timestamp": timestamp,
+      "venmo": venmo,
+      "imageUrl": imageUrl
+    });
+  }
 }

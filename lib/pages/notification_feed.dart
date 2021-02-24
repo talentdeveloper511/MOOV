@@ -384,6 +384,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                                       stream: groupsRef
                                           .doc(currentUser.friendGroups[index])
                                           .snapshots(),
+                                      // ignore: missing_return
                                       builder: (context, snapshot) {
                                         if (snapshot.hasError)
                                           return CircularProgressIndicator();
@@ -391,161 +392,250 @@ class _NotificationFeedState extends State<NotificationFeed>
                                           return CircularProgressIndicator();
                                         String groupName =
                                             snapshot.data['groupName'];
-
-                                        return Column(
-                                          children: [
-                                            SizedBox(height: 10),
-                                            Text(
-                                              "—— $groupName —— ",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            FutureBuilder(
-                                                future: getGroupIds(index + 1),
-                                                builder: (context, snapshot2) {
-                                                  if (!snapshot2.hasData) {
-                                                    return circularProgress();
-                                                  }
-
-                                                  return FutureBuilder(
-                                                    future:
-                                                        getGroupFeed(index + 1),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      if (!snapshot.hasData) {
-                                                        return circularProgress();
-                                                      }
-                                                      if (snapshot
-                                                              .data.length ==
-                                                          0) {
-                                                        return Container(
-                                                            child: Center(
-                                                                child: Text(
-                                                          "\n\n\nUp to Date.",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: TextThemes
-                                                                  .ndBlue,
-                                                              fontSize: 18),
-                                                        )));
-                                                      }
-
-                                                      return Container(
-                                                        height: 170,
-                                                        child: ListView.builder(
-                                                          itemCount: snapshot
-                                                              .data.length,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            List<String>
-                                                                docIds = [];
-                                                            snapshot2.data
-                                                                .forEach((doc) {
-                                                              docIds.add(doc);
-                                                            });
-                                                            final item =
-                                                                snapshot.data[
-                                                                    index];
-                                                            List<NotificationFeedItem>
-                                                                feedItems = [];
-
-                                                            snapshot.data
-                                                                .forEach((doc) {
-                                                              feedItems
-                                                                  .add(doc);
-                                                            });
-
-                                                            return Dismissible(
-
-                                                                // Each Dismissible must contain a Key. Keys allow Flutter to
-                                                                // uniquely identify widgets.
-                                                                key: Key(item
-                                                                    .toString()),
-                                                                // Provide a function that tells the app
-                                                                // what to do after an item has been swiped away.
-                                                                onDismissed:
-                                                                    (direction) {
-                                                                  notificationFeedRef
-                                                                      .doc(currentUser
-                                                                              .friendGroups[
-                                                                          groupCount])
-                                                                      .collection(
-                                                                          'feedItems')
-                                                                      .doc(docIds[
-                                                                          index])
-                                                                      .delete();
-
-                                                                  if (feedItems
-                                                                      .contains(
-                                                                          docId)) {
-                                                                    //_personList is list of person shown in ListView
-                                                                    setState(
-                                                                        () {
-                                                                      feedItems
-                                                                          .remove(
-                                                                              docId);
-                                                                    });
-                                                                  }
-
-                                                                  // Remove the item from the data source.
-
-                                                                  // Then show a snackbar.
-                                                                  Scaffold.of(context).showSnackBar(
-                                                                      SnackBar(
-                                                                          duration: Duration(
-                                                                              milliseconds:
-                                                                                  1500),
-                                                                          backgroundColor: TextThemes
-                                                                              .ndBlue,
-                                                                          content:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(2.0),
-                                                                            child:
-                                                                                Text("See ya notification."),
-                                                                          )));
-                                                                },
-                                                                // Show a red background as the item is swiped away.
-                                                                background:
-                                                                    Container(
-                                                                  color: Colors
-                                                                      .red,
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .end,
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.only(right: 8.0),
-                                                                        child: Icon(
-                                                                            CupertinoIcons
-                                                                                .trash,
-                                                                            color:
-                                                                                Colors.white,
-                                                                            size: 45),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                child: snapshot
-                                                                        .hasData
-                                                                    ? snapshot
-                                                                            .data[
-                                                                        index]
-                                                                    : Text(
-                                                                        'No Notifications',
-                                                                      ));
-                                                          },
+                                        List members = snapshot.data['members'];
+                                        String groupId =
+                                            snapshot.data['groupId'];
+                                        for (int i = 0;
+                                            i < members.length;
+                                            i++) {
+                                          return StreamBuilder(
+                                              stream: usersRef
+                                                  .where('friendGroups',
+                                                      arrayContains: groupId)
+                                                  .snapshots(),
+                                              builder: (context, snapshot7) {
+                                                if (snapshot7.hasError)
+                                                  return CircularProgressIndicator();
+                                                if (!snapshot7.hasData)
+                                                  return CircularProgressIndicator();
+                                                return Column(
+                                                  children: [
+                                                    SizedBox(height: 10),
+                                                    Stack(children: [
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "—— $groupName ——",
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700),
+                                                            ),
+                                                          ]),
+                                                      Positioned(
+                                                        // bottom: isLargePhone ? 80 : 70,
+                                                        right: 10,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Stack(children: [
+                                                              Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          0.0),
+                                                                  child: members
+                                                                              .length >
+                                                                          1
+                                                                      ? CircleAvatar(
+                                                                          radius:
+                                                                              10.0,
+                                                                          backgroundImage:
+                                                                              NetworkImage(
+                                                                            snapshot7.data.docs[1]['photoUrl'],
+                                                                          ),
+                                                                        )
+                                                                      : Container()),
+                                                              Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      top: 0,
+                                                                      left:
+                                                                          20.0),
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    radius:
+                                                                        10.0,
+                                                                    backgroundImage:
+                                                                        NetworkImage(
+                                                                      snapshot7
+                                                                          .data
+                                                                          .docs[0]['photoUrl'],
+                                                                    ),
+                                                                  )),
+                                                              members.length > 2
+                                                                  ? Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .only(
+                                                                          top:
+                                                                              0,
+                                                                          left:
+                                                                              40.0),
+                                                                      child:
+                                                                          CircleAvatar(
+                                                                        radius:
+                                                                            10.0,
+                                                                        backgroundImage:
+                                                                            NetworkImage(
+                                                                          snapshot7
+                                                                              .data
+                                                                              .docs[2]['photoUrl'],
+                                                                        ),
+                                                                      ))
+                                                                  : Container(),
+                                                            ])
+                                                          ],
                                                         ),
-                                                      );
-                                                    },
-                                                  );
-                                                }),
-                                          ],
-                                        );
+                                                      ),
+                                                    ]),
+                                                    FutureBuilder(
+                                                        future: getGroupIds(
+                                                            index + 1),
+                                                        builder: (context,
+                                                            snapshot2) {
+                                                          if (!snapshot2
+                                                              .hasData) {
+                                                            return circularProgress();
+                                                          }
+
+                                                          return FutureBuilder(
+                                                            future:
+                                                                getGroupFeed(
+                                                                    index + 1),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return circularProgress();
+                                                              }
+                                                              if (snapshot.data
+                                                                      .length ==
+                                                                  0) {
+                                                                return Container(
+                                                                    child: Center(
+                                                                        child: Text(
+                                                                  "\n\n\nNo notifs here!",
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      color: TextThemes
+                                                                          .ndBlue,
+                                                                      fontSize:
+                                                                          18),
+                                                                )));
+                                                              }
+
+                                                              return Container(
+                                                                height: 170,
+                                                                child: ListView
+                                                                    .builder(
+                                                                  itemCount:
+                                                                      snapshot
+                                                                          .data
+                                                                          .length,
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    List<String>
+                                                                        docIds =
+                                                                        [];
+                                                                    snapshot2
+                                                                        .data
+                                                                        .forEach(
+                                                                            (doc) {
+                                                                      docIds.add(
+                                                                          doc);
+                                                                    });
+                                                                    final item =
+                                                                        snapshot
+                                                                            .data[index];
+                                                                    List<NotificationFeedItem>
+                                                                        feedItems =
+                                                                        [];
+
+                                                                    snapshot
+                                                                        .data
+                                                                        .forEach(
+                                                                            (doc) {
+                                                                      feedItems
+                                                                          .add(
+                                                                              doc);
+                                                                    });
+
+                                                                    return Dismissible(
+
+                                                                        // Each Dismissible must contain a Key. Keys allow Flutter to
+                                                                        // uniquely identify widgets.
+                                                                        key: Key(item
+                                                                            .toString()),
+                                                                        // Provide a function that tells the app
+                                                                        // what to do after an item has been swiped away.
+                                                                        onDismissed:
+                                                                            (direction) {
+                                                                          notificationFeedRef
+                                                                              .doc(currentUser.friendGroups[groupCount])
+                                                                              .collection('feedItems')
+                                                                              .doc(docIds[index])
+                                                                              .delete();
+
+                                                                          if (feedItems
+                                                                              .contains(docId)) {
+                                                                            //_personList is list of person shown in ListView
+                                                                            setState(() {
+                                                                              feedItems.remove(docId);
+                                                                            });
+                                                                          }
+
+                                                                          // Remove the item from the data source.
+
+                                                                          // Then show a snackbar.
+                                                                          Scaffold.of(context).showSnackBar(SnackBar(
+                                                                              duration: Duration(milliseconds: 1500),
+                                                                              backgroundColor: TextThemes.ndBlue,
+                                                                              content: Padding(
+                                                                                padding: const EdgeInsets.all(2.0),
+                                                                                child: Text("See ya notification."),
+                                                                              )));
+                                                                        },
+                                                                        // Show a red background as the item is swiped away.
+                                                                        background:
+                                                                            Container(
+                                                                          color:
+                                                                              Colors.red,
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.end,
+                                                                            children: [
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(right: 8.0),
+                                                                                child: Icon(CupertinoIcons.trash, color: Colors.white, size: 45),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        child: snapshot.hasData
+                                                                            ? snapshot.data[index]
+                                                                            : Text(
+                                                                                'No Notifications',
+                                                                              ));
+                                                                  },
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        }),
+                                                  ],
+                                                );
+                                              });
+                                        }
                                       }),
                                 );
                               })),
