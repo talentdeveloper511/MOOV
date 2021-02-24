@@ -67,6 +67,20 @@ class ChatState extends State<Chat> {
   }
 
   buildChat() {
+    CollectionReference reference = isGroupChat
+        ? groupsRef.doc(gid).collection('chat')
+        : messagesRef.doc(directMessageId).collection('chat');
+    reference.snapshots().listen((querySnapshot) {
+      querySnapshot.docChanges.forEach((change) {
+        // Do something with change
+        Timer(
+            Duration(milliseconds: 200),
+            () => _scrollController.animateTo(
+                _scrollController.position.maxScrollExtent,
+                curve: Curves.easeIn,
+                duration: Duration(milliseconds: 300)));
+      });
+    });
     return StreamBuilder(
         stream: isGroupChat
             ? groupsRef
@@ -77,9 +91,6 @@ class ChatState extends State<Chat> {
             : messagesRef.doc(directMessageId).collection('chat').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return circularProgress();
-          }
-          if (!snapshot.hasData) {
             return Container();
           }
 
@@ -89,14 +100,13 @@ class ChatState extends State<Chat> {
           });
           return ListView(
             controller: _scrollController,
-            // reverse: true,
             children: chat,
           );
         });
   }
 
   addComment() {
-    adjustChat();
+    // adjustChat();
 
     if (commentController.text.isNotEmpty) {
       isGroupChat
@@ -148,8 +158,10 @@ class ChatState extends State<Chat> {
             });
       Timer(
           Duration(milliseconds: 200),
-          () => _scrollController
-              .jumpTo(_scrollController.position.maxScrollExtent));
+          () => _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              curve: Curves.easeIn,
+              duration: Duration(milliseconds: 200)));
       commentController.clear();
     }
   }
@@ -181,18 +193,19 @@ class ChatState extends State<Chat> {
                       "people": [currentUser.id, otherPerson]
                     });
                   }
-isGroupChat ?
-                   null :Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) =>
-                          MessageDetail(directMessageId, otherPerson),
-                      transitionDuration: Duration(seconds: 0),
-                    ),
-                  );
+                  // isGroupChat
+                  //     ? null
+                  //     : Navigator.pushReplacement(
+                  //         context,
+                  //         PageRouteBuilder(
+                  //           pageBuilder: (context, animation1, animation2) =>
+                  //               MessageDetail(directMessageId, otherPerson),
+                  //           transitionDuration: Duration(seconds: 0),
+                  //         ),
+                  //       );
 
                   addComment();
-                  adjustChat();
+                  // adjustChat();
                 },
                 borderSide: BorderSide.none,
                 child: Text("Send", style: TextStyle(color: Colors.blue))),

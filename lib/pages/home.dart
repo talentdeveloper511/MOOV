@@ -64,7 +64,7 @@ final chatRef = FirebaseFirestore.instance
 final messagesRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
-    .collection('chat');
+    .collection('directMessages');
 final DateTime timestamp = DateTime.now();
 User currentUser;
 

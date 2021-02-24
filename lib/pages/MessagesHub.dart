@@ -130,7 +130,7 @@ class MessagesHub extends StatelessWidget {
                         //   ),
                         // ),
                         Text(
-                          "When added to a Friend Group,\n it will appear here.",
+                          "Your direct messages will appear here.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w300),
@@ -193,6 +193,7 @@ class MessagesHub extends StatelessWidget {
                                       .where("friendArray",
                                           arrayContains: currentUser.id)
                                       .snapshots(),
+                                  // ignore: missing_return
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData)
                                       return CircularProgressIndicator();

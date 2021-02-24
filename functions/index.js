@@ -362,6 +362,67 @@ exports.groupChat = functions.firestore
       }
     });
 
+exports.directMessage = functions.firestore
+    .document("{college}/data/directMessages/{chatters}/chat/{activityFeedItem}")
+    .onCreate(async (snapshot, context) => {
+      console.log("Activity Feed Item Created", snapshot.data());
+
+      // 1) Get user connected to the feed
+      const chatters = context.params.chatters;
+      const college = context.params.college;
+
+      const groupRef = admin.firestore().doc(`${college}/data/friendGroups/${groupId}`);
+      const doc = await groupRef.get();
+      const groupName = doc.data().groupName;
+      let userId; 
+
+      // 2) check if they have a notification token
+      const members = doc.data().members;
+      const createdActivityFeedItem = snapshot.data();
+      const senderId = createdActivityFeedItem.userId;
+      for (let i = 0; i < members.length; i++) {
+        const userRef = admin.firestore().doc(`${college}/data/users/${members[i]}`);
+        const userdoc = await userRef.get();
+        userId = userdoc.data().id;
+        console.log("sender id:", senderId);
+        console.log("user id: ", userId);
+        if (userdoc.data().androidNotificationToken && userdoc.data().pushSettings["suggestions"] == true && userId != senderId) {
+          sendNotification(userdoc.data().androidNotificationToken, createdActivityFeedItem, groupName);
+        } else {
+          console.log("No token for user, cannot send notification");
+        }
+      }
+      /**
+       * Adds two numbers together.
+       * @param {string} androidNotificationToken The first number.
+       * @param {string} activityFeedItem The second number.
+       * @param {string} groupName The second number.
+       * @return {void} The sum of the two numbers.
+       */
+      function sendNotification(androidNotificationToken, activityFeedItem, groupName) {
+        const body = `${activityFeedItem.displayName}: "${activityFeedItem.comment}"`;
+        const title = `${groupName}`;
+        // 4) Create message for push notification
+        const message = {
+          notification: {title, body},
+          token: androidNotificationToken,
+          data: {recipient: userId},
+        };
+
+        // 5) Send message with admin.messaging()
+        admin
+            .messaging()
+            .send(message)
+            .then((response) => {
+              // Response is a message ID string
+              console.log("Successfully sent message!", response);
+            })
+            .catch((error) => {
+              console.log("Error sending message", error);
+            });
+      }
+    });
+
 exports.resetScore = functions.pubsub.schedule("55 23 * * 0").timeZone("America/New_York")
     .onRun(async (context) => {
       const querySnapshot = admin
