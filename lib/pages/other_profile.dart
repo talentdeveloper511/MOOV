@@ -478,7 +478,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   MessageDetail(
-                                                      directMessageId, id)));
+                                                      "nothing", id)));
                                     },
                                     child: Text("Message",
                                         style:
