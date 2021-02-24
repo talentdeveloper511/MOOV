@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/services/database.dart';
@@ -18,37 +19,29 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Chat extends StatefulWidget {
-  final String gid, directMessageId;
-  final String groupPic;
+  final String gid, directMessageId, otherPerson;
+  final bool isGroupChat;
 
-  Chat({
-    this.gid,
-    this.groupPic,
-    this.directMessageId
-  });
+  Chat({this.gid, this.isGroupChat, this.directMessageId, this.otherPerson});
 
   @override
   ChatState createState() => ChatState(
-        gid: this.gid,
-        groupPic: this.groupPic,
-        directMessageId: this.directMessageId
-      );
+      gid: this.gid,
+      isGroupChat: this.isGroupChat,
+      directMessageId: this.directMessageId,
+      otherPerson: this.otherPerson);
 }
 
 class ChatState extends State<Chat> {
   TextEditingController commentController = TextEditingController();
-  final String gid, directMessageId;
-  final String groupPic;
+  final String gid, otherPerson;
+  String directMessageId;
+  final bool isGroupChat;
   final _scrollController = ScrollController();
   bool messages = false;
-  bool isGroupChat = true;
 
-
-  ChatState({
-    this.gid,
-    this.groupPic,
-    this.directMessageId
-  });
+  ChatState(
+      {this.gid, this.isGroupChat, this.directMessageId, this.otherPerson});
 
   adjustChat() {
     _scrollController.animateTo(
@@ -70,6 +63,9 @@ class ChatState extends State<Chat> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return circularProgress();
+          }
+          if (!snapshot.hasData) {
+            return Container();
           }
           List<Comment> chat = [];
           snapshot.data.docs.forEach((doc) {
@@ -106,7 +102,6 @@ class ChatState extends State<Chat> {
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
               "isGroupChat": true
-            
             })
           : messagesRef
               .doc(directMessageId)
@@ -125,8 +120,13 @@ class ChatState extends State<Chat> {
                   currentUser.id,
               "directMessageId": directMessageId,
               "isGroupChat": false,
+              "gid": "",
               "millis": DateTime.now().millisecondsSinceEpoch.toString()
             });
+             isGroupChat ? null : messagesRef.doc(directMessageId).update({
+                      "lastMessage": commentController.text,
+                      "timestamp": timestamp,
+                    });
       Timer(
           Duration(milliseconds: 200),
           () => _scrollController
@@ -153,13 +153,33 @@ class ChatState extends State<Chat> {
               decoration: InputDecoration(labelText: "Talk to 'em..."),
             ),
             trailing: OutlineButton(
-                onPressed: () => {addComment(), adjustChat()},
+                onPressed: () {
+                  if (isGroupChat == false && directMessageId == "nothing") {
+                    directMessageId = generateRandomString(20);
+                    messagesRef.doc(directMessageId).set({
+                      "lastMessage": commentController.text,
+                      "timestamp": timestamp,
+                      "directMessageId": directMessageId,
+                      "people": [currentUser.id, otherPerson]
+                    });
+                  }
+                  addComment();
+                  adjustChat();
+                },
                 borderSide: BorderSide.none,
                 child: Text("Send", style: TextStyle(color: Colors.blue))),
           ),
         ],
       ),
     );
+  }
+
+  String generateRandomString(int len) {
+    var r = Random();
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
+        .join();
   }
 }
 
@@ -172,7 +192,7 @@ class Comment extends StatelessWidget {
   final String chatId;
   final String gid;
   final String millis;
-  final String directMessageId;
+  String directMessageId;
   final bool isGroupChat;
 
   Comment(
@@ -299,12 +319,17 @@ class Comment extends StatelessWidget {
             child: Text("Yeah", style: TextStyle(color: Colors.red)),
             onPressed: () {
               Navigator.pop(context);
-
-              groupsRef
-                  .doc(gid)
-                  .collection("chat")
-                  .doc(millis + " " + currentUser.id)
-                  .delete();
+              isGroupChat
+                  ? groupsRef
+                      .doc(gid)
+                      .collection("chat")
+                      .doc(millis + " " + currentUser.id)
+                      .delete()
+                  : messagesRef
+                      .doc(directMessageId)
+                      .collection("chat")
+                      .doc(millis + " " + currentUser.id)
+                      .delete();
             },
           ),
           CupertinoDialogAction(

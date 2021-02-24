@@ -7,6 +7,7 @@ import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/dm_page.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:flutter/cupertino.dart';
@@ -139,6 +140,7 @@ class _OtherProfileState extends State<OtherProfile> {
           List<dynamic> userGroups = snapshot.data['friendGroups'];
           score = snapshot.data['score'];
           String venmo = snapshot.data['venmoUsername'];
+          String directMessageId = " ";
 
           return Scaffold(
               backgroundColor: Colors.white,
@@ -454,6 +456,90 @@ class _OtherProfileState extends State<OtherProfile> {
                             ),
                           )
                         : Text(""),
+                    StreamBuilder(
+                      stream: messagesRef
+                          .where("people", arrayContains: currentUser.id)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
+                          return Text("Message",
+                              style: TextStyle(color: Colors.white));
+                        for (int i = 0; i < snapshot.data.docs.length; i++) {
+                          DocumentSnapshot course = snapshot.data.docs[i];
+                          // print(course['people']);
+                          List people = course['people'];
+                          people.removeWhere((item) => item == currentUser.id);
+                          String otherPerson = people[0];
+                          if (snapshot.data.docs.length <= 1) {
+                            directMessageId = " ";
+
+                            return Padding(
+                                padding: EdgeInsets.all(5),
+                                child: RaisedButton(
+                                    padding: const EdgeInsets.all(12.0),
+                                    color: TextThemes.ndGold,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(3.0))),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MessageDetail(
+                                                      directMessageId, id)));
+                                    },
+                                    child: Text("Message",
+                                        style:
+                                            TextStyle(color: Colors.white))));
+                          }
+                          if (course['people'].contains(currentUser.id) &&
+                              course['people'].contains(id)) {
+                            directMessageId =
+                                snapshot.data.docs[i]['directMessageId'];
+
+                            return Padding(
+                                padding: EdgeInsets.all(5),
+                                child: RaisedButton(
+                                    padding: const EdgeInsets.all(12.0),
+                                    color: TextThemes.ndGold,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(3.0))),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MessageDetail(
+                                                      directMessageId, id)));
+                                    },
+                                    child: Text("Message",
+                                        style:
+                                            TextStyle(color: Colors.white))));
+                          }
+                        }
+                        return Padding(
+                                padding: EdgeInsets.all(5),
+                                child: RaisedButton(
+                                    padding: const EdgeInsets.all(12.0),
+                                    color: TextThemes.ndGold,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(3.0))),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MessageDetail(
+                                                      directMessageId, id)));
+                                    },
+                                    child: Text("Message",
+                                        style:
+                                            TextStyle(color: Colors.white))));
+                      },
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                           right: 7.5, bottom: 15, top: 15.5),
@@ -544,32 +630,6 @@ class _OtherProfileState extends State<OtherProfile> {
                                                 ),
                                               ),
                                       ),
-                                      Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: RaisedButton(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              color: TextThemes.ndGold,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              3.0))),
-                                              onPressed: () {
-                                                // nothing goes here
-                                              },
-                                              child: GestureDetector(
-                                                  onTap: () {
-                                                    // DM code here
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
-                                                      return DmPage(
-                                                        otherId: id,
-                                                      );
-                                                    }));
-                                                  },
-                                                  child: Icon(Icons.message))))
                                     ])
                               : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -594,25 +654,6 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   fontSize: 14.0,
                                                 ),
                                               ))),
-                                      Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: RaisedButton(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              color: TextThemes.ndGold,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              3.0))),
-                                              onPressed: () {
-                                                // nothing goes here
-                                              },
-                                              child: GestureDetector(
-                                                  onTap: () {
-                                                    // DM code here
-                                                  },
-                                                  child: Icon(Icons.message))))
                                     ]),
                     ),
                   ],

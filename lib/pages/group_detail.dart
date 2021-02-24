@@ -519,7 +519,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                 child: Chat(
                                                   directMessageId: "",
                                                   gid: gid,
-                                                  groupPic: groupPic,
+                                                  isGroupChat: true,
                                                 ),
                                               ),
                                             ),
