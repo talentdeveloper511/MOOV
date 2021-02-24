@@ -17,7 +17,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-
 class MessagesHub extends StatelessWidget {
   Container buildNoContent() {
     return Container(
@@ -368,13 +367,12 @@ class MessagesHub extends StatelessWidget {
                             ],
                           ),
                         ),
-                      
                         SliverToBoxAdapter(
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
-                            child: Stack(
-                                                          children: [SizedBox(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 10),
+                            child: Stack(children: [
+                              SizedBox(
                                 height: 250,
                                 child: StreamBuilder(
                                     stream: messagesRef
@@ -413,11 +411,9 @@ class MessagesHub extends StatelessWidget {
                                       );
                                     }),
                               ),
-                                   Text(' Last Active Conversation',
-                                    style: TextStyle(fontSize: 16)),
-                          
-                              ]
-                            ),
+                              Text(' Last Active Conversation',
+                                  style: TextStyle(fontSize: 16)),
+                            ]),
                             // Container(
                             //   decoration: BoxDecoration(
                             //       color: Colors.grey[100],
@@ -962,13 +958,16 @@ class _MessageScreenshotState extends State<MessageScreenshot> {
                                   setState(() {
                                     isUploading = true;
                                   });
-                                   
+
                                   firebase_storage.Reference ref =
                                       firebase_storage.FirebaseStorage.instance
                                           .ref()
-                                          .child("images/" + currentUser.id + "/" +
-                                             DateTime.now().millisecondsSinceEpoch.toString());
-                                 
+                                          .child("images/" +
+                                              currentUser.id +
+                                              "/" +
+                                              DateTime.now()
+                                                  .millisecondsSinceEpoch
+                                                  .toString());
 
                                   firebase_storage.UploadTask uploadTask;
 
@@ -982,22 +981,19 @@ class _MessageScreenshotState extends State<MessageScreenshot> {
                                     final String downloadUrl =
                                         await taskSnapshot.ref.getDownloadURL();
                                     Database().funnyScreenshot(
-                                        user: currentUser.displayName,
-                                        
-                                        timestamp:
-                                            DateTime.now().millisecondsSinceEpoch,
-                                        
-                                        venmo: currentUser.venmoUsername,
-                                        imageUrl: downloadUrl,
-                                        );
+                                      user: currentUser.displayName,
+                                      timestamp:
+                                          DateTime.now().millisecondsSinceEpoch,
+                                      venmo: currentUser.venmoUsername,
+                                      imageUrl: downloadUrl,
+                                    );
 
                                     setState(() {
                                       isUploading = false;
                                     });
                                   }
                                 }
-                                },
-                              
+                              },
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(80.0)),
                               padding: EdgeInsets.all(0.0),
