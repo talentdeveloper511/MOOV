@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
@@ -408,7 +409,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        leadingWidth: 100,
+        leadingWidth: 55,
         leading: CarouselSlider(
           options: CarouselOptions(
             height: 400,
@@ -428,26 +429,37 @@ class _HomeState extends State<Home> {
             scrollDirection: Axis.horizontal,
           ),
           items: [
-            GestureDetector(
-              onTap: () async {
-                var randomPost = await randomPostMaker();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PostDetail(randomPost)));
-              },
-              child: Container(
-                margin: const EdgeInsets.all(7.0),
-                padding: const EdgeInsets.all(7.0),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(7)),
-                child: Text(
-                  "Surprise",
-                  style: TextStyle(fontSize: 14.0, color: Colors.white),
-                ),
-              ),
-            ),
+             IconButton(
+            padding: EdgeInsets.only(left: 5.0),
+            icon: Icon(Icons.insert_chart_outlined),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () async {
+              // Implement navigation to leaderboard page here...
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+            },
+          ),
+            // GestureDetector(
+            //   onTap: () async {
+            //     var randomPost = await randomPostMaker();
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => PostDetail(randomPost)));
+            //   },
+            //   child: Container(
+            //     margin: const EdgeInsets.all(7.0),
+            //     padding: const EdgeInsets.all(7.0),
+            //     decoration: BoxDecoration(
+            //         border: Border.all(color: Colors.white),
+            //         borderRadius: BorderRadius.circular(7)),
+            //     child: Text(
+            //       "Surprise",
+            //       style: TextStyle(fontSize: 14.0, color: Colors.white),
+            //     ),
+            //   ),
+            // ),
             // FocusedMenuHolder(
             //   menuWidth: MediaQuery.of(context).size.width * .95,
 
@@ -523,19 +535,20 @@ class _HomeState extends State<Home> {
         backgroundColor: TextThemes.ndBlue,
         //pinned: true,
         actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.only(left: 5.0),
-            icon: Icon(Icons.insert_chart),
+            IconButton(
+            padding: EdgeInsets.only(left: 0.0),
+            icon: Icon(Icons.mail_outline),
             color: Colors.white,
             splashColor: Color.fromRGBO(220, 180, 57, 1.0),
             onPressed: () async {
               // Implement navigation to leaderboard page here...
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+                  MaterialPageRoute(builder: (context) => MessageList()));
             },
           ),
+         
           NamedIcon(
-              iconData: Icons.notifications_active,
+              iconData: Icons.notifications_active_outlined,
               onTap: () {
                 Navigator.push(
                     context,

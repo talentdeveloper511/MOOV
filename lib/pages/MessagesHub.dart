@@ -6,6 +6,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/services/database.dart';
 
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/chat.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -14,6 +15,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -578,7 +580,12 @@ class MessageList extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 75.0),
                 child: RaisedButton(
-                  onPressed: () => null,
+                  onPressed: () => Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: SearchUsersMessage(),
+                      )),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0)),
                   padding: EdgeInsets.all(0.0),
@@ -612,7 +619,12 @@ class MessageList extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 75.0),
                     child: RaisedButton(
-                      onPressed: () => null,
+                      onPressed: () => Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: SearchUsersMessage(),
+                      )),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(80.0)),
                       padding: EdgeInsets.all(0.0),
@@ -855,7 +867,7 @@ class _MessageScreenshotState extends State<MessageScreenshot> {
       builder: (context) {
         return SimpleDialog(
           title: Text(
-            "Show it off",
+            "Don't Flop",
             style: TextStyle(color: Colors.white),
           ),
           children: <Widget>[
