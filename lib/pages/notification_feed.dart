@@ -181,8 +181,8 @@ class _NotificationFeedState extends State<NotificationFeed>
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   // Sign In Button
-                  Stack(
-                                      children: [FlatButton(
+                  Stack(children: [
+                    FlatButton(
                       splashColor: Colors.white,
                       color: Colors.white,
                       onPressed: () {
@@ -207,24 +207,22 @@ class _NotificationFeedState extends State<NotificationFeed>
                               style: TextStyle(fontSize: 16.5),
                             ),
                     ),
-                    Positioned(
-                                top: 8,
-                                right: 0,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.red),
-                                  alignment: Alignment.center,
-                                  child: Text(" ",
-                                      style: TextStyle(color: Colors.white)),
-                                ),
-                              )]
-                  ),
+                    // Positioned(
+                    //   top: 8,
+                    //   right: 0,
+                    //   child: Container(
+                    //     padding:
+                    //         EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    //     decoration: BoxDecoration(
+                    //         shape: BoxShape.circle, color: Colors.red),
+                    //     alignment: Alignment.center,
+                    //     child: Text(" ", style: TextStyle(color: Colors.white)),
+                    //   ),
+                    // )
+                  ]),
                   // Sign Up Button
-                  Stack(
-                                      children:  [FlatButton(
+                  Stack(children: [
+                    FlatButton(
                       splashColor: Colors.white,
                       color: Colors.white,
                       onPressed: () {
@@ -249,21 +247,19 @@ class _NotificationFeedState extends State<NotificationFeed>
                               style: TextStyle(fontSize: 16.5),
                             ),
                     ),
-                     Positioned(
-                                top: 8,
-                                right: 0,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.red),
-                                  alignment: Alignment.center,
-                                  child: Text(" ",
-                                      style: TextStyle(color: Colors.white)),
-                                ),
-                              )]
-                  ),
+                    // Positioned(
+                    //   top: 8,
+                    //   right: 0,
+                    //   child: Container(
+                    //     padding:
+                    //         EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    //     decoration: BoxDecoration(
+                    //         shape: BoxShape.circle, color: Colors.red),
+                    //     alignment: Alignment.center,
+                    //     child: Text(" ", style: TextStyle(color: Colors.white)),
+                    //   ),
+                    // )
+                  ]),
                 ],
               ),
               SingleChildScrollView(
@@ -289,7 +285,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                                 return Container(
                                     child: Center(
                                         child: Text(
-                                  "You're up to date on your notifications! Let's go!",
+                                  "Up to date on your notifications.",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: TextThemes.ndBlue, fontSize: 25),
@@ -395,11 +391,12 @@ class _NotificationFeedState extends State<NotificationFeed>
                                           return CircularProgressIndicator();
                                         String groupName =
                                             snapshot.data['groupName'];
+
                                         return Column(
                                           children: [
                                             SizedBox(height: 10),
                                             Text(
-                                              "—— $groupName ——",
+                                              "—— $groupName —— ",
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w700),
@@ -425,7 +422,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                                                         return Container(
                                                             child: Center(
                                                                 child: Text(
-                                                          "\n\n\nNo notifs here!",
+                                                          "\n\n\nUp to Date.",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -442,7 +439,6 @@ class _NotificationFeedState extends State<NotificationFeed>
                                                               .data.length,
                                                           itemBuilder:
                                                               (context, index) {
-                                                          
                                                             List<String>
                                                                 docIds = [];
                                                             snapshot2.data

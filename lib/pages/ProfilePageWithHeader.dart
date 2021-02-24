@@ -239,12 +239,14 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 2.0, bottom: 14.0),
-                        child: Text(
-                          userYear != "" && userDorm != ""
-                              ? userYear + ' in ' + userDorm
-                              : "",
-                          style: TextStyle(fontSize: 15),
-                        ),
+                        child: snapshot.data['privacySettings']['showDorm']
+                            ? Text(
+                                snapshot.data['year'] +
+                                    " in " +
+                                    snapshot.data['dorm'],
+                                style: TextStyle(fontSize: 15),
+                              )
+                            : Text("Top secret year and dorm"),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
