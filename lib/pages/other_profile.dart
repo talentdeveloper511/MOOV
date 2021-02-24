@@ -46,6 +46,7 @@ class _OtherProfileState extends State<OtherProfile> {
   final strUserName = currentUser.displayName;
   int verifiedStatus = currentUser.verifiedStatus;
   var iter = 1;
+  String directMessageId;
 
   void showAlertDialog(BuildContext context) {
     showDialog(
@@ -118,6 +119,33 @@ class _OtherProfileState extends State<OtherProfile> {
         });
   }
 
+  Future dmChecker() async {
+    messagesRef.doc(id + currentUser.id).get().then((doc) async {
+      messagesRef.doc(currentUser.id + id).get().then((doc2) async {
+        if (!doc2.exists && !doc.exists) {
+          directMessageId = "nothing";
+        } else if (!doc2.exists) {
+          directMessageId = doc['directMessageId'];
+        } else if (!doc.exists) {
+          directMessageId = doc2['directMessageId'];
+        }
+        print(directMessageId);
+      });
+    });
+  }
+
+  void toMessageDetail() {
+    
+         Timer(Duration(milliseconds: 200), () {
+       Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MessageDetail(directMessageId, id)));
+      });
+  
+   
+  }
+
   @override
   Widget build(BuildContext context) {
     var userFriends;
@@ -142,7 +170,6 @@ class _OtherProfileState extends State<OtherProfile> {
           List<dynamic> userGroups = snapshot.data['friendGroups'];
           score = snapshot.data['score'];
           String venmo = snapshot.data['venmoUsername'];
-          String directMessageId = "nothing";
 
           return Scaffold(
               backgroundColor: Colors.white,
@@ -458,184 +485,155 @@ class _OtherProfileState extends State<OtherProfile> {
                             ),
                           )
                         : Text(""),
-                    StreamBuilder(
-                        stream:
-                            messagesRef.doc(currentUser.id + id).snapshots(),
-                        builder: (context, snapshot) {
-                          return StreamBuilder(
-                              stream: messagesRef
-                                  .doc(id + currentUser.id)
-                                  .snapshots(),
-                              builder: (context, snapshot2) {
-                                  if (!snapshot.hasData) {
-                                  directMessageId =
-                                      snapshot2.data['directMessageId'];
-                                }
-                                if (!snapshot2.hasData) {
-                                  directMessageId =
-                                      snapshot.data['directMessageId'];
-                                }
-
-                                if (snapshot.data == null && snapshot2.data == null) {
-                                  return Padding(
-                                      padding: EdgeInsets.all(5),
-                                      child: RaisedButton(
-                                          padding: const EdgeInsets.all(12.0),
-                                          color: TextThemes.ndGold,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(3.0))),
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MessageDetail(
-                                                            directMessageId,
-                                                            id)));
-                                          },
-                                          child: Text("Message",
-                                              style: TextStyle(
-                                                  color: Colors.white))));
-                                }
-                              
-                                return Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: RaisedButton(
-                                        padding: const EdgeInsets.all(12.0),
-                                        color: TextThemes.ndGold,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(3.0))),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MessageDetail(
-                                                          directMessageId,
-                                                          id)));
-                                        },
-                                        child: Text("Message",
-                                            style: TextStyle(
-                                                color: Colors.white))));
-                              });
-                        }),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          right: 7.5, bottom: 15, top: 15.5),
-                      child: status == 2
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                RaisedButton(
-                                    padding: const EdgeInsets.all(12.0),
-                                    color: Colors.green,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(3.0))),
-                                    onPressed: () {
-                                      Database().acceptFriendRequest(
-                                          id, strUserId, strUserName, strPic);
-                                      setState(() {
-                                        status = 1;
-                                      });
-                                      Database().friendAcceptNotification(
-                                          id, photoUrl, displayName, strUserId);
-                                    },
-                                    child: Text(
-                                      "Accept Friend Request",
-                                      style: new TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14.0,
-                                      ),
-                                    )),
-                                RaisedButton(
-                                    padding: const EdgeInsets.all(12.0),
-                                    color: Colors.red,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(3.0))),
-                                    onPressed: () {
-                                      setState(() {
-                                        status = null;
-                                      });
-                                      Database().rejectFriendRequest(
-                                          strUserId, id, strUserName, strPic);
-                                    },
-                                    child: Text(
-                                      "Decline Friend Request",
-                                      style: new TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14.0,
-                                      ),
-                                    )),
-                              ],
-                            )
-                          : status != 1
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.all(5),
+                            child: RaisedButton(
+                                padding: const EdgeInsets.all(12.0),
+                                color: TextThemes.ndGold,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(3.0))),
+                                onPressed: () {
+                                  dmChecker()
+                                      .then(
+                                        (value) => toMessageDetail());
+                                },
+                                child: Text("Message",
+                                    style: TextStyle(color: Colors.white)))),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 7.5, bottom: 15, top: 15.5),
+                          child: status == 2
                               ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                      RaisedButton(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    RaisedButton(
                                         padding: const EdgeInsets.all(12.0),
-                                        color: Color.fromRGBO(2, 43, 91, 1.0),
+                                        color: Colors.green,
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(3.0))),
                                         onPressed: () {
-                                          Database().sendFriendRequest(
-                                              strUserId,
-                                              id,
-                                              strUserName,
-                                              strPic);
-                                          status = 0;
-                                          Database().friendRequestNotification(
+                                          Database().acceptFriendRequest(id,
+                                              strUserId, strUserName, strPic);
+                                          setState(() {
+                                            status = 1;
+                                          });
+                                          Database().friendAcceptNotification(
                                               id,
                                               photoUrl,
                                               displayName,
                                               strUserId);
                                         },
-                                        child: status == null
-                                            ? Text(
-                                                "Send Friend Request",
-                                                style: new TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                ),
-                                              )
-                                            : Text(
-                                                "Request Sent",
-                                                style: new TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                ),
-                                              ),
-                                      ),
-                                    ])
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                      RaisedButton(
-                                          padding: const EdgeInsets.all(12.0),
-                                          color: Colors.green,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(3.0))),
-                                          onPressed: () {
-                                            // unfriend code here
-                                          },
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                showAlertDialog(context);
+                                        child: Text(
+                                          "Accept Friend Request",
+                                          style: new TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.0,
+                                          ),
+                                        )),
+                                    RaisedButton(
+                                        padding: const EdgeInsets.all(12.0),
+                                        color: Colors.red,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(3.0))),
+                                        onPressed: () {
+                                          setState(() {
+                                            status = null;
+                                          });
+                                          Database().rejectFriendRequest(
+                                              strUserId,
+                                              id,
+                                              strUserName,
+                                              strPic);
+                                        },
+                                        child: Text(
+                                          "Decline Friend Request",
+                                          style: new TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.0,
+                                          ),
+                                        )),
+                                  ],
+                                )
+                              : status != 1
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                          RaisedButton(
+                                            padding: const EdgeInsets.all(12.0),
+                                            color:
+                                                Color.fromRGBO(2, 43, 91, 1.0),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(3.0))),
+                                            onPressed: () {
+                                              Database().sendFriendRequest(
+                                                  strUserId,
+                                                  id,
+                                                  strUserName,
+                                                  strPic);
+                                              status = 0;
+                                              Database()
+                                                  .friendRequestNotification(
+                                                      id,
+                                                      photoUrl,
+                                                      displayName,
+                                                      strUserId);
+                                            },
+                                            child: status == null
+                                                ? Text(
+                                                    "Send Friend Request",
+                                                    style: new TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 14.0,
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    "Request Sent",
+                                                    style: new TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 14.0,
+                                                    ),
+                                                  ),
+                                          ),
+                                        ])
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                          RaisedButton(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              color: Colors.green,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              3.0))),
+                                              onPressed: () {
+                                                // unfriend code here
                                               },
-                                              child: Text(
-                                                "Friends",
-                                                style: new TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                ),
-                                              ))),
-                                    ]),
+                                              child: GestureDetector(
+                                                  onTap: () {
+                                                    showAlertDialog(context);
+                                                  },
+                                                  child: Text(
+                                                    "Friends",
+                                                    style: new TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 14.0,
+                                                    ),
+                                                  ))),
+                                        ]),
+                        ),
+                      ],
                     ),
                   ],
                 ),

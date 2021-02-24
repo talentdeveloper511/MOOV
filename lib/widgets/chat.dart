@@ -8,6 +8,7 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:duration/duration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/home.dart';
@@ -34,6 +35,19 @@ class Chat extends StatefulWidget {
 }
 
 class ChatState extends State<Chat> {
+  rebuild() {
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) =>
+              MessageDetail(directMessageId, otherPerson),
+          transitionDuration: Duration(seconds: 0),
+        ),
+      );
+    });
+  }
+
   TextEditingController commentController = TextEditingController();
   final String gid, otherPerson;
   String directMessageId;
@@ -68,6 +82,7 @@ class ChatState extends State<Chat> {
           if (!snapshot.hasData) {
             return Container();
           }
+
           List<Comment> chat = [];
           snapshot.data.docs.forEach((doc) {
             chat.add(Comment.fromDocument(doc));
@@ -82,6 +97,7 @@ class ChatState extends State<Chat> {
 
   addComment() {
     adjustChat();
+
     if (commentController.text.isNotEmpty) {
       isGroupChat
           ? groupsRef
@@ -140,10 +156,9 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    Timer(
-        Duration(milliseconds: 200),
-        () => _scrollController
-            .jumpTo(_scrollController.position.maxScrollExtent));
+    Timer(Duration(milliseconds: 200), () {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
     return Container(
       height: 500,
       child: Column(
@@ -166,14 +181,15 @@ class ChatState extends State<Chat> {
                       "people": [currentUser.id, otherPerson]
                     });
                   }
-                 
-                 Navigator.pushReplacement(
-      context, 
-      PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => MessageDetail(directMessageId,otherPerson),
-        transitionDuration: Duration(seconds: 0),
-    ),
-);
+
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          MessageDetail(directMessageId, otherPerson),
+                      transitionDuration: Duration(seconds: 0),
+                    ),
+                  );
 
                   addComment();
                   adjustChat();

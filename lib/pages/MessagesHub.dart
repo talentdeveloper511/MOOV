@@ -368,48 +368,55 @@ class MessagesHub extends StatelessWidget {
                             ],
                           ),
                         ),
+                      
                         SliverToBoxAdapter(
                           child: Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: SizedBox(
-                              height: 250,
-                              child: StreamBuilder(
-                                  stream: messagesRef
-                                      .where('people',
-                                          arrayContains: currentUser.id)
-                                      .orderBy("timestamp")
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) return Container();
-                                    if (snapshot.data.docs == null) {
-                                      return Container();
-                                    }
+                                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                            child: Stack(
+                                                          children: [SizedBox(
+                                height: 250,
+                                child: StreamBuilder(
+                                    stream: messagesRef
+                                        .where('people',
+                                            arrayContains: currentUser.id)
+                                        // .orderBy("unix")
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) return Container();
+                                      if (snapshot.data.docs == null) {
+                                        return Container();
+                                      }
 
-                                    for (int i = 0;
-                                        i < snapshot.data.docs.length;
-                                        i++) {
-                                      DocumentSnapshot course =
-                                          snapshot.data.docs[i];
-                                      List people = course['people'];
-                                      people.removeWhere(
-                                          (item) => item == currentUser.id);
-                                      String otherPerson = people[0];
-                                      return Container(
-                                        height: 100,
-                                        child: Chat(
-                                          gid: "",
-                                          directMessageId:
-                                              course['directMessageId'],
-                                          otherPerson: otherPerson,
-                                          isGroupChat: false,
-                                        ),
+                                      for (int i = 0;
+                                          i < snapshot.data.docs.length;
+                                          i++) {
+                                        DocumentSnapshot course =
+                                            snapshot.data.docs[i];
+                                        List people = course['people'];
+                                        people.removeWhere(
+                                            (item) => item == currentUser.id);
+                                        String otherPerson = people[0];
+                                        return Container(
+                                          height: 100,
+                                          child: Chat(
+                                            gid: "",
+                                            directMessageId:
+                                                course['directMessageId'],
+                                            otherPerson: otherPerson,
+                                            isGroupChat: false,
+                                          ),
+                                        );
+                                      }
+                                      return Chat(
+                                        isGroupChat: false,
                                       );
-                                    }
-                                    return Chat(
-                                      isGroupChat: false,
-                                    );
-                                  }),
+                                    }),
+                              ),
+                                   Text(' Last Active Conversation',
+                                    style: TextStyle(fontSize: 16)),
+                          
+                              ]
                             ),
                             // Container(
                             //   decoration: BoxDecoration(
@@ -567,6 +574,7 @@ class MessageList extends StatelessWidget {
       body: StreamBuilder(
           stream: messagesRef //featured
               .where("people", arrayContains: currentUser.id)
+              // .orderBy("timestamp")
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data.docs.length == 0)
