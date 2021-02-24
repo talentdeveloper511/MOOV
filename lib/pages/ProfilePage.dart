@@ -471,7 +471,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   bottomLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10)),
               gradient: LinearGradient(
-                colors: [Colors.amber[300], Colors.amber[400]],
+                colors: [Colors.amber[300], Colors.amber[200]],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),

@@ -158,7 +158,7 @@ class ChatState extends State<Chat> {
             trailing: OutlineButton(
                 onPressed: () {
                   if (isGroupChat == false && directMessageId == "nothing") {
-                    directMessageId = generateRandomString(20);
+                    directMessageId = currentUser.id + otherPerson;
                     messagesRef.doc(directMessageId).set({
                       "lastMessage": commentController.text,
                       "timestamp": timestamp,

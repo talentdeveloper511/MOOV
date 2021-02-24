@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -10,6 +11,7 @@ import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/dm_page.dart';
 import 'package:MOOV/pages/leaderboard.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -457,106 +459,68 @@ class _OtherProfileState extends State<OtherProfile> {
                           )
                         : Text(""),
                     StreamBuilder(
-                      stream: messagesRef
-                          .where("people", arrayContains: currentUser.id)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                         return Padding(
-                                padding: EdgeInsets.all(5),
-                                child: RaisedButton(
-                                    padding: const EdgeInsets.all(12.0),
-                                    color: TextThemes.ndGold,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(3.0))),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MessageDetail(
-                                                      directMessageId, id)));
-                                    },
-                                    child: Text("Message",
-                                        style:
-                                            TextStyle(color: Colors.white))));
-                        for (int i = 0; i < snapshot.data.docs.length; i++) {
-                          DocumentSnapshot course = snapshot.data.docs[i];
-                          // print(course['people']);
-                          List people = course['people'];
-                          people.removeWhere((item) => item == currentUser.id);
-                          String otherPerson = people[0];
-                          if (snapshot.data.docs.length <= 1) {
-                            directMessageId = "nothing";
+                        stream:
+                            messagesRef.doc(currentUser.id + id).snapshots(),
+                        builder: (context, snapshot) {
+                          return StreamBuilder(
+                              stream: messagesRef
+                                  .doc(id + currentUser.id)
+                                  .snapshots(),
+                              builder: (context, snapshot2) {
+                                  if (!snapshot.hasData) {
+                                  directMessageId =
+                                      snapshot2.data['directMessageId'];
+                                }
+                                if (!snapshot2.hasData) {
+                                  directMessageId =
+                                      snapshot.data['directMessageId'];
+                                }
 
-                            return Padding(
-                                padding: EdgeInsets.all(5),
-                                child: RaisedButton(
-                                    padding: const EdgeInsets.all(12.0),
-                                    color: TextThemes.ndGold,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(3.0))),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MessageDetail(
-                                                      directMessageId, id)));
-                                    },
-                                    child: Text("Message",
-                                        style:
-                                            TextStyle(color: Colors.white))));
-                          }
-                          if (course['people'].contains(currentUser.id) &&
-                              course['people'].contains(id)) {
-                            directMessageId =
-                                snapshot.data.docs[i]['directMessageId'];
-
-                            return Padding(
-                                padding: EdgeInsets.all(5),
-                                child: RaisedButton(
-                                    padding: const EdgeInsets.all(12.0),
-                                    color: TextThemes.ndGold,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(3.0))),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MessageDetail(
-                                                      directMessageId, id)));
-                                    },
-                                    child: Text("Message",
-                                        style:
-                                            TextStyle(color: Colors.white))));
-                          }
-                        }
-                        return Padding(
-                                padding: EdgeInsets.all(5),
-                                child: RaisedButton(
-                                    padding: const EdgeInsets.all(12.0),
-                                    color: TextThemes.ndGold,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(3.0))),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MessageDetail(
-                                                      directMessageId, id)));
-                                    },
-                                    child: Text("Message",
-                                        style:
-                                            TextStyle(color: Colors.white))));
-                      },
-                    ),
+                                if (snapshot.data == null && snapshot2.data == null) {
+                                  return Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: RaisedButton(
+                                          padding: const EdgeInsets.all(12.0),
+                                          color: TextThemes.ndGold,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(3.0))),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MessageDetail(
+                                                            directMessageId,
+                                                            id)));
+                                          },
+                                          child: Text("Message",
+                                              style: TextStyle(
+                                                  color: Colors.white))));
+                                }
+                              
+                                return Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: RaisedButton(
+                                        padding: const EdgeInsets.all(12.0),
+                                        color: TextThemes.ndGold,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(3.0))),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MessageDetail(
+                                                          directMessageId,
+                                                          id)));
+                                        },
+                                        child: Text("Message",
+                                            style: TextStyle(
+                                                color: Colors.white))));
+                              });
+                        }),
                     Padding(
                       padding: const EdgeInsets.only(
                           right: 7.5, bottom: 15, top: 15.5),
