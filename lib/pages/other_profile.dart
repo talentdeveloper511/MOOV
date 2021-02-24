@@ -462,8 +462,25 @@ class _OtherProfileState extends State<OtherProfile> {
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                          return Text("Message",
-                              style: TextStyle(color: Colors.white));
+                          return Padding(
+                                padding: EdgeInsets.all(5),
+                                child: RaisedButton(
+                                    padding: const EdgeInsets.all(12.0),
+                                    color: TextThemes.ndGold,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(3.0))),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MessageDetail(
+                                                      directMessageId, id)));
+                                    },
+                                    child: Text("Message",
+                                        style:
+                                            TextStyle(color: Colors.white))));
                         for (int i = 0; i < snapshot.data.docs.length; i++) {
                           DocumentSnapshot course = snapshot.data.docs[i];
                           // print(course['people']);

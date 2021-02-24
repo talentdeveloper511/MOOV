@@ -24,6 +24,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  final nameController = TextEditingController();
   final dormController = TextEditingController();
   final bioController = TextEditingController();
   final venmoController = TextEditingController();
@@ -212,14 +213,6 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
-
-    final GoogleSignInAccount user = googleSignIn.currentUser;
-    final strUserId = user.id;
-    dynamic userScore = currentUser.score.toString();
-    final strUserName = user.displayName;
-    final strUserPic = user.photoUrl;
-    var userHeader = currentUser.header;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -380,6 +373,32 @@ class _EditProfileState extends State<EditProfile> {
                     style: TextThemes.extraBold,
                   ),
                 ),
+                currentUser.nameChangeLimit == 1
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 30.0, bottom: 5),
+                        child: Text(
+                          "Name",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                      )
+                    : Container(),
+                    SizedBox(height: 5),
+                currentUser.nameChangeLimit == 1
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: TextFormField(
+                          autocorrect: false,
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            labelText: "You can only change your name once.",
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
                 Padding(
                   padding: const EdgeInsets.only(top: 30.0, bottom: 5),
                   child: Text(
@@ -411,14 +430,14 @@ class _EditProfileState extends State<EditProfile> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Row(
                     children: [
-                      Text("@  ", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text("@  ",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       Expanded(
                         child: TextFormField(
-                          
                           autocorrect: false,
                           controller: venmoController,
                           decoration: InputDecoration(
-                            
                             labelText: "What's your @?",
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -426,11 +445,12 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                       ),
+                      SizedBox(width: 30)
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(25.0),
                   child: RaisedButton(
                       color: TextThemes.ndBlue,
                       child:
@@ -490,6 +510,13 @@ class _EditProfileState extends State<EditProfile> {
                             });
                           }
                         }
+                        if (nameController.text != "") {
+                          usersRef.doc(currentUser.id).update({
+                            "displayName": nameController.text.toUpperCase(),
+                            "nameChangeLimit": FieldValue.increment(-1)
+                          });
+                        }
+
                         if (dormController.text != "") {
                           usersRef.doc(currentUser.id).update({
                             "dorm": dormController.text.toUpperCase(),

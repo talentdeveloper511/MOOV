@@ -939,7 +939,7 @@ class Database {
             //   "incognito": false,
             //   "showDorm": true
             // }
-            // "suggestLimit": 5,
+            "nameChangeLimit": 1,
             // "groupLimit": 2
           }, SetOptions(merge: true));
         }

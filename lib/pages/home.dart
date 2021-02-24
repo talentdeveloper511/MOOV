@@ -290,6 +290,7 @@ class _HomeState extends State<Home> {
         "sendLimit": 5,
         "suggestLimit": 5,
         "groupLimit": 2,
+        "nameChangeLimit": 1,
         "verifiedStatus": 0,
         "friendArray": [],
         "friendRequests": [],
