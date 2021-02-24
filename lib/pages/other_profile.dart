@@ -135,15 +135,12 @@ class _OtherProfileState extends State<OtherProfile> {
   }
 
   void toMessageDetail() {
-    
-         Timer(Duration(milliseconds: 200), () {
-       Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MessageDetail(directMessageId, id)));
-      });
-  
-   
+    Timer(Duration(milliseconds: 200), () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MessageDetail(directMessageId, id)));
+    });
   }
 
   @override
@@ -500,8 +497,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                         BorderRadius.all(Radius.circular(3.0))),
                                 onPressed: () {
                                   dmChecker()
-                                      .then(
-                                        (value) => toMessageDetail());
+                                      .then((value) => toMessageDetail());
                                 },
                                 child: Text("Message",
                                     style: TextStyle(color: Colors.white)))),
@@ -509,7 +505,7 @@ class _OtherProfileState extends State<OtherProfile> {
                           padding: const EdgeInsets.only(
                               right: 7.5, bottom: 15, top: 15.5),
                           child: status == 2
-                              ? Row(
+                              ? Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [

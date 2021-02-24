@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/group_detail.dart';
@@ -1240,7 +1243,6 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(3.0))),
                     onPressed: () {
-                      
                       Database().addUser(userId, gname, gid, displayName);
                       Database().addedToGroup(userId, gname, gid, pic);
                       setState(() {
@@ -1514,19 +1516,12 @@ class _InviteGroupState extends State<InviteGroup> {
 }
 
 class SearchUsersMessage extends StatefulWidget {
-  String id, name;
-  
-  SearchUsersMessage(this.id, name);
-
   @override
-  _SearchUsersMessageState createState() => _SearchUsersMessageState(
-      this.id, this.name);
+  _SearchUsersMessageState createState() => _SearchUsersMessageState();
 }
 
 class _SearchUsersMessageState extends State<SearchUsersMessage> {
-  String id, name;
-  _SearchUsersMessageState(
-      this.id, this.name);
+  _SearchUsersMessageState();
 
   final TextEditingController searchController = TextEditingController();
   final textFieldFocusNode = FocusNode();
@@ -1700,23 +1695,17 @@ class _SearchUsersMessageState extends State<SearchUsersMessage> {
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                // return _searchTerm.length > 0
-                                //     ? UserGroupResultAdd(
-                                //         currSearchStuff[index]
-                                //             .data["displayName"],
-                                //         currSearchStuff[index].data["email"],
-                                //         currSearchStuff[index].data["photoUrl"],
-                                //         currSearchStuff[index].data["id"],
-                                //         currSearchStuff[index]
-                                //             .data["verifiedStatus"],
-                                //         currSearchStuff[index]
-                                //             .data["friendGroups"],
-                                //         gname,
-                                //         gid,
-                                //         pic,
-                                //         moov,
-                                //         members)
-                                //     : Container();
+                                return _searchTerm.length > 0
+                                    ? MessageResultAdd(
+                                        currSearchStuff[index]
+                                            .data["displayName"],
+                                        currSearchStuff[index].data["email"],
+                                        currSearchStuff[index].data["photoUrl"],
+                                        currSearchStuff[index].data["id"],
+                                        currSearchStuff[index]
+                                            .data["verifiedStatus"],
+                                      )
+                                    : Container();
                               },
                               childCount: currSearchStuff.length ?? 0,
                             ),
@@ -1729,162 +1718,138 @@ class _SearchUsersMessageState extends State<SearchUsersMessage> {
       ),
     );
   }
-  
 }
 
-// class MessageResultAdd extends StatefulWidget {
-//   final String displayName;
-//   final String email;
-//   final String proPic;
-//   final String userId;
-//   final int verifiedStatus;
-//   final List<dynamic> friendGroups;
-//   String gname, gid, pic, moov;
-//   List<dynamic> members;
+class MessageResultAdd extends StatefulWidget {
+  final String displayName;
+  final String email;
+  final String proPic;
+  final String userId;
+  final int verifiedStatus;
 
-//   MessageResultAdd(
-//       this.displayName,
-//       this.email,
-//       this.proPic,
-//       this.userId,
-//       this.verifiedStatus,
-//       this.friendGroups,
-//       this.gname,
-//       this.gid,
-//       this.pic,
-//       this.moov,
-//       this.members);
+  MessageResultAdd(
+    this.displayName,
+    this.email,
+    this.proPic,
+    this.userId,
+    this.verifiedStatus,
+  );
 
-//   @override
-//   _UserGroupResultAddState createState() => _UserGroupResultAddState(
-//       this.displayName,
-//       this.email,
-//       this.proPic,
-//       this.userId,
-//       this.verifiedStatus,
-//       this.friendGroups,
-//       this.gname,
-//       this.gid,
-//       this.pic,
-//       this.moov,
-//       this.members);
-// }
+  @override
+  _MessageResultAddState createState() => _MessageResultAddState(
+        this.displayName,
+        this.email,
+        this.proPic,
+        this.userId,
+        this.verifiedStatus,
+      );
+}
 
-// class _UserGroupResultAddState extends State<UserGroupResultAdd> {
-//   String displayName;
-//   String email;
-//   String proPic;
-//   String userId;
-//   int verifiedStatus;
-//   String gname, gid, pic, moov;
-//   List<dynamic> members, friendGroups;
-//   bool status = false;
+class _MessageResultAddState extends State<MessageResultAdd> {
+  String displayName;
+  String email;
+  String proPic;
+  String userId;
+  int verifiedStatus;
 
-//   _UserGroupResultAddState(
-//       this.displayName,
-//       this.email,
-//       this.proPic,
-//       this.userId,
-//       this.verifiedStatus,
-//       this.friendGroups,
-//       this.gname,
-//       this.gid,
-//       this.pic,
-//       this.moov,
-//       this.members);
+  _MessageResultAddState(
+    this.displayName,
+    this.email,
+    this.proPic,
+    this.userId,
+    this.verifiedStatus,
+  );
+  String directMessageId;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     friendGroups.contains(gid) ? status = true : false;
+  Future dmChecker() async {
+    messagesRef.doc(userId + currentUser.id).get().then((doc) async {
+      messagesRef.doc(currentUser.id + userId).get().then((doc2) async {
+        if (!doc2.exists && !doc.exists) {
+          directMessageId = "nothing";
+        } else if (!doc2.exists) {
+          directMessageId = doc['directMessageId'];
+        } else if (!doc.exists) {
+          directMessageId = doc2['directMessageId'];
+        }
+        print(directMessageId);
+      });
+    });
+  }
 
-//     return GestureDetector(
-//       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => userId != currentUser.id
-//               ? OtherProfile(userId)
-//               : ProfilePageWithHeader())),
-//       child: Stack(children: [
-//         Row(children: <Widget>[
-//           Padding(
-//             padding: const EdgeInsets.only(left: 20.0, top: 5, bottom: 5),
-//             child: CircleAvatar(
-//                 radius: 27,
-//                 backgroundColor: TextThemes.ndGold,
-//                 child: CircleAvatar(
-//                   backgroundImage: NetworkImage(proPic),
-//                   radius: 25,
-//                   backgroundColor: TextThemes.ndBlue,
-//                 )),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.only(left: 12.5),
-//             child: Text(
-//               displayName ?? "",
-//               style: TextStyle(
-//                   color: Colors.black,
-//                   fontWeight: FontWeight.w500,
-//                   fontSize: 20),
-//             ),
-//           ),
-//           verifiedStatus == 2
-//               ? Padding(
-//                   padding: const EdgeInsets.only(top: 3, left: 3),
-//                   child: Image.asset('lib/assets/verif.png', height: 30),
-//                 )
-//               : Text(""),
-//           // Text(
-//           //   email ?? "",
-//           //   style: TextStyle(color: Colors.black),
-//           // ),
-//           Divider(
-//             color: Colors.black,
-//           ),
-//         ]),
-//         status
-//             ? Positioned(
-//                 right: 20,
-//                 top: 10,
-//                 child: RaisedButton(
-//                     padding: const EdgeInsets.all(2.0),
-//                     color: Colors.green,
-//                     shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.all(Radius.circular(3.0))),
-//                     onPressed: () {
-//                       setState(() {
-//                         status = true;
-//                       });
-//                     },
-//                     child: Text(
-//                       "Added",
-//                       style: new TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 12.0,
-//                       ),
-//                     )))
-//             : Positioned(
-//                 right: 20,
-//                 top: 10,
-//                 child: RaisedButton(
-//                     padding: const EdgeInsets.all(2.0),
-//                     color: TextThemes.ndBlue,
-//                     shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.all(Radius.circular(3.0))),
-//                     onPressed: () {
-                      
-//                       Database().addUser(userId, gname, gid, displayName);
-//                       Database().addedToGroup(userId, gname, gid, pic);
-//                       setState(() {
-//                         status = true;
-//                       });
-//                     },
-//                     child: Text(
-//                       "Add to Group",
-//                       style: new TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 12.0,
-//                       ),
-//                     )),
-//               ),
-//       ]),
-//     );
-//   }
-// }
+  void toMessageDetail() {
+    Timer(Duration(milliseconds: 200), () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MessageDetail(directMessageId, userId)));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => userId != currentUser.id
+              ? OtherProfile(userId)
+              : ProfilePageWithHeader())),
+      child: Stack(children: [
+        Row(children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, top: 5, bottom: 5),
+            child: CircleAvatar(
+                radius: 27,
+                backgroundColor: TextThemes.ndGold,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(proPic),
+                  radius: 25,
+                  backgroundColor: TextThemes.ndBlue,
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12.5),
+            child: Text(
+              displayName ?? "",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20),
+            ),
+          ),
+          verifiedStatus == 2
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 3, left: 3),
+                  child: Image.asset('lib/assets/verif.png', height: 30),
+                )
+              : Text(""),
+          // Text(
+          //   email ?? "",
+          //   style: TextStyle(color: Colors.black),
+          // ),
+          Divider(
+            color: Colors.black,
+          ),
+        ]),
+        Positioned(
+          right: 20,
+          top: 10,
+          child: RaisedButton(
+              padding: const EdgeInsets.all(2.0),
+              color: TextThemes.ndBlue,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(3.0))),
+              onPressed: () {
+                 dmChecker()
+                                      .then((value) => toMessageDetail());
+              },
+              child: Text(
+                "Chat",
+                style: new TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.0,
+                ),
+              )),
+        ),
+      ]),
+    );
+  }
+}
