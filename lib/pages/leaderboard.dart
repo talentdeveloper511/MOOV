@@ -166,7 +166,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
                                   padding: const EdgeInsets.all(15.0),
                                   child: Text(
                                     "Do you like free stuff?"
-                                    " \nRise to the top of the leaderboard to win. \nWeek ends with payouts on MOOV Money Mondays.",
+                                    " \nRise to the top of the leaderboard to win. \nWeek ends with payouts on Money MOOV Mondays.",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: isLargePhone ? 14 : 15,

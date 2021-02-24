@@ -6,6 +6,7 @@ import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/map_test.dart';
+import 'package:MOOV/services/database.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
@@ -56,11 +57,14 @@ final notificationFeedRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('notificationFeed');
+final chatRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('chat');
 final messagesRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
-    .collection('directMessages');
-
+    .collection('chat');
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
@@ -537,6 +541,7 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => NotificationFeed()));
+                Database().setNotifsSeen();
               }),
         ],
         flexibleSpace: FlexibleSpaceBar(
@@ -679,51 +684,42 @@ class NamedIcon extends StatelessWidget {
         stream: notificationFeedRef
             .doc(user.id)
             .collection('feedItems')
+            .where('seen', isEqualTo: false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return CircularProgressIndicator();
           if (!snapshot.hasData) return CircularProgressIndicator();
           int notifs = snapshot.data.docs.length;
 
-          // return StreamBuilder(
-          //     stream: FirebaseFirestore.instance.collectionGroup('feedItems')
-          //         .where('groupId', whereIn: currentUser.friendGroups)
-          //         .where("type", isEqualTo: "invite")
-          //         .snapshots(),
-          //     builder: (context, snapshot2) {
-          //       if (snapshot2.hasError) return CircularProgressIndicator();
-          //       if (!snapshot2.hasData) return CircularProgressIndicator();
-                return InkWell(
-                  onTap: onTap,
-                  child: Container(
-                    width: 50,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Icon(iconData, color: Colors.white),
-                        notifs != 0
-                            ? Positioned(
-                                top: 8,
-                                right: 0,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.red),
-                                  alignment: Alignment.center,
-                                  child: Text("$notifs",
-                                      style: TextStyle(color: Colors.white)),
-                                ),
-                              )
-                            : Container()
-                      ],
-                    ),
-                  ),
-                );
-              });
- 
+          return InkWell(
+            onTap: onTap,
+            child: Container(
+              width: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Icon(iconData, color: Colors.white),
+                  notifs != 0
+                      ? Positioned(
+                          top: 8,
+                          right: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.red),
+                            alignment: Alignment.center,
+                            child: Text("$notifs",
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
 

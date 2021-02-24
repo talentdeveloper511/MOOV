@@ -295,12 +295,14 @@ class _OtherProfileState extends State<OtherProfile> {
                         Padding(
                           padding:
                               const EdgeInsets.only(top: 2.0, bottom: 12.0),
-                          child: Text(
-                            snapshot.data['year'] +
-                                " in " +
-                                snapshot.data['dorm'],
-                            style: TextStyle(fontSize: 15),
-                          ),
+                          child: snapshot.data['privacySettings']['showDorm']
+                              ? Text(
+                                  snapshot.data['year'] +
+                                      " in " +
+                                      snapshot.data['dorm'],
+                                  style: TextStyle(fontSize: 15),
+                                )
+                              : Text("Top secret year and dorm"),
                         ),
                       ],
                     ),
