@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -123,10 +124,12 @@ class ChatState extends State<Chat> {
               "gid": "",
               "millis": DateTime.now().millisecondsSinceEpoch.toString()
             });
-             isGroupChat ? null : messagesRef.doc(directMessageId).update({
-                      "lastMessage": commentController.text,
-                      "timestamp": timestamp,
-                    });
+      isGroupChat
+          ? null
+          : messagesRef.doc(directMessageId).update({
+              "lastMessage": commentController.text,
+              "timestamp": timestamp,
+            });
       Timer(
           Duration(milliseconds: 200),
           () => _scrollController
@@ -163,6 +166,15 @@ class ChatState extends State<Chat> {
                       "people": [currentUser.id, otherPerson]
                     });
                   }
+                 
+                 Navigator.pushReplacement(
+      context, 
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => MessageDetail(directMessageId,otherPerson),
+        transitionDuration: Duration(seconds: 0),
+    ),
+);
+
                   addComment();
                   adjustChat();
                 },
