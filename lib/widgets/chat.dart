@@ -181,8 +181,8 @@ class ChatState extends State<Chat> {
                       "people": [currentUser.id, otherPerson]
                     });
                   }
-
-                  Navigator.pushReplacement(
+isGroupChat ?
+                   null :Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation1, animation2) =>

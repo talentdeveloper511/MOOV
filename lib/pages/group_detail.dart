@@ -517,7 +517,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                 padding:
                                                     const EdgeInsets.all(2.0),
                                                 child: Chat(
-                                                  directMessageId: "",
+                                                  directMessageId: " ",
                                                   gid: gid,
                                                   isGroupChat: true,
                                                 ),
