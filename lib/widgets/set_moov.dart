@@ -219,6 +219,8 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
                               (context, index) {
                                 String privacy =
                                     currSearchStuff[index].data["privacy"];
+                                Map statuses =
+                                    currSearchStuff[index].data["statuses"];
                                 bool hide = false;
                                 if (privacy == "Friends Only" ||
                                     privacy == "Invite Only") {
@@ -226,6 +228,9 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
                                 }
                                 if (currSearchStuff[index].data['userId'] ==
                                     currentUser.id) {
+                                  hide = false;
+                                }
+                                if (statuses.keys.contains(gid)) {
                                   hide = false;
                                 }
 
