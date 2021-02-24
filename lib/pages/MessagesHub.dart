@@ -1,16 +1,22 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/services/database.dart';
 
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/chat.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 
 class MessagesHub extends StatelessWidget {
   Container buildNoContent() {
@@ -366,49 +372,89 @@ class MessagesHub extends StatelessWidget {
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[100],
-                                  borderRadius: BorderRadius.circular(10.0)),
-                              height: 150,
-                              padding: const EdgeInsets.all(8.0),
-                              child: Stack(children: [
-                                StreamBuilder(
-                                    stream: messagesRef
-                                        .where('people',
-                                            arrayContains: currentUser.id)
-                                        .orderBy("timestamp")
-                                        .snapshots(),
-                                    builder: (context, snapshot) {
-                                      if (!snapshot.hasData) return Container();
-                                      if (snapshot.data.docs.length == 0) {
-                                        return Container();
-                                      }
-                                      for (int i = 0;
-                                          i < snapshot.data.docs.length;
-                                          i++) {
-                                        DocumentSnapshot course =
-                                            snapshot.data.docs[i];
-                                        List people = course['people'];
-                                        people.removeWhere(
-                                            (item) => item == currentUser.id);
-                                        String otherPerson = people[0];
-                                        return Container(
-                                          height: 100,
-                                          child: Chat(
-                                            gid: "",
-                                            directMessageId:
-                                                course['directMessageId'],
-                                            otherPerson: otherPerson,
-                                          ),
-                                        );
-                                      }
+                            child: SizedBox(
+                              height: 250,
+                              child: StreamBuilder(
+                                  stream: messagesRef
+                                      .where('people',
+                                          arrayContains: currentUser.id)
+                                      .orderBy("timestamp")
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) return Container();
+                                    if (snapshot.data.docs == null) {
                                       return Container();
-                                    }),
-                                Text('Last Active Conversation',
-                                    style: TextStyle(fontSize: 18)),
-                              ]),
+                                    }
+
+                                    for (int i = 0;
+                                        i < snapshot.data.docs.length;
+                                        i++) {
+                                      DocumentSnapshot course =
+                                          snapshot.data.docs[i];
+                                      List people = course['people'];
+                                      people.removeWhere(
+                                          (item) => item == currentUser.id);
+                                      String otherPerson = people[0];
+                                      return Container(
+                                        height: 100,
+                                        child: Chat(
+                                          gid: "",
+                                          directMessageId:
+                                              course['directMessageId'],
+                                          otherPerson: otherPerson,
+                                          isGroupChat: false,
+                                        ),
+                                      );
+                                    }
+                                    return Chat(
+                                      isGroupChat: false,
+                                    );
+                                  }),
                             ),
+                            // Container(
+                            //   decoration: BoxDecoration(
+                            //       color: Colors.grey[100],
+                            //       borderRadius: BorderRadius.circular(10.0)),
+                            //   height: 150,
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Stack(children: [
+                            //     StreamBuilder(
+                            //         stream: messagesRef
+                            //             .where('people',
+                            //                 arrayContains: currentUser.id)
+                            //             .orderBy("timestamp")
+                            //             .snapshots(),
+                            //         builder: (context, snapshot) {
+                            //           if (!snapshot.hasData) return Container();
+                            //           if (snapshot.data.docs.length == 0) {
+                            //             return Container();
+                            //           }
+                            //           for (int i = 0;
+                            //               i < snapshot.data.docs.length;
+                            //               i++) {
+                            //             DocumentSnapshot course =
+                            //                 snapshot.data.docs[i];
+                            //             List people = course['people'];
+                            //             people.removeWhere(
+                            //                 (item) => item == currentUser.id);
+                            //             String otherPerson = people[0];
+                            //             return Container(
+                            //               height: 100,
+                            //               child: Chat(
+                            //                 gid: "",
+                            //                 directMessageId:
+                            //                     course['directMessageId'],
+                            //                 otherPerson: otherPerson,
+                            //                 isGroupChat: false,
+                            //               ),
+                            //             );
+                            //           }
+                            //           return Container();
+                            //         }),
+                            //     Text('Last Active Conversation',
+                            //         style: TextStyle(fontSize: 18)),
+                            //   ]),
+                            // ),
                           ),
                         ),
                         SliverPadding(
@@ -465,227 +511,6 @@ class MessagesHub extends StatelessWidget {
                                         )))),
                           ),
                         ),
-                        // SliverGrid(
-                        //     delegate: SliverChildBuilderDelegate(
-                        //         (BuildContext context, int index) {
-                        //       if (!snapshot.hasData)
-                        //         return CircularProgressIndicator();
-                        //       if (snapshot.data.docs.length == 0) {
-                        //         return Container();
-                        //       }
-
-                        //       DocumentSnapshot course =
-                        //           snapshot.data.docs[index];
-                        //       var length = course['members'].length - 2;
-                        //       String groupId = course['groupId'];
-
-                        //       // var rng = new Random();
-                        //       // var l = rng.nextInt(course['members'].length);
-                        //       // print(l);
-                        //       // print(course['groupName']);
-
-                        //       return StreamBuilder(
-                        //           stream: usersRef
-                        //               .where('friendGroups',
-                        //                   arrayContains: groupId)
-                        //               .snapshots(),
-                        //           builder: (context, snapshot3) {
-                        //             if (!snapshot3.hasData)
-                        //               return CircularProgressIndicator();
-                        //             if (snapshot3.hasError ||
-                        //                 snapshot3.data == null)
-                        //               return CircularProgressIndicator();
-
-                        //             return Padding(
-                        //               padding: const EdgeInsets.all(8.0),
-                        //               child: Container(
-                        //                 // color: Colors.white,
-                        //                 clipBehavior: Clip.none,
-                        //                 child: Stack(
-                        //                   children: <Widget>[
-                        //                     InkWell(
-                        //                       // onTap: () {
-                        //                       //   Navigator.push(
-                        //                       //       context,
-                        //                       //       MaterialPageRoute(
-                        //                       //           builder: (context) =>
-                        //                       //               MessageDetail(
-                        //                       //                   groupId)));
-                        //                       // },
-                        //                       child: Column(
-                        //                         children: [
-                        //                           Padding(
-                        //                             padding:
-                        //                                 const EdgeInsets.only(
-                        //                                     bottom: 5.0),
-                        //                             child: Container(
-                        //                               decoration: BoxDecoration(
-                        //                                   borderRadius:
-                        //                                       BorderRadius.all(
-                        //                                           Radius
-                        //                                               .circular(
-                        //                                                   20)),
-                        //                                   border: Border.all(
-                        //                                     width: 3,
-                        //                                   )),
-                        //                               child: ClipRRect(
-                        //                                 borderRadius:
-                        //                                     BorderRadius.all(
-                        //                                         Radius.circular(
-                        //                                             15)),
-                        //                                 child:
-                        //                                     CachedNetworkImage(
-                        //                                   imageUrl: course[
-                        //                                       'groupPic'],
-                        //                                   fit: BoxFit.cover,
-                        //                                   height: isLargePhone
-                        //                                       ? MediaQuery.of(
-                        //                                                   context)
-                        //                                               .size
-                        //                                               .height *
-                        //                                           0.11
-                        //                                       : MediaQuery.of(
-                        //                                                   context)
-                        //                                               .size
-                        //                                               .height *
-                        //                                           0.13,
-                        //                                   width: isLargePhone
-                        //                                       ? MediaQuery.of(
-                        //                                                   context)
-                        //                                               .size
-                        //                                               .width *
-                        //                                           0.35
-                        //                                       : MediaQuery.of(
-                        //                                                   context)
-                        //                                               .size
-                        //                                               .width *
-                        //                                           0.35,
-                        //                                 ),
-                        //                               ),
-                        //                             ),
-                        //                           ),
-                        //                           Padding(
-                        //                             padding:
-                        //                                 const EdgeInsets.all(
-                        //                                     12.5),
-                        //                             child: Center(
-                        //                               child: FittedBox(
-                        //                                 child: Text(
-                        //                                   course['groupName']
-                        //                                       .toString(),
-                        //                                   maxLines: 2,
-                        //                                   style: TextStyle(
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                       fontSize:
-                        //                                           isLargePhone
-                        //                                               ? 20.0
-                        //                                               : 18,
-                        //                                       fontWeight:
-                        //                                           FontWeight
-                        //                                               .bold),
-                        //                                   textAlign:
-                        //                                       TextAlign.center,
-                        //                                   overflow: TextOverflow
-                        //                                       .ellipsis,
-                        //                                 ),
-                        //                               ),
-                        //                             ),
-                        //                           ),
-                        //                         ],
-                        //                       ),
-                        //                     ),
-                        //                     Positioned(
-                        //                       bottom: isLargePhone ? 80 : 70,
-                        //                       right: 20,
-                        //                       child: Row(
-                        //                         mainAxisAlignment:
-                        //                             MainAxisAlignment.center,
-                        //                         children: [
-                        //                           Stack(children: [
-                        //                             Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                         .all(4.0),
-                        //                                 child: course['members']
-                        //                                             .length >
-                        //                                         1
-                        //                                     ? CircleAvatar(
-                        //                                         radius: 20.0,
-                        //                                         backgroundImage:
-                        //                                             NetworkImage(
-                        //                                           snapshot3.data
-                        //                                                   .docs[1]
-                        //                                               [
-                        //                                               'photoUrl'],
-                        //                                         ),
-                        //                                       )
-                        //                                     : Container()),
-                        //                             Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         top: 4,
-                        //                                         left: 20.0),
-                        //                                 child: CircleAvatar(
-                        //                                   radius: 20.0,
-                        //                                   backgroundImage:
-                        //                                       NetworkImage(
-                        //                                     snapshot3.data
-                        //                                             .docs[0]
-                        //                                         ['photoUrl'],
-                        //                                   ),
-                        //                                 )),
-                        //                             Padding(
-                        //                               padding:
-                        //                                   const EdgeInsets.only(
-                        //                                       top: 4,
-                        //                                       left: 40.0),
-                        //                               child: CircleAvatar(
-                        //                                 radius: 20.0,
-                        //                                 child: course['members']
-                        //                                             .length >
-                        //                                         2
-                        //                                     ? Text(
-                        //                                         "+" +
-                        //                                             (length
-                        //                                                 .toString()),
-                        //                                         style: TextStyle(
-                        //                                             color: TextThemes
-                        //                                                 .ndGold,
-                        //                                             fontWeight:
-                        //                                                 FontWeight
-                        //                                                     .w500),
-                        //                                       )
-                        //                                     : Text(
-                        //                                         (course['members']
-                        //                                             .length
-                        //                                             .toString()),
-                        //                                         style: TextStyle(
-                        //                                             color: TextThemes
-                        //                                                 .ndGold,
-                        //                                             fontWeight:
-                        //                                                 FontWeight
-                        //                                                     .w500),
-                        //                                       ),
-                        //                                 backgroundColor:
-                        //                                     TextThemes.ndBlue,
-                        //                               ),
-                        //                             ),
-                        //                           ])
-                        //                         ],
-                        //                       ),
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //             );
-                        //           });
-                        //     }, childCount: snapshot.data.docs.length),
-                        //     gridDelegate:
-                        //         SliverGridDelegateWithFixedCrossAxisCount(
-                        //       crossAxisCount: 2,
-                        //     )),
                       ],
                     )),
                   ],
@@ -870,9 +695,19 @@ class MessageList extends StatelessWidget {
   }
 }
 
-class MessageDetail extends StatelessWidget {
+class MessageDetail extends StatefulWidget {
   final String otherPerson, directMessageId;
   MessageDetail(this.directMessageId, this.otherPerson);
+
+  @override
+  _MessageDetailState createState() =>
+      _MessageDetailState(this.directMessageId, this.otherPerson);
+}
+
+class _MessageDetailState extends State<MessageDetail> {
+  String otherPerson, directMessageId;
+
+  _MessageDetailState(this.directMessageId, this.otherPerson);
 
   @override
   Widget build(BuildContext context) {
@@ -946,54 +781,246 @@ class MessageDetail extends StatelessWidget {
                   directMessageId: directMessageId,
                   otherPerson: otherPerson),
               SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    Text(
-                      "Welcome to MOOV DM's.",
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      "\nHave a funny conversation? Get someone's number? Screenshot it (phone number's blurred), and submit it here for a chance to get featured and win \$20!",
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 75.0),
-                      child: RaisedButton(
-                        onPressed: () => null,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(80.0)),
-                        padding: EdgeInsets.all(0.0),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [TextThemes.ndBlue, Color(0xff64B6FF)],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                              ),
-                              borderRadius: BorderRadius.circular(30.0)),
-                          child: Container(
-                            constraints: BoxConstraints(
-                                maxWidth: 300.0, minHeight: 50.0),
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Submit",
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
+              MessageScreenshot()
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MessageScreenshot extends StatefulWidget {
+  MessageScreenshot({Key key}) : super(key: key);
+
+  @override
+  _MessageScreenshotState createState() => _MessageScreenshotState();
+}
+
+class _MessageScreenshotState extends State<MessageScreenshot> {
+  File _image;
+  final picker = ImagePicker();
+
+  void openCamera(context) async {
+    final image = await CustomCamera.openCamera();
+    setState(() {
+      _image = image;
+      //  fileName = p.basename(_image.path);
+    });
+  }
+
+  void openGallery(context) async {
+    final image = await CustomCamera.openGallery();
+    setState(() {
+      _image = image;
+    });
+  }
+
+  Future handleTakePhoto() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.camera,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
+  }
+
+  handleChooseFromGallery() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.gallery,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
+  }
+
+  selectImage(parentContext) {
+    return showDialog(
+      context: parentContext,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text(
+            "Show it off",
+            style: TextStyle(color: Colors.white),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text(
+                "Photo with Camera",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openCamera(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: handleChooseFromGallery),
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: () => openGallery(context)),
+              child: Text(
+                "Image from Gallery",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openGallery(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  bool isUploading = false;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        children: [
+          Text(
+            "Welcome to MOOV DM's.",
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          Text(
+            "\nHave a funny conversation? Get someone's number? Screenshot it (phone number's blurred), and submit it here for a chance to get featured and win \$20!",
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 20),
+          isUploading
+              ? linearProgress()
+              : Column(
+                  children: [
+                    _image != null
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 18.0),
+                            child:
+                                Stack(alignment: Alignment.center, children: [
+                              Container(
+                                height: 125,
+                                width: MediaQuery.of(context).size.width * .8,
+                                child: Center(
+                                    child: AspectRatio(
+                                        aspectRatio: 16 / 9,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          child: Image.file(_image,
+                                              fit: BoxFit.cover),
+                                        ))),
+                              ),
+                              GestureDetector(
+                                  onTap: () => selectImage(context),
+                                  child: Icon(Icons.camera_alt))
+                            ]),
+                          )
+                        : RaisedButton(
+                            color: TextThemes.ndBlue,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Upload Screenshot',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20)),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                            onPressed: () => selectImage(context)),
+                    _image == null
+                        ? Container()
+                        : Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 75.0),
+                            child: RaisedButton(
+                              onPressed: () async {
+                                if (_image != null) {
+                                  setState(() {
+                                    isUploading = true;
+                                  });
+                                   
+                                  firebase_storage.Reference ref =
+                                      firebase_storage.FirebaseStorage.instance
+                                          .ref()
+                                          .child("images/" + currentUser.id + "/" +
+                                             DateTime.now().millisecondsSinceEpoch.toString());
+                                 
+
+                                  firebase_storage.UploadTask uploadTask;
+
+                                  uploadTask = ref.putFile(_image);
+
+                                  firebase_storage.TaskSnapshot taskSnapshot =
+                                      await uploadTask;
+                                  if (uploadTask.snapshot.state ==
+                                      firebase_storage.TaskState.success) {
+                                    print("added to Firebase Storage");
+                                    final String downloadUrl =
+                                        await taskSnapshot.ref.getDownloadURL();
+                                    Database().funnyScreenshot(
+                                        user: currentUser.displayName,
+                                        
+                                        timestamp:
+                                            DateTime.now().millisecondsSinceEpoch,
+                                        
+                                        venmo: currentUser.venmoUsername,
+                                        imageUrl: downloadUrl,
+                                        );
+
+                                    setState(() {
+                                      isUploading = false;
+                                    });
+                                  }
+                                }
+                                },
+                              
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(80.0)),
+                              padding: EdgeInsets.all(0.0),
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        TextThemes.ndBlue,
+                                        Color(0xff64B6FF)
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth: 300.0, minHeight: 50.0),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Submit",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                  ],
+                )
+        ],
       ),
     );
   }
