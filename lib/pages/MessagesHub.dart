@@ -672,7 +672,7 @@ class MessageList extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => MessageDetail(
                                       course['directMessageId'], otherPerson)));
-                          if (currentUser.id != otherPerson) {
+                          if (currentUser.id == otherPerson) {
                             Database()
                                 .setMessagesSeen(course['directMessageId']);
                           }
