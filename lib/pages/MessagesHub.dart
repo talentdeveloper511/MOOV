@@ -654,8 +654,11 @@ class MessageList extends StatelessWidget {
                 DocumentSnapshot course = snapshot.data.docs[index];
                 // print(course['people']);
                 List people = course['people'];
+                List people2 = course['people'];
                 people.removeWhere((item) => item == currentUser.id);
                 String otherPerson = people[0];
+                people2.removeWhere((item) => item == otherPerson);
+                String receiver = people2[0];
                 Timestamp timestamp = course['timestamp'];
 
                 return StreamBuilder(
@@ -672,7 +675,8 @@ class MessageList extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => MessageDetail(
                                       course['directMessageId'], otherPerson)));
-                          if (currentUser.id == otherPerson) {
+
+                          if (currentUser.id == receiver) {
                             Database()
                                 .setMessagesSeen(course['directMessageId']);
                           }
