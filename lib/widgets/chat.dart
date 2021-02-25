@@ -19,6 +19,7 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_1.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_2.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
+import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Chat extends StatefulWidget {
@@ -130,7 +131,8 @@ class ChatState extends State<Chat> {
               "gid": gid,
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
-              "isGroupChat": true
+              "isGroupChat": true,
+              "middleFinger": false
             })
           : messagesRef
               .doc(directMessageId)
@@ -151,7 +153,8 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "isGroupChat": false,
               "gid": "",
-              "millis": DateTime.now().millisecondsSinceEpoch.toString()
+              "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+              "middleFinger": false
             });
       isGroupChat
           ? null
@@ -248,7 +251,7 @@ class ChatState extends State<Chat> {
   }
 }
 
-class Comment extends StatelessWidget {
+class Comment extends StatefulWidget {
   final String displayName;
   final String userId;
   final String avatarUrl;
@@ -257,8 +260,9 @@ class Comment extends StatelessWidget {
   final String chatId;
   final String gid;
   final String millis;
-  String directMessageId;
+  final String directMessageId;
   final bool isGroupChat;
+  final bool middleFinger;
 
   Comment(
       {this.displayName,
@@ -270,22 +274,63 @@ class Comment extends StatelessWidget {
       this.gid,
       this.millis,
       this.directMessageId,
-      this.isGroupChat});
+      this.isGroupChat,
+      this.middleFinger});
 
   factory Comment.fromDocument(DocumentSnapshot doc) {
     return Comment(
-      displayName: doc['displayName'],
-      userId: doc['userId'],
-      comment: doc['comment'],
-      timestamp: doc['timestamp'],
-      avatarUrl: doc['avatarUrl'],
-      chatId: doc['chatId'],
-      gid: doc['gid'],
-      millis: doc['millis'],
-      directMessageId: doc['directMessageId'],
-      isGroupChat: doc['isGroupChat'],
-    );
+        displayName: doc['displayName'],
+        userId: doc['userId'],
+        comment: doc['comment'],
+        timestamp: doc['timestamp'],
+        avatarUrl: doc['avatarUrl'],
+        chatId: doc['chatId'],
+        gid: doc['gid'],
+        millis: doc['millis'],
+        directMessageId: doc['directMessageId'],
+        isGroupChat: doc['isGroupChat'],
+        middleFinger: doc['middleFinger']);
   }
+
+  @override
+  _CommentState createState() => _CommentState(
+      this.displayName,
+      this.userId,
+      this.avatarUrl,
+      this.comment,
+      this.timestamp,
+      this.chatId,
+      this.gid,
+      this.millis,
+      this.directMessageId,
+      this.isGroupChat,
+      this.middleFinger);
+}
+
+class _CommentState extends State<Comment> {
+  final String displayName;
+  final String userId;
+  final String avatarUrl;
+  final String comment;
+  final Timestamp timestamp;
+  final String chatId;
+  final String gid;
+  final String millis;
+  String directMessageId;
+  final bool isGroupChat;
+  bool middleFinger;
+  _CommentState(
+      this.displayName,
+      this.userId,
+      this.avatarUrl,
+      this.comment,
+      this.timestamp,
+      this.chatId,
+      this.gid,
+      this.millis,
+      this.directMessageId,
+      this.isGroupChat,
+      this.middleFinger);
 
   @override
   Widget build(BuildContext context) {
@@ -293,18 +338,74 @@ class Comment extends StatelessWidget {
       children: <Widget>[
         (userId != currentUser.id)
             ? ListTile(
+          
                 // tileColor: Colors.blue[100],
-                title: ChatBubble(
-                    alignment: Alignment.centerLeft,
-                    clipper:
-                        ChatBubbleClipper5(type: BubbleType.receiverBubble),
-                    backGroundColor: Colors.grey[200],
-                    margin: EdgeInsets.only(top: 5),
-                    child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.7,
-                        ),
-                        child: Text(comment))),
+                title: isGroupChat ? 
+                ChatBubble(
+                                alignment: Alignment.centerLeft,
+                                clipper: ChatBubbleClipper5(
+                                    type: BubbleType.receiverBubble),
+                                backGroundColor: Colors.grey[200],
+                                margin: EdgeInsets.only(top: 5),
+                                child: Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.7,
+                                    ),
+                                    child: Text(comment)))
+                : FlutterReactionButtonCheck(
+                    onReactionChanged: (reaction, index, isChecked) {
+
+                      // FLIPPED OFF NOTIF HERE
+                    
+
+                      messagesRef
+                          .doc(directMessageId).collection("chat").doc(chatId)
+                          .update({"middleFinger": !middleFinger});
+                          //     messagesRef
+                          // .doc(directMessageId)
+                          // .update({"middleFinger": !middleFinger});
+                      setState(() {
+                        middleFinger = !middleFinger;
+                      });
+                    },
+                    reactions: [
+                      Reaction(
+                          previewIcon: Padding(
+                            padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 6),
+                            child: Image.asset('lib/assets/middleFinger.gif',
+                                          height: 40,),
+                          ),
+                          title: Text("Flip 'em off"),
+                          icon: Stack(children: [
+                            ChatBubble(
+                                alignment: Alignment.centerLeft,
+                                clipper: ChatBubbleClipper5(
+                                    type: BubbleType.receiverBubble),
+                                backGroundColor: Colors.grey[200],
+                                margin: EdgeInsets.only(top: 5),
+                                child: Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.7,
+                                    ),
+                                    child: Text(comment))),
+                            Positioned(
+                                left: comment.length < 25
+                                    ? comment.length.toDouble() * 8
+                                    : comment.length < 40
+                                        ? comment.length.toDouble() * 6
+                                        : 220,
+                                child: middleFinger
+                                    ? Image.asset(
+                                        'lib/assets/middleFinger.gif',
+                                        height: 40,
+                                      )
+                                    : Container())
+                          ])),
+                    ]),
                 leading: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: CircleAvatar(
@@ -319,25 +420,55 @@ class Comment extends StatelessWidget {
               )
             : Stack(
                 children: [
+                 
                   ListTile(
                     // tileColor: Colors.blue[100],
-                    title: GestureDetector(
+                    title: isGroupChat ? 
+                    ChatBubble(
+                              alignment: Alignment.centerRight,
+                              clipper:
+                                  ChatBubbleClipper5(type: BubbleType.sendBubble),
+                              backGroundColor: Colors.blue[200],
+                              margin: EdgeInsets.only(top: 5),
+                              child: Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width * 0.7,
+                                  ),
+                                  child: Text(comment))) :
+                                
+                    
+                     GestureDetector(
                         onLongPress: () => {
                               showAlertDialog(context, chatId, gid, millis,
                                   isGroupChat, directMessageId)
                             },
-                        child: ChatBubble(
-                            alignment: Alignment.centerRight,
-                            clipper:
-                                ChatBubbleClipper5(type: BubbleType.sendBubble),
-                            backGroundColor: Colors.blue[200],
-                            margin: EdgeInsets.only(top: 5),
-                            child: Container(
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                ),
-                                child: Text(comment)))),
+                        child: Stack(
+                                                  children: [ChatBubble(
+                              alignment: Alignment.centerRight,
+                              clipper:
+                                  ChatBubbleClipper5(type: BubbleType.sendBubble),
+                              backGroundColor: Colors.blue[200],
+                              margin: EdgeInsets.only(top: 5),
+                              child: Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width * 0.7,
+                                  ),
+                                  child: Text(comment))),
+                                  Positioned(
+                                right: comment.length < 25
+                                    ? comment.length.toDouble() * 8
+                                    : comment.length < 40
+                                        ? comment.length.toDouble() * 6
+                                        : 220,
+                                child: middleFinger
+                                    ? Image.asset(
+                                        'lib/assets/middleFinger.gif',
+                                        height: 40,
+                                      )
+                                    : Container())]
+                        )),
                     subtitle: Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Text(timeago.format(timestamp.toDate()),

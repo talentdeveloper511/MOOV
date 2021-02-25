@@ -433,6 +433,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.11"
+  flutter_reaction_button:
+    dependency: "direct main"
+    description:
+      name: flutter_reaction_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.7+3"
   flutter_screenutil:
     dependency: "direct main"
     description:

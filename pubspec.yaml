@@ -87,6 +87,8 @@ dependencies:
   animations: ^1.1.2
   overlay_support: ^1.0.5
   flutter_chat_bubble: ^1.0.2
+  flutter_reaction_button: ^1.0.7+3
+
 
 
 
@@ -194,6 +196,7 @@ flutter:
     - lib/assets/clemson.HEIC
     - lib/assets/venmo-icon.png
     - lib/assets/suggestion.png
+    - lib/assets/middleFinger.gif
 
 
 
