@@ -520,7 +520,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                                                                 return Container(
                                                                     child: Center(
                                                                         child: Text(
-                                                                  "\n\n\nNo notifs here!",
+                                                                  "\n\n\nUp to date.",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
