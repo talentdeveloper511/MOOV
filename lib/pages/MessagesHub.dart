@@ -652,19 +652,18 @@ class MessageList extends StatelessWidget {
                 }
 
                 DocumentSnapshot course = snapshot.data.docs[index];
-                // print(course['people']);
                 List people = course['people'];
-                List people2 = course['people'];
                 people.removeWhere((item) => item == currentUser.id);
                 String otherPerson = people[0];
-                people2.removeWhere((item) => item == otherPerson);
-                String receiver = people2[0];
                 Timestamp timestamp = course['timestamp'];
+
+                // print(receiver);
+                // print(currentUser.id);
 
                 return StreamBuilder(
                     stream: usersRef.doc(otherPerson).snapshots(),
                     builder: (context, snapshot) {
-                      print(index);
+                      // print(index);
                       if (!snapshot.hasData || snapshot.data == null) {
                         return circularProgress();
                       }
@@ -676,7 +675,7 @@ class MessageList extends StatelessWidget {
                                   builder: (context) => MessageDetail(
                                       course['directMessageId'], otherPerson)));
 
-                          if (currentUser.id == receiver) {
+                          if (currentUser.id != course['sender']) {
                             Database()
                                 .setMessagesSeen(course['directMessageId']);
                           }

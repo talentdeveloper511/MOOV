@@ -190,6 +190,7 @@ class ChatState extends State<Chat> {
                     messagesRef.doc(directMessageId).set({
                       "lastMessage": commentController.text,
                       "seen": false,
+                      "sender": currentUser.id,
                       "timestamp": timestamp,
                       "directMessageId": directMessageId,
                       "people": [currentUser.id, otherPerson]
