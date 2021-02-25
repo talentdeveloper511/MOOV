@@ -1765,7 +1765,7 @@ class _MessageResultAddState extends State<MessageResultAdd> {
     messagesRef.doc(userId + currentUser.id).get().then((doc) async {
       messagesRef.doc(currentUser.id + userId).get().then((doc2) async {
         if (!doc2.exists && !doc.exists) {
-          directMessageId = "nothing";
+          directMessageId = userId + currentUser.id;
         } else if (!doc2.exists) {
           directMessageId = doc['directMessageId'];
         } else if (!doc.exists) {
@@ -1832,23 +1832,23 @@ class _MessageResultAddState extends State<MessageResultAdd> {
         Positioned(
           right: 20,
           top: 10,
-          child:
-          currentUser.id == userId ? Container():
-           RaisedButton(
-              padding: const EdgeInsets.all(2.0),
-              color: TextThemes.ndBlue,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(3.0))),
-              onPressed: () {
-                 dmChecker().then((value) => toMessageDetail());
-              },
-              child: Text(
-                "Chat",
-                style: new TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.0,
-                ),
-              )),
+          child: currentUser.id == userId
+              ? Container()
+              : RaisedButton(
+                  padding: const EdgeInsets.all(2.0),
+                  color: TextThemes.ndBlue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                  onPressed: () {
+                    dmChecker().then((value) => toMessageDetail());
+                  },
+                  child: Text(
+                    "Chat",
+                    style: new TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                    ),
+                  )),
         ),
       ]),
     );

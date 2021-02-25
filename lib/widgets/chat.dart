@@ -154,13 +154,15 @@ class ChatState extends State<Chat> {
             });
       isGroupChat
           ? null
-          : messagesRef.doc(directMessageId).update({
+          : messagesRef.doc(directMessageId).set({
               "lastMessage": commentController.text,
-              "timestamp": timestamp,
+              "seen": false,
               "sender": currentUser.id,
               "receiver": otherPerson,
-              "seen": false
-            });
+              "timestamp": timestamp,
+              "directMessageId": directMessageId,
+              "people": [currentUser.id, otherPerson]
+            }, SetOptions(merge: true));
       Timer(
           Duration(milliseconds: 200),
           () => _scrollController.animateTo(
@@ -173,13 +175,13 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     Timer(Duration(milliseconds: 200), () {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
     return Container(
-      height: isLargePhone ? 500: 370,
+      height: isLargePhone ? 500 : 370,
       child: Column(
         children: <Widget>[
           Expanded(child: buildChat()),
@@ -191,20 +193,20 @@ class ChatState extends State<Chat> {
             ),
             trailing: OutlineButton(
                 onPressed: () {
-                  if (isGroupChat == false && directMessageId == "nothing") {
-                    directMessageId = currentUser.id + otherPerson;
-                    Timer(
-                        Duration(milliseconds: 200),
-                        () => messagesRef.doc(directMessageId).set({
-                              "lastMessage": commentController.text,
-                              "seen": false,
-                              "sender": currentUser.id,
-                              "receiver": otherPerson,
-                              "timestamp": timestamp,
-                              "directMessageId": directMessageId,
-                              "people": [currentUser.id, otherPerson]
-                            }));
-                  }
+                  // if (isGroupChat == false) {
+                  //   directMessageId = currentUser.id + otherPerson;
+                  //   Timer(
+                  //       Duration(milliseconds: 200),
+                  //       () => messagesRef.doc(directMessageId).set({
+                  //             "lastMessage": commentController.text,
+                  //             "seen": false,
+                  //             "sender": currentUser.id,
+                  //             "receiver": otherPerson,
+                  //             "timestamp": timestamp,
+                  //             "directMessageId": directMessageId,
+                  //             "people": [currentUser.id, otherPerson]
+                  //           }));
+                  // }
                   isGroupChat
                       ? null
                       : messagesRef
