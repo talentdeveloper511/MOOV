@@ -275,8 +275,7 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           CupertinoDialogAction(
               isDefaultAction: true,
-              child:
-                  Text("Yes, sign me out", style: TextStyle(color: Colors.red)),
+              child: Text("Sign out", style: TextStyle(color: Colors.red)),
               onPressed: () {
                 home.googleSignIn.signOut();
                 Navigator.pushAndRemoveUntil(

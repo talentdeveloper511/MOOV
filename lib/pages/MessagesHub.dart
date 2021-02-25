@@ -730,24 +730,48 @@ class MessageList extends StatelessWidget {
                                       snapshot.data['photoUrl'],
                                     ),
                                   )),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * .46,
-                                child: course['seen'] == true ||
-                                        currentUser.id == course['sender']
-                                    ? Text(course['lastMessage'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.grey[700]))
-                                    : Text(course['lastMessage'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold)),
-                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(top: 30),
+                                  child: Column(children: <Widget>[
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .46,
+                                      child: course['seen'] == true ||
+                                              currentUser.id == course['sender']
+                                          ? Text(snapshot.data['displayName'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.grey[700]))
+                                          : Text(course['lastMessage'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold)),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .46,
+                                      child: course['seen'] == true ||
+                                              currentUser.id == course['sender']
+                                          ? Text(course['lastMessage'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey[700]))
+                                          : Text(course['lastMessage'],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold)),
+                                    )
+                                  ])),
                               course['seen'] == true ||
                                       currentUser.id == course['sender']
                                   ? Text(

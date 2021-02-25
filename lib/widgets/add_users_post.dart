@@ -1765,7 +1765,7 @@ class _MessageResultAddState extends State<MessageResultAdd> {
     messagesRef.doc(userId + currentUser.id).get().then((doc) async {
       messagesRef.doc(currentUser.id + userId).get().then((doc2) async {
         if (!doc2.exists && !doc.exists) {
-          directMessageId = userId + currentUser.id;
+          directMessageId = "nothing";
         } else if (!doc2.exists) {
           directMessageId = doc['directMessageId'];
         } else if (!doc.exists) {

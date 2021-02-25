@@ -107,8 +107,9 @@ class ChatState extends State<Chat> {
   }
 
   addComment() {
-    // adjustChat();
-    directMessageId = currentUser.id + otherPerson;
+    if (directMessageId == "nothing") {
+      directMessageId = currentUser.id + otherPerson;
+    }
     if (commentController.text.isNotEmpty) {
       isGroupChat
           ? groupsRef
