@@ -399,7 +399,7 @@ exports.directMessage = functions.firestore
        * @return {void} The sum of the two numbers.
        */
       function sendNotification(androidNotificationToken, activityFeedItem) {
-        const body = `"${activityFeedItem.comment}"`;
+        const body = `${activityFeedItem.comment}`;
         const title = `${activityFeedItem.displayName}`;
         // 4) Create message for push notification
         const message = {
