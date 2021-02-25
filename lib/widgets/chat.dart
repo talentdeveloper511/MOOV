@@ -157,6 +157,7 @@ class ChatState extends State<Chat> {
               "lastMessage": commentController.text,
               "timestamp": timestamp,
               "sender": currentUser.id,
+              "receiver": otherPerson,
               "seen": false
             });
       Timer(
@@ -193,6 +194,7 @@ class ChatState extends State<Chat> {
                       "lastMessage": commentController.text,
                       "seen": false,
                       "sender": currentUser.id,
+                      "receiver": otherPerson,
                       "timestamp": timestamp,
                       "directMessageId": directMessageId,
                       "people": [currentUser.id, otherPerson]

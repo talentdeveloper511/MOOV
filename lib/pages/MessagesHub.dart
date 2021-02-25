@@ -669,16 +669,17 @@ class MessageList extends StatelessWidget {
                       }
                       return GestureDetector(
                         onTap: () {
+                          if (currentUser.id != course['sender']) {
+                            Database()
+                                .setMessagesSeen(course['directMessageId']);
+                          }
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => MessageDetail(
                                       course['directMessageId'], otherPerson)));
-
-                          if (currentUser.id != course['sender']) {
-                            Database()
-                                .setMessagesSeen(course['directMessageId']);
-                          }
+                          print(currentUser.id);
+                          print(course['sender']);
                         },
                         child: Container(
                           height: 100,
@@ -695,7 +696,8 @@ class MessageList extends StatelessWidget {
                                   )),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * .46,
-                                child: course['seen'] == true
+                                child: course['seen'] == true ||
+                                        currentUser.id == course['sender']
                                     ? Text(course['lastMessage'],
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -710,7 +712,8 @@ class MessageList extends StatelessWidget {
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold)),
                               ),
-                              course['seen'] == true
+                              course['seen'] == true ||
+                                      currentUser.id == course['sender']
                                   ? Text(
                                       timeago.format(timestamp.toDate()),
                                       style: TextStyle(fontSize: 12),

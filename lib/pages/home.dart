@@ -689,7 +689,7 @@ class NamedIconMessages extends StatelessWidget {
 
     return StreamBuilder(
         stream: messagesRef
-            .where("people", arrayContains: currentUser.id)
+            .where("receiver", isEqualTo: currentUser.id)
             .where('seen', isEqualTo: false)
             .snapshots(),
         builder: (context, snapshot) {
