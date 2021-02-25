@@ -534,6 +534,22 @@ class MessageList extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        actions: [
+          IconButton(
+            padding: EdgeInsets.only(),
+            icon: Icon(Icons.add),
+            color: Colors.white,
+            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            onPressed: () async {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.bottomToTop,
+                    child: SearchUsersMessage(),
+                  ));
+            },
+          ),
+        ],
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
@@ -577,80 +593,88 @@ class MessageList extends StatelessWidget {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data.docs.length == 0)
-              return  
-              SingleChildScrollView(
-        child: Container(
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.pink[300], Colors.pink[200]],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-                padding: const EdgeInsets.only(top: 30.0, bottom: 20),
-                child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(style: TextThemes.mediumbody, children: [
-                      TextSpan(
-                          text: "Spark",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w300)),
-                      TextSpan(
-                          text: " a conversation",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w600)),
-                      TextSpan(
-                          text: ".",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w300))
-                    ]))),
-                    Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 75.0),
-                    child: RaisedButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.bottomToTop,
-                            child: SearchUsersMessage(),
-                          )),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80.0)),
-                      padding: EdgeInsets.all(0.0),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [TextThemes.ndBlue, Color(0xff64B6FF)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
+              return SingleChildScrollView(
+                  child: Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.pink[300], Colors.pink[200]],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.only(top: 30.0, bottom: 20),
+                          child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                  style: TextThemes.mediumbody,
+                                  children: [
+                                    TextSpan(
+                                        text: "Spark",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w300)),
+                                    TextSpan(
+                                        text: " a conversation",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w600)),
+                                    TextSpan(
+                                        text: ".",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w300))
+                                  ]))),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 75.0),
+                        child: RaisedButton(
+                          onPressed: () => Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.bottomToTop,
+                                child: SearchUsersMessage(),
+                              )),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(80.0)),
+                          padding: EdgeInsets.all(0.0),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    TextThemes.ndBlue,
+                                    Color(0xff64B6FF)
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0)),
+                            child: Container(
+                              constraints: BoxConstraints(
+                                  maxWidth: 300.0, minHeight: 50.0),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "New Conversation",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(30.0)),
-                        child: Container(
-                          constraints:
-                              BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "New Conversation",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Image.asset('lib/assets/ff.png'),
+                      )
+                    ],
                   ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Image.asset('lib/assets/ff.png'),
-            )
-          ],
-        ),
-      ),
-    ));
+                ),
+              ));
 
             return ListView.builder(
               itemCount: snapshot.data.docs.length + 1,
@@ -659,36 +683,7 @@ class MessageList extends StatelessWidget {
                 if (index == snapshot.data.docs.length) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 75.0),
-                    child: RaisedButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.bottomToTop,
-                            child: SearchUsersMessage(),
-                          )),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80.0)),
-                      padding: EdgeInsets.all(0.0),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [TextThemes.ndBlue, Color(0xff64B6FF)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(30.0)),
-                        child: Container(
-                          constraints:
-                              BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "New Conversation",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: Container(),
                   );
                 }
 

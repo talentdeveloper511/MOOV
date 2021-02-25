@@ -108,7 +108,7 @@ class ChatState extends State<Chat> {
 
   addComment() {
     // adjustChat();
-
+    directMessageId = currentUser.id + otherPerson;
     if (commentController.text.isNotEmpty) {
       isGroupChat
           ? groupsRef
@@ -362,7 +362,7 @@ class Comment extends StatelessWidget {
       child: CupertinoAlertDialog(
         title: Text("Delete?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nRemove your message?"),
+        content: Text("\nRegret sending that message?"),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,
