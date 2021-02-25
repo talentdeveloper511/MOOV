@@ -300,6 +300,7 @@ class MessagesHub extends StatelessWidget {
                                       .where("members",
                                           arrayContains: currentUser.id)
                                       .snapshots(),
+                                  // ignore: missing_return
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData)
                                       return CircularProgressIndicator();
@@ -409,6 +410,7 @@ class MessagesHub extends StatelessWidget {
                                           ),
                                         );
                                       }
+                                      // why are there two return statements?
                                       return Chat(
                                         isGroupChat: false,
                                       );
