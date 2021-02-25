@@ -206,7 +206,7 @@ class _SearchBarState extends State<SearchBar>
                                     ))),
                           )),
                     ),
-                   showTabs == true
+                    showTabs == true
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -758,9 +758,15 @@ class DisplayGroupResult extends StatelessWidget {
   final String groupId;
   final String groupPic;
   final List<dynamic> members;
+  bool sendMOOV = false;
 
   DisplayGroupResult(
-      {Key key, this.groupName, this.groupId, this.groupPic, this.members})
+      {Key key,
+      this.groupName,
+      this.groupId,
+      this.groupPic,
+      this.members,
+      this.sendMOOV})
       : super(key: key);
 
   @override
@@ -850,43 +856,6 @@ class DisplayGroupResult extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // isToday == false
-                  //     ? Positioned(
-                  //         top: 0,
-                  //         right: 0,
-                  //         child: Container(
-                  //           height: 30,
-                  //           padding: EdgeInsets.all(4),
-                  //           decoration: BoxDecoration(
-                  //               gradient: LinearGradient(
-                  //                 colors: [Colors.pink[400], Colors.purple[300]],
-                  //                 begin: Alignment.centerLeft,
-                  //                 end: Alignment.centerRight,
-                  //               ),
-                  //               borderRadius: BorderRadius.circular(10.0)),
-                  //           child: isNextWeek ? Text("") : Text(""),
-                  //         ),
-                  //       )
-                  //     : Container(),
-                  // isToday == true
-                  //     ? Positioned(
-                  //         top: 0,
-                  //         right: 0,
-                  //         child: Container(
-                  //           height: 30,
-                  //           padding: EdgeInsets.all(4),
-                  //           decoration: BoxDecoration(
-                  //               gradient: LinearGradient(
-                  //                 colors: [Colors.red[400], Colors.red[600]],
-                  //                 begin: Alignment.centerLeft,
-                  //                 end: Alignment.centerRight,
-                  //               ),
-                  //               borderRadius: BorderRadius.circular(10.0)),
-                  //           child: Text(""),
-                  //         ),
-                  //       )
-                  //     : Text(""),
-
                   Positioned(
                     bottom: isLargePhone ? 0 : 0,
                     right: 55,

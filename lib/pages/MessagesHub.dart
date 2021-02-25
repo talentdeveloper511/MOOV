@@ -385,35 +385,31 @@ class MessagesHub extends StatelessWidget {
                                         // .orderBy("unix")
                                         .snapshots(),
                                     builder: (context, snapshot) {
-                                      if (!snapshot.hasData) return Container();
-                                      if (snapshot.data.docs == null) {
+                                      if (snapshot.data.docs == null ||
+                                          !snapshot.hasData) {
                                         return Container();
-                                      }
-
-                                      for (int i = 0;
-                                          i < snapshot.data.docs.length;
-                                          i++) {
-                                        DocumentSnapshot course =
-                                            snapshot.data.docs[i];
-                                        List people = course['people'];
-                                        people.removeWhere(
-                                            (item) => item == currentUser.id);
-                                        String otherPerson = people[0];
-                                        return Container(
-                                          height: 100,
-                                          child: Chat(
-                                            gid: "",
-                                            directMessageId:
-                                                course['directMessageId'],
-                                            otherPerson: otherPerson,
-                                            isGroupChat: false,
-                                          ),
-                                        );
-                                      }
-                                      // why are there two return statements?
-                                      return Chat(
-                                        isGroupChat: false,
-                                      );
+                                      } else
+                                        for (int i = 0;
+                                            i < snapshot.data.docs.length;
+                                            i++) {
+                                          DocumentSnapshot course =
+                                              snapshot.data.docs[i];
+                                          List people = course['people'];
+                                          people.removeWhere(
+                                              (item) => item == currentUser.id);
+                                          String otherPerson = people[0];
+                                          return Container(
+                                            height: 100,
+                                            child: Chat(
+                                              gid: "",
+                                              directMessageId:
+                                                  course['directMessageId'],
+                                              otherPerson: otherPerson,
+                                              isGroupChat: false,
+                                            ),
+                                          );
+                                        }
+                                      return circularProgress();
                                     }),
                               ),
                               Text(' Last Active Conversation',
@@ -533,6 +529,8 @@ class MessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -725,7 +723,7 @@ class MessageList extends StatelessWidget {
                             children: [
                               Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 0, left: 20.0, right: 20),
+                                      top: 0, left: 15.0, right: 10),
                                   child: CircleAvatar(
                                     radius: 30.0,
                                     backgroundImage: NetworkImage(
