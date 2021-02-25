@@ -255,8 +255,7 @@ class _LeaderBoardState extends State<LeaderBoardPage>
                                   child: Text('Your MOOV Score: '),
                                 ),
                                 Text(
-                                  snapshot.data.docs[myIndex]['score']
-                                      .toString(),
+                                  currentUser.score.toString(),
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
                               ],
