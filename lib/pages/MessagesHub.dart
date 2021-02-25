@@ -771,22 +771,16 @@ class MessageList extends StatelessWidget {
                                                   fontWeight: FontWeight.bold)),
                                     )
                                   ])),
-                              course['seen'] == true ||
-                                      currentUser.id == course['sender']
-                                  ? Text(
-                                      timeago.format(timestamp.toDate()),
-                                      style: TextStyle(fontSize: 12),
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.end,
-                                    )
-                                  : Text(
-                                      timeago.format(timestamp.toDate()),
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.end,
-                                    ),
+                             Padding(
+                               padding: const EdgeInsets.only(left: 18.0),
+                               child: Text(
+                                        timeago.format(timestamp.toDate()),
+                                        style: TextStyle(fontSize: 12),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.end,
+                                      ),
+                             )
+                                  
                             ],
                           ),
                         ),

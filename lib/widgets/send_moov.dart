@@ -401,6 +401,9 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                                                                           index]
                                                                       .data[
                                                                   "members"],
+                                                                  postId: moovId,
+                                                                  title: title,
+                                                                  sendMOOV: true,
                                                             )
                                                           : Container();
                                                     },

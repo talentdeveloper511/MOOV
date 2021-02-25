@@ -7,6 +7,7 @@ import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
+import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
@@ -758,6 +759,7 @@ class DisplayGroupResult extends StatelessWidget {
   final String groupId;
   final String groupPic;
   final List<dynamic> members;
+  final String postId, title;
   bool sendMOOV = false;
 
   DisplayGroupResult(
@@ -766,6 +768,8 @@ class DisplayGroupResult extends StatelessWidget {
       this.groupId,
       this.groupPic,
       this.members,
+      this.postId,
+      this.title,
       this.sendMOOV})
       : super(key: key);
 
@@ -905,6 +909,28 @@ class DisplayGroupResult extends StatelessWidget {
                         ])
                       ],
                     ),
+                  ),
+                  Positioned(
+                    right: MediaQuery.of(context).size.width / 2,
+                    bottom: -2.5,
+                    child: RaisedButton(
+                        padding: const EdgeInsets.all(2.0),
+                        color: TextThemes.ndBlue,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(3.0))),
+                        onPressed: () {
+                          Database().sendMOOVNotification(
+                              groupId, groupPic, postId, "", title, "", "");
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "Send",
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0,
+                          ),
+                        )),
                   ),
                 ]),
               ),
