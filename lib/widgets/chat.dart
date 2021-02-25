@@ -156,6 +156,7 @@ class ChatState extends State<Chat> {
           : messagesRef.doc(directMessageId).update({
               "lastMessage": commentController.text,
               "timestamp": timestamp,
+              "sender": currentUser.id,
             });
       Timer(
           Duration(milliseconds: 200),
