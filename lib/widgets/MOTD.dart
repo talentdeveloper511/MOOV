@@ -12,6 +12,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 
 class MOTD extends StatefulWidget {
   @override
@@ -108,16 +109,17 @@ class _MOTDState extends State<MOTD> {
                   pic = course['image'];
                   title = course['title'];
 
-                  return GestureDetector(
-                     onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => PostDetail(course.id)));
-                            },
-                                      child: Padding(
-                      padding: const EdgeInsets.only(top: 12.0),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: Column(
+                      children: <Widget>[
+                        Bounce(
+                          duration: Duration(milliseconds: 300),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PostDetail(course.id)));
+                          },
+                          child: Container(
                             height: isLargePhone
                                 ? SizeConfig.blockSizeVertical * 15
                                 : SizeConfig.blockSizeVertical * 18,
@@ -185,40 +187,40 @@ class _MOTDState extends State<MOTD> {
                               ),
                             ]),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Align(
-                                alignment: Alignment.center,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (_) => CupertinoAlertDialog(
-                                              title: Text("Your MOOV."),
-                                              content: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8.0),
-                                                child: Text(
-                                                    "Do you have the MOOV of the Day? Email admin@whatsthemoov.com."),
-                                              ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) => CupertinoAlertDialog(
+                                            title: Text("Your MOOV."),
+                                            content: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Text(
+                                                  "Do you have the MOOV of the Day? Email admin@whatsthemoov.com."),
                                             ),
-                                        barrierDismissible: true);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      "MOOV of the Day",
-                                      style: TextStyle(
-                                          fontFamily: 'Open Sans',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                          fontSize: 16.0),
-                                    ),
+                                          ),
+                                      barrierDismissible: true);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "MOOV of the Day",
+                                    style: TextStyle(
+                                        fontFamily: 'Open Sans',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16.0),
                                   ),
-                                )),
-                          ),
-                        ],
-                      ),
+                                ),
+                              )),
+                        ),
+                      ],
                     ),
                   );
                 }),

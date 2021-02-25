@@ -772,8 +772,8 @@ class MessageList extends StatelessWidget {
                                                   fontWeight: FontWeight.bold)),
                                     )
                                   ])),
-                             Padding(
-                               padding: const EdgeInsets.only(left: 18.0),
+                             Align(
+                               alignment: Alignment.centerRight,
                                child: Text(
                                         timeago.format(timestamp.toDate()),
                                         style: TextStyle(fontSize: 12),

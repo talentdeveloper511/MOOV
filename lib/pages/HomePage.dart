@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage>
               children: <Widget>[
                 // OpenContainerTransformDemo()
                 Bounce(
-                    duration: Duration(milliseconds: 100),
+                    duration: Duration(milliseconds: 300),
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => MOTD()));
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage>
                       child: GestureDetector(
                         onTap: () {},
                         child: Bounce(
-                          duration: Duration(milliseconds: 100),
+                          duration: Duration(milliseconds: 300),
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -259,7 +259,7 @@ class _HomePageState extends State<HomePage>
                     child: GestureDetector(
                       onTap: () {},
                       child: Bounce(
-                        duration: Duration(milliseconds: 100),
+                        duration: Duration(milliseconds: 300),
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -341,7 +341,7 @@ class _HomePageState extends State<HomePage>
                         GestureDetector(
                             onTap: () {},
                             child: Bounce(
-                                duration: Duration(milliseconds: 100),
+                                duration: Duration(milliseconds: 300),
                                 onPressed: () {
                                   navigateToCategoryFeed(
                                       context, "Restaurants & Bars");
@@ -368,7 +368,7 @@ class _HomePageState extends State<HomePage>
                     GestureDetector(
                         onTap: () {},
                         child: Bounce(
-                            duration: Duration(milliseconds: 100),
+                            duration: Duration(milliseconds: 300),
                             onPressed: () {
                               navigateToCategoryFeed(
                                   context, "Pregames & Parties");
