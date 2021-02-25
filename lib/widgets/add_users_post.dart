@@ -1657,13 +1657,13 @@ class _SearchUsersMessageState extends State<SearchUsersMessage> {
                                           style: TextThemes.mediumbody,
                                           children: [
                                             TextSpan(
-                                                text: "Spark",
+                                                text: "Slide",
                                                 style: TextStyle(
                                                     fontSize: 30,
                                                     fontWeight:
                                                         FontWeight.w300)),
                                             TextSpan(
-                                                text: " a conversation",
+                                                text: " in",
                                                 style: TextStyle(
                                                     fontSize: 30,
                                                     fontWeight:
@@ -1838,8 +1838,7 @@ class _MessageResultAddState extends State<MessageResultAdd> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(3.0))),
               onPressed: () {
-                 dmChecker()
-                                      .then((value) => toMessageDetail());
+                 dmChecker().then((value) => toMessageDetail());
               },
               child: Text(
                 "Chat",

@@ -190,26 +190,37 @@ class ChatState extends State<Chat> {
                 onPressed: () {
                   if (isGroupChat == false && directMessageId == "nothing") {
                     directMessageId = currentUser.id + otherPerson;
-                    messagesRef.doc(directMessageId).set({
-                      "lastMessage": commentController.text,
-                      "seen": false,
-                      "sender": currentUser.id,
-                      "receiver": otherPerson,
-                      "timestamp": timestamp,
-                      "directMessageId": directMessageId,
-                      "people": [currentUser.id, otherPerson]
-                    });
+                    Timer(
+                        Duration(milliseconds: 200),
+                        () => messagesRef.doc(directMessageId).set({
+                              "lastMessage": commentController.text,
+                              "seen": false,
+                              "sender": currentUser.id,
+                              "receiver": otherPerson,
+                              "timestamp": timestamp,
+                              "directMessageId": directMessageId,
+                              "people": [currentUser.id, otherPerson]
+                            }));
                   }
-                  // isGroupChat
-                  //     ? null
-                  //     : Navigator.pushReplacement(
-                  //         context,
-                  //         PageRouteBuilder(
-                  //           pageBuilder: (context, animation1, animation2) =>
-                  //               MessageDetail(directMessageId, otherPerson),
-                  //           transitionDuration: Duration(seconds: 0),
-                  //         ),
-                  //       );
+                  isGroupChat
+                      ? null
+                      : messagesRef
+                          .doc(directMessageId)
+                          .collection("chat")
+                          .get()
+                          .then((doc) {
+                          if (doc.docs.length <= 1) {
+                            Navigator.pushReplacement(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder: (context, animation1,
+                                        animation2) =>
+                                    MessageDetail(directMessageId, otherPerson),
+                                transitionDuration: Duration(seconds: 0),
+                              ),
+                            );
+                          }
+                        });
 
                   addComment();
                   // adjustChat();
