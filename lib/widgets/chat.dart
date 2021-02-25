@@ -298,30 +298,29 @@ class Comment extends StatelessWidget {
                   padding: const EdgeInsets.all(5.0),
                   child: Text(timeago.format(timestamp.toDate())),
                 ),
-                trailing: (userId == currentUser.id)
-                    ? GestureDetector(
-                        onTap: () {
-                          showAlertDialog(context, chatId, gid, millis,
-                              isGroupChat, directMessageId);
-                        },
-                        child: Icon(Icons.more_vert_outlined))
-                    : Text(''),
+                trailing: Text(''),
               )
             : Stack(
                 children: [
                   ListTile(
                     // tileColor: Colors.blue[100],
-                    title: ChatBubble(
-                        alignment: Alignment.centerRight,
-                        clipper:
-                            ChatBubbleClipper5(type: BubbleType.sendBubble),
-                        backGroundColor: Colors.blue[200],
-                        margin: EdgeInsets.only(top: 20),
-                        child: Container(
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.7,
-                            ),
-                            child: Text(comment))),
+                    title: GestureDetector(
+                        onLongPress: () => {
+                              showAlertDialog(context, chatId, gid, millis,
+                                  isGroupChat, directMessageId)
+                            },
+                        child: ChatBubble(
+                            alignment: Alignment.centerRight,
+                            clipper:
+                                ChatBubbleClipper5(type: BubbleType.sendBubble),
+                            backGroundColor: Colors.blue[200],
+                            margin: EdgeInsets.only(top: 20),
+                            child: Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                child: Text(comment)))),
                     subtitle: Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Text(timeago.format(timestamp.toDate()),
@@ -334,19 +333,6 @@ class Comment extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    left: 20,
-                    top: 30,
-                    child: GestureDetector(
-                        onTap: () {
-                          showAlertDialog(context, chatId, gid, millis,
-                              isGroupChat, directMessageId);
-                        },
-                        child: Icon(
-                          Icons.more_vert_outlined,
-                          color: Colors.grey,
-                        )),
-                  )
                 ],
               ),
       ],
