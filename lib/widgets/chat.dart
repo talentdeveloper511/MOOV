@@ -299,7 +299,7 @@ class Comment extends StatelessWidget {
                     clipper:
                         ChatBubbleClipper5(type: BubbleType.receiverBubble),
                     backGroundColor: Colors.grey[200],
-                    margin: EdgeInsets.only(top: 20),
+                    margin: EdgeInsets.only(top: 5),
                     child: Container(
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width * 0.7,
@@ -331,7 +331,7 @@ class Comment extends StatelessWidget {
                             clipper:
                                 ChatBubbleClipper5(type: BubbleType.sendBubble),
                             backGroundColor: Colors.blue[200],
-                            margin: EdgeInsets.only(top: 20),
+                            margin: EdgeInsets.only(top: 5),
                             child: Container(
                                 constraints: BoxConstraints(
                                   maxWidth:
