@@ -20,7 +20,11 @@ class LeaderBoardPage extends StatefulWidget {
   }
 }
 
-class _LeaderBoardState extends State<LeaderBoardPage> {
+class _LeaderBoardState extends State<LeaderBoardPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
 
@@ -48,6 +52,7 @@ class _LeaderBoardState extends State<LeaderBoardPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     var myIndex = 0;

@@ -620,11 +620,11 @@ class MessageList extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 75.0),
                     child: RaisedButton(
                       onPressed: () => Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.bottomToTop,
-                        child: SearchUsersMessage(),
-                      )),
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.bottomToTop,
+                            child: SearchUsersMessage(),
+                          )),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(80.0)),
                       padding: EdgeInsets.all(0.0),
@@ -672,9 +672,10 @@ class MessageList extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => MessageDetail(
                                       course['directMessageId'], otherPerson)));
+                          Database().setMessagesSeen(course['directMessageId']);
                         },
                         child: Container(
-                          height: 140,
+                          height: 100,
                           child: Row(
                             children: [
                               Padding(
@@ -688,18 +689,36 @@ class MessageList extends StatelessWidget {
                                   )),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * .46,
-                                child: Text(course['lastMessage'],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.grey[700])),
+                                child: course['seen'] == true
+                                    ? Text(course['lastMessage'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey[700]))
+                                    : Text(course['lastMessage'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold)),
                               ),
-                              Text(
-                                timeago.format(timestamp.toDate()),
-                                style: TextStyle(fontSize: 13),
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.end,
-                              ),
+                              course['seen'] == true
+                                  ? Text(
+                                      timeago.format(timestamp.toDate()),
+                                      style: TextStyle(fontSize: 12),
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                    )
+                                  : Text(
+                                      timeago.format(timestamp.toDate()),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                    ),
                             ],
                           ),
                         ),

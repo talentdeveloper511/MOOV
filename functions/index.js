@@ -119,7 +119,7 @@ exports.onCreateActivityFeedItem = functions.firestore
       if (androidNotificationToken) {
         if (pushSettings.going == true && createdActivityFeedItem.type == "going") {
           sendNotification(androidNotificationToken, createdActivityFeedItem);
-        } else if (pushSettings.friendPosts == true && createdActivityFeedItem.type == "created") {
+        } else if (pushSettings.friendPosts == true && createdActivityFeedItem.type == "created" && createdActivityFeedItem.userId != "107290090512658207959") {
           sendNotification(androidNotificationToken, createdActivityFeedItem);
         } else if (pushSettings.suggestions == true && createdActivityFeedItem.type == "suggestion") {
           sendNotification(androidNotificationToken, createdActivityFeedItem);
@@ -363,31 +363,30 @@ exports.groupChat = functions.firestore
     });
 
 exports.directMessage = functions.firestore
-    .document("{college}/data/directMessages/{chatters}/chat/{activityFeedItem}")
+    .document("{college}/data/directMessages/{chatId}/chat/{activityFeedItem}")
     .onCreate(async (snapshot, context) => {
       console.log("Activity Feed Item Created", snapshot.data());
 
       // 1) Get user connected to the feed
-      const chatters = context.params.chatters;
+      const chatId = context.params.chatId;
       const college = context.params.college;
 
-      const groupRef = admin.firestore().doc(`${college}/data/friendGroups/${groupId}`);
-      const doc = await groupRef.get();
-      const groupName = doc.data().groupName;
-      let userId; 
+      const chatRef = admin.firestore().doc(`${college}/data/directMessages/${chatId}`);
+      const doc = await chatRef.get();
+      const chatters = doc.data().people;
+      let receiverId;
 
       // 2) check if they have a notification token
-      const members = doc.data().members;
       const createdActivityFeedItem = snapshot.data();
       const senderId = createdActivityFeedItem.userId;
-      for (let i = 0; i < members.length; i++) {
-        const userRef = admin.firestore().doc(`${college}/data/users/${members[i]}`);
-        const userdoc = await userRef.get();
-        userId = userdoc.data().id;
+      for (let i = 0; i < chatters.length; i++) {
+        const userRef = admin.firestore().doc(`${college}/data/users/${chatters[i]}`);
+        const userDoc = await userRef.get();
+        receiverId = userDoc.data().id;
         console.log("sender id:", senderId);
-        console.log("user id: ", userId);
-        if (userdoc.data().androidNotificationToken && userdoc.data().pushSettings["suggestions"] == true && userId != senderId) {
-          sendNotification(userdoc.data().androidNotificationToken, createdActivityFeedItem, groupName);
+        console.log("receiver id: ", receiverId);
+        if (userDoc.data().androidNotificationToken && receiverId != senderId) {
+          sendNotification(userDoc.data().androidNotificationToken, createdActivityFeedItem);
         } else {
           console.log("No token for user, cannot send notification");
         }
@@ -399,14 +398,14 @@ exports.directMessage = functions.firestore
        * @param {string} groupName The second number.
        * @return {void} The sum of the two numbers.
        */
-      function sendNotification(androidNotificationToken, activityFeedItem, groupName) {
-        const body = `${activityFeedItem.displayName}: "${activityFeedItem.comment}"`;
-        const title = `${groupName}`;
+      function sendNotification(androidNotificationToken, activityFeedItem) {
+        const body = `"${activityFeedItem.comment}"`;
+        const title = `${activityFeedItem.displayName}`;
         // 4) Create message for push notification
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId},
+          data: {recipient: receiverId},
         };
 
         // 5) Send message with admin.messaging()

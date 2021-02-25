@@ -24,7 +24,8 @@ class FriendGroupsPage extends StatefulWidget {
   }
 }
 
-class _FriendGroupsState extends State<FriendGroupsPage> {
+class _FriendGroupsState extends State<FriendGroupsPage>
+    with AutomaticKeepAliveClientMixin {
   Container buildNoContent() {
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
@@ -51,7 +52,11 @@ class _FriendGroupsState extends State<FriendGroupsPage> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Scaffold(

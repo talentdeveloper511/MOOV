@@ -31,11 +31,16 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with AutomaticKeepAliveClientMixin {
   GlobalKey _settingsKey = GlobalKey();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     bool bigHeight = true;
     SharedPreferences preferences;
 
@@ -49,7 +54,6 @@ class _ProfilePageState extends State<ProfilePage> {
       }
       return false;
     }
-
 
     displayShowCase4().then((status) {
       if (status) {
@@ -420,68 +424,68 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
-          //             GestureDetector(
-          //               onTap: (){
-          //                     Navigator.push(
-          //                         context,
-          //                         MaterialPageRoute(
-          //                             builder: (context) => MessageList()));
-          //               },
-          //               child: Container(
-          //   child: 
-          //   Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Padding(
-          //         padding: const EdgeInsets.only(left: 8.0),
-          //         child: Icon(
-          //           Icons.message,
-          //           color: Colors.white,
-          //           size: 20,
-          //         ),
-          //       ),
-          //       Expanded(
-          //         child: Center(
-          //           child: Padding(
-          //             padding: const EdgeInsets.only(right: 15.0),
-          //             child: Text(
-          //               "Messages",
-          //               style: TextStyle(
-          //                   fontSize: isLargePhone ? 18 : 16,
-          //                   color: Colors.white),
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          //   width: MediaQuery.of(context).size.width * .4,
-          //   height: 50,
-          //   decoration: BoxDecoration(
-          //     boxShadow: [
-          //       BoxShadow(
-          //         color: Colors.grey.withOpacity(0.5),
-          //         spreadRadius: 5,
-          //         blurRadius: 7,
-          //         offset: Offset(0, 3), // changes position of shadow
-          //       ),
-          //     ],
-          //     borderRadius: BorderRadius.only(
-          //         topLeft: Radius.circular(10),
-          //         topRight: Radius.circular(10),
-          //         bottomLeft: Radius.circular(10),
-          //         bottomRight: Radius.circular(10)),
-          //     gradient: LinearGradient(
-          //       colors: [Colors.amber[300], Colors.amber[200]],
-          //       begin: Alignment.centerLeft,
-          //       end: Alignment.centerRight,
-          //     ),
-          //   ),
-          // )),
-          //             Padding(
-          //               padding: const EdgeInsets.only(bottom: 8.0, top: 8),
-          //               child: SeeContactsButton(),
-          //             ),
+                      //             GestureDetector(
+                      //               onTap: (){
+                      //                     Navigator.push(
+                      //                         context,
+                      //                         MaterialPageRoute(
+                      //                             builder: (context) => MessageList()));
+                      //               },
+                      //               child: Container(
+                      //   child:
+                      //   Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Padding(
+                      //         padding: const EdgeInsets.only(left: 8.0),
+                      //         child: Icon(
+                      //           Icons.message,
+                      //           color: Colors.white,
+                      //           size: 20,
+                      //         ),
+                      //       ),
+                      //       Expanded(
+                      //         child: Center(
+                      //           child: Padding(
+                      //             padding: const EdgeInsets.only(right: 15.0),
+                      //             child: Text(
+                      //               "Messages",
+                      //               style: TextStyle(
+                      //                   fontSize: isLargePhone ? 18 : 16,
+                      //                   color: Colors.white),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   width: MediaQuery.of(context).size.width * .4,
+                      //   height: 50,
+                      //   decoration: BoxDecoration(
+                      //     boxShadow: [
+                      //       BoxShadow(
+                      //         color: Colors.grey.withOpacity(0.5),
+                      //         spreadRadius: 5,
+                      //         blurRadius: 7,
+                      //         offset: Offset(0, 3), // changes position of shadow
+                      //       ),
+                      //     ],
+                      //     borderRadius: BorderRadius.only(
+                      //         topLeft: Radius.circular(10),
+                      //         topRight: Radius.circular(10),
+                      //         bottomLeft: Radius.circular(10),
+                      //         bottomRight: Radius.circular(10)),
+                      //     gradient: LinearGradient(
+                      //       colors: [Colors.amber[300], Colors.amber[200]],
+                      //       begin: Alignment.centerLeft,
+                      //       end: Alignment.centerRight,
+                      //     ),
+                      //   ),
+                      // )),
+                      //             Padding(
+                      //               padding: const EdgeInsets.only(bottom: 8.0, top: 8),
+                      //               child: SeeContactsButton(),
+                      //             ),
                     ],
                   ),
                 )

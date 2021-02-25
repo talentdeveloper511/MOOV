@@ -43,7 +43,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   GlobalKey _categoryButtonKey = GlobalKey();
   GlobalKey _friendFinderKey = GlobalKey();
   GlobalKey _friendGroupsKey = GlobalKey();
@@ -54,6 +54,9 @@ class _HomePageState extends State<HomePage>
   AnimationController _hideFabAnimController;
   List<dynamic> likedArray;
   String eventprofile, title;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void dispose() {
@@ -89,6 +92,7 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget build(BuildContext context) {
+    super.build(context);
     SharedPreferences preferences;
 
     displayShowCase() async {

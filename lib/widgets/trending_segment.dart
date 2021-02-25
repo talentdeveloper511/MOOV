@@ -23,8 +23,13 @@ class TrendingSegment extends StatefulWidget {
   }
 }
 
-class TrendingSegmentState extends State<TrendingSegment> {
+class TrendingSegmentState extends State<TrendingSegment>
+    with AutomaticKeepAliveClientMixin {
   int selectedIndex = 0;
+
+  @override
+  bool get wantKeepAlive => true;
+
   Map<int, Widget> map = new Map();
   @override
   void initState() {
@@ -65,6 +70,7 @@ class TrendingSegmentState extends State<TrendingSegment> {
   bool _isPressed; // = false;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     final GoogleSignInAccount user = googleSignIn.currentUser;

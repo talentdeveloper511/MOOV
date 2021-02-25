@@ -76,6 +76,15 @@ class Database {
     });
   }
 
+  setMessagesSeen(dmId) {
+    messagesRef.doc(dmId).collection('chat').get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.set({"seen": true}, SetOptions(merge: true));
+      }
+    });
+    messagesRef.doc(dmId).set({"seen": true}, SetOptions(merge: true));
+  }
+
   editPostNotification(String postId, String title, List<dynamic> going) {
     for (var i = 0; i < going.length; i++) {
       if (going[i] != currentUser.id) {

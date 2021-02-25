@@ -429,17 +429,17 @@ class _HomeState extends State<Home> {
             scrollDirection: Axis.horizontal,
           ),
           items: [
-             IconButton(
-            padding: EdgeInsets.only(left: 5.0),
-            icon: Icon(Icons.insert_chart_outlined),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () async {
-              // Implement navigation to leaderboard page here...
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-            },
-          ),
+            IconButton(
+              padding: EdgeInsets.only(left: 5.0),
+              icon: Icon(Icons.insert_chart_outlined),
+              color: Colors.white,
+              splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+              onPressed: () async {
+                // Implement navigation to leaderboard page here...
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LeaderBoardPage()));
+              },
+            ),
             // GestureDetector(
             //   onTap: () async {
             //     var randomPost = await randomPostMaker();
@@ -535,18 +535,12 @@ class _HomeState extends State<Home> {
         backgroundColor: TextThemes.ndBlue,
         //pinned: true,
         actions: <Widget>[
-            IconButton(
-            padding: EdgeInsets.only(left: 0.0),
-            icon: Icon(Icons.mail_outline),
-            color: Colors.white,
-            splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-            onPressed: () async {
-              // Implement navigation to leaderboard page here...
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MessageList()));
-            },
-          ),
-         
+          NamedIconMessages(
+              iconData: Icons.mail_outline,
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MessageList()));
+              }),
           NamedIcon(
               iconData: Icons.notifications_active_outlined,
               onTap: () {
@@ -672,6 +666,66 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return (isAuth == false) ? buildUnAuthScreen() : buildAuthScreen();
+  }
+}
+
+class NamedIconMessages extends StatelessWidget {
+  final IconData iconData;
+  final int messages;
+  final VoidCallback onTap;
+  int messageCount;
+
+  NamedIconMessages({
+    Key key,
+    this.onTap,
+    this.messages,
+    @required this.iconData,
+    this.messageCount,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final GoogleSignInAccount user = googleSignIn.currentUser;
+
+    return StreamBuilder(
+        stream: messagesRef
+            .where("people", arrayContains: currentUser.id)
+            .where('seen', isEqualTo: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) return CircularProgressIndicator();
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          int notifs = snapshot.data.docs.length;
+
+          return InkWell(
+            onTap: onTap,
+            child: Container(
+              width: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Icon(iconData, color: Colors.white),
+                  notifs != 0
+                      ? Positioned(
+                          top: 8,
+                          right: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.red),
+                            alignment: Alignment.center,
+                            child: Text("$notifs",
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
 

@@ -31,7 +31,10 @@ class MOOVSPage extends StatefulWidget {
 }
 
 class _MOOVSPageState extends State<MOOVSPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   GlobalKey _myPostsKey = GlobalKey();
   GlobalKey _goingKey = GlobalKey();
   // TabController to control and switch tabs
@@ -69,6 +72,7 @@ class _MOOVSPageState extends State<MOOVSPage>
   Widget getChildWidget() => childWidgets[selectedIndex];
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     SharedPreferences preferences;
 
     displayShowCase() async {
@@ -129,7 +133,6 @@ class _MOOVSPageState extends State<MOOVSPage>
                           fontSize: 20),
                       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                       contentPadding: EdgeInsets.all(10),
-                      
                       child: new FlatButton(
                         color: _currentIndex == 0
                             ? Colors.blue[100]
@@ -155,7 +158,6 @@ class _MOOVSPageState extends State<MOOVSPage>
                           fontSize: 20),
                       descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                       contentPadding: EdgeInsets.all(10),
-                      
                       child: new FlatButton(
                         color: _currentIndex == 1
                             ? Colors.blue[100]
