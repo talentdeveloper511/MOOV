@@ -743,7 +743,7 @@ class MessageList extends StatelessWidget {
                                               style: TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.grey[700]))
-                                          : Text(course['lastMessage'],
+                                          : Text(snapshot.data['displayName'],
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
