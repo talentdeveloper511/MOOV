@@ -232,14 +232,7 @@ class _HomePageState extends State<HomePage>
                                     color: Colors.white,
                                     splashColor:
                                         Color.fromRGBO(220, 180, 57, 1.0),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FriendFinder()));
-                                      // Implement navigation to shopping cart page here...
-                                    },
+                                   
                                   ),
                                   Align(
                                       alignment: Alignment.center,
@@ -297,13 +290,7 @@ class _HomePageState extends State<HomePage>
                                   icon: Image.asset('lib/assets/fg1.png'),
                                   splashColor:
                                       Color.fromRGBO(220, 180, 57, 1.0),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                FriendGroupsPage()));
-                                  },
+                                 
                                 ),
                                 Align(
                                     alignment: Alignment.center,
