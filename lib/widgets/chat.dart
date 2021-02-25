@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/services/database.dart';
@@ -172,11 +173,13 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     Timer(Duration(milliseconds: 200), () {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
     return Container(
-      height: 500,
+      height: isLargePhone ? 500: 370,
       child: Column(
         children: <Widget>[
           Expanded(child: buildChat()),

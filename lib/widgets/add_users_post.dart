@@ -1832,7 +1832,9 @@ class _MessageResultAddState extends State<MessageResultAdd> {
         Positioned(
           right: 20,
           top: 10,
-          child: RaisedButton(
+          child:
+          currentUser.id == userId ? Container():
+           RaisedButton(
               padding: const EdgeInsets.all(2.0),
               color: TextThemes.ndBlue,
               shape: RoundedRectangleBorder(
