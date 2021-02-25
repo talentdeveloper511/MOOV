@@ -157,6 +157,7 @@ class ChatState extends State<Chat> {
               "lastMessage": commentController.text,
               "timestamp": timestamp,
               "sender": currentUser.id,
+              "seen": false
             });
       Timer(
           Duration(milliseconds: 200),
