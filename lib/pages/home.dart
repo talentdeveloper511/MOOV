@@ -7,6 +7,7 @@ import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/map_test.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
 import 'dart:async';
 import 'dart:io';
@@ -39,6 +40,7 @@ import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase_widget.dart';
 import 'create_account.dart';
+import 'group_detail.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final Reference storageRef = FirebaseStorage.instance.ref();
@@ -134,10 +136,29 @@ class _HomeState extends State<Home> {
     _fcm.configure(
         onLaunch: (Map<String, dynamic> message) async {
           print('message: $message');
+          final String pushId = message['link'];
+          final String page = message['page'];
           final String recipientId = message['recipient'];
           final String body = message['notification']['title'] +
               ' ' +
               message['notification']['body'];
+          FlutterAppBadger.updateBadgeCount(1);
+          if (page == 'chat') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MessagesHub()));
+          } else if (page == 'post') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          } else if (page == 'group') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          } else if (page == 'user') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          } else {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NotificationFeed()));
+          }
           if (recipientId == currentUser.id) {
             print('Notification shown');
 
@@ -175,11 +196,29 @@ class _HomeState extends State<Home> {
         onBackgroundMessage: myBackgroundMessageHandler,
         onResume: (Map<String, dynamic> message) async {
           print('message: $message');
+          final String pushId = message['link'];
+          final String page = message['page'];
           final String recipientId = message['recipient'];
           final String body = message['notification']['title'] +
               ' ' +
               message['notification']['body'];
           FlutterAppBadger.updateBadgeCount(1);
+          if (page == 'chat') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MessagesHub()));
+          } else if (page == 'post') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          } else if (page == 'group') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          } else if (page == 'user') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          } else {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NotificationFeed()));
+          }
           if (recipientId == currentUser.id) {
             print('Notification shown');
             Flushbar snackbar = Flushbar(
@@ -207,16 +246,36 @@ class _HomeState extends State<Home> {
             //     backgroundColor: Colors.green);
             // _scaffoldKey.currentState.showSnackBar(snackybar);
             snackbar.show(context);
+
             // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
           }
           print('Notification not shown :(');
         },
         onMessage: (Map<String, dynamic> message) async {
           print('message1: $message');
+          final String pushId = message['link'];
+          final String page = message['page'];
           final String recipientId = message['recipient'];
           final String body = message['notification']['title'] +
               ' ' +
               message['notification']['body'];
+          FlutterAppBadger.updateBadgeCount(1);
+          if (page == 'chat') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MessagesHub()));
+          } else if (page == 'post') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          } else if (page == 'group') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          } else if (page == 'user') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          } else {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NotificationFeed()));
+          }
           FlutterAppBadger.updateBadgeCount(1);
           if (recipientId == currentUser.id) {
             print('Notification shown');

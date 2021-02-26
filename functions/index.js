@@ -139,44 +139,62 @@ exports.onCreateActivityFeedItem = functions.firestore
       function sendNotification(androidNotificationToken, activityFeedItem) {
         let body;
         let title;
+        let post;
+        let id;
 
         // 3) switch body value based off of notification type
         switch (activityFeedItem.type) {
           case "invite":
             title = `${activityFeedItem.username}`;
             body = `invited you to ${activityFeedItem.title}`;
+            post = "post";
+            id = `${activityFeedItem.postId}`;
             break;
           case "sent":
             title = `${activityFeedItem.username}`;
             body = `sent you ${activityFeedItem.title}`;
+            post = "post";
+            id = `${activityFeedItem.postId}`;
             break;
           case "edit":
             title = `${activityFeedItem.username}`;
             body = "has been updated with a new start time";
+            post = "post";
+            id = `${activityFeedItem.postId}`;
             break;
           case "going":
             title = `${activityFeedItem.title}`;
             body = `${activityFeedItem.username} is going to your MOOV!`;
+            post = "post";
             break;
           case "friendGroup":
             title = `${activityFeedItem.username}`;
             body = `added you to their friend group, ${activityFeedItem.groupName}`;
+            post = "group";
+            id = `${activityFeedItem.groupId}`;
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
+            post = "group";
+            id = `${activityFeedItem.groupId}`;
             break;
           case "comment":
             title = `${activityFeedItem.title}`;
             body = `${activityFeedItem.username} commented: "${activityFeedItem.message}"`;
+            post = "post";
+            id = `${activityFeedItem.postId}`;
             break;
           case "request":
             title = `${activityFeedItem.username}`;
             body = "sent you a friend request";
+            post = "user";
+            id = `${activityFeedItem.id}`;
             break;
           case "created":
             title = `${activityFeedItem.username}`;
             body = `just posted ${activityFeedItem.title}`;
+            post = "post";
             break;
           case "deleted":
             title = `${activityFeedItem.username} `;
@@ -185,6 +203,8 @@ exports.onCreateActivityFeedItem = functions.firestore
           case "accept":
             title = `${activityFeedItem.username} `;
             body = "accepted your friend request";
+            post = "user";
+            id = `${activityFeedItem.id}`;
             break;
           default:
             break;
@@ -194,7 +214,7 @@ exports.onCreateActivityFeedItem = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId},
+          data: {recipient: userId, page: post, link: id},
         };
 
         // 5) Send message with admin.messaging()
@@ -345,7 +365,7 @@ exports.groupChat = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId},
+          data: {recipient: userId, page: "group"},
         };
 
         // 5) Send message with admin.messaging()
@@ -405,7 +425,7 @@ exports.directMessage = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: receiverId},
+          data: {recipient: receiverId, page: "chat"},
         };
 
         // 5) Send message with admin.messaging()
@@ -459,20 +479,6 @@ exports.resetLimits = functions.pubsub.schedule("0 0 * * *")
           });
     });
 
-exports.fixPrivacy = functions.firestore
-    .document("{college}/data/users/{userId}")
-    .onCreate(async (snapshot, context) => {
-      const userId = context.params.userId;
-      admin.firestore().collection("notreDame").doc("data").collection("users").doc(`${userId}`).set({
-        "privacySettings": {
-          "friendFinderVisibility": true,
-          "friendsOnly": false,
-          "incognito": false,
-          "showDorm": true,
-        },
-      }, {merge: true});
-    });
-
 exports.editPostNotif = functions.firestore
     .document("{college}/data/food/{postId}")
     .onUpdate(async (snapshot, context) => {
@@ -512,11 +518,12 @@ exports.editPostNotif = functions.firestore
       function sendNotification(androidNotificationToken, activityFeedItem, newTime) {
         const body = `was updated to ${newTime}`;
         const title = `${activityFeedItem.title}`;
+        const post = `${activityFeedItem.postId}`;
         // 4) Create message for push notification
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId},
+          data: {recipient: userId, page: "post", link: post},
         };
 
         // 5) Send message with admin.messaging()
