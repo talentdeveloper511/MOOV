@@ -74,13 +74,17 @@ class ChatState extends State<Chat> {
         : messagesRef.doc(directMessageId).collection('chat');
     reference.snapshots().listen((querySnapshot) {
       querySnapshot.docChanges.forEach((change) {
-        // Do something with change
-        Timer(
+
+
+if(querySnapshot.docs.isNotEmpty){
+    Timer(
             Duration(milliseconds: 200),
             () => _scrollController.animateTo(
                 _scrollController.position.maxScrollExtent,
                 curve: Curves.easeIn,
                 duration: Duration(milliseconds: 300)));
+}
+    
       });
     });
     return StreamBuilder(
@@ -92,23 +96,41 @@ class ChatState extends State<Chat> {
                 .snapshots()
             : messagesRef.doc(directMessageId).collection('chat').snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Container();
+          if (snapshot.hasError) {
+            return new Text('Error: ${snapshot.error}');
           }
-
-          List<Comment> chat = [];
-          snapshot.data.docs.forEach((doc) {
-            chat.add(Comment.fromDocument(doc));
-          });
-          return ListView(
-            controller: _scrollController,
-            children: chat,
-          );
+          if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text("Loading..."),
+                  SizedBox(
+                    height: 50.0,
+                  ),
+                  CircularProgressIndicator()
+                ],
+              ),
+            );
+          } else {
+            List<Comment> chat = [];
+            snapshot.data.docs.forEach((doc) {
+              chat.add(Comment.fromDocument(doc));
+            });
+            return ListView(
+              controller: _scrollController,
+              children: chat,
+            );
+          }
         });
   }
 
   addComment() {
-    if (directMessageId == "nothing") {
+    if (directMessageId == null) {
+      circularProgress();
+    }
+    if (directMessageId == "nothing" || directMessageId == null) {
       directMessageId = currentUser.id + otherPerson;
     }
     if (commentController.text.isNotEmpty) {
@@ -211,6 +233,7 @@ class ChatState extends State<Chat> {
                   //             "people": [currentUser.id, otherPerson]
                   //           }));
                   // }
+
                   isGroupChat
                       ? null
                       : messagesRef
@@ -338,74 +361,75 @@ class _CommentState extends State<Comment> {
       children: <Widget>[
         (userId != currentUser.id)
             ? ListTile(
-          
                 // tileColor: Colors.blue[100],
-                title: isGroupChat ? 
-                ChatBubble(
-                                alignment: Alignment.centerLeft,
-                                clipper: ChatBubbleClipper5(
-                                    type: BubbleType.receiverBubble),
-                                backGroundColor: Colors.grey[200],
-                                margin: EdgeInsets.only(top: 5),
-                                child: Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.7,
-                                    ),
-                                    child: Text(comment)))
-                : FlutterReactionButtonCheck(
-                    onReactionChanged: (reaction, index, isChecked) {
+                title: isGroupChat
+                    ? ChatBubble(
+                        alignment: Alignment.centerLeft,
+                        clipper:
+                            ChatBubbleClipper5(type: BubbleType.receiverBubble),
+                        backGroundColor: Colors.grey[200],
+                        margin: EdgeInsets.only(top: 5),
+                        child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.7,
+                            ),
+                            child: Text(comment)))
+                    : FlutterReactionButtonCheck(
+                        onReactionChanged: (reaction, index, isChecked) {
+                          // FLIPPED OFF NOTIF HERE
 
-                      // FLIPPED OFF NOTIF HERE
-                    
-
-                      messagesRef
-                          .doc(directMessageId).collection("chat").doc(chatId)
-                          .update({"middleFinger": !middleFinger});
+                          messagesRef
+                              .doc(directMessageId)
+                              .collection("chat")
+                              .doc(chatId)
+                              .update({"middleFinger": !middleFinger});
                           //     messagesRef
                           // .doc(directMessageId)
                           // .update({"middleFinger": !middleFinger});
-                      setState(() {
-                        middleFinger = !middleFinger;
-                      });
-                    },
-                    reactions: [
-                      Reaction(
-                          previewIcon: Padding(
-                            padding: const EdgeInsets.only(right: 8.0, top: 4, bottom: 6),
-                            child: Image.asset('lib/assets/middleFinger.gif',
-                                          height: 40,),
-                          ),
-                          title: Text("Flip 'em off"),
-                          icon: Stack(children: [
-                            ChatBubble(
-                                alignment: Alignment.centerLeft,
-                                clipper: ChatBubbleClipper5(
-                                    type: BubbleType.receiverBubble),
-                                backGroundColor: Colors.grey[200],
-                                margin: EdgeInsets.only(top: 5),
-                                child: Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.7,
-                                    ),
-                                    child: Text(comment))),
-                            Positioned(
-                                left: comment.length < 25
-                                    ? comment.length.toDouble() * 8
-                                    : comment.length < 40
-                                        ? comment.length.toDouble() * 6
-                                        : 220,
-                                child: middleFinger
-                                    ? Image.asset(
-                                        'lib/assets/middleFinger.gif',
-                                        height: 40,
-                                      )
-                                    : Container())
-                          ])),
-                    ]),
+                          setState(() {
+                            middleFinger = !middleFinger;
+                          });
+                        },
+                        reactions: [
+                            Reaction(
+                                previewIcon: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 8.0, top: 4, bottom: 6),
+                                  child: Image.asset(
+                                    'lib/assets/middleFinger.gif',
+                                    height: 40,
+                                  ),
+                                ),
+                                title: Text("Flip 'em off"),
+                                icon: Stack(children: [
+                                  ChatBubble(
+                                      alignment: Alignment.centerLeft,
+                                      clipper: ChatBubbleClipper5(
+                                          type: BubbleType.receiverBubble),
+                                      backGroundColor: Colors.grey[200],
+                                      margin: EdgeInsets.only(top: 5),
+                                      child: Container(
+                                          constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                          ),
+                                          child: Text(comment))),
+                                  Positioned(
+                                      left: comment.length < 25
+                                          ? comment.length.toDouble() * 8
+                                          : comment.length < 40
+                                              ? comment.length.toDouble() * 6
+                                              : 220,
+                                      child: middleFinger
+                                          ? Image.asset(
+                                              'lib/assets/middleFinger.gif',
+                                              height: 40,
+                                            )
+                                          : Container())
+                                ])),
+                          ]),
                 leading: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: CircleAvatar(
@@ -420,55 +444,53 @@ class _CommentState extends State<Comment> {
               )
             : Stack(
                 children: [
-                 
                   ListTile(
                     // tileColor: Colors.blue[100],
-                    title: isGroupChat ? 
-                    ChatBubble(
-                              alignment: Alignment.centerRight,
-                              clipper:
-                                  ChatBubbleClipper5(type: BubbleType.sendBubble),
-                              backGroundColor: Colors.blue[200],
-                              margin: EdgeInsets.only(top: 5),
-                              child: Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                  ),
-                                  child: Text(comment))) :
-                                
-                    
-                     GestureDetector(
-                        onLongPress: () => {
-                              showAlertDialog(context, chatId, gid, millis,
-                                  isGroupChat, directMessageId)
-                            },
-                        child: Stack(
-                                                  children: [ChatBubble(
-                              alignment: Alignment.centerRight,
-                              clipper:
-                                  ChatBubbleClipper5(type: BubbleType.sendBubble),
-                              backGroundColor: Colors.blue[200],
-                              margin: EdgeInsets.only(top: 5),
-                              child: Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                  ),
-                                  child: Text(comment))),
-                                  Positioned(
-                                right: comment.length < 25
-                                    ? comment.length.toDouble() * 8
-                                    : comment.length < 40
-                                        ? comment.length.toDouble() * 6
-                                        : 220,
-                                child: middleFinger
-                                    ? Image.asset(
-                                        'lib/assets/middleFinger.gif',
-                                        height: 40,
-                                      )
-                                    : Container())]
-                        )),
+                    title: isGroupChat
+                        ? ChatBubble(
+                            alignment: Alignment.centerRight,
+                            clipper:
+                                ChatBubbleClipper5(type: BubbleType.sendBubble),
+                            backGroundColor: Colors.blue[200],
+                            margin: EdgeInsets.only(top: 5),
+                            child: Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                child: Text(comment)))
+                        : GestureDetector(
+                            onLongPress: () => {
+                                  showAlertDialog(context, chatId, gid, millis,
+                                      isGroupChat, directMessageId)
+                                },
+                            child: Stack(children: [
+                              ChatBubble(
+                                  alignment: Alignment.centerRight,
+                                  clipper: ChatBubbleClipper5(
+                                      type: BubbleType.sendBubble),
+                                  backGroundColor: Colors.blue[200],
+                                  margin: EdgeInsets.only(top: 5),
+                                  child: Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width *
+                                                0.7,
+                                      ),
+                                      child: Text(comment))),
+                              Positioned(
+                                  right: comment.length < 25
+                                      ? comment.length.toDouble() * 8
+                                      : comment.length < 40
+                                          ? comment.length.toDouble() * 6
+                                          : 220,
+                                  child: middleFinger
+                                      ? Image.asset(
+                                          'lib/assets/middleFinger.gif',
+                                          height: 40,
+                                        )
+                                      : Container())
+                            ])),
                     subtitle: Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Text(timeago.format(timestamp.toDate()),
