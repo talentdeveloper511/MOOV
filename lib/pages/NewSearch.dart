@@ -479,6 +479,7 @@ class _SearchBarState extends State<SearchBar>
                                                                       members: currSearchStuff0[index]
                                                                               .data[
                                                                           "members"],
+                                                                          sendMOOV: false,
                                                                     )
                                                                   : Container();
                                                             },
@@ -760,7 +761,7 @@ class DisplayGroupResult extends StatelessWidget {
   final String groupPic;
   final List<dynamic> members;
   final String postId, title;
-  bool sendMOOV = false;
+  final bool sendMOOV;
 
   DisplayGroupResult(
       {Key key,
@@ -910,7 +911,7 @@ class DisplayGroupResult extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Positioned(
+                sendMOOV ? Positioned(
                     right: MediaQuery.of(context).size.width / 2,
                     bottom: -2.5,
                     child: RaisedButton(
@@ -931,7 +932,7 @@ class DisplayGroupResult extends StatelessWidget {
                             fontSize: 12.0,
                           ),
                         )),
-                  ),
+                  ) : Container(),
                 ]),
               ),
             );
@@ -1406,6 +1407,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                                                       members: currSearchStuff0[index]
                                                                               .data[
                                                                           "members"],
+                                                                          sendMOOV: false,
                                                                     )
                                                                   : Container(
                                                                       height:
