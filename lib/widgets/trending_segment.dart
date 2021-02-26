@@ -10,6 +10,7 @@ import 'package:MOOV/services/database.dart';
 import 'package:MOOV/helpers/themes.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,6 @@ import 'package:MOOV/pages/home.dart';
 class TrendingSegment extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return TrendingSegmentState();
   }
 }
@@ -30,11 +30,14 @@ class TrendingSegmentState extends State<TrendingSegment>
   @override
   bool get wantKeepAlive => true;
 
+  EasyRefreshController _controller;
+
   Map<int, Widget> map = new Map();
   @override
   void initState() {
     super.initState();
     loadCupertinoTabs();
+    _controller = EasyRefreshController();
   }
 
   void loadCupertinoTabs() {
@@ -67,19 +70,15 @@ class TrendingSegmentState extends State<TrendingSegment>
     };
   }
 
-  bool _isPressed; // = false;
+  // int id=0;
+  // void refreshData() {
+  //   id++;
+  // }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     bool isLargePhone = Screen.diagonal(context) > 766;
-
-    final GoogleSignInAccount user = googleSignIn.currentUser;
-    final strUserId = user.id;
-    final strUserName = user.displayName;
-    final strUserPic = user.photoUrl;
-    var height = 400;
-    dynamic likeCount;
-
     return Container(
       color: Colors.white,
       child: Column(
@@ -98,221 +97,249 @@ class TrendingSegmentState extends State<TrendingSegment>
                         color: Colors.white, fontSize: 30)),
               ))),
           Expanded(
-            child: ListView(children: [
-              Container(
-                child: StreamBuilder(
-                    stream: postsRef
-                        .where('type', isEqualTo: 'Restaurants & Bars')
-                        .where('privacy', isEqualTo: "Public")
-                        .orderBy("goingCount", descending: true)
-                        .limit(6)
-                        // .orderBy("goingCount")
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Text('');
-                      return Container(
-                        height: (snapshot.data.docs.length <= 3 && isLargePhone)
-                            ? 210
-                            : (snapshot.data.docs.length >= 3 && isLargePhone)
-                                ? 345
-                                : (snapshot.data.docs.length <= 3 &&
-                                        !isLargePhone)
-                                    ? 190
-                                    : (snapshot.data.docs.length >= 3 &&
-                                            !isLargePhone)
-                                        ? 310
-                                        : 350,
-                        child: Column(
-                          children: [
-                            Expanded(
-                                child: CustomScrollView(
-                              physics: NeverScrollableScrollPhysics(),
-                              slivers: [
-                                SliverToBoxAdapter(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Image.asset('lib/assets/plate.png',
-                                          height: 40),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text('Restaurants & Bars',
-                                            style: TextThemes.extraBold),
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                                SliverGrid(
-                                    delegate: SliverChildBuilderDelegate(
-                                        (BuildContext context, int index) {
-                                      DocumentSnapshot course =
-                                          snapshot.data.docs[index];
-
-                                      return PostOnTrending(course);
-                                    }, childCount: snapshot.data.docs.length),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                    )),
-                              ],
-                            )),
-                          ],
-                        ),
-                      );
-                    }),
-              ),
-              Container(
-                child: StreamBuilder(
-                    stream: postsRef
-                        .where('type', isEqualTo: "Pregames & Parties")
-                        .where('privacy', isEqualTo: "Public")
-                        .orderBy("goingCount", descending: true)
-                        .limit(6)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      bool hide = false;
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Text('');
-
-                      return Container(
-                        height: (snapshot.data.docs.length <= 3 && isLargePhone)
-                            ? 210
-                            : (snapshot.data.docs.length >= 3 && isLargePhone)
-                                ? 345
-                                : (snapshot.data.docs.length <= 3 &&
-                                        !isLargePhone)
-                                    ? 190
-                                    : (snapshot.data.docs.length >= 3 &&
-                                            !isLargePhone)
-                                        ? 310
-                                        : 350,
-                        child: Column(
-                          children: [
-                            Expanded(
-                                child: CustomScrollView(
-                              physics: NeverScrollableScrollPhysics(),
-                              slivers: [
-                                SliverToBoxAdapter(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Image.asset('lib/assets/dance.png',
-                                          height: 40),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text('Pregames & Parties',
-                                            style: TextThemes.extraBold),
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                                SliverGrid(
-                                    delegate: SliverChildBuilderDelegate(
-                                        (BuildContext context, int index) {
-                                      DocumentSnapshot course =
-                                          snapshot.data.docs[index];
-                                      if (course['privacy'] == "Friends Only" ||
-                                          course['privacy'] == "Invite Only") {
-                                        hide = true;
-                                      }
-
-                                      return (hide == false)
-                                          ? PostOnTrending(course)
-                                          : Container();
-                                    }, childCount: snapshot.data.docs.length),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                    )),
-                              ],
-                            )),
-                          ],
-                        ),
-                      );
-                    }),
-              ),
-              Container(
-                child: StreamBuilder(
-                    stream: postsRef
-                        .where('isPartyOrBar', isEqualTo: false)
-                        .where('privacy', isEqualTo: 'Public')
-                        .orderBy("goingCount", descending: true)
-                        .limit(6)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      bool hide = false;
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Text('');
-                      return Container(
-                        height: (snapshot.data.docs.length <= 3 && isLargePhone)
-                            ? 210
-                            : (snapshot.data.docs.length >= 3 && isLargePhone)
-                                ? 345
-                                : (snapshot.data.docs.length <= 3 &&
-                                        !isLargePhone)
-                                    ? 190
-                                    : (snapshot.data.docs.length >= 3 &&
-                                            !isLargePhone)
-                                        ? 310
-                                        : 350,
-                        child: Column(
-                          children: [
-                            Expanded(
-                                child: CustomScrollView(
-                              physics: NeverScrollableScrollPhysics(),
-                              slivers: [
-                                SliverToBoxAdapter(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 2.0),
-                                        child: Image.asset(
-                                            'lib/assets/show3.png',
+            child: EasyRefresh(
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 1), () {
+                  _controller.resetLoadState();
+                });
+              },
+              onLoad: () async {
+                await Future.delayed(Duration(seconds: 1), () {
+                  setState(() {
+                    // refreshData();
+                    setState(() {});
+                  });
+                  _controller.finishLoad();
+                });
+              },
+              enableControlFinishRefresh: false,
+              enableControlFinishLoad: true,
+              controller: _controller,
+              header: BezierCircleHeader(
+                  color: Colors.pinkAccent[200], backgroundColor: TextThemes.ndBlue),
+              child: ListView(children: [
+                Container(
+                  child: StreamBuilder(
+                      stream: postsRef
+                          .where('type', isEqualTo: 'Restaurants & Bars')
+                          .where('privacy', isEqualTo: "Public")
+                          .orderBy("goingCount", descending: true)
+                          .limit(6)
+                          // .orderBy("goingCount")
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
+                          return Text('');
+                        return Container(
+                          height: (snapshot.data.docs.length <= 3 &&
+                                  isLargePhone)
+                              ? 210
+                              : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                  ? 345
+                                  : (snapshot.data.docs.length <= 3 &&
+                                          !isLargePhone)
+                                      ? 190
+                                      : (snapshot.data.docs.length >= 3 &&
+                                              !isLargePhone)
+                                          ? 310
+                                          : 350,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                  child: CustomScrollView(
+                                physics: NeverScrollableScrollPhysics(),
+                                slivers: [
+                                  SliverToBoxAdapter(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Image.asset('lib/assets/plate.png',
                                             height: 40),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text('More',
-                                            style: TextThemes.extraBold),
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                                SliverGrid(
-                                    delegate: SliverChildBuilderDelegate(
-                                        (BuildContext context, int index) {
-                                      DocumentSnapshot course =
-                                          snapshot.data.docs[index];
-                                      if (course['privacy'] == "Friends Only" ||
-                                          course['privacy'] == "Invite Only") {
-                                        hide = true;
-                                      }
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Text('Restaurants & Bars',
+                                              style: TextThemes.extraBold),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                                  SliverGrid(
+                                      delegate: SliverChildBuilderDelegate(
+                                          (BuildContext context, int index) {
+                                        DocumentSnapshot course =
+                                            snapshot.data.docs[index];
 
-                                      return (hide == false)
-                                          ? PostOnTrending(course)
-                                          : Container();
-                                    }, childCount: snapshot.data.docs.length),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                    )),
-                              ],
-                            )),
-                          ],
-                        ),
-                      );
-                    }),
-              ),
-            ]),
+                                        return PostOnTrending(course);
+                                      }, childCount: snapshot.data.docs.length),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                      )),
+                                ],
+                              )),
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+                Container(
+                  child: StreamBuilder(
+                      stream: postsRef
+                          .where('type', isEqualTo: "Pregames & Parties")
+                          .where('privacy', isEqualTo: "Public")
+                          .orderBy("goingCount", descending: true)
+                          .limit(6)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        bool hide = false;
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
+                          return Text('');
+
+                        return Container(
+                          height: (snapshot.data.docs.length <= 3 &&
+                                  isLargePhone)
+                              ? 210
+                              : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                  ? 345
+                                  : (snapshot.data.docs.length <= 3 &&
+                                          !isLargePhone)
+                                      ? 190
+                                      : (snapshot.data.docs.length >= 3 &&
+                                              !isLargePhone)
+                                          ? 310
+                                          : 350,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                  child: CustomScrollView(
+                                physics: NeverScrollableScrollPhysics(),
+                                slivers: [
+                                  SliverToBoxAdapter(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Image.asset('lib/assets/dance.png',
+                                            height: 40),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Text('Pregames & Parties',
+                                              style: TextThemes.extraBold),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                                  SliverGrid(
+                                      delegate: SliverChildBuilderDelegate(
+                                          (BuildContext context, int index) {
+                                        DocumentSnapshot course =
+                                            snapshot.data.docs[index];
+                                        if (course['privacy'] ==
+                                                "Friends Only" ||
+                                            course['privacy'] ==
+                                                "Invite Only") {
+                                          hide = true;
+                                        }
+
+                                        return (hide == false)
+                                            ? PostOnTrending(course)
+                                            : Container();
+                                      }, childCount: snapshot.data.docs.length),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                      )),
+                                ],
+                              )),
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+                Container(
+                  child: StreamBuilder(
+                      stream: postsRef
+                          .where('isPartyOrBar', isEqualTo: false)
+                          .where('privacy', isEqualTo: 'Public')
+                          .orderBy("goingCount", descending: true)
+                          .limit(6)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        bool hide = false;
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
+                          return Text('');
+                        return Container(
+                          height: (snapshot.data.docs.length <= 3 &&
+                                  isLargePhone)
+                              ? 210
+                              : (snapshot.data.docs.length >= 3 && isLargePhone)
+                                  ? 345
+                                  : (snapshot.data.docs.length <= 3 &&
+                                          !isLargePhone)
+                                      ? 190
+                                      : (snapshot.data.docs.length >= 3 &&
+                                              !isLargePhone)
+                                          ? 310
+                                          : 350,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                  child: CustomScrollView(
+                                physics: NeverScrollableScrollPhysics(),
+                                slivers: [
+                                  SliverToBoxAdapter(
+                                      child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 2.0),
+                                          child: Image.asset(
+                                              'lib/assets/show3.png',
+                                              height: 40),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Text('More',
+                                              style: TextThemes.extraBold),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                                  SliverGrid(
+                                      delegate: SliverChildBuilderDelegate(
+                                          (BuildContext context, int index) {
+                                        DocumentSnapshot course =
+                                            snapshot.data.docs[index];
+                                        if (course['privacy'] ==
+                                                "Friends Only" ||
+                                            course['privacy'] ==
+                                                "Invite Only") {
+                                          hide = true;
+                                        }
+
+                                        return (hide == false)
+                                            ? PostOnTrending(course)
+                                            : Container();
+                                      }, childCount: snapshot.data.docs.length),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                      )),
+                                ],
+                              )),
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+              ]),
+            ),
           ),
         ],
       ),

@@ -14,6 +14,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -525,7 +526,9 @@ class MessagesHub extends StatelessWidget {
 }
 
 class MessageList extends StatelessWidget {
-  const MessageList({Key key}) : super(key: key);
+  MessageList({Key key}) : super(key: key);
+
+  EasyRefreshController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -675,119 +678,141 @@ class MessageList extends StatelessWidget {
                   ),
                 ),
               ));
+            
 
-            return ListView.builder(
-              itemCount: snapshot.data.docs.length + 1,
-              itemBuilder: (context, index) {
-                //adding da button
-                if (index == snapshot.data.docs.length) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 75.0),
-                    child: Container(),
-                  );
-                }
-
-                DocumentSnapshot course = snapshot.data.docs[index];
-                List people = course['people'];
-                people.removeWhere((item) => item == currentUser.id);
-                String otherPerson = people[0];
-                Timestamp timestamp = course['timestamp'];
-
-                // print(receiver);
-                // print(currentUser.id);
-
-                return StreamBuilder(
-                    stream: usersRef.doc(otherPerson).snapshots(),
-                    builder: (context, snapshot) {
-                      // print(index);
-                      if (!snapshot.hasData || snapshot.data == null) {
-                        return circularProgress();
-                      }
-                      return GestureDetector(
-                        onTap: () {
-                          if (currentUser.id != course['sender']) {
-                            Database()
-                                .setMessagesSeen(course['directMessageId']);
-                          }
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MessageDetail(
-                                      course['directMessageId'], otherPerson)));
-                          print(currentUser.id);
-                          print(course['sender']);
-                        },
-                        child: Container(
-                          height: 100,
-                          child: Row(
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 0, left: 15.0, right: 10),
-                                  child: CircleAvatar(
-                                    radius: 30.0,
-                                    backgroundImage: NetworkImage(
-                                      snapshot.data['photoUrl'],
-                                    ),
-                                  )),
-                              Padding(
-                                  padding: EdgeInsets.only(top: 30),
-                                  child: Column(children: <Widget>[
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          .46,
-                                      child: course['seen'] == true ||
-                                              currentUser.id == course['sender']
-                                          ? Text(snapshot.data['displayName'],
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.grey[700]))
-                                          : Text(snapshot.data['displayName'],
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold)),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          .46,
-                                      child: course['seen'] == true ||
-                                              currentUser.id == course['sender']
-                                          ? Text(course['lastMessage'],
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey[700]))
-                                          : Text(course['lastMessage'],
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold)),
-                                    )
-                                  ])),
-                             Align(
-                               alignment: Alignment.centerRight,
-                               child: Text(
-                                        timeago.format(timestamp.toDate()),
-                                        style: TextStyle(fontSize: 12),
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.end,
-                                      ),
-                             )
-                                  
-                            ],
-                          ),
-                        ),
-                      );
-                    });
+            return EasyRefresh(
+                   onRefresh: () async {
+                await Future.delayed(Duration(seconds: 1), () {
+                  // _controller.resetLoadState();
+                });
               },
+              onLoad: () async {
+                await Future.delayed(Duration(seconds: 1), () {
+                  // setState(() {
+                  //   // refreshData();
+                  //   setState(() {});
+                  // });
+                  _controller.finishLoad();
+                });
+              },
+              enableControlFinishRefresh: false,
+              enableControlFinishLoad: true,
+              controller: _controller,
+              header: BezierCircleHeader(
+                  color: TextThemes.ndGold, backgroundColor: TextThemes.ndBlue),
+                              
+                          child: ListView.builder(
+                itemCount: snapshot.data.docs.length + 1,
+                itemBuilder: (context, index) {
+                  //adding da button
+                  if (index == snapshot.data.docs.length) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 75.0),
+                      child: Container(),
+                    );
+                  }
+
+                  DocumentSnapshot course = snapshot.data.docs[index];
+                  List people = course['people'];
+                  people.removeWhere((item) => item == currentUser.id);
+                  String otherPerson = people[0];
+                  Timestamp timestamp = course['timestamp'];
+
+                  // print(receiver);
+                  // print(currentUser.id);
+
+                  return StreamBuilder(
+                      stream: usersRef.doc(otherPerson).snapshots(),
+                      builder: (context, snapshot) {
+                        // print(index);
+                        if (!snapshot.hasData || snapshot.data == null) {
+                          return circularProgress();
+                        }
+                        return GestureDetector(
+                          onTap: () {
+                            if (currentUser.id != course['sender']) {
+                              Database()
+                                  .setMessagesSeen(course['directMessageId']);
+                            }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MessageDetail(
+                                        course['directMessageId'], otherPerson)));
+                            print(currentUser.id);
+                            print(course['sender']);
+                          },
+                          child: Container(
+                            height: 100,
+                            child: Row(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 0, left: 15.0, right: 10),
+                                    child: CircleAvatar(
+                                      radius: 30.0,
+                                      backgroundImage: NetworkImage(
+                                        snapshot.data['photoUrl'],
+                                      ),
+                                    )),
+                                Padding(
+                                    padding: EdgeInsets.only(top: 30),
+                                    child: Column(children: <Widget>[
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width *
+                                            .46,
+                                        child: course['seen'] == true ||
+                                                currentUser.id == course['sender']
+                                            ? Text(snapshot.data['displayName'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.grey[700]))
+                                            : Text(snapshot.data['displayName'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold)),
+                                      ),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width *
+                                            .46,
+                                        child: course['seen'] == true ||
+                                                currentUser.id == course['sender']
+                                            ? Text(course['lastMessage'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey[700]))
+                                            : Text(course['lastMessage'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold)),
+                                      )
+                                    ])),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    timeago.format(timestamp.toDate()),
+                                    style: TextStyle(fontSize: 12),
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.end,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+                },
+              ),
             );
           }),
     );

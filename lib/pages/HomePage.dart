@@ -22,12 +22,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
 import 'MorePage.dart';
+import 'package:flutter_easyrefresh/bezier_circle_header.dart';
+
 
 import 'friend_finder.dart';
 import 'notification_feed.dart';
@@ -52,6 +55,8 @@ class _HomePageState extends State<HomePage>
 
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
+  EasyRefreshController _controller;
+
   List<dynamic> likedArray;
   String eventprofile, title;
 
@@ -67,6 +72,7 @@ class _HomePageState extends State<HomePage>
 
   void initState() {
     super.initState();
+    _controller = EasyRefreshController();
     _scrollController = ScrollController();
     _hideFabAnimController = AnimationController(
       vsync: this,
@@ -149,51 +155,130 @@ class _HomePageState extends State<HomePage>
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverPadding(
-            padding: EdgeInsets.only(left: 0, right: 0),
-            sliver: SliverGrid.count(
-              crossAxisCount: 1,
-              mainAxisSpacing: 0.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 2.25,
-              children: <Widget>[
-                // OpenContainerTransformDemo()
-                Bounce(
-                    duration: Duration(milliseconds: 300),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MOTD()));
-                    },
-                    child: Showcase(
-                      key: _motdKey,
-                      title: "BIGGEST MOOV TODAY",
-                      description: "\n     You won't want to miss this     ",
-                      titleTextStyle: TextStyle(
-                          color: TextThemes.ndBlue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                      descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-                      contentPadding: EdgeInsets.all(10),
-                      child: Container(
-                        child: MOTD(),
-                      ),
-                    )),
-              ],
+      body: EasyRefresh(
+        
+        onRefresh: () async {
+          await Future.delayed(Duration(seconds: 1), () {
+            _controller.resetLoadState();
+          });
+        },
+        onLoad: () async {
+          await Future.delayed(Duration(seconds: 1), () {
+            _controller.finishLoad();
+          });
+        },
+        enableControlFinishRefresh: false,
+        enableControlFinishLoad: true,
+        controller: _controller,
+        header: BezierCircleHeader(
+          color: TextThemes.ndGold,
+          backgroundColor: TextThemes.ndBlue
+        ),
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: <Widget>[
+            SliverPadding(
+              padding: EdgeInsets.only(left: 0, right: 0),
+              sliver: SliverGrid.count(
+                crossAxisCount: 1,
+                mainAxisSpacing: 0.0,
+                crossAxisSpacing: 10.0,
+                childAspectRatio: 2.25,
+                children: <Widget>[
+                  // OpenContainerTransformDemo()
+                  Bounce(
+                      duration: Duration(milliseconds: 300),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => MOTD()));
+                      },
+                      child: Showcase(
+                        key: _motdKey,
+                        title: "BIGGEST MOOV TODAY",
+                        description: "\n     You won't want to miss this     ",
+                        titleTextStyle: TextStyle(
+                            color: TextThemes.ndBlue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                        descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                        contentPadding: EdgeInsets.all(10),
+                        child: Container(
+                          child: MOTD(),
+                        ),
+                      )),
+                ],
+              ),
             ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            sliver: SliverGrid.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 0.0,
-              crossAxisSpacing: 0.0,
-              childAspectRatio: isLargePhone ? 1.48 : 1.5,
-              children: <Widget>[
-                Container(
-                  child: Padding(
+            SliverPadding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              sliver: SliverGrid.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0.0,
+                crossAxisSpacing: 0.0,
+                childAspectRatio: isLargePhone ? 1.48 : 1.5,
+                children: <Widget>[
+                  Container(
+                    child: Padding(
+                        padding: const EdgeInsets.only(bottom: 30),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Bounce(
+                            duration: Duration(milliseconds: 300),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FriendFinder()));
+                            },
+                            child: Showcase(
+                              key: _friendFinderKey,
+                              title: "NO MORE FOMO",
+                              description:
+                                  "\nFind your friends' plans for tonight",
+                              titleTextStyle: TextStyle(
+                                  color: TextThemes.ndBlue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                              descTextStyle:
+                                  TextStyle(fontStyle: FontStyle.italic),
+                              contentPadding: EdgeInsets.all(10),
+                              // shapeBorder: ContinuousRectangleBorder(
+                              //     borderRadius: BorderRadius.circular(15)),
+                              child: Card(
+                                elevation: 10,
+                                color: Colors.pink[50],
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      padding: EdgeInsets.all(5.0),
+                                      icon: Image.asset('lib/assets/ff.png'),
+                                      color: Colors.white,
+                                      splashColor:
+                                          Color.fromRGBO(220, 180, 57, 1.0),
+                                    ),
+                                    Align(
+                                        alignment: Alignment.center,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            "Friends' Plans",
+                                            style: TextStyle(
+                                                fontFamily: 'Open Sans',
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 16.0),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        )),
+                  ),
+                  Padding(
                       padding: const EdgeInsets.only(bottom: 30),
                       child: GestureDetector(
                         onTap: () {},
@@ -203,13 +288,12 @@ class _HomePageState extends State<HomePage>
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => FriendFinder()));
+                                    builder: (context) => FriendGroupsPage()));
                           },
                           child: Showcase(
-                            key: _friendFinderKey,
-                            title: "NO MORE FOMO",
-                            description:
-                                "\nFind your friends' plans for tonight",
+                            key: _friendGroupsKey,
+                            title: "SQUAD UP",
+                            description: "\niMessage and Snap had a baby",
                             titleTextStyle: TextStyle(
                                 color: TextThemes.ndBlue,
                                 fontWeight: FontWeight.bold,
@@ -221,25 +305,23 @@ class _HomePageState extends State<HomePage>
                             //     borderRadius: BorderRadius.circular(15)),
                             child: Card(
                               elevation: 10,
-                              color: Colors.pink[50],
+                              color: Colors.purple[50],
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   IconButton(
                                     padding: EdgeInsets.all(5.0),
-                                    icon: Image.asset('lib/assets/ff.png'),
-                                    color: Colors.white,
+                                    icon: Image.asset('lib/assets/fg1.png'),
                                     splashColor:
                                         Color.fromRGBO(220, 180, 57, 1.0),
-                                   
                                   ),
                                   Align(
                                       alignment: Alignment.center,
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Text(
-                                          "Friends' Plans",
+                                          "Friend Groups",
                                           style: TextStyle(
                                               fontFamily: 'Open Sans',
                                               fontWeight: FontWeight.bold,
@@ -252,106 +334,265 @@ class _HomePageState extends State<HomePage>
                             ),
                           ),
                         ),
-                      )),
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Bounce(
-                        duration: Duration(milliseconds: 300),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FriendGroupsPage()));
-                        },
-                        child: Showcase(
-                          key: _friendGroupsKey,
-                          title: "SQUAD UP",
-                          description: "\niMessage and Snap had a baby",
-                          titleTextStyle: TextStyle(
-                              color: TextThemes.ndBlue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
-                          descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-                          contentPadding: EdgeInsets.all(10),
-                          // shapeBorder: ContinuousRectangleBorder(
-                          //     borderRadius: BorderRadius.circular(15)),
-                          child: Card(
-                            elevation: 10,
-                            color: Colors.purple[50],
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  padding: EdgeInsets.all(5.0),
-                                  icon: Image.asset('lib/assets/fg1.png'),
-                                  splashColor:
-                                      Color.fromRGBO(220, 180, 57, 1.0),
-                                 
-                                ),
-                                Align(
-                                    alignment: Alignment.center,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        "Friend Groups",
-                                        style: TextStyle(
-                                            fontFamily: 'Open Sans',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 16.0),
-                                      ),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ))
-              ],
+                      ))
+                ],
+              ),
             ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.only(left: 10, right: 10),
-            sliver: SliverGrid.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 0.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 1.1,
-              children: <Widget>[
-                Showcase(
-                  key: _categoryButtonKey,
-                  description: "\nFind MOOVs of any category",
-                  title: "ANY VIBE",
-                  titleTextStyle: TextStyle(
-                      color: TextThemes.ndBlue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                  descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-                  contentPadding: EdgeInsets.all(10),
-                  // shapeBorder: ContinuousRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(15)),
-                  child: Container(
+            SliverPadding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              sliver: SliverGrid.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0.0,
+                crossAxisSpacing: 10.0,
+                childAspectRatio: 1.1,
+                children: <Widget>[
+                  Showcase(
+                    key: _categoryButtonKey,
+                    description: "\nFind MOOVs of any category",
+                    title: "ANY VIBE",
+                    titleTextStyle: TextStyle(
+                        color: TextThemes.ndBlue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                    descTextStyle: TextStyle(fontStyle: FontStyle.italic),
+                    contentPadding: EdgeInsets.all(10),
+                    // shapeBorder: ContinuousRectangleBorder(
+                    //     borderRadius: BorderRadius.circular(15)),
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          GestureDetector(
+                              onTap: () {},
+                              child: Bounce(
+                                  duration: Duration(milliseconds: 300),
+                                  onPressed: () {
+                                    navigateToCategoryFeed(
+                                        context, "Restaurants & Bars");
+                                  },
+                                  child: CategoryButton(
+                                      asset: 'lib/assets/food5.png'))),
+                          Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Restaurants & Bars",
+                                style: TextStyle(
+                                    fontFamily: 'Open Sans',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontSize: 16.0),
+                              ))
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                          onTap: () {},
+                          child: Bounce(
+                              duration: Duration(milliseconds: 300),
+                              onPressed: () {
+                                navigateToCategoryFeed(
+                                    context, "Pregames & Parties");
+                              },
+                              child: CategoryButton(
+                                  asset: 'lib/assets/party2.png'))),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Pregames & Parties",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 170,
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 1,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    // scrollPhysics: NeverScrollableScrollPhysics(),
+                    pauseAutoPlayOnTouch: false,
+                    reverse: false,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 6),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true,
+                    // onPageChanged: callbackFunction,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                  items: [
+                    // Container(
+                    //   height: 100,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.all(
+                    //       Radius.circular(10),
+                    //     ),
+                    //     //   boxShadow: [
+                    //     //     BoxShadow(
+                    //     //       color: Colors.grey.withOpacity(0.5),
+                    //     //       spreadRadius: 2,
+                    //     //       blurRadius: 3,
+                    //     //       offset: Offset(0, 3), // changes position of shadow
+                    //     //     ),
+                    //     //   ],
+                    //     // ),
+                    //   ),
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       showDialog(
+                    //           context: context,
+                    //           builder: (_) => CupertinoAlertDialog(
+                    //                 title: Text("No bullshit."),
+                    //                 content: Padding(
+                    //                   padding: const EdgeInsets.only(top: 8.0),
+                    //                   child: Text(
+                    //                       "Created by two students (ND '22 and ND '23), MOOV is ND's app. \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
+                    //                 ),
+                    //               ),
+                    //           barrierDismissible: true);
+                    //     },
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(8.0),
+                    //       child: Container(
+                    //         height: 100,
+                    //         child: Card(
+                    //           color: Color.fromRGBO(249, 249, 249, 1.0),
+                    //           child: Column(
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             crossAxisAlignment: CrossAxisAlignment.center,
+                    //             children: <Widget>[
+                    //               Padding(
+                    //                 padding:
+                    //                     const EdgeInsets.only(bottom: 3, top: 30),
+                    //                 child: RichText(
+                    //                   textScaleFactor: 1.75,
+                    //                   text: TextSpan(
+                    //                       style: TextThemes.mediumbody,
+                    //                       children: [
+                    //                         TextSpan(
+                    //                             text: "This is",
+                    //                             style: TextStyle(
+                    //                                 fontWeight: FontWeight.w400)),
+                    //                         TextSpan(
+                    //                             text: " our ",
+                    //                             style: TextStyle(
+                    //                                 color: TextThemes.ndGold,
+                    //                                 fontWeight: FontWeight.w600,
+                    //                                 fontStyle: FontStyle.italic)),
+                    //                         TextSpan(
+                    //                             text: "app",
+                    //                             style: TextStyle(
+                    //                                 fontWeight: FontWeight.w400)),
+                    //                       ]),
+                    //                 ),
+                    //               ),
+                    //               Padding(
+                    //                 padding: const EdgeInsets.only(left: 0.0),
+                    //                 child: Center(
+                    //                   child: RichText(
+                    //                     textScaleFactor: 1.75,
+                    //                     text: TextSpan(
+                    //                         style: TextThemes.mediumbody,
+                    //                         children: [
+                    //                           TextSpan(
+                    //                               style: TextThemes.mediumbody,
+                    //                               children: [
+                    //                                 TextSpan(
+                    //                                     text: "Always",
+                    //                                     style: TextStyle(
+                    //                                         fontWeight:
+                    //                                             FontWeight.w400)),
+                    //                                 TextSpan(
+                    //                                     text: " know the ",
+                    //                                     style: TextStyle(
+                    //                                         fontWeight:
+                    //                                             FontWeight.w400)),
+                    //                                 TextSpan(
+                    //                                     text: "MOOV",
+                    //                                     style: TextStyle(
+                    //                                         color: TextThemes.ndGold,
+                    //                                         fontWeight:
+                    //                                             FontWeight.w600,
+                    //                                         fontStyle:
+                    //                                             FontStyle.italic)),
+                    //                               ]),
+                    //                         ]),
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               Align(
+                    //                 alignment: Alignment.center,
+                    //                 child: Padding(
+                    //                   padding:
+                    //                       const EdgeInsets.only(top: 2, bottom: 0),
+                    //                   child: RichText(
+                    //                     textScaleFactor: 1.75,
+                    //                     text: TextSpan(
+                    //                         style: TextThemes.mediumbody,
+                    //                         children: [
+                    //                           TextSpan(
+                    //                               text: "Go ",
+                    //                               style: TextStyle(
+                    //                                   fontWeight: FontWeight.w400)),
+                    //                           TextSpan(
+                    //                               text: "Irish",
+                    //                               style: TextStyle(
+                    //                                   color: TextThemes.ndGold,
+                    //                                   fontWeight: FontWeight.w600,
+                    //                                   fontStyle: FontStyle.italic)),
+                    //                         ]),
+                    //                   ),
+                    //                 ),
+                    //               )
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // MapTest(),
+                    PollView(),
+                    SuggestionBoxCarousel(),
+                    GroupCarousel(),
+                    HottestMOOV()
+                  ]),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.only(left: 10, right: 10, top: 20),
+              sliver: SliverGrid.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 0.0,
+                crossAxisSpacing: 10.0,
+                childAspectRatio: .75,
+                children: <Widget>[
+                  Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         GestureDetector(
-                            onTap: () {},
-                            child: Bounce(
-                                duration: Duration(milliseconds: 300),
-                                onPressed: () {
-                                  navigateToCategoryFeed(
-                                      context, "Restaurants & Bars");
-                                },
-                                child: CategoryButton(
-                                    asset: 'lib/assets/food5.png'))),
+                            onTap: () {
+                              navigateToCategoryFeed(context, "Clubs");
+                            },
+                            child:
+                                CategoryButton(asset: 'lib/assets/club2.png')),
                         Align(
                             alignment: Alignment.center,
                             child: Text(
-                              "Restaurants & Bars",
+                              "Clubs",
                               style: TextStyle(
                                   fontFamily: 'Open Sans',
                                   fontWeight: FontWeight.bold,
@@ -361,213 +602,19 @@ class _HomePageState extends State<HomePage>
                       ],
                     ),
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                        onTap: () {},
-                        child: Bounce(
-                            duration: Duration(milliseconds: 300),
-                            onPressed: () {
-                              navigateToCategoryFeed(
-                                  context, "Pregames & Parties");
-                            },
-                            child: CategoryButton(
-                                asset: 'lib/assets/party2.png'))),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Pregames & Parties",
-                          style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16.0),
-                        ))
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: CarouselSlider(
-                options: CarouselOptions(
-                  height: 170,
-                  aspectRatio: 16 / 9,
-                  viewportFraction: 1,
-                  initialPage: 0,
-                  enableInfiniteScroll: true,
-                  // scrollPhysics: NeverScrollableScrollPhysics(),
-                  pauseAutoPlayOnTouch: false,
-                  reverse: false,
-                  autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 6),
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enlargeCenterPage: true,
-                  // onPageChanged: callbackFunction,
-                  scrollDirection: Axis.horizontal,
-                ),
-                items: [
-                  // Container(
-                  //   height: 100,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.all(
-                  //       Radius.circular(10),
-                  //     ),
-                  //     //   boxShadow: [
-                  //     //     BoxShadow(
-                  //     //       color: Colors.grey.withOpacity(0.5),
-                  //     //       spreadRadius: 2,
-                  //     //       blurRadius: 3,
-                  //     //       offset: Offset(0, 3), // changes position of shadow
-                  //     //     ),
-                  //     //   ],
-                  //     // ),
-                  //   ),
-                  //   child: GestureDetector(
-                  //     onTap: () {
-                  //       showDialog(
-                  //           context: context,
-                  //           builder: (_) => CupertinoAlertDialog(
-                  //                 title: Text("No bullshit."),
-                  //                 content: Padding(
-                  //                   padding: const EdgeInsets.only(top: 8.0),
-                  //                   child: Text(
-                  //                       "Created by two students (ND '22 and ND '23), MOOV is ND's app. \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
-                  //                 ),
-                  //               ),
-                  //           barrierDismissible: true);
-                  //     },
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       child: Container(
-                  //         height: 100,
-                  //         child: Card(
-                  //           color: Color.fromRGBO(249, 249, 249, 1.0),
-                  //           child: Column(
-                  //             mainAxisSize: MainAxisSize.min,
-                  //             crossAxisAlignment: CrossAxisAlignment.center,
-                  //             children: <Widget>[
-                  //               Padding(
-                  //                 padding:
-                  //                     const EdgeInsets.only(bottom: 3, top: 30),
-                  //                 child: RichText(
-                  //                   textScaleFactor: 1.75,
-                  //                   text: TextSpan(
-                  //                       style: TextThemes.mediumbody,
-                  //                       children: [
-                  //                         TextSpan(
-                  //                             text: "This is",
-                  //                             style: TextStyle(
-                  //                                 fontWeight: FontWeight.w400)),
-                  //                         TextSpan(
-                  //                             text: " our ",
-                  //                             style: TextStyle(
-                  //                                 color: TextThemes.ndGold,
-                  //                                 fontWeight: FontWeight.w600,
-                  //                                 fontStyle: FontStyle.italic)),
-                  //                         TextSpan(
-                  //                             text: "app",
-                  //                             style: TextStyle(
-                  //                                 fontWeight: FontWeight.w400)),
-                  //                       ]),
-                  //                 ),
-                  //               ),
-                  //               Padding(
-                  //                 padding: const EdgeInsets.only(left: 0.0),
-                  //                 child: Center(
-                  //                   child: RichText(
-                  //                     textScaleFactor: 1.75,
-                  //                     text: TextSpan(
-                  //                         style: TextThemes.mediumbody,
-                  //                         children: [
-                  //                           TextSpan(
-                  //                               style: TextThemes.mediumbody,
-                  //                               children: [
-                  //                                 TextSpan(
-                  //                                     text: "Always",
-                  //                                     style: TextStyle(
-                  //                                         fontWeight:
-                  //                                             FontWeight.w400)),
-                  //                                 TextSpan(
-                  //                                     text: " know the ",
-                  //                                     style: TextStyle(
-                  //                                         fontWeight:
-                  //                                             FontWeight.w400)),
-                  //                                 TextSpan(
-                  //                                     text: "MOOV",
-                  //                                     style: TextStyle(
-                  //                                         color: TextThemes.ndGold,
-                  //                                         fontWeight:
-                  //                                             FontWeight.w600,
-                  //                                         fontStyle:
-                  //                                             FontStyle.italic)),
-                  //                               ]),
-                  //                         ]),
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //               Align(
-                  //                 alignment: Alignment.center,
-                  //                 child: Padding(
-                  //                   padding:
-                  //                       const EdgeInsets.only(top: 2, bottom: 0),
-                  //                   child: RichText(
-                  //                     textScaleFactor: 1.75,
-                  //                     text: TextSpan(
-                  //                         style: TextThemes.mediumbody,
-                  //                         children: [
-                  //                           TextSpan(
-                  //                               text: "Go ",
-                  //                               style: TextStyle(
-                  //                                   fontWeight: FontWeight.w400)),
-                  //                           TextSpan(
-                  //                               text: "Irish",
-                  //                               style: TextStyle(
-                  //                                   color: TextThemes.ndGold,
-                  //                                   fontWeight: FontWeight.w600,
-                  //                                   fontStyle: FontStyle.italic)),
-                  //                         ]),
-                  //                   ),
-                  //                 ),
-                  //               )
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // MapTest(),
-                  PollView(),
-                  SuggestionBoxCarousel(),
-                  GroupCarousel(),
-                  HottestMOOV()
-                ]),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 20),
-            sliver: SliverGrid.count(
-              crossAxisCount: 3,
-              mainAxisSpacing: 0.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: .75,
-              children: <Widget>[
-                Container(
-                  child: Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
                           onTap: () {
-                            navigateToCategoryFeed(context, "Clubs");
+                            navigateToCategoryFeed(context, "Sports");
                           },
-                          child: CategoryButton(asset: 'lib/assets/club2.png')),
+                          child: CategoryButton(
+                              asset: 'lib/assets/sportbutton1.png')),
                       Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "Clubs",
+                            "Sports",
                             style: TextStyle(
                                 fontFamily: 'Open Sans',
                                 fontWeight: FontWeight.bold,
@@ -576,164 +623,145 @@ class _HomePageState extends State<HomePage>
                           ))
                     ],
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          navigateToCategoryFeed(context, "Sports");
-                        },
-                        child: CategoryButton(
-                            asset: 'lib/assets/sportbutton1.png')),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Sports",
-                          style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16.0),
-                        ))
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          navigateToCategoryFeed(context, "Shows");
-                        },
-                        child: CategoryButton(
-                            asset: 'lib/assets/filmbutton1.png')),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Shows",
-                          style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16.0),
-                        ))
-                  ],
-                ),
-
-                // Column(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: <Widget>[
-                //     GestureDetector(
-                //         onTap: () {
-                //           navigateToShowFeed(context);
-                //         },
-                //         child: CategoryButton(
-                //             asset: 'lib/assets/filmbutton1.png')),
-                //     Align(
-                //         alignment: Alignment.center,
-                //         child: Text(
-                //           "Shows",
-                //           style: TextStyle(
-                //               fontFamily: 'Open Sans',
-                //               fontWeight: FontWeight.bold,
-                //               color: Colors.black,
-                //               fontSize: 16.0),
-                //         ))
-                //   ],
-                // ),
-              ],
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-            sliver: SliverGrid.extent(
-              maxCrossAxisExtent: 200,
-              mainAxisSpacing: 15.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: isLargePhone ? 1.187 : 1.1,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          navigateToCategoryFeed(context, "Virtual");
-                        },
-                        child:
-                            CategoryButton(asset: 'lib/assets/virtual1.png')),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Virtual",
-                          style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16.0),
-                        ))
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          navigateToCategoryFeed(context, "Recreation");
-                        },
-                        child: CategoryButton(asset: 'lib/assets/rec.png')),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Recreation",
-                          style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16.0),
-                        ))
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MorePage()));
-                },
-                child: Card(
-                  margin: EdgeInsets.all(15),
-                  color: TextThemes.ndBlue,
-                  child: Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 25, top: 25),
-                        child: RichText(
-                          textScaleFactor: 1.75,
-                          text:
-                              TextSpan(style: TextThemes.mediumbody, children: [
-                            TextSpan(
-                                text: "More ",
-                                style: TextStyle(color: Colors.white)),
-                            TextSpan(
-                                text: "MOOVs",
-                                style: TextStyle(color: TextThemes.ndGold)),
-                          ]),
-                        ),
-                      ),
+                      GestureDetector(
+                          onTap: () {
+                            navigateToCategoryFeed(context, "Shows");
+                          },
+                          child: CategoryButton(
+                              asset: 'lib/assets/filmbutton1.png')),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Shows",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
                     ],
+                  ),
+
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: <Widget>[
+                  //     GestureDetector(
+                  //         onTap: () {
+                  //           navigateToShowFeed(context);
+                  //         },
+                  //         child: CategoryButton(
+                  //             asset: 'lib/assets/filmbutton1.png')),
+                  //     Align(
+                  //         alignment: Alignment.center,
+                  //         child: Text(
+                  //           "Shows",
+                  //           style: TextStyle(
+                  //               fontFamily: 'Open Sans',
+                  //               fontWeight: FontWeight.bold,
+                  //               color: Colors.black,
+                  //               fontSize: 16.0),
+                  //         ))
+                  //   ],
+                  // ),
+                ],
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+              sliver: SliverGrid.extent(
+                maxCrossAxisExtent: 200,
+                mainAxisSpacing: 15.0,
+                crossAxisSpacing: 10.0,
+                childAspectRatio: isLargePhone ? 1.187 : 1.1,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                          onTap: () {
+                            navigateToCategoryFeed(context, "Virtual");
+                          },
+                          child:
+                              CategoryButton(asset: 'lib/assets/virtual1.png')),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Virtual",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                          onTap: () {
+                            navigateToCategoryFeed(context, "Recreation");
+                          },
+                          child: CategoryButton(asset: 'lib/assets/rec.png')),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Recreation",
+                            style: TextStyle(
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 16.0),
+                          ))
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MorePage()));
+                  },
+                  child: Card(
+                    margin: EdgeInsets.all(15),
+                    color: TextThemes.ndBlue,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 25, top: 25),
+                          child: RichText(
+                            textScaleFactor: 1.75,
+                            text: TextSpan(
+                                style: TextThemes.mediumbody,
+                                children: [
+                                  TextSpan(
+                                      text: "More ",
+                                      style: TextStyle(color: Colors.white)),
+                                  TextSpan(
+                                      text: "MOOVs",
+                                      style:
+                                          TextStyle(color: TextThemes.ndGold)),
+                                ]),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
     // return MaterialApp(
