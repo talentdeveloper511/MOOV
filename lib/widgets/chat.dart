@@ -43,7 +43,7 @@ class ChatState extends State<Chat> {
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) =>
-              MessageDetail(directMessageId, otherPerson),
+              MessageDetail(directMessageId, otherPerson, false, " "),
           transitionDuration: Duration(seconds: 0),
         ),
       );
@@ -70,26 +70,23 @@ class ChatState extends State<Chat> {
 
   buildChat() {
     CollectionReference reference = isGroupChat
-        ? groupsRef.doc(gid).collection('chat')
+        ? messagesRef.doc(gid).collection('chat')
         : messagesRef.doc(directMessageId).collection('chat');
     reference.snapshots().listen((querySnapshot) {
       querySnapshot.docChanges.forEach((change) {
-
-
-if(querySnapshot.docs.isNotEmpty){
-    Timer(
-            Duration(milliseconds: 200),
-            () => _scrollController.animateTo(
-                _scrollController.position.maxScrollExtent,
-                curve: Curves.easeIn,
-                duration: Duration(milliseconds: 300)));
-}
-    
+        if (querySnapshot.docs.isNotEmpty) {
+          Timer(
+              Duration(milliseconds: 200),
+              () => _scrollController.animateTo(
+                  _scrollController.position.maxScrollExtent,
+                  curve: Curves.easeIn,
+                  duration: Duration(milliseconds: 300)));
+        }
       });
     });
     return StreamBuilder(
         stream: isGroupChat
-            ? groupsRef
+            ? messagesRef
                 .doc(gid)
                 .collection('chat')
                 // .orderBy("timestamp", descending: false)
@@ -99,7 +96,8 @@ if(querySnapshot.docs.isNotEmpty){
           if (snapshot.hasError) {
             return new Text('Error: ${snapshot.error}');
           }
-          if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting ||
+              !snapshot.hasData) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -135,13 +133,14 @@ if(querySnapshot.docs.isNotEmpty){
     }
     if (commentController.text.isNotEmpty) {
       isGroupChat
-          ? groupsRef
+          ? messagesRef
               .doc(gid)
               .collection("chat")
               .doc(DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
                   currentUser.id)
               .set({
+              "seen": false,
               "displayName": currentUser.displayName,
               "comment": commentController.text,
               "timestamp": timestamp,
@@ -172,22 +171,34 @@ if(querySnapshot.docs.isNotEmpty){
               "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
                   currentUser.id,
+                  "gid": " ",
               "directMessageId": directMessageId,
               "isGroupChat": false,
-              "gid": "",
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "middleFinger": false
             });
       isGroupChat
-          ? null
+          ? messagesRef.doc(gid).set({
+              "lastMessage": commentController.text,
+              "seen": false,
+              "sender": currentUser.id,
+              "receiver": otherPerson,
+              "timestamp": timestamp,
+              "gid": gid,
+              "directMessageId": directMessageId,
+              "people": [currentUser.id, otherPerson],
+              "isGroupChat": true,
+            }, SetOptions(merge: true))
           : messagesRef.doc(directMessageId).set({
               "lastMessage": commentController.text,
               "seen": false,
               "sender": currentUser.id,
               "receiver": otherPerson,
               "timestamp": timestamp,
+              "gid": "",
               "directMessageId": directMessageId,
-              "people": [currentUser.id, otherPerson]
+              "people": [currentUser.id, otherPerson],
+              "isGroupChat": false,
             }, SetOptions(merge: true));
       Timer(
           Duration(milliseconds: 200),
@@ -245,9 +256,10 @@ if(querySnapshot.docs.isNotEmpty){
                             Navigator.pushReplacement(
                               context,
                               PageRouteBuilder(
-                                pageBuilder: (context, animation1,
-                                        animation2) =>
-                                    MessageDetail(directMessageId, otherPerson),
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        MessageDetail(directMessageId,
+                                            otherPerson, false, " "),
                                 transitionDuration: Duration(seconds: 0),
                               ),
                             );
@@ -524,7 +536,7 @@ class _CommentState extends State<Comment> {
             onPressed: () {
               Navigator.pop(context);
               isGroupChat
-                  ? groupsRef
+                  ? messagesRef
                       .doc(gid)
                       .collection("chat")
                       .doc(millis + " " + currentUser.id)

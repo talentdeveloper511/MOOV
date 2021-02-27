@@ -528,7 +528,7 @@ class MessagesHub extends StatelessWidget {
 class MessageList extends StatelessWidget {
   MessageList({Key key}) : super(key: key);
 
-   EasyRefreshController _controller;
+  EasyRefreshController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -678,10 +678,9 @@ class MessageList extends StatelessWidget {
                   ),
                 ),
               ));
-            
 
             return EasyRefresh(
-                   onRefresh: () async {
+              onRefresh: () async {
                 await Future.delayed(Duration(seconds: 1), () {
                   // _controller.resetLoadState();
                 });
@@ -700,117 +699,279 @@ class MessageList extends StatelessWidget {
               controller: _controller,
               header: BezierCircleHeader(
                   color: TextThemes.ndGold, backgroundColor: TextThemes.ndBlue),
-                              
-                          child: ListView.builder(
-                itemCount: snapshot.data.docs.length + 1,
+              child: ListView.builder(
+                itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   //adding da button
-                  if (index == snapshot.data.docs.length) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 75.0),
-                      child: Container(),
-                    );
-                  }
 
                   DocumentSnapshot course = snapshot.data.docs[index];
                   List people = course['people'];
                   people.removeWhere((item) => item == currentUser.id);
                   String otherPerson = people[0];
                   Timestamp timestamp = course['timestamp'];
+                  bool isGroupChat = course['isGroupChat'];
+                  String gid = course['gid'];
 
-                  // print(receiver);
-                  // print(currentUser.id);
-
-                  return StreamBuilder(
-                      stream: usersRef.doc(otherPerson).snapshots(),
-                      builder: (context, snapshot) {
-                        // print(index);
-                        if (!snapshot.hasData || snapshot.data == null) {
-                          return circularProgress();
-                        }
-                        return GestureDetector(
-                          onTap: () {
-                            if (currentUser.id != course['sender']) {
-                              Database()
-                                  .setMessagesSeen(course['directMessageId']);
+                  return (isGroupChat == false)
+                      ? StreamBuilder(
+                          stream: usersRef.doc(otherPerson).snapshots(),
+                          builder: (context, snapshot) {
+                            // print(index);
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return circularProgress();
                             }
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MessageDetail(
-                                        course['directMessageId'], otherPerson)));
-                            print(currentUser.id);
-                            print(course['sender']);
-                          },
-                          child: Container(
-                            height: 100,
-                            child: Row(
-                              children: [
-                                Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 0, left: 15.0, right: 10),
-                                    child: CircleAvatar(
-                                      radius: 30.0,
-                                      backgroundImage: NetworkImage(
-                                        snapshot.data['photoUrl'],
+                            return GestureDetector(
+                              onTap: () {
+                                if (currentUser.id != course['sender']) {
+                                  Database().setMessagesSeen(
+                                      course['directMessageId']);
+                                }
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MessageDetail(
+                                            course['directMessageId'],
+                                            otherPerson,
+                                            false, " ")));
+                              },
+                              child: Container(
+                                height: 100,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 0, left: 15.0, right: 10),
+                                        child: CircleAvatar(
+                                          radius: 30.0,
+                                          backgroundImage: NetworkImage(
+                                            snapshot.data['photoUrl'],
+                                          ),
+                                        )),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 30),
+                                        child: Column(children: <Widget>[
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .46,
+                                            child: course['seen'] == true ||
+                                                    currentUser.id ==
+                                                        course['sender']
+                                                ? Text(
+                                                    snapshot
+                                                        .data['displayName'],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color:
+                                                            Colors.grey[700]))
+                                                : Text(
+                                                    snapshot
+                                                        .data['displayName'],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .46,
+                                            child: course['seen'] == true ||
+                                                    currentUser.id ==
+                                                        course['sender']
+                                                ? Text(course['lastMessage'],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color:
+                                                            Colors.grey[700]))
+                                                : Text(course['lastMessage'],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                          )
+                                        ])),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        timeago.format(timestamp.toDate()),
+                                        style: TextStyle(fontSize: 12),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.end,
                                       ),
-                                    )),
-                                Padding(
-                                    padding: EdgeInsets.only(top: 30),
-                                    child: Column(children: <Widget>[
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width *
-                                            .46,
-                                        child: course['seen'] == true ||
-                                                currentUser.id == course['sender']
-                                            ? Text(snapshot.data['displayName'],
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.grey[700]))
-                                            : Text(snapshot.data['displayName'],
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold)),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
+                      : StreamBuilder(
+                          stream: groupsRef.doc(gid).snapshots(),
+                          builder: (context, snapshot) {
+                            // print(index);
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return circularProgress();
+                            }
+                            return GestureDetector(
+                              onTap: () {
+                                print(otherPerson);
+                                if (currentUser.id != course['sender']) {
+                                  Database().setMessagesSeen(gid);
+                                }
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MessageDetail(
+                                            " ", " ", true, gid)));
+                              },
+                              child: Container(
+                                height: 100,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 0, left: 0.0, right: 0),
+                                      child: SizedBox(
+                                        width: isLargePhone
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.24
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.24,
+                                        height: isLargePhone
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.1
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.1,
+                                        child: Container(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  snapshot.data['groupPic'],
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              left: 10,
+                                              top: 0,
+                                              right: 10,
+                                              bottom: 0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 5,
+                                                blurRadius: 7,
+                                                offset: Offset(0,
+                                                    3), // changes position of shadow
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width *
-                                            .46,
-                                        child: course['seen'] == true ||
-                                                currentUser.id == course['sender']
-                                            ? Text(course['lastMessage'],
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.grey[700]))
-                                            : Text(course['lastMessage'],
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold)),
-                                      )
-                                    ])),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    timeago.format(timestamp.toDate()),
-                                    style: TextStyle(fontSize: 12),
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.end,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      });
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 30),
+                                        child: Column(children: <Widget>[
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .46,
+                                            child: course['seen'] == true ||
+                                                    currentUser.id ==
+                                                        course['sender']
+                                                ? Text(
+                                                    snapshot.data['groupName'],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color:
+                                                            Colors.grey[700]))
+                                                : Text(
+                                                    snapshot.data['groupName'],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .46,
+                                            child: course['seen'] == true ||
+                                                    currentUser.id ==
+                                                        course['sender']
+                                                ? Text(course['lastMessage'],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color:
+                                                            Colors.grey[700]))
+                                                : Text(course['lastMessage'],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                          )
+                                        ])),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        timeago.format(timestamp.toDate()),
+                                        style: TextStyle(fontSize: 12),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
                 },
               ),
             );
@@ -820,18 +981,20 @@ class MessageList extends StatelessWidget {
 }
 
 class MessageDetail extends StatefulWidget {
-  final String otherPerson, directMessageId;
-  MessageDetail(this.directMessageId, this.otherPerson);
+  final String otherPerson, directMessageId, gid;
+  final bool isGroupChat;
+  MessageDetail(this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
 
   @override
-  _MessageDetailState createState() =>
-      _MessageDetailState(this.directMessageId, this.otherPerson);
+  _MessageDetailState createState() => _MessageDetailState(
+      this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
 }
 
 class _MessageDetailState extends State<MessageDetail> {
-  String otherPerson, directMessageId;
+  String otherPerson, directMessageId, gid;
+  bool isGroupChat;
 
-  _MessageDetailState(this.directMessageId, this.otherPerson);
+  _MessageDetailState(this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
 
   @override
   Widget build(BuildContext context) {
@@ -864,33 +1027,74 @@ class _MessageDetailState extends State<MessageDetail> {
                       (Route<dynamic> route) => false,
                     );
                   },
-                  child: StreamBuilder(
-                      stream: usersRef.doc(otherPerson).snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData || snapshot.data == null) {
-                          return circularProgress();
-                        }
+                  child: (isGroupChat == false)
+                      ? StreamBuilder(
+                          stream: usersRef.doc(otherPerson).snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return circularProgress();
+                            }
 
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 20.0,
-                                backgroundImage:
-                                    NetworkImage(snapshot.data['photoUrl']),
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 20.0,
+                                    backgroundImage:
+                                        NetworkImage(snapshot.data['photoUrl']),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      snapshot.data['displayName'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  snapshot.data['displayName'],
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      })),
+                            );
+                          })
+                      : StreamBuilder(
+                          stream: groupsRef.doc(gid).snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return circularProgress();
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                 Container(
+                                                                      child:
+                                                                          ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(15)),
+                                                                        child:
+                                                                            CachedNetworkImage(
+                                                                          imageUrl:
+                                                                            snapshot.data['groupPic'],
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                         height:
+                                                                             MediaQuery.of(context).size.height * 0.06,
+                                                                        width:
+                                                                               MediaQuery.of(context).size.width * 0.15,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      snapshot.data['groupName'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          })),
             ],
           ),
         ),
@@ -899,11 +1103,17 @@ class _MessageDetailState extends State<MessageDetail> {
         child: Container(
           child: Column(
             children: [
-              Chat(
-                  gid: "",
-                  isGroupChat: false,
-                  directMessageId: directMessageId,
-                  otherPerson: otherPerson),
+              isGroupChat
+                  ? Chat(
+                      gid: gid,
+                      isGroupChat: true,
+                      directMessageId: " ",
+                      otherPerson: " ")
+                  : Chat(
+                      gid: " ",
+                      isGroupChat: false,
+                      directMessageId: directMessageId,
+                      otherPerson: otherPerson),
               SizedBox(height: 20),
               MessageScreenshot()
             ],

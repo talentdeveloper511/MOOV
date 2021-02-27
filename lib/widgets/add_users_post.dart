@@ -1781,7 +1781,7 @@ class _MessageResultAddState extends State<MessageResultAdd> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => MessageDetail(directMessageId, userId)));
+              builder: (context) => MessageDetail(directMessageId, userId, false, " ")));
     });
   }
 
@@ -1812,7 +1812,7 @@ class _MessageResultAddState extends State<MessageResultAdd> {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: 20),
+                  fontSize: 17),
             ),
           ),
           verifiedStatus == 2

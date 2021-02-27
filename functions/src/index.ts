@@ -38,7 +38,7 @@ exports.onCreateActivityFeedItem = functions.firestore
           body = `${activityFeedItem.username} is going to your MOOV`;
           break;
         case "friendgroup":
-          body = `${activityFeedItem.username} added you to a friend group`;
+          body = `${activityFeedItem.username} added you to a Friend Group`;
           break;
         default:
           break;
