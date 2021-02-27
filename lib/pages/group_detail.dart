@@ -520,6 +520,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                   directMessageId: " ",
                                                   gid: gid,
                                                   isGroupChat: true,
+                                                  members: members,
                                                 ),
                                               ),
                                             ),

@@ -174,6 +174,7 @@ class _HomePageState extends State<HomePage>
           color: TextThemes.ndGold,
           backgroundColor: TextThemes.ndBlue
         ),
+        bottomBouncing: false,
         child: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[

@@ -20,20 +20,28 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_2.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
+import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Chat extends StatefulWidget {
   final String gid, directMessageId, otherPerson;
   final bool isGroupChat;
+  final List<dynamic> members;
 
-  Chat({this.gid, this.isGroupChat, this.directMessageId, this.otherPerson});
+  Chat(
+      {this.gid,
+      this.isGroupChat,
+      this.directMessageId,
+      this.otherPerson,
+      this.members});
 
   @override
   ChatState createState() => ChatState(
       gid: this.gid,
       isGroupChat: this.isGroupChat,
       directMessageId: this.directMessageId,
-      otherPerson: this.otherPerson);
+      otherPerson: this.otherPerson,
+      members: this.members);
 }
 
 class ChatState extends State<Chat> {
@@ -53,12 +61,13 @@ class ChatState extends State<Chat> {
   TextEditingController commentController = TextEditingController();
   final String gid, otherPerson;
   String directMessageId;
+  final List<dynamic> members;
   final bool isGroupChat;
   final _scrollController = ScrollController();
   bool messages = false;
 
   ChatState(
-      {this.gid, this.isGroupChat, this.directMessageId, this.otherPerson});
+      {this.gid, this.isGroupChat, this.directMessageId, this.otherPerson, this.members});
 
   adjustChat() {
     _scrollController.animateTo(
@@ -143,7 +152,7 @@ class ChatState extends State<Chat> {
               "seen": false,
               "displayName": currentUser.displayName,
               "comment": commentController.text,
-              "timestamp": timestamp,
+              "timestamp": DateTime.now().millisecondsSinceEpoch,
               "avatarUrl": currentUser.photoUrl,
               "userId": currentUser.id,
               "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
@@ -165,13 +174,13 @@ class ChatState extends State<Chat> {
               "seen": false,
               "displayName": currentUser.displayName,
               "comment": commentController.text,
-              "timestamp": timestamp,
+              "timestamp": DateTime.now().millisecondsSinceEpoch,
               "avatarUrl": currentUser.photoUrl,
               "userId": currentUser.id,
               "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
                   currentUser.id,
-                  "gid": " ",
+              "gid": " ",
               "directMessageId": directMessageId,
               "isGroupChat": false,
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
@@ -183,10 +192,10 @@ class ChatState extends State<Chat> {
               "seen": false,
               "sender": currentUser.id,
               "receiver": otherPerson,
-              "timestamp": timestamp,
+              "timestamp": DateTime.now().millisecondsSinceEpoch,
               "gid": gid,
               "directMessageId": directMessageId,
-              "people": [currentUser.id, otherPerson],
+              "people": members,
               "isGroupChat": true,
             }, SetOptions(merge: true))
           : messagesRef.doc(directMessageId).set({
@@ -194,7 +203,7 @@ class ChatState extends State<Chat> {
               "seen": false,
               "sender": currentUser.id,
               "receiver": otherPerson,
-              "timestamp": timestamp,
+              "timestamp": DateTime.now().millisecondsSinceEpoch,
               "gid": "",
               "directMessageId": directMessageId,
               "people": [currentUser.id, otherPerson],
@@ -291,7 +300,7 @@ class Comment extends StatefulWidget {
   final String userId;
   final String avatarUrl;
   final String comment;
-  final Timestamp timestamp;
+  final int timestamp;
   final String chatId;
   final String gid;
   final String millis;
@@ -347,7 +356,7 @@ class _CommentState extends State<Comment> {
   final String userId;
   final String avatarUrl;
   final String comment;
-  final Timestamp timestamp;
+  final int timestamp;
   final String chatId;
   final String gid;
   final String millis;
@@ -369,6 +378,16 @@ class _CommentState extends State<Comment> {
 
   @override
   Widget build(BuildContext context) {
+    var now = new DateTime.now();
+    var format = new DateFormat('').add_jm();
+    var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
+    var diff = now.difference(date);
+    String timeAgo = '';
+
+    if (diff.inMicroseconds >= 0) {
+      timeAgo = format.format(now);
+    }
+
     return Column(
       children: <Widget>[
         (userId != currentUser.id)
@@ -450,7 +469,7 @@ class _CommentState extends State<Comment> {
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Text(timeago.format(timestamp.toDate())),
+                  child: Text(timeAgo),
                 ),
                 trailing: Text(''),
               )
@@ -505,8 +524,7 @@ class _CommentState extends State<Comment> {
                             ])),
                     subtitle: Padding(
                       padding: const EdgeInsets.all(3.0),
-                      child: Text(timeago.format(timestamp.toDate()),
-                          textAlign: TextAlign.right),
+                      child: Text(timeAgo, textAlign: TextAlign.right),
                     ),
                     trailing: Padding(
                       padding: const EdgeInsets.only(top: 8.0),

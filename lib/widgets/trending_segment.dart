@@ -117,6 +117,7 @@ class TrendingSegmentState extends State<TrendingSegment>
               controller: _controller,
               header: BezierCircleHeader(
                   color: Colors.pinkAccent[200], backgroundColor: TextThemes.ndBlue),
+                  bottomBouncing: false,
               child: ListView(children: [
                 Container(
                   child: StreamBuilder(

@@ -2,7 +2,9 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
 
 import 'package:MOOV/utils/themes_styles.dart';
@@ -16,8 +18,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class MessagesHub extends StatelessWidget {
@@ -592,92 +594,95 @@ class MessageList extends StatelessWidget {
       body: StreamBuilder(
           stream: messagesRef //featured
               .where("people", arrayContains: currentUser.id)
-              // .orderBy("timestamp")
+              .orderBy("timestamp", descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || snapshot.data.docs.length == 0)
               return SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
                   child: Container(
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.pink[300], Colors.pink[200]],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(top: 30.0, bottom: 20),
-                          child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                  style: TextThemes.mediumbody,
-                                  children: [
-                                    TextSpan(
-                                        text: "Spark",
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.w300)),
-                                    TextSpan(
-                                        text: " a conversation",
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.w600)),
-                                    TextSpan(
-                                        text: ".",
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.w300))
-                                  ]))),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 75.0),
-                        child: RaisedButton(
-                          onPressed: () => Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.bottomToTop,
-                                child: SearchUsersMessage(),
-                              )),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(80.0)),
-                          padding: EdgeInsets.all(0.0),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    TextThemes.ndBlue,
-                                    Color(0xff64B6FF)
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.pink[300], Colors.pink[200]],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 30.0, bottom: 20),
+                              child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                      style: TextThemes.mediumbody,
+                                      children: [
+                                        TextSpan(
+                                            text: "Spark",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w300)),
+                                        TextSpan(
+                                            text: " a conversation",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w600)),
+                                        TextSpan(
+                                            text: ".",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w300))
+                                      ]))),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 75.0),
+                            child: RaisedButton(
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    type: PageTransitionType.bottomToTop,
+                                    child: SearchUsersMessage(),
+                                  )),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(80.0)),
+                              padding: EdgeInsets.all(0.0),
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        TextThemes.ndBlue,
+                                        Color(0xff64B6FF)
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth: 300.0, minHeight: 50.0),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "New Conversation",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(30.0)),
-                            child: Container(
-                              constraints: BoxConstraints(
-                                  maxWidth: 300.0, minHeight: 50.0),
-                              alignment: Alignment.center,
-                              child: Text(
-                                "New Conversation",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
                               ),
                             ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Image.asset('lib/assets/ff.png'),
+                          )
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Image.asset('lib/assets/ff.png'),
-                      )
-                    ],
-                  ),
-                ),
-              ));
+                    ),
+                  ));
 
             return EasyRefresh(
               onRefresh: () async {
@@ -699,6 +704,7 @@ class MessageList extends StatelessWidget {
               controller: _controller,
               header: BezierCircleHeader(
                   color: TextThemes.ndGold, backgroundColor: TextThemes.ndBlue),
+              bottomBouncing: false,
               child: ListView.builder(
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
@@ -708,9 +714,37 @@ class MessageList extends StatelessWidget {
                   List people = course['people'];
                   people.removeWhere((item) => item == currentUser.id);
                   String otherPerson = people[0];
-                  Timestamp timestamp = course['timestamp'];
+                  int timestamp = course['timestamp'];
                   bool isGroupChat = course['isGroupChat'];
                   String gid = course['gid'];
+                  
+                  var now = new DateTime.now();
+                  var format = new DateFormat('HH:mm a');
+                  var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
+                  var diff = now.difference(date);
+                  String timeAgo = '';
+
+                  timeAgo = 'a moment ago';
+
+                  if (diff.inMinutes >= 2 && diff.inMinutes <= 60) {
+                    timeAgo = (diff.inMinutes).toString() + ' minutes ago';
+                  }
+                  if (diff.inMinutes >= 60) {
+                    timeAgo =
+                        (diff.inMinutes / 60).round().toString() + ' hours ago';
+                  }
+                  if (1440 <= diff.inMinutes && diff.inMinutes <= 2880) {
+                    timeAgo =
+                        (diff.inMinutes / 1440).round().toString() + ' day ago';
+                  }
+                  if (diff.inMinutes >= 2880) {
+                    timeAgo = (diff.inMinutes / 1440).round().toString() +
+                        ' days ago';
+                  }
+                  if (diff.inMinutes >= 10080) {
+                    timeAgo = 'long ass time ago';
+                  }
+
 
                   return (isGroupChat == false)
                       ? StreamBuilder(
@@ -732,7 +766,8 @@ class MessageList extends StatelessWidget {
                                         builder: (context) => MessageDetail(
                                             course['directMessageId'],
                                             otherPerson,
-                                            false, " ")));
+                                            false,
+                                            " ")));
                               },
                               child: Container(
                                 height: 100,
@@ -807,13 +842,18 @@ class MessageList extends StatelessWidget {
                                                             FontWeight.bold)),
                                           )
                                         ])),
+                                    Spacer(),
                                     Align(
                                       alignment: Alignment.centerRight,
-                                      child: Text(
-                                        timeago.format(timestamp.toDate()),
-                                        style: TextStyle(fontSize: 12),
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.end,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15),
+                                        child: Text(
+                                          timeAgo,
+                                          style: TextStyle(fontSize: 12),
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.end,
+                                        ),
                                       ),
                                     )
                                   ],
@@ -958,13 +998,18 @@ class MessageList extends StatelessWidget {
                                                             FontWeight.bold)),
                                           )
                                         ])),
+                                    Spacer(),
                                     Align(
                                       alignment: Alignment.centerRight,
-                                      child: Text(
-                                        timeago.format(timestamp.toDate()),
-                                        style: TextStyle(fontSize: 12),
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.end,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15.0),
+                                        child: Text(
+                                          timeAgo,
+                                          style: TextStyle(fontSize: 12),
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.end,
+                                        ),
                                       ),
                                     )
                                   ],
@@ -983,7 +1028,8 @@ class MessageList extends StatelessWidget {
 class MessageDetail extends StatefulWidget {
   final String otherPerson, directMessageId, gid;
   final bool isGroupChat;
-  MessageDetail(this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
+  MessageDetail(
+      this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
 
   @override
   _MessageDetailState createState() => _MessageDetailState(
@@ -994,7 +1040,8 @@ class _MessageDetailState extends State<MessageDetail> {
   String otherPerson, directMessageId, gid;
   bool isGroupChat;
 
-  _MessageDetailState(this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
+  _MessageDetailState(
+      this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
 
   @override
   Widget build(BuildContext context) {
@@ -1020,12 +1067,13 @@ class _MessageDetailState extends State<MessageDetail> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                      (Route<dynamic> route) => false,
-                    );
+                  onTap: isGroupChat ? () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => GroupDetail(gid)));
+                  }:
+                   () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => OtherProfile(otherPerson)));
                   },
                   child: (isGroupChat == false)
                       ? StreamBuilder(
@@ -1066,24 +1114,22 @@ class _MessageDetailState extends State<MessageDetail> {
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
                                 children: [
-                                 Container(
-                                                                      child:
-                                                                          ClipRRect(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(15)),
-                                                                        child:
-                                                                            CachedNetworkImage(
-                                                                          imageUrl:
-                                                                            snapshot.data['groupPic'],
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                         height:
-                                                                             MediaQuery.of(context).size.height * 0.06,
-                                                                        width:
-                                                                               MediaQuery.of(context).size.width * 0.15,
-                                                                        ),
-                                                                      ),
-                                                                    ),
+                                  Container(
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                      child: CachedNetworkImage(
+                                        imageUrl: snapshot.data['groupPic'],
+                                        fit: BoxFit.cover,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.06,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.15,
+                                      ),
+                                    ),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
