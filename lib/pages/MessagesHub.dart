@@ -528,7 +528,7 @@ class MessagesHub extends StatelessWidget {
 class MessageList extends StatelessWidget {
   MessageList({Key key}) : super(key: key);
 
-  EasyRefreshController _controller;
+   EasyRefreshController _controller;
 
   @override
   Widget build(BuildContext context) {
