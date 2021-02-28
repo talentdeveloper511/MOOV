@@ -1781,7 +1781,7 @@ class _MessageResultAddState extends State<MessageResultAdd> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => MessageDetail(directMessageId, userId, false, " ")));
+              builder: (context) => MessageDetail(directMessageId, userId, false, " ", [])));
     });
   }
 

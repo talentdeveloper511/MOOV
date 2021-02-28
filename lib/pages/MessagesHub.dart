@@ -704,6 +704,7 @@ class MessageList extends StatelessWidget {
               controller: _controller,
               header: BezierCircleHeader(
                   color: TextThemes.ndGold, backgroundColor: TextThemes.ndBlue),
+              footer: BezierBounceFooter(backgroundColor: Colors.white),
               bottomBouncing: false,
               child: ListView.builder(
                 itemCount: snapshot.data.docs.length,
@@ -717,7 +718,7 @@ class MessageList extends StatelessWidget {
                   int timestamp = course['timestamp'];
                   bool isGroupChat = course['isGroupChat'];
                   String gid = course['gid'];
-                  
+
                   var now = new DateTime.now();
                   var format = new DateFormat('HH:mm a');
                   var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -729,7 +730,11 @@ class MessageList extends StatelessWidget {
                   if (diff.inMinutes >= 2 && diff.inMinutes <= 60) {
                     timeAgo = (diff.inMinutes).toString() + ' minutes ago';
                   }
-                  if (diff.inMinutes >= 60) {
+                   if (diff.inMinutes >= 60 && diff.inMinutes <= 120){
+                    timeAgo =
+                        (diff.inMinutes / 60).round().toString() + ' hour ago';
+                  }
+                  if (diff.inMinutes >= 120) {
                     timeAgo =
                         (diff.inMinutes / 60).round().toString() + ' hours ago';
                   }
@@ -744,7 +749,6 @@ class MessageList extends StatelessWidget {
                   if (diff.inMinutes >= 10080) {
                     timeAgo = 'long ass time ago';
                   }
-
 
                   return (isGroupChat == false)
                       ? StreamBuilder(
@@ -767,7 +771,8 @@ class MessageList extends StatelessWidget {
                                             course['directMessageId'],
                                             otherPerson,
                                             false,
-                                            " ")));
+                                            " ",
+                                            [])));
                               },
                               child: Container(
                                 height: 100,
@@ -878,7 +883,7 @@ class MessageList extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MessageDetail(
-                                            " ", " ", true, gid)));
+                                            " ", " ", true, gid, snapshot.data['members'])));
                               },
                               child: Container(
                                 height: 100,
@@ -1028,20 +1033,23 @@ class MessageList extends StatelessWidget {
 class MessageDetail extends StatefulWidget {
   final String otherPerson, directMessageId, gid;
   final bool isGroupChat;
-  MessageDetail(
-      this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
+  final List<dynamic> members;
+
+  MessageDetail(this.directMessageId, this.otherPerson, this.isGroupChat,
+      this.gid, this.members);
 
   @override
-  _MessageDetailState createState() => _MessageDetailState(
-      this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
+  _MessageDetailState createState() => _MessageDetailState(this.directMessageId,
+      this.otherPerson, this.isGroupChat, this.gid, this.members);
 }
 
 class _MessageDetailState extends State<MessageDetail> {
   String otherPerson, directMessageId, gid;
   bool isGroupChat;
+  List<dynamic> members;
 
   _MessageDetailState(
-      this.directMessageId, this.otherPerson, this.isGroupChat, this.gid);
+      this.directMessageId, this.otherPerson, this.isGroupChat, this.gid, this.members);
 
   @override
   Widget build(BuildContext context) {
@@ -1067,14 +1075,15 @@ class _MessageDetailState extends State<MessageDetail> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
-                  onTap: isGroupChat ? () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => GroupDetail(gid)));
-                  }:
-                   () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OtherProfile(otherPerson)));
-                  },
+                  onTap: isGroupChat
+                      ? () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => GroupDetail(gid)));
+                        }
+                      : () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => OtherProfile(otherPerson)));
+                        },
                   child: (isGroupChat == false)
                       ? StreamBuilder(
                           stream: usersRef.doc(otherPerson).snapshots(),
@@ -1154,7 +1163,8 @@ class _MessageDetailState extends State<MessageDetail> {
                       gid: gid,
                       isGroupChat: true,
                       directMessageId: " ",
-                      otherPerson: " ")
+                      otherPerson: " ",
+                      members: members)
                   : Chat(
                       gid: " ",
                       isGroupChat: false,

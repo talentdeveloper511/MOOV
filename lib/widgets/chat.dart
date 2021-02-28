@@ -51,7 +51,7 @@ class ChatState extends State<Chat> {
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) =>
-              MessageDetail(directMessageId, otherPerson, false, " "),
+              MessageDetail(directMessageId, otherPerson, false, " ", []),
           transitionDuration: Duration(seconds: 0),
         ),
       );
@@ -67,7 +67,11 @@ class ChatState extends State<Chat> {
   bool messages = false;
 
   ChatState(
-      {this.gid, this.isGroupChat, this.directMessageId, this.otherPerson, this.members});
+      {this.gid,
+      this.isGroupChat,
+      this.directMessageId,
+      this.otherPerson,
+      this.members});
 
   adjustChat() {
     _scrollController.animateTo(
@@ -162,7 +166,7 @@ class ChatState extends State<Chat> {
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
               "isGroupChat": true,
-              "middleFinger": false
+              "reactions": {}
             })
           : messagesRef
               .doc(directMessageId)
@@ -184,7 +188,7 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "isGroupChat": false,
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
-              "middleFinger": false
+              "reactions": {}
             });
       isGroupChat
           ? messagesRef.doc(gid).set({
@@ -268,7 +272,7 @@ class ChatState extends State<Chat> {
                                 pageBuilder:
                                     (context, animation1, animation2) =>
                                         MessageDetail(directMessageId,
-                                            otherPerson, false, " "),
+                                            otherPerson, false, " ",[]),
                                 transitionDuration: Duration(seconds: 0),
                               ),
                             );
@@ -306,7 +310,8 @@ class Comment extends StatefulWidget {
   final String millis;
   final String directMessageId;
   final bool isGroupChat;
-  final bool middleFinger;
+
+  final Map<String, dynamic> reactions;
 
   Comment(
       {this.displayName,
@@ -319,7 +324,7 @@ class Comment extends StatefulWidget {
       this.millis,
       this.directMessageId,
       this.isGroupChat,
-      this.middleFinger});
+      this.reactions});
 
   factory Comment.fromDocument(DocumentSnapshot doc) {
     return Comment(
@@ -333,7 +338,7 @@ class Comment extends StatefulWidget {
         millis: doc['millis'],
         directMessageId: doc['directMessageId'],
         isGroupChat: doc['isGroupChat'],
-        middleFinger: doc['middleFinger']);
+        reactions: doc['reactions']);
   }
 
   @override
@@ -348,7 +353,7 @@ class Comment extends StatefulWidget {
       this.millis,
       this.directMessageId,
       this.isGroupChat,
-      this.middleFinger);
+      this.reactions);
 }
 
 class _CommentState extends State<Comment> {
@@ -362,7 +367,7 @@ class _CommentState extends State<Comment> {
   final String millis;
   String directMessageId;
   final bool isGroupChat;
-  bool middleFinger;
+  final Map<String, dynamic> reactions;
   _CommentState(
       this.displayName,
       this.userId,
@@ -374,19 +379,31 @@ class _CommentState extends State<Comment> {
       this.millis,
       this.directMessageId,
       this.isGroupChat,
-      this.middleFinger);
+      this.reactions);
 
   @override
   Widget build(BuildContext context) {
     var now = new DateTime.now();
     var format = new DateFormat('').add_jm();
+    var format2 = new DateFormat('EEE').add_jm();
+
     var date = new DateTime.fromMillisecondsSinceEpoch(timestamp);
     var diff = now.difference(date);
     String timeAgo = '';
 
-    if (diff.inMicroseconds >= 0) {
-      timeAgo = format.format(now);
-    }
+                  timeAgo = format.format(date);
+
+                  if (1440 <= diff.inMinutes && diff.inMinutes <= 2880) {
+                    timeAgo =
+                      format2.format(date);
+                  }
+               
+    bool middleFinger = false;
+    int status = -1;
+    List reactionValues = reactions.values.toList();
+    // if (reactions.isNotEmpty && reactionValues[0] == 0) {
+    //   middleFinger = true;
+    // }
 
     return Column(
       children: <Widget>[
@@ -408,30 +425,46 @@ class _CommentState extends State<Comment> {
                     : FlutterReactionButtonCheck(
                         onReactionChanged: (reaction, index, isChecked) {
                           // FLIPPED OFF NOTIF HERE
+                          // if (reactionValues[0] == 0) {
+                          //   setState(() {
+                          //     middleFinger = false;
+                          //   });
+                          // } else
+                          //  if (reactionValues[0] == 1) {
+                          //   setState(() {
+                          //     middleFinger = false;
+                          //   });
+                          // }
+                          // // } else {
+                          // //   setState(() {
+                          // //     reactionValues[0] = -1;
+                          // //   });
+                          // // }
+                          // Database().chatReaction(currentUser.id,
+                          //     directMessageId, chatId, index, false);
+                          // setState(() {
+                          //   middleFinger = !middleFinger;
+                          // });
 
-                          messagesRef
-                              .doc(directMessageId)
-                              .collection("chat")
-                              .doc(chatId)
-                              .update({"middleFinger": !middleFinger});
-                          //     messagesRef
-                          // .doc(directMessageId)
-                          // .update({"middleFinger": !middleFinger});
-                          setState(() {
-                            middleFinger = !middleFinger;
-                          });
+                          // print(reactionValues[0]);
+                          // print(middleFinger);
                         },
                         reactions: [
                             Reaction(
-                                previewIcon: Padding(
+                              previewIcon: Padding(
                                   padding: const EdgeInsets.only(
-                                      right: 8.0, top: 4, bottom: 6),
-                                  child: Image.asset(
-                                    'lib/assets/middleFinger.gif',
-                                    height: 40,
-                                  ),
+                                      right: 8.0, top: 6, bottom: 6, left: 8),
+                                  child: Text("Coming soon")
                                 ),
-                                title: Text("Flip 'em off"),
+                                // previewIcon: Padding(
+                                //   padding: const EdgeInsets.only(
+                                //       right: 8.0, top: 4, bottom: 6),
+                                //   child: Image.asset(
+                                //     'lib/assets/middleFinger.gif',
+                                //     height: 40,
+                                //   ),
+                                // ),
+                                // title: Text("Flip 'em off"),
                                 icon: Stack(children: [
                                   ChatBubble(
                                       alignment: Alignment.centerLeft,
@@ -460,6 +493,44 @@ class _CommentState extends State<Comment> {
                                             )
                                           : Container())
                                 ])),
+                            // Reaction(
+                            //     // previewIcon: Padding(
+                            //     //   padding: const EdgeInsets.only(
+                            //     //       right: 8.0, top: 4, bottom: 6),
+                            //     //   child: Image.asset(
+                            //     //     'lib/assets/chens.jpg',
+                            //     //     height: 40,
+                            //     //   ),
+                            //     // ),
+                            //     // title: Text("Flip 'em off"),
+                            //     icon: Stack(children: [
+                            //       ChatBubble(
+                            //           alignment: Alignment.centerLeft,
+                            //           clipper: ChatBubbleClipper5(
+                            //               type: BubbleType.receiverBubble),
+                            //           backGroundColor: Colors.grey[200],
+                            //           margin: EdgeInsets.only(top: 5),
+                            //           child: Container(
+                            //               constraints: BoxConstraints(
+                            //                 maxWidth: MediaQuery.of(context)
+                            //                         .size
+                            //                         .width *
+                            //                     0.7,
+                            //               ),
+                            //               child: Text(comment))),
+                            //       Positioned(
+                            //           left: comment.length < 25
+                            //               ? comment.length.toDouble() * 8
+                            //               : comment.length < 40
+                            //                   ? comment.length.toDouble() * 6
+                            //                   : 220,
+                            //           child: middleFinger
+                            //               ? Image.asset(
+                            //                   'lib/assets/middleFinger.gif',
+                            //                   height: 40,
+                            //                 )
+                            //               : Container())
+                            //     ])),
                           ]),
                 leading: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -467,10 +538,12 @@ class _CommentState extends State<Comment> {
                     backgroundImage: CachedNetworkImageProvider(avatarUrl),
                   ),
                 ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Text(timeAgo),
-                ),
+                subtitle: timeAgo == ""
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(timeAgo, style: TextStyle(fontSize: 10),),
+                      ),
                 trailing: Text(''),
               )
             : Stack(
@@ -515,17 +588,19 @@ class _CommentState extends State<Comment> {
                                       : comment.length < 40
                                           ? comment.length.toDouble() * 6
                                           : 220,
-                                  child: middleFinger
+                                  child: status == 0
                                       ? Image.asset(
                                           'lib/assets/middleFinger.gif',
                                           height: 40,
                                         )
                                       : Container())
                             ])),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Text(timeAgo, textAlign: TextAlign.right),
-                    ),
+                    subtitle: timeAgo == ""
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.all(3.0),
+                        child: Text(timeAgo, textAlign: TextAlign.right, style: TextStyle(fontSize: 10),),
+                          ),
                     trailing: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: CircleAvatar(

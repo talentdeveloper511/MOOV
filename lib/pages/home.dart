@@ -130,7 +130,42 @@ class _HomeState extends State<Home> {
 
     Future<dynamic> myBackgroundMessageHandler(
         Map<String, dynamic> message) async {
+      final String pushId = message['link'];
+      final String page = message['page'];
+      final String recipientId = message['recipient'];
+      final String body = message['notification']['title'] +
+          ' ' +
+          message['notification']['body'];
+
       FlutterAppBadger.updateBadgeCount(1);
+      if (recipientId == currentUser.id) {
+        print(pushId);
+        Flushbar snackbar = Flushbar(
+            padding: EdgeInsets.all(20),
+            borderRadius: 15,
+            flushbarStyle: FlushbarStyle.FLOATING,
+            boxShadows: [
+              BoxShadow(
+                  color: Colors.blue[800],
+                  offset: Offset(0.0, 2.0),
+                  blurRadius: 3.0)
+            ],
+            icon: Icon(
+              Icons.directions_run,
+              color: Colors.green,
+            ),
+            duration: Duration(seconds: 4),
+            flushbarPosition: FlushbarPosition.TOP,
+            backgroundColor: Colors.white,
+            messageText: Text(body,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.black)));
+        // SnackBar snackybar = SnackBar(
+        //     content: Text(body, overflow: TextOverflow.ellipsis),
+        //     backgroundColor: Colors.green);
+        // _scaffoldKey.currentState.showSnackBar(snackybar);
+        snackbar.show(context);
+      }
     }
 
     _fcm.configure(
@@ -143,22 +178,22 @@ class _HomeState extends State<Home> {
               ' ' +
               message['notification']['body'];
           FlutterAppBadger.updateBadgeCount(1);
-          if (page == 'chat') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MessagesHub()));
-          } else if (page == 'post') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-          } else if (page == 'group') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-          } else if (page == 'user') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-          } else {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NotificationFeed()));
-          }
+          // if (page == 'chat') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => MessagesHub()));
+          // } else if (page == 'post') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          // } else if (page == 'group') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          // } else if (page == 'user') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          // } else {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => NotificationFeed()));
+          // }
           if (recipientId == currentUser.id) {
             print('Notification shown');
 
@@ -203,22 +238,22 @@ class _HomeState extends State<Home> {
               ' ' +
               message['notification']['body'];
           FlutterAppBadger.updateBadgeCount(1);
-          if (page == 'chat') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MessagesHub()));
-          } else if (page == 'post') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-          } else if (page == 'group') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-          } else if (page == 'user') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-          } else {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NotificationFeed()));
-          }
+          // if (page == 'chat') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => MessagesHub()));
+          // } else if (page == 'post') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          // } else if (page == 'group') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          // } else if (page == 'user') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          // } else {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => NotificationFeed()));
+          // }
           if (recipientId == currentUser.id) {
             print('Notification shown');
             Flushbar snackbar = Flushbar(
@@ -260,26 +295,28 @@ class _HomeState extends State<Home> {
               ' ' +
               message['notification']['body'];
           FlutterAppBadger.updateBadgeCount(1);
-          if (page == 'chat') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MessagesHub()));
-          } else if (page == 'post') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-          } else if (page == 'group') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-          } else if (page == 'user') {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-          } else {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NotificationFeed()));
-          }
+          // if (page == 'chat') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => MessagesHub()));
+          // } else if (page == 'post') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          // } else if (page == 'group') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          // } else if (page == 'user') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          // } else {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => NotificationFeed()));
+          // }
           FlutterAppBadger.updateBadgeCount(1);
           if (recipientId == currentUser.id) {
-            print('Notification shown');
+            print(pushId);
             Flushbar snackbar = Flushbar(
+                padding: EdgeInsets.all(20),
+                borderRadius: 15,
                 flushbarStyle: FlushbarStyle.FLOATING,
                 boxShadows: [
                   BoxShadow(
@@ -287,18 +324,16 @@ class _HomeState extends State<Home> {
                       offset: Offset(0.0, 2.0),
                       blurRadius: 3.0)
                 ],
-                backgroundGradient:
-                    LinearGradient(colors: [Colors.green, Colors.green]),
                 icon: Icon(
                   Icons.directions_run,
-                  color: Colors.white,
+                  color: Colors.green,
                 ),
                 duration: Duration(seconds: 4),
                 flushbarPosition: FlushbarPosition.TOP,
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.white,
                 messageText: Text(body,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.white)));
+                    style: TextStyle(color: Colors.black)));
             // SnackBar snackybar = SnackBar(
             //     content: Text(body, overflow: TextOverflow.ellipsis),
             //     backgroundColor: Colors.green);
@@ -664,18 +699,27 @@ class _HomeState extends State<Home> {
         onPageChanged: onPageChanged,
       ),
       bottomNavigationBar: CupertinoTabBar(
+          inactiveColor: Colors.black,
           currentIndex: pageIndex,
           onTap: onTap,
           activeColor: TextThemes.ndGold,
           items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home)),
+            BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
+            BottomNavigationBarItem(icon: Icon(Icons.directions_run_outlined)),
             BottomNavigationBarItem(
-                title: Text("Home"), icon: Icon(Icons.home)),
-            BottomNavigationBarItem(
-                title: Text("Search"), icon: Icon(Icons.search)),
-            BottomNavigationBarItem(
-                title: Text("My MOOVs"), icon: Icon(Icons.directions_run)),
-            BottomNavigationBarItem(
-                title: Text("Profile"), icon: Icon(Icons.person_outline)
+                icon: CircleAvatar(
+                    radius: 16,
+                    backgroundColor:
+                        pageIndex == 3 ? TextThemes.ndGold : Colors.black,
+                    child: currentUser.photoUrl != null
+                        ? CircleAvatar(
+                            radius: 14,
+                            backgroundImage: NetworkImage(currentUser.photoUrl))
+                        : CircleAvatar(
+                            radius: 14,
+                            backgroundImage:
+                                AssetImage('lib/assets/incognitoPic.jpg')))
                 // CircleAvatar(
                 //   backgroundImage: NetworkImage(currentUser.photoUrl),
                 //   radius: 13)
@@ -689,6 +733,7 @@ class _HomeState extends State<Home> {
   }
 
   Scaffold buildUnAuthScreen() {
+   
     return Scaffold(
       body: Container(
         color: TextThemes.ndBlue,
@@ -724,7 +769,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return (isAuth == false) ? buildUnAuthScreen() : buildAuthScreen();
+    return (isAuth == true) ? buildAuthScreen() : buildUnAuthScreen();
   }
 }
 

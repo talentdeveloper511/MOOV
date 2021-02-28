@@ -295,7 +295,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                   },
                                   child: Column(children: [
                                     NotifIconGroup(
-                                      iconData: Icons.notifications_active,
+                                      iconData: Icons.notifications_active_outlined,
                                       gid: gid,
                                     ),
                                     Text(

@@ -5,6 +5,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/edit_post.dart';
@@ -111,29 +112,21 @@ class _CategoryFeedState extends State<CategoryFeed>
           backgroundColor: TextThemes.ndBlue,
           //pinned: true,
           actions: <Widget>[
-            IconButton(
-              padding: EdgeInsets.all(5.0),
-              icon: Icon(Icons.insert_chart),
-              color: Colors.white,
-              splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-              onPressed: () {
-                // Implement navigation to leaderboard page here...
+          NamedIconMessages(
+              iconData: Icons.mail_outline,
+              onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-              },
-            ),
-            IconButton(
-              padding: EdgeInsets.all(5.0),
-              icon: Icon(Icons.notifications_active),
-              color: Colors.white,
-              splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-              onPressed: () {
+                    MaterialPageRoute(builder: (context) => MessageList()));
+              }),
+          NamedIcon(
+              iconData: Icons.notifications_active_outlined,
+              onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => NotificationFeed()));
-              },
-            )
+                Database().setNotifsSeen();
+              }),
           ],
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: EdgeInsets.all(15),
@@ -1261,6 +1254,28 @@ class PostOnFeed extends StatelessWidget {
                 ],
               ),
             )),
+          currentUser.id == "118426518878481598299" ? //ADMIN CONTROLS
+          Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                  height: 30,
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue[400], Colors.purple[300]],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Text(
+                    "MAKE MOTD",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              )
+            :  Text(""),
         isToday == true
             ? Positioned(
                 top: 0,

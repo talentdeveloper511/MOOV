@@ -139,7 +139,7 @@ class _OtherProfileState extends State<OtherProfile> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => MessageDetail(directMessageId, id, false,"")));
+              builder: (context) => MessageDetail(directMessageId, id, false,"",[])));
     });
   }
 

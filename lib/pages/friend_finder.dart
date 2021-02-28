@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/pages/searchNoTrending.dart';
+import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -92,31 +94,21 @@ class _FriendFinderState extends State<FriendFinder>
       backgroundColor: TextThemes.ndBlue,
       //pinned: true,
       actions: <Widget>[
-        IconButton(
-          padding: EdgeInsets.all(5.0),
-          icon: Icon(Icons.insert_chart),
-          color: Colors.white,
-          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-          onPressed: () {
-            // Implement navigation to leaderboard page here...
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => LeaderBoardPage()));
-            print('Leaderboards clicked');
-          },
-        ),
-        IconButton(
-          padding: EdgeInsets.all(5.0),
-          icon: Padding(
-            padding: const EdgeInsets.only(bottom: 0.0),
-            child: Icon(Icons.notifications_active),
-          ),
-          color: Colors.white,
-          splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NotificationFeed()));
-          },
-        )
+         NamedIconMessages(
+              iconData: Icons.mail_outline,
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MessageList()));
+              }),
+          NamedIcon(
+              iconData: Icons.notifications_active_outlined,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationFeed()));
+                Database().setNotifsSeen();
+              }),
       ],
     );
   }

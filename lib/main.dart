@@ -48,7 +48,7 @@ class MOOV extends StatelessWidget {
               data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             );
           }, //for accessibility larger text size
-          title: 'Whats the MOOV?',
+          title: 'MOOV',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             appBarTheme: Theme.of(context)

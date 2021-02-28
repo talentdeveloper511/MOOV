@@ -1005,4 +1005,21 @@ class Database {
       "imageUrl": imageUrl
     });
   }
+
+  
+  Future<void> chatReaction(String userId, String directMessageId, String chatId, int reactionChoice, bool undoing) async {
+    return dbRef.runTransaction((transaction) async {
+
+undoing? // taking the reaction off
+ messagesRef.doc(directMessageId).collection('chat').doc(chatId).set({
+        "reactions": {userId: 0}
+      }, SetOptions(merge: true)) :
+
+      messagesRef.doc(directMessageId).collection('chat').doc(chatId).set({
+        "reactions": {userId: reactionChoice}
+      }, SetOptions(merge: true));
+
+    });
+  }
 }
+
