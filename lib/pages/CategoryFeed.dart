@@ -112,21 +112,21 @@ class _CategoryFeedState extends State<CategoryFeed>
           backgroundColor: TextThemes.ndBlue,
           //pinned: true,
           actions: <Widget>[
-          NamedIconMessages(
-              iconData: Icons.mail_outline,
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MessageList()));
-              }),
-          NamedIcon(
-              iconData: Icons.notifications_active_outlined,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationFeed()));
-                Database().setNotifsSeen();
-              }),
+            NamedIconMessages(
+                iconData: Icons.mail_outline,
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MessageList()));
+                }),
+            NamedIcon(
+                iconData: Icons.notifications_active_outlined,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationFeed()));
+                  Database().setNotifsSeen();
+                }),
           ],
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: EdgeInsets.all(15),
@@ -1047,7 +1047,10 @@ class PostOnFeed extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            course['userId'] == currentUser.id
+                            course['userId'] == currentUser.id ||
+                                    currentUser.id == "108155010592087635288" ||
+                                    currentUser.id == "118426518878481598299" ||
+                                    currentUser.id == "107290090512658207959"
                                 ? GestureDetector(
                                     onTap: () => Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -1254,28 +1257,43 @@ class PostOnFeed extends StatelessWidget {
                 ],
               ),
             )),
-          currentUser.id == "118426518878481598299" ? //ADMIN CONTROLS
-          Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  height: 30,
-                  padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue[400], Colors.purple[300]],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Text(
-                    "MAKE MOTD",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+        currentUser.id == "108155010592087635288" ||
+                currentUser.id == "118426518878481598299" ||
+                currentUser.id == "107290090512658207959"
+            ? //ADMIN CONTROLS
+            Positioned(
+                top: 40,
+                left: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    FirebaseFirestore.instance
+                        .collection('notreDame')
+                        .doc('data')
+                        .collection('food')
+                        .doc(course['postId'])
+                        .set({
+                      "MOTD": true,
+                    }, SetOptions(merge: true));
+                  },
+                  child: Container(
+                    height: 30,
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.blue[400], Colors.purple[300]],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(
+                      "MAKE MOTD",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
                   ),
                 ),
               )
-            :  Text(""),
+            : Text(""),
         isToday == true
             ? Positioned(
                 top: 0,

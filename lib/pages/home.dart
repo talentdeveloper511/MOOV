@@ -230,6 +230,21 @@ class _HomeState extends State<Home> {
         },
         onBackgroundMessage: myBackgroundMessageHandler,
         onResume: (Map<String, dynamic> message) async {
+          // if (Platform.isIOS) {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => MessageList()));
+          // }
+          //   _navigationService.navigateTo(
+          //   routes.EventDetail,
+          //      arguments: '${message["eventId"]}',
+          //   );
+          // } else {
+          //   _navigationService.navigateTo(
+          //    routes.EventDetail,
+          //      arguments: '${message["data"]["eventId"]}',
+          //    );
+          // }
+
           print('message: $message');
           final String pushId = message['link'];
           final String page = message['page'];
@@ -314,7 +329,17 @@ class _HomeState extends State<Home> {
           FlutterAppBadger.updateBadgeCount(1);
           if (recipientId == currentUser.id) {
             print(pushId);
+            print(page);
             Flushbar snackbar = Flushbar(
+                onTap: message['page'] == "post"
+                    ? (flushbar) {
+                        print("HHH");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PostDetail(pushId)));
+                      }
+                    : null,
                 padding: EdgeInsets.all(20),
                 borderRadius: 15,
                 flushbarStyle: FlushbarStyle.FLOATING,
@@ -733,7 +758,6 @@ class _HomeState extends State<Home> {
   }
 
   Scaffold buildUnAuthScreen() {
-   
     return Scaffold(
       body: Container(
         color: TextThemes.ndBlue,

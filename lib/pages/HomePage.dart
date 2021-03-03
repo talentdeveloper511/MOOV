@@ -53,6 +53,15 @@ class _HomePageState extends State<HomePage>
   GlobalKey _motdKey = GlobalKey();
   GlobalKey _leaderboardKey = GlobalKey();
 
+  bool foodSelected = false;
+  bool partySelected = false;
+  bool showSelected = false;
+  bool clubSelected = false;
+  bool sportSelected = false;
+  bool virtualSelected = false;
+  bool recSelected = false;
+
+
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
   EasyRefreshController _controller;
@@ -416,6 +425,7 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
             ),
+           
             SliverToBoxAdapter(
               child: CarouselSlider(
                   options: CarouselOptions(
@@ -573,6 +583,7 @@ class _HomePageState extends State<HomePage>
                     HottestMOOV()
                   ]),
             ),
+            
             SliverPadding(
               padding: EdgeInsets.only(left: 10, right: 10, top: 20),
               sliver: SliverGrid.count(

@@ -201,6 +201,21 @@ flutter:
     - lib/assets/venmo-icon.png
     - lib/assets/suggestion.png
     - lib/assets/middleFinger.gif
+    - lib/assets/icons/BarICON.png
+    - lib/assets/icons/BarICON2.png
+    - lib/assets/icons/ClubICON.png
+    - lib/assets/icons/ClubICON2.png
+    - lib/assets/icons/PartyICON.png
+    - lib/assets/icons/PartyICON2.png
+    - lib/assets/icons/SportICON.png
+    - lib/assets/icons/SportICON2.png
+    - lib/assets/icons/RecICON.png
+    - lib/assets/icons/RecICON2.png
+    - lib/assets/icons/ShowICON.png
+    - lib/assets/icons/ShowICON2.png
+    - lib/assets/icons/VirtualICON.png
+    - lib/assets/icons/VirtualICON2.png
+
 
 
 

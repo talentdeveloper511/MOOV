@@ -544,12 +544,12 @@ class UserResult extends StatelessWidget {
                                           child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: isIncognito ||
-                                                !friendFinderVisibility
+                                                !friendFinderVisibility 
                                             ? Text("")
                                             : Text("nothing, right now."),
                                       ));
-                                    if (!snapshot.hasData ||
-                                        snapshot.data.docs.length == 0)
+                                    if ((!snapshot.hasData ||
+                                        snapshot.data.docs.length == 0) && (!isIncognito || !friendFinderVisibility))
                                       return SizedBox(
                                           child: Align(
                                               alignment: Alignment.centerLeft,
