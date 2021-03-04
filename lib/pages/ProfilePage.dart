@@ -424,6 +424,7 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                         ),
                       ),
+                     
                       //             GestureDetector(
                       //               onTap: (){
                       //                     Navigator.push(

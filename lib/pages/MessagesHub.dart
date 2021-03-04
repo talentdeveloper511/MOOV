@@ -353,7 +353,7 @@ class MessagesHub extends StatelessWidget {
                                                                           fit: BoxFit
                                                                               .cover,
                                                                           height: isLargePhone
-                                                                              ? MediaQuery.of(context).size.height * 0.05
+                                                                              ? MediaQuery.of(context).size.height * 0.04
                                                                               : MediaQuery.of(context).size.height * 0.06,
                                                                           width: isLargePhone
                                                                               ? MediaQuery.of(context).size.width * 0.22
@@ -730,9 +730,9 @@ class MessageList extends StatelessWidget {
                   if (diff.inMinutes >= 2 && diff.inMinutes <= 60) {
                     timeAgo = (diff.inMinutes).toString() + ' minutes ago';
                   }
-                   if (diff.inMinutes >= 60 && diff.inMinutes <= 120){
+                   if (diff.inMinutes >= 60 && diff.inMinutes <= 119){
                     timeAgo =
-                        (diff.inMinutes / 60).round().toString() + ' hour ago';
+                        '1 hour ago';
                   }
                   if (diff.inMinutes >= 120) {
                     timeAgo =
@@ -906,7 +906,7 @@ class MessageList extends StatelessWidget {
                                             ? MediaQuery.of(context)
                                                     .size
                                                     .height *
-                                                0.1
+                                                0.07
                                             : MediaQuery.of(context)
                                                     .size
                                                     .height *
@@ -1053,6 +1053,8 @@ class _MessageDetailState extends State<MessageDetail> {
 
   @override
   Widget build(BuildContext context) {
+        bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -1130,7 +1132,9 @@ class _MessageDetailState extends State<MessageDetail> {
                                       child: CachedNetworkImage(
                                         imageUrl: snapshot.data['groupPic'],
                                         fit: BoxFit.cover,
-                                        height:
+                                        height: isLargePhone ?
+                                        MediaQuery.of(context).size.height *
+                                                0.04:
                                             MediaQuery.of(context).size.height *
                                                 0.06,
                                         width:

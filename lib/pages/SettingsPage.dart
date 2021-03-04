@@ -1,5 +1,6 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/RemoteControl.dart';
 import 'package:MOOV/pages/ChangePrivacy.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart' as home;
@@ -213,6 +214,25 @@ class _SettingsPageState extends State<SettingsPage> {
                                                       UserData()));
                                         },
                                       ),
+                                      home.currentUser.id == "118426518878481598299" || home.currentUser.id == "107290090512658207959" ||home.currentUser.id == "108772008140999951446"||home.currentUser.id == "108155010592087635288"?
+                                      ListTile(
+                                        leading: Icon(
+                                          Icons.settings_remote_outlined,
+                                          color: TextThemes.ndBlue,
+                                        ),
+                                        title: Text("Remote Control"),
+                                        trailing:
+                                            Icon(Icons.keyboard_arrow_right),
+                                        onTap: () {
+                                          // Database().updateAllDocs();
+                                          //open change password
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RemoteControl()));
+                                        },
+                                      ): Container(),
                                     ],
                                   ),
                                 ),
