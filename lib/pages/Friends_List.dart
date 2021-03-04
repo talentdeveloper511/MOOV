@@ -142,33 +142,67 @@ class FriendsListState extends State<FriendsList> {
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 8),
-                                            child: RaisedButton(
-                                              padding:
-                                                  const EdgeInsets.all(2.0),
-                                              color: Colors.green,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              3.0))),
-                                              onPressed: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            OtherProfile(snapshot
-                                                                .data
-                                                                .docs[index]
-                                                                    ['id']
-                                                                .toString())));
-                                              },
-                                              child: Text(
-                                                "Friends",
-                                                style: new TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                ),
-                                              ),
-                                            ),
+                                            child: currentUser.friendArray
+                                                    .contains(snapshot
+                                                        .data.docs[index]['id'])
+                                                ? RaisedButton(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    color: Colors.green,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    3.0))),
+                                                    onPressed: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  OtherProfile(snapshot
+                                                                      .data
+                                                                      .docs[
+                                                                          index]
+                                                                          ['id']
+                                                                      .toString())));
+                                                    },
+                                                    child: Text(
+                                                      "Friends",
+                                                      style: new TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14.0,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : RaisedButton(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    color: TextThemes.ndBlue,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    3.0))),
+                                                    onPressed: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  OtherProfile(snapshot
+                                                                      .data
+                                                                      .docs[
+                                                                          index]
+                                                                          ['id']
+                                                                      .toString())));
+                                                    },
+                                                    child: Text(
+                                                      "Stranger",
+                                                      style: new TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14.0,
+                                                      ),
+                                                    ),
+                                                  ),
                                           )
                                         ],
                                       )),
