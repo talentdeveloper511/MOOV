@@ -4,15 +4,12 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/map_test.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
-import 'package:MOOV/widgets/MOTDAnimated.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/hottestMOOV.dart';
 import 'package:MOOV/widgets/poll2.dart';
@@ -30,7 +27,7 @@ import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
 import 'MorePage.dart';
 import 'package:flutter_easyrefresh/bezier_circle_header.dart';
-
+import 'dart:math' as math;
 
 import 'friend_finder.dart';
 import 'notification_feed.dart';
@@ -46,21 +43,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   GlobalKey _categoryButtonKey = GlobalKey();
   GlobalKey _friendFinderKey = GlobalKey();
   GlobalKey _friendGroupsKey = GlobalKey();
   GlobalKey _motdKey = GlobalKey();
   GlobalKey _leaderboardKey = GlobalKey();
-
-  bool foodSelected = false;
-  bool partySelected = false;
-  bool showSelected = false;
-  bool clubSelected = false;
-  bool sportSelected = false;
-  bool virtualSelected = false;
-  bool recSelected = false;
-
 
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
@@ -72,8 +60,27 @@ class _HomePageState extends State<HomePage>
   @override
   bool get wantKeepAlive => true;
 
+  TabController _tabController;
+  dynamic moovId;
+  String type;
+  int todayOnly = 0;
+  String privacy;
+
+  // Current Index of tab
+  int _currentIndex = 0;
+
+  Map<int, Widget> map =
+      new Map(); // Cupertino Segmented Control takes children in form of Map.
+  List<Widget>
+      childWidgets; //The Widgets that has to be loaded when a tab is selected.
+  int selectedIndex = 0;
+
+  Widget getChildWidget() => childWidgets[selectedIndex];
+
   @override
   void dispose() {
+    _tabController.dispose();
+
     _scrollController.dispose();
     _hideFabAnimController.dispose();
     super.dispose();
@@ -88,6 +95,15 @@ class _HomePageState extends State<HomePage>
       duration: kThemeAnimationDuration,
       value: 1,
     );
+
+    _tabController =
+        TabController(vsync: this, length: 6, initialIndex: _currentIndex);
+    _tabController.animation
+      ..addListener(() {
+        setState(() {
+          _currentIndex = (_tabController.animation.value).round();
+        });
+      });
 
     _scrollController.addListener(() {
       switch (_scrollController.position.userScrollDirection) {
@@ -105,6 +121,10 @@ class _HomePageState extends State<HomePage>
       }
     });
   }
+
+  final privacyList = ["Featured", "All", "Private"];
+
+  String privacyDropdownValue = 'Featured';
 
   Widget build(BuildContext context) {
     super.build(context);
@@ -146,57 +166,31 @@ class _HomePageState extends State<HomePage>
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      floatingActionButton: FadeTransition(
-        opacity: _hideFabAnimController,
-        child: ScaleTransition(
-          scale: _hideFabAnimController,
-          child: FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.topToBottom,
-                        child: MoovMaker(postModel: PostModel())));
-              },
-              label: const Text("Post the MOOV",
-                  style: TextStyle(fontSize: 20, color: Colors.white))),
+        backgroundColor: Colors.white,
+        floatingActionButton: FadeTransition(
+          opacity: _hideFabAnimController,
+          child: ScaleTransition(
+            scale: _hideFabAnimController,
+            child: FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.topToBottom,
+                          child: MoovMaker(postModel: PostModel())));
+                },
+                label: const Text("Post the MOOV",
+                    style: TextStyle(fontSize: 20, color: Colors.white))),
+          ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: EasyRefresh(
-        
-        onRefresh: () async {
-          await Future.delayed(Duration(seconds: 1), () {
-            _controller.resetLoadState();
-          });
-        },
-        onLoad: () async {
-          await Future.delayed(Duration(seconds: 1), () {
-            _controller.finishLoad();
-          });
-        },
-        enableControlFinishRefresh: false,
-        enableControlFinishLoad: true,
-        controller: _controller,
-        header: BezierCircleHeader(
-          color: TextThemes.ndGold,
-          backgroundColor: TextThemes.ndBlue
-        ),
-        footer: BezierBounceFooter(backgroundColor: Colors.white),
-        bottomBouncing: false,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            SliverPadding(
-              padding: EdgeInsets.only(left: 0, right: 0),
-              sliver: SliverGrid.count(
-                crossAxisCount: 1,
-                mainAxisSpacing: 0.0,
-                crossAxisSpacing: 10.0,
-                childAspectRatio: 2.25,
-                children: <Widget>[
-                  // OpenContainerTransformDemo()
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: Container(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
                   Bounce(
                       duration: Duration(milliseconds: 300),
                       onPressed: () {
@@ -214,569 +208,1410 @@ class _HomePageState extends State<HomePage>
                         descTextStyle: TextStyle(fontStyle: FontStyle.italic),
                         contentPadding: EdgeInsets.all(10),
                         child: Container(
+                          height: 190,
                           child: MOTD(),
                         ),
                       )),
-                ],
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              sliver: SliverGrid.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 0.0,
-                crossAxisSpacing: 0.0,
-                childAspectRatio: isLargePhone ? 1.48 : 1.5,
-                children: <Widget>[
-                  Container(
-                    child: Padding(
-                        padding: const EdgeInsets.only(bottom: 30),
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Bounce(
-                            duration: Duration(milliseconds: 300),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => FriendFinder()));
-                            },
-                            child: Showcase(
-                              key: _friendFinderKey,
-                              title: "NO MORE FOMO",
-                              description:
-                                  "\nFind your friends' plans for tonight",
-                              titleTextStyle: TextStyle(
-                                  color: TextThemes.ndBlue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                              descTextStyle:
-                                  TextStyle(fontStyle: FontStyle.italic),
-                              contentPadding: EdgeInsets.all(10),
-                              // shapeBorder: ContinuousRectangleBorder(
-                              //     borderRadius: BorderRadius.circular(15)),
-                              child: Card(
-                                elevation: 10,
-                                color: Colors.pink[50],
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      padding: EdgeInsets.all(5.0),
-                                      icon: Image.asset('lib/assets/ff.png'),
-                                      color: Colors.white,
-                                      splashColor:
-                                          Color.fromRGBO(220, 180, 57, 1.0),
-                                    ),
-                                    Align(
-                                        alignment: Alignment.center,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(
-                                            "Friends' Plans",
-                                            style: TextStyle(
-                                                fontFamily: 'Open Sans',
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontSize: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Padding(
+                            padding: const EdgeInsets.only(bottom: 30),
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Bounce(
+                                duration: Duration(milliseconds: 300),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              FriendFinder()));
+                                },
+                                child: Showcase(
+                                  key: _friendFinderKey,
+                                  title: "NO MORE FOMO",
+                                  description:
+                                      "\nFind your friends' plans for tonight",
+                                  titleTextStyle: TextStyle(
+                                      color: TextThemes.ndBlue,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                  descTextStyle:
+                                      TextStyle(fontStyle: FontStyle.italic),
+                                  contentPadding: EdgeInsets.all(10),
+                                  // shapeBorder: ContinuousRectangleBorder(
+                                  //     borderRadius: BorderRadius.circular(15)),
+                                  child: Card(
+                                    elevation: 10,
+                                    color: Colors.pink[50],
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          IconButton(
+                                            padding: EdgeInsets.only(
+                                                left: .0,
+                                                right: 5,
+                                                bottom: 5,
+                                                top: 5),
+                                            icon: Image.asset(
+                                                'lib/assets/ff.png'),
+                                            color: Colors.white,
+                                            splashColor: Color.fromRGBO(
+                                                220, 180, 57, 1.0),
                                           ),
-                                        )),
-                                  ],
+                                          Align(
+                                              alignment: Alignment.center,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Text(
+                                                  "Friends' Plans",
+                                                  style: TextStyle(
+                                                      fontFamily: 'Open Sans',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black,
+                                                      fontSize: 16.0),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 30),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Bounce(
+                              duration: Duration(milliseconds: 300),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FriendGroupsPage()));
+                              },
+                              child: Showcase(
+                                key: _friendGroupsKey,
+                                title: "SQUAD UP",
+                                description: "\niMessage and Snap had a baby",
+                                titleTextStyle: TextStyle(
+                                    color: TextThemes.ndBlue,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                                descTextStyle:
+                                    TextStyle(fontStyle: FontStyle.italic),
+                                contentPadding: EdgeInsets.all(10),
+                                // shapeBorder: ContinuousRectangleBorder(
+                                //     borderRadius: BorderRadius.circular(15)),
+                                child: Card(
+                                  elevation: 10,
+                                  color: Colors.purple[50],
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 4, horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        IconButton(
+                                          padding: EdgeInsets.all(5.0),
+                                          icon:
+                                              Image.asset('lib/assets/fg1.png'),
+                                          splashColor:
+                                              Color.fromRGBO(220, 180, 57, 1.0),
+                                        ),
+                                        Align(
+                                            alignment: Alignment.center,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(
+                                                "Friend Groups",
+                                                style: TextStyle(
+                                                    fontFamily: 'Open Sans',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                    fontSize: 16.0),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Bounce(
-                          duration: Duration(milliseconds: 300),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FriendGroupsPage()));
-                          },
-                          child: Showcase(
-                            key: _friendGroupsKey,
-                            title: "SQUAD UP",
-                            description: "\niMessage and Snap had a baby",
-                            titleTextStyle: TextStyle(
-                                color: TextThemes.ndBlue,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                            descTextStyle:
-                                TextStyle(fontStyle: FontStyle.italic),
-                            contentPadding: EdgeInsets.all(10),
-                            // shapeBorder: ContinuousRectangleBorder(
-                            //     borderRadius: BorderRadius.circular(15)),
-                            child: Card(
-                              elevation: 10,
-                              color: Colors.purple[50],
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    padding: EdgeInsets.all(5.0),
-                                    icon: Image.asset('lib/assets/fg1.png'),
-                                    splashColor:
-                                        Color.fromRGBO(220, 180, 57, 1.0),
-                                  ),
-                                  Align(
-                                      alignment: Alignment.center,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Text(
-                                          "Friend Groups",
-                                          style: TextStyle(
-                                              fontFamily: 'Open Sans',
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              fontSize: 16.0),
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ))
-                ],
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              sliver: SliverGrid.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 0.0,
-                crossAxisSpacing: 10.0,
-                childAspectRatio: 1.1,
-                children: <Widget>[
-                  Showcase(
-                    key: _categoryButtonKey,
-                    description: "\nFind MOOVs of any category",
-                    title: "ANY VIBE",
-                    titleTextStyle: TextStyle(
-                        color: TextThemes.ndBlue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                    descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-                    contentPadding: EdgeInsets.all(10),
-                    // shapeBorder: ContinuousRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(15)),
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          GestureDetector(
-                              onTap: () {},
-                              child: Bounce(
-                                  duration: Duration(milliseconds: 300),
-                                  onPressed: () {
-                                    navigateToCategoryFeed(
-                                        context, "Restaurants & Bars");
-                                  },
-                                  child: CategoryButton(
-                                      asset: 'lib/assets/food5.png'))),
-                          Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                "Restaurants & Bars",
-                                style: TextStyle(
-                                    fontFamily: 'Open Sans',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16.0),
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {},
-                          child: Bounce(
-                              duration: Duration(milliseconds: 300),
-                              onPressed: () {
-                                navigateToCategoryFeed(
-                                    context, "Pregames & Parties");
-                              },
-                              child: CategoryButton(
-                                  asset: 'lib/assets/party2.png'))),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Pregames & Parties",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
                           ))
                     ],
                   ),
-                ],
-              ),
-            ),
-           
-            SliverToBoxAdapter(
-              child: CarouselSlider(
-                  options: CarouselOptions(
-                    height: 170,
-                    aspectRatio: 16 / 9,
-                    viewportFraction: 1,
-                    initialPage: 0,
-                    enableInfiniteScroll: true,
-                    // scrollPhysics: NeverScrollableScrollPhysics(),
-                    pauseAutoPlayOnTouch: false,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 6),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enlargeCenterPage: true,
-                    // onPageChanged: callbackFunction,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                  items: [
-                    // Container(
-                    //   height: 100,
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.all(
-                    //       Radius.circular(10),
-                    //     ),
-                    //     //   boxShadow: [
-                    //     //     BoxShadow(
-                    //     //       color: Colors.grey.withOpacity(0.5),
-                    //     //       spreadRadius: 2,
-                    //     //       blurRadius: 3,
-                    //     //       offset: Offset(0, 3), // changes position of shadow
-                    //     //     ),
-                    //     //   ],
-                    //     // ),
-                    //   ),
-                    //   child: GestureDetector(
-                    //     onTap: () {
-                    //       showDialog(
-                    //           context: context,
-                    //           builder: (_) => CupertinoAlertDialog(
-                    //                 title: Text("No bullshit."),
-                    //                 content: Padding(
-                    //                   padding: const EdgeInsets.only(top: 8.0),
-                    //                   child: Text(
-                    //                       "Created by two students (ND '22 and ND '23), MOOV is ND's app. \n \n We know how important privacy is. Only friends will see your data, and MOOVs disappear right after their start times. You are safe. This is your app. You define the experience."),
-                    //                 ),
-                    //               ),
-                    //           barrierDismissible: true);
-                    //     },
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(8.0),
-                    //       child: Container(
-                    //         height: 100,
-                    //         child: Card(
-                    //           color: Color.fromRGBO(249, 249, 249, 1.0),
-                    //           child: Column(
-                    //             mainAxisSize: MainAxisSize.min,
-                    //             crossAxisAlignment: CrossAxisAlignment.center,
-                    //             children: <Widget>[
-                    //               Padding(
-                    //                 padding:
-                    //                     const EdgeInsets.only(bottom: 3, top: 30),
-                    //                 child: RichText(
-                    //                   textScaleFactor: 1.75,
-                    //                   text: TextSpan(
-                    //                       style: TextThemes.mediumbody,
-                    //                       children: [
-                    //                         TextSpan(
-                    //                             text: "This is",
-                    //                             style: TextStyle(
-                    //                                 fontWeight: FontWeight.w400)),
-                    //                         TextSpan(
-                    //                             text: " our ",
-                    //                             style: TextStyle(
-                    //                                 color: TextThemes.ndGold,
-                    //                                 fontWeight: FontWeight.w600,
-                    //                                 fontStyle: FontStyle.italic)),
-                    //                         TextSpan(
-                    //                             text: "app",
-                    //                             style: TextStyle(
-                    //                                 fontWeight: FontWeight.w400)),
-                    //                       ]),
-                    //                 ),
-                    //               ),
-                    //               Padding(
-                    //                 padding: const EdgeInsets.only(left: 0.0),
-                    //                 child: Center(
-                    //                   child: RichText(
-                    //                     textScaleFactor: 1.75,
-                    //                     text: TextSpan(
-                    //                         style: TextThemes.mediumbody,
-                    //                         children: [
-                    //                           TextSpan(
-                    //                               style: TextThemes.mediumbody,
-                    //                               children: [
-                    //                                 TextSpan(
-                    //                                     text: "Always",
-                    //                                     style: TextStyle(
-                    //                                         fontWeight:
-                    //                                             FontWeight.w400)),
-                    //                                 TextSpan(
-                    //                                     text: " know the ",
-                    //                                     style: TextStyle(
-                    //                                         fontWeight:
-                    //                                             FontWeight.w400)),
-                    //                                 TextSpan(
-                    //                                     text: "MOOV",
-                    //                                     style: TextStyle(
-                    //                                         color: TextThemes.ndGold,
-                    //                                         fontWeight:
-                    //                                             FontWeight.w600,
-                    //                                         fontStyle:
-                    //                                             FontStyle.italic)),
-                    //                               ]),
-                    //                         ]),
-                    //                   ),
-                    //                 ),
-                    //               ),
-                    //               Align(
-                    //                 alignment: Alignment.center,
-                    //                 child: Padding(
-                    //                   padding:
-                    //                       const EdgeInsets.only(top: 2, bottom: 0),
-                    //                   child: RichText(
-                    //                     textScaleFactor: 1.75,
-                    //                     text: TextSpan(
-                    //                         style: TextThemes.mediumbody,
-                    //                         children: [
-                    //                           TextSpan(
-                    //                               text: "Go ",
-                    //                               style: TextStyle(
-                    //                                   fontWeight: FontWeight.w400)),
-                    //                           TextSpan(
-                    //                               text: "Irish",
-                    //                               style: TextStyle(
-                    //                                   color: TextThemes.ndGold,
-                    //                                   fontWeight: FontWeight.w600,
-                    //                                   fontStyle: FontStyle.italic)),
-                    //                         ]),
-                    //                   ),
-                    //                 ),
-                    //               )
-                    //             ],
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // MapTest(),
-                    PollView(),
-                    SuggestionBoxCarousel(),
-                    GroupCarousel(),
-                    HottestMOOV()
-                  ]),
-            ),
-            
-            SliverPadding(
-              padding: EdgeInsets.only(left: 10, right: 10, top: 20),
-              sliver: SliverGrid.count(
-                crossAxisCount: 3,
-                mainAxisSpacing: 0.0,
-                crossAxisSpacing: 10.0,
-                childAspectRatio: .75,
-                children: <Widget>[
                   Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        GestureDetector(
-                            onTap: () {
-                              navigateToCategoryFeed(context, "Clubs");
-                            },
-                            child:
-                                CategoryButton(asset: 'lib/assets/club2.png')),
-                        Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Clubs",
-                              style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: 16.0),
-                            ))
-                      ],
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {
-                            navigateToCategoryFeed(context, "Sports");
-                          },
-                          child: CategoryButton(
-                              asset: 'lib/assets/sportbutton1.png')),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Sports",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
-                          ))
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {
-                            navigateToCategoryFeed(context, "Shows");
-                          },
-                          child: CategoryButton(
-                              asset: 'lib/assets/filmbutton1.png')),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Shows",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
-                          ))
-                    ],
-                  ),
+                    height: 100,
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: ListView(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                _currentIndex != 1
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(1);
+                                          print(_currentIndex);
 
-                  // Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.center,
-                  //   children: <Widget>[
-                  //     GestureDetector(
-                  //         onTap: () {
-                  //           navigateToShowFeed(context);
-                  //         },
-                  //         child: CategoryButton(
-                  //             asset: 'lib/assets/filmbutton1.png')),
-                  //     Align(
-                  //         alignment: Alignment.center,
-                  //         child: Text(
-                  //           "Shows",
-                  //           style: TextStyle(
-                  //               fontFamily: 'Open Sans',
-                  //               fontWeight: FontWeight.bold,
-                  //               color: Colors.black,
-                  //               fontSize: 16.0),
-                  //         ))
-                  //   ],
-                  // ),
-                ],
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-              sliver: SliverGrid.extent(
-                maxCrossAxisExtent: 200,
-                mainAxisSpacing: 15.0,
-                crossAxisSpacing: 10.0,
-                childAspectRatio: isLargePhone ? 1.187 : 1.1,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {
-                            navigateToCategoryFeed(context, "Virtual");
-                          },
-                          child:
-                              CategoryButton(asset: 'lib/assets/virtual1.png')),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Virtual",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
-                          ))
-                    ],
+                                          setState(() {
+                                            _currentIndex = 1;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, top: 8, bottom: 5),
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 3.0),
+                                                child: Image.asset(
+                                                  'lib/assets/icons/BarICON.png',
+                                                  height: 40,
+                                                  width: 50,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 7.0),
+                                                child: Text(
+                                                  "Food & Drink",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(0);
+                                          print(_currentIndex);
+                                          setState(() {
+                                            _currentIndex = 0;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, top: 8, bottom: 5),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                'lib/assets/icons/BarICON2.png',
+                                                height: 44,
+                                                width: 50,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 6.0),
+                                                child: Text(
+                                                  "Food & Drink",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                _currentIndex != 2
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(2);
+                                          print(_currentIndex);
+
+                                          setState(() {
+                                            _currentIndex = 2;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15.0),
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 3.0, top: 4),
+                                                child: Image.asset(
+                                                  'lib/assets/icons/PartyICON.png',
+                                                  height: 50,
+                                                  width: 50,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 1.0),
+                                                child: Text(
+                                                  "Parties",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(0);
+                                          print(_currentIndex);
+                                          setState(() {
+                                            _currentIndex = 0;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15.0),
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 3.0, top: 4),
+                                                child: Image.asset(
+                                                  'lib/assets/icons/PartyICON2.png',
+                                                  height: 50,
+                                                  width: 50,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 1.0),
+                                                child: Text(
+                                                  "Parties",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                _currentIndex != 3
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(3);
+                                          print(_currentIndex);
+                                          setState(() {
+                                            _currentIndex = 3;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5.0, right: 15),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                'lib/assets/icons/ShowICON.png',
+                                                height: 50,
+                                                width: 50,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "Shows",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(0);
+                                          print(_currentIndex);
+                                          setState(() {
+                                            _currentIndex = 0;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5.0, right: 15),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                'lib/assets/icons/ShowICON2.png',
+                                                height: 55,
+                                                width: 50,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8,
+                                                    top: 3,
+                                                    bottom: 2),
+                                                child: Text(
+                                                  "Shows",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                _currentIndex != 4
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(4);
+                                          print(_currentIndex);
+                                          setState(() {
+                                            _currentIndex = 4;
+                                          });
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Image.asset(
+                                                'lib/assets/icons/SportICON.png',
+                                                height: 42,
+                                                width: 50,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                "Sports",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 13),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(0);
+                                          print(_currentIndex);
+                                          setState(() {
+                                            _currentIndex = 0;
+                                            ;
+                                          });
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 6.0),
+                                              child: Image.asset(
+                                                'lib/assets/icons/SportICON2.png',
+                                                height: 45,
+                                                width: 50,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 7.0,
+                                                  left: 8,
+                                                  right: 8,
+                                                  bottom: 0),
+                                              child: Text(
+                                                "Sports",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 13),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                _currentIndex != 5
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(5);
+                                          print(_currentIndex);
+                                          setState(() {
+                                            _currentIndex = 5;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 4.0, top: 5),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                'lib/assets/icons/RecICON.png',
+                                                height: 45,
+                                                width: 50,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "Recreation",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          _tabController.animateTo(0);
+                                          print(_currentIndex);
+                                          setState(() {
+                                            _currentIndex = 0;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 4.0),
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 6.0),
+                                                child: Image.asset(
+                                                  'lib/assets/icons/RecICON2.png',
+                                                  height: 45,
+                                                  width: 50,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 7.0,
+                                                    left: 8,
+                                                    right: 8,
+                                                    bottom: 0),
+                                                child: Text(
+                                                  "Recreation",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          )
+                        ]),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                          onTap: () {
-                            navigateToCategoryFeed(context, "Recreation");
-                          },
-                          child: CategoryButton(asset: 'lib/assets/rec.png')),
-                      Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Recreation",
-                            style: TextStyle(
-                                fontFamily: 'Open Sans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16.0),
-                          ))
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MorePage()));
-                  },
-                  child: Card(
-                    margin: EdgeInsets.all(15),
-                    color: TextThemes.ndBlue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 25, top: 25),
-                          child: RichText(
-                            textScaleFactor: 1.75,
-                            text: TextSpan(
-                                style: TextThemes.mediumbody,
-                                children: [
-                                  TextSpan(
-                                      text: "More ",
-                                      style: TextStyle(color: Colors.white)),
-                                  TextSpan(
-                                      text: "MOOVs",
-                                      style:
-                                          TextStyle(color: TextThemes.ndGold)),
-                                ]),
+                  Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView(
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    SizedBox(width: 45),
+                                    Padding(
+                                        padding: const EdgeInsets.only(
+                                            bottom: 1.0, left: 20),
+                                        child: todayOnly == 0
+                                            ? RaisedButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    todayOnly = 1;
+                                                  });
+                                                },
+                                                color: TextThemes.ndBlue,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(3.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                right: 8.0),
+                                                        child: Text(
+                                                            'Today Only?',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 14)),
+                                                      ),
+                                                      Icon(Icons.calendar_today,
+                                                          color: TextThemes
+                                                              .ndGold),
+                                                    ],
+                                                  ),
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0)),
+                                              )
+                                            : RaisedButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    todayOnly = 0;
+                                                  });
+                                                },
+                                                color: Colors.green,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(3.0),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                right: 8.0),
+                                                        child: Text(
+                                                            'Today Only!',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 14)),
+                                                      ),
+                                                      Icon(Icons.check,
+                                                          color: TextThemes
+                                                              .ndGold),
+                                                    ],
+                                                  ),
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0)),
+                                              )),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10.0,
+                                      ),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .28,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        child: Theme(
+                                          data: Theme.of(context).copyWith(
+                                            canvasColor: TextThemes.ndBlue,
+                                          ),
+                                          child: ButtonTheme(
+                                            child: DropdownButtonFormField(
+                                              decoration: InputDecoration(
+                                                  border: UnderlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                    const Radius.circular(10.0),
+                                                  )),
+                                                  filled: true,
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey[800]),
+                                                  fillColor: TextThemes.ndBlue),
+                                              style: isLargePhone
+                                                  ? TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.white)
+                                                  : TextStyle(
+                                                      fontSize: 12.5,
+                                                      color: Colors.white),
+                                              value: privacyDropdownValue,
+                                              icon: Icon(
+                                                  Icons.privacy_tip_outlined,
+                                                  color: TextThemes.ndGold),
+                                              items: privacyList
+                                                  .map((String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(
+                                                    value,
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  privacyDropdownValue =
+                                                      newValue;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            )
+                          ])),
+                  SizedBox(height: 15),
+                  _currentIndex == 0 &&
+                          todayOnly == 0 &&
+                          privacyDropdownValue == 'Featured'
+                      ? CarouselSlider(
+                          options: CarouselOptions(
+                            height: 170,
+                            aspectRatio: 16 / 9,
+                            viewportFraction: 1,
+                            initialPage: 0,
+                            enableInfiniteScroll: true,
+                            // scrollPhysics: NeverScrollableScrollPhysics(),
+                            pauseAutoPlayOnTouch: false,
+                            reverse: false,
+                            autoPlay: false,
+                            autoPlayInterval: Duration(seconds: 6),
+                            autoPlayAnimationDuration:
+                                Duration(milliseconds: 800),
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            enlargeCenterPage: true,
+                            // onPageChanged: callbackFunction,
+                            scrollDirection: Axis.horizontal,
                           ),
-                        ),
-                      ],
-                    ),
+                          items: [
+                              PollView(),
+                              SuggestionBoxCarousel(),
+                              GroupCarousel(),
+                              HottestMOOV()
+                            ])
+                      : Container(),
+                  Flexible(
+                    child: TabBarView(controller: _tabController, children: [
+                      FutureBuilder(
+                        //THE DEFAULT NO FILTERS FEED
+                        future: postsRef.get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data.docs.length == 0)
+                            return Center(
+                              child: Text(
+                                  "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 20)),
+                            );
+
+                          return ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot course =
+                                  snapshot.data.docs[index];
+                              Timestamp startDate = course["startDate"];
+                              privacy = course['privacy'];
+                              Map<String, dynamic> statuses =
+                                  (snapshot.data.docs[index]['statuses']);
+
+                              int status = 0;
+                              List<dynamic> statusesIds =
+                                  statuses.keys.toList();
+
+                              List<dynamic> statusesValues =
+                                  statuses.values.toList();
+
+                              if (statuses != null) {
+                                for (int i = 0; i < statuses.length; i++) {
+                                  if (statusesIds[i] == currentUser.id) {
+                                    if (statusesValues[i] == 3) {
+                                      status = 3;
+                                    }
+                                  }
+                                }
+                              }
+
+                              bool hide = false;
+
+                              if (startDate.millisecondsSinceEpoch <
+                                  Timestamp.now().millisecondsSinceEpoch -
+                                      3600000) {
+                                print("Expired. See ya later.");
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
+                                  Database().deletePost(
+                                      course['postId'],
+                                      course['userId'],
+                                      course['title'],
+                                      course['statuses'],
+                                      course['posterName']);
+                                });
+                              }
+                              final now = DateTime.now();
+                              bool isToday = false;
+                              bool isTomorrow = false;
+
+                              final today =
+                                  DateTime(now.year, now.month, now.day);
+
+                              final tomorrow =
+                                  DateTime(now.year, now.month, now.day + 1);
+
+                              final dateToCheck = startDate.toDate();
+                              final aDate = DateTime(dateToCheck.year,
+                                  dateToCheck.month, dateToCheck.day);
+
+                              if (aDate == today) {
+                                isToday = true;
+                              } else if (aDate == tomorrow) {
+                                isTomorrow = true;
+                              }
+                              if (course['featured'] != true &&
+                                  privacyDropdownValue == "Featured") {
+                                hide = true;
+                              }
+                              if (isToday == false && todayOnly == 1) {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacyDropdownValue == "Private" &&
+                                  privacy != "Friends Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" &&
+                                  privacyDropdownValue == "Private" &&
+                                  !currentUser.friendArray
+                                      .contains(course['userId'])) {
+                                hide = true;
+                              }
+
+                              // if (course['featured'] != true) {
+                              //   hide = true;
+                              // }
+
+                              return (hide == false)
+                                  ? PostOnFeed(course)
+                                  : Text("",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20));
+                            },
+                          );
+                        },
+                      ),
+                       FutureBuilder(
+                        //Parties
+                        future: postsRef
+                            .where("type", isEqualTo: "Restaurants & Bars")
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data.docs.length == 0)
+                            return Center(
+                              child: Text(
+                                  "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 20)),
+                            );
+
+                          return ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot course =
+                                  snapshot.data.docs[index];
+                              Timestamp startDate = course["startDate"];
+                              privacy = course['privacy'];
+                              Map<String, dynamic> statuses =
+                                  (snapshot.data.docs[index]['statuses']);
+
+                              int status = 0;
+                              List<dynamic> statusesIds =
+                                  statuses.keys.toList();
+
+                              List<dynamic> statusesValues =
+                                  statuses.values.toList();
+
+                              if (statuses != null) {
+                                for (int i = 0; i < statuses.length; i++) {
+                                  if (statusesIds[i] == currentUser.id) {
+                                    if (statusesValues[i] == 3) {
+                                      status = 3;
+                                    }
+                                  }
+                                }
+                              }
+
+                              bool hide = false;
+
+                              if (startDate.millisecondsSinceEpoch <
+                                  Timestamp.now().millisecondsSinceEpoch -
+                                      3600000) {
+                                print("Expired. See ya later.");
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
+                                  Database().deletePost(
+                                      course['postId'],
+                                      course['userId'],
+                                      course['title'],
+                                      course['statuses'],
+                                      course['posterName']);
+                                });
+                              }
+                              final now = DateTime.now();
+                              bool isToday = false;
+                              bool isTomorrow = false;
+
+                              final today =
+                                  DateTime(now.year, now.month, now.day);
+                              final yesterday =
+                                  DateTime(now.year, now.month, now.day - 1);
+                              final tomorrow =
+                                  DateTime(now.year, now.month, now.day + 1);
+
+                              final dateToCheck = startDate.toDate();
+                              final aDate = DateTime(dateToCheck.year,
+                                  dateToCheck.month, dateToCheck.day);
+
+                              if (aDate == today) {
+                                isToday = true;
+                              } else if (aDate == tomorrow) {
+                                isTomorrow = true;
+                              }
+                              if (isToday == false && todayOnly == 1) {
+                                hide = true;
+                              }
+                              if (course['featured'] != true &&
+                                  privacyDropdownValue == "Featured") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacyDropdownValue == "Private" &&
+                                  privacy != "Friends Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" &&
+                                  privacyDropdownValue == "Private" &&
+                                  !currentUser.friendArray
+                                      .contains(course['userId'])) {
+                                hide = true;
+                              }
+
+                              // if (course['featured'] != true) {
+                              //   hide = true;
+                              // }
+
+                              return (hide == false)
+                                  ? PostOnFeed(course)
+                                  : Text("",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20));
+                            },
+                          );
+                        },
+                      ),
+                      FutureBuilder(
+                        //Parties
+                        future: postsRef
+                            .where("type", isEqualTo: "Pregames & Parties")
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data.docs.length == 0)
+                            return Center(
+                              child: Text(
+                                  "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 20)),
+                            );
+
+                          return ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot course =
+                                  snapshot.data.docs[index];
+                              Timestamp startDate = course["startDate"];
+                              privacy = course['privacy'];
+                              Map<String, dynamic> statuses =
+                                  (snapshot.data.docs[index]['statuses']);
+
+                              int status = 0;
+                              List<dynamic> statusesIds =
+                                  statuses.keys.toList();
+
+                              List<dynamic> statusesValues =
+                                  statuses.values.toList();
+
+                              if (statuses != null) {
+                                for (int i = 0; i < statuses.length; i++) {
+                                  if (statusesIds[i] == currentUser.id) {
+                                    if (statusesValues[i] == 3) {
+                                      status = 3;
+                                    }
+                                  }
+                                }
+                              }
+
+                              bool hide = false;
+
+                              if (startDate.millisecondsSinceEpoch <
+                                  Timestamp.now().millisecondsSinceEpoch -
+                                      3600000) {
+                                print("Expired. See ya later.");
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
+                                  Database().deletePost(
+                                      course['postId'],
+                                      course['userId'],
+                                      course['title'],
+                                      course['statuses'],
+                                      course['posterName']);
+                                });
+                              }
+                              final now = DateTime.now();
+                              bool isToday = false;
+                              bool isTomorrow = false;
+
+                              final today =
+                                  DateTime(now.year, now.month, now.day);
+                              final yesterday =
+                                  DateTime(now.year, now.month, now.day - 1);
+                              final tomorrow =
+                                  DateTime(now.year, now.month, now.day + 1);
+
+                              final dateToCheck = startDate.toDate();
+                              final aDate = DateTime(dateToCheck.year,
+                                  dateToCheck.month, dateToCheck.day);
+
+                              if (aDate == today) {
+                                isToday = true;
+                              } else if (aDate == tomorrow) {
+                                isTomorrow = true;
+                              }
+                              if (isToday == false && todayOnly == 1) {
+                                hide = true;
+                              }
+                              if (course['featured'] != true &&
+                                  privacyDropdownValue == "Featured") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacyDropdownValue == "Private" &&
+                                  privacy != "Friends Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" &&
+                                  privacyDropdownValue == "Private" &&
+                                  !currentUser.friendArray
+                                      .contains(course['userId'])) {
+                                hide = true;
+                              }
+
+                              // if (course['featured'] != true) {
+                              //   hide = true;
+                              // }
+
+                              return (hide == false)
+                                  ? PostOnFeed(course)
+                                  : Text("",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20));
+                            },
+                          );
+                        },
+                      ),
+                      FutureBuilder(
+                        future:
+                            postsRef.where("type", isEqualTo: "Shows").get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data.docs.length == 0)
+                            return Center(
+                              child: Text("",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 20)),
+                            );
+
+                          return ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot course =
+                                  snapshot.data.docs[index];
+                              Timestamp startDate = course["startDate"];
+                              privacy = course['privacy'];
+                              Map<String, dynamic> statuses =
+                                  (snapshot.data.docs[index]['statuses']);
+
+                              int status = 0;
+                              List<dynamic> statusesIds =
+                                  statuses.keys.toList();
+
+                              List<dynamic> statusesValues =
+                                  statuses.values.toList();
+
+                              if (statuses != null) {
+                                for (int i = 0; i < statuses.length; i++) {
+                                  if (statusesIds[i] == currentUser.id) {
+                                    if (statusesValues[i] == 3) {
+                                      status = 3;
+                                    }
+                                  }
+                                }
+                              }
+
+                              bool hide = false;
+
+                              if (startDate.millisecondsSinceEpoch <
+                                  Timestamp.now().millisecondsSinceEpoch -
+                                      3600000) {
+                                print("Expired. See ya later.");
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
+                                  Database().deletePost(
+                                      course['postId'],
+                                      course['userId'],
+                                      course['title'],
+                                      course['statuses'],
+                                      course['posterName']);
+                                });
+                              }
+                              final now = DateTime.now();
+                              bool isToday = false;
+                              bool isTomorrow = false;
+
+                              final today =
+                                  DateTime(now.year, now.month, now.day);
+                              final yesterday =
+                                  DateTime(now.year, now.month, now.day - 1);
+                              final tomorrow =
+                                  DateTime(now.year, now.month, now.day + 1);
+
+                              final dateToCheck = startDate.toDate();
+                              final aDate = DateTime(dateToCheck.year,
+                                  dateToCheck.month, dateToCheck.day);
+
+                              if (aDate == today) {
+                                isToday = true;
+                              } else if (aDate == tomorrow) {
+                                isTomorrow = true;
+                              }
+                              if (isToday == false && todayOnly == 1) {
+                                hide = true;
+                              }
+                              if (course['featured'] != true &&
+                                  privacyDropdownValue == "Featured") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacyDropdownValue == "Private" &&
+                                  privacy != "Friends Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" &&
+                                  privacyDropdownValue == "Private" &&
+                                  !currentUser.friendArray
+                                      .contains(course['userId'])) {
+                                hide = true;
+                              }
+
+                              // if (course['featured'] != true) {
+                              //   hide = true;
+                              // }
+
+                              return (hide == false)
+                                  ? PostOnFeed(course)
+                                  : Text("",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20));
+                            },
+                          );
+                        },
+                      ),
+                      FutureBuilder(
+                        //Sports
+                        future:
+                            postsRef.where("type", isEqualTo: "Sports").get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data.docs.length == 0)
+                            return Center(
+                              child: Text(
+                                  "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 20)),
+                            );
+
+                          return ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot course =
+                                  snapshot.data.docs[index];
+                              Timestamp startDate = course["startDate"];
+                              privacy = course['privacy'];
+                              Map<String, dynamic> statuses =
+                                  (snapshot.data.docs[index]['statuses']);
+
+                              int status = 0;
+                              List<dynamic> statusesIds =
+                                  statuses.keys.toList();
+
+                              List<dynamic> statusesValues =
+                                  statuses.values.toList();
+
+                              if (statuses != null) {
+                                for (int i = 0; i < statuses.length; i++) {
+                                  if (statusesIds[i] == currentUser.id) {
+                                    if (statusesValues[i] == 3) {
+                                      status = 3;
+                                    }
+                                  }
+                                }
+                              }
+
+                              bool hide = false;
+
+                              if (startDate.millisecondsSinceEpoch <
+                                  Timestamp.now().millisecondsSinceEpoch -
+                                      3600000) {
+                                print("Expired. See ya later.");
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
+                                  Database().deletePost(
+                                      course['postId'],
+                                      course['userId'],
+                                      course['title'],
+                                      course['statuses'],
+                                      course['posterName']);
+                                });
+                              }
+                              final now = DateTime.now();
+                              bool isToday = false;
+                              bool isTomorrow = false;
+
+                              final today =
+                                  DateTime(now.year, now.month, now.day);
+                              final yesterday =
+                                  DateTime(now.year, now.month, now.day - 1);
+                              final tomorrow =
+                                  DateTime(now.year, now.month, now.day + 1);
+
+                              final dateToCheck = startDate.toDate();
+                              final aDate = DateTime(dateToCheck.year,
+                                  dateToCheck.month, dateToCheck.day);
+
+                              if (aDate == today) {
+                                isToday = true;
+                              } else if (aDate == tomorrow) {
+                                isTomorrow = true;
+                              }
+                              if (isToday == false && todayOnly == 1) {
+                                hide = true;
+                              }
+                              if (course['featured'] != true &&
+                                  privacyDropdownValue == "Featured") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacyDropdownValue == "Private" &&
+                                  privacy != "Friends Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" &&
+                                  privacyDropdownValue == "Private" &&
+                                  !currentUser.friendArray
+                                      .contains(course['userId'])) {
+                                hide = true;
+                              }
+
+                              // if (course['featured'] != true) {
+                              //   hide = true;
+                              // }
+
+                              return (hide == false)
+                                  ? PostOnFeed(course)
+                                  : Text("",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20));
+                            },
+                          );
+                        },
+                      ),
+                      FutureBuilder(
+                        future: postsRef
+                            .where("type", isEqualTo: "Recreation")
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data.docs.length == 0)
+                            return Center(
+                              child: Text(
+                                  "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 20)),
+                            );
+
+                          return ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot course =
+                                  snapshot.data.docs[index];
+                              Timestamp startDate = course["startDate"];
+                              privacy = course['privacy'];
+                              Map<String, dynamic> statuses =
+                                  (snapshot.data.docs[index]['statuses']);
+
+                              int status = 0;
+                              List<dynamic> statusesIds =
+                                  statuses.keys.toList();
+
+                              List<dynamic> statusesValues =
+                                  statuses.values.toList();
+
+                              if (statuses != null) {
+                                for (int i = 0; i < statuses.length; i++) {
+                                  if (statusesIds[i] == currentUser.id) {
+                                    if (statusesValues[i] == 3) {
+                                      status = 3;
+                                    }
+                                  }
+                                }
+                              }
+
+                              bool hide = false;
+
+                              if (startDate.millisecondsSinceEpoch <
+                                  Timestamp.now().millisecondsSinceEpoch -
+                                      3600000) {
+                                print("Expired. See ya later.");
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
+                                  Database().deletePost(
+                                      course['postId'],
+                                      course['userId'],
+                                      course['title'],
+                                      course['statuses'],
+                                      course['posterName']);
+                                });
+                              }
+                              final now = DateTime.now();
+                              bool isToday = false;
+                              bool isTomorrow = false;
+
+                              final today =
+                                  DateTime(now.year, now.month, now.day);
+                              final yesterday =
+                                  DateTime(now.year, now.month, now.day - 1);
+                              final tomorrow =
+                                  DateTime(now.year, now.month, now.day + 1);
+
+                              final dateToCheck = startDate.toDate();
+                              final aDate = DateTime(dateToCheck.year,
+                                  dateToCheck.month, dateToCheck.day);
+
+                              if (aDate == today) {
+                                isToday = true;
+                              } else if (aDate == tomorrow) {
+                                isTomorrow = true;
+                              }
+                              if (isToday == false && todayOnly == 1) {
+                                hide = true;
+                              }
+                              if (course['featured'] != true &&
+                                  privacyDropdownValue == "Featured") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacyDropdownValue == "Private" &&
+                                  privacy != "Friends Only") {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" &&
+                                  privacyDropdownValue == "Private" &&
+                                  !currentUser.friendArray
+                                      .contains(course['userId'])) {
+                                hide = true;
+                              }
+
+                              // if (course['featured'] != true) {
+                              //   hide = true;
+                              // }
+
+                              return (hide == false)
+                                  ? PostOnFeed(course)
+                                  : Text("",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 20));
+                            },
+                          );
+                        },
+                      ),
+                    ]),
                   ),
-                ),
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          ),
+        ));
     // return MaterialApp(
     //   home: Scaffold(
     //     backgroundColor: CupertinoColors.lightBackgroundGray,
@@ -815,43 +1650,111 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class CategoryButton extends StatelessWidget {
-  CategoryButton({@required this.asset});
-  final String asset;
+class Category extends StatelessWidget {
+   String type;
+   int todayOnly;
+   String privacyDropdownValue;
+
+  Category(String type, int todayOnly, String privacyDropDownValue);
 
   @override
   Widget build(BuildContext context) {
-    bool isLargePhone = Screen.diagonal(context) > 766;
-    bool isNarrow = Screen.widthInches(context) < 3.5;
+    return FutureBuilder(
+      future: postsRef.where("type", isEqualTo: type).get(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data.docs.length == 0)
+          return Center(
+            child: Text(
+                "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20)),
+          );
 
-    return Container(
-      // height:
-      height: isLargePhone
-          ? MediaQuery.of(context).size.height * 0.15
-          : MediaQuery.of(context).size.height * 0.178,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Image.asset(
-          (asset),
-          fit: BoxFit.cover,
-        ),
-      ),
-      margin: EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 7.5),
-      width: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
+        return ListView.builder(
+          itemCount: snapshot.data.docs.length,
+          itemBuilder: (context, index) {
+            DocumentSnapshot course = snapshot.data.docs[index];
+            Timestamp startDate = course["startDate"];
+            String privacy = course['privacy'];
+            Map<String, dynamic> statuses =
+                (snapshot.data.docs[index]['statuses']);
+
+            int status = 0;
+            List<dynamic> statusesIds = statuses.keys.toList();
+
+            List<dynamic> statusesValues = statuses.values.toList();
+
+            if (statuses != null) {
+              for (int i = 0; i < statuses.length; i++) {
+                if (statusesIds[i] == currentUser.id) {
+                  if (statusesValues[i] == 3) {
+                    status = 3;
+                  }
+                }
+              }
+            }
+
+            bool hide = false;
+
+            if (startDate.millisecondsSinceEpoch <
+                Timestamp.now().millisecondsSinceEpoch - 3600000) {
+              print("Expired. See ya later.");
+              Future.delayed(const Duration(milliseconds: 1000), () {
+                Database().deletePost(course['postId'], course['userId'],
+                    course['title'], course['statuses'], course['posterName']);
+              });
+            }
+            final now = DateTime.now();
+            bool isToday = false;
+            bool isTomorrow = false;
+
+            final today = DateTime(now.year, now.month, now.day);
+            final tomorrow = DateTime(now.year, now.month, now.day + 1);
+
+            final dateToCheck = startDate.toDate();
+            final aDate =
+                DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
+
+            if (aDate == today) {
+              isToday = true;
+            } else if (aDate == tomorrow) {
+              isTomorrow = true;
+            }
+            if (isToday == false && todayOnly == 1) {
+              hide = true;
+            }
+            if (course['featured'] != true &&
+                privacyDropdownValue == "Featured") {
+              hide = true;
+            }
+            if (privacy == "Friends Only" || privacy == "Invite Only") {
+              hide = true;
+            }
+            if (privacy == "Friends Only" || privacy == "Invite Only") {
+              hide = true;
+            }
+            if (privacyDropdownValue == "Private" &&
+                privacy != "Friends Only") {
+              hide = true;
+            }
+            if (privacy == "Friends Only" &&
+                privacyDropdownValue == "Private" &&
+                !currentUser.friendArray.contains(course['userId'])) {
+              hide = true;
+            }
+
+            // if (course['featured'] != true) {
+            //   hide = true;
+            // }
+
+            return (hide == false)
+                ? PostOnFeed(course)
+                : Text("",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20));
+          },
+        );
+      },
     );
   }
 }

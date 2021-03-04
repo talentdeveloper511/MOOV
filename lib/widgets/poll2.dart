@@ -13,8 +13,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:polls/polls.dart';
 
-User currentUser;
-
 class PollView extends StatefulWidget {
   @override
   _PollViewState createState() => _PollViewState();
@@ -38,15 +36,12 @@ class _PollViewState extends State<PollView> {
 
   @override
   Widget build(BuildContext context) {
-    String userName;
-    String userPic;
+ 
     String question;
     String choice1;
     String choice2;
     var x;
     var y;
-    GoogleSignInAccount user = googleSignIn.currentUser;
-    userId = user.id;
 
     bool isLargePhone = Screen.diagonal(context) > 766;
     final dateToCheck = Timestamp.now().toDate();
@@ -119,12 +114,12 @@ class _PollViewState extends State<PollView> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             pollStyle: TextStyle(color: TextThemes.ndBlue),
-                            currentUser: userId,
+                            currentUser: currentUser.id,
                             creatorID: this.creator,
                             voteData: voters,
                             // voteData: usersWhoVoted,
                             // userChoice: usersWhoVoted[this.userId],
-                            userChoice: voters[userId],
+                            userChoice: voters[currentUser.id],
                             onVoteBackgroundColor: Colors.blue,
                             leadingBackgroundColor: TextThemes.ndGold,
                             backgroundColor: Colors.white,
@@ -144,11 +139,11 @@ class _PollViewState extends State<PollView> {
                                   .collection('poll')
                                   .doc(day)
                                   .set({
-                                "voters": {user.id: choice}
+                                "voters": {currentUser.id ?? "": choice}
                               }, SetOptions(merge: true));
 
                               if (choice == 1) {
-                                usersRef.doc(user.id).update(
+                                usersRef.doc(currentUser.id).update(
                                     {"score": FieldValue.increment(25)});
                                 setState(() {
                                   option1 += 1.0;
@@ -162,7 +157,7 @@ class _PollViewState extends State<PollView> {
                                 });
                               }
                               if (choice == 2) {
-                                usersRef.doc(user.id).update(
+                                usersRef.doc(currentUser.id?? "").update(
                                     {"score": FieldValue.increment(25)});
 
                                 setState(() {
@@ -218,7 +213,7 @@ class _PollViewState extends State<PollView> {
                         opacityDisabled: 0, //and end value
                         enabled: positivePointAnimation2,
                         child: PointAnimation(25, true))),
-                voters.containsKey(userId)
+                voters.containsKey(currentUser.id)
                     ? Positioned(
                         top: isLargePhone ? 60 : 60,
                         left: isLargePhone ? 90 : 90,
@@ -260,7 +255,7 @@ class _PollViewState extends State<PollView> {
                                           child: Column(
                                             children: <Widget>[
                                               GestureDetector(
-                                                onTap: userId == id
+                                                onTap: currentUser.id == id
                                                     ? () {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(
@@ -306,7 +301,7 @@ class _PollViewState extends State<PollView> {
                         ),
                       )
                     : Container(),
-                voters.containsKey(userId)
+                voters.containsKey(currentUser.id)
                     ? Positioned(
                         bottom: isLargePhone ? -35 : -35,
                         left: isLargePhone ? 90 : 90,
@@ -348,7 +343,7 @@ class _PollViewState extends State<PollView> {
                                           child: Column(
                                             children: <Widget>[
                                               GestureDetector(
-                                                onTap: userId == id2
+                                                onTap: currentUser.id == id2
                                                     ? () {
                                                         Navigator.of(context).push(
                                                             MaterialPageRoute(

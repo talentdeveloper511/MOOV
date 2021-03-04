@@ -977,54 +977,56 @@ class PostOnFeed extends StatelessWidget {
                                             constraints: BoxConstraints(
                                               maxWidth: 130,
                                             ),
-                                            child: Row(
-                                              children: [
-                                                Text(displayName,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color:
-                                                            TextThemes.ndBlue,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .none)),
-                                                verifiedStatus == 3
-                                                    ? Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left: 2.5,
-                                                        ),
-                                                        child: Icon(
-                                                          Icons.store,
-                                                          size: 20,
+                                            child: SizedBox(
+                                              child: Row(
+                                                children: [
+                                                  Text(displayName,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                          fontSize: 14,
                                                           color:
-                                                              TextThemes.ndGold,
-                                                        ),
-                                                      )
-                                                    : verifiedStatus == 2
-                                                        ? Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                              left: 5,
-                                                            ),
-                                                            child: Image.asset(
-                                                                'lib/assets/verif2.png',
-                                                                height: 15),
-                                                          )
-                                                        : verifiedStatus == 1
-                                                            ? Padding(
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        left:
-                                                                            2.5,
-                                                                        top: 0),
-                                                                child: Image.asset(
-                                                                    'lib/assets/verif.png',
-                                                                    height: 22),
-                                                              )
-                                                            : Text("")
-                                              ],
+                                                              TextThemes.ndBlue,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .none)),
+                                                  verifiedStatus == 3
+                                                      ? Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                            left: 2.5,
+                                                          ),
+                                                          child: Icon(
+                                                            Icons.store,
+                                                            size: 20,
+                                                            color:
+                                                                TextThemes.ndGold,
+                                                          ),
+                                                        )
+                                                      : verifiedStatus == 2
+                                                          ? Padding(
+                                                              padding:
+                                                                  EdgeInsets.only(
+                                                                left: 5,
+                                                              ),
+                                                              child: Image.asset(
+                                                                  'lib/assets/verif2.png',
+                                                                  height: 15),
+                                                            )
+                                                          : verifiedStatus == 1
+                                                              ? Padding(
+                                                                  padding: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              2.5,
+                                                                          top: 0),
+                                                                  child: Image.asset(
+                                                                      'lib/assets/verif.png',
+                                                                      height: 22),
+                                                                )
+                                                              : Text("")
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
