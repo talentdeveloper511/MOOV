@@ -106,26 +106,27 @@ class _MOOVSPageState extends State<MOOVSPage>
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-                  child: Column(
+        body: Column(children:
+        [ Column(
             children: [
-              SizedBox(height: 30),
+              SizedBox(height: isLargePhone ? 60 : 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Friends' Plans", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: TextThemes.ndBlue),),
-               IconButton(
-                                            padding: EdgeInsets.only(
-                                                left: 0,
-                                                right: 0,
-                                                bottom: 15,
-                                                top: 5),
-                                            icon: Image.asset(
-                                                'lib/assets/ff.png'),
-                                            color: Colors.white,
-                                            splashColor: Color.fromRGBO(
-                                                220, 180, 57, 1.0),
-                                          ), 
+                  Text(
+                    "Friends' Plans",
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: TextThemes.ndBlue),
+                  ),
+                  IconButton(
+                    padding:
+                        EdgeInsets.only(left: 0, right: 0, bottom: 15, top: 5),
+                    icon: Image.asset('lib/assets/ff.png'),
+                    color: Colors.white,
+                    splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                  ),
                 ],
               ),
               Divider(
@@ -226,7 +227,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                                             Text(" Incognito",
                                                 style: TextStyle(
                                                     color: Colors.white,
-                                                    fontWeight: FontWeight.bold))
+                                                    fontWeight:
+                                                        FontWeight.bold))
                                           ]),
                                         )
                                       : Text("is going to")),
@@ -247,12 +249,14 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                 : Text("nothing, right now."),
                                           ));
                                         if ((!snapshot.hasData ||
-                                                snapshot.data.docs.length == 0) &&
+                                                snapshot.data.docs.length ==
+                                                    0) &&
                                             (!isIncognito ||
                                                 !friendFinderVisibility))
                                           return SizedBox(
                                               child: Align(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Padding(
                                                     padding: !isLargePhone
                                                         ? const EdgeInsets.all(
@@ -278,7 +282,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                       .height *
                                                   0.15);
                                         var course = snapshot.data.docs[0];
-                                        Timestamp startDate = course["startDate"];
+                                        Timestamp startDate =
+                                            course["startDate"];
                                         bool hide = false;
 
                                         final now = DateTime.now();
@@ -307,7 +312,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                                         } else if (aDate == tomorrow) {
                                           isTomorrow = true;
                                         }
-                                        if (isToday == false && todayOnly == 1) {
+                                        if (isToday == false &&
+                                            todayOnly == 1) {
                                           hide = true;
                                         }
 
@@ -315,7 +321,8 @@ class _MOOVSPageState extends State<MOOVSPage>
                                             friendFinderVisibility == false) {
                                           hide = true;
                                         }
-                                        if (course['privacy'] == "Invite Only") {
+                                        if (course['privacy'] ==
+                                            "Invite Only") {
                                           hide = true;
                                         }
 
@@ -358,34 +365,40 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                           child: ClipRRect(
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(10),
+                                                                    .circular(
+                                                                        10),
                                                             child:
                                                                 CachedNetworkImage(
-                                                              imageUrl:
-                                                                  course['image'],
+                                                              imageUrl: course[
+                                                                  'image'],
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
-                                                          margin: EdgeInsets.only(
-                                                              left: 20,
-                                                              top: 0,
-                                                              right: 20,
-                                                              bottom: 7.5),
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  left: 20,
+                                                                  top: 0,
+                                                                  right: 20,
+                                                                  bottom: 7.5),
                                                           decoration:
                                                               BoxDecoration(
                                                             color: Colors.white,
                                                             borderRadius:
-                                                                BorderRadius.all(
-                                                              Radius.circular(10),
+                                                                BorderRadius
+                                                                    .all(
+                                                              Radius.circular(
+                                                                  10),
                                                             ),
                                                             boxShadow: [
                                                               BoxShadow(
-                                                                color: Colors.grey
+                                                                color: Colors
+                                                                    .grey
                                                                     .withOpacity(
                                                                         0.5),
                                                                 spreadRadius: 5,
                                                                 blurRadius: 7,
-                                                                offset: Offset(0,
+                                                                offset: Offset(
+                                                                    0,
                                                                     3), // changes position of shadow
                                                               ),
                                                             ],
@@ -393,11 +406,13 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                         ),
                                                       ),
                                                       Container(
-                                                        decoration: BoxDecoration(
+                                                        decoration:
+                                                            BoxDecoration(
                                                           borderRadius:
                                                               BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      20)),
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)),
                                                           gradient:
                                                               LinearGradient(
                                                             begin: Alignment
@@ -428,8 +443,9 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                       .docs[0]
                                                                   ['title'],
                                                               maxLines: 2,
-                                                              textAlign: TextAlign
-                                                                  .center,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
@@ -463,50 +479,32 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         gradient:
                                                                             LinearGradient(
                                                                           colors: [
-                                                                            Colors
-                                                                                .pink[400],
-                                                                            Colors
-                                                                                .purple[300]
+                                                                            Colors.pink[400],
+                                                                            Colors.purple[300]
                                                                           ],
-                                                                          begin: Alignment
-                                                                              .centerLeft,
+                                                                          begin:
+                                                                              Alignment.centerLeft,
                                                                           end: Alignment
                                                                               .centerRight,
                                                                         ),
                                                                         borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                10.0)),
-                                                                child: isNextWeek
-                                                                    ? Text(
-                                                                        DateFormat(
-                                                                                'MMM d')
-                                                                            .add_jm()
-                                                                            .format(
-                                                                                course['startDate'].toDate()),
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            color: Colors
-                                                                                .white,
-                                                                            fontSize:
-                                                                                18),
-                                                                      )
-                                                                    : Text(
-                                                                        DateFormat(
-                                                                                'EEE')
-                                                                            .add_jm()
-                                                                            .format(
-                                                                                course['startDate'].toDate()),
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            color: Colors
-                                                                                .white,
-                                                                            fontSize:
-                                                                                18),
-                                                                      ),
+                                                                            BorderRadius.circular(10.0)),
+                                                                child:
+                                                                    isNextWeek
+                                                                        ? Text(
+                                                                            DateFormat('MMM d').add_jm().format(course['startDate'].toDate()),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(color: Colors.white, fontSize: 18),
+                                                                          )
+                                                                        : Text(
+                                                                            DateFormat('EEE').add_jm().format(course['startDate'].toDate()),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(color: Colors.white, fontSize: 18),
+                                                                          ),
                                                               ),
                                                             )
                                                           : Container(),
@@ -524,19 +522,16 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                         gradient:
                                                                             LinearGradient(
                                                                           colors: [
-                                                                            Colors
-                                                                                .red[400],
-                                                                            Colors
-                                                                                .red[600]
+                                                                            Colors.red[400],
+                                                                            Colors.red[600]
                                                                           ],
-                                                                          begin: Alignment
-                                                                              .centerLeft,
+                                                                          begin:
+                                                                              Alignment.centerLeft,
                                                                           end: Alignment
                                                                               .centerRight,
                                                                         ),
                                                                         borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                10.0)),
+                                                                            BorderRadius.circular(10.0)),
                                                                 child: Text(
                                                                   DateFormat(
                                                                           'EEE')
@@ -571,13 +566,14 @@ class _MOOVSPageState extends State<MOOVSPage>
                                                                 .size
                                                                 .width *
                                                             0.49,
-                                                    height: MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                        0.15,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.15,
                                                     child: Align(
-                                                        alignment:
-                                                            Alignment.centerLeft,
+                                                        alignment: Alignment
+                                                            .centerLeft,
                                                         child: Padding(
                                                           padding:
                                                               const EdgeInsets
@@ -594,33 +590,36 @@ class _MOOVSPageState extends State<MOOVSPage>
                           right: 20,
                           bottom: 15,
                           child: GestureDetector(
-                            onTap: (){
-                                   Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    FriendFinder()));
-                            },
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => FriendFinder()));
+                              },
                               child: Text(
-                            "View more",
-                            style: TextStyle(
-                                color: Colors.blue, fontWeight: FontWeight.bold),
-                          )))
+                                "View more",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold),
+                              )))
                     ]);
                   }),
-                  SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Friend Groups ",style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: TextThemes.ndBlue),),
-                   IconButton(
-                                          padding: EdgeInsets.only(left: 5.0, top:5, bottom: 10),
-                                          icon:
-                                              Image.asset('lib/assets/fg1.png'),
-                                          splashColor:
-                                              Color.fromRGBO(220, 180, 57, 1.0),
-                                        ),
-                      ],
-                    ),
+              SizedBox(height: isLargePhone ? 60 : 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Friend Groups ",
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: TextThemes.ndBlue),
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.only(left: 5.0, top: 5, bottom: 10),
+                    icon: Image.asset('lib/assets/fg1.png'),
+                    splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                  ),
+                ],
+              ),
               Divider(
                 color: TextThemes.ndBlue,
                 height: 20,
@@ -628,276 +627,274 @@ class _MOOVSPageState extends State<MOOVSPage>
                 indent: 20,
                 endIndent: 20,
               ),
+              Container(
+                height: 200,
+                child: StreamBuilder(
+                    stream: groupsRef
+                        .where('members', arrayContains: currentUser.id)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return CircularProgressIndicator();
+                      if (snapshot.data.docs.length == 0) {
+                        return Container();
+                      }
 
-                  Container(height: 200,
-                    child: StreamBuilder(
-              stream: groupsRef
-                    .where('members', arrayContains: currentUser.id)
-                    .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return CircularProgressIndicator();
-                if (snapshot.data.docs.length == 0) {
-                    return Container( );
-                }
-
-                return Stack(
-                                  children: [Container(
-                      // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
-                      child: Column(
-                        children: [
-                          Expanded(
-                              child: CustomScrollView(
+                      return Stack(children: [
+                        Container(
+                          // height: (snapshot.data.documents.length <= 3) ? 270 : 400,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                  child: CustomScrollView(
                                 physics: NeverScrollableScrollPhysics(),
-                            slivers: [
-                            
-                              SliverGrid(
-                                  delegate: SliverChildBuilderDelegate(
-                                      (BuildContext context, int index) {
-                                    if (!snapshot.hasData)
-                                      return CircularProgressIndicator();
-                                    if (snapshot.data.docs.length == 0) {
-                                      return Container();
-                                    }
+                                slivers: [
+                                  SliverGrid(
+                                      delegate: SliverChildBuilderDelegate(
+                                          (BuildContext context, int index) {
+                                        if (!snapshot.hasData)
+                                          return CircularProgressIndicator();
+                                        if (snapshot.data.docs.length == 0) {
+                                          return Container();
+                                        }
 
-                                    DocumentSnapshot course =
-                                        snapshot.data.docs[index];
-                                    var length = course['members'].length - 2;
-                                    String groupId = course['groupId'];
+                                        DocumentSnapshot course =
+                                            snapshot.data.docs[index];
+                                        var length =
+                                            course['members'].length - 2;
+                                        String groupId = course['groupId'];
 
-                                    // var rng = new Random();
-                                    // var l = rng.nextInt(course['members'].length);
-                                    // print(l);
-                                    // print(course['groupName']);
+                                        // var rng = new Random();
+                                        // var l = rng.nextInt(course['members'].length);
+                                        // print(l);
+                                        // print(course['groupName']);
 
-                                    return StreamBuilder(
-                                        stream: usersRef
-                                            .where('friendGroups',
-                                                arrayContains: groupId)
-                                            .snapshots(),
-                                        builder: (context, snapshot3) {
-                                          if (!snapshot3.hasData)
-                                            return CircularProgressIndicator();
-                                          if (snapshot3.hasError ||
-                                              snapshot3.data == null)
-                                            return CircularProgressIndicator();
+                                        return StreamBuilder(
+                                            stream: usersRef
+                                                .where('friendGroups',
+                                                    arrayContains: groupId)
+                                                .snapshots(),
+                                            builder: (context, snapshot3) {
+                                              if (!snapshot3.hasData)
+                                                return CircularProgressIndicator();
+                                              if (snapshot3.hasError ||
+                                                  snapshot3.data == null)
+                                                return CircularProgressIndicator();
 
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              // color: Colors.white,
-                                              clipBehavior: Clip.none,
-                                              child: Stack(
-                                                children: <Widget>[
-                                                  InkWell(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  GroupDetail(
-                                                                      groupId)));
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets.only(
-                                                                  bottom: 5.0),
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius.all(
-                                                                        Radius
-                                                                            .circular(
-                                                                                20)),
-                                                                border: Border.all(
-                                                                  color: TextThemes
-                                                                      .ndBlue,
-                                                                  width: 3,
-                                                                )),
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius.all(
-                                                                      Radius.circular(
-                                                                          15)),
-                                                              child:
-                                                                  CachedNetworkImage(
-                                                                imageUrl: course[
-                                                                    'groupPic'],
-                                                                fit: BoxFit.cover,
-                                                                height: isLargePhone
-                                                                    ? MediaQuery.of(
-                                                                                context)
-                                                                            .size
-                                                                            .height *
-                                                                        0.11
-                                                                    : MediaQuery.of(
-                                                                                context)
-                                                                            .size
-                                                                            .height *
-                                                                        0.13,
-                                                                width: isLargePhone
-                                                                    ? MediaQuery.of(
-                                                                                context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.35
-                                                                    : MediaQuery.of(
-                                                                                context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.35,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets.all(
-                                                                  12.5),
-                                                          child: Center(
-                                                            child: FittedBox(
-                                                              child: Text(
-                                                                course['groupName']
-                                                                    .toString(),
-                                                                maxLines: 2,
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        Colors.black,
-                                                                    fontSize:
-                                                                        isLargePhone
-                                                                            ? 20.0
-                                                                            : 18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                                textAlign:
-                                                                    TextAlign.center,
-                                                                overflow: TextOverflow
-                                                                    .ellipsis,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    bottom: isLargePhone ? 80 : 70,
-                                                    right: 20,
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.center,
-                                                      children: [
-                                                        Stack(children: [
-                                                          Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(4.0),
-                                                              child: course['members']
-                                                                          .length >
-                                                                      1
-                                                                  ? CircleAvatar(
-                                                                      radius: 20.0,
-                                                                      backgroundImage:
-                                                                          NetworkImage(
-                                                                        snapshot3.data
-                                                                                .docs[1]
-                                                                            [
-                                                                            'photoUrl'],
-                                                                      ),
-                                                                    )
-                                                                  : Container()),
-                                                          Padding(
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  // color: Colors.white,
+                                                  clipBehavior: Clip.none,
+                                                  child: Stack(
+                                                    children: <Widget>[
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      GroupDetail(
+                                                                          groupId)));
+                                                        },
+                                                        child: Column(
+                                                          children: [
+                                                            Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                           .only(
-                                                                      top: 4,
-                                                                      left: 20.0),
-                                                              child: CircleAvatar(
-                                                                radius: 20.0,
-                                                                backgroundImage:
-                                                                    NetworkImage(
-                                                                  snapshot3.data
-                                                                          .docs[0]
-                                                                      ['photoUrl'],
+                                                                      bottom:
+                                                                          5.0),
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(
+                                                                                20)),
+                                                                        border:
+                                                                            Border.all(
+                                                                          color:
+                                                                              TextThemes.ndBlue,
+                                                                          width:
+                                                                              3,
+                                                                        )),
+                                                                child:
+                                                                    ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              15)),
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl:
+                                                                        course[
+                                                                            'groupPic'],
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                    height: isLargePhone
+                                                                        ? MediaQuery.of(context).size.height *
+                                                                            0.11
+                                                                        : MediaQuery.of(context).size.height *
+                                                                            0.13,
+                                                                    width: isLargePhone
+                                                                        ? MediaQuery.of(context).size.width *
+                                                                            0.35
+                                                                        : MediaQuery.of(context).size.width *
+                                                                            0.35,
+                                                                  ),
                                                                 ),
-                                                              )),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets.only(
-                                                                    top: 4,
-                                                                    left: 40.0),
-                                                            child: CircleAvatar(
-                                                              radius: 20.0,
-                                                              child: course['members']
-                                                                          .length >
-                                                                      2
-                                                                  ? Text(
-                                                                      "+" +
-                                                                          (length
-                                                                              .toString()),
-                                                                      style: TextStyle(
-                                                                          color: TextThemes
-                                                                              .ndGold,
-                                                                          fontWeight:
-                                                                              FontWeight
-                                                                                  .w500),
-                                                                    )
-                                                                  : Text(
-                                                                      (course['members']
-                                                                          .length
-                                                                          .toString()),
-                                                                      style: TextStyle(
-                                                                          color: TextThemes
-                                                                              .ndGold,
-                                                                          fontWeight:
-                                                                              FontWeight
-                                                                                  .w500),
-                                                                    ),
-                                                              backgroundColor:
-                                                                  TextThemes.ndBlue,
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ])
-                                                      ],
-                                                    ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .all(
+                                                                      12.5),
+                                                              child: Center(
+                                                                child:
+                                                                    FittedBox(
+                                                                  child: Text(
+                                                                    course['groupName']
+                                                                        .toString(),
+                                                                    maxLines: 2,
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize: isLargePhone
+                                                                            ? 20.0
+                                                                            : 18,
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        bottom: isLargePhone
+                                                            ? 80
+                                                            : 70,
+                                                        right: 20,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Stack(children: [
+                                                              Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          4.0),
+                                                                  child: course['members']
+                                                                              .length >
+                                                                          1
+                                                                      ? CircleAvatar(
+                                                                          radius:
+                                                                              20.0,
+                                                                          backgroundImage:
+                                                                              NetworkImage(
+                                                                            snapshot3.data.docs[1]['photoUrl'],
+                                                                          ),
+                                                                        )
+                                                                      : Container()),
+                                                              Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      top: 4,
+                                                                      left:
+                                                                          20.0),
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    radius:
+                                                                        20.0,
+                                                                    backgroundImage:
+                                                                        NetworkImage(
+                                                                      snapshot3
+                                                                          .data
+                                                                          .docs[0]['photoUrl'],
+                                                                    ),
+                                                                  )),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        top: 4,
+                                                                        left:
+                                                                            40.0),
+                                                                child:
+                                                                    CircleAvatar(
+                                                                  radius: 20.0,
+                                                                  child: course['members']
+                                                                              .length >
+                                                                          2
+                                                                      ? Text(
+                                                                          "+" +
+                                                                              (length.toString()),
+                                                                          style: TextStyle(
+                                                                              color: TextThemes.ndGold,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        )
+                                                                      : Text(
+                                                                          (course['members']
+                                                                              .length
+                                                                              .toString()),
+                                                                          style: TextStyle(
+                                                                              color: TextThemes.ndGold,
+                                                                              fontWeight: FontWeight.w500),
+                                                                        ),
+                                                                  backgroundColor:
+                                                                      TextThemes
+                                                                          .ndBlue,
+                                                                ),
+                                                              ),
+                                                            ])
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                  }, childCount: 2),
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                  )),
+                                                ),
+                                              );
+                                            });
+                                      }, childCount: 2),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                      )),
+                                ],
+                              )),
                             ],
-                          )),
-                        ],
-                      ),
-                  ),
-                  Positioned(
-                          right: 20,
-                          bottom: 15,
-                          child: GestureDetector(
-                            onTap: (){
-                                   Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    FriendGroupsPage()));
-                            },
-                              child: Text(
-                            "View more",
-                            style: TextStyle(
-                                color: Colors.blue, fontWeight: FontWeight.bold),
-                          )))]
-                );
-              }),
-                  )
+                          ),
+                        ),
+                        Positioned(
+                            right: 20,
+                            bottom: 15,
+                            child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          FriendGroupsPage()));
+                                },
+                                child: Text(
+                                  "View more",
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold),
+                                )))
+                      ]);
+                    }),
+              )
             ],
-          ),
+          )],
         ));
 
     // FloatingActionButton.extended(
