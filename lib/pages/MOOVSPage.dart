@@ -613,7 +613,7 @@ class _MOOVSPageState extends State<MOOVSPage>
                       children: [
                         Text("Friend Groups ",style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: TextThemes.ndBlue),),
                    IconButton(
-                                          padding: EdgeInsets.all(5.0),
+                                          padding: EdgeInsets.only(left: 5.0, top:5, bottom: 10),
                                           icon:
                                               Image.asset('lib/assets/fg1.png'),
                                           splashColor:

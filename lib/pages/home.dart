@@ -729,9 +729,9 @@ class _HomeState extends State<Home> {
           onTap: onTap,
           activeColor: TextThemes.ndGold,
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home)),
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
             BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
-            BottomNavigationBarItem(icon: Icon(Icons.directions_run_outlined)),
+            BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
             BottomNavigationBarItem(
                 icon: CircleAvatar(
                     radius: 16,
