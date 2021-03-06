@@ -492,7 +492,7 @@ class _ProfilePageState extends State<ProfilePage>
 
                       StreamBuilder(
                           stream: postsRef
-                              .where('userId', isEqualTo: currentUser.id)
+                              .where('going', arrayContains: currentUser.id)
                               // .orderBy("startDate")
                               .limit(6)
                               .snapshots(),

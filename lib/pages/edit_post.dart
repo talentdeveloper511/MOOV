@@ -43,8 +43,8 @@ class _EditPostState extends State<EditPost> {
   final _formKey = GlobalKey<FormState>();
   final privacyList = ["Public", "Friends Only", "Invite Only"];
   final listOfTypes = [
-    "Restaurants & Bars",
-    "Pregames & Parties",
+    "Food/Drink",
+    "Parties",
     "Clubs",
     "Sports",
     "Shows",
@@ -1193,13 +1193,11 @@ class _EditPostState extends State<EditPost> {
                                             });
                                           }
 
-                                          
                                           if (invitees != []) {
                                             for (var item in invitees)
                                               postsRef.doc(postId).set({
                                                 "statuses": {item: -1}
                                               }, SetOptions(merge: true)).then(
-                                               
                                                   Database()
                                                       .inviteesNotification(
                                                           postId,

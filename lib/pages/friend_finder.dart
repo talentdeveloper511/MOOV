@@ -15,6 +15,7 @@ import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -94,21 +95,19 @@ class _FriendFinderState extends State<FriendFinder>
       backgroundColor: TextThemes.ndBlue,
       //pinned: true,
       actions: <Widget>[
-         NamedIconMessages(
-              iconData: Icons.mail_outline,
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MessageList()));
-              }),
-          NamedIcon(
-              iconData: Icons.notifications_active_outlined,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationFeed()));
-                Database().setNotifsSeen();
-              }),
+        NamedIconMessages(
+            iconData: Icons.mail_outline,
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MessageList()));
+            }),
+        NamedIcon(
+            iconData: Icons.notifications_active_outlined,
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationFeed()));
+              Database().setNotifsSeen();
+            }),
       ],
     );
   }
@@ -137,6 +136,8 @@ class _FriendFinderState extends State<FriendFinder>
                     child: todayOnly == 0
                         ? RaisedButton(
                             onPressed: () {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 todayOnly = 1;
                               });
@@ -163,6 +164,8 @@ class _FriendFinderState extends State<FriendFinder>
                           )
                         : RaisedButton(
                             onPressed: () {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 todayOnly = 0;
                               });
@@ -191,6 +194,8 @@ class _FriendFinderState extends State<FriendFinder>
                     child: tomorrowOnly == 0
                         ? RaisedButton(
                             onPressed: () {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 tomorrowOnly = 1;
                               });
@@ -217,6 +222,8 @@ class _FriendFinderState extends State<FriendFinder>
                           )
                         : RaisedButton(
                             onPressed: () {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 tomorrowOnly = 0;
                               });
@@ -544,12 +551,14 @@ class UserResult extends StatelessWidget {
                                           child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: isIncognito ||
-                                                !friendFinderVisibility 
+                                                !friendFinderVisibility
                                             ? Text("")
                                             : Text("nothing, right now."),
                                       ));
                                     if ((!snapshot.hasData ||
-                                        snapshot.data.docs.length == 0) && (!isIncognito || !friendFinderVisibility))
+                                            snapshot.data.docs.length == 0) &&
+                                        (!isIncognito ||
+                                            !friendFinderVisibility))
                                       return SizedBox(
                                           child: Align(
                                               alignment: Alignment.centerLeft,

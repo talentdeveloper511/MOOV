@@ -232,8 +232,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   final _formKey = GlobalKey<FormState>();
   final privacyList = ["Public", "Friends Only", "Invite Only"];
   final listOfTypes = [
-    "Restaurants & Bars",
-    "Pregames & Parties",
+    "Food/Drink",
+    "Parties",
     "Clubs",
     "Sports",
     "Shows",
@@ -254,7 +254,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
   // DateTime endTimes;
   String privacyDropdownValue = 'Public';
-  String typeDropdownValue = 'Pregames & Parties';
+  String typeDropdownValue = 'Parties';
   // String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
   final addressController = TextEditingController();
@@ -1060,7 +1060,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                   width: noHeight ? 0 : MediaQuery.of(context).size.width * .74,
                 ),
 
-
                 _image != null
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 18.0),
@@ -1132,6 +1131,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
+                              HapticFeedback.lightImpact();
+
                               // for (int i = 0;
                               //     i < inviteesNameList.length;
                               //     i++) {

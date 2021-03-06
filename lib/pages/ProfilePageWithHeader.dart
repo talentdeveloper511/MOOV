@@ -13,6 +13,7 @@ import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
+import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -414,6 +415,134 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                           ),
                         ),
                       ),
+                      
+                      StreamBuilder(
+                          stream: postsRef
+                              .where('userId', isEqualTo: currentUser.id)
+                              // .orderBy("goingCount", descending: true)
+                              .limit(6)
+                              // .orderBy("goingCount")
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.docs.length == 0) return Text('');
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 12.0),
+                              child: Container(
+                                height: (snapshot.data.docs.length <= 3 &&
+                                        isLargePhone)
+                                    ? 210
+                                    : (snapshot.data.docs.length >= 3 &&
+                                            isLargePhone)
+                                        ? 345
+                                        : (snapshot.data.docs.length <= 3 &&
+                                                !isLargePhone)
+                                            ? 175
+                                            : (snapshot.data.docs.length >= 3 &&
+                                                    !isLargePhone)
+                                                ? 310
+                                                : 350,
+                                child: Column(
+                                  children: [
+                                    Text("Your MOOVs"),
+                                    Divider(
+                                      color: TextThemes.ndBlue,
+                                      height: 20,
+                                      thickness: 2,
+                                      indent: 20,
+                                      endIndent: 20,
+                                    ),
+                                    Expanded(
+                                        child: CustomScrollView(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      slivers: [
+                                        SliverGrid(
+                                            delegate:
+                                                SliverChildBuilderDelegate(
+                                                    (BuildContext context,
+                                                        int index) {
+                                              DocumentSnapshot course =
+                                                  snapshot.data.docs[index];
+
+                                              return PostOnTrending(course);
+                                            },
+                                                    childCount: snapshot
+                                                        .data.docs.length),
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 3,
+                                            )),
+                                      ],
+                                    )),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+
+                      StreamBuilder(
+                          stream: postsRef
+                              .where('going', arrayContains: currentUser.id)
+                              // .orderBy("startDate")
+                              .limit(6)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.docs.length == 0) return Text('');
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 12.0),
+                              child: Container(
+                                height: (snapshot.data.docs.length <= 3 &&
+                                        isLargePhone)
+                                    ? 210
+                                    : (snapshot.data.docs.length >= 3 &&
+                                            isLargePhone)
+                                        ? 345
+                                        : (snapshot.data.docs.length <= 3 &&
+                                                !isLargePhone)
+                                            ? 160
+                                            : (snapshot.data.docs.length >= 3 &&
+                                                    !isLargePhone)
+                                                ? 310
+                                                : 350,
+                                child: Column(
+                                  children: [
+                                    Text("Upcoming MOOVs"),
+                                    Divider(
+                                      color: TextThemes.ndBlue,
+                                      height: 20,
+                                      thickness: 2,
+                                      indent: 20,
+                                      endIndent: 20,
+                                    ),
+                                    Expanded(
+                                        child: CustomScrollView(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      slivers: [
+                                        SliverGrid(
+                                            delegate:
+                                                SliverChildBuilderDelegate(
+                                                    (BuildContext context,
+                                                        int index) {
+                                              DocumentSnapshot course =
+                                                  snapshot.data.docs[index];
+
+                                              return PostOnTrending(course);
+                                            },
+                                                    childCount: snapshot
+                                                        .data.docs.length),
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 3,
+                                            )),
+                                      ],
+                                    )),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+
           //              GestureDetector(
           //               onTap: (){
           //                     Navigator.push(

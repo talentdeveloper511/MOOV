@@ -4,6 +4,7 @@ import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'home.dart';
 
 class ChangePrivacy extends StatefulWidget {
@@ -135,6 +136,8 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                                 ? isSwitch
                                 : friendsSeeOnly,
                             onChanged: (val) {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 isSwitch = val;
                                 friendsSeeOnly = val;
@@ -156,6 +159,8 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                           Switch(
                             value: incognito != true ? isSwitch2 : incognito,
                             onChanged: (val) {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 isSwitch2 = val;
                                 incognito = val;
@@ -185,6 +190,8 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                           Switch(
                             value: showDorm != true ? isSwitch3 : showDorm,
                             onChanged: (val) {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 isSwitch3 = val;
                                 showDorm = val;
@@ -208,6 +215,8 @@ class _ChangePrivacyState extends State<ChangePrivacy> {
                                 ? isSwitch4
                                 : friendFinderVisibility,
                             onChanged: (val) {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 isSwitch4 = val;
                                 friendFinderVisibility = val;
@@ -285,6 +294,8 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                           Switch(
                             value: friendPosts != true ? isSwitch : friendPosts,
                             onChanged: (val) {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 isSwitch = val;
                                 friendPosts = val;
@@ -306,6 +317,8 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                           Switch(
                             value: going != true ? isSwitch : going,
                             onChanged: (val) {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 isSwitch = val;
                                 going = val;
@@ -327,6 +340,8 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                           Switch(
                             value: hourBefore != true ? isSwitch2 : hourBefore,
                             onChanged: (val) {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 isSwitch2 = val;
                                 hourBefore = val;
@@ -349,6 +364,8 @@ class _NotificationSettingsState extends State<NotificationSettings> {
                             value:
                                 suggestions != true ? isSwitch3 : suggestions,
                             onChanged: (val) {
+                              HapticFeedback.lightImpact();
+
                               setState(() {
                                 isSwitch3 = val;
                                 suggestions = val;

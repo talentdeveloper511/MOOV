@@ -26,6 +26,7 @@ import 'dart:math';
 import 'package:MOOV/helpers/themes.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -384,6 +385,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 ),
                                 FloatingActionButton.extended(
                                     onPressed: () {
+                                      HapticFeedback.lightImpact();
+
                                       Navigator.push(
                                           context,
                                           PageTransition(
@@ -477,6 +480,8 @@ class _CategoryFeedState extends State<CategoryFeed>
                                 ),
                                 FloatingActionButton.extended(
                                     onPressed: () {
+                                      HapticFeedback.lightImpact();
+
                                       Navigator.push(
                                           context,
                                           PageTransition(
@@ -999,14 +1004,15 @@ class PostOnFeed extends StatelessWidget {
                                                           child: Icon(
                                                             Icons.store,
                                                             size: 20,
-                                                            color:
-                                                                TextThemes.ndGold,
+                                                            color: TextThemes
+                                                                .ndGold,
                                                           ),
                                                         )
                                                       : verifiedStatus == 2
                                                           ? Padding(
                                                               padding:
-                                                                  EdgeInsets.only(
+                                                                  EdgeInsets
+                                                                      .only(
                                                                 left: 5,
                                                               ),
                                                               child: Image.asset(
@@ -1019,10 +1025,12 @@ class PostOnFeed extends StatelessWidget {
                                                                       .only(
                                                                           left:
                                                                               2.5,
-                                                                          top: 0),
+                                                                          top:
+                                                                              0),
                                                                   child: Image.asset(
                                                                       'lib/assets/verif.png',
-                                                                      height: 22),
+                                                                      height:
+                                                                          22),
                                                                 )
                                                               : Text("")
                                                 ],
@@ -1169,6 +1177,7 @@ class PostOnFeed extends StatelessWidget {
                                             if (statuses != null &&
                                                 status != 3 &&
                                                 goingCount < maxOccupancy) {
+                                              
                                               changeScore(true);
                                               Database().addGoingGood(
                                                 currentUser.id,

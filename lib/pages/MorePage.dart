@@ -2,6 +2,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
+import 'package:flutter/services.dart';
 
 import 'HomePage.dart';
 import 'package:MOOV/utils/themes_styles.dart';
@@ -68,6 +69,8 @@ class _MorePageState extends State<MorePage>
           scale: _hideFabAnimController,
           child: FloatingActionButton.extended(
               onPressed: () {
+                HapticFeedback.lightImpact();
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -130,20 +133,20 @@ class _MorePageState extends State<MorePage>
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-             GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 50.0,
-                ),
-              ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Image.asset(
+                      'lib/assets/moovblue.png',
+                      fit: BoxFit.cover,
+                      height: 50.0,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -734,7 +737,7 @@ class CategoryButton extends StatelessWidget {
   CategoryButton({@required this.asset});
   final String asset;
 
-@override
+  @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
     bool isNarrow = Screen.widthInches(context) < 3.5;

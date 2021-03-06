@@ -126,7 +126,7 @@ class Database {
       int goingCount //BETA
       }) {
     bool isPartyOrBar = false;
-    if (type == "Pregames & Parties" || type == "Bars & Restaurants") {
+    if (type == "Parties" || type == "Bars & Restaurants") {
       isPartyOrBar = true;
     }
     print(isPartyOrBar);
@@ -1006,20 +1006,21 @@ class Database {
     });
   }
 
-  
-  Future<void> chatReaction(String userId, String directMessageId, String chatId, int reactionChoice, bool undoing) async {
+  Future<void> chatReaction(String userId, String directMessageId,
+      String chatId, int reactionChoice, bool undoing) async {
     return dbRef.runTransaction((transaction) async {
-
-undoing? // taking the reaction off
- messagesRef.doc(directMessageId).collection('chat').doc(chatId).set({
-        "reactions": {userId: 0}
-      }, SetOptions(merge: true)) :
-
-      messagesRef.doc(directMessageId).collection('chat').doc(chatId).set({
-        "reactions": {userId: reactionChoice}
-      }, SetOptions(merge: true));
-
+      undoing
+          ? // taking the reaction off
+          messagesRef.doc(directMessageId).collection('chat').doc(chatId).set({
+              "reactions": {userId: 0}
+            }, SetOptions(merge: true))
+          : messagesRef
+              .doc(directMessageId)
+              .collection('chat')
+              .doc(chatId)
+              .set({
+              "reactions": {userId: reactionChoice}
+            }, SetOptions(merge: true));
     });
   }
 }
-

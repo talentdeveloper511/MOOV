@@ -14,6 +14,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class NextMOOV extends StatefulWidget {
@@ -181,6 +182,8 @@ class _NextMOOVState extends State<NextMOOV> {
                                       left: 20,
                                       child: GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           showAlertDialog(context);
                                         },
                                         child: Container(

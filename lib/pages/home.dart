@@ -615,7 +615,7 @@ class _HomeState extends State<Home> {
             //             style: GoogleFonts.yeonSung(
             //                 fontSize: 50, color: Colors.red)),
             //         onPressed: () {
-            //           navigateToCategoryFeed(context, "Pregames & Parties");
+            //           navigateToCategoryFeed(context, "Parties");
             //         }),
             //   ],
             //   onPressed: () {},

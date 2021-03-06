@@ -17,6 +17,7 @@ import 'package:algolia/algolia.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -457,6 +458,8 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                             snapshot4.data.docs.length == 0) {
                           return GestureDetector(
                             onTap: () {
+                              HapticFeedback.lightImpact();
+
                               Database().suggestMOOV(
                                   currentUser.id,
                                   gid,
@@ -513,6 +516,8 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                             onTap: isSuggested
                                 ? null
                                 : () {
+                                    HapticFeedback.lightImpact();
+
                                     Database().suggestMOOV(
                                         currentUser.id,
                                         gid,

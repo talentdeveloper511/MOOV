@@ -116,15 +116,15 @@ class TrendingSegmentState extends State<TrendingSegment>
               enableControlFinishLoad: true,
               controller: _controller,
               header: BezierCircleHeader(
-                  color: Colors.pinkAccent[200], backgroundColor: TextThemes.ndBlue),
-                          footer: BezierBounceFooter(backgroundColor: Colors.white),
-
-                  bottomBouncing: false,
+                  color: Colors.pinkAccent[200],
+                  backgroundColor: TextThemes.ndBlue),
+              footer: BezierBounceFooter(backgroundColor: Colors.white),
+              bottomBouncing: false,
               child: ListView(children: [
                 Container(
                   child: StreamBuilder(
                       stream: postsRef
-                          .where('type', isEqualTo: 'Restaurants & Bars')
+                          .where('type', isEqualTo: 'Food/Drink')
                           .where('privacy', isEqualTo: "Public")
                           .orderBy("goingCount", descending: true)
                           .limit(6)
@@ -162,7 +162,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
-                                          child: Text('Restaurants & Bars',
+                                          child: Text('Food/Drink',
                                               style: TextThemes.extraBold),
                                         ),
                                       ],
@@ -190,7 +190,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                 Container(
                   child: StreamBuilder(
                       stream: postsRef
-                          .where('type', isEqualTo: "Pregames & Parties")
+                          .where('type', isEqualTo: "Parties")
                           .where('privacy', isEqualTo: "Public")
                           .orderBy("goingCount", descending: true)
                           .limit(6)
@@ -229,7 +229,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
-                                          child: Text('Pregames & Parties',
+                                          child: Text('Parties',
                                               style: TextThemes.extraBold),
                                         ),
                                       ],
