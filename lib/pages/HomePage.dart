@@ -25,7 +25,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
-import 'MorePage.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/bezier_circle_header.dart';
 import 'dart:math' as math;
 
@@ -185,6 +185,7 @@ class _HomePageState extends State<HomePage>
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: CustomScrollView(
+          controller: _scrollController,
           slivers: [
             SliverToBoxAdapter(
               child: Column(
@@ -370,6 +371,8 @@ class _HomePageState extends State<HomePage>
                                 _currentIndex != 1
                                     ? GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(1);
                                           print(_currentIndex);
 
@@ -395,7 +398,7 @@ class _HomePageState extends State<HomePage>
                                                 padding: const EdgeInsets.only(
                                                     top: 7.0),
                                                 child: Text(
-                                                  "Food & Drink",
+                                                  "Food/Drink",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -408,6 +411,8 @@ class _HomePageState extends State<HomePage>
                                       )
                                     : GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(0);
                                           print(_currentIndex);
                                           setState(() {
@@ -428,7 +433,7 @@ class _HomePageState extends State<HomePage>
                                                 padding: const EdgeInsets.only(
                                                     top: 6.0),
                                                 child: Text(
-                                                  "Food & Drink",
+                                                  "Food/Drink",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -442,6 +447,8 @@ class _HomePageState extends State<HomePage>
                                 _currentIndex != 2
                                     ? GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(2);
                                           print(_currentIndex);
 
@@ -480,8 +487,9 @@ class _HomePageState extends State<HomePage>
                                       )
                                     : GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(0);
-                                          print(_currentIndex);
                                           setState(() {
                                             _currentIndex = 0;
                                           });
@@ -518,6 +526,8 @@ class _HomePageState extends State<HomePage>
                                 _currentIndex != 3
                                     ? GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(3);
                                           print(_currentIndex);
                                           setState(() {
@@ -551,6 +561,8 @@ class _HomePageState extends State<HomePage>
                                       )
                                     : GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(0);
                                           print(_currentIndex);
                                           setState(() {
@@ -588,6 +600,8 @@ class _HomePageState extends State<HomePage>
                                 _currentIndex != 4
                                     ? GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(4);
                                           print(_currentIndex);
                                           setState(() {
@@ -657,6 +671,8 @@ class _HomePageState extends State<HomePage>
                                 _currentIndex != 5
                                     ? GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(5);
                                           print(_currentIndex);
                                           setState(() {
@@ -690,6 +706,8 @@ class _HomePageState extends State<HomePage>
                                       )
                                     : GestureDetector(
                                         onTap: () {
+                                          HapticFeedback.lightImpact();
+
                                           _tabController.animateTo(0);
                                           print(_currentIndex);
                                           setState(() {
@@ -752,6 +770,8 @@ class _HomePageState extends State<HomePage>
                                         child: todayOnly == 0
                                             ? RaisedButton(
                                                 onPressed: () {
+                                                  HapticFeedback.lightImpact();
+
                                                   setState(() {
                                                     todayOnly = 1;
                                                   });
@@ -828,8 +848,7 @@ class _HomePageState extends State<HomePage>
                                               )),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: 10.0,vertical: 0
-                                      ),
+                                          horizontal: 10.0, vertical: 0),
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -873,6 +892,8 @@ class _HomePageState extends State<HomePage>
                                                 );
                                               }).toList(),
                                               onChanged: (String newValue) {
+                                                HapticFeedback.lightImpact();
+
                                                 setState(() {
                                                   privacyDropdownValue =
                                                       newValue;
@@ -927,8 +948,7 @@ class _HomePageState extends State<HomePage>
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.docs.length == 0)
                       return Center(
-                        child: Text(
-                            "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                        child: Text("",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20)),
                       );
@@ -946,8 +966,7 @@ class _HomePageState extends State<HomePage>
                         int status = 0;
                         List<dynamic> statusesIds = statuses.keys.toList();
 
-                        List<dynamic> statusesValues =
-                            statuses.values.toList();
+                        List<dynamic> statusesValues = statuses.values.toList();
 
                         if (statuses != null) {
                           for (int i = 0; i < statuses.length; i++) {
@@ -962,8 +981,7 @@ class _HomePageState extends State<HomePage>
                         bool hide = false;
 
                         if (startDate.millisecondsSinceEpoch <
-                            Timestamp.now().millisecondsSinceEpoch -
-                                3600000) {
+                            Timestamp.now().millisecondsSinceEpoch - 3600000) {
                           print("Expired. See ya later.");
                           Future.delayed(const Duration(milliseconds: 1000),
                               () {
@@ -1017,9 +1035,7 @@ class _HomePageState extends State<HomePage>
                         }
                         if (privacy == "Invite Only" &&
                             privacyDropdownValue == "Private" &&
-                            course['statuses']
-                                .keys
-                                .contains(currentUser.id)) {
+                            course['statuses'].keys.contains(currentUser.id)) {
                           hide = false;
                         }
 
@@ -1044,8 +1060,7 @@ class _HomePageState extends State<HomePage>
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.docs.length == 0)
                       return Center(
-                        child: Text(
-                            "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                        child: Text("",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20)),
                       );
@@ -1063,8 +1078,7 @@ class _HomePageState extends State<HomePage>
                         int status = 0;
                         List<dynamic> statusesIds = statuses.keys.toList();
 
-                        List<dynamic> statusesValues =
-                            statuses.values.toList();
+                        List<dynamic> statusesValues = statuses.values.toList();
 
                         if (statuses != null) {
                           for (int i = 0; i < statuses.length; i++) {
@@ -1079,8 +1093,7 @@ class _HomePageState extends State<HomePage>
                         bool hide = false;
 
                         if (startDate.millisecondsSinceEpoch <
-                            Timestamp.now().millisecondsSinceEpoch -
-                                3600000) {
+                            Timestamp.now().millisecondsSinceEpoch - 3600000) {
                           print("Expired. See ya later.");
                           Future.delayed(const Duration(milliseconds: 1000),
                               () {
@@ -1135,9 +1148,7 @@ class _HomePageState extends State<HomePage>
                         }
                         if (privacy == "Invite Only" &&
                             privacyDropdownValue == "Private" &&
-                            course['statuses']
-                                .keys
-                                .contains(currentUser.id)) {
+                            course['statuses'].keys.contains(currentUser.id)) {
                           hide = false;
                         }
 
@@ -1162,8 +1173,7 @@ class _HomePageState extends State<HomePage>
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.docs.length == 0)
                       return Center(
-                        child: Text(
-                            "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                        child: Text("",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20)),
                       );
@@ -1181,8 +1191,7 @@ class _HomePageState extends State<HomePage>
                         int status = 0;
                         List<dynamic> statusesIds = statuses.keys.toList();
 
-                        List<dynamic> statusesValues =
-                            statuses.values.toList();
+                        List<dynamic> statusesValues = statuses.values.toList();
 
                         if (statuses != null) {
                           for (int i = 0; i < statuses.length; i++) {
@@ -1197,8 +1206,7 @@ class _HomePageState extends State<HomePage>
                         bool hide = false;
 
                         if (startDate.millisecondsSinceEpoch <
-                            Timestamp.now().millisecondsSinceEpoch -
-                                3600000) {
+                            Timestamp.now().millisecondsSinceEpoch - 3600000) {
                           print("Expired. See ya later.");
                           Future.delayed(const Duration(milliseconds: 1000),
                               () {
@@ -1253,9 +1261,7 @@ class _HomePageState extends State<HomePage>
                         }
                         if (privacy == "Invite Only" &&
                             privacyDropdownValue == "Private" &&
-                            course['statuses']
-                                .keys
-                                .contains(currentUser.id)) {
+                            course['statuses'].keys.contains(currentUser.id)) {
                           hide = false;
                         }
                         // if (course['featured'] != true) {
@@ -1294,8 +1300,7 @@ class _HomePageState extends State<HomePage>
                         int status = 0;
                         List<dynamic> statusesIds = statuses.keys.toList();
 
-                        List<dynamic> statusesValues =
-                            statuses.values.toList();
+                        List<dynamic> statusesValues = statuses.values.toList();
 
                         if (statuses != null) {
                           for (int i = 0; i < statuses.length; i++) {
@@ -1310,8 +1315,7 @@ class _HomePageState extends State<HomePage>
                         bool hide = false;
 
                         if (startDate.millisecondsSinceEpoch <
-                            Timestamp.now().millisecondsSinceEpoch -
-                                3600000) {
+                            Timestamp.now().millisecondsSinceEpoch - 3600000) {
                           print("Expired. See ya later.");
                           Future.delayed(const Duration(milliseconds: 1000),
                               () {
@@ -1366,9 +1370,7 @@ class _HomePageState extends State<HomePage>
                         }
                         if (privacy == "Invite Only" &&
                             privacyDropdownValue == "Private" &&
-                            course['statuses']
-                                .keys
-                                .contains(currentUser.id)) {
+                            course['statuses'].keys.contains(currentUser.id)) {
                           hide = false;
                         }
 
@@ -1391,8 +1393,7 @@ class _HomePageState extends State<HomePage>
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.docs.length == 0)
                       return Center(
-                        child: Text(
-                            "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                        child: Text("",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20)),
                       );
@@ -1410,8 +1411,7 @@ class _HomePageState extends State<HomePage>
                         int status = 0;
                         List<dynamic> statusesIds = statuses.keys.toList();
 
-                        List<dynamic> statusesValues =
-                            statuses.values.toList();
+                        List<dynamic> statusesValues = statuses.values.toList();
 
                         if (statuses != null) {
                           for (int i = 0; i < statuses.length; i++) {
@@ -1426,8 +1426,7 @@ class _HomePageState extends State<HomePage>
                         bool hide = false;
 
                         if (startDate.millisecondsSinceEpoch <
-                            Timestamp.now().millisecondsSinceEpoch -
-                                3600000) {
+                            Timestamp.now().millisecondsSinceEpoch - 3600000) {
                           print("Expired. See ya later.");
                           Future.delayed(const Duration(milliseconds: 1000),
                               () {
@@ -1482,9 +1481,7 @@ class _HomePageState extends State<HomePage>
                         }
                         if (privacy == "Invite Only" &&
                             privacyDropdownValue == "Private" &&
-                            course['statuses']
-                                .keys
-                                .contains(currentUser.id)) {
+                            course['statuses'].keys.contains(currentUser.id)) {
                           hide = false;
                         }
 
@@ -1502,13 +1499,11 @@ class _HomePageState extends State<HomePage>
                   },
                 ),
                 FutureBuilder(
-                  future:
-                      postsRef.where("type", isEqualTo: "Recreation").get(),
+                  future: postsRef.where("type", isEqualTo: "Recreation").get(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.docs.length == 0)
                       return Center(
-                        child: Text(
-                            "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
+                        child: Text("",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 20)),
                       );
@@ -1526,8 +1521,7 @@ class _HomePageState extends State<HomePage>
                         int status = 0;
                         List<dynamic> statusesIds = statuses.keys.toList();
 
-                        List<dynamic> statusesValues =
-                            statuses.values.toList();
+                        List<dynamic> statusesValues = statuses.values.toList();
 
                         if (statuses != null) {
                           for (int i = 0; i < statuses.length; i++) {
@@ -1542,8 +1536,7 @@ class _HomePageState extends State<HomePage>
                         bool hide = false;
 
                         if (startDate.millisecondsSinceEpoch <
-                            Timestamp.now().millisecondsSinceEpoch -
-                                3600000) {
+                            Timestamp.now().millisecondsSinceEpoch - 3600000) {
                           print("Expired. See ya later.");
                           Future.delayed(const Duration(milliseconds: 1000),
                               () {
@@ -1598,9 +1591,7 @@ class _HomePageState extends State<HomePage>
                         }
                         if (privacy == "Invite Only" &&
                             privacyDropdownValue == "Private" &&
-                            course['statuses']
-                                .keys
-                                .contains(currentUser.id)) {
+                            course['statuses'].keys.contains(currentUser.id)) {
                           hide = false;
                         }
 
@@ -1673,10 +1664,8 @@ class Category extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data.docs.length == 0)
           return Center(
-            child: Text(
-                "No featured MOOVs. \n\n Got a feature? Email admin@whatsthemoov.com.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20)),
+            child: Text("",
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
           );
 
         return ListView.builder(

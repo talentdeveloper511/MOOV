@@ -19,6 +19,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/widgets/going_statuses.dart';
 import 'package:page_transition/page_transition.dart';
@@ -143,6 +144,8 @@ class _PostDetailState extends State<PostDetail>
                       backgroundColor:
                           isIncognito ? Colors.black : Colors.white,
                       onPressed: () {
+                        HapticFeedback.lightImpact();
+
                         isIncognito
                             ? usersRef.doc(currentUser.id).set({
                                 "privacySettings": {"incognito": false}
@@ -792,6 +795,8 @@ class _AuthorContent extends StatelessWidget {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
+                        HapticFeedback.lightImpact();
+
                         Navigator.push(
                             context,
                             PageTransition(
@@ -897,6 +902,8 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
                   new FlatButton(
                     color: _currentIndex == 0 ? Colors.blue : Colors.white,
                     onPressed: () {
+                      HapticFeedback.lightImpact();
+
                       _tabController.animateTo(0);
                       setState(() {
                         _currentIndex = 0;
@@ -908,6 +915,8 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
                   new FlatButton(
                     color: _currentIndex == 1 ? Colors.blue : Colors.white,
                     onPressed: () {
+                      HapticFeedback.lightImpact();
+
                       _tabController.animateTo(1);
                       setState(() {
                         _currentIndex = 1;
@@ -973,9 +982,7 @@ class _ButtonsState extends State<Buttons> {
             .update({"score": FieldValue.increment(-30)});
 
     increment //for post owner
-        ? usersRef
-            .doc(postOwnerId)
-            .update({"score": FieldValue.increment(10)})
+        ? usersRef.doc(postOwnerId).update({"score": FieldValue.increment(10)})
         : usersRef
             .doc(postOwnerId)
             .update({"score": FieldValue.increment(-10)});
@@ -1068,6 +1075,7 @@ class _ButtonsState extends State<Buttons> {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
+                        HapticFeedback.lightImpact();
                         if (statuses != null && status == 1) {
                           changeScore(postOwnerId, false);
                         }
@@ -1100,7 +1108,7 @@ class _ButtonsState extends State<Buttons> {
                           Database()
                               .addNotGoing(currentUser.id, moovId, goingList);
                           if (status != 3 && status != 2) {
-                            changeScore(postOwnerId,true);
+                            changeScore(postOwnerId, true);
                           }
                           status = 1;
                           print(status);
@@ -1184,8 +1192,10 @@ class _ButtonsState extends State<Buttons> {
                             borderRadius: BorderRadius.circular(5),
                             side: BorderSide(color: Colors.black)),
                         onPressed: () {
+                          HapticFeedback.lightImpact();
+
                           if (statuses != null && status == 2) {
-                            changeScore(postOwnerId,false);
+                            changeScore(postOwnerId, false);
                           }
                           if (statuses != null && status != 2) {
                             positivePointAnimationUndecided = true;
@@ -1216,7 +1226,7 @@ class _ButtonsState extends State<Buttons> {
                             Database().addUndecided(
                                 currentUser.id, moovId, goingList);
                             if (status != 1 && status != 3) {
-                              changeScore(postOwnerId,true);
+                              changeScore(postOwnerId, true);
                             }
                             status = 2;
                             print(status);
@@ -1292,8 +1302,10 @@ class _ButtonsState extends State<Buttons> {
                             borderRadius: BorderRadius.circular(5),
                             side: BorderSide(color: Colors.black)),
                         onPressed: () {
+                          HapticFeedback.lightImpact();
+
                           if (statuses != null && status == 3) {
-                            changeScore(postOwnerId,false);
+                            changeScore(postOwnerId, false);
                           }
                           if (goingCount == maxOccupancy && status != 3) {
                             showMax(context);
@@ -1335,7 +1347,7 @@ class _ButtonsState extends State<Buttons> {
                                 course['image'],
                                 course['push']);
                             if (status != 1 && status != 2) {
-                              changeScore(postOwnerId,true);
+                              changeScore(postOwnerId, true);
                             }
                             status = 3;
                             print(status);

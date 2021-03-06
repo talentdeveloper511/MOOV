@@ -61,22 +61,22 @@ class _FriendGroupsState extends State<FriendGroupsPage>
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: TextThemes.ndBlue,
-          title: Text(
-            "Friend Groups",
-            style: TextStyle(color: Colors.white, fontSize: 25),
-          ),
-        ),
+        // appBar: AppBar(
+        //   leading: IconButton(
+        //     icon: Icon(
+        //       Icons.arrow_back,
+        //       color: Colors.white,
+        //     ),
+        //     onPressed: () {
+        //       Navigator.pop(context);
+        //     },
+        //   ),
+        //   backgroundColor: TextThemes.ndBlue,
+        //   title: Text(
+        //     "Friend Groups",
+        //     style: TextStyle(color: Colors.white, fontSize: 25),
+        //   ),
+        // ),
         body: StreamBuilder(
             stream: groupsRef
                 .where('members', arrayContains: currentUser.id)

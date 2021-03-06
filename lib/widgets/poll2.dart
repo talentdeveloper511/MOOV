@@ -9,6 +9,7 @@ import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:polls/polls.dart';
@@ -36,7 +37,6 @@ class _PollViewState extends State<PollView> {
 
   @override
   Widget build(BuildContext context) {
- 
     String question;
     String choice1;
     String choice2;
@@ -124,6 +124,8 @@ class _PollViewState extends State<PollView> {
                             leadingBackgroundColor: TextThemes.ndGold,
                             backgroundColor: Colors.white,
                             onVote: (choice) {
+                              HapticFeedback.lightImpact();
+
                               for (var entry in voters.entries) {
                                 x = entry.key;
                                 y = entry.value;
@@ -157,7 +159,7 @@ class _PollViewState extends State<PollView> {
                                 });
                               }
                               if (choice == 2) {
-                                usersRef.doc(currentUser.id?? "").update(
+                                usersRef.doc(currentUser.id ?? "").update(
                                     {"score": FieldValue.increment(25)});
 
                                 setState(() {
