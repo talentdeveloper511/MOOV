@@ -20,6 +20,8 @@ class User {
   final String referral;
   final String venmoUsername;
   final Map pushSettings;
+  final List<dynamic> followers;
+  final bool isBusiness;
   final int nameChangeLimit;
 
   User(
@@ -42,6 +44,8 @@ class User {
       this.referral,
       this.venmoUsername,
       this.pushSettings,
+      this.followers,
+      this.isBusiness,
       this.nameChangeLimit});
 
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -65,6 +69,8 @@ class User {
       referral: doc.data()['referral'],
       venmoUsername: doc.data()['venmoUsername'],
       pushSettings: doc.data()['pushSettings'],
+      followers: doc.data()['followers'],
+      isBusiness: doc.data()['isBusiness'],
       nameChangeLimit: doc.data()['nameChangeLimit'],
     );
   }
