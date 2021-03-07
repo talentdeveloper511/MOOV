@@ -373,7 +373,7 @@ class _FriendFinderState extends State<FriendFinder>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                              padding: const EdgeInsets.only(top: 50.0, left: 50, right: 50, bottom: 10),
+                              padding: isLargePhone ? const EdgeInsets.only(top: 50.0, left: 50, right: 50, bottom: 10):const EdgeInsets.only(top: 10.0, left: 50, right: 50, bottom: 0),
                               child: RichText(
                                   textAlign: TextAlign.center,
                                   text: TextSpan(

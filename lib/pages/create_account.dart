@@ -767,9 +767,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 key: _formKey6,
                                 autovalidate: true,
                                 child: TextFormField(
-                                  autocorrect: false,
-                                  textCapitalization: TextCapitalization.words,
-                                 
+                                  autocorrect: false,                                 
                                   onSaved: (val) => businessDescription = val,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
