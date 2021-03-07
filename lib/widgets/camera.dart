@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CustomCamera {
-  static Future<dynamic> openCamera({ bool getBase64 = true }) async {
+  static Future<dynamic> openCamera({bool getBase64 = true}) async {
     final image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     if (getBase64 == false) {
@@ -21,7 +21,8 @@ class CustomCamera {
     return image;
   }
 
-  static Future<dynamic> openGallery({ bool getBase64 = true }) async {
+  static Future<dynamic> openGallery({bool getBase64 = true}) async {
+    // ignore: deprecated_member_use
     final image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     if (getBase64 == false) {

@@ -569,7 +569,8 @@ class _OtherProfileState extends State<OtherProfile> {
                       ),
                       venmo != null && venmo != ""
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 10.0, bottom: 12.5),
+                              padding: const EdgeInsets.only(
+                                  top: 10.0, bottom: 12.5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -668,7 +669,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                 : 350,
                                 child: Column(
                                   children: [
-                                    Text("Their MOOVs"),
+                                    Text("Their Posts"),
                                     Divider(
                                       color: TextThemes.ndBlue,
                                       height: 20,
@@ -732,13 +733,18 @@ class _OtherProfileState extends State<OtherProfile> {
                                 child: Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 5.0),
+                                          padding:
+                                              const EdgeInsets.only(right: 5.0),
                                           child: Text("Upcoming MOOVs"),
                                         ),
-                                        Icon(Icons.directions_run,color: Colors.green,)
+                                        Icon(
+                                          Icons.directions_run,
+                                          color: Colors.green,
+                                        )
                                       ],
                                     ),
                                     Divider(
