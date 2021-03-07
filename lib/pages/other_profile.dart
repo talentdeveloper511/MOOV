@@ -731,7 +731,16 @@ class _OtherProfileState extends State<OtherProfile> {
                                                 : 350,
                                 child: Column(
                                   children: [
-                                    Text("Upcoming MOOVs"),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 5.0),
+                                          child: Text("Upcoming MOOVs"),
+                                        ),
+                                        Icon(Icons.directions_run,color: Colors.green,)
+                                      ],
+                                    ),
                                     Divider(
                                       color: TextThemes.ndBlue,
                                       height: 20,

@@ -97,7 +97,9 @@ class _PostDetailState extends State<PostDetail>
                 leading: (includeMarkAsDoneButton)
                     ? IconButton(
                         icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () => Navigator.pop(context, true),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         tooltip: 'Mark as done',
                       )
                     : IconButton(
@@ -108,7 +110,6 @@ class _PostDetailState extends State<PostDetail>
                         onPressed: () {
                           Navigator.pop(
                             context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         },
                       ),

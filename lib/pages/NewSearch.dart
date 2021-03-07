@@ -1,6 +1,6 @@
 import 'dart:async';
+
 import 'package:MOOV/main.dart';
-import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/group_detail.dart';
@@ -12,12 +12,10 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:algolia/algolia.dart';
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:algolia/algolia.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
@@ -479,7 +477,8 @@ class _SearchBarState extends State<SearchBar>
                                                                       members: currSearchStuff0[index]
                                                                               .data[
                                                                           "members"],
-                                                                          sendMOOV: false,
+                                                                      sendMOOV:
+                                                                          false,
                                                                     )
                                                                   : Container();
                                                             },
@@ -618,25 +617,28 @@ class DisplayMOOVResult extends StatelessWidget {
           String proPic = snapshot.data['photoUrl'];
           return Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => PostDetail(postId))),
-              child: Stack(alignment: Alignment.center, children: <Widget>[
-                SizedBox(
-                  width: isLargePhone
-                      ? MediaQuery.of(context).size.width * 0.8
-                      : MediaQuery.of(context).size.width * 0.8,
-                  height: isLargePhone
-                      ? MediaQuery.of(context).size.height * 0.15
-                      : MediaQuery.of(context).size.height * 0.17,
-                  child: Container(
-                    child: ClipRRect(
+            child: Stack(alignment: Alignment.center, children: <Widget>[
+              Container(
+                width: isLargePhone
+                    ? MediaQuery.of(context).size.width * 0.8
+                    : MediaQuery.of(context).size.width * 0.8,
+                height: isLargePhone
+                    ? MediaQuery.of(context).size.height * 0.15
+                    : MediaQuery.of(context).size.height * 0.17,
+                child:OpenContainer(
+                                  transitionType: ContainerTransitionType.fade,
+                                  transitionDuration: Duration(seconds: 1),
+                                  openBuilder: (context, _) =>
+                                      PostDetail(postId),
+                                  closedElevation: 0,
+                                  closedBuilder: (context, _) => 
+                  ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: CachedNetworkImage(
                         imageUrl: image,
                         fit: BoxFit.cover,
                       ),
-                    ),
+                    ),),
                     margin:
                         EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 0),
                     decoration: BoxDecoration(
@@ -654,102 +656,102 @@ class DisplayMOOVResult extends StatelessWidget {
                       ],
                     ),
                   ),
+                
+              
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Colors.black.withAlpha(0),
+                      Colors.black,
+                      Colors.black12,
+                    ],
+                  ),
                 ),
-                Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * .4),
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontFamily: 'Solway',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: isLargePhone ? 17.0 : 14),
+                    ),
+                  ),
+                ),
+              ),
+              // isToday == false
+              //     ? Positioned(
+              //         top: 0,
+              //         right: 0,
+              //         child: Container(
+              //           height: 30,
+              //           padding: EdgeInsets.all(4),
+              //           decoration: BoxDecoration(
+              //               gradient: LinearGradient(
+              //                 colors: [Colors.pink[400], Colors.purple[300]],
+              //                 begin: Alignment.centerLeft,
+              //                 end: Alignment.centerRight,
+              //               ),
+              //               borderRadius: BorderRadius.circular(10.0)),
+              //           child: isNextWeek ? Text("") : Text(""),
+              //         ),
+              //       )
+              //     : Container(),
+              // isToday == true
+              //     ? Positioned(
+              //         top: 0,
+              //         right: 0,
+              //         child: Container(
+              //           height: 30,
+              //           padding: EdgeInsets.all(4),
+              //           decoration: BoxDecoration(
+              //               gradient: LinearGradient(
+              //                 colors: [Colors.red[400], Colors.red[600]],
+              //                 begin: Alignment.centerLeft,
+              //                 end: Alignment.centerRight,
+              //               ),
+              //               borderRadius: BorderRadius.circular(10.0)),
+              //           child: Text(""),
+              //         ),
+              //       )
+              //     : Text(""),
+              Positioned(
+                bottom: 8.5,
+                right: isLargePhone ? 60 : 55,
+                child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        Colors.black.withAlpha(0),
-                        Colors.black,
-                        Colors.black12,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * .4),
-                      child: Text(
-                        title,
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontFamily: 'Solway',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: isLargePhone ? 17.0 : 14),
+                    borderRadius: BorderRadius.circular(25.0),
+                    color: TextThemes.ndGold,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 20.0,
+                        offset: Offset(5.0, 5.0),
                       ),
-                    ),
+                    ],
                   ),
+                  child: CircleAvatar(
+                      radius: 27,
+                      backgroundColor: TextThemes.ndGold,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(proPic),
+                        radius: 25,
+                        backgroundColor: TextThemes.ndBlue,
+                      )),
                 ),
-                // isToday == false
-                //     ? Positioned(
-                //         top: 0,
-                //         right: 0,
-                //         child: Container(
-                //           height: 30,
-                //           padding: EdgeInsets.all(4),
-                //           decoration: BoxDecoration(
-                //               gradient: LinearGradient(
-                //                 colors: [Colors.pink[400], Colors.purple[300]],
-                //                 begin: Alignment.centerLeft,
-                //                 end: Alignment.centerRight,
-                //               ),
-                //               borderRadius: BorderRadius.circular(10.0)),
-                //           child: isNextWeek ? Text("") : Text(""),
-                //         ),
-                //       )
-                //     : Container(),
-                // isToday == true
-                //     ? Positioned(
-                //         top: 0,
-                //         right: 0,
-                //         child: Container(
-                //           height: 30,
-                //           padding: EdgeInsets.all(4),
-                //           decoration: BoxDecoration(
-                //               gradient: LinearGradient(
-                //                 colors: [Colors.red[400], Colors.red[600]],
-                //                 begin: Alignment.centerLeft,
-                //                 end: Alignment.centerRight,
-                //               ),
-                //               borderRadius: BorderRadius.circular(10.0)),
-                //           child: Text(""),
-                //         ),
-                //       )
-                //     : Text(""),
-                Positioned(
-                  bottom: 8.5,
-                  right: isLargePhone ? 60 : 55,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25.0),
-                      color: TextThemes.ndGold,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 20.0,
-                          offset: Offset(5.0, 5.0),
-                        ),
-                      ],
-                    ),
-                    child: CircleAvatar(
-                        radius: 27,
-                        backgroundColor: TextThemes.ndGold,
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(proPic),
-                          radius: 25,
-                          backgroundColor: TextThemes.ndBlue,
-                        )),
-                  ),
-                ),
-              ]),
-            ),
+              ),
+            ]),
           );
         });
   }
@@ -790,27 +792,30 @@ class DisplayGroupResult extends StatelessWidget {
 
             return Padding(
               padding: const EdgeInsets.only(top: 10.0),
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => members.contains(currentUser.id)
+              child: Stack(alignment: Alignment.center, children: <Widget>[
+                Container(
+                  width: isLargePhone
+                      ? MediaQuery.of(context).size.width * 0.8
+                      : MediaQuery.of(context).size.width * 0.8,
+                  height: isLargePhone
+                      ? MediaQuery.of(context).size.height * 0.15
+                      : MediaQuery.of(context).size.height * 0.17,
+                  child: OpenContainer(
+                                  transitionType: ContainerTransitionType.fade,
+                                  transitionDuration: Duration(seconds: 1),
+                                  openBuilder: (context, _) =>
+                                      members.contains(currentUser.id)
                         ? GroupDetail(groupId)
-                        : OtherGroup(groupId))),
-                child: Stack(alignment: Alignment.center, children: <Widget>[
-                  SizedBox(
-                    width: isLargePhone
-                        ? MediaQuery.of(context).size.width * 0.8
-                        : MediaQuery.of(context).size.width * 0.8,
-                    height: isLargePhone
-                        ? MediaQuery.of(context).size.height * 0.15
-                        : MediaQuery.of(context).size.height * 0.17,
-                    child: Container(
-                      child: ClipRRect(
+                        : OtherGroup(groupId),
+                                  closedElevation: 0,
+                                  closedBuilder: (context, _) =>  Container(
+                                    child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
                           imageUrl: groupPic,
                           fit: BoxFit.cover,
-                        ),
-                      ),
+                        ),),
+                      
                       margin: EdgeInsets.only(
                           left: 10, top: 0, right: 10, bottom: 0),
                       decoration: BoxDecoration(
@@ -828,113 +833,116 @@ class DisplayGroupResult extends StatelessWidget {
                         ],
                       ),
                     ),
+                                  ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Colors.black.withAlpha(0),
-                          Colors.black,
-                          Colors.black12,
-                        ],
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * .3),
-                        child: Text(
-                          groupName,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontFamily: 'Solway',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: isLargePhone ? 17.0 : 14),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: isLargePhone ? 0 : 0,
-                    right: 55,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Stack(children: [
-                          Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: members.length > 1
-                                  ? CircleAvatar(
-                                      radius: 25.0,
-                                      backgroundImage: NetworkImage(
-                                        course[1]['photoUrl'],
-                                      ),
-                                    )
-                                  : Container()),
-                          Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 4, left: 25.0),
-                              child: CircleAvatar(
-                                radius: 25.0,
-                                backgroundImage: NetworkImage(
-                                  course[0]['photoUrl'],
-                                ),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 50.0),
-                            child: CircleAvatar(
-                              radius: 25.0,
-                              child: members.length > 2
-                                  ? Text(
-                                      "+" + (length.toString()),
-                                      style: TextStyle(
-                                          color: TextThemes.ndGold,
-                                          fontWeight: FontWeight.w500),
-                                    )
-                                  : Text(
-                                      (members.length.toString()),
-                                      style: TextStyle(
-                                          color: TextThemes.ndGold,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                              backgroundColor: TextThemes.ndBlue,
-                            ),
-                          ),
-                        ])
+                
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        Colors.black.withAlpha(0),
+                        Colors.black,
+                        Colors.black12,
                       ],
                     ),
                   ),
-                sendMOOV ? Positioned(
-                    right: MediaQuery.of(context).size.width / 2,
-                    bottom: -2.5,
-                    child: RaisedButton(
-                        padding: const EdgeInsets.all(2.0),
-                        color: TextThemes.ndBlue,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(3.0))),
-                        onPressed: () {
-                          Database().sendMOOVNotification(
-                              groupId, groupPic, postId, "", title, "", "");
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          "Send",
-                          style: new TextStyle(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * .3),
+                      child: Text(
+                        groupName,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontFamily: 'Solway',
+                            fontWeight: FontWeight.bold,
                             color: Colors.white,
-                            fontSize: 12.0,
+                            fontSize: isLargePhone ? 17.0 : 14),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: isLargePhone ? 0 : 0,
+                  right: 55,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Stack(children: [
+                        Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: members.length > 1
+                                ? CircleAvatar(
+                                    radius: 25.0,
+                                    backgroundImage: NetworkImage(
+                                      course[1]['photoUrl'],
+                                    ),
+                                  )
+                                : Container()),
+                        Padding(
+                            padding:
+                                const EdgeInsets.only(top: 4, left: 25.0),
+                            child: CircleAvatar(
+                              radius: 25.0,
+                              backgroundImage: NetworkImage(
+                                course[0]['photoUrl'],
+                              ),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4, left: 50.0),
+                          child: CircleAvatar(
+                            radius: 25.0,
+                            child: members.length > 2
+                                ? Text(
+                                    "+" + (length.toString()),
+                                    style: TextStyle(
+                                        color: TextThemes.ndGold,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                : Text(
+                                    (members.length.toString()),
+                                    style: TextStyle(
+                                        color: TextThemes.ndGold,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                            backgroundColor: TextThemes.ndBlue,
                           ),
-                        )),
-                  ) : Container(),
-                ]),
-              ),
+                        ),
+                      ])
+                    ],
+                  ),
+                ),
+                sendMOOV
+                    ? Positioned(
+                        right: MediaQuery.of(context).size.width / 2,
+                        bottom: -2.5,
+                        child: RaisedButton(
+                            padding: const EdgeInsets.all(2.0),
+                            color: TextThemes.ndBlue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(3.0))),
+                            onPressed: () {
+                              Database().sendMOOVNotification(groupId,
+                                  groupPic, postId, "", title, "", "");
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              "Send",
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                              ),
+                            )),
+                      )
+                    : Container(),
+              ]),
             );
           });
     }
@@ -1407,7 +1415,8 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                                                       members: currSearchStuff0[index]
                                                                               .data[
                                                                           "members"],
-                                                                          sendMOOV: false,
+                                                                      sendMOOV:
+                                                                          false,
                                                                     )
                                                                   : Container(
                                                                       height:

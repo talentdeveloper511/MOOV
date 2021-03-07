@@ -1,6 +1,8 @@
 import 'package:MOOV/helpers/demo_values.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
+import 'package:MOOV/widgets/MOTD.dart';
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -121,6 +123,9 @@ class TrendingSegmentState extends State<TrendingSegment>
               footer: BezierBounceFooter(backgroundColor: Colors.white),
               bottomBouncing: false,
               child: ListView(children: [
+                SizedBox(height: 10),
+               
+
                 Container(
                   child: StreamBuilder(
                       stream: postsRef
@@ -157,8 +162,8 @@ class TrendingSegmentState extends State<TrendingSegment>
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        Image.asset('lib/assets/plate.png',
-                                            height: 40),
+                                        Image.asset('lib/assets/icons/BarICON.png',
+                                            height: 35),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
@@ -203,7 +208,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                         return Container(
                           height: (snapshot.data.docs.length <= 3 &&
                                   isLargePhone)
-                              ? 210
+                              ? 200
                               : (snapshot.data.docs.length >= 3 && isLargePhone)
                                   ? 345
                                   : (snapshot.data.docs.length <= 3 &&
@@ -224,8 +229,8 @@ class TrendingSegmentState extends State<TrendingSegment>
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        Image.asset('lib/assets/dance.png',
-                                            height: 40),
+                                        Image.asset('lib/assets/icons/PartyICON.png',
+                                            height: 27.5),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
@@ -302,12 +307,12 @@ class TrendingSegmentState extends State<TrendingSegment>
                                           padding:
                                               const EdgeInsets.only(right: 2.0),
                                           child: Image.asset(
-                                              'lib/assets/show3.png',
+                                              'lib/assets/icons/ShowICON.png',
                                               height: 40),
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(left: 8.0),
+                                              const EdgeInsets.only(left: 8.0, top: 5),
                                           child: Text('More',
                                               style: TextThemes.extraBold),
                                         ),
@@ -366,24 +371,29 @@ class PostOnTrending extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PostDetail(course.id)));
-              },
+             
               child: Column(
                 children: [
                   Expanded(
                     child: Stack(alignment: Alignment.center, children: [
-                      Container(
-                        height: 500,
-                        child: CachedNetworkImage(
-                          imageUrl: course['image'],
-                          fit: BoxFit.cover,
-                          width: isLargePhone
-                              ? MediaQuery.of(context).size.width * 0.315
-                              : MediaQuery.of(context).size.width * 0.32,
-                        ),
-                      ),
+                      OpenContainer(
+  transitionType:     ContainerTransitionType.fade,
+  transitionDuration: Duration(seconds: 1),
+  openBuilder: (context, _) => PostDetail(course.id),
+  closedElevation: 0,
+  
+  closedBuilder: (context, _) => Container(
+                            height: 500,
+                            child: CachedNetworkImage(
+                              imageUrl: course['image'],
+                              fit: BoxFit.cover,
+                              width: isLargePhone
+                                  ? MediaQuery.of(context).size.width * 0.315
+                                  : MediaQuery.of(context).size.width * 0.32,
+                            ),
+                          ),
+                    ),
+                      
                       Container(
                         alignment: Alignment(0.0, 0.0),
                         child: Container(
