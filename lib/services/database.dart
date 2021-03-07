@@ -157,8 +157,11 @@ class Database {
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {
-      friendCreatedNotification(
-          postId, title, imageUrl, currentUser.friendArray);
+      var peepsToAlert;
+      currentUser.isBusiness == true
+          ? peepsToAlert = currentUser.followers
+          : peepsToAlert = currentUser.friendArray;
+      friendCreatedNotification(postId, title, imageUrl, peepsToAlert);
     }
     usersRef.doc(currentUser.id).get().then((value) {
       if (value['postLimit'] >= 1) {

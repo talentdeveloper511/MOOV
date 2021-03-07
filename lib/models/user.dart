@@ -20,9 +20,9 @@ class User {
   final String referral;
   final String venmoUsername;
   final Map pushSettings;
-  final int nameChangeLimit;
-  final bool isBusiness;
   final List<dynamic> followers;
+  final bool isBusiness;
+  final int nameChangeLimit;
 
   User(
       {this.id,
