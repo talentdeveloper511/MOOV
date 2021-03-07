@@ -375,12 +375,10 @@ class _ProfilePageState extends State<ProfilePage>
                                       textAlign: TextAlign.center,
                                       textScaleFactor: 1.3,
                                       text: TextSpan(
-                                        
                                           style: TextThemes.mediumbody,
                                           children: [
                                             TextSpan(
                                                 text: "\"" + userBio + "\"",
-                                                
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontStyle:
@@ -423,7 +421,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                 : 350,
                                 child: Column(
                                   children: [
-                                    Text("Your MOOVs"),
+                                    Text("Your Posts"),
                                     Divider(
                                       color: TextThemes.ndBlue,
                                       height: 20,
@@ -486,14 +484,19 @@ class _ProfilePageState extends State<ProfilePage>
                                                 : 350,
                                 child: Column(
                                   children: [
-                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 5.0),
+                                          padding:
+                                              const EdgeInsets.only(right: 5.0),
                                           child: Text("Upcoming MOOVs"),
                                         ),
-                                        Icon(Icons.directions_run,color: Colors.green,)
+                                        Icon(
+                                          Icons.directions_run,
+                                          color: Colors.green,
+                                        )
                                       ],
                                     ),
                                     Divider(

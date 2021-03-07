@@ -9,6 +9,7 @@ import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/camera.dart';
+import 'package:MOOV/widgets/placeholders.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -156,6 +157,17 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
     });
   }
 
+  void openPlaceholders(context) async {
+    // final image = await CustomCamera.openGallery();
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.bottomToTop, child: Placeholders()));
+    // setState(() {
+    //   _image = image;
+    // });
+  }
+
   Future handleTakePhoto() async {
     Navigator.pop(context);
     final file = await picker.getImage(
@@ -216,6 +228,16 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 Navigator.of(context).pop();
               },
             ),
+            // SimpleDialogOption(
+            //   child: Text(
+            //     "Use a Placeholder",
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            //   onPressed: () {
+            //     openPlaceholders(context);
+            //     // Navigator.of(context).pop();
+            //   },
+            // ),
             SimpleDialogOption(
               child: Text(
                 "Cancel",

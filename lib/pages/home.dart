@@ -177,22 +177,22 @@ class _HomeState extends State<Home> {
               ' ' +
               message['notification']['body'];
           FlutterAppBadger.updateBadgeCount(1);
-          // if (page == 'chat') {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => MessagesHub()));
-          // } else if (page == 'post') {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-          // } else if (page == 'group') {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-          // } else if (page == 'user') {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-          // } else {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => NotificationFeed()));
-          // }
+          if (page == 'chat') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MessagesHub()));
+          } else if (page == 'post') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          } else if (page == 'group') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          } else if (page == 'user') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          } else {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NotificationFeed()));
+          }
           if (recipientId == currentUser.id) {
             print('Notification shown');
 
@@ -252,22 +252,22 @@ class _HomeState extends State<Home> {
               ' ' +
               message['notification']['body'];
           FlutterAppBadger.updateBadgeCount(1);
-          // if (page == 'chat') {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => MessagesHub()));
-          // } else if (page == 'post') {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-          // } else if (page == 'group') {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-          // } else if (page == 'user') {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-          // } else {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => NotificationFeed()));
-          // }
+          if (page == 'chat') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MessagesHub()));
+          } else if (page == 'post') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          } else if (page == 'group') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          } else if (page == 'user') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          } else {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NotificationFeed()));
+          }
           if (recipientId == currentUser.id) {
             print('Notification shown');
             Flushbar snackbar = Flushbar(

@@ -302,7 +302,7 @@ exports.onCreateGroupFeedItem = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId},
+          data: {recipient: userId, click_action: "FLUTTER_NOTIFICATION_CLICK"},
         };
 
         // 5) Send message with admin.messaging()
@@ -365,7 +365,7 @@ exports.groupChat = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId, page: "group"},
+          data: {recipient: userId, page: "group", click_action: "FLUTTER_NOTIFICATION_CLICK"},
         };
 
         // 5) Send message with admin.messaging()
@@ -425,7 +425,7 @@ exports.directMessage = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: receiverId, page: "chat"},
+          data: {recipient: receiverId, page: "chat", click_action: "FLUTTER_NOTIFICATION_CLICK"},
         };
 
         // 5) Send message with admin.messaging()
@@ -523,7 +523,7 @@ exports.editPostNotif = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId, page: "post", link: post},
+          data: {recipient: userId, page: "post", link: post, click_action: "FLUTTER_NOTIFICATION_CLICK"},
         };
 
         // 5) Send message with admin.messaging()
@@ -558,7 +558,7 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                 const message = {
                   notification: {title: data.title, body: "starts in one hour, don't flake!"},
                   token: notifToken,
-                  data: {recipient: user.id},
+                  data: {recipient: user.id, click_action: "FLUTTER_NOTIFICATION_CLICK"},
                 };
                 if (data.startDate.toDate().getDate() == now.toDate().getDate() && data.startDate.toDate().getMonth() == now.toDate().getMonth() && data.startDate.toDate().getFullYear() == now.toDate().getFullYear()) {
                   if ((data.startDate.toDate().getHours() - 1 == now.toDate().getHours()) && data.scheduled != "true") {
