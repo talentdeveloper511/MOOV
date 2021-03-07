@@ -33,7 +33,7 @@ class Placeholders extends StatelessWidget {
                       // DocumentSnapshot course =
                       //     snapshot.data.docs[index];
 
-                      return Image.network(
+                      Image.network(
                         'alvin.png',
                         fit: BoxFit.cover,
                         height: 40,

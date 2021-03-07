@@ -24,7 +24,9 @@ void main() async {
 }
 
 class MOOV extends StatelessWidget {
-  const MOOV({Key key}) : super(key: key);
+  MOOV({Key key}) : super(key: key);
+  final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey(debugLabel: "Main Navigator");
   // This widget is the root of your application.
 
   @override
@@ -42,6 +44,7 @@ class MOOV extends StatelessWidget {
           }
         },
         child: MaterialApp(
+          navigatorKey: navigatorKey,
           builder: (context, widget) {
             return MediaQuery(
               child: widget,

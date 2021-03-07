@@ -228,16 +228,16 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 Navigator.of(context).pop();
               },
             ),
-            SimpleDialogOption(
-              child: Text(
-                "Use a Placeholder",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                openPlaceholders(context);
-                // Navigator.of(context).pop();
-              },
-            ),
+            // SimpleDialogOption(
+            //   child: Text(
+            //     "Use a Placeholder",
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            //   onPressed: () {
+            //     openPlaceholders(context);
+            //     // Navigator.of(context).pop();
+            //   },
+            // ),
             SimpleDialogOption(
               child: Text(
                 "Cancel",
