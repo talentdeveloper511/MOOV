@@ -25,8 +25,6 @@ import 'package:MOOV/widgets/going_statuses.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcase.dart';
-import 'package:showcaseview/showcase_widget.dart';
 
 class PostDetail extends StatefulWidget {
   String postId;
@@ -92,138 +90,146 @@ class _PostDetailState extends State<PostDetail>
           isIncognito = snapshot.data['privacySettings']['incognito'];
           final bool includeMarkAsDoneButton = true;
 
-          return Scaffold(
-              appBar: AppBar(
-                leading: (includeMarkAsDoneButton)
-                    ? IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        tooltip: 'Mark as done',
-                      )
-                    : IconButton(
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
+          return GestureDetector(
+            onPanUpdate: (details) {
+              if (details.delta.dx > 0) {
+                Navigator.pop(context);
+              }
+            },
+            child: Scaffold(
+                appBar: AppBar(
+                  leading: (includeMarkAsDoneButton)
+                      ? IconButton(
+                          icon:
+                              const Icon(Icons.arrow_back, color: Colors.white),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          tooltip: 'Mark as done',
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(
+                              context,
+                            );
+                          },
                         ),
-                        onPressed: () {
-                          Navigator.pop(
-                            context,
-                          );
-                        },
-                      ),
-                backgroundColor: TextThemes.ndBlue,
-                flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: EdgeInsets.all(5),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
-                            (Route<dynamic> route) => false,
-                          );
-                        },
-                        child: Image.asset(
-                          'lib/assets/moovblue.png',
-                          fit: BoxFit.cover,
-                          height: 50.0,
+                  backgroundColor: TextThemes.ndBlue,
+                  flexibleSpace: FlexibleSpaceBar(
+                    titlePadding: EdgeInsets.all(5),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()),
+                              (Route<dynamic> route) => false,
+                            );
+                          },
+                          child: Image.asset(
+                            'lib/assets/moovblue.png',
+                            fit: BoxFit.cover,
+                            height: 50.0,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              floatingActionButton: FadeTransition(
-                opacity: _hideFabAnimController,
-                child: ScaleTransition(
-                  scale: _hideFabAnimController,
-                  child: FloatingActionButton.extended(
-                      backgroundColor:
-                          isIncognito ? Colors.black : Colors.white,
-                      onPressed: () {
-                        HapticFeedback.lightImpact();
+                floatingActionButton: FadeTransition(
+                  opacity: _hideFabAnimController,
+                  child: ScaleTransition(
+                    scale: _hideFabAnimController,
+                    child: FloatingActionButton.extended(
+                        backgroundColor:
+                            isIncognito ? Colors.black : Colors.white,
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
 
-                        isIncognito
-                            ? usersRef.doc(currentUser.id).set({
-                                "privacySettings": {"incognito": false}
-                              }, SetOptions(merge: true))
-                            : usersRef.doc(currentUser.id).set({
-                                "privacySettings": {
-                                  "incognito": true,
-                                  "friendsOnly": false
-                                }
-                              }, SetOptions(merge: true));
-                      },
-                      label: !isIncognito
-                          ? Text("Go Incognito",
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black))
-                          : Row(
-                              children: [
-                                Image.asset('lib/assets/incognito.png',
-                                    height: 20),
-                                Text(" Incognito",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white)),
-                              ],
-                            )),
+                          isIncognito
+                              ? usersRef.doc(currentUser.id).set({
+                                  "privacySettings": {"incognito": false}
+                                }, SetOptions(merge: true))
+                              : usersRef.doc(currentUser.id).set({
+                                  "privacySettings": {
+                                    "incognito": true,
+                                    "friendsOnly": false
+                                  }
+                                }, SetOptions(merge: true));
+                        },
+                        label: !isIncognito
+                            ? Text("Go Incognito",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black))
+                            : Row(
+                                children: [
+                                  Image.asset('lib/assets/incognito.png',
+                                      height: 20),
+                                  Text(" Incognito",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white)),
+                                ],
+                              )),
+                  ),
                 ),
-              ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.endFloat,
-              body: SafeArea(
-                top: false,
-                child: Stack(children: [
-                  StreamBuilder(
-                      stream: postsRef.doc(postId).snapshots(),
-                      builder: (context, snapshot) {
-                        String title,
-                            description,
-                            bannerImage,
-                            address,
-                            userId,
-                            postId;
-                        dynamic startDate;
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.endFloat,
+                body: SafeArea(
+                  top: false,
+                  child: Stack(children: [
+                    StreamBuilder(
+                        stream: postsRef.doc(postId).snapshots(),
+                        builder: (context, snapshot) {
+                          String title,
+                              description,
+                              bannerImage,
+                              address,
+                              userId,
+                              postId;
+                          dynamic startDate;
 
-                        if (!snapshot.hasData)
-                          return CircularProgressIndicator();
-                        DocumentSnapshot course = snapshot.data;
-                        title = course['title'];
-                        bannerImage = course['image'];
-                        description = course['description'];
-                        startDate = course['startDate'];
-                        address = course['address'];
-                        userId = course['userId'];
-                        postId = course['postId'];
-                        int maxOccupancy = course['maxOccupancy'];
-                        int venmo = course['venmo'];
-                        int goingCount = course['going'].length;
-                        return Container(
-                          color: Colors.white,
-                          child: ListView(
-                            controller: _scrollController,
-                            children: <Widget>[
-                              _BannerImage(bannerImage, userId, postId,
-                                  maxOccupancy, goingCount),
-                              _NonImageContents(
-                                  title,
-                                  description,
-                                  startDate,
-                                  address,
-                                  userId,
-                                  postId,
-                                  course,
-                                  commentCount),
-                            ],
-                          ),
-                        );
-                      }),
-                ]),
-              ));
+                          if (!snapshot.hasData)
+                            return CircularProgressIndicator();
+                          DocumentSnapshot course = snapshot.data;
+                          title = course['title'];
+                          bannerImage = course['image'];
+                          description = course['description'];
+                          startDate = course['startDate'];
+                          address = course['address'];
+                          userId = course['userId'];
+                          postId = course['postId'];
+                          int maxOccupancy = course['maxOccupancy'];
+                          int venmo = course['venmo'];
+                          int goingCount = course['going'].length;
+                          return Container(
+                            color: Colors.white,
+                            child: ListView(
+                              controller: _scrollController,
+                              children: <Widget>[
+                                _BannerImage(bannerImage, userId, postId,
+                                    maxOccupancy, goingCount),
+                                _NonImageContents(
+                                    title,
+                                    description,
+                                    startDate,
+                                    address,
+                                    userId,
+                                    postId,
+                                    course,
+                                    commentCount),
+                              ],
+                            ),
+                          );
+                        }),
+                  ]),
+                )),
+          );
         });
   }
 }
@@ -997,24 +1003,6 @@ class _ButtonsState extends State<Buttons> {
 
   @override
   Widget build(BuildContext context) {
-    // SharedPreferences preferences;
-
-    // displayShowCase() async {
-    //   preferences = await SharedPreferences.getInstance();
-    //   bool showCaseVisibilityStatus = preferences.getBool("displayShowCase4");
-    //   if (showCaseVisibilityStatus == null) {
-    //     preferences.setBool("displayShowCase4", false);
-    //     return true;
-    //   }
-    //   return false;
-    // }
-
-    // displayShowCase().then((status) {
-    //   if (status) {
-
-    //     ShowCaseWidget.of(context).startShowCase([_buttonsKey]);
-    //   }
-    // });
     return StreamBuilder(
         stream: postsRef.doc(moovId).snapshots(),
         // ignore: missing_return

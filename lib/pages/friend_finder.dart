@@ -265,7 +265,7 @@ class _FriendFinderState extends State<FriendFinder>
         ? Timer(Duration(milliseconds: 1), () {
             handleSearch("");
           })
-        : null;
+        : Container();
 
     // return SingleChildScrollView(
     //     child: Container(
@@ -373,7 +373,7 @@ class _FriendFinderState extends State<FriendFinder>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                              padding: const EdgeInsets.all(50.0),
+                              padding: const EdgeInsets.only(top: 50.0, left: 50, right: 50, bottom: 10),
                               child: RichText(
                                   textAlign: TextAlign.center,
                                   text: TextSpan(
@@ -395,22 +395,48 @@ class _FriendFinderState extends State<FriendFinder>
                                                 fontSize: 30,
                                                 fontWeight: FontWeight.w300))
                                       ]))),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 35.0),
-                            child: FloatingActionButton.extended(
-                                backgroundColor: Colors.pinkAccent[100],
-                                onPressed: () {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            SearchBarWithHeader()),
-                                    (Route<dynamic> route) => false,
-                                  );
-                                },
-                                label: const Text("Find friends",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white))),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SearchBarWithHeader()),
+                                (Route<dynamic> route) => false,
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Card(
+ elevation: 20,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                              child: Container(
+                                  
+                                    height: 45,
+                                    width: 150,
+                                    padding: EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.pink[400],
+                                            Colors.pink[300]
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Find Friends",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )),
+                              ),
+                            ),
                           ),
                           Image.asset('lib/assets/ff.png')
                         ],

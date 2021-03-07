@@ -938,6 +938,9 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'wants to join!';
     } else if (type == 'sent') {
       activityItemText = 'sent you ';
+    }
+    else if (type == 'businessFollow') {
+      activityItemText = 'is following you.';
     } else if (type == 'created') {
       activityItemText = 'just posted ';
     } else if (type == 'comment') {
@@ -962,7 +965,7 @@ class NotificationFeedItem extends StatelessWidget {
         child: ListTile(
           title: GestureDetector(
             onTap: () {
-              (type == 'request' || type == 'accept' || type == 'askToJoin')
+              (type == 'request' || type == 'accept' || type == 'askToJoin' || type == 'businessFollow')
                   ? showProfile(context)
                   : (type == 'suggestion' || type == 'friendGroup')
                       ? showGroup(context)

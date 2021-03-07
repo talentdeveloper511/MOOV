@@ -28,8 +28,6 @@ import 'package:MOOV/services/database.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcase.dart';
-import 'package:showcaseview/showcase_widget.dart';
 
 class MOOVSPage extends StatefulWidget {
   @override
@@ -81,35 +79,11 @@ class _MOOVSPageState extends State<MOOVSPage>
     super.build(context);
     SharedPreferences preferences;
 
-    displayShowCase() async {
-      preferences = await SharedPreferences.getInstance();
-      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase3");
-      if (showCaseVisibilityStatus == null) {
-        preferences.setBool("displayShowCase3", false);
-        return true;
-      }
-      return false;
-    }
-
-    displayShowCase().then((status) {
-      if (status) {
-        Timer(Duration(seconds: 1), () {
-          ShowCaseWidget.of(context).startShowCase([_myPostsKey, _goingKey]);
-        });
-      }
-    });
-
     bool isLargePhone = Screen.diagonal(context) > 766;
-    String userId = currentUser.friendArray[0];
 
     bool isIncognito = false;
     bool friendFinderVisibility = true;
-    final ValueChanged<int> onItemSelected = (int index) {
-      print(index);
-      setState(() {
-        selectedIndex = index;
-      });
-    };
+   
 
     return Scaffold(
         backgroundColor: Colors.white,

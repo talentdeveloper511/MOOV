@@ -17,8 +17,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcase.dart';
-import 'package:showcaseview/showcase_widget.dart';
 
 class AlgoliaApplication {
   static final Algolia algolia = Algolia.init(
@@ -128,23 +126,6 @@ class _SearchBarState extends State<SearchBar>
   Widget build(BuildContext context) {
     SharedPreferences preferences;
 
-    displayShowCase2() async {
-      preferences = await SharedPreferences.getInstance();
-      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase2");
-      if (showCaseVisibilityStatus == null) {
-        preferences.setBool("displayShowCase2", false);
-        return true;
-      }
-      return false;
-    }
-
-    displayShowCase2().then((status) {
-      if (status) {
-        Timer(Duration(seconds: 1), () {
-          ShowCaseWidget.of(context).startShowCase([_searchKey]);
-        });
-      }
-    });
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
@@ -153,18 +134,7 @@ class _SearchBarState extends State<SearchBar>
               bottom: PreferredSize(
                   preferredSize: null,
                   child: Column(children: <Widget>[
-                    Showcase(
-                      title: "A DYNAMIC SEARCH",
-                      description:
-                          "\nSearch for People, Friend Groups, and MOOVs",
-                      titleTextStyle: TextStyle(
-                          color: TextThemes.ndBlue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                      descTextStyle: TextStyle(fontStyle: FontStyle.italic),
-                      contentPadding: EdgeInsets.all(10),
-                      key: _searchKey,
-                      child: TextField(
+                   TextField(
                           style: TextStyle(fontSize: 20),
                           controller: searchController,
                           onChanged: (val) {
@@ -204,7 +174,7 @@ class _SearchBarState extends State<SearchBar>
                                       color: Colors.black,
                                     ))),
                           )),
-                    ),
+                    
                     showTabs == true
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -1147,82 +1117,82 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                   ))),
                         )),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        // Sign In Button
-                        new FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(0);
-                            setState(() {
-                              _currentIndex = (_tabController.animation.value)
-                                  .round(); //_tabController.animation.value returns double
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              // Sign In Button
+                              new FlatButton(
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                onPressed: () {
+                                  _tabController.animateTo(0);
+                                  setState(() {
+                                    _currentIndex = (_tabController
+                                            .animation.value)
+                                        .round(); //_tabController.animation.value returns double
 
-                              _currentIndex = 0;
-                            });
-                          },
-                          child: _currentIndex == 0
-                              ? GradientText(
-                                  '     Users  ',
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "     Users  ",
-                                  style: TextStyle(fontSize: 16.5),
-                                ),
-                        ),
-                        // Sign Up Button
-                        new FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(1);
-                            setState(() {
-                              _currentIndex = 1;
-                            });
-                          },
-                          child: _currentIndex == 1
-                              ? GradientText(
-                                  "    MOOVs",
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "    MOOVs",
-                                  style: TextStyle(fontSize: 16.5),
-                                ),
-                        ),
-                        FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(2);
-                            setState(() {
-                              _currentIndex = 2;
-                            });
-                          },
-                          child: _currentIndex == 2
-                              ? GradientText(
-                                  "Friend Groups",
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "Friend Groups",
-                                  style: TextStyle(fontSize: 16.5),
-                                ),
-                        )
-                      ],
-                    ),
+                                    _currentIndex = 0;
+                                  });
+                                },
+                                child: _currentIndex == 0
+                                    ? GradientText(
+                                        "     People ",
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]),
+                                      )
+                                    : Text(
+                                        "     People ",
+                                      ),
+                              ),
+                              // Sign Up Button
+                              new FlatButton(
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                onPressed: () {
+                                  _tabController.animateTo(1);
+                                  setState(() {
+                                    _currentIndex = 1;
+                                  });
+                                },
+                                child: _currentIndex == 1
+                                    ? GradientText(
+                                        "    MOOVs",
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]),
+                                      )
+                                    : Text(
+                                        "    MOOVs",
+                                        style: TextStyle(fontSize: 16.5),
+                                      ),
+                              ),
+                              FlatButton(
+                                splashColor: Colors.white,
+                                color: Colors.white,
+                                onPressed: () {
+                                  _tabController.animateTo(2);
+                                  setState(() {
+                                    _currentIndex = 2;
+                                  });
+                                },
+                                child: _currentIndex == 2
+                                    ? GradientText(
+                                        "Friend Groups",
+                                        gradient: LinearGradient(colors: [
+                                          Colors.blue.shade400,
+                                          Colors.blue.shade900,
+                                        ]),
+                                      )
+                                    : Text(
+                                        "Friend Groups",
+                                        style: TextStyle(fontSize: 16.5),
+                                      ),
+                              )
+                            ],
+                          )
                   ])),
             ),
             backgroundColor: Colors.white,

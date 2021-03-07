@@ -21,6 +21,8 @@ class User {
   final String venmoUsername;
   final Map pushSettings;
   final int nameChangeLimit;
+  final bool isBusiness;
+  final List<dynamic> followers;
 
   User(
       {this.id,
@@ -42,30 +44,33 @@ class User {
       this.referral,
       this.venmoUsername,
       this.pushSettings,
-      this.nameChangeLimit});
+      this.nameChangeLimit,
+      this.isBusiness,
+      this.followers});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
-      id: doc.data()['id'],
-      email: doc.data()['email'],
-      photoUrl: doc.data()['photoUrl'],
-      displayName: doc.data()['displayName'],
-      bio: doc.data()['bio'],
-      score: doc.data()['score'],
-      dorm: doc.data()['dorm'],
-      header: doc.data()['header'],
-      year: doc.data()['year'],
-      gender: doc.data()['gender'],
-      friendArray: doc.data()['friendArray'],
-      friendRequests: doc.data()['friendRequests'],
-      postLimit: doc.data()['postLimit'],
-      verifiedStatus: doc.data()['verifiedStatus'],
-      timestamp: doc.data()['timestamp'],
-      friendGroups: doc.data()['friendGroups'],
-      referral: doc.data()['referral'],
-      venmoUsername: doc.data()['venmoUsername'],
-      pushSettings: doc.data()['pushSettings'],
-      nameChangeLimit: doc.data()['nameChangeLimit'],
-    );
+        id: doc.data()['id'],
+        email: doc.data()['email'],
+        photoUrl: doc.data()['photoUrl'],
+        displayName: doc.data()['displayName'],
+        bio: doc.data()['bio'],
+        score: doc.data()['score'],
+        dorm: doc.data()['dorm'],
+        header: doc.data()['header'],
+        year: doc.data()['year'],
+        gender: doc.data()['gender'],
+        friendArray: doc.data()['friendArray'],
+        friendRequests: doc.data()['friendRequests'],
+        postLimit: doc.data()['postLimit'],
+        verifiedStatus: doc.data()['verifiedStatus'],
+        timestamp: doc.data()['timestamp'],
+        friendGroups: doc.data()['friendGroups'],
+        referral: doc.data()['referral'],
+        venmoUsername: doc.data()['venmoUsername'],
+        pushSettings: doc.data()['pushSettings'],
+        nameChangeLimit: doc.data()['nameChangeLimit'],
+        isBusiness: doc.data()['isBusiness'],
+        followers: doc.data()['followers']);
   }
 }
