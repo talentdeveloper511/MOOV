@@ -25,8 +25,6 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcase.dart';
-import 'package:showcaseview/showcase_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/bezier_circle_header.dart';
 import 'dart:math' as math;
@@ -133,27 +131,6 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     SharedPreferences preferences;
 
-    displayShowCase() async {
-      preferences = await SharedPreferences.getInstance();
-      bool showCaseVisibilityStatus = preferences.getBool("displayShowCase");
-      if (showCaseVisibilityStatus == null) {
-        preferences.setBool("displayShowCase", false);
-        return true;
-      }
-      return false;
-    }
-
-    displayShowCase().then((status) {
-      if (status) {
-        ShowCaseWidget.of(context).startShowCase([
-          _categoryButtonKey,
-          _friendFinderKey,
-          _friendGroupsKey,
-          _motdKey,
-          _leaderboardKey
-        ]);
-      }
-    });
 
     SizeConfig().init(context);
     bool isLargePhone = Screen.diagonal(context) > 766;
@@ -958,170 +935,11 @@ class _HomePageState extends State<HomePage>
                               if (index == 0) {
                                 return Column(children: [
                                  
-                                  Showcase(
-                                    key: _motdKey,
-                                    title: "BIGGEST MOOV TODAY",
-                                    description:
-                                        "\n     You won't want to miss this     ",
-                                    titleTextStyle: TextStyle(
-                                        color: TextThemes.ndBlue,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                    descTextStyle: TextStyle(
-                                        fontStyle: FontStyle.italic),
-                                    contentPadding: EdgeInsets.all(5),
-                                    child: Container(
+                                 Container(
                                       height: isLargePhone ? 190 : 160,
                                       child: MOTD(),
                                     ),
-                                  ),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                  //   children: [
-                                  //     Container(
-                                  //       child: Padding(
-                                  //           padding: const EdgeInsets.only(bottom: 30),
-                                  //           child: GestureDetector(
-                                  //             onTap: () {},
-                                  //             child: Bounce(
-                                  //               duration: Duration(milliseconds: 300),
-                                  //               onPressed: () {
-                                  //                 Navigator.push(
-                                  //                     context,
-                                  //                     MaterialPageRoute(
-                                  //                         builder: (context) =>
-                                  //                             FriendFinder()));
-                                  //               },
-                                  //               child: Showcase(
-                                  //                 key: _friendFinderKey,
-                                  //                 title: "NO MORE FOMO",
-                                  //                 description:
-                                  //                     "\nFind your friends' plans for tonight",
-                                  //                 titleTextStyle: TextStyle(
-                                  //                     color: TextThemes.ndBlue,
-                                  //                     fontWeight: FontWeight.bold,
-                                  //                     fontSize: 20),
-                                  //                 descTextStyle:
-                                  //                     TextStyle(fontStyle: FontStyle.italic),
-                                  //                 contentPadding: EdgeInsets.all(10),
-                                  //                 // shapeBorder: ContinuousRectangleBorder(
-                                  //                 //     borderRadius: BorderRadius.circular(15)),
-                                  //                 child: Card(
-                                  //                   elevation: 10,
-                                  //                   color: Colors.pink[50],
-                                  //                   child: Padding(
-                                  //                     padding: EdgeInsets.symmetric(
-                                  //                         vertical: 4, horizontal: 20),
-                                  //                     child: Column(
-                                  //                       crossAxisAlignment:
-                                  //                           CrossAxisAlignment.center,
-                                  //                       mainAxisAlignment:
-                                  //                           MainAxisAlignment.center,
-                                  //                       children: [
-                                  //                         IconButton(
-                                  //                           padding: EdgeInsets.only(
-                                  //                               left: .0,
-                                  //                               right: 5,
-                                  //                               bottom: 5,
-                                  //                               top: 5),
-                                  //                           icon: Image.asset(
-                                  //                               'lib/assets/ff.png'),
-                                  //                           color: Colors.white,
-                                  //                           splashColor: Color.fromRGBO(
-                                  //                               220, 180, 57, 1.0),
-                                  //                         ),
-                                  //                         Align(
-                                  //                             alignment: Alignment.center,
-                                  //                             child: Padding(
-                                  //                               padding:
-                                  //                                   const EdgeInsets.all(4.0),
-                                  //                               child: Text(
-                                  //                                 "Friends' Plans",
-                                  //                                 style: TextStyle(
-                                  //                                     fontFamily: 'Open Sans',
-                                  //                                     fontWeight:
-                                  //                                         FontWeight.bold,
-                                  //                                     color: Colors.black,
-                                  //                                     fontSize: 16.0),
-                                  //                               ),
-                                  //                             )),
-                                  //                       ],
-                                  //                     ),
-                                  //                   ),
-                                  //                 ),
-                                  //               ),
-                                  //             ),
-                                  //           )),
-                                  //     ),
-                                  //     Padding(
-                                  //         padding: const EdgeInsets.only(bottom: 30),
-                                  //         child: GestureDetector(
-                                  //           onTap: () {},
-                                  //           child: Bounce(
-                                  //             duration: Duration(milliseconds: 300),
-                                  //             onPressed: () {
-                                  //               Navigator.push(
-                                  //                   context,
-                                  //                   MaterialPageRoute(
-                                  //                       builder: (context) =>
-                                  //                           FriendGroupsPage()));
-                                  //             },
-                                  //             child: Showcase(
-                                  //               key: _friendGroupsKey,
-                                  //               title: "SQUAD UP",
-                                  //               description: "\niMessage and Snap had a baby",
-                                  //               titleTextStyle: TextStyle(
-                                  //                   color: TextThemes.ndBlue,
-                                  //                   fontWeight: FontWeight.bold,
-                                  //                   fontSize: 20),
-                                  //               descTextStyle:
-                                  //                   TextStyle(fontStyle: FontStyle.italic),
-                                  //               contentPadding: EdgeInsets.all(10),
-                                  //               // shapeBorder: ContinuousRectangleBorder(
-                                  //               //     borderRadius: BorderRadius.circular(15)),
-                                  //               child: Card(
-                                  //                 elevation: 10,
-                                  //                 color: Colors.purple[50],
-                                  //                 child: Padding(
-                                  //                   padding: EdgeInsets.symmetric(
-                                  //                       vertical: 4, horizontal: 20),
-                                  //                   child: Column(
-                                  //                     crossAxisAlignment:
-                                  //                         CrossAxisAlignment.center,
-                                  //                     mainAxisAlignment:
-                                  //                         MainAxisAlignment.center,
-                                  //                     children: [
-                                  //                       IconButton(
-                                  //                         padding: EdgeInsets.all(5.0),
-                                  //                         icon:
-                                  //                             Image.asset('lib/assets/fg1.png'),
-                                  //                         splashColor:
-                                  //                             Color.fromRGBO(220, 180, 57, 1.0),
-                                  //                       ),
-                                  //                       Align(
-                                  //                           alignment: Alignment.center,
-                                  //                           child: Padding(
-                                  //                             padding:
-                                  //                                 const EdgeInsets.all(4.0),
-                                  //                             child: Text(
-                                  //                               "Friend Groups",
-                                  //                               style: TextStyle(
-                                  //                                   fontFamily: 'Open Sans',
-                                  //                                   fontWeight: FontWeight.bold,
-                                  //                                   color: Colors.black,
-                                  //                                   fontSize: 16.0),
-                                  //                             ),
-                                  //                           )),
-                                  //                     ],
-                                  //                   ),
-                                  //                 ),
-                                  //               ),
-                                  //             ),
-                                  //           ),
-                                  //         ))
-                                  //   ],
-                                  // ),
-
+                                
                                   SizedBox(height: 0),
                                   _currentIndex == 0 &&
                                           todayOnly == 0 &&
@@ -1149,7 +967,8 @@ class _HomePageState extends State<HomePage>
                                           items: [
                                               PollView(),
                                               SuggestionBoxCarousel(),
-                                              GroupCarousel(),
+                                              currentUser.friendGroups != null ?
+                                              GroupCarousel() : null,
                                               HottestMOOV()
                                             ])
                                       : Container(),

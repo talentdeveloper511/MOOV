@@ -90,6 +90,7 @@ class _FriendGroupsState extends State<FriendGroupsPage>
                     padding: const EdgeInsets.all(40.0),
                     child: Column(
                       children: [
+                        SizedBox(height: 75),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 50.0),
                           child: RaisedButton(

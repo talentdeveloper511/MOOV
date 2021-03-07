@@ -465,6 +465,33 @@ class Database {
     });
   }
 
+  followBusiness(String businessId, String senderProPic, String businessName,
+      String sender) {
+    notificationFeedRef
+        .doc(businessId)
+        .collection("feedItems")
+        .doc('businessFollow ' + sender)
+        .set({
+      "seen": false,
+      "type": "businessFollow",
+      "username": currentUser.displayName,
+      "userId": currentUser.id,
+      "userProfilePic": currentUser.photoUrl,
+      "timestamp": DateTime.now(),
+      "ownerName": businessName,
+    });
+
+    usersRef.doc(businessId).set({
+      'followers': FieldValue.arrayUnion([currentUser.id]),
+    }, SetOptions(merge: true));
+  }
+
+  unfollowBusiness(String businessId, String sender) {
+    usersRef.doc(businessId).set({
+      'followers': FieldValue.arrayRemove([currentUser.id]),
+    }, SetOptions(merge: true));
+  }
+
   sendMOOVNotification(
     String ownerId,
     String previewImg,

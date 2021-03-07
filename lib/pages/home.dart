@@ -38,7 +38,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcase_widget.dart';
 import 'create_account.dart';
 import 'group_detail.dart';
 
@@ -700,25 +699,13 @@ class _HomeState extends State<Home> {
       body: PageView(
         children: <Widget>[
           // Timeline(),
-          ShowCaseWidget(
-            builder: Builder(builder: (context) => HomePage()),
-            autoPlay: false,
-            autoPlayLockEnable: true,
-          ),
+          HomePage(),
+        
 
-          ShowCaseWidget(
-              builder: Builder(builder: (context) => SearchBar()),
-              autoPlay: false,
-              autoPlayLockEnable: true),
+         SearchBar(),
 
-          ShowCaseWidget(
-              builder: Builder(builder: (context) => MOOVSPage()),
-              autoPlay: false,
-              autoPlayLockEnable: true),
-          ShowCaseWidget(
-              builder: Builder(builder: (context) => ProfilePage()),
-              autoPlay: false,
-              autoPlayLockEnable: true),
+          MOOVSPage(),
+          ProfilePage()
         ],
         controller: pageController,
         onPageChanged: onPageChanged,
