@@ -757,7 +757,7 @@ class _AuthorContent extends StatelessWidget {
                                       child: Icon(
                                         Icons.store,
                                         size: 20,
-                                        color: TextThemes.ndGold,
+                                        color: Colors.blue,
                                       ),
                                     )
                                   : verifiedStatus == 2

@@ -979,6 +979,23 @@ class Database {
     });
   }
 
+  giveBadge(String userId, String type){
+  usersRef.doc(userId).set({
+        "badges": {type: FieldValue.arrayUnion([Timestamp.now()])}
+      }, SetOptions(merge: true));
+  notificationFeedRef.doc(userId).collection('feedItems')
+            .doc('badge ' + type)
+            .set({
+          "seen": false,
+          "type": "badge",
+          "title": "",
+          // "username": currentUser.displayName,
+          "userId": userId,
+          "userProfilePic": "badge",
+          "timestamp": DateTime.now()
+        });
+  }
+
   updateAllDocs() async {
     var snapshots = usersRef.snapshots();
     try {
@@ -987,13 +1004,10 @@ class Database {
 
         for (var document in documents) {
           await document.reference.set({
-            // "sendLimit": {
-            //   "friendFinderVisibility": true,
-            //   "friendsOnly": false,
-            //   "incognito": false,
-            //   "showDorm": true
-            // }
-            "nameChangeLimit": 1,
+            "badges": {
+            }
+            // "badges": [],
+            // "isBusiness": false
             // "groupLimit": 2
           }, SetOptions(merge: true));
         }

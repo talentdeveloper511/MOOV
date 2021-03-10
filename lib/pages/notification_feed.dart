@@ -4,6 +4,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
@@ -868,7 +869,7 @@ class NotificationFeedItem extends StatelessWidget {
                     fit: BoxFit.cover,
                     image: previewImg != null
                         ? CachedNetworkImageProvider(previewImg)
-                        : AssetImage("lib/assets/otherbutton1.png"),
+                        : Container(),
                   ),
                 ),
               )),
@@ -938,8 +939,7 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'wants to join!';
     } else if (type == 'sent') {
       activityItemText = 'sent you ';
-    }
-    else if (type == 'businessFollow') {
+    } else if (type == 'businessFollow') {
       activityItemText = 'is following you.';
     } else if (type == 'created') {
       activityItemText = 'just posted ';
@@ -947,6 +947,8 @@ class NotificationFeedItem extends StatelessWidget {
       activityItemText = 'commented: ';
     } else if (type == 'deleted') {
       activityItemText = 'has been canceled';
+    } else if (type == 'badge') {
+      activityItemText = 'You have earned a badge!';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
@@ -965,11 +967,16 @@ class NotificationFeedItem extends StatelessWidget {
         child: ListTile(
           title: GestureDetector(
             onTap: () {
-              (type == 'request' || type == 'accept' || type == 'askToJoin' || type == 'businessFollow')
+              (type == 'request' ||
+                      type == 'accept' ||
+                      type == 'askToJoin' ||
+                      type == 'businessFollow')
                   ? showProfile(context)
                   : (type == 'suggestion' || type == 'friendGroup')
                       ? showGroup(context)
-                      : showPost(context);
+                      : type == 'badge'
+                          ? null
+                          : showPost(context);
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -984,7 +991,7 @@ class NotificationFeedItem extends StatelessWidget {
                       ),
                       children: [
                         TextSpan(
-                          text: username,
+                          text: username ?? "",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
@@ -1011,11 +1018,15 @@ class NotificationFeedItem extends StatelessWidget {
             ),
           ),
           leading: GestureDetector(
-            onTap: () => showProfile(context),
+            onTap: userProfilePic == 'badge'
+                ? () => null
+                : () => showProfile(context),
             child: CircleAvatar(
-              backgroundImage: userProfilePic != null
-                  ? CachedNetworkImageProvider(userProfilePic)
-                  : AssetImage("lib/assets/otherbutton1.png"),
+              backgroundImage: userProfilePic == 'badge'
+                  ? AssetImage("lib/assets/trophy2.png")
+                  : userProfilePic != null
+                      ? CachedNetworkImageProvider(userProfilePic)
+                      : AssetImage("lib/assets/otherbutton1.png"),
             ),
           ),
           subtitle: Text(
@@ -1031,5 +1042,10 @@ class NotificationFeedItem extends StatelessWidget {
   showProfile(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => OtherProfile(userId)));
+  }
+
+  showOwnProfile(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => ProfilePageWithHeader()));
   }
 }

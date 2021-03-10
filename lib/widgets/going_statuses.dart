@@ -198,7 +198,7 @@ class GoingPage extends StatelessWidget {
                                                                                 Icon(
                                                                               Icons.store,
                                                                               size: 20,
-                                                                              color: TextThemes.ndGold,
+                                                                              color:Colors.blue
                                                                             ),
                                                                           )
                                                                         : verifiedStatus ==

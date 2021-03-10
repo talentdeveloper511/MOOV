@@ -1004,8 +1004,7 @@ class PostOnFeed extends StatelessWidget {
                                                           child: Icon(
                                                             Icons.store,
                                                             size: 20,
-                                                            color: TextThemes
-                                                                .ndGold,
+                                                            color:Colors.blue
                                                           ),
                                                         )
                                                       : verifiedStatus == 2
@@ -1268,80 +1267,7 @@ class PostOnFeed extends StatelessWidget {
                 ],
               ),
             )),
-        currentUser.id == "108155010592087635288" ||
-                currentUser.id == "118426518878481598299" ||
-                currentUser.id == "107290090512658207959"
-            ? //ADMIN CONTROLS
-            Positioned(
-                top: 40,
-                left: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    FirebaseFirestore.instance
-                        .collection('notreDame')
-                        .doc('data')
-                        .collection('food')
-                        .doc(course['postId'])
-                        .set({
-                      "MOTD": true,
-                    }, SetOptions(merge: true));
-                  },
-                  child: Container(
-                    height: 30,
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.blue[400], Colors.purple[300]],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Text(
-                      "MAKE MOTD",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ),
-              )
-            : Text(""),
-            currentUser.id == "108155010592087635288" ||
-                currentUser.id == "118426518878481598299" ||
-                currentUser.id == "107290090512658207959"
-            ? //ADMIN CONTROLS
-            Positioned(
-                top: 70,
-                left: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    FirebaseFirestore.instance
-                        .collection('notreDame')
-                        .doc('data')
-                        .collection('food')
-                        .doc(course['postId'])
-                        .set({
-                      "featured": true,
-                    }, SetOptions(merge: true));
-                  },
-                  child: Container(
-                    height: 30,
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.orange[400], Colors.purple[300]],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Text(
-                      "FEATURE",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ),
-              )
-            : Text(""),
+       
         isToday == true
             ? Positioned(
                 top: 0,

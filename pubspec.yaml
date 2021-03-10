@@ -118,6 +118,7 @@ dependencies:
 
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -148,6 +149,7 @@ flutter:
     - lib/assets/otherbutton1.png
     - lib/assets/dummyqr.png
     - lib/assets/ndlogo.png
+    - lib/assets/tux.jpg  
     - lib/assets/ndlogo1.png
     - lib/assets/header.jpg
     - lib/assets/headerNoWhite.jpg
@@ -214,6 +216,11 @@ flutter:
     - lib/assets/icons/ShowICON2.png
     - lib/assets/icons/VirtualICON.png
     - lib/assets/icons/VirtualICON2.png
+    - lib/assets/badges/10friends.png
+    - lib/assets/badges/clink.png
+    - lib/assets/badges/natty.png
+    - lib/assets/badges/moovMaker.png
+    - lib/assets/badges/mountain.png
 
 
 

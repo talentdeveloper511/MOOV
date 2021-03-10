@@ -361,7 +361,8 @@ class _SearchBarState extends State<SearchBar>
                                                                           "id"],
                                                                       verifiedStatus:
                                                                           currSearchStuff[index]
-                                                                              .data["verifiedStatusador"])
+                                                                              .data["verifiedStatus"],
+                                                                              isBusiness: currSearchStuff[index].data['isBusiness'],)
                                                                   : Container();
                                                             },
                                                             childCount:
@@ -476,6 +477,7 @@ class DisplaySearchResult extends StatelessWidget {
   final String proPic;
   final String userId;
   final int verifiedStatus;
+  final bool isBusiness;
 
   DisplaySearchResult({
     Key key,
@@ -484,6 +486,8 @@ class DisplaySearchResult extends StatelessWidget {
     this.proPic,
     this.userId,
     this.verifiedStatus,
+    this.isBusiness
+    
   }) : super(key: key);
 
   @override
@@ -498,7 +502,7 @@ class DisplaySearchResult extends StatelessWidget {
           padding: const EdgeInsets.only(left: 20.0, top: 5, bottom: 5),
           child: CircleAvatar(
               radius: 27,
-              backgroundColor: TextThemes.ndGold,
+              backgroundColor: isBusiness ? Colors.blue : TextThemes.ndGold,
               child: CircleAvatar(
                 backgroundImage: NetworkImage(proPic),
                 radius: 25,
@@ -507,10 +511,46 @@ class DisplaySearchResult extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 12.5),
-          child: Text(
-            displayName ?? "",
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 3.0),
+                child: Text(
+                  displayName ?? "",
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
+                ),
+              ),
+               verifiedStatus == 3
+                                    ? Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 5,
+                                          top: 2.5,
+                                        ),
+                                        child: Icon(
+                                          Icons.store,
+                                          size: 25,
+                                          color: Colors.blue,
+                                        ),
+                                      )
+                                    : verifiedStatus == 2
+                                        ? Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 5, top: 5),
+                                            child: Image.asset(
+                                                'lib/assets/verif2.png',
+                                                height: 20),
+                                          )
+                                        : verifiedStatus == 1
+                                            ? Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 2.5, top: 0),
+                                                child: Image.asset(
+                                                    'lib/assets/verif.png',
+                                                    height: 30),
+                                              )
+                                            : Text("")
+            ],
           ),
         ),
         // isAmbassador
@@ -587,141 +627,143 @@ class DisplayMOOVResult extends StatelessWidget {
           String proPic = snapshot.data['photoUrl'];
           return Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: Stack(alignment: Alignment.center, children: <Widget>[
-              Container(
-                width: isLargePhone
-                    ? MediaQuery.of(context).size.width * 0.8
-                    : MediaQuery.of(context).size.width * 0.8,
-                height: isLargePhone
-                    ? MediaQuery.of(context).size.height * 0.15
-                    : MediaQuery.of(context).size.height * 0.17,
-                child:OpenContainer(
-                                  transitionType: ContainerTransitionType.fade,
-                                  transitionDuration: Duration(seconds: 1),
+            child: OpenContainer(
+                  transitionType: ContainerTransitionType.fade,
+                                  transitionDuration: Duration(milliseconds: 500),
                                   openBuilder: (context, _) =>
                                       PostDetail(postId),
                                   closedElevation: 0,
                                   closedBuilder: (context, _) => 
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl: image,
-                        fit: BoxFit.cover,
-                      ),
-                    ),),
-                    margin:
-                        EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
+                           Stack(alignment: Alignment.center, children: <Widget>[
+                Container(
+                  width: isLargePhone
+                      ? MediaQuery.of(context).size.width * 0.8
+                      : MediaQuery.of(context).size.width * 0.8,
+                  height: isLargePhone
+                      ? MediaQuery.of(context).size.height * 0.15
+                      : MediaQuery.of(context).size.height * 0.17,
+                  child:
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl: image,
+                          fit: BoxFit.cover,
                         ),
+                      ),
+                      margin:
+                          EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                    ),
+                  
+                
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        Colors.black.withAlpha(0),
+                        Colors.black,
+                        Colors.black12,
                       ],
                     ),
                   ),
-                
-              
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: <Color>[
-                      Colors.black.withAlpha(0),
-                      Colors.black,
-                      Colors.black12,
-                    ],
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * .4),
-                    child: Text(
-                      title,
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontFamily: 'Solway',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: isLargePhone ? 17.0 : 14),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * .4),
+                      child: Text(
+                        title,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontFamily: 'Solway',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: isLargePhone ? 17.0 : 14),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              // isToday == false
-              //     ? Positioned(
-              //         top: 0,
-              //         right: 0,
-              //         child: Container(
-              //           height: 30,
-              //           padding: EdgeInsets.all(4),
-              //           decoration: BoxDecoration(
-              //               gradient: LinearGradient(
-              //                 colors: [Colors.pink[400], Colors.purple[300]],
-              //                 begin: Alignment.centerLeft,
-              //                 end: Alignment.centerRight,
-              //               ),
-              //               borderRadius: BorderRadius.circular(10.0)),
-              //           child: isNextWeek ? Text("") : Text(""),
-              //         ),
-              //       )
-              //     : Container(),
-              // isToday == true
-              //     ? Positioned(
-              //         top: 0,
-              //         right: 0,
-              //         child: Container(
-              //           height: 30,
-              //           padding: EdgeInsets.all(4),
-              //           decoration: BoxDecoration(
-              //               gradient: LinearGradient(
-              //                 colors: [Colors.red[400], Colors.red[600]],
-              //                 begin: Alignment.centerLeft,
-              //                 end: Alignment.centerRight,
-              //               ),
-              //               borderRadius: BorderRadius.circular(10.0)),
-              //           child: Text(""),
-              //         ),
-              //       )
-              //     : Text(""),
-              Positioned(
-                bottom: 8.5,
-                right: isLargePhone ? 60 : 55,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
-                    color: TextThemes.ndGold,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 20.0,
-                        offset: Offset(5.0, 5.0),
-                      ),
-                    ],
+                // isToday == false
+                //     ? Positioned(
+                //         top: 0,
+                //         right: 0,
+                //         child: Container(
+                //           height: 30,
+                //           padding: EdgeInsets.all(4),
+                //           decoration: BoxDecoration(
+                //               gradient: LinearGradient(
+                //                 colors: [Colors.pink[400], Colors.purple[300]],
+                //                 begin: Alignment.centerLeft,
+                //                 end: Alignment.centerRight,
+                //               ),
+                //               borderRadius: BorderRadius.circular(10.0)),
+                //           child: isNextWeek ? Text("") : Text(""),
+                //         ),
+                //       )
+                //     : Container(),
+                // isToday == true
+                //     ? Positioned(
+                //         top: 0,
+                //         right: 0,
+                //         child: Container(
+                //           height: 30,
+                //           padding: EdgeInsets.all(4),
+                //           decoration: BoxDecoration(
+                //               gradient: LinearGradient(
+                //                 colors: [Colors.red[400], Colors.red[600]],
+                //                 begin: Alignment.centerLeft,
+                //                 end: Alignment.centerRight,
+                //               ),
+                //               borderRadius: BorderRadius.circular(10.0)),
+                //           child: Text(""),
+                //         ),
+                //       )
+                //     : Text(""),
+                Positioned(
+                  bottom: 8.5,
+                  right: isLargePhone ? 60 : 55,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25.0),
+                      color: TextThemes.ndGold,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 20.0,
+                          offset: Offset(5.0, 5.0),
+                        ),
+                      ],
+                    ),
+                    child: CircleAvatar(
+                        radius: 27,
+                        backgroundColor: TextThemes.ndGold,
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(proPic),
+                          radius: 25,
+                          backgroundColor: TextThemes.ndBlue,
+                        )),
                   ),
-                  child: CircleAvatar(
-                      radius: 27,
-                      backgroundColor: TextThemes.ndGold,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(proPic),
-                        radius: 25,
-                        backgroundColor: TextThemes.ndBlue,
-                      )),
                 ),
-              ),
-            ]),
+              ]),
+            ),
           );
         });
   }
@@ -772,7 +814,7 @@ class DisplayGroupResult extends StatelessWidget {
                       : MediaQuery.of(context).size.height * 0.17,
                   child: OpenContainer(
                                   transitionType: ContainerTransitionType.fade,
-                                  transitionDuration: Duration(seconds: 1),
+                                  transitionDuration: Duration(milliseconds: 500),
                                   openBuilder: (context, _) =>
                                       members.contains(currentUser.id)
                         ? GroupDetail(groupId)

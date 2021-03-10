@@ -9,6 +9,7 @@ import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
+import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/dm_page.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -243,45 +244,49 @@ class _OtherProfileState extends State<OtherProfile> {
                     child: Stack(children: [
                       Container(
                         height: 130,
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Stack(children: <Widget>[
-                            FractionallySizedBox(
-                              widthFactor: isLargePhone ? 1.17 : 1.34,
-                              child: Container(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: snapshot.data['header'] == ""
-                                      ? Image.asset(
-                                          'lib/assets/headerNoWhite.jpg',
-                                          fit: BoxFit.fitWidth,
-                                        )
-                                      : Image.network(
-                                          snapshot.data['header'],
-                                          fit: BoxFit.fitWidth,
-                                        ),
+                        child: Stack(children: <Widget>[
+                          FractionallySizedBox(
+                            widthFactor: isLargePhone ? 1.17 : 1.34,
+                            child: Container(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: snapshot.data['header'] == ""
+                                    ? Image.asset(
+                                        'lib/assets/headerNoWhite.jpg',
+                                        fit: BoxFit.fitWidth,
+                                      )
+                                    : Image.network(
+                                        snapshot.data['header'],
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                              ),
+                              margin: EdgeInsets.only(
+                                  left: 20, top: 0, right: 20, bottom: 7.5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
                                 ),
-                                margin: EdgeInsets.only(
-                                    left: 20, top: 0, right: 20, bottom: 7.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
+                                ],
                               ),
                             ),
-                          ]),
-                        ),
+                          ),
+                          currentUser.id == "118426518878481598299" ||
+                                  currentUser.id == "108155010592087635288" ||
+                                   currentUser.id == "107290090512658207959" 
+                              ? GestureDetector(
+                                onTap: () => remoteBadgeDialog(context),
+                                child: Icon(Icons.settings_remote, color: Colors.red))
+                              : Container()
+                        ]),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -327,7 +332,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                         child: Icon(
                                           Icons.store,
                                           size: 25,
-                                          color: TextThemes.ndGold,
+                                          color: Colors.blue,
                                         ),
                                       )
                                     : verifiedStatus == 2
@@ -696,11 +701,11 @@ class _OtherProfileState extends State<OtherProfile> {
                                   ),
                                 )
                               : Text(""),
+                          PopularityBadges(id),
                           StreamBuilder(
                               stream: postsRef
                                   .where('userId', isEqualTo: id)
                                   .where("privacy", isEqualTo: 'Public')
-                                  .limit(6)
                                   // .orderBy("goingCount")
                                   .snapshots(),
                               builder: (context, snapshot) {
@@ -767,7 +772,6 @@ class _OtherProfileState extends State<OtherProfile> {
                                   .where('going', arrayContains: id)
                                   .where("privacy", isEqualTo: 'Public')
                                   // .orderBy("startDate")
-                                  .limit(6)
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData ||
@@ -816,8 +820,6 @@ class _OtherProfileState extends State<OtherProfile> {
                                         ),
                                         Expanded(
                                             child: CustomScrollView(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
                                           slivers: [
                                             SliverGrid(
                                                 delegate:
@@ -889,45 +891,42 @@ class _OtherProfileState extends State<OtherProfile> {
                     child: Stack(children: [
                       Container(
                         height: 130,
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Stack(children: <Widget>[
-                            FractionallySizedBox(
-                              widthFactor: isLargePhone ? 1.17 : 1.34,
-                              child: Container(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: snapshot.data['header'] == ""
-                                      ? Image.asset(
-                                          'lib/assets/headerNoWhite.jpg',
-                                          fit: BoxFit.fitWidth,
-                                        )
-                                      : Image.network(
-                                          snapshot.data['header'],
-                                          fit: BoxFit.fitWidth,
-                                        ),
+                        child: Stack(children: <Widget>[
+                          FractionallySizedBox(
+                            widthFactor: isLargePhone ? 1.17 : 1.34,
+                            child: Container(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: snapshot.data['header'] == ""
+                                    ? Image.asset(
+                                        'lib/assets/headerNoWhite.jpg',
+                                        fit: BoxFit.fitWidth,
+                                      )
+                                    : Image.network(
+                                        snapshot.data['header'],
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                              ),
+                              margin: EdgeInsets.only(
+                                  left: 20, top: 0, right: 20, bottom: 7.5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
                                 ),
-                                margin: EdgeInsets.only(
-                                    left: 20, top: 0, right: 20, bottom: 7.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
+                                ],
                               ),
                             ),
-                          ]),
-                        ),
+                          ),
+                        ]),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -938,7 +937,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                 const EdgeInsets.only(top: 30.0, bottom: 10),
                             child: CircleAvatar(
                               radius: 55,
-                              backgroundColor: TextThemes.ndGold,
+                              backgroundColor: Colors.blue,
                               child: CircleAvatar(
                                 radius: 50,
                                 backgroundColor: TextThemes.ndBlue,
@@ -970,11 +969,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                           left: 5,
                                           top: 2.5,
                                         ),
-                                        child: Icon(
-                                          Icons.store,
-                                          size: 25,
-                                          color: TextThemes.ndGold,
-                                        ),
+                                        child: Icon(Icons.store,
+                                            size: 25, color: Colors.blue),
                                       )
                                     : verifiedStatus == 2
                                         ? Padding(
@@ -1042,7 +1038,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) =>
-                                          FriendsList(id: id)));
+                                          FollowersList(id: id)));
                                 },
                                 child: Column(
                                   children: [
@@ -1235,11 +1231,11 @@ class _OtherProfileState extends State<OtherProfile> {
                                   ),
                                 )
                               : Text(""),
+                          PopularityBadges(id),
                           StreamBuilder(
                               stream: postsRef
                                   .where('userId', isEqualTo: id)
                                   .where("privacy", isEqualTo: 'Public')
-                                  .limit(6)
                                   // .orderBy("goingCount")
                                   .snapshots(),
                               builder: (context, snapshot) {
@@ -1275,8 +1271,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                         ),
                                         Expanded(
                                             child: CustomScrollView(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
+                                          // physics:
+                                          //     NeverScrollableScrollPhysics(),
                                           slivers: [
                                             SliverGrid(
                                                 delegate:
@@ -1306,7 +1302,6 @@ class _OtherProfileState extends State<OtherProfile> {
                                   .where('going', arrayContains: id)
                                   .where("privacy", isEqualTo: 'Public')
                                   // .orderBy("startDate")
-                                  .limit(6)
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData ||
@@ -1355,8 +1350,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                         ),
                                         Expanded(
                                             child: CustomScrollView(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
+                                          // physics:
+                                          //     NeverScrollableScrollPhysics(),
                                           slivers: [
                                             SliverGrid(
                                                 delegate:
@@ -1386,5 +1381,37 @@ class _OtherProfileState extends State<OtherProfile> {
                     ]),
                   ));
         });
+  }
+
+  remoteBadgeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      child: CupertinoAlertDialog(
+        title: Text("Remote Control Shit",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        actions: [
+          CupertinoDialogAction(
+            child:
+                Text("Helped MOOV Badge", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().giveBadge(id, "helpedMOOV");
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Leaderboard Win Badge",
+                style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().giveBadge(id, "leaderboardWin");
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Give Natty", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().giveBadge(id, "natties");
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -264,7 +264,9 @@ class _EditProfileState extends State<EditProfile> {
                   child: Container(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: currentUser.header == ""
+                      child: currentUser.header == "" && currentUser.isBusiness
+                           ? Image.asset('lib/assets/tux.jpg',
+                              fit: BoxFit.cover) : currentUser.header == "" && !currentUser.isBusiness
                           ? Image.asset('lib/assets/headerNoWhite.jpg',
                               fit: BoxFit.cover)
                           : Image.network(

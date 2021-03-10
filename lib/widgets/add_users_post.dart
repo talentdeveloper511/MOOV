@@ -808,7 +808,7 @@ class _UserPostResultState extends State<UserPostResult> {
                   child: Icon(
                     Icons.store,
                     size: 25,
-                    color: TextThemes.ndGold,
+                    color: Colors.blue
                   ),
                 )
               : verifiedStatus == 2

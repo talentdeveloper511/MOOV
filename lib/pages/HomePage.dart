@@ -807,7 +807,7 @@ class _HomePageState extends State<HomePage>
                   child: TabBarView(controller: _tabController, children: [
                     FutureBuilder(
                       //THE DEFAULT NO FILTERS FEED
-                      future: postsRef.get(),
+                      future: postsRef.orderBy("startDate").get(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
@@ -1108,7 +1108,7 @@ class _HomePageState extends State<HomePage>
                     FutureBuilder(
                       //Parties
                       future:
-                          postsRef.where("type", isEqualTo: "Parties").get(),
+                          postsRef.where("type", isEqualTo: "Parties").orderBy("startDate").get(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
@@ -1225,7 +1225,7 @@ class _HomePageState extends State<HomePage>
                     ),
                     FutureBuilder(
                       future:
-                          postsRef.where("type", isEqualTo: "Shows").get(),
+                          postsRef.where("type", isEqualTo: "Shows").orderBy("startDate").get(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
@@ -1344,7 +1344,7 @@ class _HomePageState extends State<HomePage>
                     FutureBuilder(
                       //Sports
                       future:
-                          postsRef.where("type", isEqualTo: "Sports").get(),
+                          postsRef.where("type", isEqualTo: "Sports").orderBy("startDate").get(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
@@ -1463,6 +1463,7 @@ class _HomePageState extends State<HomePage>
                     FutureBuilder(
                       future: postsRef
                           .where("type", isEqualTo: "Recreation")
+                          .orderBy("startDate")
                           .get(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
@@ -1581,7 +1582,7 @@ class _HomePageState extends State<HomePage>
                     ),
                     FutureBuilder(
                       future:
-                          postsRef.where("type", isEqualTo: "Virtual").get(),
+                          postsRef.where("type", isEqualTo: "Virtual").orderBy("startDate").get(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)

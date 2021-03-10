@@ -1,6 +1,7 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

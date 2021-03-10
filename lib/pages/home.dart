@@ -31,9 +31,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:random_string/random_string.dart';
@@ -90,7 +87,7 @@ class _HomeState extends State<Home> {
 
   StreamSubscription iosSubscription;
   @override
-  Future<void> initState() {
+  initState() {
     super.initState();
     pageController = PageController();
     // Detects when user signed in
@@ -301,7 +298,9 @@ class _HomeState extends State<Home> {
           print('Notification not shown :(');
         },
         onMessage: (Map<String, dynamic> message) async {
+          print(message['payload']);
           print('message1: $message');
+          print(message['aps']);
           final String pushId = message['link'];
           final String page = message['page'];
           final String recipientId = message['recipient'];
@@ -700,9 +699,8 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           // Timeline(),
           HomePage(),
-        
 
-         SearchBar(),
+          SearchBar(),
 
           MOOVSPage(),
           ProfilePage()

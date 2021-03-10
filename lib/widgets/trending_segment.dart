@@ -123,9 +123,7 @@ class TrendingSegmentState extends State<TrendingSegment>
               footer: BezierBounceFooter(backgroundColor: Colors.white),
               bottomBouncing: false,
               child: ListView(children: [
-                SizedBox(height: 10),
-               
-
+                SizedBox(height: 2.5),
                 Container(
                   child: StreamBuilder(
                       stream: postsRef
@@ -162,7 +160,8 @@ class TrendingSegmentState extends State<TrendingSegment>
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        Image.asset('lib/assets/icons/BarICON.png',
+                                        Image.asset(
+                                            'lib/assets/icons/BarICON.png',
                                             height: 35),
                                         Padding(
                                           padding:
@@ -229,7 +228,8 @@ class TrendingSegmentState extends State<TrendingSegment>
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        Image.asset('lib/assets/icons/PartyICON.png',
+                                        Image.asset(
+                                            'lib/assets/icons/PartyICON.png',
                                             height: 27.5),
                                         Padding(
                                           padding:
@@ -311,8 +311,8 @@ class TrendingSegmentState extends State<TrendingSegment>
                                               height: 40),
                                         ),
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8.0, top: 5),
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, top: 5),
                                           child: Text('More',
                                               style: TextThemes.extraBold),
                                         ),
@@ -368,104 +368,102 @@ class PostOnTrending extends StatelessWidget {
       child: Card(
         color: Colors.white,
         clipBehavior: Clip.antiAlias,
-        child: Stack(
-          children: <Widget>[
-            InkWell(
-             
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Stack(alignment: Alignment.center, children: [
-                      OpenContainer(
-  transitionType:     ContainerTransitionType.fade,
-  transitionDuration: Duration(seconds: 1),
-  openBuilder: (context, _) => PostDetail(course.id),
-  closedElevation: 0,
-  
-  closedBuilder: (context, _) => Container(
-                            height: 500,
-                            child: CachedNetworkImage(
-                              imageUrl: course['image'],
-                              fit: BoxFit.cover,
-                              width: isLargePhone
-                                  ? MediaQuery.of(context).size.width * 0.315
-                                  : MediaQuery.of(context).size.width * 0.32,
-                            ),
+        child: OpenContainer(
+          transitionType: ContainerTransitionType.fade,
+          transitionDuration: Duration(milliseconds: 500),
+          openBuilder: (context, _) => PostDetail(course.id),
+          closedElevation: 0,
+          closedBuilder: (context, _) => Stack(
+            children: <Widget>[
+              InkWell(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Stack(alignment: Alignment.center, children: [
+                        Container(
+                          height: 500,
+                          child: CachedNetworkImage(
+                            imageUrl: course['image'],
+                            fit: BoxFit.cover,
+                            width: isLargePhone
+                                ? MediaQuery.of(context).size.width * 0.315
+                                : MediaQuery.of(context).size.width * 0.32,
                           ),
-                    ),
-                      
-                      Container(
-                        alignment: Alignment(0.0, 0.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: <Color>[
-                                Colors.black.withAlpha(0),
-                                Colors.black,
-                                Colors.black12,
-                              ],
+                        ),
+                        Container(
+                          alignment: Alignment(0.0, 0.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: <Color>[
+                                  Colors.black.withAlpha(0),
+                                  Colors.black,
+                                  Colors.black12,
+                                ],
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text(
-                              course['title'],
-                              maxLines: 2,
-                              style: TextStyle(
-                                  fontFamily: 'Solway',
-                                  color: Colors.white,
-                                  fontSize: isLargePhone ? 13.0 : 10,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(
+                                course['title'],
+                                maxLines: 2,
+                                style: TextStyle(
+                                    fontFamily: 'Solway',
+                                    color: Colors.white,
+                                    fontSize: isLargePhone ? 13.0 : 10,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ]),
-                  ),
-                  Container(
-                    height: 21,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [Colors.pink[100], Colors.blue[100]])),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Padding(
-                        //   padding: const EdgeInsets.only(left: 4.0, top: 2.0),
-                        //   child: CircleAvatar(
-                        //     radius: 8.0,
-                        //     backgroundImage: NetworkImage(
-                        //       course['profilePic'],
-                        //     ),
-                        //     backgroundColor: Colors.transparent,
-                        //   ),
-                        // ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2.0),
-                          child: Text(
-                              DateFormat('EEE')
-                                  .add_jm()
-                                  .format(course['startDate'].toDate()),
-                              style: TextStyle(
-                                  fontFamily: 'Solway',
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700)),
-                        )
-                      ],
+                      ]),
                     ),
-                  )
-                ],
-              ),
-            )
-          ],
+                    Container(
+                      height: 21,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Colors.pink[100], Colors.blue[100]])),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 4.0, top: 2.0),
+                          //   child: CircleAvatar(
+                          //     radius: 8.0,
+                          //     backgroundImage: NetworkImage(
+                          //       course['profilePic'],
+                          //     ),
+                          //     backgroundColor: Colors.transparent,
+                          //   ),
+                          // ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: Text(
+                                DateFormat('EEE')
+                                    .add_jm()
+                                    .format(course['startDate'].toDate()),
+                                style: TextStyle(
+                                    fontFamily: 'Solway',
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700)),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

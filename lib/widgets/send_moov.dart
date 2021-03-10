@@ -543,7 +543,7 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
                     child: Icon(
                       Icons.store,
                       size: 20,
-                      color: TextThemes.ndGold,
+                      color: Colors.blue
                     ),
                   )
                 : verifiedStatus == 2

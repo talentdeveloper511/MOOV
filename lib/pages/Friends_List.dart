@@ -214,6 +214,7 @@ class FriendsListState extends State<FriendsList> {
         });
   }
 }
+
 class FollowersList extends StatefulWidget {
   TextEditingController searchController = TextEditingController();
   final id;
@@ -222,27 +223,24 @@ class FollowersList extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return FriendsListState(this.id);
+    return FollowersListState(this.id);
   }
 }
 
 class FollowersListState extends State<FollowersList> {
   TextEditingController searchController = TextEditingController();
-  var iter = 0;
   final id;
 
   FollowersListState(this.id);
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return StreamBuilder(
-        stream: usersRef.where("followers", arrayContains: id).snapshots(),
+        stream: usersRef.doc(id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return CircularProgressIndicator();
           if (snapshot.data == null) return Container();
+          List followers = snapshot.data['followers'];
 
           return Scaffold(
               appBar: AppBar(
@@ -260,7 +258,7 @@ class FollowersListState extends State<FollowersList> {
                   },
                 ),
                 backgroundColor: TextThemes.ndBlue,
-                title: snapshot.data.docs.length == 1
+                title: followers.length == 1
                     ? Text(
                         "Follower",
                         style: TextStyle(color: Colors.white),
@@ -271,147 +269,156 @@ class FollowersListState extends State<FollowersList> {
                       ),
               ),
               body: ListView.builder(
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: followers.length,
                   itemBuilder: (_, index) => Padding(
                         padding: const EdgeInsets.all(2.0),
-                        child: Container(
-                            margin: EdgeInsets.all(0.0),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 2.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                      color: Colors.grey[300],
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(builder:
-                                                          (BuildContext
-                                                              context) {
-                                                    return OtherProfile(snapshot
-                                                        .data.docs[index]['id']
-                                                        .toString());
-                                                  })); //Material
-                                                },
-                                                child: CircleAvatar(
-                                                    radius: 22,
-                                                    child: CircleAvatar(
-                                                        radius: 22.0,
-                                                        backgroundImage:
-                                                            NetworkImage(snapshot
-                                                                    .data
-                                                                    .docs[index]
-                                                                ['photoUrl'])
+                        child: StreamBuilder(
+                            stream: usersRef
+                                .doc(followers[index])
+                                .snapshots(),
+                            builder: (context, snapshot2) {
+                              return Container(
+                                  margin: EdgeInsets.all(0.0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.0),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            color: Colors.grey[300],
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                          return OtherProfile(
+                                                              snapshot2
+                                                                  .data['id']);
+                                                        })); //Material
+                                                      },
+                                                      child: CircleAvatar(
+                                                          radius: 22,
+                                                          child: CircleAvatar(
+                                                              radius: 22.0,
+                                                              backgroundImage:
+                                                                  NetworkImage(snapshot2
+                                                                          .data[
+                                                                      'photoUrl'])
 
-                                                        // NetworkImage(likedArray[index]['strPic']),
+                                                              // NetworkImage(likedArray[index]['strPic']),
 
-                                                        ))),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0),
-                                            child: GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(builder:
-                                                          (BuildContext
-                                                              context) {
-                                                    return OtherProfile(snapshot
-                                                        .data.docs[index]['id']
-                                                        .toString());
-                                                  })); //Material
-                                                },
-                                                child: Text(
-                                                    snapshot
-                                                        .data
-                                                        .docs[index]
-                                                            ['displayName']
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        color:
-                                                            TextThemes.ndBlue,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .none))),
-                                          ),
-                                          Spacer(),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 8),
-                                            child: Container(),
-                                            // currentUser.friendArray
-                                            //         .contains(snapshot
-                                            //             .data.docs[index]['id'])
-                                            // ? RaisedButton(
-                                            //     padding:
-                                            //         const EdgeInsets.all(
-                                            //             2.0),
-                                            //     color: Colors.green,
-                                            //     shape: RoundedRectangleBorder(
-                                            //         borderRadius:
-                                            //             BorderRadius.all(
-                                            //                 Radius.circular(
-                                            //                     3.0))),
-                                            //     onPressed: () {
-                                            //       Navigator.of(context).push(
-                                            //           MaterialPageRoute(
-                                            //               builder: (context) =>
-                                            //                   OtherProfile(snapshot
-                                            //                       .data
-                                            //                       .docs[
-                                            //                           index]
-                                            //                           ['id']
-                                            //                       .toString())));
-                                            //     },
-                                            //     child: Text(
-                                            //       "Friends",
-                                            //       style: new TextStyle(
-                                            //         color: Colors.white,
-                                            //         fontSize: 14.0,
-                                            //       ),
-                                            //     ),
-                                            //   )
-                                            // : RaisedButton(
-                                            //     padding:
-                                            //         const EdgeInsets.all(
-                                            //             2.0),
-                                            //     color: TextThemes.ndBlue,
-                                            //     shape: RoundedRectangleBorder(
-                                            //         borderRadius:
-                                            //             BorderRadius.all(
-                                            //                 Radius.circular(
-                                            //                     3.0))),
-                                            //     onPressed: () {
-                                            //       Navigator.of(context).push(
-                                            //           MaterialPageRoute(
-                                            //               builder: (context) =>
-                                            //                   OtherProfile(snapshot
-                                            //                       .data
-                                            //                       .docs[
-                                            //                           index]
-                                            //                           ['id']
-                                            //                       .toString())));
-                                            //     },
-                                            //     child: Text(
-                                            //       "Stranger",
-                                            //       style: new TextStyle(
-                                            //         color: Colors.white,
-                                            //         fontSize: 14.0,
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                          )
-                                        ],
-                                      )),
-                                ],
-                              ),
-                            )),
+                                                              ))),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10.0),
+                                                  child: GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                          return OtherProfile(
+                                                              snapshot2
+                                                                  .data['id']
+                                                                  );
+                                                        })); //Material
+                                                      },
+                                                      child: Text(
+                                                          snapshot2.data[
+                                                                  'displayName']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 18,
+                                                              color: TextThemes
+                                                                  .ndBlue,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .none))),
+                                                ),
+                                                Spacer(),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8),
+                                                  child: Container(),
+                                                  // currentUser.friendArray
+                                                  //         .contains(snapshot
+                                                  //             .data.docs[index]['id'])
+                                                  // ? RaisedButton(
+                                                  //     padding:
+                                                  //         const EdgeInsets.all(
+                                                  //             2.0),
+                                                  //     color: Colors.green,
+                                                  //     shape: RoundedRectangleBorder(
+                                                  //         borderRadius:
+                                                  //             BorderRadius.all(
+                                                  //                 Radius.circular(
+                                                  //                     3.0))),
+                                                  //     onPressed: () {
+                                                  //       Navigator.of(context).push(
+                                                  //           MaterialPageRoute(
+                                                  //               builder: (context) =>
+                                                  //                   OtherProfile(snapshot
+                                                  //                       .data
+                                                  //                       .docs[
+                                                  //                           index]
+                                                  //                           ['id']
+                                                  //                       .toString())));
+                                                  //     },
+                                                  //     child: Text(
+                                                  //       "Friends",
+                                                  //       style: new TextStyle(
+                                                  //         color: Colors.white,
+                                                  //         fontSize: 14.0,
+                                                  //       ),
+                                                  //     ),
+                                                  //   )
+                                                  // : RaisedButton(
+                                                  //     padding:
+                                                  //         const EdgeInsets.all(
+                                                  //             2.0),
+                                                  //     color: TextThemes.ndBlue,
+                                                  //     shape: RoundedRectangleBorder(
+                                                  //         borderRadius:
+                                                  //             BorderRadius.all(
+                                                  //                 Radius.circular(
+                                                  //                     3.0))),
+                                                  //     onPressed: () {
+                                                  //       Navigator.of(context).push(
+                                                  //           MaterialPageRoute(
+                                                  //               builder: (context) =>
+                                                  //                   OtherProfile(snapshot
+                                                  //                       .data
+                                                  //                       .docs[
+                                                  //                           index]
+                                                  //                           ['id']
+                                                  //                       .toString())));
+                                                  //     },
+                                                  //     child: Text(
+                                                  //       "Stranger",
+                                                  //       style: new TextStyle(
+                                                  //         color: Colors.white,
+                                                  //         fontSize: 14.0,
+                                                  //       ),
+                                                  //     ),
+                                                  //   ),
+                                                )
+                                              ],
+                                            )),
+                                      ],
+                                    ),
+                                  ));
+                            }),
                       )));
         });
   }
