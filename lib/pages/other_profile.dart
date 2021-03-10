@@ -281,7 +281,7 @@ class _OtherProfileState extends State<OtherProfile> {
                           ),
                           currentUser.id == "118426518878481598299" ||
                                   currentUser.id == "108155010592087635288" ||
-                                   currentUser.id == "107290090512658207959" 
+                                   currentUser.id == "115805501102171844515" 
                               ? GestureDetector(
                                 onTap: () => remoteBadgeDialog(context),
                                 child: Icon(Icons.settings_remote, color: Colors.red))
