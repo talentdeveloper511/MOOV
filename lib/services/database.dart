@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
 
 class Database {
   final dbRef = FirebaseFirestore.instance;
@@ -686,9 +687,24 @@ class Database {
     });
   }
 
+  int lastDigit(int number) {
+    return (number).abs() % 10;
+  }
+
   Future<void> acceptFriendRequest(
       String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
+      usersRef.doc(receiverId).get().then((value) {
+        if (value['friendArray'] != null && lastDigit(value['friendArray'].length) == 9) {
+          Database().giveBadge(receiverId, "friends10");
+        }
+      });
+      usersRef.doc(senderId).get().then((value) {
+        if (value['friendArray'] != null && lastDigit(value['friendArray'].length) == 9) {
+          Database().giveBadge(senderId, "friends10");
+        }
+      });
+
       final DocumentReference ref =
           dbRef.doc('notreDame/data/users/$receiverId');
       final DocumentReference ref2 =
@@ -708,6 +724,16 @@ class Database {
       });
       transaction.update(ref2, {
         'friendArray': FieldValue.arrayUnion([serializedMessage2]),
+      });
+      usersRef.doc(currentUser.id).get().then((value) {
+        if (value['sendLimit'] >= 0) {
+          usersRef
+              .doc(currentUser.id)
+              .update({"sendLimit": FieldValue.increment(-1)});
+          usersRef
+              .doc(currentUser.id)
+              .update({"score": FieldValue.increment(50)});
+        }
       });
     });
   }
@@ -979,21 +1005,25 @@ class Database {
     });
   }
 
-  giveBadge(String userId, String type){
-  usersRef.doc(userId).set({
-        "badges": {type: FieldValue.arrayUnion([Timestamp.now()])}
-      }, SetOptions(merge: true));
-  notificationFeedRef.doc(userId).collection('feedItems')
-            .doc('badge ' + type)
-            .set({
-          "seen": false,
-          "type": "badge",
-          "title": "",
-          // "username": currentUser.displayName,
-          "userId": userId,
-          "userProfilePic": "badge",
-          "timestamp": DateTime.now()
-        });
+  giveBadge(String userId, String type) {
+    usersRef.doc(userId).set({
+      "badges": {
+        type: FieldValue.arrayUnion([Timestamp.now()])
+      }
+    }, SetOptions(merge: true));
+    notificationFeedRef
+        .doc(userId)
+        .collection('feedItems')
+        .doc('badge ' + type)
+        .set({
+      "seen": false,
+      "type": "badge",
+      "title": "",
+      // "username": currentUser.displayName,
+      "userId": userId,
+      "userProfilePic": "badge",
+      "timestamp": DateTime.now()
+    });
   }
 
   updateAllDocs() async {
@@ -1004,8 +1034,7 @@ class Database {
 
         for (var document in documents) {
           await document.reference.set({
-            "badges": {
-            }
+            "badges": {}
             // "badges": [],
             // "isBusiness": false
             // "groupLimit": 2

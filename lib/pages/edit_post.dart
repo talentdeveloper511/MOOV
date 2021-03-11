@@ -19,6 +19,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
@@ -80,6 +81,7 @@ class _EditPostState extends State<EditPost> {
       _image = image;
       //  fileName = p.basename(_image.path);
     });
+    _cropImage();
   }
 
   void openGallery(context) async {
@@ -87,6 +89,46 @@ class _EditPostState extends State<EditPost> {
     setState(() {
       _image = image;
     });
+    _cropImage();
+  }
+
+  Future<Null> _cropImage() async {
+    File croppedFile = await ImageCropper.cropImage(
+        maxHeight: 100,
+        sourcePath: _image.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Crop that shit',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+        
+          title: 'Crop that shit',
+        ));
+    if (croppedFile != null) {
+      setState(() {
+        _image = croppedFile;
+      });
+    }
   }
 
   Future handleTakePhoto() async {
@@ -1048,80 +1090,92 @@ class _EditPostState extends State<EditPost> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                   currentUser.id == "108155010592087635288" ||
-                currentUser.id == "118426518878481598299" ||
-                currentUser.id == "107290090512658207959"
-            ? //ADMIN CONTROLS
-            Positioned(
-                top: 40,
-                left: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    FirebaseFirestore.instance
-                        .collection('notreDame')
-                        .doc('data')
-                        .collection('food')
-                        .doc(postId)
-                        .set({
-                      "MOTD": true,
-                    }, SetOptions(merge: true));
-                  },
-                  child: Container(
-                    height: 30,
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.blue[400], Colors.purple[300]],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Text(
-                      "MAKE MOTD",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ),
-              )
-            : Text(""),
-            currentUser.id == "108155010592087635288" ||
-                currentUser.id == "118426518878481598299" ||
-                currentUser.id == "107290090512658207959"
-            ? //ADMIN CONTROLS
-            Positioned(
-                top: 70,
-                left: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    FirebaseFirestore.instance
-                        .collection('notreDame')
-                        .doc('data')
-                        .collection('food')
-                        .doc(postId)
-                        .set({
-                      "featured": true,
-                    }, SetOptions(merge: true));
-                  },
-                  child: Container(
-                    height: 30,
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.orange[400], Colors.purple[300]],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Text(
-                      "FEATURE",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ),
-              )
-            : Text(""),
+                                                                  currentUser.id == "108155010592087635288" ||
+                                                                          currentUser.id ==
+                                                                              "118426518878481598299" ||
+                                                                          currentUser.id ==
+                                                                              "107290090512658207959"
+                                                                      ? //ADMIN CONTROLS
+                                                                      Positioned(
+                                                                          top:
+                                                                              40,
+                                                                          left:
+                                                                              0,
+                                                                          child:
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              FirebaseFirestore.instance.collection('notreDame').doc('data').collection('food').doc(postId).set({
+                                                                                "MOTD": true,
+                                                                              }, SetOptions(merge: true));
+                                                                            },
+                                                                            child:
+                                                                                Container(
+                                                                              height: 30,
+                                                                              padding: EdgeInsets.all(4),
+                                                                              decoration: BoxDecoration(
+                                                                                  gradient: LinearGradient(
+                                                                                    colors: [
+                                                                                      Colors.blue[400],
+                                                                                      Colors.purple[300]
+                                                                                    ],
+                                                                                    begin: Alignment.centerLeft,
+                                                                                    end: Alignment.centerRight,
+                                                                                  ),
+                                                                                  borderRadius: BorderRadius.circular(10.0)),
+                                                                              child: Text(
+                                                                                "MAKE MOTD",
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(color: Colors.white, fontSize: 18),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                      : Text(
+                                                                          ""),
+                                                                  currentUser.id == "108155010592087635288" ||
+                                                                          currentUser.id ==
+                                                                              "118426518878481598299" ||
+                                                                          currentUser.id ==
+                                                                              "107290090512658207959"
+                                                                      ? //ADMIN CONTROLS
+                                                                      Positioned(
+                                                                          top:
+                                                                              70,
+                                                                          left:
+                                                                              0,
+                                                                          child:
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              FirebaseFirestore.instance.collection('notreDame').doc('data').collection('food').doc(postId).set({
+                                                                                "featured": true,
+                                                                              }, SetOptions(merge: true));
+                                                                            },
+                                                                            child:
+                                                                                Container(
+                                                                              height: 30,
+                                                                              padding: EdgeInsets.all(4),
+                                                                              decoration: BoxDecoration(
+                                                                                  gradient: LinearGradient(
+                                                                                    colors: [
+                                                                                      Colors.orange[400],
+                                                                                      Colors.purple[300]
+                                                                                    ],
+                                                                                    begin: Alignment.centerLeft,
+                                                                                    end: Alignment.centerRight,
+                                                                                  ),
+                                                                                  borderRadius: BorderRadius.circular(10.0)),
+                                                                              child: Text(
+                                                                                "FEATURE",
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(color: Colors.white, fontSize: 18),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                      : Text(
+                                                                          ""),
                                                                   Positioned(
                                                                       right: -3,
                                                                       top: 0,

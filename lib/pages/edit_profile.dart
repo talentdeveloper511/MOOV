@@ -12,6 +12,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatefulWidget {
@@ -40,6 +41,7 @@ class _EditProfileState extends State<EditProfile> {
       _image = image;
       //  fileName = p.basename(_image.path);
     });
+    _cropImage();
   }
 
   void openGallery(context) async {
@@ -47,6 +49,45 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       _image = image;
     });
+    _cropImage();
+  }
+
+  Future<Null> _cropImage() async {
+    File croppedFile = await ImageCropper.cropImage(
+        maxHeight: 100,
+        sourcePath: _image.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Crop that shit',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          title: 'Crop that shit',
+        ));
+    if (croppedFile != null) {
+      setState(() {
+        _image = croppedFile;
+      });
+    }
   }
 
   Future handleTakePhoto() async {
@@ -128,6 +169,7 @@ class _EditProfileState extends State<EditProfile> {
       _image2 = image2;
       //  fileName = p.basename(_image.path);
     });
+    _cropImage2();
   }
 
   void openGallery2(context) async {
@@ -135,6 +177,30 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       _image2 = image2;
     });
+    _cropImage2();
+  }
+
+  Future<Null> _cropImage2() async {
+    File croppedFile = await ImageCropper.cropImage(
+        maxHeight: 100,
+        sourcePath: _image2.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [CropAspectRatioPreset.ratio16x9]
+            : [CropAspectRatioPreset.ratio16x9],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Crop that shit',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: true),
+        iosUiSettings: IOSUiSettings(
+          title: 'Crop that shit',
+        ));
+    if (croppedFile != null) {
+      setState(() {
+        _image2 = croppedFile;
+      });
+    }
   }
 
   Future handleTakePhoto2() async {
@@ -265,14 +331,14 @@ class _EditProfileState extends State<EditProfile> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: currentUser.header == "" && currentUser.isBusiness
-                           ? Image.asset('lib/assets/tux.jpg',
-                              fit: BoxFit.cover) : currentUser.header == "" && !currentUser.isBusiness
-                          ? Image.asset('lib/assets/headerNoWhite.jpg',
-                              fit: BoxFit.cover)
-                          : Image.network(
-                              currentUser.header,
-                              fit: BoxFit.fitWidth,
-                            ),
+                          ? Image.asset('lib/assets/tux.jpg', fit: BoxFit.cover)
+                          : currentUser.header == "" && !currentUser.isBusiness
+                              ? Image.asset('lib/assets/headerNoWhite.jpg',
+                                  fit: BoxFit.cover)
+                              : Image.network(
+                                  currentUser.header,
+                                  fit: BoxFit.fitWidth,
+                                ),
                     ),
                     margin: EdgeInsets.only(
                         left: 20, top: 0, right: 20, bottom: 7.5),
@@ -385,7 +451,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       )
                     : Container(),
-                    SizedBox(height: 5),
+                SizedBox(height: 5),
                 currentUser.nameChangeLimit == 1
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -453,33 +519,29 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(25.0),
-                  child:   RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(80.0)),
-                            padding: EdgeInsets.all(0.0),
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      TextThemes.ndBlue,
-                                      Color(0xff64B6FF)
-                                    ],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              child: Container(
-                                constraints: BoxConstraints(
-                                    maxWidth: 125.0, minHeight: 50.0),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Save",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 22),
-                                ),
-                              ),
+                  child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80.0)),
+                      padding: EdgeInsets.all(0.0),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [TextThemes.ndBlue, Color(0xff64B6FF)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
+                            borderRadius: BorderRadius.circular(30.0)),
+                        child: Container(
+                          constraints:
+                              BoxConstraints(maxWidth: 125.0, minHeight: 50.0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Save",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                        ),
+                      ),
                       onPressed: () async {
                         if (_image != null) {
                           firebase_storage.Reference ref = firebase_storage

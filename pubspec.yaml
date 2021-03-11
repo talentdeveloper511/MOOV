@@ -81,7 +81,6 @@ dependencies:
   algolia: ^0.1.7
   currency_text_input_formatter: ^1.0.3
   another_flushbar: ^1.10.8
-  image_crop: ^0.3.4
   flutter_app_badger: ^1.1.2
   animations: ^1.1.2
   overlay_support: ^1.0.5
