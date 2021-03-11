@@ -26,6 +26,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:page_transition/page_transition.dart';
 import 'home.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class MoovMaker extends StatefulWidget {
   final PostModel postModel;
@@ -148,6 +149,45 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
       _image = image;
       //  fileName = p.basename(_image.path);
     });
+    _cropImage();
+  }
+
+  Future<Null> _cropImage() async {
+    File croppedFile = await ImageCropper.cropImage(
+        maxHeight: 100,
+        sourcePath: _image.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Crop that shit',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          title: 'Crop that shit',
+        ));
+    if (croppedFile != null) {
+      setState(() {
+        _image = croppedFile;
+      });
+    }
   }
 
   void openGallery(context) async {
@@ -155,6 +195,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
     setState(() {
       _image = image;
     });
+    _cropImage();
   }
 
   void openPlaceholders(context) async {

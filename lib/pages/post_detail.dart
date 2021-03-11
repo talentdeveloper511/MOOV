@@ -260,7 +260,7 @@ class _BannerImage extends StatelessWidget {
           ),
           child: CachedNetworkImage(
             imageUrl: bannerImage,
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
             height: 200,
             width: double.infinity,
           ),
