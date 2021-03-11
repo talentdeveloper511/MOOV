@@ -601,6 +601,12 @@ class Database {
 
   deletePost(String postId, String ownerId, String title, Map statuses,
       String posterName) {
+    postsRef.doc(postId).get().then((value) {
+      if (value['statuses'].entries.length == 10) {
+        giveBadge(ownerId, "moovMaker");
+        print("DONE");
+      }
+    });
     String filePath = 'images/$ownerId$title';
 
     firebase_storage.Reference ref =
@@ -695,12 +701,14 @@ class Database {
       String senderId, String receiverId, String strName, String strPic) async {
     return dbRef.runTransaction((transaction) async {
       usersRef.doc(receiverId).get().then((value) {
-        if (value['friendArray'] != null && lastDigit(value['friendArray'].length) == 9) {
+        if (value['friendArray'] != null &&
+            lastDigit(value['friendArray'].length) == 9) {
           Database().giveBadge(receiverId, "friends10");
         }
       });
       usersRef.doc(senderId).get().then((value) {
-        if (value['friendArray'] != null && lastDigit(value['friendArray'].length) == 9) {
+        if (value['friendArray'] != null &&
+            lastDigit(value['friendArray'].length) == 9) {
           Database().giveBadge(senderId, "friends10");
         }
       });
@@ -1011,19 +1019,29 @@ class Database {
         type: FieldValue.arrayUnion([Timestamp.now()])
       }
     }, SetOptions(merge: true));
-    // notificationFeedRef
-    //     .doc(userId)
-    //     .collection('feedItems')
-    //     .doc('badge ' + type)
-    //     .set({
-    //   "seen": false,
-    //   "type": "badge",
-    //   "title": "",
-    //   // "username": currentUser.displayName,
-    //   "userId": userId,
-    //   "userProfilePic": "badge",
-    //   "timestamp": DateTime.now()
-    // });
+    notificationFeedRef
+        .doc(userId)
+        .collection('feedItems')
+        .doc('badge ' + type)
+        .set({
+      "seen": false,
+      "type": type == "natties" ? "natties": "badge",
+      "title": type == "friends10"
+          ? "10 Friends"
+          : type == "leaderboardWin"
+              ? "Leaderboard Win"
+              : type == "natties"
+                  ? "a Natty!"
+                  : type == "moovMaker"
+                      ? "MOOV Maker"
+                      : type == "mountain"
+                          ? "MOOV Mountain"
+                          : "",
+      // "username": currentUser.displayName,
+      "userId": userId,
+      "userProfilePic": "badge",
+      "timestamp": DateTime.now()
+    });
   }
 
   updateAllDocs() async {

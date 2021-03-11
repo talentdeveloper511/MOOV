@@ -129,10 +129,10 @@ class _FriendFinderState extends State<FriendFinder>
         return Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0, top: 20),
+                    padding: const EdgeInsets.only(bottom: 20.0, top: 20, right: 5),
                     child: todayOnly == 0
                         ? RaisedButton(
                             onPressed: () {

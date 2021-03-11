@@ -281,12 +281,8 @@ class _OtherProfileState extends State<OtherProfile> {
                           ),
                           currentUser.id == "118426518878481598299" ||
                                   currentUser.id == "108155010592087635288" ||
-<<<<<<< HEAD
                                    currentUser.id == "115805501102171844515" ||
                                    currentUser.id == "107290090512658207959"
-=======
-                                  currentUser.id == "115805501102171844515"
->>>>>>> 3e0ed93085ef89ed52326c5a058223515d646663
                               ? GestureDetector(
                                   onTap: () => remoteBadgeDialog(context),
                                   child: Icon(Icons.settings_remote,
@@ -448,12 +444,18 @@ class _OtherProfileState extends State<OtherProfile> {
                                       style: TextThemes.extraBold,
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 4.0),
-                                      child: Text(
-                                        'Friend Groups',
-                                        style: TextThemes.bodyText1,
+                                        padding:
+                                            const EdgeInsets.only(top: 4.0),
+                                        child: userGroups.length == 1
+                                            ? Text(
+                                                'Friend Group',
+                                                style: TextThemes.bodyText1,
+                                              )
+                                            : Text(
+                                                'Friend Groups',
+                                                style: TextThemes.bodyText1,
+                                              ),
                                       ),
-                                    ),
                                   ],
                                 ),
                               ),

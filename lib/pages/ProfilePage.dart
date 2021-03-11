@@ -447,8 +447,8 @@ class _ProfilePageState extends State<ProfilePage>
                                         ),
                                         Expanded(
                                             child: CustomScrollView(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
+                                          // physics:
+                                          //     NeverScrollableScrollPhysics(),
                                           slivers: [
                                             SliverGrid(
                                                 delegate:
@@ -527,8 +527,8 @@ class _ProfilePageState extends State<ProfilePage>
                                         ),
                                         Expanded(
                                             child: CustomScrollView(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
+                                          // physics:
+                                          //     NeverScrollableScrollPhysics(),
                                           slivers: [
                                             SliverGrid(
                                                 delegate:
