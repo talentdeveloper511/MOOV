@@ -281,7 +281,8 @@ class _OtherProfileState extends State<OtherProfile> {
                           ),
                           currentUser.id == "118426518878481598299" ||
                                   currentUser.id == "108155010592087635288" ||
-                                   currentUser.id == "115805501102171844515" 
+                                   currentUser.id == "115805501102171844515" ||
+                                   currentUser.id == "107290090512658207959"
                               ? GestureDetector(
                                 onTap: () => remoteBadgeDialog(context),
                                 child: Icon(Icons.settings_remote, color: Colors.red))
@@ -713,7 +714,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                     snapshot.data.docs.length == 0)
                                   return Text('');
                                 return Padding(
-                                  padding: const EdgeInsets.only(left: 12.0),
+                                  padding: const EdgeInsets.only(left: 2.0),
                                   child: Container(
                                     height: (snapshot.data.docs.length <= 3 &&
                                             isLargePhone)
@@ -778,7 +779,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                     snapshot.data.docs.length == 0)
                                   return Text('');
                                 return Padding(
-                                  padding: const EdgeInsets.only(left: 12.0),
+                                  padding: const EdgeInsets.only(left: 2.0),
                                   child: Container(
                                     height: (snapshot.data.docs.length <= 3 &&
                                             isLargePhone)
@@ -793,7 +794,9 @@ class _OtherProfileState extends State<OtherProfile> {
                                                             3 &&
                                                         !isLargePhone)
                                                     ? 310
-                                                    : 350,
+                                                    : snapshot.data.docs.length >=6 ?
+                                                    
+                                                    500 : 550,
                                     child: Column(
                                       children: [
                                         Row(
@@ -1408,6 +1411,12 @@ class _OtherProfileState extends State<OtherProfile> {
             child: Text("Give Natty", style: TextStyle(color: Colors.red)),
             onPressed: () {
               Database().giveBadge(id, "natties");
+            },
+          ),
+           CupertinoDialogAction(
+            child: Text("Give friends", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              Database().giveBadge(id, "friends10");
             },
           ),
         ],

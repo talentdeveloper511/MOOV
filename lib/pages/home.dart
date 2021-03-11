@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
+import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
+import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
@@ -15,6 +17,8 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:another_flushbar/flushbar_route.dart';
 import 'package:another_flushbar/main.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,6 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'create_account.dart';
@@ -73,7 +78,11 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  AnimationController _hideFabAnimController;
+  ScrollController scrollController;
+
+
   bool isSelected = false;
   String stringValue = "No value";
 
@@ -90,7 +99,31 @@ class _HomeState extends State<Home> {
   @override
   initState() {
     super.initState();
-    Fcm(context);
+    _hideFabAnimController = AnimationController(
+      vsync: this,
+      duration: kThemeAnimationDuration,
+      value: 1,
+    );
+        scrollController = ScrollController();
+
+         scrollController.addListener(() {
+      switch (scrollController.position.userScrollDirection) {
+        // Scrolling up - forward the animation (value goes to 1)
+        case ScrollDirection.forward:
+          _hideFabAnimController.forward();
+          break;
+        // Scrolling down - reverse the animation (value goes to 0)
+        case ScrollDirection.reverse:
+          _hideFabAnimController.reverse();
+          break;
+        // Idle - keep FAB visibility unchanged
+        case ScrollDirection.idle:
+          break;
+      }
+    });
+
+    
+
     pageController = PageController();
     // Detects when user signed in
     googleSignIn.onCurrentUserChanged.listen((account) {
@@ -125,6 +158,46 @@ class _HomeState extends State<Home> {
       print('token: $token/n');
       usersRef.doc(user.id).update({'androidNotificationToken': token});
     });
+
+    Future<dynamic> myBackgroundMessageHandler(
+        Map<String, dynamic> message) async {
+      final String pushId = message['link'];
+      final String page = message['page'];
+      final String recipientId = message['recipient'];
+      final String body = message['notification']['title'] +
+          ' ' +
+          message['notification']['body'];
+
+      FlutterAppBadger.updateBadgeCount(1);
+      if (recipientId == currentUser.id) {
+        print(pushId);
+        Flushbar snackbar = Flushbar(
+            padding: EdgeInsets.all(20),
+            borderRadius: 15,
+            flushbarStyle: FlushbarStyle.FLOATING,
+            boxShadows: [
+              BoxShadow(
+                  color: Colors.blue[800],
+                  offset: Offset(0.0, 2.0),
+                  blurRadius: 3.0)
+            ],
+            icon: Icon(
+              Icons.directions_run,
+              color: Colors.green,
+            ),
+            duration: Duration(seconds: 4),
+            flushbarPosition: FlushbarPosition.TOP,
+            backgroundColor: Colors.white,
+            messageText: Text(body,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.black)));
+        // SnackBar snackybar = SnackBar(
+        //     content: Text(body, overflow: TextOverflow.ellipsis),
+        //     backgroundColor: Colors.green);
+        // _scaffoldKey.currentState.showSnackBar(snackybar);
+        snackbar.show(context);
+      }
+    }
   }
 
   getiOSPermission() {
@@ -202,6 +275,10 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     pageController.dispose();
+    _hideFabAnimController.dispose();
+        scrollController.dispose();
+
+
     if (iosSubscription != null) iosSubscription.cancel();
     super.dispose();
   }
@@ -285,6 +362,30 @@ class _HomeState extends State<Home> {
     // Upload(currentUser: currentUser);
     return Scaffold(
       key: _scaffoldKey,
+      floatingActionButton: FadeTransition(
+        opacity: _hideFabAnimController,
+        child: ScaleTransition(
+          scale: _hideFabAnimController,
+          child: FloatingActionButton.extended(
+              onPressed: () {
+                HapticFeedback.lightImpact();
+
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.topToBottom,
+                        child: MoovMaker(postModel: PostModel())));
+              },
+              label: Row(
+                children: [
+                  Text("Post ",
+                      style: TextStyle(fontSize: 20, color: Colors.white)),
+                  Icon(Icons.directions_run, color: Colors.white),
+                ],
+              )),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
         leadingWidth: 55,
         leading: CarouselSlider(
@@ -542,50 +643,6 @@ class _HomeState extends State<Home> {
   }
 }
 
-class Fcm {
-  BuildContext context;
-  Fcm(this.context);
-  Future<dynamic> myBackgroundMessageHandler(
-      Map<String, dynamic> message) async {
-    final String pushId = message['link'];
-    final String page = message['page'];
-    final String recipientId = message['recipient'];
-    final String body = message['notification']['title'] +
-        ' ' +
-        message['notification']['body'];
-
-    FlutterAppBadger.updateBadgeCount(1);
-    if (recipientId == currentUser.id) {
-      print(pushId);
-      Flushbar snackbar = Flushbar(
-          padding: EdgeInsets.all(20),
-          borderRadius: 15,
-          flushbarStyle: FlushbarStyle.FLOATING,
-          boxShadows: [
-            BoxShadow(
-                color: Colors.blue[800],
-                offset: Offset(0.0, 2.0),
-                blurRadius: 3.0)
-          ],
-          icon: Icon(
-            Icons.directions_run,
-            color: Colors.green,
-          ),
-          duration: Duration(seconds: 4),
-          flushbarPosition: FlushbarPosition.TOP,
-          backgroundColor: Colors.white,
-          messageText: Text(body,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.black)));
-      // SnackBar snackybar = SnackBar(
-      //     content: Text(body, overflow: TextOverflow.ellipsis),
-      //     backgroundColor: Colors.green);
-      // _scaffoldKey.currentState.showSnackBar(snackybar);
-      snackbar.show(context);
-    }
-  }
-}
-
 class NamedIconMessages extends StatelessWidget {
   final IconData iconData;
   final int messages;
@@ -755,6 +812,7 @@ class SharedPreferencesDemoState extends State<SharedPreferencesDemo> {
     _counter = _prefs.then((SharedPreferences prefs) {
       return (prefs.getInt('counter') ?? 0);
     });
+    
   }
 
   @override

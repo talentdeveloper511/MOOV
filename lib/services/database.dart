@@ -1011,19 +1011,19 @@ class Database {
         type: FieldValue.arrayUnion([Timestamp.now()])
       }
     }, SetOptions(merge: true));
-    notificationFeedRef
-        .doc(userId)
-        .collection('feedItems')
-        .doc('badge ' + type)
-        .set({
-      "seen": false,
-      "type": "badge",
-      "title": "",
-      // "username": currentUser.displayName,
-      "userId": userId,
-      "userProfilePic": "badge",
-      "timestamp": DateTime.now()
-    });
+    // notificationFeedRef
+    //     .doc(userId)
+    //     .collection('feedItems')
+    //     .doc('badge ' + type)
+    //     .set({
+    //   "seen": false,
+    //   "type": "badge",
+    //   "title": "",
+    //   // "username": currentUser.displayName,
+    //   "userId": userId,
+    //   "userProfilePic": "badge",
+    //   "timestamp": DateTime.now()
+    // });
   }
 
   updateAllDocs() async {

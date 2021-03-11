@@ -106,21 +106,7 @@ class _HomePageState extends State<HomePage>
         });
       });
 
-    _scrollController.addListener(() {
-      switch (_scrollController.position.userScrollDirection) {
-        // Scrolling up - forward the animation (value goes to 1)
-        case ScrollDirection.forward:
-          _hideFabAnimController.forward();
-          break;
-        // Scrolling down - reverse the animation (value goes to 0)
-        case ScrollDirection.reverse:
-          _hideFabAnimController.reverse();
-          break;
-        // Idle - keep FAB visibility unchanged
-        case ScrollDirection.idle:
-          break;
-      }
-    });
+   
   }
 
   final privacyList = ["Featured", "All", "Private"];
@@ -147,25 +133,7 @@ class _HomePageState extends State<HomePage>
 
     return Scaffold(
         backgroundColor: Colors.white,
-        floatingActionButton: FadeTransition(
-          opacity: _hideFabAnimController,
-          child: ScaleTransition(
-            scale: _hideFabAnimController,
-            child: FloatingActionButton.extended(
-                onPressed: () {
-                  HapticFeedback.lightImpact();
-
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.topToBottom,
-                          child: MoovMaker(postModel: PostModel())));
-                },
-                label: const Text("Post the MOOV",
-                    style: TextStyle(fontSize: 20, color: Colors.white))),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+       
         body: SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
           child: Container(
@@ -832,7 +800,7 @@ class _HomePageState extends State<HomePage>
           enableControlFinishLoad: true,
           controller: _controller,
           header: BezierCircleHeader(
-              color: TextThemes.ndGold, backgroundColor: TextThemes.ndBlue),
+              color: TextThemes.ndBlue, backgroundColor: Colors.white),
           footer: BezierBounceFooter(backgroundColor: Colors.white),
           bottomBouncing: false,
                                                   child: ListView.builder(

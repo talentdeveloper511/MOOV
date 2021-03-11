@@ -419,7 +419,7 @@ class _ProfilePageState extends State<ProfilePage>
                                     snapshot.data.docs.length == 0)
                                   return Text('');
                                 return Padding(
-                                  padding: const EdgeInsets.only(left: 12.0),
+                                  padding: const EdgeInsets.only(left: 2.0),
                                   child: Container(
                                     height: (snapshot.data.docs.length <= 3 &&
                                             isLargePhone)
@@ -485,7 +485,7 @@ class _ProfilePageState extends State<ProfilePage>
                                     snapshot.data.docs.length == 0)
                                   return Text('');
                                 return Padding(
-                                  padding: const EdgeInsets.only(left: 12.0),
+                                  padding: const EdgeInsets.only(left: 2.0),
                                   child: Container(
                                     height: (snapshot.data.docs.length <= 3 &&
                                             isLargePhone)
