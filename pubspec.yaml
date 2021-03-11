@@ -196,6 +196,19 @@ flutter:
     - lib/assets/music1.png
     - lib/assets/bm1.png
     - lib/assets/virtual1.png
+    - lib/assets/placeholderparty1.jpg
+    - lib/assets/placeholderparty2.jpg
+    - lib/assets/placeholderparty3.jpg
+    - lib/assets/placeholderparty0.jpg
+    - lib/assets/placeholderbar1.jpg
+    - lib/assets/placeholderbar2.jpg
+    - lib/assets/placeholderbar3.jpg
+    - lib/assets/placeholderbar0.jpg
+    - lib/assets/placeholderfood1.jpg
+    - lib/assets/placeholderfood2.jpg
+    - lib/assets/placeholderfood3.jpg
+    - lib/assets/placeholderfood0.jpg
+    - lib/assets/random.jpg
     - lib/assets/show3.png
     - lib/assets/clemson.HEIC
     - lib/assets/venmo-icon.png

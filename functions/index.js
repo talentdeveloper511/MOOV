@@ -565,18 +565,16 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                     admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).set({
                       scheduled: "true",
                     }, {merge: true});
-                    if (user.pushSettings.hourBefore == true) {
-                      admin
-                          .messaging()
-                          .send(message)
-                          .then((response) => {
-                            // Response is a message ID string
-                            console.log("Successfully sent message!", response, querySnapshot);
-                          })
-                          .catch((error) => {
-                            console.log("Error sending message", error);
-                          });
-                    }
+                    admin
+                        .messaging()
+                        .send(message)
+                        .then((response) => {
+                          // Response is a message ID string
+                          console.log("Successfully sent message!", response, querySnapshot);
+                        })
+                        .catch((error) => {
+                          console.log("Error sending message", error);
+                        });
                   }
                   // else if ((data.startDate.toDate().getHours() + 1 == now.toDate().getHours()) && data.scheduled != "true") {
                   //   console.log("deleting post!");
