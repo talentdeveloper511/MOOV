@@ -3,13 +3,15 @@ import 'dart:io';
 import 'dart:math';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
+import 'dart:math';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/add_users_post.dart';
 import 'package:MOOV/widgets/camera.dart';
-import 'package:MOOV/widgets/placeholders.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -140,6 +142,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   bool isUploading = false;
 
   File _image;
+  var placeholderImage;
   final picker = ImagePicker();
 
   void openCamera(context) async {
@@ -157,15 +160,34 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
     });
   }
 
+  Future<File> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load('lib/assets/$path');
+
+    final file = File('${(await getTemporaryDirectory()).path}/$path');
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+    return file;
+  }
+
   void openPlaceholders(context) async {
-    // final image = await CustomCamera.openGallery();
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.bottomToTop, child: Placeholders()));
-    // setState(() {
-    //   _image = image;
-    // });
+    Random random = new Random();
+    int randomNumber = random.nextInt(4);
+    if (typeDropdownValue == 'Parties') {
+      placeholderImage = 'placeholderparty' + randomNumber.toString() + '.jpg';
+    } else if (typeDropdownValue == 'Bars') {
+      placeholderImage = 'placeholderbar' + randomNumber.toString() + '.jpg';
+    } else if (typeDropdownValue == 'Food/Drink') {
+      placeholderImage = 'placeholderfood' + randomNumber.toString() + '.jpg';
+    } else {
+      placeholderImage = 'random.jpg';
+    }
+
+    final image = await getImageFileFromAssets('$placeholderImage');
+
+    setState(() {
+      _image = image;
+    });
   }
 
   Future handleTakePhoto() async {
@@ -228,16 +250,16 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                 Navigator.of(context).pop();
               },
             ),
-            // SimpleDialogOption(
-            //   child: Text(
-            //     "Use a Placeholder",
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            //   onPressed: () {
-            //     openPlaceholders(context);
-            //     // Navigator.of(context).pop();
-            //   },
-            // ),
+            SimpleDialogOption(
+              child: Text(
+                "Use a Placeholder",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openPlaceholders(context);
+                Navigator.of(context).pop();
+              },
+            ),
             SimpleDialogOption(
               child: Text(
                 "Cancel",
@@ -637,7 +659,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                             title: Row(
                               children: <Widget>[
                                 Expanded(
-                                    flex: 4, child: Text('Venmo Per Person')),
+                                    flex: 4, child: Text('Cost Per Person')),
                                 Expanded(
                                   flex: 1,
                                   child: TextField(
