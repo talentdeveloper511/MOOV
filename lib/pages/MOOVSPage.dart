@@ -83,7 +83,6 @@ class _MOOVSPageState extends State<MOOVSPage>
 
     bool isIncognito = false;
     bool friendFinderVisibility = true;
-   
 
     return Scaffold(
         backgroundColor: Colors.white,
