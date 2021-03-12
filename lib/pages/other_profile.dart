@@ -760,7 +760,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(course);
+                                                  return PostOnTrending(course: course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -839,7 +839,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(course);
+                                                  return PostOnTrending(course: course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1292,7 +1292,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(course);
+                                                  return PostOnTrending(course: course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1371,7 +1371,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(course);
+                                                  return PostOnTrending(course: course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),

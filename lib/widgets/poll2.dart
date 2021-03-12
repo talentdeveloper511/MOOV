@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:polls/polls.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PollView extends StatefulWidget {
   @override
@@ -35,6 +36,22 @@ class _PollViewState extends State<PollView> {
   List<dynamic> option1List;
   List<dynamic> option2List;
 
+  Future request(String id) async => await Future.delayed(
+        const Duration(seconds: 1),
+        () => usersRef.doc(id).get(),
+      );
+       Future request2(String day) async => await Future.delayed(
+        const Duration(seconds: 1),
+        () => FirebaseFirestore.instance
+            .collection('notreDame')
+            .doc('data')
+            .collection('poll')
+            .doc(day)
+            .get(),
+      );
+    
+
+
   @override
   Widget build(BuildContext context) {
     String question;
@@ -50,19 +67,28 @@ class _PollViewState extends State<PollView> {
 
     String day = DateFormat('MMMd').format(aDate);
 
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('notreDame')
-            .doc('data')
-            .collection('poll')
-            .doc(day)
-            .snapshots(),
+    return FutureBuilder(
+        future: request2(day),
         // ignore: missing_return
         builder: (context, snapshot) {
           // dynamic moovId;
           bool isLargePhone = Screen.diagonal(context) > 766;
 
-          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (!snapshot.hasData ||
+              snapshot.connectionState != ConnectionState.done)
+            return Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  height: 150.0,
+                  width: MediaQuery.of(context).size.width * .9,
+                ),
+              ),
+            );
 
           voters = snapshot.data['voters'];
           question = snapshot.data['question'];
@@ -238,13 +264,15 @@ class _PollViewState extends State<PollView> {
 
                                 var p = voters.keys.toList();
 
-                                return StreamBuilder(
-                                    stream: usersRef.doc(p[index]).snapshots(),
+                                return FutureBuilder(
+                                    future: request(p[index]),
                                     builder: (context, snapshot2) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                      if (!snapshot2.hasData)
-                                        return CircularProgressIndicator();
+                                      if (!snapshot2.hasData ||
+                                          snapshot.connectionState !=
+                                              ConnectionState.done)
+                                        return Container();
                                       var name = snapshot2.data['displayName'];
                                       var pic = snapshot2.data['photoUrl'];
                                       var id = snapshot2.data['id'];
@@ -326,15 +354,19 @@ class _PollViewState extends State<PollView> {
 
                                 var w = voters.keys.toList();
 
-                                return StreamBuilder(
-                                    stream: usersRef.doc(w[index]).snapshots(),
+                                return FutureBuilder(
+                                    future: request(w[index]),
                                     builder: (context, snapshot3) {
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                      if (!snapshot3.hasData)
-                                        return CircularProgressIndicator();
+                                      if (!snapshot3.hasData ||
+                                          snapshot3.connectionState !=
+                                              ConnectionState.done) {
+                                        return Container();
+                                      }
                                       var name2 = snapshot3.data['displayName'];
-                                      var pic2 = snapshot3.data['photoUrl'];
+                                      var pic2 =
+                                          snapshot3.data['photoUrl'] ?? "";
                                       var id2 = snapshot3.data['id'];
 
                                       return Padding(

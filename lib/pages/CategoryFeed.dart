@@ -1341,3 +1341,19 @@ class PostOnFeed extends StatelessWidget {
     );
   }
 }
+
+class PostOnFeedNew extends StatefulWidget {
+  PostOnFeedNew({Key key}) : super(key: key);
+
+  @override
+  _PostOnFeedNewState createState() => _PostOnFeedNewState();
+}
+
+class _PostOnFeedNewState extends State<PostOnFeedNew> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+    
+    );
+  }
+}
