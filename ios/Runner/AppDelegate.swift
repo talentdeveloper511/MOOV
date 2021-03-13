@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import Firebase
+import GoogleMaps
 
 @available(iOS 10.0, *)
 @UIApplicationMain
@@ -12,7 +13,7 @@ import Firebase
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     FirebaseApp.configure()
-    [GMSServices provideAPIKey:@"AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A"];
+    GMSServices.provideAPIKey("AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A")
    
     // UNUserNotificationCenter.current().delegate = self
    
@@ -174,27 +175,27 @@ import Firebase
 // }
 // [END ios_10_message_handling]
 
-extension AppDelegate : MessagingDelegate {
-//     // [START refresh_token]
-//     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-//         print("Firebase registration token: \(fcmToken)")
-//         deviceID = fcmToken
+// extension AppDelegate : MessagingDelegate {
+// //     // [START refresh_token]
+// //     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+// //         print("Firebase registration token: \(fcmToken)")
+// //         deviceID = fcmToken
 
-//         let dataDict:[String: String] = ["token": fcmToken]
-//         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
-//         // TODO: If necessary send token to application server.
-//         // Note: This callback is fired at each app startup and whenever a new token is generated.
+// //         let dataDict:[String: String] = ["token": fcmToken]
+// //         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+// //         // TODO: If necessary send token to application server.
+// //         // Note: This callback is fired at each app startup and whenever a new token is generated.
+// //     }
+// //     // [END refresh_token]
+// //     // [START ios_10_data_message]
+// //     // Receive data messages on iOS 10+ directly from FCM (bypassing APNs) when the app is in the foreground.
+// //     // To enable direct data messages, you can set Messaging.messaging().shouldEstablishDirectChannel to true.
+//     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+//       Messaging.messaging().shouldEstablishDirectChannel = true
+//         print("Received data message: \(remoteMessage.appData)")
 //     }
-//     // [END refresh_token]
-//     // [START ios_10_data_message]
-//     // Receive data messages on iOS 10+ directly from FCM (bypassing APNs) when the app is in the foreground.
-//     // To enable direct data messages, you can set Messaging.messaging().shouldEstablishDirectChannel to true.
-    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-      Messaging.messaging().shouldEstablishDirectChannel = true
-        print("Received data message: \(remoteMessage.appData)")
-    }
-//     // [END ios_10_data_message]
+// //     // [END ios_10_data_message]
 
 
- }
+//  }
 }

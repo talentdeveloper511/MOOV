@@ -1,6 +1,4 @@
-import 'dart:math';
 import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
@@ -8,28 +6,23 @@ import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
-import 'package:MOOV/pages/map_test.dart';
-import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/widgets/google_map.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:another_flushbar/flushbar_helper.dart';
-import 'package:another_flushbar/flushbar_route.dart';
-import 'package:another_flushbar/main.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
-import 'package:MOOV/pages/post_detail.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -41,8 +34,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'create_account.dart';
-import 'group_detail.dart';
+import 'package:MOOV/widgets/locationCheckIn.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final Reference storageRef = FirebaseStorage.instance.ref();
@@ -79,9 +71,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  callback() {
+    setState(() {});
+  }
+
   AnimationController _hideFabAnimController;
   ScrollController scrollController;
-
 
   bool isSelected = false;
   String stringValue = "No value";
@@ -104,9 +99,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       duration: kThemeAnimationDuration,
       value: 1,
     );
-        scrollController = ScrollController();
+    scrollController = ScrollController();
 
-         scrollController.addListener(() {
+    scrollController.addListener(() {
       switch (scrollController.position.userScrollDirection) {
         // Scrolling up - forward the animation (value goes to 1)
         case ScrollDirection.forward:
@@ -121,8 +116,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           break;
       }
     });
-
-    
 
     pageController = PageController();
     // Detects when user signed in
@@ -276,8 +269,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void dispose() {
     pageController.dispose();
     _hideFabAnimController.dispose();
-        scrollController.dispose();
-
+    scrollController.dispose();
 
     if (iosSubscription != null) iosSubscription.cancel();
     super.dispose();
@@ -304,19 +296,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Scaffold buildAuthScreen() {
-    // Future<int> notifCount() async {
-    //   int notifCount;
-
-    //   final QuerySnapshot result = await notificationFeedRef
-    //       .doc(currentUser.id)
-    //       .collection('feedItems')
-    //       .get();
-    //   if (result.docs != null) notifCount = await result.docs.length;
-
-    //   // print(randomPost);
-    //   return notifCount;
-    // }
-
     Future<String> randomPostMaker() async {
       String randomPost;
       print(randomAlpha(1));
@@ -330,36 +309,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       if (result.docs != null && result.docs.first['privacy'] == "Public")
         randomPost = await result.docs.first['postId'];
       print(result.docs.first['privacy']);
-
-      // if (result.docs == null) {
-      //   final QuerySnapshot result2 = await postsRef
-      //       .where("postId", isGreaterThanOrEqualTo: "")
-      //       .orderBy("postId")
-      //       .limit(1)
-      //       .get();
-      //   randomPost = await result.docs.first['postId'];
-      // }
-      // print(randomPost);
       return randomPost;
-    }
-
-    Future navigateToCategoryFeed(context, type) async {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
     }
 
     int hi = 2;
     if (hi != 0) {
       isSelected = true;
     }
-    // notificationFeedRef
-    //     .doc(currentUser.id)
-    //     .collection('feedItems')
-    //     .orderBy('timestamp', descending: true)
-    //     .limit(50)
-    //     .get();
 
-    // Upload(currentUser: currentUser);
+    locationCheckIn(context, callback);
+
     return Scaffold(
       key: _scaffoldKey,
       floatingActionButton: FadeTransition(
@@ -563,7 +522,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
           SearchBar(),
 
-          MOOVSPage(),
+          currentUser.isBusiness ? NotificationFeed() : MOOVSPage(),
           ProfilePage()
         ],
         controller: pageController,
@@ -812,7 +771,6 @@ class SharedPreferencesDemoState extends State<SharedPreferencesDemo> {
     _counter = _prefs.then((SharedPreferences prefs) {
       return (prefs.getInt('counter') ?? 0);
     });
-    
   }
 
   @override

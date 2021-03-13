@@ -1284,24 +1284,47 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                     print("added to Firebase Storage");
                                     final String downloadUrl =
                                         await taskSnapshot.ref.getDownloadURL();
-                                    Database().createPost(
-                                        title: titleController.text,
-                                        type: typeDropdownValue,
-                                        privacy: privacyDropdownValue,
-                                        description: descriptionController.text,
-                                        address: addressController.text,
-                                        startDate: currentValue,
-                                        unix:
-                                            currentValue.millisecondsSinceEpoch,
-                                        statuses: inviteesNameList,
-                                        maxOccupancy: maxOccupancyInt,
-                                        venmo: venmoInt,
-                                        barcode: barcode,
-                                        imageUrl: downloadUrl,
-                                        userId: strUserId,
-                                        postId: generateRandomString(20),
-                                        posterName: currentUser.displayName,
-                                        push: push);
+                                    currentUser.isBusiness
+                                        ? Database().createBusinessPost(
+                                          
+                                          
+                                            title: titleController.text,
+                                            type: typeDropdownValue,
+                                            privacy: privacyDropdownValue,
+                                            description:
+                                                descriptionController.text,
+                                            address: addressController.text,
+                                            startDate: currentValue,
+                                            unix: currentValue
+                                                .millisecondsSinceEpoch,
+                                            statuses: inviteesNameList,
+                                            maxOccupancy: maxOccupancyInt,
+                                            venmo: venmoInt,
+                                            barcode: barcode,
+                                            imageUrl: downloadUrl,
+                                            userId: strUserId,
+                                            postId: generateRandomString(20),
+                                            posterName: currentUser.displayName,
+                                            push: push)
+                                        : Database().createPost(
+                                            title: titleController.text,
+                                            type: typeDropdownValue,
+                                            privacy: privacyDropdownValue,
+                                            description:
+                                                descriptionController.text,
+                                            address: addressController.text,
+                                            startDate: currentValue,
+                                            unix: currentValue
+                                                .millisecondsSinceEpoch,
+                                            statuses: inviteesNameList,
+                                            maxOccupancy: maxOccupancyInt,
+                                            venmo: venmoInt,
+                                            barcode: barcode,
+                                            imageUrl: downloadUrl,
+                                            userId: strUserId,
+                                            postId: generateRandomString(20),
+                                            posterName: currentUser.displayName,
+                                            push: push);
 
                                     Database().betaActivityTracker(
                                         currentUser.displayName,

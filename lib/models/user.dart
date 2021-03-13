@@ -23,6 +23,7 @@ class User {
   final List<dynamic> followers;
   final bool isBusiness;
   final int nameChangeLimit;
+  final GeoPoint businessLocation;
 
   User(
       {this.id,
@@ -46,7 +47,8 @@ class User {
       this.pushSettings,
       this.nameChangeLimit,
       this.isBusiness,
-      this.followers});
+      this.followers,
+      this.businessLocation});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -71,6 +73,7 @@ class User {
         pushSettings: doc.data()['pushSettings'],
         nameChangeLimit: doc.data()['nameChangeLimit'],
         isBusiness: doc.data()['isBusiness'],
-        followers: doc.data()['followers']);
+        followers: doc.data()['followers'],
+        businessLocation: doc.data()['businessLocation']);
   }
 }

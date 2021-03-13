@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:MOOV/widgets/google_map.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:MOOV/helpers/themes.dart';
@@ -18,9 +19,17 @@ import 'package:image_picker/image_picker.dart';
 class CreateAccount extends StatefulWidget {
   @override
   _CreateAccountState createState() => _CreateAccountState();
+  static _CreateAccountState of(BuildContext context) =>
+      context.findAncestorStateOfType<_CreateAccountState>();
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+  String businessLocationLatitude = "";
+  String businessLocationLongitude = "";
+
+  set string(String value) => businessLocationLatitude = value;
+  set string2(String value) => businessLocationLongitude = value;
+
   int selectedIndex = 0;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -81,6 +90,9 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   submitBusiness() {
+    setState(() {});
+    print(businessLocationLatitude);
+
     final form5 = _formKey5.currentState;
     final form6 = _formKey6.currentState;
     final form7 = _formKey7.currentState;
@@ -302,6 +314,9 @@ class _CreateAccountState extends State<CreateAccount> {
     final GoogleSignInAccount user = googleSignIn.currentUser;
     DocumentSnapshot doc = await usersRef.doc(user.id).get();
 
+    double businessLatitude = double.parse(businessLocationLatitude);
+    double businessLongitude = double.parse(businessLocationLongitude);
+
     if (!doc.exists) {
       // 2) if the user doesn't exist, then we want to take them to the create account page
 
@@ -310,6 +325,8 @@ class _CreateAccountState extends State<CreateAccount> {
         "id": user.id,
         "email": user.email,
         "displayName": businessName,
+        "businessLocation": GeoPoint(businessLatitude, businessLongitude),
+        "photoUrl": user.photoUrl,
         "badges": {},
         "bio": businessDescription ?? "Create a bio here",
         "header": "",
@@ -341,33 +358,11 @@ class _CreateAccountState extends State<CreateAccount> {
           "showDorm": true
         }
       });
-      if (_image == null) {
-        usersRef.doc(user.id).update({"photoUrl": user.photoUrl});
-      }
-      if (_image != null) {
-        firebase_storage.Reference ref = firebase_storage
-            .FirebaseStorage.instance
-            .ref()
-            .child("images/" + currentUser.displayName);
 
-        // StorageReference firebaseStorageRef = FirebaseStorage
-        //     .instance
-        //     .ref()
-        //     .child("images/" + currentUser.displayName);
-        firebase_storage.UploadTask uploadTask;
-
-        uploadTask = ref.putFile(_image);
-
-        firebase_storage.TaskSnapshot taskSnapshot = await uploadTask;
-        if (uploadTask.snapshot.state == firebase_storage.TaskState.success) {
-          print("added to Firebase Storage");
-          final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-
-          usersRef.doc(user.id).update({
-            "photoUrl": downloadUrl,
-          });
-        }
-      }
+      // StorageReference firebaseStorageRef = FirebaseStorage
+      //     .instance
+      //     .ref()
+      //     .child("images/" + currentUser.displayName);
 
       doc = await usersRef.doc(user.id).get();
     }
@@ -662,7 +657,8 @@ class _CreateAccountState extends State<CreateAccount> {
                           GestureDetector(
                             onTap: submit,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 18.0, bottom: 18),
+                              padding:
+                                  const EdgeInsets.only(top: 18.0, bottom: 18),
                               child: Container(
                                 height: 50.0,
                                 width: 300.0,
@@ -715,7 +711,11 @@ class _CreateAccountState extends State<CreateAccount> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 50),
+                          GoogleMap(
+                            callback: (val) => businessLocationLatitude = val,
+                            callback2: (val) => businessLocationLongitude = val,
+                          ),
+                          SizedBox(height: 20),
                           Text("— Optional Details —"),
                           Padding(
                             padding:
@@ -730,8 +730,8 @@ class _CreateAccountState extends State<CreateAccount> {
                                   Opacity(
                                     opacity: .5,
                                     child: CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                          'lib/assets/tux.jpg'),
+                                      backgroundImage:
+                                          AssetImage('lib/assets/tux.jpg'),
                                       // backgroundImage: NetworkImage(currentUser.photoUrl),
                                       radius: 50,
                                     ),
@@ -831,7 +831,8 @@ class _CreateAccountState extends State<CreateAccount> {
                           GestureDetector(
                             onTap: submitBusiness,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 18.0, bottom: 18),
+                              padding:
+                                  const EdgeInsets.only(top: 18.0, bottom: 18),
                               child: Container(
                                 height: 50.0,
                                 width: 300.0,

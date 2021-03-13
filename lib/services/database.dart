@@ -177,6 +177,66 @@ class Database {
     });
   }
 
+  void createBusinessPost(
+      {title,
+      description,
+      type,
+      privacy,
+      address,
+
+      DateTime startDate,
+      int unix,
+      statuses,
+      int maxOccupancy,
+      int venmo,
+      bool barcode,
+      imageUrl,
+      userId,
+      postId,
+      posterName,
+      bool push,
+      int goingCount
+      }) {
+    bool isPartyOrBar = false;
+    if (type == "Parties" || type == "Bars & Restaurants") {
+      isPartyOrBar = true;
+    }
+
+    postsRef.doc(postId).set({
+      'title': title,
+      'type': type,
+      "businessPost": true,
+      "businessLocation": currentUser.businessLocation,
+      "checkInMap": {},
+      'privacy': privacy,
+      'description': description,
+      'address': address,
+      'startDate': startDate,
+      'unix': unix,
+      'statuses': {
+        for (var item in statuses) item.toString(): -1,
+      },
+      'maxOccupancy': maxOccupancy,
+      'venmo': venmo,
+      'barcode': barcode,
+      'image': imageUrl,
+      'userId': userId,
+      "featured": false,
+      "postId": postId,
+      "posterName": posterName,
+      "push": push,
+      "goingCount": 0,
+      "going": [],
+      "isPartyOrBar": isPartyOrBar
+    }).then(inviteesNotification(postId, imageUrl, title, statuses));
+
+    if (privacy == 'Public' || privacy == 'Friends Only') {
+      List peepsToAlert = currentUser.followers;
+
+      friendCreatedNotification(postId, title, imageUrl, peepsToAlert);
+    }
+  }
+
   Future<void> addNotGoing(userId, postId, List<dynamic> goingList) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
@@ -1025,7 +1085,7 @@ class Database {
         .doc('badge ' + type)
         .set({
       "seen": false,
-      "type": type == "natties" ? "natties": "badge",
+      "type": type == "natties" ? "natties" : "badge",
       "title": type == "friends10"
           ? "10 Friends"
           : type == "leaderboardWin"

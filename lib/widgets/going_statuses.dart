@@ -91,7 +91,9 @@ class GoingPage extends StatelessWidget {
                                               ? status = 3
                                               : statusesValues[index] == -1
                                                   ? status = -1
-                                                  : status = 0;
+                                                  : statusesValues[index] == 4
+                                                      ? status = 4
+                                                      : status = 0;
 
                                   var pic = snapshot.data['photoUrl'];
                                   var name = snapshot.data['displayName'];
@@ -136,8 +138,11 @@ class GoingPage extends StatelessWidget {
                                                               : status == 3
                                                                   ? Colors
                                                                       .green[50]
-                                                                  : Colors
-                                                                      .blue[50],
+                                                                  : status == 4
+                                                                      ? Colors.amber[
+                                                                          500]
+                                                                      : Colors.blue[
+                                                                          50],
                                                       child: Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -194,12 +199,9 @@ class GoingPage extends StatelessWidget {
                                                                                 EdgeInsets.only(
                                                                               left: 4,
                                                                             ),
-                                                                            child:
-                                                                                Icon(
-                                                                              Icons.store,
-                                                                              size: 20,
-                                                                              color:Colors.blue
-                                                                            ),
+                                                                            child: Icon(Icons.store,
+                                                                                size: 20,
+                                                                                color: Colors.blue),
                                                                           )
                                                                         : verifiedStatus ==
                                                                                 2
@@ -280,6 +282,19 @@ class GoingPage extends StatelessWidget {
                                                                                       Text(
                                                                                         "Invited",
                                                                                         style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w700),
+                                                                                      )
+                                                                                    ],
+                                                                                  )
+                                                                                   : status == 4
+                                                                                ? Row(
+                                                                                    children: [
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.only(right: 8.0),
+                                                                                        child: Icon(Icons.check, color: Colors.white),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        "Checked In",
+                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                                                                                       )
                                                                                     ],
                                                                                   )
@@ -491,7 +506,8 @@ class GoingPage extends StatelessWidget {
                                                                           )
                                                                         ],
                                                                       )
-                                                                    : Row(
+                                                                    : 
+                                                                    Row(
                                                                         children: [
                                                                           Padding(
                                                                             padding:
@@ -596,7 +612,9 @@ class GoingPageFriends extends StatelessWidget {
                                             : statusesValues[index] == 3
                                                 ? status = 3
                                                 : statusesValues[index] == -1
-                                                    ? status = -1
+                                                    ? status = -1 
+                                                : statusesValues[index] == 4
+                                                    ? status = 4
                                                     : status = 0;
 
                                     var pic = snapshot2.data['photoUrl'];
@@ -644,7 +662,9 @@ class GoingPageFriends extends StatelessWidget {
                                                               : status == 3
                                                                   ? Colors
                                                                       .green[50]
-                                                                  : Colors
+                                                                  : status == 4 ?
+                                                                  Colors.amber[600]:
+                                                                  Colors
                                                                       .blue[50],
                                                       child: Row(
                                                           mainAxisAlignment:
@@ -757,7 +777,20 @@ class GoingPageFriends extends StatelessWidget {
                                                                                   )
                                                                                 ],
                                                                               )
-                                                                            : Row(
+                                                                            : 
+                                                                             status == 4
+                                                                                ? Row(
+                                                                                    children: [
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.only(right: 8.0),
+                                                                                        child: Icon(Icons.check, color: Colors.white),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        "Checked In",
+                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                                                                                      )
+                                                                                    ],
+                                                                                  ): Row(
                                                                                 children: [
                                                                                   Padding(
                                                                                     padding: const EdgeInsets.only(right: 8.0),

@@ -139,7 +139,21 @@ class _NotificationFeedState extends State<NotificationFeed>
     }
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
+        appBar: currentUser.isBusiness ? AppBar(
+           leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            },
+          ),
+          backgroundColor: TextThemes.ndBlue,) : 
+        AppBar(
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
