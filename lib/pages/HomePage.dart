@@ -14,6 +14,7 @@ import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/hottestMOOV.dart';
 import 'package:MOOV/widgets/poll2.dart';
+import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/suggestionBox.dart';
 import 'package:animations/animations.dart';

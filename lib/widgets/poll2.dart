@@ -37,11 +37,11 @@ class _PollViewState extends State<PollView> {
   List<dynamic> option2List;
 
   Future request(String id) async => await Future.delayed(
-        const Duration(seconds: 1),
+        const Duration(milliseconds: 0),
         () => usersRef.doc(id).get(),
       );
        Future request2(String day) async => await Future.delayed(
-        const Duration(seconds: 1),
+        const Duration(milliseconds: 0),
         () => FirebaseFirestore.instance
             .collection('notreDame')
             .doc('data')

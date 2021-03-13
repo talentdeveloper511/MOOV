@@ -12,6 +12,7 @@ import Firebase
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     FirebaseApp.configure()
+    [GMSServices provideAPIKey:@"AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A"];
    
     // UNUserNotificationCenter.current().delegate = self
    
@@ -173,7 +174,7 @@ import Firebase
 // }
 // [END ios_10_message_handling]
 
-// extension AppDelegate : MessagingDelegate {
+extension AppDelegate : MessagingDelegate {
 //     // [START refresh_token]
 //     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
 //         print("Firebase registration token: \(fcmToken)")
@@ -188,12 +189,12 @@ import Firebase
 //     // [START ios_10_data_message]
 //     // Receive data messages on iOS 10+ directly from FCM (bypassing APNs) when the app is in the foreground.
 //     // To enable direct data messages, you can set Messaging.messaging().shouldEstablishDirectChannel to true.
-//     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-//       Messaging.messaging().shouldEstablishDirectChannel
-//         print("Received data message: \(remoteMessage.appData)")
-//     }
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+      Messaging.messaging().shouldEstablishDirectChannel = true
+        print("Received data message: \(remoteMessage.appData)")
+    }
 //     // [END ios_10_data_message]
 
 
  }
-
+}

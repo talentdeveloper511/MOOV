@@ -51,10 +51,14 @@
 	<string>MOOV requires access to your phone's camera.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>This just allows you to invite your friends!</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>MOOV requires access to your location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>MOOV requires access to your location.</string>
+	<string>This app needs access to location when open.</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<!-- <key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to location when in the background.</string> -->
+	<!-- <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open and in the background.</string> -->
 	<key>NSMotionUsageDescription</key>
 	<string>MOOV requires access to your motion.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

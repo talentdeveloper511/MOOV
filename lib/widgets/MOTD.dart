@@ -22,8 +22,7 @@ class MOTD extends StatefulWidget {
 }
 
 class _MOTDState extends State<MOTD> {
-  Future request() async => await Future.delayed(const Duration(seconds: 1),
-      () => postsRef.where("MOTD", isEqualTo: true).get());
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +30,7 @@ class _MOTDState extends State<MOTD> {
     var pic;
 
     return FutureBuilder(
-        future: request(),
+        future: postsRef.where("MOTD", isEqualTo: true).get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             bool isLargePhone = Screen.diagonal(context) > 766;

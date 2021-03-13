@@ -34,7 +34,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey7 = GlobalKey<FormState>();
   final _formKey8 = GlobalKey<FormState>();
   final yearList = ["Freshman", "Sophomore", "Junior", "Senior", "Grad"];
-  final genderList = ["Male", "Female", "Other"];
+  final genderList = ["Female", "Male", "Other"];
 
   String yearDropdownValue = "Freshman";
   String genderDropdownValue = "Female";
@@ -81,7 +81,6 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   submitBusiness() {
-    
     final form5 = _formKey5.currentState;
     final form6 = _formKey6.currentState;
     final form7 = _formKey7.currentState;
@@ -260,6 +259,8 @@ class _CreateAccountState extends State<CreateAccount> {
       usersRef.doc(user.id).set({
         "id": user.id,
         "photoUrl": user.photoUrl,
+        "badges": {},
+        "isBusiness": false,
         "email": user.email,
         "displayName": user.displayName,
         "bio": "Create a bio here",
@@ -273,6 +274,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "postLimit": 3,
         "sendLimit": 5,
         "verifiedStatus": 0,
+        "followers": [],
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],
@@ -280,7 +282,8 @@ class _CreateAccountState extends State<CreateAccount> {
         "pushSettings": {
           "going": true,
           "hourBefore": true,
-          "suggestions": true
+          "suggestions": true,
+          "friendPosts": true
         },
         "privacySettings": {
           "friendFinderVisibility": true,
@@ -300,14 +303,14 @@ class _CreateAccountState extends State<CreateAccount> {
     DocumentSnapshot doc = await usersRef.doc(user.id).get();
 
     if (!doc.exists) {
-     
       // 2) if the user doesn't exist, then we want to take them to the create account page
 
       // 3) get username from create account, use it to make new user document in users collection
       usersRef.doc(user.id).set({
-         "id": user.id,
+        "id": user.id,
         "email": user.email,
         "displayName": businessName,
+        "badges": {},
         "bio": businessDescription ?? "Create a bio here",
         "header": "",
         "timestamp": timestamp,
@@ -326,6 +329,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "friendGroups": [],
         "venmoUsername": venmoUsername,
         "pushSettings": {
+          "friendPosts": true,
           "going": true,
           "hourBefore": true,
           "suggestions": true
@@ -336,15 +340,11 @@ class _CreateAccountState extends State<CreateAccount> {
           "incognito": false,
           "showDorm": true
         }
-        
-      
       });
-        if (_image == null){
-         usersRef.doc(user.id).update({
-            "photoUrl": user.photoUrl
-          });
+      if (_image == null) {
+        usersRef.doc(user.id).update({"photoUrl": user.photoUrl});
       }
-       if (_image != null) {
+      if (_image != null) {
         firebase_storage.Reference ref = firebase_storage
             .FirebaseStorage.instance
             .ref()
@@ -354,24 +354,20 @@ class _CreateAccountState extends State<CreateAccount> {
         //     .instance
         //     .ref()
         //     .child("images/" + currentUser.displayName);
-       firebase_storage.UploadTask uploadTask;
+        firebase_storage.UploadTask uploadTask;
 
-                                  uploadTask = ref.putFile(_image);
+        uploadTask = ref.putFile(_image);
 
-                                  firebase_storage.TaskSnapshot taskSnapshot =
-                                      await uploadTask;
-                                  if (uploadTask.snapshot.state ==
-                                      firebase_storage.TaskState.success) {
-                                    print("added to Firebase Storage");
-                                    final String downloadUrl =
-                                        await taskSnapshot.ref.getDownloadURL();
+        firebase_storage.TaskSnapshot taskSnapshot = await uploadTask;
+        if (uploadTask.snapshot.state == firebase_storage.TaskState.success) {
+          print("added to Firebase Storage");
+          final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
           usersRef.doc(user.id).update({
             "photoUrl": downloadUrl,
           });
         }
       }
-    
 
       doc = await usersRef.doc(user.id).get();
     }
@@ -666,7 +662,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           GestureDetector(
                             onTap: submit,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 18.0),
+                              padding: const EdgeInsets.only(top: 18.0, bottom: 18),
                               child: Container(
                                 height: 50.0,
                                 width: 300.0,
@@ -702,9 +698,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                   textCapitalization: TextCapitalization.words,
                                   validator: (val) {
                                     if (val.trim().length < 2 || val.isEmpty) {
-                                      return "Business name is too short";
+                                      return "Name is too short";
                                     } else if (val.trim().length > 25) {
-                                      return "Business name is too long";
+                                      return "Name is too long";
                                     } else {
                                       return null;
                                     }
@@ -734,8 +730,8 @@ class _CreateAccountState extends State<CreateAccount> {
                                   Opacity(
                                     opacity: .5,
                                     child: CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage('images/assets/pete!!.jpg'),
+                                      backgroundImage: AssetImage(
+                                          'lib/assets/tux.jpg'),
                                       // backgroundImage: NetworkImage(currentUser.photoUrl),
                                       radius: 50,
                                     ),
@@ -767,7 +763,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 key: _formKey6,
                                 autovalidate: true,
                                 child: TextFormField(
-                                  autocorrect: false,                                 
+                                  autocorrect: false,
                                   onSaved: (val) => businessDescription = val,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -819,7 +815,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                           onSaved: (val) => venmoUsername = val,
                                           decoration: InputDecoration(
                                             border: OutlineInputBorder(),
-                                            labelText: "Venmo Username",
+                                            labelText: "Venmo username",
                                             labelStyle:
                                                 TextStyle(fontSize: 13.0),
                                           ),
@@ -835,7 +831,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           GestureDetector(
                             onTap: submitBusiness,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 18.0),
+                              padding: const EdgeInsets.only(top: 18.0, bottom: 18),
                               child: Container(
                                 height: 50.0,
                                 width: 300.0,
