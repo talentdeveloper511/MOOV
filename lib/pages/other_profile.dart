@@ -363,15 +363,17 @@ class _OtherProfileState extends State<OtherProfile> {
                               Padding(
                                 padding: const EdgeInsets.only(
                                     top: 2.0, bottom: 12.0),
-                                child: snapshot.data['privacySettings']
-                                        ['showDorm']
-                                    ? Text(
-                                        snapshot.data['year'] +
-                                            " in " +
-                                            snapshot.data['dorm'],
-                                        style: TextStyle(fontSize: 15),
-                                      )
-                                    : Text("Top secret year and dorm"),
+                                child: currentUser.isBusiness == true
+                                    ? Container()
+                                    : snapshot.data['privacySettings']
+                                            ['showDorm']
+                                        ? Text(
+                                            snapshot.data['year'] +
+                                                " in " +
+                                                snapshot.data['dorm'],
+                                            style: TextStyle(fontSize: 15),
+                                          )
+                                        : Text("Top secret year and dorm"),
                               ),
                             ],
                           ),
@@ -478,125 +480,15 @@ class _OtherProfileState extends State<OtherProfile> {
                                       child: Text("Message",
                                           style:
                                               TextStyle(color: Colors.white)))),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 7.5, bottom: 15, top: 15.5),
-                                child: status == 2
-                                    ? Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          RaisedButton(
-                                              padding:
-                                                  const EdgeInsets.all(12.0),
-                                              color: Colors.green,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              3.0))),
-                                              onPressed: () {
-                                                Database().acceptFriendRequest(
-                                                    id,
-                                                    strUserId,
-                                                    strUserName,
-                                                    strPic);
-                                                setState(() {
-                                                  status = 1;
-                                                });
-                                                Database()
-                                                    .friendAcceptNotification(
-                                                        id,
-                                                        photoUrl,
-                                                        displayName,
-                                                        strUserId);
-                                              },
-                                              child: Text(
-                                                "Accept Friend Request",
-                                                style: new TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                ),
-                                              )),
-                                          RaisedButton(
-                                              padding:
-                                                  const EdgeInsets.all(12.0),
-                                              color: Colors.red,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              3.0))),
-                                              onPressed: () {
-                                                setState(() {
-                                                  status = null;
-                                                });
-                                                Database().rejectFriendRequest(
-                                                    strUserId,
-                                                    id,
-                                                    strUserName,
-                                                    strPic);
-                                              },
-                                              child: Text(
-                                                "Decline Friend Request",
-                                                style: new TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                ),
-                                              )),
-                                        ],
-                                      )
-                                    : status != 1
-                                        ? Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                                RaisedButton(
-                                                  padding: const EdgeInsets.all(
-                                                      12.0),
-                                                  color: Color.fromRGBO(
-                                                      2, 43, 91, 1.0),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  3.0))),
-                                                  onPressed: () {
-                                                    Database()
-                                                        .sendFriendRequest(
-                                                            strUserId,
-                                                            id,
-                                                            strUserName,
-                                                            strPic);
-                                                    status = 0;
-                                                    Database()
-                                                        .friendRequestNotification(
-                                                            id,
-                                                            photoUrl,
-                                                            displayName,
-                                                            strUserId);
-                                                  },
-                                                  child: status == null
-                                                      ? Text(
-                                                          "Send Friend Request",
-                                                          style: new TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 14.0,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          "Request Sent",
-                                                          style: new TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 14.0,
-                                                          ),
-                                                        ),
-                                                ),
-                                              ])
-                                        : Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
+                              currentUser.isBusiness == false
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 7.5, bottom: 15, top: 15.5),
+                                      child: status == 2
+                                          ? Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
                                                 RaisedButton(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -608,22 +500,149 @@ class _OtherProfileState extends State<OtherProfile> {
                                                                 Radius.circular(
                                                                     3.0))),
                                                     onPressed: () {
-                                                      // unfriend code here
+                                                      Database()
+                                                          .acceptFriendRequest(
+                                                              id,
+                                                              strUserId,
+                                                              strUserName,
+                                                              strPic);
+                                                      setState(() {
+                                                        status = 1;
+                                                      });
+                                                      Database()
+                                                          .friendAcceptNotification(
+                                                              id,
+                                                              photoUrl,
+                                                              displayName,
+                                                              strUserId);
                                                     },
-                                                    child: GestureDetector(
-                                                        onTap: () {
-                                                          showAlertDialog(
-                                                              context);
+                                                    child: Text(
+                                                      "Accept Friend Request",
+                                                      style: new TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14.0,
+                                                      ),
+                                                    )),
+                                                RaisedButton(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            12.0),
+                                                    color: Colors.red,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    3.0))),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        status = null;
+                                                      });
+                                                      Database()
+                                                          .rejectFriendRequest(
+                                                              strUserId,
+                                                              id,
+                                                              strUserName,
+                                                              strPic);
+                                                    },
+                                                    child: Text(
+                                                      "Decline Friend Request",
+                                                      style: new TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14.0,
+                                                      ),
+                                                    )),
+                                              ],
+                                            )
+                                          : status != 1
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                      RaisedButton(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(12.0),
+                                                        color: Color.fromRGBO(
+                                                            2, 43, 91, 1.0),
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        3.0))),
+                                                        onPressed: () {
+                                                          Database()
+                                                              .sendFriendRequest(
+                                                                  strUserId,
+                                                                  id,
+                                                                  strUserName,
+                                                                  strPic);
+                                                          status = 0;
+                                                          Database()
+                                                              .friendRequestNotification(
+                                                                  id,
+                                                                  photoUrl,
+                                                                  displayName,
+                                                                  strUserId);
                                                         },
-                                                        child: Text(
-                                                          "Friends",
-                                                          style: new TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 14.0,
-                                                          ),
-                                                        ))),
-                                              ]),
-                              ),
+                                                        child: status == null
+                                                            ? Text(
+                                                                "Send Friend Request",
+                                                                style:
+                                                                    new TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      14.0,
+                                                                ),
+                                                              )
+                                                            : Text(
+                                                                "Request Sent",
+                                                                style:
+                                                                    new TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      14.0,
+                                                                ),
+                                                              ),
+                                                      ),
+                                                    ])
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                      RaisedButton(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(12.0),
+                                                          color: Colors.green,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.all(
+                                                                      Radius.circular(
+                                                                          3.0))),
+                                                          onPressed: () {
+                                                            // unfriend code here
+                                                          },
+                                                          child:
+                                                              GestureDetector(
+                                                                  onTap: () {
+                                                                    showAlertDialog(
+                                                                        context);
+                                                                  },
+                                                                  child: Text(
+                                                                    "Friends",
+                                                                    style:
+                                                                        new TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          14.0,
+                                                                    ),
+                                                                  ))),
+                                                    ]),
+                                    )
+                                  : Container(),
                             ],
                           ),
                           venmo != null && venmo != ""
@@ -1019,8 +1038,10 @@ class _OtherProfileState extends State<OtherProfile> {
                                             snapshot.data['dorm'],
                                         style: TextStyle(fontSize: 15),
                                       )
-                                    : Text("Top secret year and dorm"),
-                              ),
+                                    : currentUser.isBusiness == true
+                                        ? Container()
+                                        : Text("Top secret year and dorm"),
+                              )
                             ],
                           ),
                           Row(
