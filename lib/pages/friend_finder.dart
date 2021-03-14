@@ -19,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'ProfilePageWithHeader.dart';
 import 'other_profile.dart';
@@ -30,6 +31,9 @@ class FriendFinder extends StatefulWidget {
 
 class _FriendFinderState extends State<FriendFinder>
     with AutomaticKeepAliveClientMixin {
+      
+  Future request() async => await Future.delayed(
+      const Duration(milliseconds: 500), () => usersRef.doc(currentUser.id).get());
   int todayOnly = 0;
   int tomorrowOnly = 0;
 
@@ -129,10 +133,10 @@ class _FriendFinderState extends State<FriendFinder>
         return Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0, top: 20),
+                    padding: const EdgeInsets.only(bottom: 20.0, top: 20, right: 5),
                     child: todayOnly == 0
                         ? RaisedButton(
                             onPressed: () {
@@ -347,18 +351,25 @@ class _FriendFinderState extends State<FriendFinder>
       //         ),
       //       ),
       body: currentUser.friendArray.isEmpty
-          ? StreamBuilder(
-              stream: usersRef.doc(currentUser.id).snapshots(),
+          ? FutureBuilder(
+              future: request(),
               builder: (context, snapshot) {
-                List<dynamic> friendArray;
 
                 bool isLargePhone = Screen.diagonal(context) > 766;
 
                 if (!snapshot.hasData) return CircularProgressIndicator();
-                if (snapshot.data == null || snapshot.data == 0)
-                  return Container();
-                friendArray = snapshot.data['friendArray'];
-                if (snapshot.data["friendArray"].isEmpty) {
+                if (snapshot.connectionState != ConnectionState.done)
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[300],
+                    highlightColor: Colors.grey[100],
+                    child: Container(
+                      height: 60.0,
+                      width: 60.0,
+                      color: Colors.grey[300],
+                    ),
+                  );
+                List friendArray = snapshot.data['friendArray'];
+                if (friendArray.isEmpty) {
                   return Container(
                     height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(
@@ -473,8 +484,8 @@ class UserResult extends StatelessWidget {
         onTap: () => print('tapped'),
         child: Card(
             color: Colors.white,
-            child: StreamBuilder(
-                stream: usersRef.doc(user.id).snapshots(),
+            child: FutureBuilder(
+                future: usersRef.doc(user.id).get(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return circularProgress();
                   isIncognito = snapshot.data['privacySettings']['incognito'];
@@ -566,11 +577,11 @@ class UserResult extends StatelessWidget {
                                     )
                                   : Text("is going to")),
                           Container(
-                              child: StreamBuilder(
-                                  stream: postsRef
+                              child: FutureBuilder(
+                                  future: postsRef
                                       .where('going', arrayContains: user.id)
                                       .orderBy("startDate")
-                                      .snapshots(),
+                                      .get(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData)
                                       return Center(

@@ -83,13 +83,13 @@ class _EditGroupState extends State<EditGroup> {
                 CropAspectRatioPreset.ratio16x9
               ],
         androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Crop that shit',
+            toolbarTitle: 'Croperooni',
             toolbarColor: Colors.deepOrange,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
-          title: 'Crop that shit',
+          title: 'Croperooni',
         ));
     if (croppedFile != null) {
       setState(() {

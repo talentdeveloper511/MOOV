@@ -87,6 +87,17 @@ dependencies:
   flutter_chat_bubble: ^1.0.2
   flutter_reaction_button: ^1.0.7+3
   flutter_easyrefresh: ^2.1.8
+  shimmer: ^1.1.2
+  google_maps_place_picker: ^1.0.1
+  google_maps_flutter: ^1.2.0
+  geolocator: ^6.2.1
+  geocoding: ^1.0.5
+  animated_check: ^1.0.0
+
+
+
+
+
 
 
 

@@ -139,7 +139,21 @@ class _NotificationFeedState extends State<NotificationFeed>
     }
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
+        appBar: currentUser.isBusiness ? AppBar(
+           leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            },
+          ),
+          backgroundColor: TextThemes.ndBlue,) : 
+        AppBar(
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
@@ -875,7 +889,7 @@ class NotificationFeedItem extends StatelessWidget {
               )),
         ),
       );
-    } else if (type == 'invite' || type == 'comment' || type == 'sent') {
+    } else if (type == 'invite' || type == 'sent') {
       mediaPreview = GestureDetector(
         onTap: () => showPost(context),
         child: Container(
@@ -948,7 +962,9 @@ class NotificationFeedItem extends StatelessWidget {
     } else if (type == 'deleted') {
       activityItemText = 'has been canceled';
     } else if (type == 'badge') {
-      activityItemText = 'You have earned a badge!';
+      activityItemText = 'You have earned the badge, ';
+    } else if (type == 'natties') {
+      activityItemText = 'You have earned ';
     } else {
       activityItemText = "Error: Unknown type '$type'";
     }
@@ -974,7 +990,7 @@ class NotificationFeedItem extends StatelessWidget {
                   ? showProfile(context)
                   : (type == 'suggestion' || type == 'friendGroup')
                       ? showGroup(context)
-                      : type == 'badge'
+                      : type == 'badge' || type == 'natties'
                           ? null
                           : showPost(context);
             },

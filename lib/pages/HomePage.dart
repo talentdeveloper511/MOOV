@@ -14,6 +14,8 @@ import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/hottestMOOV.dart';
 import 'package:MOOV/widgets/poll2.dart';
+import 'package:MOOV/widgets/post_card_new.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/suggestionBox.dart';
 import 'package:animations/animations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -44,12 +46,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  GlobalKey _categoryButtonKey = GlobalKey();
-  GlobalKey _friendFinderKey = GlobalKey();
-  GlobalKey _friendGroupsKey = GlobalKey();
-  GlobalKey _motdKey = GlobalKey();
-  GlobalKey _leaderboardKey = GlobalKey();
-
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
   EasyRefreshController _controller;
@@ -105,35 +101,22 @@ class _HomePageState extends State<HomePage>
           _currentIndex = (_tabController.animation.value).round();
         });
       });
-
-   
   }
 
-  final privacyList = ["Featured", "All", "Private"];
+  Future request() async => await Future.delayed(
+      const Duration(seconds: 0), () => postsRef.orderBy("startDate").get());
 
+  final privacyList = ["Featured", "All", "Private"];
   String privacyDropdownValue = 'Featured';
 
   Widget build(BuildContext context) {
     super.build(context);
-    SharedPreferences preferences;
-
 
     SizeConfig().init(context);
     bool isLargePhone = Screen.diagonal(context) > 766;
-    bool isNarrow = Screen.widthInches(context) < 3.5;
-
-    // final GoogleSignInAccount user = googleSignIn.currentUser;
-    // final strUserId = user.id;
-    var userFriends;
-
-    Future navigateToCategoryFeed(context, type) async {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CategoryFeed(type: type)));
-    }
 
     return Scaffold(
         backgroundColor: Colors.white,
-       
         body: SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
           child: Container(
@@ -184,8 +167,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Food/Drink",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -219,8 +201,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Food/Drink",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -260,8 +241,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Parties",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -298,8 +278,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Parties",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -334,8 +313,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Shows",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -372,8 +350,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Shows",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -395,8 +372,8 @@ class _HomePageState extends State<HomePage>
                                       child: Column(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 8.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 8.0),
                                             child: Image.asset(
                                               'lib/assets/icons/SportICON.png',
                                               height: 42,
@@ -404,8 +381,7 @@ class _HomePageState extends State<HomePage>
                                             ),
                                           ),
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(8.0),
                                             child: Text(
                                               "Sports",
                                               style: TextStyle(
@@ -428,8 +404,8 @@ class _HomePageState extends State<HomePage>
                                       child: Column(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 6.0),
+                                            padding:
+                                                const EdgeInsets.only(top: 6.0),
                                             child: Image.asset(
                                               'lib/assets/icons/SportICON2.png',
                                               height: 45,
@@ -479,8 +455,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Recreation",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -521,8 +496,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Recreation",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -559,8 +533,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Virtual",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -596,8 +569,7 @@ class _HomePageState extends State<HomePage>
                                               child: Text(
                                                 "Virtual",
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
+                                                    fontWeight: FontWeight.w600,
                                                     fontSize: 13),
                                               ),
                                             )
@@ -642,14 +614,12 @@ class _HomePageState extends State<HomePage>
                                                 child: Row(
                                                   children: [
                                                     Padding(
-                                                      padding:
-                                                          EdgeInsets.only(
-                                                              right: 8.0),
-                                                      child: Text(
-                                                          'Today Only?',
+                                                      padding: EdgeInsets.only(
+                                                          right: 8.0),
+                                                      child: Text('Today Only?',
                                                           style: TextStyle(
-                                                              color: Colors
-                                                                  .white,
+                                                              color:
+                                                                  Colors.white,
                                                               fontSize:
                                                                   isLargePhone
                                                                       ? 14
@@ -657,8 +627,8 @@ class _HomePageState extends State<HomePage>
                                                     ),
                                                     Icon(Icons.calendar_today,
                                                         size: 15,
-                                                        color: TextThemes
-                                                            .ndGold),
+                                                        color:
+                                                            TextThemes.ndGold),
                                                   ],
                                                 ),
                                               ),
@@ -682,22 +652,20 @@ class _HomePageState extends State<HomePage>
                                                       MainAxisSize.min,
                                                   children: [
                                                     Padding(
-                                                      padding:
-                                                          EdgeInsets.only(
-                                                              right: 8.0),
-                                                      child: Text(
-                                                          'Today Only!',
+                                                      padding: EdgeInsets.only(
+                                                          right: 8.0),
+                                                      child: Text('Today Only!',
                                                           style: TextStyle(
-                                                              color: Colors
-                                                                  .white,
+                                                              color:
+                                                                  Colors.white,
                                                               fontSize:
                                                                   isLargePhone
                                                                       ? 14
                                                                       : 12.5)),
                                                     ),
                                                     Icon(Icons.check,
-                                                        color: TextThemes
-                                                            .ndGold),
+                                                        color:
+                                                            TextThemes.ndGold),
                                                   ],
                                                 ),
                                               ),
@@ -710,9 +678,8 @@ class _HomePageState extends State<HomePage>
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 10.0, vertical: 1),
                                     child: Container(
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                              .29,
+                                      width: MediaQuery.of(context).size.width *
+                                          .29,
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10.0)),
@@ -724,9 +691,11 @@ class _HomePageState extends State<HomePage>
                                           height: 10,
                                           child: DropdownButtonFormField(
                                             decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.only(bottom: 8, left: 10, right: 5),
+                                                contentPadding: EdgeInsets.only(
+                                                    bottom: 8,
+                                                    left: 10,
+                                                    right: 5),
                                                 border: UnderlineInputBorder(
-                                                  
                                                     borderRadius:
                                                         BorderRadius.all(
                                                   const Radius.circular(10.0),
@@ -745,8 +714,8 @@ class _HomePageState extends State<HomePage>
                                             value: privacyDropdownValue,
                                             icon: Icon(Icons.arrow_drop_down,
                                                 color: TextThemes.ndGold),
-                                            items: privacyList
-                                                .map((String value) {
+                                            items:
+                                                privacyList.map((String value) {
                                               return DropdownMenuItem<String>(
                                                 value: value,
                                                 child: Text(
@@ -758,8 +727,7 @@ class _HomePageState extends State<HomePage>
                                               HapticFeedback.lightImpact();
 
                                               setState(() {
-                                                privacyDropdownValue =
-                                                    newValue;
+                                                privacyDropdownValue = newValue;
                                               });
                                             },
                                           ),
@@ -775,35 +743,33 @@ class _HomePageState extends State<HomePage>
                   child: TabBarView(controller: _tabController, children: [
                     FutureBuilder(
                       //THE DEFAULT NO FILTERS FEED
-                      future: postsRef.orderBy("startDate").get(),
+                      future: request(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
-                          return Center(
-                            child: Text("",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20)),
-                          );
+                        if (snapshot.connectionState != ConnectionState.done) {
+                          return Container();
+                        }
 
                         return EasyRefresh(
                           onRefresh: () async {
-            await Future.delayed(Duration(seconds: 1), () {
-              _controller.resetLoadState();
-            });
-          },
-          onLoad: () async {
-            await Future.delayed(Duration(seconds: 1), () {
-              _controller.finishLoad();
-            });
-          },
-          enableControlFinishRefresh: false,
-          enableControlFinishLoad: true,
-          controller: _controller,
-          header: BezierCircleHeader(
-              color: TextThemes.ndBlue, backgroundColor: Colors.white),
-          footer: BezierBounceFooter(backgroundColor: Colors.white),
-          bottomBouncing: false,
-                                                  child: ListView.builder(
+                            await Future.delayed(Duration(seconds: 1), () {
+                              _controller.resetLoadState();
+                            });
+                          },
+                          onLoad: () async {
+                            await Future.delayed(Duration(seconds: 1), () {
+                              _controller.finishLoad();
+                            });
+                          },
+                          enableControlFinishRefresh: false,
+                          enableControlFinishLoad: true,
+                          controller: _controller,
+                          header: BezierCircleHeader(
+                              color: TextThemes.ndBlue,
+                              backgroundColor: Colors.white),
+                          footer:
+                              BezierBounceFooter(backgroundColor: Colors.white),
+                          bottomBouncing: false,
+                          child: ListView.builder(
                             controller: _scrollController,
                             itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {
@@ -902,13 +868,10 @@ class _HomePageState extends State<HomePage>
 
                               if (index == 0) {
                                 return Column(children: [
-                                 
-                                 Container(
-                                      height: isLargePhone ? 190 : 160,
-                                      child: MOTD(),
-                                    ),
-                                
-                                  SizedBox(height: 0),
+                                  Container(
+                                    height: isLargePhone ? 190 : 160,
+                                    child: MOTD(),
+                                  ),
                                   _currentIndex == 0 &&
                                           todayOnly == 0 &&
                                           privacyDropdownValue == 'Featured'
@@ -935,15 +898,17 @@ class _HomePageState extends State<HomePage>
                                           items: [
                                               PollView(),
                                               SuggestionBoxCarousel(),
-                                              currentUser.friendGroups != null ?
-                                              GroupCarousel() : null,
+                                              currentUser.friendGroups != null
+                                                  ? GroupCarousel()
+                                                  : null,
                                               HottestMOOV()
                                             ])
                                       : Container(),
+                                  SizedBox(height: 10),
                                 ]);
                               }
                               return (hide == false)
-                                  ? PostOnFeed(course)
+                                  ? PostOnFeedNew(course)
                                   : Text("",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 20));
@@ -954,12 +919,10 @@ class _HomePageState extends State<HomePage>
                     ),
                     FutureBuilder(
                       //Parties
-                      future: postsRef
-                          .where("type", isEqualTo: "Food/Drink")
-                          .get(),
+                      future:
+                          postsRef.where("type", isEqualTo: "Food/Drink").get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                             child: Text("",
                                 textAlign: TextAlign.center,
@@ -970,16 +933,14 @@ class _HomePageState extends State<HomePage>
                           controller: _scrollController,
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1000,8 +961,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1065,7 +1026,7 @@ class _HomePageState extends State<HomePage>
                             // }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1075,11 +1036,12 @@ class _HomePageState extends State<HomePage>
                     ),
                     FutureBuilder(
                       //Parties
-                      future:
-                          postsRef.where("type", isEqualTo: "Parties").orderBy("startDate").get(),
+                      future: postsRef
+                          .where("type", isEqualTo: "Parties")
+                          .orderBy("startDate")
+                          .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                             child: Text("",
                                 textAlign: TextAlign.center,
@@ -1089,16 +1051,14 @@ class _HomePageState extends State<HomePage>
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1119,8 +1079,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1183,7 +1143,7 @@ class _HomePageState extends State<HomePage>
                             // }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1192,11 +1152,12 @@ class _HomePageState extends State<HomePage>
                       },
                     ),
                     FutureBuilder(
-                      future:
-                          postsRef.where("type", isEqualTo: "Shows").orderBy("startDate").get(),
+                      future: postsRef
+                          .where("type", isEqualTo: "Shows")
+                          .orderBy("startDate")
+                          .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                             child: Text("",
                                 textAlign: TextAlign.center,
@@ -1206,16 +1167,14 @@ class _HomePageState extends State<HomePage>
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1236,8 +1195,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1301,7 +1260,7 @@ class _HomePageState extends State<HomePage>
                             // }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1311,11 +1270,12 @@ class _HomePageState extends State<HomePage>
                     ),
                     FutureBuilder(
                       //Sports
-                      future:
-                          postsRef.where("type", isEqualTo: "Sports").orderBy("startDate").get(),
+                      future: postsRef
+                          .where("type", isEqualTo: "Sports")
+                          .orderBy("startDate")
+                          .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                             child: Text("",
                                 textAlign: TextAlign.center,
@@ -1325,16 +1285,14 @@ class _HomePageState extends State<HomePage>
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1355,8 +1313,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1420,7 +1378,7 @@ class _HomePageState extends State<HomePage>
                             // }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1434,8 +1392,7 @@ class _HomePageState extends State<HomePage>
                           .orderBy("startDate")
                           .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                             child: Text("",
                                 textAlign: TextAlign.center,
@@ -1445,16 +1402,14 @@ class _HomePageState extends State<HomePage>
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1475,8 +1430,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1540,7 +1495,7 @@ class _HomePageState extends State<HomePage>
                             }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1549,11 +1504,12 @@ class _HomePageState extends State<HomePage>
                       },
                     ),
                     FutureBuilder(
-                      future:
-                          postsRef.where("type", isEqualTo: "Virtual").orderBy("startDate").get(),
+                      future: postsRef
+                          .where("type", isEqualTo: "Virtual")
+                          .orderBy("startDate")
+                          .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                             child: Text("",
                                 textAlign: TextAlign.center,
@@ -1563,16 +1519,14 @@ class _HomePageState extends State<HomePage>
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1593,8 +1547,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1658,7 +1612,7 @@ class _HomePageState extends State<HomePage>
                             }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1806,7 +1760,7 @@ class Category extends StatelessWidget {
             // }
 
             return (hide == false)
-                ? PostOnFeed(course)
+                ? PostOnFeedNew(course)
                 : Text("",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20));

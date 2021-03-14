@@ -447,8 +447,8 @@ class _ProfilePageState extends State<ProfilePage>
                                         ),
                                         Expanded(
                                             child: CustomScrollView(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
+                                          // physics:
+                                          //     NeverScrollableScrollPhysics(),
                                           slivers: [
                                             SliverGrid(
                                                 delegate:
@@ -458,7 +458,8 @@ class _ProfilePageState extends State<ProfilePage>
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(course);
+                                                  return PostOnTrending(
+                                                      course: course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -527,8 +528,8 @@ class _ProfilePageState extends State<ProfilePage>
                                         ),
                                         Expanded(
                                             child: CustomScrollView(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
+                                          // physics:
+                                          //     NeverScrollableScrollPhysics(),
                                           slivers: [
                                             SliverGrid(
                                                 delegate:
@@ -538,7 +539,8 @@ class _ProfilePageState extends State<ProfilePage>
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(course);
+                                                  return PostOnTrending(
+                                                      course: course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -728,7 +730,7 @@ class _ProfilePageState extends State<ProfilePage>
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: SizedBox(
-                                  height: bigHeight ? 24 : 18,
+                                  height: bigHeight ? 18 : 18,
                                   child: GestureDetector(
                                       onTap: () => Navigator.of(context).push(
                                           MaterialPageRoute(
@@ -764,11 +766,15 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                           ),
                           Padding(
-                            padding:
-                                const EdgeInsets.only(top: 2.0, bottom: 14.0),
-                            child: Text(
-                              dorm,
-                              style: TextStyle(fontSize: 15),
+                            padding: const EdgeInsets.only(
+                                top: 12.0, bottom: 14.0, left: 50, right: 50),
+                            child: SizedBox(
+                              width: 200,
+                              child: Text(
+                                dorm,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 15),
+                              ),
                             ),
                           ),
                           Padding(
@@ -913,7 +919,7 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                             ),
                           ),
-
+                          PopularityBadges(currentUser.id),
                           StreamBuilder(
                               stream: postsRef
                                   .where('userId', isEqualTo: currentUser.id)
@@ -964,7 +970,8 @@ class _ProfilePageState extends State<ProfilePage>
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(course);
+                                                  return PostOnTrending(
+                                                      course: course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1043,7 +1050,8 @@ class _ProfilePageState extends State<ProfilePage>
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(course);
+                                                  return PostOnTrending(
+                                                      course: course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),

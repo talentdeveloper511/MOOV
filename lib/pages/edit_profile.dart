@@ -54,6 +54,7 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<Null> _cropImage() async {
     File croppedFile = await ImageCropper.cropImage(
+        cropStyle: CropStyle.circle,
         maxHeight: 100,
         sourcePath: _image.path,
         aspectRatioPresets: Platform.isAndroid
@@ -75,13 +76,13 @@ class _EditProfileState extends State<EditProfile> {
                 CropAspectRatioPreset.ratio16x9
               ],
         androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Crop that shit',
+            toolbarTitle: 'Croperooni',
             toolbarColor: Colors.deepOrange,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
-          title: 'Crop that shit',
+          title: 'Croperooni',
         ));
     if (croppedFile != null) {
       setState(() {
@@ -188,13 +189,13 @@ class _EditProfileState extends State<EditProfile> {
             ? [CropAspectRatioPreset.ratio16x9]
             : [CropAspectRatioPreset.ratio16x9],
         androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Crop that shit',
+            toolbarTitle: 'Croperooni',
             toolbarColor: Colors.deepOrange,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: true),
         iosUiSettings: IOSUiSettings(
-          title: 'Crop that shit',
+          title: 'Croperooni',
         ));
     if (croppedFile != null) {
       setState(() {

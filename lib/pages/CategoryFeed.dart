@@ -13,8 +13,10 @@ import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/pointAnimation.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/send_moov.dart';
 import 'package:animated_widgets/animated_widgets.dart';
+import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +29,7 @@ import 'package:MOOV/helpers/themes.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -1002,10 +1005,10 @@ class PostOnFeed extends StatelessWidget {
                                                             left: 2.5,
                                                           ),
                                                           child: Icon(
-                                                            Icons.store,
-                                                            size: 20,
-                                                            color:Colors.blue
-                                                          ),
+                                                              Icons.store,
+                                                              size: 20,
+                                                              color:
+                                                                  Colors.blue),
                                                         )
                                                       : verifiedStatus == 2
                                                           ? Padding(
@@ -1176,7 +1179,6 @@ class PostOnFeed extends StatelessWidget {
                                             if (statuses != null &&
                                                 status != 3 &&
                                                 goingCount < maxOccupancy) {
-                                              
                                               changeScore(true);
                                               Database().addGoingGood(
                                                 currentUser.id,
@@ -1267,7 +1269,6 @@ class PostOnFeed extends StatelessWidget {
                 ],
               ),
             )),
-       
         isToday == true
             ? Positioned(
                 top: 0,
@@ -1341,3 +1342,4 @@ class PostOnFeed extends StatelessWidget {
     );
   }
 }
+

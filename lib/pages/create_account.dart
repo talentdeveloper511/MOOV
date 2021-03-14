@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:MOOV/widgets/google_map.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'package:MOOV/helpers/themes.dart';
@@ -18,9 +19,19 @@ import 'package:image_picker/image_picker.dart';
 class CreateAccount extends StatefulWidget {
   @override
   _CreateAccountState createState() => _CreateAccountState();
+  static _CreateAccountState of(BuildContext context) =>
+      context.findAncestorStateOfType<_CreateAccountState>();
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+  String businessLocationLatitude = "";
+  String businessLocationLongitude = "";
+  String businessAddress = "";
+
+  set string(String value) => businessLocationLatitude = value;
+  set string2(String value) => businessLocationLongitude = value;
+  set string3(String value) => businessAddress = value;
+
   int selectedIndex = 0;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -31,10 +42,9 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey4 = GlobalKey<FormState>();
   final _formKey5 = GlobalKey<FormState>();
   final _formKey6 = GlobalKey<FormState>();
-  final _formKey7 = GlobalKey<FormState>();
   final _formKey8 = GlobalKey<FormState>();
   final yearList = ["Freshman", "Sophomore", "Junior", "Senior", "Grad"];
-  final genderList = ["Male", "Female", "Other"];
+  final genderList = ["Female", "Male", "Other"];
 
   String yearDropdownValue = "Freshman";
   String genderDropdownValue = "Female";
@@ -45,7 +55,6 @@ class _CreateAccountState extends State<CreateAccount> {
   String referral;
   String venmoUsername;
   String businessName;
-  String businessAddress;
   String businessDescription;
 
   submit() {
@@ -81,19 +90,17 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   submitBusiness() {
-    
+    setState(() {});
+
     final form5 = _formKey5.currentState;
     final form6 = _formKey6.currentState;
-    final form7 = _formKey7.currentState;
     final form8 = _formKey8.currentState;
 
     if (form5.validate() &&
         form6.validate() &&
-        form7.validate() &&
         form8.validate()) {
       form5.save();
       form6.save();
-      form7.save();
       form8.save();
 
       SnackBar snackbar = SnackBar(
@@ -260,6 +267,8 @@ class _CreateAccountState extends State<CreateAccount> {
       usersRef.doc(user.id).set({
         "id": user.id,
         "photoUrl": user.photoUrl,
+        "badges": {},
+        "isBusiness": false,
         "email": user.email,
         "displayName": user.displayName,
         "bio": "Create a bio here",
@@ -273,6 +282,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "postLimit": 3,
         "sendLimit": 5,
         "verifiedStatus": 0,
+        "followers": [],
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],
@@ -280,7 +290,8 @@ class _CreateAccountState extends State<CreateAccount> {
         "pushSettings": {
           "going": true,
           "hourBefore": true,
-          "suggestions": true
+          "suggestions": true,
+          "friendPosts": true
         },
         "privacySettings": {
           "friendFinderVisibility": true,
@@ -299,15 +310,20 @@ class _CreateAccountState extends State<CreateAccount> {
     final GoogleSignInAccount user = googleSignIn.currentUser;
     DocumentSnapshot doc = await usersRef.doc(user.id).get();
 
+    double businessLatitude = double.parse(businessLocationLatitude);
+    double businessLongitude = double.parse(businessLocationLongitude);
+
     if (!doc.exists) {
-     
       // 2) if the user doesn't exist, then we want to take them to the create account page
 
       // 3) get username from create account, use it to make new user document in users collection
       usersRef.doc(user.id).set({
-         "id": user.id,
+        "id": user.id,
         "email": user.email,
         "displayName": businessName,
+        "businessLocation": GeoPoint(businessLatitude, businessLongitude),
+        "photoUrl": user.photoUrl,
+        "badges": {},
         "bio": businessDescription ?? "Create a bio here",
         "header": "",
         "timestamp": timestamp,
@@ -326,6 +342,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "friendGroups": [],
         "venmoUsername": venmoUsername,
         "pushSettings": {
+          "friendPosts": true,
           "going": true,
           "hourBefore": true,
           "suggestions": true
@@ -336,42 +353,12 @@ class _CreateAccountState extends State<CreateAccount> {
           "incognito": false,
           "showDorm": true
         }
-        
-      
       });
-        if (_image == null){
-         usersRef.doc(user.id).update({
-            "photoUrl": user.photoUrl
-          });
-      }
-       if (_image != null) {
-        firebase_storage.Reference ref = firebase_storage
-            .FirebaseStorage.instance
-            .ref()
-            .child("images/" + currentUser.displayName);
 
-        // StorageReference firebaseStorageRef = FirebaseStorage
-        //     .instance
-        //     .ref()
-        //     .child("images/" + currentUser.displayName);
-       firebase_storage.UploadTask uploadTask;
-
-                                  uploadTask = ref.putFile(_image);
-
-                                  firebase_storage.TaskSnapshot taskSnapshot =
-                                      await uploadTask;
-                                  if (uploadTask.snapshot.state ==
-                                      firebase_storage.TaskState.success) {
-                                    print("added to Firebase Storage");
-                                    final String downloadUrl =
-                                        await taskSnapshot.ref.getDownloadURL();
-
-          usersRef.doc(user.id).update({
-            "photoUrl": downloadUrl,
-          });
-        }
-      }
-    
+      // StorageReference firebaseStorageRef = FirebaseStorage
+      //     .instance
+      //     .ref()
+      //     .child("images/" + currentUser.displayName);
 
       doc = await usersRef.doc(user.id).get();
     }
@@ -666,7 +653,8 @@ class _CreateAccountState extends State<CreateAccount> {
                           GestureDetector(
                             onTap: submit,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 18.0),
+                              padding:
+                                  const EdgeInsets.only(top: 18.0, bottom: 18),
                               child: Container(
                                 height: 50.0,
                                 width: 300.0,
@@ -702,9 +690,9 @@ class _CreateAccountState extends State<CreateAccount> {
                                   textCapitalization: TextCapitalization.words,
                                   validator: (val) {
                                     if (val.trim().length < 2 || val.isEmpty) {
-                                      return "Business name is too short";
+                                      return "Name is too short";
                                     } else if (val.trim().length > 25) {
-                                      return "Business name is too long";
+                                      return "Name is too long";
                                     } else {
                                       return null;
                                     }
@@ -719,46 +707,51 @@ class _CreateAccountState extends State<CreateAccount> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 50),
+                          GoogleMap(
+                              callback: (val) => businessLocationLatitude = val,
+                              callback2: (val) =>
+                                  businessLocationLongitude = val,
+                              callback3: (val) => businessAddress = val),
+                          SizedBox(height: 20),
                           Text("— Optional Details —"),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 15.0, bottom: 10),
-                            child: CircleAvatar(
-                              radius: 55,
-                              backgroundColor: TextThemes.ndGold,
-                              child: CircleAvatar(
-                                radius: 50,
-                                backgroundColor: TextThemes.ndBlue,
-                                child: Stack(children: [
-                                  Opacity(
-                                    opacity: .5,
-                                    child: CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage('images/assets/pete!!.jpg'),
-                                      // backgroundImage: NetworkImage(currentUser.photoUrl),
-                                      radius: 50,
-                                    ),
-                                  ),
-                                  Center(
-                                      child: _image != null
-                                          ? CircleAvatar(
-                                              backgroundImage:
-                                                  FileImage(_image),
-                                              radius: 200,
-                                            )
-                                          : Container(
-                                              width: 100,
-                                              height: 100,
-                                              child: IconButton(
-                                                  icon: Icon(Icons.add_a_photo,
-                                                      size: 50),
-                                                  onPressed: () =>
-                                                      selectImage(context))))
-                                ]),
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding:
+                          //       const EdgeInsets.only(top: 15.0, bottom: 10),
+                          //   child: CircleAvatar(
+                          //     radius: 55,
+                          //     backgroundColor: TextThemes.ndGold,
+                          //     child: CircleAvatar(
+                          //       radius: 50,
+                          //       backgroundColor: TextThemes.ndBlue,
+                          //       child: Stack(children: [
+                          //         Opacity(
+                          //           opacity: .5,
+                          //           child: CircleAvatar(
+                          //             backgroundImage:
+                          //                 AssetImage('lib/assets/tux.jpg'),
+                          //             // backgroundImage: NetworkImage(currentUser.photoUrl),
+                          //             radius: 50,
+                          //           ),
+                          //         ),
+                          //         Center(
+                          //             child: _image != null
+                          //                 ? CircleAvatar(
+                          //                     backgroundImage:
+                          //                         FileImage(_image),
+                          //                     radius: 200,
+                          //                   )
+                          //                 : Container(
+                          //                     width: 100,
+                          //                     height: 100,
+                          //                     child: IconButton(
+                          //                         icon: Icon(Icons.add_a_photo,
+                          //                             size: 50),
+                          //                         onPressed: () =>
+                          //                             selectImage(context))))
+                          //       ]),
+                          //     ),
+                          //   ),
+                          // ),
                           Padding(
                             padding:
                                 EdgeInsets.only(top: 16.0, left: 50, right: 50),
@@ -767,7 +760,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 key: _formKey6,
                                 autovalidate: true,
                                 child: TextFormField(
-                                  autocorrect: false,                                 
+                                  autocorrect: false,
                                   onSaved: (val) => businessDescription = val,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -781,30 +774,18 @@ class _CreateAccountState extends State<CreateAccount> {
                           Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  child: Form(
-                                    key: _formKey7,
-                                    autovalidate: true,
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          .4,
-                                      child: ButtonTheme(
-                                        child: TextFormField(
-                                          autocorrect: false,
-                                          onSaved: (val) =>
-                                              businessAddress = val,
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: "Address",
-                                            labelStyle:
-                                                TextStyle(fontSize: 13.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                Image.asset(
+                                  'lib/assets/venmo-icon.png',
+                                  height: 40,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("@",
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold)),
                                 ),
                                 Container(
                                   child: Form(
@@ -831,11 +812,12 @@ class _CreateAccountState extends State<CreateAccount> {
                               ],
                             ),
                           ),
-                          SizedBox(height: isLargePhone ? 30 : 0),
+                          SizedBox(height: isLargePhone ? 10 : 0),
                           GestureDetector(
                             onTap: submitBusiness,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 18.0),
+                              padding:
+                                  const EdgeInsets.only(top: 18.0, bottom: 18),
                               child: Container(
                                 height: 50.0,
                                 width: 300.0,
