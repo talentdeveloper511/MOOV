@@ -26,9 +26,11 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   String businessLocationLatitude = "";
   String businessLocationLongitude = "";
+  String businessAddress = "";
 
   set string(String value) => businessLocationLatitude = value;
   set string2(String value) => businessLocationLongitude = value;
+  set string3(String value) => businessAddress = value;
 
   int selectedIndex = 0;
 
@@ -40,7 +42,6 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey4 = GlobalKey<FormState>();
   final _formKey5 = GlobalKey<FormState>();
   final _formKey6 = GlobalKey<FormState>();
-  final _formKey7 = GlobalKey<FormState>();
   final _formKey8 = GlobalKey<FormState>();
   final yearList = ["Freshman", "Sophomore", "Junior", "Senior", "Grad"];
   final genderList = ["Female", "Male", "Other"];
@@ -54,7 +55,6 @@ class _CreateAccountState extends State<CreateAccount> {
   String referral;
   String venmoUsername;
   String businessName;
-  String businessAddress;
   String businessDescription;
 
   submit() {
@@ -91,20 +91,16 @@ class _CreateAccountState extends State<CreateAccount> {
 
   submitBusiness() {
     setState(() {});
-    print(businessLocationLatitude);
 
     final form5 = _formKey5.currentState;
     final form6 = _formKey6.currentState;
-    final form7 = _formKey7.currentState;
     final form8 = _formKey8.currentState;
 
     if (form5.validate() &&
         form6.validate() &&
-        form7.validate() &&
         form8.validate()) {
       form5.save();
       form6.save();
-      form7.save();
       form8.save();
 
       SnackBar snackbar = SnackBar(
@@ -712,49 +708,50 @@ class _CreateAccountState extends State<CreateAccount> {
                             ),
                           ),
                           GoogleMap(
-                            callback: (val) => businessLocationLatitude = val,
-                            callback2: (val) => businessLocationLongitude = val,
-                          ),
+                              callback: (val) => businessLocationLatitude = val,
+                              callback2: (val) =>
+                                  businessLocationLongitude = val,
+                              callback3: (val) => businessAddress = val),
                           SizedBox(height: 20),
                           Text("— Optional Details —"),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 15.0, bottom: 10),
-                            child: CircleAvatar(
-                              radius: 55,
-                              backgroundColor: TextThemes.ndGold,
-                              child: CircleAvatar(
-                                radius: 50,
-                                backgroundColor: TextThemes.ndBlue,
-                                child: Stack(children: [
-                                  Opacity(
-                                    opacity: .5,
-                                    child: CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage('lib/assets/tux.jpg'),
-                                      // backgroundImage: NetworkImage(currentUser.photoUrl),
-                                      radius: 50,
-                                    ),
-                                  ),
-                                  Center(
-                                      child: _image != null
-                                          ? CircleAvatar(
-                                              backgroundImage:
-                                                  FileImage(_image),
-                                              radius: 200,
-                                            )
-                                          : Container(
-                                              width: 100,
-                                              height: 100,
-                                              child: IconButton(
-                                                  icon: Icon(Icons.add_a_photo,
-                                                      size: 50),
-                                                  onPressed: () =>
-                                                      selectImage(context))))
-                                ]),
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding:
+                          //       const EdgeInsets.only(top: 15.0, bottom: 10),
+                          //   child: CircleAvatar(
+                          //     radius: 55,
+                          //     backgroundColor: TextThemes.ndGold,
+                          //     child: CircleAvatar(
+                          //       radius: 50,
+                          //       backgroundColor: TextThemes.ndBlue,
+                          //       child: Stack(children: [
+                          //         Opacity(
+                          //           opacity: .5,
+                          //           child: CircleAvatar(
+                          //             backgroundImage:
+                          //                 AssetImage('lib/assets/tux.jpg'),
+                          //             // backgroundImage: NetworkImage(currentUser.photoUrl),
+                          //             radius: 50,
+                          //           ),
+                          //         ),
+                          //         Center(
+                          //             child: _image != null
+                          //                 ? CircleAvatar(
+                          //                     backgroundImage:
+                          //                         FileImage(_image),
+                          //                     radius: 200,
+                          //                   )
+                          //                 : Container(
+                          //                     width: 100,
+                          //                     height: 100,
+                          //                     child: IconButton(
+                          //                         icon: Icon(Icons.add_a_photo,
+                          //                             size: 50),
+                          //                         onPressed: () =>
+                          //                             selectImage(context))))
+                          //       ]),
+                          //     ),
+                          //   ),
+                          // ),
                           Padding(
                             padding:
                                 EdgeInsets.only(top: 16.0, left: 50, right: 50),
@@ -777,30 +774,18 @@ class _CreateAccountState extends State<CreateAccount> {
                           Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  child: Form(
-                                    key: _formKey7,
-                                    autovalidate: true,
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          .4,
-                                      child: ButtonTheme(
-                                        child: TextFormField(
-                                          autocorrect: false,
-                                          onSaved: (val) =>
-                                              businessAddress = val,
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: "Address",
-                                            labelStyle:
-                                                TextStyle(fontSize: 13.0),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                Image.asset(
+                                  'lib/assets/venmo-icon.png',
+                                  height: 40,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("@",
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold)),
                                 ),
                                 Container(
                                   child: Form(
@@ -815,7 +800,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                           onSaved: (val) => venmoUsername = val,
                                           decoration: InputDecoration(
                                             border: OutlineInputBorder(),
-                                            labelText: "Venmo username",
+                                            labelText: "Venmo Username",
                                             labelStyle:
                                                 TextStyle(fontSize: 13.0),
                                           ),
@@ -827,7 +812,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               ],
                             ),
                           ),
-                          SizedBox(height: isLargePhone ? 30 : 0),
+                          SizedBox(height: isLargePhone ? 10 : 0),
                           GestureDetector(
                             onTap: submitBusiness,
                             child: Padding(

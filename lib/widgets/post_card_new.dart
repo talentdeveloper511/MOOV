@@ -1,43 +1,19 @@
-
 import 'dart:async';
-
-import 'package:MOOV/helpers/demo_values.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/pages/Friends_List.dart';
-import 'package:MOOV/pages/HomePage.dart';
-import 'package:MOOV/pages/MessagesHub.dart';
-import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
-import 'package:MOOV/pages/edit_post.dart';
-import 'package:MOOV/pages/leaderboard.dart';
-import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/progress.dart';
-import 'package:MOOV/widgets/send_moov.dart';
-import 'package:animated_widgets/animated_widgets.dart';
 import 'package:animations/animations.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
-import 'dart:math';
-
 import 'package:MOOV/helpers/themes.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bounce/flutter_bounce.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:like_button/like_button.dart';
-import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
-import 'package:page_transition/page_transition.dart';
+
 
 class PostOnFeedNew extends StatefulWidget {
   final DocumentSnapshot course;
@@ -98,7 +74,7 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
             closedBuilder: (context, _) => ConstrainedBox(
               constraints: BoxConstraints(
                   minHeight: 200,
-                  maxHeight: 300,
+                  maxHeight: 250,
                   minWidth: MediaQuery.of(context).size.width),
               child: Container(
                 child: Container(

@@ -872,7 +872,6 @@ class _HomePageState extends State<HomePage>
                                     height: isLargePhone ? 190 : 160,
                                     child: MOTD(),
                                   ),
-                                  SizedBox(height: 0),
                                   _currentIndex == 0 &&
                                           todayOnly == 0 &&
                                           privacyDropdownValue == 'Featured'
@@ -905,10 +904,11 @@ class _HomePageState extends State<HomePage>
                                               HottestMOOV()
                                             ])
                                       : Container(),
+                                  SizedBox(height: 10),
                                 ]);
                               }
                               return (hide == false)
-                                  ? PostOnFeed(course)
+                                  ? PostOnFeedNew(course)
                                   : Text("",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 20));
@@ -1026,7 +1026,7 @@ class _HomePageState extends State<HomePage>
                             // }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1143,7 +1143,7 @@ class _HomePageState extends State<HomePage>
                             // }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1260,7 +1260,7 @@ class _HomePageState extends State<HomePage>
                             // }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1378,7 +1378,7 @@ class _HomePageState extends State<HomePage>
                             // }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1495,7 +1495,7 @@ class _HomePageState extends State<HomePage>
                             }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1612,7 +1612,7 @@ class _HomePageState extends State<HomePage>
                             }
 
                             return (hide == false)
-                                ? PostOnFeed(course)
+                                ? PostOnFeedNew(course)
                                 : Text("",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20));
@@ -1760,7 +1760,7 @@ class Category extends StatelessWidget {
             // }
 
             return (hide == false)
-                ? PostOnFeed(course)
+                ? PostOnFeedNew(course)
                 : Text("",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20));

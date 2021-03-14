@@ -33,7 +33,7 @@ class _FriendFinderState extends State<FriendFinder>
     with AutomaticKeepAliveClientMixin {
       
   Future request() async => await Future.delayed(
-      const Duration(milliseconds: 500), () => usersRef.doc(currentUser.id).snapshots());
+      const Duration(milliseconds: 500), () => usersRef.doc(currentUser.id).get());
   int todayOnly = 0;
   int tomorrowOnly = 0;
 

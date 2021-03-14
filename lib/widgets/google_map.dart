@@ -14,8 +14,9 @@ typedef void Callback(String val);
 class GoogleMap extends StatefulWidget {
   final Callback callback;
   final Callback callback2;
+  final Callback callback3;
 
-  GoogleMap({this.callback, this.callback2});
+  GoogleMap({this.callback, this.callback2, this.callback3});
 
   static final kInitialPosition = LatLng(-33.8567844, 151.213108);
 
@@ -33,7 +34,7 @@ class _GoogleMapState extends State<GoogleMap> {
         address,
       );
 
-   Future<Position> determinePosition() async {
+  Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -82,6 +83,8 @@ class _GoogleMapState extends State<GoogleMap> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: 20),
+              Text("Your Location"),
+              SizedBox(height: 10),
               Expanded(
                 child: Container(
                   height: 500,
@@ -94,6 +97,7 @@ class _GoogleMapState extends State<GoogleMap> {
                     //usePlaceDetailSearch: true,
                     onPlacePicked: (result) {
                       selectedPlace = result;
+                      print(result);
 
                       // Navigator.of(context).pop();
                       setState(() {});
@@ -103,29 +107,35 @@ class _GoogleMapState extends State<GoogleMap> {
                     //autocompleteLanguage: "ko",
                     //region: 'au',
                     //selectInitialPosition: true,
-                    // selectedPlaceWidgetBuilder: (_, selectedPlace, state, isSearchBarFocused) {
-                    //   print("state: $state, isSearchBarFocused: $isSearchBarFocused");
-                    //   return isSearchBarFocused
-                    //       ? Container()
-                    //       : FloatingCard(
-                    //           bottomPosition: 0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
-                    //           leftPosition: 0.0,
-                    //           rightPosition: 0.0,
-                    //           width: 500,
-                    //           borderRadius: BorderRadius.circular(12.0),
-                    //           child: state == SearchingState.Searching
-                    //               ? Center(child: CircularProgressIndicator())
-                    //               : RaisedButton(
-                    //                   child: Text("Pick Here"),
-                    //                   onPressed: () {
-                    //                     // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
-                    //                     //            this will override default 'Select here' Button.
-                    //                     print("do something with [selectedPlace] data");
-                    //                     Navigator.of(context).pop();
-                    //                   },
-                    //                 ),
-                    //         );
-                    // },
+                    selectedPlaceWidgetBuilder:
+                        (_, _selectedPlace, state, isSearchBarFocused) {
+                      print(
+                          "state: $state, isSearchBarFocused: $isSearchBarFocused");
+                      return isSearchBarFocused
+                          ? Container()
+                          : FloatingCard(
+                              bottomPosition:
+                                  0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                              leftPosition: 0.0,
+                              rightPosition: 0.0,
+                              width: 500,
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: state == SearchingState.Searching
+                                  ? Center(child: CircularProgressIndicator())
+                                  : RaisedButton(
+                                      color: Colors.green[100],
+                                      child: Text("Set Address",
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.bold)),
+                                      onPressed: () {
+                                        print(selectedPlace);
+                                        selectedPlace = _selectedPlace;
+                                        setState(() {});
+                                      },
+                                    ),
+                            );
+                    },
                     // pinBuilder: (context, state) {
                     //   if (state == PinState.Idle) {
                     //     return Icon(Icons.favorite_border);
@@ -137,69 +147,6 @@ class _GoogleMapState extends State<GoogleMap> {
                 ),
               ),
               SizedBox(height: 20),
-
-              // RaisedButton(
-              //   child: Text("Load Google Map"),
-              //   onPressed: () {
-              //     _determinePosition();
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) {
-              //           return PlacePicker(
-              //             apiKey: "AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A",
-              //             initialPosition: GoogleMap.kInitialPosition,
-              //             useCurrentLocation: true,
-              //             selectInitialPosition: true,
-
-              //             //usePlaceDetailSearch: true,
-              //             onPlacePicked: (result) {
-              //               selectedPlace = result;
-
-              //               // Navigator.of(context).pop();
-              //               setState(() {});
-              //             },
-              //             //forceSearchOnZoomChanged: true,
-              //             //automaticallyImplyAppBarLeading: false,
-              //             //autocompleteLanguage: "ko",
-              //             //region: 'au',
-              //             //selectInitialPosition: true,
-              //             // selectedPlaceWidgetBuilder: (_, selectedPlace, state, isSearchBarFocused) {
-              //             //   print("state: $state, isSearchBarFocused: $isSearchBarFocused");
-              //             //   return isSearchBarFocused
-              //             //       ? Container()
-              //             //       : FloatingCard(
-              //             //           bottomPosition: 0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
-              //             //           leftPosition: 0.0,
-              //             //           rightPosition: 0.0,
-              //             //           width: 500,
-              //             //           borderRadius: BorderRadius.circular(12.0),
-              //             //           child: state == SearchingState.Searching
-              //             //               ? Center(child: CircularProgressIndicator())
-              //             //               : RaisedButton(
-              //             //                   child: Text("Pick Here"),
-              //             //                   onPressed: () {
-              //             //                     // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
-              //             //                     //            this will override default 'Select here' Button.
-              //             //                     print("do something with [selectedPlace] data");
-              //             //                     Navigator.of(context).pop();
-              //             //                   },
-              //             //                 ),
-              //             //         );
-              //             // },
-              //             // pinBuilder: (context, state) {
-              //             //   if (state == PinState.Idle) {
-              //             //     return Icon(Icons.favorite_border);
-              //             //   } else {
-              //             //     return Icon(Icons.favorite);
-              //             //   }
-              //             // },
-              //           );
-              //         },
-              //       ),
-              //     );
-              //   },
-              // ),
               selectedPlace == null
                   ? Container()
                   : FutureBuilder(
@@ -233,6 +180,8 @@ class _GoogleMapState extends State<GoogleMap> {
                             latitude.toString();
                         CreateAccount.of(context).businessLocationLongitude =
                             longtitude.toString();
+                           CreateAccount.of(context).businessAddress =
+                            selectedPlace.formattedAddress;
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
