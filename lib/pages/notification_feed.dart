@@ -139,57 +139,59 @@ class _NotificationFeedState extends State<NotificationFeed>
     }
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: currentUser.isBusiness ? AppBar(
-           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Home()),
-              );
-            },
-          ),
-          backgroundColor: TextThemes.ndBlue,) : 
-        AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-            },
-          ),
-          backgroundColor: TextThemes.ndBlue,
-          flexibleSpace: FlexibleSpaceBar(
-            titlePadding: EdgeInsets.all(5),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
+        appBar: currentUser.isBusiness
+            ? AppBar(
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Home()),
-                      (Route<dynamic> route) => false,
                     );
                   },
-                  child: Image.asset(
-                    'lib/assets/moovblue.png',
-                    fit: BoxFit.cover,
-                    height: 50.0,
+                ),
+                backgroundColor: TextThemes.ndBlue,
+              )
+            : AppBar(
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
+                ),
+                backgroundColor: TextThemes.ndBlue,
+                flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: EdgeInsets.all(5),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: Image.asset(
+                          'lib/assets/moovblue.png',
+                          fit: BoxFit.cover,
+                          height: 50.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
         body: Container(
           height: MediaQuery.of(context).size.height,
           child: Column(
@@ -936,31 +938,31 @@ class NotificationFeedItem extends StatelessWidget {
     }
 
     if (type == 'going') {
-      activityItemText = "is going to ";
+      activityItemText = " is going to ";
     } else if (type == 'request') {
-      activityItemText = "sent you a friend request.";
+      activityItemText = " sent you a friend request.";
     } else if (type == 'accept') {
-      activityItemText = "accepted your friend request.";
+      activityItemText = " accepted your friend request.";
     } else if (type == 'friendGroup') {
-      activityItemText = 'has added you to ';
+      activityItemText = ' has added you to ';
     } else if (type == 'edit') {
-      activityItemText = 'updated the start time of ';
+      activityItemText = ' updated the start time of ';
     } else if (type == 'invite') {
-      activityItemText = 'has invited you to ';
+      activityItemText = ' has invited you to ';
     } else if (type == 'suggestion') {
-      activityItemText = 'suggested ';
+      activityItemText = ' suggested ';
     } else if (type == 'askToJoin') {
-      activityItemText = 'wants to join!';
+      activityItemText = ' wants to join!';
     } else if (type == 'sent') {
-      activityItemText = 'sent you ';
+      activityItemText = ' sent you ';
     } else if (type == 'businessFollow') {
-      activityItemText = 'is following you.';
+      activityItemText = ' is following you.';
     } else if (type == 'created') {
-      activityItemText = 'just posted ';
+      activityItemText = ' just posted ';
     } else if (type == 'comment') {
-      activityItemText = 'commented: ';
+      activityItemText = ' commented: ';
     } else if (type == 'deleted') {
-      activityItemText = 'has been canceled';
+      activityItemText = ' has been canceled';
     } else if (type == 'badge') {
       activityItemText = 'You have earned the badge, ';
     } else if (type == 'natties') {

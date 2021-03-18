@@ -284,7 +284,7 @@ exports.onCreateGroupFeedItem = functions.firestore
             break;
           case "sent":
             title = `${activityFeedItem.username}`;
-            body = `sent you ${activityFeedItem.title}`;
+            body = `sent ${activityFeedItem.title} to your friend group`;
             break;
           case "askToJoin":
             title = `${activityFeedItem.groupName}`;
