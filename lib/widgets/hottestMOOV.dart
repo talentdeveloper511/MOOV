@@ -92,7 +92,7 @@ class HottestMOOV extends StatelessWidget {
                       ? Padding(
                           padding: const EdgeInsets.only(bottom: 0.0),
                           child: Stack(children: [
-                            PostOnFeed(course),
+                            // PostOnFeed(course),
                             Positioned(
                               top: 140,
                               left: isLargePhone ? 22.5 : 20,

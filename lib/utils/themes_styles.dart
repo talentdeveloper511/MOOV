@@ -13,6 +13,13 @@ class TextThemes {
     fontWeight: FontWeight.w800,
     color: Color.fromRGBO(2, 43, 91, 1.0),
   );
+  
+ static final TextStyle headlineWhite = TextStyle(
+    fontFamily: 'Solway',
+    fontSize: 24,
+    fontWeight: FontWeight.w800,
+    color: Colors.white
+  );
 
   static final TextStyle extraBold = TextStyle(
     fontFamily: 'Solway',

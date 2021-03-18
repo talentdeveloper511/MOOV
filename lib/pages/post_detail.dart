@@ -28,6 +28,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PostDetail extends StatefulWidget {
   String postId;
+  bool isArchive;
   PostDetail(this.postId);
 
   @override
@@ -267,11 +268,9 @@ class _BannerImage extends StatelessWidget {
         ),
       ),
       userId == currentUser.id ||
-      currentUser.id == "108155010592087635288" ||
-                                                                          currentUser.id ==
-                                                                              "118426518878481598299" ||
-                                                                          currentUser.id ==
-                                                                              "107290090512658207959"
+              currentUser.id == "108155010592087635288" ||
+              currentUser.id == "118426518878481598299" ||
+              currentUser.id == "107290090512658207959"
           ? Positioned(
               top: 5,
               right: 5,

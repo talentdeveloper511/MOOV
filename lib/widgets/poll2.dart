@@ -16,6 +16,10 @@ import 'package:polls/polls.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PollView extends StatefulWidget {
+  final ValueNotifier<double> notifier;
+
+  const PollView({Key key, this.notifier});
+
   @override
   _PollViewState createState() => _PollViewState();
 }
@@ -40,7 +44,7 @@ class _PollViewState extends State<PollView> {
         const Duration(milliseconds: 0),
         () => usersRef.doc(id).get(),
       );
-       Future request2(String day) async => await Future.delayed(
+  Future request2(String day) async => await Future.delayed(
         const Duration(milliseconds: 0),
         () => FirebaseFirestore.instance
             .collection('notreDame')
@@ -49,8 +53,10 @@ class _PollViewState extends State<PollView> {
             .doc(day)
             .get(),
       );
-    
 
+  Color _colorTween(Color begin, Color end) {
+    return ColorTween(begin: begin, end: end).transform(widget.notifier.value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +130,12 @@ class _PollViewState extends State<PollView> {
                         Text(
                           question,
                           textAlign: TextAlign.center,
-                          style: TextThemes.headline1,
+                          style: TextStyle(
+                              fontFamily: 'Solway',
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                              color:
+                                  _colorTween(TextThemes.ndBlue, Colors.white)),
                           overflow: TextOverflow.ellipsis,
                         ),
                         Polls(

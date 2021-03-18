@@ -71,6 +71,9 @@ typedef void Callback(String val);
 void locationCheckIn(BuildContext context, Function callback) {
   postsRef.where("going", arrayContains: currentUser.id).get().then((value) {
     for (int i = 0; i < value.docs.length; i++) {
+      if (value.docs[i]['businessPost'] == false) {
+        return null;
+      }
       String title = value.docs[i]['title'];
       String postId = value.docs[i]['postId'];
       Map checkInMap = value.docs[i]['checkInMap'];
@@ -85,8 +88,8 @@ void locationCheckIn(BuildContext context, Function callback) {
 
       if (openWindow &&
           value.docs[i]['businessPost'] &&
-          !checkInMap.keys.contains(currentUser.id)) {
-            
+          !checkInMap.keys.contains(currentUser.id) &&
+          value.docs[i]['userId'] != currentUser.id) {
         //ask for location
         determinePosition();
 

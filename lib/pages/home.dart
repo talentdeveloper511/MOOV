@@ -1,6 +1,7 @@
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/BusinessTab.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
@@ -62,6 +63,11 @@ final messagesRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('directMessages');
+final archiveRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('postArchives');
+
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
@@ -522,7 +528,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
           SearchBar(),
 
-          currentUser.isBusiness ? NotificationFeed() : MOOVSPage(),
+          !currentUser.isBusiness ? Biz() : MOOVSPage(),
           ProfilePage()
         ],
         controller: pageController,

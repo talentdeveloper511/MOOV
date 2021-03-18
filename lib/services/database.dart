@@ -130,18 +130,42 @@ class Database {
     if (type == "Parties" || type == "Bars & Restaurants") {
       isPartyOrBar = true;
     }
-    print(isPartyOrBar);
 
-    postsRef.doc(postId).set({
+    archiveRef.doc(postId).set({
       'title': title,
       'type': type,
+      'businessPost': false,
       'privacy': privacy,
       'description': description,
       'address': address,
       'startDate': startDate,
       'unix': unix,
       'statuses': {
-        for (var item in statuses) item.toString(): -1,
+      },
+      'maxOccupancy': maxOccupancy,
+      'venmo': venmo,
+      'barcode': barcode,
+      'image': imageUrl,
+      'userId': userId,
+      "featured": false,
+      "postId": postId,
+      "posterName": posterName,
+      "push": push,
+      "goingCount": 0,
+      "going": [],
+      "isPartyOrBar": isPartyOrBar
+    });
+
+    postsRef.doc(postId).set({
+      'title': title,
+      'type': type,
+      'businessPost': false,
+      'privacy': privacy,
+      'description': description,
+      'address': address,
+      'startDate': startDate,
+      'unix': unix,
+      'statuses': {
       },
       'maxOccupancy': maxOccupancy,
       'venmo': venmo,
@@ -183,7 +207,6 @@ class Database {
       type,
       privacy,
       address,
-
       DateTime startDate,
       int unix,
       statuses,
@@ -195,12 +218,38 @@ class Database {
       postId,
       posterName,
       bool push,
-      int goingCount
-      }) {
+      int goingCount}) {
     bool isPartyOrBar = false;
     if (type == "Parties" || type == "Bars & Restaurants") {
       isPartyOrBar = true;
     }
+
+    archiveRef.doc(postId).set({
+      'title': title,
+      'type': type,
+      "businessPost": true,
+      "businessLocation": currentUser.businessLocation,
+      "checkInMap": {},
+      'privacy': privacy,
+      'description': description,
+      'address': address,
+      'startDate': startDate,
+      'unix': unix,
+      'statuses': {
+      },
+      'maxOccupancy': maxOccupancy,
+      'venmo': venmo,
+      'barcode': barcode,
+      'image': imageUrl,
+      'userId': userId,
+      "featured": false,
+      "postId": postId,
+      "posterName": posterName,
+      "push": push,
+      "goingCount": 0,
+      "going": [],
+      "isPartyOrBar": isPartyOrBar
+    });
 
     postsRef.doc(postId).set({
       'title': title,
@@ -214,7 +263,6 @@ class Database {
       'startDate': startDate,
       'unix': unix,
       'statuses': {
-        for (var item in statuses) item.toString(): -1,
       },
       'maxOccupancy': maxOccupancy,
       'venmo': venmo,
@@ -664,7 +712,6 @@ class Database {
     postsRef.doc(postId).get().then((value) {
       if (value['statuses'].entries.length == 10) {
         giveBadge(ownerId, "moovMaker");
-        print("DONE");
       }
     });
     String filePath = 'images/$ownerId$title';
