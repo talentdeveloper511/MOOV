@@ -217,7 +217,7 @@ packages:
       name: date_range_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   datetime_picker_formfield:
     dependency: "direct main"
     description:
@@ -474,7 +474,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.18.1"
+    version: "0.19.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -743,7 +743,7 @@ packages:
       name: overlay_support
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "1.2.0"
   page_transition:
     dependency: "direct main"
     description:
@@ -993,7 +993,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.0"
   sqflite:
     dependency: transitive
     description:
@@ -1205,5 +1205,5 @@ packages:
     source: hosted
     version: "4.5.1"
 sdks:
-  dart: ">=2.12.0-0.0 <3.0.0"
-  flutter: ">=1.22.2"
+  dart: ">=2.12.0 <3.0.0"
+  flutter: ">=1.24.0-10.1.pre"
