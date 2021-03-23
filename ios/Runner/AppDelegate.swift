@@ -15,7 +15,7 @@ import GoogleMaps
     FirebaseApp.configure()
     GMSServices.provideAPIKey("AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A")
    
-    // UNUserNotificationCenter.current().delegate = self
+    UNUserNotificationCenter.current().delegate = self
    
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

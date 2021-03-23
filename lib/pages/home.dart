@@ -7,6 +7,7 @@ import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/google_map.dart';
 import 'dart:async';
@@ -197,6 +198,206 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         snackbar.show(context);
       }
     }
+
+    _fcm.configure(
+        onLaunch: (Map<String, dynamic> message) async {
+          print('message: $message');
+          final String pushId = message['link'];
+          final String page = message['page'];
+          final String recipientId = message['recipient'];
+          final String body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+          FlutterAppBadger.updateBadgeCount(1);
+          // if (page == 'chat') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => MessagesHub()));
+          // } else if (page == 'post') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          // } else if (page == 'group') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          // } else if (page == 'user') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          // } else {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => NotificationFeed()));
+          // }
+          if (recipientId == currentUser.id) {
+            print('Notification shown');
+
+            Flushbar snackbar = Flushbar(
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                backgroundGradient: LinearGradient(
+                    colors: [TextThemes.ndGold, TextThemes.ndGold]),
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.green[700],
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.green,
+                messageText: Text(
+                  body,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white),
+                ));
+            // SnackBar snackybar = SnackBar(
+            //     content: Text(body, overflow: TextOverflow.ellipsis),
+            //     backgroundColor: Colors.green);
+            // _scaffoldKey.currentState.showSnackBar(snackybar);
+            snackbar.show(context);
+            // Get.snackbar("Message", body);
+          }
+          print('Notification not shown :(');
+        },
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onResume: (Map<String, dynamic> message) async {
+          // if (Platform.isIOS) {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => MessageList()));
+          // }
+          //   _navigationService.navigateTo(
+          //   routes.EventDetail,
+          //      arguments: '${message["eventId"]}',
+          //   );
+          // } else {
+          //   _navigationService.navigateTo(
+          //    routes.EventDetail,
+          //      arguments: '${message["data"]["eventId"]}',
+          //    );
+          // }
+
+          print('message: $message');
+          final String pushId = message['link'];
+          final String page = message['page'];
+          final String recipientId = message['recipient'];
+          final String body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+          FlutterAppBadger.updateBadgeCount(1);
+          // if (page == 'chat') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => MessagesHub()));
+          // } else if (page == 'post') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          // } else if (page == 'group') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          // } else if (page == 'user') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          // } else {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => NotificationFeed()));
+          // }
+          if (recipientId == currentUser.id) {
+            print('Notification shown');
+            Flushbar snackbar = Flushbar(
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                backgroundGradient: LinearGradient(
+                    colors: [TextThemes.ndGold, TextThemes.ndGold]),
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.green[700],
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.green,
+                messageText: Text(body,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white)));
+            // SnackBar snackybar = SnackBar(
+            //     content: Text(body, overflow: TextOverflow.ellipsis),
+            //     backgroundColor: Colors.green);
+            // _scaffoldKey.currentState.showSnackBar(snackybar);
+            snackbar.show(context);
+
+            // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
+          }
+          print('Notification not shown :(');
+        },
+        onMessage: (Map<String, dynamic> message) async {
+          print('message1: $message');
+          final String pushId = message['link'];
+          final String page = message['page'];
+          final String recipientId = message['recipient'];
+          final String body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+          FlutterAppBadger.updateBadgeCount(1);
+          // if (page == 'chat') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => MessagesHub()));
+          // } else if (page == 'post') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+          // } else if (page == 'group') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+          // } else if (page == 'user') {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+          // } else {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => NotificationFeed()));
+          // }
+          FlutterAppBadger.updateBadgeCount(1);
+          if (recipientId == currentUser.id) {
+            print(pushId);
+            print(page);
+            Flushbar snackbar = Flushbar(
+                onTap: message['page'] == "post"
+                    ? (flushbar) {
+                        print("HHH");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PostDetail(pushId)));
+                      }
+                    : null,
+                padding: EdgeInsets.all(20),
+                borderRadius: 15,
+                flushbarStyle: FlushbarStyle.FLOATING,
+                boxShadows: [
+                  BoxShadow(
+                      color: Colors.blue[800],
+                      offset: Offset(0.0, 2.0),
+                      blurRadius: 3.0)
+                ],
+                icon: Icon(
+                  Icons.directions_run,
+                  color: Colors.green,
+                ),
+                duration: Duration(seconds: 4),
+                flushbarPosition: FlushbarPosition.TOP,
+                backgroundColor: Colors.white,
+                messageText: Text(body,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.black)));
+            // SnackBar snackybar = SnackBar(
+            //     content: Text(body, overflow: TextOverflow.ellipsis),
+            //     backgroundColor: Colors.green);
+            // _scaffoldKey.currentState.showSnackBar(snackybar);
+            snackbar.show(context);
+          }
+          print('Notification not shown :(');
+        });
   }
 
   getiOSPermission() {
