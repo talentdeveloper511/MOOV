@@ -1469,9 +1469,9 @@ void showAlertDialog2(
     });
   }
 
-  showDialog(
-    context: context,
-    child: CupertinoAlertDialog(
+ showDialog(
+      context: context,
+      builder: (context) =>CupertinoAlertDialog(
       title: Text("Delete?",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       content: Text("\nRemove this post from the feed?"),

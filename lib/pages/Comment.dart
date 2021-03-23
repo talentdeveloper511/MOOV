@@ -81,8 +81,8 @@ class PostCommentsState extends State<PostComments> {
         "millis": DateTime.now().millisecondsSinceEpoch.toString()
       });
       if (currentUser.id != postOwnerId) {
-        Database()
-            .commentNotification(postOwnerId, commentController.text, postId, timestamp, postMediaUrl);
+        Database().commentNotification(postOwnerId, commentController.text,
+            postId, timestamp, postMediaUrl);
       }
       commentController.clear();
     }
@@ -226,7 +226,7 @@ class PostComment extends StatelessWidget {
   void showAlertDialog(BuildContext context, chatId, postId, millis) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Delete?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nRemove your message?"),

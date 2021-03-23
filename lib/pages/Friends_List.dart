@@ -273,9 +273,7 @@ class FollowersListState extends State<FollowersList> {
                   itemBuilder: (_, index) => Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: StreamBuilder(
-                            stream: usersRef
-                                .doc(followers[index])
-                                .snapshots(),
+                            stream: usersRef.doc(followers[index]).snapshots(),
                             builder: (context, snapshot2) {
                               return Container(
                                   margin: EdgeInsets.all(0.0),
@@ -329,8 +327,7 @@ class FollowersListState extends State<FollowersList> {
                                                                         context) {
                                                           return OtherProfile(
                                                               snapshot2
-                                                                  .data['id']
-                                                                  );
+                                                                  .data['id']);
                                                         })); //Material
                                                       },
                                                       child: Text(
@@ -667,7 +664,7 @@ class GroupsListState extends State<GroupsList> {
   void showAlertDialog(BuildContext context, groupName, groupId) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Ask to Join?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nYou cool enough?"),

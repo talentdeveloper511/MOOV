@@ -214,25 +214,33 @@ class _SettingsPageState extends State<SettingsPage> {
                                                       UserData()));
                                         },
                                       ),
-                                      home.currentUser.id == "118426518878481598299" || home.currentUser.id == "107290090512658207959" ||home.currentUser.id == "108772008140999951446"||home.currentUser.id == "108155010592087635288"?
-                                      ListTile(
-                                        leading: Icon(
-                                          Icons.settings_remote_outlined,
-                                          color: TextThemes.ndBlue,
-                                        ),
-                                        title: Text("Remote Control"),
-                                        trailing:
-                                            Icon(Icons.keyboard_arrow_right),
-                                        onTap: () {
-                                          // Database().updateAllDocs();
-                                          //open change password
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      RemoteControl()));
-                                        },
-                                      ): Container(),
+                                      home.currentUser.id ==
+                                                  "118426518878481598299" ||
+                                              home.currentUser.id ==
+                                                  "107290090512658207959" ||
+                                              home.currentUser.id ==
+                                                  "108772008140999951446" ||
+                                              home.currentUser.id ==
+                                                  "108155010592087635288"
+                                          ? ListTile(
+                                              leading: Icon(
+                                                Icons.settings_remote_outlined,
+                                                color: TextThemes.ndBlue,
+                                              ),
+                                              title: Text("Remote Control"),
+                                              trailing: Icon(
+                                                  Icons.keyboard_arrow_right),
+                                              onTap: () {
+                                                // Database().updateAllDocs();
+                                                //open change password
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            RemoteControl()));
+                                              },
+                                            )
+                                          : Container(),
                                     ],
                                   ),
                                 ),
@@ -288,7 +296,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Sign out?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nWhere you goin'?"),

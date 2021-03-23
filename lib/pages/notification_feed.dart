@@ -734,7 +734,7 @@ class _NotificationFeedState extends State<NotificationFeed>
   void showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Clear Notifications?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nCleaning up?"),

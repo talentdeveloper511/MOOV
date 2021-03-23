@@ -183,7 +183,7 @@ class _EditGroupState extends State<EditGroup> {
   void showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Leave the group?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nTime to MOOV on?"),
@@ -514,7 +514,7 @@ class _EditGroupState extends State<EditGroup> {
   void showAlertDialog2(BuildContext context, id, displayName) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Crew get smaller?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nKick user out of the group?"),

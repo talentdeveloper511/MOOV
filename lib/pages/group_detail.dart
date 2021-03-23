@@ -58,7 +58,7 @@ class _GroupDetailState extends State<GroupDetail> {
   void showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Leave the group?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nTime to MOOV on?"),
@@ -295,7 +295,8 @@ class _GroupDetailState extends State<GroupDetail> {
                                   },
                                   child: Column(children: [
                                     NotifIconGroup(
-                                      iconData: Icons.notifications_active_outlined,
+                                      iconData:
+                                          Icons.notifications_active_outlined,
                                       gid: gid,
                                     ),
                                     Text(
@@ -546,7 +547,7 @@ class _GroupDetailState extends State<GroupDetail> {
                               ),
                               onPressed: () {
                                 Navigator.pop(context);
-                     },
+                              },
                             ),
                             backgroundColor: TextThemes.ndBlue,
                             flexibleSpace: FlexibleSpaceBar(
@@ -663,8 +664,8 @@ class _GroupDetailState extends State<GroupDetail> {
                           Container(
                               height: 200,
                               width: MediaQuery.of(context).size.width,
-                              child: Image.network(groupPic,
-                                  fit: BoxFit.cover)),
+                              child:
+                                  Image.network(groupPic, fit: BoxFit.cover)),
                           Container(
                               child: Column(children: [
                             Container(
@@ -674,8 +675,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                   physics: AlwaysScrollableScrollPhysics(),
                                   itemCount: members.length,
                                   itemBuilder: (_, index) {
-                                    DocumentSnapshot course =
-                                        snapshot2.data;
+                                    DocumentSnapshot course = snapshot2.data;
 
                                     return Padding(
                                       padding: const EdgeInsets.only(
@@ -689,28 +689,23 @@ class _GroupDetailState extends State<GroupDetail> {
                                               CrossAxisAlignment.center,
                                           children: <Widget>[
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.only(
-                                                      top: 30.0,
-                                                      bottom: 10),
+                                              padding: const EdgeInsets.only(
+                                                  top: 30.0, bottom: 10),
                                               child: GestureDetector(
                                                 onTap: () {
                                                   if (course['id'] ==
                                                       strUserId) {
                                                     Navigator.of(context).push(
                                                         MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    ProfilePageWithHeader()));
+                                                            builder: (context) =>
+                                                                ProfilePageWithHeader()));
                                                   } else {
                                                     Navigator.of(context).push(
                                                         MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    OtherProfile(
-                                                                      course[
-                                                                          'id'],
-                                                                    )));
+                                                            builder: (context) =>
+                                                                OtherProfile(
+                                                                  course['id'],
+                                                                )));
                                                   }
                                                 },
                                                 child: CircleAvatar(
@@ -731,22 +726,17 @@ class _GroupDetailState extends State<GroupDetail> {
                                               ),
                                             ),
                                             Container(
-                                              alignment:
-                                                  Alignment(0.0, 0.0),
+                                              alignment: Alignment(0.0, 0.0),
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(
-                                                              20)),
+                                                          Radius.circular(20)),
                                                   gradient: LinearGradient(
-                                                    begin:
-                                                        Alignment.topCenter,
-                                                    end: Alignment
-                                                        .bottomCenter,
+                                                    begin: Alignment.topCenter,
+                                                    end: Alignment.bottomCenter,
                                                     colors: <Color>[
-                                                      Colors.black
-                                                          .withAlpha(0),
+                                                      Colors.black.withAlpha(0),
                                                       Colors.black,
                                                       Colors.black12,
                                                     ],
@@ -754,15 +744,12 @@ class _GroupDetailState extends State<GroupDetail> {
                                                 ),
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(
-                                                          4.0),
+                                                      const EdgeInsets.all(4.0),
                                                   child: Text(
-                                                    snapshot.data
-                                                            .docs[index]
+                                                    snapshot.data.docs[index]
                                                         ['displayName'],
                                                     style: TextStyle(
-                                                        fontFamily:
-                                                            'Solway',
+                                                        fontFamily: 'Solway',
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: Colors.white,

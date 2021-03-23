@@ -243,7 +243,7 @@ class _NotificationFeedGroupState extends State<NotificationFeedGroup> {
   void showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Clear?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nCleanin' up?"),

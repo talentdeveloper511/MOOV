@@ -49,7 +49,7 @@ class _MOOVSPageState extends State<MOOVSPage>
   int selectedIndex = 0;
 
   // Current Index of tab
-  
+
   int _currentIndex = 1;
 
   String text = 'https://www.whatsthemoov.com';
@@ -138,7 +138,7 @@ class _MOOVSPageState extends State<MOOVSPage>
       BuildContext context, postId, userId, title, statuses, posterName) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Delete?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nRemove this post from the feed?"),

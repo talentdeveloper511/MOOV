@@ -296,7 +296,8 @@ class _NextMOOVState extends State<NextMOOV> {
   void showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) =>
+       CupertinoAlertDialog(
         title: Text("Unsuggest?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nRemove this suggestion?"),

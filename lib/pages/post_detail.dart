@@ -1421,7 +1421,7 @@ class _ButtonsState extends State<Buttons> {
   void showMax(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("This MOOV is currently full",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nHate to see it"),

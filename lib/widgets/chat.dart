@@ -631,7 +631,7 @@ class _CommentState extends State<Comment> {
       BuildContext context, chatId, gid, millis, isGroupChat, directMessageId) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Delete?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nRegret sending that message?"),

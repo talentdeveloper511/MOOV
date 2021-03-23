@@ -101,9 +101,9 @@ void locationCheckIn(BuildContext context, Function callback) {
               value.docs[i]['businessLocation'].latitude,
               value.docs[i]['businessLocation'].longitude);
           if (distance < 600) {
-            showDialog(
-              context: context,
-              child: CupertinoAlertDialog(
+             showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
                 title: Text("Check In",
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold)),

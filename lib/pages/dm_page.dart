@@ -156,7 +156,7 @@ class PostComment extends StatelessWidget {
   void showAlertDialog(BuildContext context, chatId, postId, millis) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Delete?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nRemove your message?"),

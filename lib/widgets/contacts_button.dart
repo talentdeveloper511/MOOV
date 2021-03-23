@@ -105,7 +105,7 @@ class SeeContactsButton extends StatelessWidget {
   void showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Invite Friends, \nWin Cash",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text(

@@ -530,7 +530,9 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                                     child: Text(
                                                         "Friends Going: ",
                                                         style: TextStyle(
-                                                          color: _colorTween(Colors.black, Colors.white),
+                                                            color: _colorTween(
+                                                                Colors.black,
+                                                                Colors.white),
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold)),
@@ -638,8 +640,9 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                                     .toDate()),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: _colorTween(TextThemes.ndBlue, Colors.white)
-                                        )),
+                                                color: _colorTween(
+                                                    TextThemes.ndBlue,
+                                                    Colors.white))),
                                       ],
                                     ),
                                     Row(
@@ -650,7 +653,9 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                               textAlign: TextAlign.end,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
-                                                color: _colorTween(Colors.black, Colors.blue),
+                                                  color: _colorTween(
+                                                      Colors.black,
+                                                      Colors.blue),
                                                   fontWeight: FontWeight.bold)),
                                         ),
                                       ],
@@ -663,25 +668,25 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                         ),
                       );
                     }),
-                    widget.notifier.value == 1 ?
-                    Container(
-                      height: 20,
-                      color: Colors.black87,
-                      child: Divider(
-                  color: Colors.blue,
-                  height: 20,
-                  thickness: 1,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                    ):
-                Divider(
-                  color: TextThemes.ndBlue,
-                  height: 20,
-                  thickness: .5,
-                  indent: 20,
-                  endIndent: 20,
-                ),
+                widget.notifier.value == 1
+                    ? Container(
+                        height: 20,
+                        color: Colors.black87,
+                        child: Divider(
+                          color: Colors.blue,
+                          height: 20,
+                          thickness: 1,
+                          indent: 20,
+                          endIndent: 20,
+                        ),
+                      )
+                    : Divider(
+                        color: TextThemes.ndBlue,
+                        height: 20,
+                        thickness: .5,
+                        indent: 20,
+                        endIndent: 20,
+                      ),
               ],
             ),
           );
@@ -691,7 +696,7 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
   void showMax(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("This MOOV is currently full",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nHate to see it"),

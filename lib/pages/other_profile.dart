@@ -53,7 +53,7 @@ class _OtherProfileState extends State<OtherProfile> {
   void showAlertDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Unfriend user?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nCut 'em out?"),
@@ -81,7 +81,7 @@ class _OtherProfileState extends State<OtherProfile> {
   void showAlertDialog2(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Unfollow?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: Text("\nDon't fuck with 'em anymore?"),
@@ -1422,7 +1422,7 @@ class _OtherProfileState extends State<OtherProfile> {
   remoteBadgeDialog(BuildContext context) {
     showDialog(
       context: context,
-      child: CupertinoAlertDialog(
+      builder: (context) => CupertinoAlertDialog(
         title: Text("Remote Control Shit",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         actions: [
