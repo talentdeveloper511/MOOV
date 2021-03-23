@@ -15,11 +15,35 @@
       },
       "oauth_client": [
         {
-          "client_id": "539403240889-tbehpefa2mmq0im4j5shehhoup16pepb.apps.googleusercontent.com",
+          "client_id": "539403240889-4gejop4n31pstd9b6seacu162n6vn17f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.MOOV3",
-            "certificate_hash": "c17dafe6ebef404cb7734a6d6d753a85748f4cf7"
+            "certificate_hash": "3d22a6ab2758b28c5d446e44e4fe066b521762f4"
+          }
+        },
+        {
+          "client_id": "539403240889-mtngt8lbmeo77pq507f53hf06nu0fqes.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.MOOV3",
+            "certificate_hash": "cb175669c2606c86d01514ce7be8023c57ec734c"
+          }
+        },
+        {
+          "client_id": "539403240889-oavfca1hpf0glve121jl32p3sqghua1q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.MOOV3",
+            "certificate_hash": "4d79aed0fc7f01bae376dd9cca3988d4e9a180ba"
+          }
+        },
+        {
+          "client_id": "539403240889-pepu1kttq43ameumndur0sbk33gt7i8q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.MOOV3",
+            "certificate_hash": "9dd656c74a4449520d877b6155f0f00146072f88"
           }
         },
         {
@@ -36,14 +60,14 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "539403240889-ptr88r86nvou6iu8dbdfj33vhqh93tar.apps.googleusercontent.com",
+              "client_id": "539403240889-crs4qlkboi73l9ju84a7ocnbhh3tslfk.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "539403240889-ktah8982icuobtdo02rvi20rghoad92s.apps.googleusercontent.com",
+              "client_id": "539403240889-1jenth4caipickvn7guka4mohiov020c.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.alvinalaphat"
+                "bundle_id": "com.MOOV.ND"
               }
             }
           ]
