@@ -763,7 +763,7 @@ class Database {
     postsRef.doc(postId).get().then((doc) {
       if (doc.exists) {
         // _storage.ref().child(filePath).delete();
-        ref.delete();
+        // ref.delete();
 
         doc.reference.delete();
       }

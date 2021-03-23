@@ -1,10 +1,13 @@
+import 'package:MOOV/main.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:flutter/material.dart';
 
 class NotifyingPageView extends StatefulWidget {
   final ValueNotifier<double> notifier;
+  int currentIndex;
 
-  const NotifyingPageView({Key key, this.notifier}) : super(key: key);
+  NotifyingPageView({Key key, this.notifier, this.currentIndex})
+      : super(key: key);
 
   @override
   _NotifyingPageViewState createState() => _NotifyingPageViewState();
@@ -43,12 +46,16 @@ class _NotifyingPageViewState extends State<NotifyingPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(
-      onPageChanged: (value) {
-        // setState(() {});
-      },
-      children: _pages,
-      controller: _pageController,
+    return PageStorage(
+      key: homeKey,
+      bucket: bucketGlobalHome,
+      child: PageView(
+        onPageChanged: (value) {
+          setState(() {});
+        },
+        children: _pages,
+        controller: _pageController,
+      ),
     );
   }
 }

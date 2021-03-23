@@ -218,9 +218,11 @@ class _BizState extends State<Biz> {
                   DocumentSnapshot course = snapshot.data.docs[pageNumber];
 
                   return Container(
-                      height: MediaQuery.of(context).size.height * .45,
+                      height: isLargePhone
+                          ? MediaQuery.of(context).size.height * .45
+                          : MediaQuery.of(context).size.height * .4,
                       child: Column(children: [
-                        SizedBox(height: 20),
+                        SizedBox(height: isLargePhone ? 20 : 10),
                         Container(
                             height: 20,
                             child: Center(
@@ -233,7 +235,7 @@ class _BizState extends State<Biz> {
                               ),
                             )),
                         Container(
-                          height: 160,
+                          height: isLargePhone ? 160 : 145,
                           child: Stack(
                             children: <Widget>[
                               buildPageView(snapshot, count, _goingController),
@@ -274,9 +276,11 @@ class _BizState extends State<Biz> {
                       DocumentSnapshot course2 = snapshot2.data.docs[i];
 
                       return Container(
-                          height: MediaQuery.of(context).size.height / 3.9,
+                          height: isLargePhone
+                              ? MediaQuery.of(context).size.height / 3.9
+                              : MediaQuery.of(context).size.height / 2.75,
                           child: Column(children: [
-                            SizedBox(height: 10),
+                            SizedBox(height: isLargePhone ? 10 : 10),
                             Center(
                               child: GradientText(
                                 "Post Again",
@@ -287,7 +291,7 @@ class _BizState extends State<Biz> {
                               ),
                             ),
                             Container(
-                              height: 150,
+                              height: isLargePhone ? 150 : 140,
                               child: Stack(
                                 children: <Widget>[
                                   buildPageView(
@@ -497,6 +501,7 @@ class _BizState extends State<Biz> {
                             ),
                           ]));
                     }
+                    return Container();
                   })
         ]));
   }
