@@ -16,8 +16,10 @@ import GoogleMaps
     GMSServices.provideAPIKey("AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A")
    
     UNUserNotificationCenter.current().delegate = self
+    
    
     GeneratedPluginRegistrant.register(with: self)
+    application.registerForRemoteNotifications()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 //     override public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
