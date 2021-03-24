@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 
 import 'package:MOOV/main.dart';
@@ -9,6 +10,7 @@ import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/friend_requests.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,6 +34,7 @@ class _NotificationFeedState extends State<NotificationFeed>
   Map<int, Widget> map = new Map();
   List<Widget> childWidgets;
   int selectedIndex = 0;
+  int id = 0;
 
   Widget getChildWidget() => childWidgets[selectedIndex];
 
@@ -58,6 +61,15 @@ class _NotificationFeedState extends State<NotificationFeed>
   void dispose() {
     super.dispose();
     _tabController.dispose();
+  }
+
+  void refreshData() {
+    id++;
+  }
+
+  FutureOr onGoBack(dynamic value) {
+    refreshData();
+    setState(() {});
   }
 
   String docId;
@@ -227,6 +239,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                               style: TextStyle(fontSize: 16.5),
                             ),
                     ),
+
                     // Positioned(
                     //   top: 8,
                     //   right: 0,
@@ -282,6 +295,39 @@ class _NotificationFeedState extends State<NotificationFeed>
                   ]),
                 ],
               ),
+              currentUser.friendRequests.length != 0
+                  ? GestureDetector(
+                      onTap: () => {
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FriendRequests(id: currentUser.id)))
+                                .then(onGoBack)
+                          },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.black, width: .25)),
+                        height: 50,
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text(
+                              'Friend Requests (' +
+                                  currentUser.friendRequests.length.toString() +
+                                  ')',
+                            )),
+                        alignment: Alignment.centerLeft,
+                      ))
+                  : Container(),
+              // Container(
+              //   decoration: BoxDecoration(
+              //       border: Border.all(color: Colors.black, width: .5)),
+              //   height: 50,
+              //   child: Padding(
+              //       padding: EdgeInsets.only(left: 20), child: Text('Invites')),
+              //   alignment: Alignment.centerLeft,
+              // ),
               SingleChildScrollView(
                 child: Container(
                   height: _currentIndex == 0
@@ -305,7 +351,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                                 return Container(
                                     child: Center(
                                         child: Text(
-                                  "Up to date on your notifications.",
+                                  "Up to date.",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: TextThemes.ndBlue, fontSize: 25),
@@ -938,31 +984,31 @@ class NotificationFeedItem extends StatelessWidget {
     }
 
     if (type == 'going') {
-      activityItemText = " is going to ";
+      activityItemText = "is going to ";
     } else if (type == 'request') {
-      activityItemText = " sent you a friend request.";
+      activityItemText = "sent you a friend request.";
     } else if (type == 'accept') {
-      activityItemText = " accepted your friend request.";
+      activityItemText = "accepted your friend request.";
     } else if (type == 'friendGroup') {
-      activityItemText = ' has added you to ';
+      activityItemText = 'has added you to ';
     } else if (type == 'edit') {
-      activityItemText = ' updated the start time of ';
+      activityItemText = 'updated the start time of ';
     } else if (type == 'invite') {
-      activityItemText = ' has invited you to ';
+      activityItemText = 'has invited you to ';
     } else if (type == 'suggestion') {
-      activityItemText = ' suggested ';
+      activityItemText = 'suggested ';
     } else if (type == 'askToJoin') {
-      activityItemText = ' wants to join!';
+      activityItemText = 'wants to join!';
     } else if (type == 'sent') {
-      activityItemText = ' sent you ';
+      activityItemText = 'sent you ';
     } else if (type == 'businessFollow') {
-      activityItemText = ' is following you.';
+      activityItemText = 'is following you.';
     } else if (type == 'created') {
-      activityItemText = ' just posted ';
+      activityItemText = 'just posted ';
     } else if (type == 'comment') {
-      activityItemText = ' commented: ';
+      activityItemText = 'commented on ';
     } else if (type == 'deleted') {
-      activityItemText = ' has been canceled';
+      activityItemText = 'has been canceled';
     } else if (type == 'badge') {
       activityItemText = 'You have earned the badge, ';
     } else if (type == 'natties') {

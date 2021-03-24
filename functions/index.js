@@ -561,7 +561,7 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                   data: {recipient: user.id, click_action: "FLUTTER_NOTIFICATION_CLICK"},
                 };
                 if (data.startDate.toDate().getDate() == now.toDate().getDate() && data.startDate.toDate().getMonth() == now.toDate().getMonth() && data.startDate.toDate().getFullYear() == now.toDate().getFullYear()) {
-                  if ((data.startDate.toDate().getHours() - 1 == now.toDate().getHours()) && data.scheduled != "true") {
+                  if ((data.startDate.toDate().getMinutes() - 60 == now.toDate().getMinutes()) && data.scheduled != "true") {
                     admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).set({
                       scheduled: "true",
                     }, {merge: true});
