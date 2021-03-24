@@ -11,6 +11,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+
+final bucketGlobalHome = PageStorageBucket();
+ PageStorageKey homeKey = PageStorageKey("homeKey");
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -71,7 +75,10 @@ class MOOV extends StatelessWidget {
           // home: Scaffold(
           //   body: push.MessageHandler(),
           // )
-          home: Home(),
+          home: PageStorage(
+            bucket: bucketGlobalHome,
+            key: homeKey,
+            child: Home()),
         ),
       ),
     );

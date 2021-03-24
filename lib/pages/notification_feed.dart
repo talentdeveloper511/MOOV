@@ -1059,7 +1059,7 @@ class NotificationFeedItem extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
-                          text: ' $activityItemText',
+                          text: '$activityItemText',
                         ),
                         title != null || groupName != null
                             ? TextSpan(

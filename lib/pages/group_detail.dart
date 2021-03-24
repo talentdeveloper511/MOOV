@@ -441,98 +441,96 @@ class _GroupDetailState extends State<GroupDetail> {
                                     )
                                   ])),
                                 ]),
-                                SingleChildScrollView(
-                                  child: Column(children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 20.0),
-                                      child: Text(
-                                        "NEXT MOOV",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                Column(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Text(
+                                      "NEXT MOOV",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    Suggestions(gid),
-                                    Padding(
-                                      padding: const EdgeInsets.all(20),
-                                      child: RaisedButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                      type: PageTransitionType
-                                                          .bottomToTop,
-                                                      child: SearchSetMOOV(
-                                                          members,
-                                                          gid,
-                                                          snapshot2.data[
-                                                              'groupName'])))
-                                              .then(onGoBack);
-                                        },
-                                        color: TextThemes.ndBlue,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(2.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Icon(Icons.edit,
-                                                  color: TextThemes.ndGold),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text('Suggest a MOOV',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20)),
-                                              ),
-                                            ],
-                                          ),
+                                  ),
+                                  Suggestions(gid),
+                                  Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: SearchSetMOOV(
+                                                        members,
+                                                        gid,
+                                                        snapshot2.data[
+                                                            'groupName'])))
+                                            .then(onGoBack);
+                                      },
+                                      color: TextThemes.ndBlue,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.edit,
+                                                color: TextThemes.ndGold),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text('Suggest a MOOV',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20)),
+                                            ),
+                                          ],
                                         ),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0)),
                                       ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0)),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 0.0),
-                                      child: Column(
-                                        children: [
-                                          Text("Talk about it",
-                                              style: TextStyle(
-                                                  color: TextThemes.ndBlue,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold)),
-                                          SizedBox(height: 10),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: TextThemes.ndBlue),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
-                                                child: Chat(
-                                                  directMessageId: " ",
-                                                  gid: gid,
-                                                  isGroupChat: true,
-                                                  members: members,
-                                                ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 0.0),
+                                    child: Column(
+                                      children: [
+                                        Text("Talk about it",
+                                            style: TextStyle(
+                                                color: TextThemes.ndBlue,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold)),
+                                        SizedBox(height: 10),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: TextThemes.ndBlue),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
+                                              child: Chat(
+                                                directMessageId: " ",
+                                                gid: gid,
+                                                isGroupChat: true,
+                                                members: members,
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      height: 50,
-                                    )
-                                  ]),
-                                )
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  )
+                                ])
                               ],
                             ),
                           ),
@@ -661,131 +659,126 @@ class _GroupDetailState extends State<GroupDetail> {
                                 ),
                               ),
                             ]),
-                        body: SingleChildScrollView(
-                            child: Column(
-                          children: [
-                            Stack(children: [
-                              Container(
-                                  height: 200,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Image.network(groupPic,
-                                      fit: BoxFit.cover)),
-                              Container(
-                                  child: Column(children: [
-                                Container(
-                                  height: 200,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      physics: AlwaysScrollableScrollPhysics(),
-                                      itemCount: members.length,
-                                      itemBuilder: (_, index) {
-                                        DocumentSnapshot course =
-                                            snapshot2.data;
+                        body: Stack(children: [
+                          Container(
+                              height: 200,
+                              width: MediaQuery.of(context).size.width,
+                              child: Image.network(groupPic,
+                                  fit: BoxFit.cover)),
+                          Container(
+                              child: Column(children: [
+                            Container(
+                              height: 200,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  itemCount: members.length,
+                                  itemBuilder: (_, index) {
+                                    DocumentSnapshot course =
+                                        snapshot2.data;
 
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8),
-                                          child: Container(
-                                            height: 200,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 30.0,
-                                                          bottom: 10),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      if (course['id'] ==
-                                                          strUserId) {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        ProfilePageWithHeader()));
-                                                      } else {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        OtherProfile(
-                                                                          course[
-                                                                              'id'],
-                                                                        )));
-                                                      }
-                                                    },
-                                                    child: CircleAvatar(
-                                                      radius: 54,
-                                                      backgroundColor:
-                                                          TextThemes.ndGold,
-                                                      child: CircleAvatar(
-                                                        // backgroundImage: snapshot.data
-                                                        //     .documents[index].data['photoUrl'],
-                                                        backgroundImage:
-                                                            NetworkImage(snapshot
-                                                                    .data
-                                                                    .docs[index]
-                                                                ['photoUrl']),
-                                                        radius: 50,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  alignment:
-                                                      Alignment(0.0, 0.0),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20)),
-                                                      gradient: LinearGradient(
-                                                        begin:
-                                                            Alignment.topCenter,
-                                                        end: Alignment
-                                                            .bottomCenter,
-                                                        colors: <Color>[
-                                                          Colors.black
-                                                              .withAlpha(0),
-                                                          Colors.black,
-                                                          Colors.black12,
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Text(
-                                                        snapshot.data
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8),
+                                      child: Container(
+                                        height: 200,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(
+                                                      top: 30.0,
+                                                      bottom: 10),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (course['id'] ==
+                                                      strUserId) {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    ProfilePageWithHeader()));
+                                                  } else {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    OtherProfile(
+                                                                      course[
+                                                                          'id'],
+                                                                    )));
+                                                  }
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 54,
+                                                  backgroundColor:
+                                                      TextThemes.ndGold,
+                                                  child: CircleAvatar(
+                                                    // backgroundImage: snapshot.data
+                                                    //     .documents[index].data['photoUrl'],
+                                                    backgroundImage:
+                                                        NetworkImage(snapshot
+                                                                .data
                                                                 .docs[index]
-                                                            ['displayName'],
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'Solway',
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.white,
-                                                            fontSize: 16.0),
-                                                      ),
-                                                    ),
+                                                            ['photoUrl']),
+                                                    radius: 50,
                                                   ),
                                                 ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      }),
-                                )
-                              ])),
-                            ]),
-                          ],
-                        )));
+                                            Container(
+                                              alignment:
+                                                  Alignment(0.0, 0.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              20)),
+                                                  gradient: LinearGradient(
+                                                    begin:
+                                                        Alignment.topCenter,
+                                                    end: Alignment
+                                                        .bottomCenter,
+                                                    colors: <Color>[
+                                                      Colors.black
+                                                          .withAlpha(0),
+                                                      Colors.black,
+                                                      Colors.black12,
+                                                    ],
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(
+                                                          4.0),
+                                                  child: Text(
+                                                    snapshot.data
+                                                            .docs[index]
+                                                        ['displayName'],
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'Solway',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white,
+                                                        fontSize: 16.0),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            )
+                          ])),
+                        ]));
               });
         });
   }

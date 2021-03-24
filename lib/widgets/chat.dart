@@ -74,11 +74,13 @@ class ChatState extends State<Chat> {
       this.members});
 
   adjustChat() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 100),
-      curve: Curves.fastOutSlowIn,
-    );
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 100),
+        curve: Curves.fastOutSlowIn,
+      );
+    }
   }
 
   buildChat() {
@@ -88,12 +90,14 @@ class ChatState extends State<Chat> {
     reference.snapshots().listen((querySnapshot) {
       querySnapshot.docChanges.forEach((change) {
         if (querySnapshot.docs.isNotEmpty) {
-          Timer(
-              Duration(milliseconds: 200),
-              () => _scrollController.animateTo(
+          Timer(Duration(milliseconds: 200), () {
+            if (_scrollController.hasClients) {
+              _scrollController.animateTo(
                   _scrollController.position.maxScrollExtent,
                   curve: Curves.easeIn,
-                  duration: Duration(milliseconds: 300)));
+                  duration: Duration(milliseconds: 300));
+            }
+          });
         }
       });
     });
@@ -213,12 +217,14 @@ class ChatState extends State<Chat> {
               "people": [currentUser.id, otherPerson],
               "isGroupChat": false,
             }, SetOptions(merge: true));
-      Timer(
-          Duration(milliseconds: 200),
-          () => _scrollController.animateTo(
+      Timer(Duration(milliseconds: 200), () {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
               _scrollController.position.maxScrollExtent,
               curve: Curves.easeIn,
-              duration: Duration(milliseconds: 200)));
+              duration: Duration(milliseconds: 200));
+        }
+      });
       commentController.clear();
     }
   }
@@ -228,7 +234,9 @@ class ChatState extends State<Chat> {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     Timer(Duration(milliseconds: 200), () {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
     });
     return Container(
       height: isLargePhone ? 500 : 370,
@@ -272,7 +280,7 @@ class ChatState extends State<Chat> {
                                 pageBuilder:
                                     (context, animation1, animation2) =>
                                         MessageDetail(directMessageId,
-                                            otherPerson, false, " ",[]),
+                                            otherPerson, false, " ", []),
                                 transitionDuration: Duration(seconds: 0),
                               ),
                             );
@@ -391,13 +399,12 @@ class _CommentState extends State<Comment> {
     var diff = now.difference(date);
     String timeAgo = '';
 
-                  timeAgo = format.format(date);
+    timeAgo = format.format(date);
 
-                  if (1440 <= diff.inMinutes && diff.inMinutes <= 2880) {
-                    timeAgo =
-                      format2.format(date);
-                  }
-               
+    if (1440 <= diff.inMinutes && diff.inMinutes <= 2880) {
+      timeAgo = format2.format(date);
+    }
+
     bool middleFinger = false;
     int status = -1;
     List reactionValues = reactions.values.toList();
@@ -451,11 +458,10 @@ class _CommentState extends State<Comment> {
                         },
                         reactions: [
                             Reaction(
-                              previewIcon: Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 8.0, top: 6, bottom: 6, left: 8),
-                                  child: Text("Coming soon")
-                                ),
+                                previewIcon: Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 8.0, top: 6, bottom: 6, left: 8),
+                                    child: Text("Coming soon")),
                                 // previewIcon: Padding(
                                 //   padding: const EdgeInsets.only(
                                 //       right: 8.0, top: 4, bottom: 6),
@@ -542,7 +548,10 @@ class _CommentState extends State<Comment> {
                     ? Container()
                     : Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: Text(timeAgo, style: TextStyle(fontSize: 10),),
+                        child: Text(
+                          timeAgo,
+                          style: TextStyle(fontSize: 10),
+                        ),
                       ),
                 trailing: Text(''),
               )
@@ -599,7 +608,11 @@ class _CommentState extends State<Comment> {
                         ? Container()
                         : Padding(
                             padding: const EdgeInsets.all(3.0),
-                        child: Text(timeAgo, textAlign: TextAlign.right, style: TextStyle(fontSize: 10),),
+                            child: Text(
+                              timeAgo,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(fontSize: 10),
+                            ),
                           ),
                     trailing: Padding(
                       padding: const EdgeInsets.only(top: 8.0),

@@ -271,6 +271,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     configurePushNotifications();
   }
 
+  int currentIndex = 0;
+
   @override
   void dispose() {
     pageController.dispose();
@@ -296,9 +298,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   onTap(int pageIndex) {
-    pageController.jumpToPage(
-      pageIndex,
-    );
+    pageController.jumpToPage(pageIndex);
+    setState(() {
+      currentIndex = pageIndex;
+    });
   }
 
   Scaffold buildAuthScreen() {
@@ -528,7 +531,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
           SearchBar(),
 
-          !currentUser.isBusiness ? Biz() : MOOVSPage(),
+          currentUser.isBusiness ? Biz() : MOOVSPage(),
           ProfilePage()
         ],
         controller: pageController,
@@ -536,7 +539,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       bottomNavigationBar: CupertinoTabBar(
           inactiveColor: Colors.black,
-          currentIndex: pageIndex,
+          currentIndex: currentIndex,
           onTap: onTap,
           activeColor: TextThemes.ndGold,
           items: [
