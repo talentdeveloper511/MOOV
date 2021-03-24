@@ -827,7 +827,7 @@ class _HomePageState extends State<HomePage>
                                                         contentPadding:
                                                             EdgeInsets.only(
                                                                 bottom: 15,
-                                                                left: 22,
+                                                                left: 20,
                                                                 right: 5),
                                                         border:
                                                             UnderlineInputBorder(
@@ -845,7 +845,7 @@ class _HomePageState extends State<HomePage>
                                                             TextThemes.ndBlue),
                                                     style: isLargePhone
                                                         ? TextStyle(
-                                                            fontSize: 14,
+                                                            fontSize: 15,
                                                             color: Colors.white)
                                                         : TextStyle(
                                                             fontSize: 12.5,
