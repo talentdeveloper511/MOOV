@@ -138,6 +138,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   handleSignIn(GoogleSignInAccount account) {
     if (account == null) {
+      configurePushNotifications();
       setState(() {
         isAuth = false;
       });
