@@ -360,7 +360,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //        pushId = message['link'];
 //        page = message['page'];
 //        recipientId = message['recipient'];
-        body = message["aps"]['title'] + ' ' + message['aps']['body'];
+        body = message["aps"]["alert"]['title'] + ' ' + message['aps']["alert"]['body'];
       }
 
 //      FlutterAppBadger.updateBadgeCount(1);
