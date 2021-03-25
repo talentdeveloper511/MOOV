@@ -227,10 +227,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
       Flushbar snackbar = Flushbar(
           onTap: (data) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
           },
           flushbarStyle: FlushbarStyle.FLOATING,
           boxShadows: [
@@ -307,10 +305,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       print('Notification shown');
       Flushbar snackbar = Flushbar(
           onTap: (data) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
           },
           flushbarStyle: FlushbarStyle.FLOATING,
           boxShadows: [
@@ -372,10 +368,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //            print(page);
       Flushbar snackbar = Flushbar(
           onTap: (data) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
           },
           padding: EdgeInsets.all(20),
           borderRadius: 15,
