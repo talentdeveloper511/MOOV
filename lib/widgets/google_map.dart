@@ -148,13 +148,20 @@ class _GoogleMapState extends State<GoogleMap> {
               ),
               SizedBox(height: 20),
               selectedPlace == null
-                  ? Container()
+                  ? Container(
+                      height: 50,
+                      child: Text("Drag the pin to your exact spot!"))
                   : FutureBuilder(
                       future:
                           locationFromAddress(selectedPlace.formattedAddress),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState != ConnectionState.done) {
                           return circularProgress();
+                        }
+                        if (!snapshot.hasData) {
+                          return Container(
+                              height: 50,
+                              child: Text("Can't find an address here!"));
                         }
 
                         List<String> parse =
@@ -180,7 +187,7 @@ class _GoogleMapState extends State<GoogleMap> {
                             latitude.toString();
                         CreateAccount.of(context).businessLocationLongitude =
                             longtitude.toString();
-                           CreateAccount.of(context).businessAddress =
+                        CreateAccount.of(context).businessAddress =
                             selectedPlace.formattedAddress;
 
                         return Padding(
