@@ -179,6 +179,7 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
 
                               int verifiedStatus =
                                   snapshot2.data['verifiedStatus'];
+                              bool isBusiness = snapshot2.data['isBusiness'];
                               String userYear = snapshot2.data['year'];
                               String userDorm = snapshot2.data['dorm'];
                               String displayName =
@@ -320,25 +321,48 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                                     ),
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 2.0),
-                                                  child: Text(
-                                                      userYear +
-                                                          " in " +
-                                                          userDorm,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 2,
-                                                      style: TextStyle(
-                                                          fontSize: 11,
-                                                          color:
-                                                              TextThemes.ndBlue,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .none)),
-                                                ),
+                                                isBusiness
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 2.0),
+                                                        child: Text(userDorm,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 2,
+                                                            style: TextStyle(
+                                                                fontSize: 11,
+                                                                color:
+                                                                    TextThemes
+                                                                        .ndBlue,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .none)),
+                                                      )
+                                                    : Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 2.0),
+                                                        child: Text(
+                                                            userYear +
+                                                                " in " +
+                                                                userDorm,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 2,
+                                                            style: TextStyle(
+                                                                fontSize: 11,
+                                                                color:
+                                                                    TextThemes
+                                                                        .ndBlue,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .none)),
+                                                      ),
                                               ],
                                             ),
                                           ),

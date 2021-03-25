@@ -14,6 +14,7 @@ import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/hottestMOOV.dart';
+import 'package:MOOV/widgets/locationCheckIn.dart';
 import 'package:MOOV/widgets/poll2.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -715,6 +716,35 @@ class _HomePageState extends State<HomePage>
                                               child: todayOnly == 0
                                                   ? RaisedButton(
                                                       onPressed: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return CustomDialogBox(
+                                                                title:
+                                                                    "Check In",
+                                                                description:
+                                                                    "Check into your MOOV to redeem any offers and/or get credit!",
+                                                                choice1:
+                                                                    "Check In",
+                                                                choice1Action:
+                                                                    (context) {
+                                                                        {
+                                                                  print("HI");
+                                                                }},
+                                                                 choice2Action:
+                                                                    (context) {
+                                                                        {
+                                                                  print("HI");
+                                                                }},
+                                                                choice2:
+                                                                    "Later",
+                                                                image:
+                                                                    "lib/assets/alvin.png",
+                                                              );
+                                                            });
+
                                                         HapticFeedback
                                                             .lightImpact();
 

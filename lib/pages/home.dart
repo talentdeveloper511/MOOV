@@ -344,22 +344,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ' ' +
           message['notification']['body'];
       FlutterAppBadger.updateBadgeCount(1);
-      // if (page == 'chat') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => MessagesHub()));
-      // } else if (page == 'post') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-      // } else if (page == 'group') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-      // } else if (page == 'user') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-      // } else {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => NotificationFeed()));
-      // }
 
       FlutterAppBadger.updateBadgeCount(1);
 //          if (recipientId == currentUser.id) {
@@ -367,6 +351,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //            print(page);
       Flushbar snackbar = Flushbar(
           onTap: (data) {
+            print(data);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => PostDetail(pushId)));
           },
