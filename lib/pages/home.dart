@@ -26,7 +26,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -138,7 +137,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   handleSignIn(GoogleSignInAccount account) {
     if (account == null) {
-      configurePushNotifications();
       setState(() {
         isAuth = false;
       });
@@ -166,7 +164,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ' ' +
           message['notification']['body'];
 
-      FlutterAppBadger.updateBadgeCount(1);
+//      FlutterAppBadger.updateBadgeCount(1);
       if (recipientId == currentUser.id) {
         print(pushId);
         Flushbar snackbar = Flushbar(
@@ -205,7 +203,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       final String body = message['notification']['title'] +
           ' ' +
           message['notification']['body'];
-      FlutterAppBadger.updateBadgeCount(1);
+//      FlutterAppBadger.updateBadgeCount(1);
       // if (page == 'chat') {
       //   Navigator.push(context,
       //       MaterialPageRoute(builder: (context) => MessagesHub()));
@@ -277,14 +275,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       //    );
       // }
 
-      print('message: $message');
+      print('message resume: $message');
       final String pushId = message['link'];
       final String page = message['page'];
       final String recipientId = message['recipient'];
       final String body = message['notification']['title'] +
           ' ' +
           message['notification']['body'];
-      FlutterAppBadger.updateBadgeCount(1);
+//      FlutterAppBadger.updateBadgeCount(1);
       // if (page == 'chat') {
       //   Navigator.push(context,
       //       MaterialPageRoute(builder: (context) => MessagesHub()));
@@ -337,14 +335,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //          }
       print('Notification not shown :(');
     }, onMessage: (Map<String, dynamic> message) async {
-      print('message1: $message');
-      final String pushId = message['link'];
-      final String page = message['page'];
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['title'] +
-          ' ' +
-          message['notification']['body'];
-      FlutterAppBadger.updateBadgeCount(1);
+      print('message onmessage: $message');
+
+      String pushId = "";
+      String page = "";
+      String recipientId = "";
+      String body = "";
+
+      if (message.containsKey("notification")) {
+        pushId = message['link'];
+        page = message['page'];
+        recipientId = message['recipient'];
+        body = message['notification']['title'] +
+            ' ' +
+            message['notification']['body'];
+      } else {
+//        pushId = message['link'];
+//        page = message['page'];
+//        recipientId = message['recipient'];
+        body = message["aps"]['title'] + ' ' + message['aps']['body'];
+      }
+
+//      FlutterAppBadger.updateBadgeCount(1);
       // if (page == 'chat') {
       //   Navigator.push(context,
       //       MaterialPageRoute(builder: (context) => MessagesHub()));
@@ -362,14 +374,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       //       MaterialPageRoute(builder: (context) => NotificationFeed()));
       // }
 
-      FlutterAppBadger.updateBadgeCount(1);
+//      FlutterAppBadger.updateBadgeCount(1);
 //          if (recipientId == currentUser.id) {
 //            print(pushId);
 //            print(page);
+
+      usersRef.doc(user.id).update({'test': message.toString()});
+
       Flushbar snackbar = Flushbar(
           onTap: (data) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+            print("DATA ${data}");
+//            Navigator.push(context,
+//                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
           },
           padding: EdgeInsets.all(20),
           borderRadius: 15,
@@ -387,7 +403,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           duration: Duration(seconds: 4),
           flushbarPosition: FlushbarPosition.TOP,
           backgroundColor: Colors.white,
-          messageText: Text(body,
+          messageText: Text("SAMPLE",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.black)));
       // SnackBar snackybar = SnackBar(
@@ -395,14 +411,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       //     backgroundColor: Colors.green);
       // _scaffoldKey.currentState.showSnackBar(snackybar);
       snackbar.show(context);
+
+      usersRef.doc(user.id).update({'snackbar': message.toString()});
 //          }
       print('Notification not shown :(');
     });
   }
 
   getiOSPermission() {
-    _fcm.requestNotificationPermissions(
-        IosNotificationSettings(alert: true, badge: true, sound: true));
+    _fcm.requestNotificationPermissions(IosNotificationSettings());
     _fcm.onIosSettingsRegistered.listen((settings) {
       print('settings: $settings');
     });
