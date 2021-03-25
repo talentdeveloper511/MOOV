@@ -1292,7 +1292,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                             privacy: "Public",
                                             description:
                                                 descriptionController.text,
-                                            address: currentUser.businessLocation,
+                                            address: currentUser.dorm,
                                             startDate: currentValue,
                                             unix: currentValue
                                                 .millisecondsSinceEpoch,

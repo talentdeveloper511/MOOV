@@ -93,6 +93,7 @@ dependencies:
   geolocator: ^6.2.1
   geocoding: ^1.0.5
   animated_check: ^1.0.0
+  # linkify: ^5.0.0
 
 
 

@@ -81,7 +81,7 @@ void locationCheckIn(BuildContext context, Function callback) {
               pos.longitude,
               value.docs[i]['businessLocation'].latitude,
               value.docs[i]['businessLocation'].longitude);
-          if (distance < 600) {
+          if (distance > 600) {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -91,17 +91,39 @@ void locationCheckIn(BuildContext context, Function callback) {
                         "Check into your MOOV to redeem any offers and/or get credit!",
                     choice1: "Check In",
                     choice1Action: (context) {
-                      {
-                        print("HI");
-                      }
+                      postsRef.doc(postId).get().then((value) {
+                        postsRef.doc(postId).set({
+                          "checkInMap": {currentUser.id: 1}
+                        }, SetOptions(merge: true));
+                      });
+                      postsRef.doc(postId).set({
+                        "statuses": {currentUser.id: 4}
+                      }, SetOptions(merge: true));
+                      FirebaseFirestore.instance
+                          .collection("notreDame")
+                          .doc('data')
+                          .collection("checkIns")
+                          .doc(postId)
+                          .set({
+                        "checkInList": FieldValue.arrayUnion([currentUser.id])
+                      }, SetOptions(merge: true));
                     },
                     choice2Action: (context) {
-                      {
-                        print("HI");
-                      }
+                      postsRef.doc(postId).get().then((value) {
+                        postsRef.doc(postId).set({
+                          "checkInMap": {currentUser.id: 0}
+                        }, SetOptions(merge: true));
+                      });
+                      Timer(Duration(seconds: 60), () {
+                       postsRef.doc(postId)
+                            .set({
+                          "checkInMap": {currentUser.id: FieldValue.delete()}
+                        }, SetOptions(merge: true));
+                      });
                     },
                     choice2: "Later",
-                    image: "lib/assets/alvin.png",
+                    image: value.docs[i]['image'],
+                    postTitle: value.docs[i]['title'],
                   );
                 });
 
@@ -180,6 +202,7 @@ void locationCheckIn(BuildContext context, Function callback) {
       //       .doc(currentUser.id)
       //       .update({"score": FieldValue.increment(100)});
       // }
+
     }
   });
 }
@@ -187,7 +210,7 @@ void locationCheckIn(BuildContext context, Function callback) {
 typedef MyEventCallback = Function(BuildContext context);
 
 class CustomDialogBox extends StatefulWidget {
-  final String title, description, choice1, choice2, image;
+  final String title, description, choice1, choice2, image, postTitle;
 
   final MyEventCallback choice1Action, choice2Action;
 
@@ -199,7 +222,8 @@ class CustomDialogBox extends StatefulWidget {
       this.choice2,
       this.image,
       this.choice1Action,
-      this.choice2Action});
+      this.choice2Action,
+      this.postTitle});
 
   @override
   _CustomDialogBoxState createState() => _CustomDialogBoxState();
@@ -228,7 +252,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              color: Colors.white,
+              color: isChecking ? Colors.green : Colors.white,
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
@@ -241,7 +265,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                 height: 110,
               ),
               isChecking
-                  ? Icon(Icons.check, size: 45, color: Colors.green)
+                  ? Icon(Icons.check, size: 45, color: Colors.white)
                   : Text(
                       widget.title,
                       style:
@@ -294,15 +318,53 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           left: 10,
           right: 10,
           child: Container(
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              child: Image.asset(
-                widget.image,
-                fit: BoxFit.cover,
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: MediaQuery.of(context).size.width * 0.1,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                child: CachedNetworkImage(
+                  imageUrl: widget.image,
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  width: MediaQuery.of(context).size.width * 0.75,
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    alignment: Alignment(0.0, 0.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            Colors.black.withAlpha(0),
+                            Colors.black,
+                            Colors.black12,
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          widget.postTitle,
+                          style: TextStyle(
+                              fontFamily: 'Solway',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 18.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
           ),
         ),
       ],

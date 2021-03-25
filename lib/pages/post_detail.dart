@@ -9,6 +9,7 @@ import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/widgets/locationCheckIn.dart';
 import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/send_moov.dart';
@@ -39,6 +40,10 @@ class PostDetail extends StatefulWidget {
 
 class _PostDetailState extends State<PostDetail>
     with SingleTickerProviderStateMixin {
+  callback() {
+    setState(() {});
+  }
+
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
 
@@ -82,6 +87,7 @@ class _PostDetailState extends State<PostDetail>
 
   @override
   Widget build(BuildContext context) {
+
     bool isIncognito;
 
     return StreamBuilder(
@@ -208,6 +214,7 @@ class _PostDetailState extends State<PostDetail>
                           int maxOccupancy = course['maxOccupancy'];
                           int venmo = course['venmo'];
                           int goingCount = course['going'].length;
+
                           return Container(
                             color: Colors.white,
                             child: ListView(
@@ -571,13 +578,13 @@ class _Description extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.only(top: 10.0, bottom: 15.0, left: 10, right: 10),
+          const EdgeInsets.only(top: 10.0, bottom: 15.0, left: 20, right: 20),
       child: Center(
         child: Text(description,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontStyle: FontStyle.italic)),
+            style: TextStyle(fontWeight: FontWeight.w500)),
       ),
     );
   }
