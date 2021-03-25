@@ -1159,6 +1159,7 @@ class _HomePageState extends State<HomePage>
                                                             ? CarouselSlider(
                                                                 options:
                                                                     CarouselOptions(
+                                                                      scrollPhysics: NeverScrollableScrollPhysics(),
                                                                   height:
                                                                       isLargePhone
                                                                           ? 170
@@ -1177,7 +1178,7 @@ class _HomePageState extends State<HomePage>
                                                                   reverse:
                                                                       false,
                                                                   autoPlay:
-                                                                      true,
+                                                                      false,
                                                                   autoPlayInterval:
                                                                       Duration(
                                                                           seconds:
@@ -1353,11 +1354,7 @@ class _HomePageState extends State<HomePage>
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
-                          return Center(
-                            child: Text("",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20)),
-                          );
+                          return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
@@ -1466,11 +1463,7 @@ class _HomePageState extends State<HomePage>
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
-                          return Center(
-                            child: Text("",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20)),
-                          );
+                          return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
@@ -1585,11 +1578,7 @@ class _HomePageState extends State<HomePage>
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
-                          return Center(
-                            child: Text("",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20)),
-                          );
+                          return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
@@ -1703,11 +1692,7 @@ class _HomePageState extends State<HomePage>
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
-                          return Center(
-                            child: Text("",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20)),
-                          );
+                          return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
@@ -1821,11 +1806,7 @@ class _HomePageState extends State<HomePage>
                       builder: (context, snapshot) {
                         if (!snapshot.hasData ||
                             snapshot.data.docs.length == 0)
-                          return Center(
-                            child: Text("",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20)),
-                          );
+                          return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,

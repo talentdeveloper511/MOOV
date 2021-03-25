@@ -436,7 +436,6 @@ class _BizState extends State<Biz> {
                                                   maxOccupancy:
                                                       course2['maxOccupancy'],
                                                   venmo: course2['venmo'],
-                                                  barcode: course2['barcode'],
                                                   imageUrl: course2['image'],
                                                   userId: course2['userId'],
                                                   postId:
@@ -458,7 +457,6 @@ class _BizState extends State<Biz> {
                                                   maxOccupancy:
                                                       course2['maxOccupancy'],
                                                   venmo: course2['venmo'],
-                                                  barcode: course2['barcode'],
                                                   imageUrl: course2['image'],
                                                   userId: course2['userId'],
                                                   postId:

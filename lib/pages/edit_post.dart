@@ -1320,7 +1320,9 @@ class _EditPostState extends State<EditPost> {
                                         currentUser.id ==
                                             "118426518878481598299" ||
                                         currentUser.id ==
-                                            "107290090512658207959"
+                                            "107290090512658207959" ||
+                                        currentUser.id ==
+                                            "115805501102171844515"
                                     ? //ADMIN CONTROLS
                                     GestureDetector(
                                         onTap: () {
@@ -1361,7 +1363,9 @@ class _EditPostState extends State<EditPost> {
                                         currentUser.id ==
                                             "118426518878481598299" ||
                                         currentUser.id ==
-                                            "107290090512658207959"
+                                            "107290090512658207959" ||
+                                        currentUser.id ==
+                                            "115805501102171844515"
                                     ? //ADMIN CONTROLS
                                     GestureDetector(
                                         onTap: () {
@@ -1469,9 +1473,9 @@ void showAlertDialog2(
     });
   }
 
- showDialog(
-      context: context,
-      builder: (context) =>CupertinoAlertDialog(
+  showDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
       title: Text("Delete?",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       content: Text("\nRemove this post from the feed?"),

@@ -9,6 +9,7 @@ import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/widgets/locationCheckIn.dart';
 import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/send_moov.dart';
@@ -20,11 +21,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/widgets/going_statuses.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share/share.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostDetail extends StatefulWidget {
   String postId;
@@ -39,6 +42,10 @@ class PostDetail extends StatefulWidget {
 
 class _PostDetailState extends State<PostDetail>
     with SingleTickerProviderStateMixin {
+  callback() {
+    setState(() {});
+  }
+
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
 
@@ -208,6 +215,7 @@ class _PostDetailState extends State<PostDetail>
                           int maxOccupancy = course['maxOccupancy'];
                           int venmo = course['venmo'];
                           int goingCount = course['going'].length;
+
                           return Container(
                             color: Colors.white,
                             child: ListView(
@@ -571,13 +579,21 @@ class _Description extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.only(top: 10.0, bottom: 15.0, left: 10, right: 10),
+          const EdgeInsets.only(top: 10.0, bottom: 15.0, left: 20, right: 20),
       child: Center(
-        child: Text(description,
+        child: Linkify(
+            onOpen: (link) async {
+              if (await canLaunch(link.url)) {
+                await launch(link.url);
+              } else {
+                throw 'Could not launch $link';
+              }
+            },
+            text: description,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontStyle: FontStyle.italic)),
+            style: TextStyle(fontWeight: FontWeight.w500)),
       ),
     );
   }
@@ -630,10 +646,14 @@ class PostTimeAndPlace extends StatelessWidget {
                   ),
                   SizedBox(
                       width: MediaQuery.of(context).size.width * .65,
-                      child: Text(
-                        address,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                      child: GestureDetector(
+                        onTap: () => MapsLauncher.launchQuery(address),
+                        child: Text(
+                          address,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.blue[800], decoration: TextDecoration.underline),
+                        ),
                       ))
                 ],
               ),

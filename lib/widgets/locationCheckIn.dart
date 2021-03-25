@@ -1,33 +1,14 @@
+import 'dart:async';
+
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duration/duration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-
-// locationCheckIn(message, Function callback) {
-//   return Center(
-//       child: Column(
-//     mainAxisAlignment: MainAxisAlignment.center,
-//     crossAxisAlignment: CrossAxisAlignment.center,
-//     children: [
-//       Text(
-//         message,
-//         style: TextStyle(color: Colors.white, fontSize: 16),
-//       ),
-//       GestureDetector(
-//           onTap: () {
-//             callback(); // ------ this will change/rebuild the state of its parent class
-//           },
-//           child: Icon(
-//             Icons.refresh,
-//             size: 30,
-//             color: Colors.white,
-//           )),
-//     ],
-//   ));
-// }
 
 Future<Position> determinePosition() async {
   bool serviceEnabled;
@@ -100,67 +81,114 @@ void locationCheckIn(BuildContext context, Function callback) {
               pos.longitude,
               value.docs[i]['businessLocation'].latitude,
               value.docs[i]['businessLocation'].longitude);
-          if (distance < 600) {
-             showDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-                title: Text("Check In",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold)),
-                content: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(style: TextThemes.mediumbody, children: [
-                      TextSpan(
-                          text: "\nCheck into your MOOV, ",
-                          style: TextStyle(fontWeight: FontWeight.w400)),
-                      TextSpan(
-                          text: title,
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.w700)),
-                      TextSpan(
-                          text: " to redeem any offers and/or get credit!",
-                          style: TextStyle(fontWeight: FontWeight.w400)),
-                    ])),
-                actions: [
-                  CupertinoDialogAction(
-                      isDefaultAction: true,
-                      isDestructiveAction: true,
-                      child: Text("Check in",
-                          style: TextStyle(color: Colors.green)),
-                      onPressed: () {
-                        postsRef.doc(postId).get().then((value) {
-                          postsRef.doc(postId).set({
-                            "checkInMap": {currentUser.id: 1}
-                          }, SetOptions(merge: true));
-                        });
+          if (distance > 600) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomDialogBox(
+                    title: "Check In",
+                    description:
+                        "Check into your MOOV to redeem any offers and/or get credit!",
+                    choice1: "Check In",
+                    choice1Action: (context) {
+                      postsRef.doc(postId).get().then((value) {
                         postsRef.doc(postId).set({
-                          "statuses": {currentUser.id: 4}
+                          "checkInMap": {currentUser.id: 1}
                         }, SetOptions(merge: true));
-                        FirebaseFirestore.instance
-                            .collection("notreDame")
-                            .doc('data')
-                            .collection("checkIns")
-                            .doc(postId)
+                      });
+                      postsRef.doc(postId).set({
+                        "statuses": {currentUser.id: 4}
+                      }, SetOptions(merge: true));
+                      FirebaseFirestore.instance
+                          .collection("notreDame")
+                          .doc('data')
+                          .collection("checkIns")
+                          .doc(postId)
+                          .set({
+                        "checkInList": FieldValue.arrayUnion([currentUser.id])
+                      }, SetOptions(merge: true));
+                    },
+                    choice2Action: (context) {
+                      postsRef.doc(postId).get().then((value) {
+                        postsRef.doc(postId).set({
+                          "checkInMap": {currentUser.id: 0}
+                        }, SetOptions(merge: true));
+                      });
+                      Timer(Duration(seconds: 60), () {
+                       postsRef.doc(postId)
                             .set({
-                          "checkInList": FieldValue.arrayUnion([currentUser.id])
+                          "checkInMap": {currentUser.id: FieldValue.delete()}
                         }, SetOptions(merge: true));
+                      });
+                    },
+                    choice2: "Later",
+                    image: value.docs[i]['image'],
+                    postTitle: value.docs[i]['title'],
+                  );
+                });
 
-                        Navigator.of(context).pop(true);
-                      }),
-                  CupertinoDialogAction(
-                      child: Text("Later"),
-                      onPressed: () {
-                        postsRef.doc(postId).get().then((value) {
-                          postsRef.doc(postId).set({
-                            "checkInMap": {currentUser.id: 0}
-                          }, SetOptions(merge: true));
-                        });
-                        Navigator.of(context).pop(true);
-                      })
-                ],
-              ),
-            );
+            HapticFeedback.lightImpact();
+
+            //        showDialog(
+            // context: context,
+            // builder: (context) => CupertinoAlertDialog(
+            //           title: Text("Check In",
+            //               style: TextStyle(
+            //                   color: Colors.black, fontWeight: FontWeight.bold)),
+            //           content: RichText(
+            //               textAlign: TextAlign.center,
+            //               text: TextSpan(style: TextThemes.mediumbody, children: [
+            //                 TextSpan(
+            //                     text: "\nCheck into your MOOV, ",
+            //                     style: TextStyle(fontWeight: FontWeight.w400)),
+            //                 TextSpan(
+            //                     text: title,
+            //                     style: TextStyle(
+            //                         color: Colors.green,
+            //                         fontWeight: FontWeight.w700)),
+            //                 TextSpan(
+            //                     text: " to redeem any offers and/or get credit!",
+            //                     style: TextStyle(fontWeight: FontWeight.w400)),
+            //               ])),
+            //           actions: [
+            //             CupertinoDialogAction(
+            //                 isDefaultAction: true,
+            //                 isDestructiveAction: true,
+            //                 child: Text("Check in",
+            //                     style: TextStyle(color: Colors.green)),
+            //                 onPressed: () {
+            //                   postsRef.doc(postId).get().then((value) {
+            //                     postsRef.doc(postId).set({
+            //                       "checkInMap": {currentUser.id: 1}
+            //                     }, SetOptions(merge: true));
+            //                   });
+            //                   postsRef.doc(postId).set({
+            //                     "statuses": {currentUser.id: 4}
+            //                   }, SetOptions(merge: true));
+            //                   FirebaseFirestore.instance
+            //                       .collection("notreDame")
+            //                       .doc('data')
+            //                       .collection("checkIns")
+            //                       .doc(postId)
+            //                       .set({
+            //                     "checkInList": FieldValue.arrayUnion([currentUser.id])
+            //                   }, SetOptions(merge: true));
+
+            //                   Navigator.of(context).pop(true);
+            //                 }),
+            //             CupertinoDialogAction(
+            //                 child: Text("Later"),
+            //                 onPressed: () {
+            //                   postsRef.doc(postId).get().then((value) {
+            //                     postsRef.doc(postId).set({
+            //                       "checkInMap": {currentUser.id: 0}
+            //                     }, SetOptions(merge: true));
+            //                   });
+            //                   Navigator.of(context).pop(true);
+            //                 })
+            //           ],
+            //         ),
+            //       );
           }
         });
       }
@@ -174,6 +202,172 @@ void locationCheckIn(BuildContext context, Function callback) {
       //       .doc(currentUser.id)
       //       .update({"score": FieldValue.increment(100)});
       // }
+
     }
   });
+}
+
+typedef MyEventCallback = Function(BuildContext context);
+
+class CustomDialogBox extends StatefulWidget {
+  final String title, description, choice1, choice2, image, postTitle;
+
+  final MyEventCallback choice1Action, choice2Action;
+
+  const CustomDialogBox(
+      {Key key,
+      this.title,
+      this.description,
+      this.choice1,
+      this.choice2,
+      this.image,
+      this.choice1Action,
+      this.choice2Action,
+      this.postTitle});
+
+  @override
+  _CustomDialogBoxState createState() => _CustomDialogBoxState();
+}
+
+class _CustomDialogBoxState extends State<CustomDialogBox> {
+  bool isChecking = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      elevation: 10,
+      backgroundColor: Colors.transparent,
+      child: contentBox(context),
+    );
+  }
+
+  contentBox(context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(5),
+          margin: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: isChecking ? Colors.green : Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+              ]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                height: 110,
+              ),
+              isChecking
+                  ? Icon(Icons.check, size: 45, color: Colors.white)
+                  : Text(
+                      widget.title,
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                    ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                widget.description,
+                style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 22,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        widget.choice1Action(context);
+                        setState(() {
+                          isChecking = true;
+                        });
+                        Timer(Duration(seconds: 1), () {
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: Text(
+                        widget.choice1,
+                        style: TextStyle(fontSize: 18, color: Colors.green),
+                      )),
+                  TextButton(
+                      onPressed: () {
+                        widget.choice2Action(context);
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        widget.choice2,
+                        style: TextStyle(fontSize: 18),
+                      )),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 10,
+          left: 10,
+          right: 10,
+          child: Container(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                child: CachedNetworkImage(
+                  imageUrl: widget.image,
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  width: MediaQuery.of(context).size.width * 0.75,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    alignment: Alignment(0.0, 0.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            Colors.black.withAlpha(0),
+                            Colors.black,
+                            Colors.black12,
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          widget.postTitle,
+                          style: TextStyle(
+                              fontFamily: 'Solway',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 18.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        ),
+      ],
+    );
+  }
 }

@@ -397,7 +397,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           : SingleChildScrollView(
               child: Column(children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(bottom: 15.0, left: 15, right: 15),
+                  padding: EdgeInsets.only(bottom: currentUser.isBusiness ? 5 : 15.0, left: 15, right: 15),
                   child: TextFormField(
                     controller: titleController,
                     decoration: InputDecoration(
@@ -419,7 +419,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                     },
                   ),
                 ),
-                Padding(
+               currentUser.isBusiness ? Container() : Padding(
                   padding: EdgeInsets.only(top: 5, bottom: 15.0, left: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -508,7 +508,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                     ],
                   ),
                 ),
-                Padding(
+               !currentUser.isBusiness ? Padding(
                   padding:
                       EdgeInsets.only(left: 15.0, right: 15, top: 5, bottom: 5),
                   child: TextFormField(
@@ -528,7 +528,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                       return null;
                     },
                   ),
-                ),
+                ): Container(),
 
                 Padding(
                   padding: EdgeInsets.all(15.0),
@@ -723,11 +723,11 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ],
                             ),
                           ),
-                          CheckboxListTile(
-                              title: new Text("Needs a Barcode (Verification)"),
-                              value: barcode,
-                              onChanged: (bool value) =>
-                                  setState(() => barcode = value)),
+                          // CheckboxListTile(
+                          //     title: new Text("Needs a Barcode (Verification)"),
+                          //     value: barcode,
+                          //     onChanged: (bool value) =>
+                          //         setState(() => barcode = value)),
                         ],
                       ),
                     ],
@@ -1288,18 +1288,17 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                     currentUser.isBusiness
                                         ? Database().createBusinessPost(
                                             title: titleController.text,
-                                            type: typeDropdownValue,
-                                            privacy: privacyDropdownValue,
+                                            type: "Food/Drink",
+                                            privacy: "Public",
                                             description:
                                                 descriptionController.text,
-                                            address: addressController.text,
+                                            address: currentUser.dorm,
                                             startDate: currentValue,
                                             unix: currentValue
                                                 .millisecondsSinceEpoch,
                                             statuses: inviteesNameList,
                                             maxOccupancy: maxOccupancyInt,
                                             venmo: venmoInt,
-                                            barcode: barcode,
                                             imageUrl: downloadUrl,
                                             userId: strUserId,
                                             postId: generateRandomString(20),
@@ -1318,7 +1317,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                             statuses: inviteesNameList,
                                             maxOccupancy: maxOccupancyInt,
                                             venmo: venmoInt,
-                                            barcode: barcode,
                                             imageUrl: downloadUrl,
                                             userId: strUserId,
                                             postId: generateRandomString(20),

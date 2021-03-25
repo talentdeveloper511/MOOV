@@ -12,8 +12,10 @@ import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
+import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/locationCheckIn.dart';
@@ -301,10 +303,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       // }
 //          if (recipientId == currentUser.id) {
       print('Notification shown');
+      print(page);
       Flushbar snackbar = Flushbar(
           onTap: (data) {
+            page == "post" ?
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+                MaterialPageRoute(builder: (context) => PostDetail(pushId))):
+                 page == "user" ?  Navigator.push(context,
+                MaterialPageRoute(builder: (context) => OtherProfile(pushId))) : page == "group" ?  Navigator.push(context,
+                MaterialPageRoute(builder: (context) => GroupDetail(pushId))) : null;
           },
           flushbarStyle: FlushbarStyle.FLOATING,
           boxShadows: [
