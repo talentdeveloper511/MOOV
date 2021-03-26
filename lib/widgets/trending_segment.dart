@@ -458,7 +458,7 @@ class PostOnTrending extends StatelessWidget {
                     height: 130,
                     width: isLargePhone
                         ? MediaQuery.of(context).size.width * 0.315
-                        : MediaQuery.of(context).size.width * 0.32,
+                        : MediaQuery.of(context).size.width * 0.29,
                   ),
                 ),
                   Card(
@@ -534,7 +534,7 @@ class PostOnTrending extends StatelessWidget {
                                       ? MediaQuery.of(context).size.width *
                                           0.315
                                       : MediaQuery.of(context).size.width *
-                                          0.32,
+                                          0.315,
                                 ),
                               ),
                               Container(
