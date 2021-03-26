@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/BusinessTab.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
@@ -227,33 +226,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         recipientId = message["data"]['recipient'];
       }
 
-         if (page == "post") {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-            }
-            if (page == "chat" && _isNumeric(pushId)) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          MessageDetail(pushId, recipientId, false, " ", [])));
-            }
-       if (page == "chat" && !_isNumeric(pushId)) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          MessageDetail(" ", " ", true, pushId, [])));
-            }
-      
-             if (page == "user") {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-            }
-              if (page == "group") {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-            }
+      if (page == "post") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+      }
+      if (page == "chat" && _isNumeric(pushId)) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MessageDetail(pushId, recipientId, false, " ", [])));
+      }
+      if (page == "chat" && !_isNumeric(pushId)) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MessageDetail(" ", " ", true, pushId, [])));
+      }
+
+      if (page == "user") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+      }
+      if (page == "group") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+      }
 
 //      FlutterAppBadger.updateBadgeCount(1);
       // if (page == 'chat') {
@@ -380,32 +379,32 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       //         builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
       // print("DATA ${data}");
       if (page == "post") {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-            }
-            if (page == "chat" && _isNumeric(pushId)) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          MessageDetail(pushId, recipientId, false, " ", [])));
-            }
-       if (page == "chat" && !_isNumeric(pushId)) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          MessageDetail(" ", " ", true, pushId, [])));
-            }
-      
-             if (page == "user") {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-            }
-              if (page == "group") {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-            }
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+      }
+      if (page == "chat" && _isNumeric(pushId)) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MessageDetail(pushId, recipientId, false, " ", [])));
+      }
+      if (page == "chat" && !_isNumeric(pushId)) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MessageDetail(" ", " ", true, pushId, [])));
+      }
+
+      if (page == "user") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+      }
+      if (page == "group") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+      }
       //No more flushbar
 
 //      Flushbar snackbar = Flushbar(
@@ -487,23 +486,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       builder: (context) =>
                           MessageDetail(pushId, recipientId, false, " ", [])));
             }
-       if (page == "chat" && !_isNumeric(pushId)) {
+            if (page == "chat" && !_isNumeric(pushId)) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           MessageDetail(" ", " ", true, pushId, [])));
             }
-      
-             if (page == "user") {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+
+            if (page == "user") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OtherProfile(pushId)));
             }
-              if (page == "group") {
+            if (page == "group") {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
             }
-
           },
           padding: EdgeInsets.all(20),
           borderRadius: 15,
@@ -606,6 +606,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   int currentIndex = 0;
 
+  final _tabItems = [HomePage(), SearchBar(), MOOVSPage(), ProfilePage()];
+
   bool _isNumeric(String result) {
     if (result == null) {
       return false;
@@ -638,7 +640,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   onTap(int pageIndex) {
-    pageController.jumpToPage(pageIndex);
+//    pageController.jumpToPage(pageIndex);
     setState(() {
       currentIndex = pageIndex;
     });
@@ -864,18 +866,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
         ),
       ),
-      body: PageView(
-        children: <Widget>[
-          // Timeline(),
-          HomePage(),
-
-          SearchBar(),
-
-          currentUser.isBusiness ? Biz() : MOOVSPage(),
-          ProfilePage()
-        ],
-        controller: pageController,
-        onPageChanged: onPageChanged,
+      body: IndexedStack(
+        index: currentIndex,
+        children: _tabItems,
       ),
       bottomNavigationBar: CupertinoTabBar(
           inactiveColor: Colors.black,
