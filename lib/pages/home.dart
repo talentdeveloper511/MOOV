@@ -444,8 +444,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       Flushbar snackbar = Flushbar(
           onTap: (data) {
             print("DATA ${data}");
-//            Navigator.push(context,
-//                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+            if (page == "post") {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+            }
           },
           padding: EdgeInsets.all(20),
           borderRadius: 15,
@@ -463,7 +465,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           duration: Duration(seconds: 4),
           flushbarPosition: FlushbarPosition.TOP,
           backgroundColor: Colors.white,
-          messageText: Text("SAMPLE",
+          messageText: Text(body,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.black)));
       // SnackBar snackybar = SnackBar(

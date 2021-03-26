@@ -32,6 +32,7 @@ class Biz extends StatefulWidget {
 
 class _BizState extends State<Biz> {
   PageController _goingController, _againController;
+  ExpandableController _expandableController;
   int pageNumber = 0;
 
   @override
@@ -39,6 +40,15 @@ class _BizState extends State<Biz> {
     super.initState();
     _goingController = PageController();
     _againController = PageController();
+    _expandableController = ExpandableController();
+  }
+
+  @override
+  void dispose() {
+    _goingController.dispose();
+    _againController.dispose();
+    _expandableController.dispose();
+    super.dispose();
   }
 
   _onPageViewChange(int page) {
@@ -201,76 +211,94 @@ class _BizState extends State<Biz> {
     return Scaffold(
         backgroundColor: Colors.white,
         body: ListView(children: [
-          StreamBuilder(
-              stream: postsRef
-                  .where("userId", isEqualTo: currentUser.id)
-                  // .orderBy("startDate")
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data == null) {
-                  return Container();
-                }
-                if (snapshot.data.docs.length == 0) {
-                  return Container();
-                }
-                int count = snapshot.data.docs.length;
+          ExpandableNotifier(
+            initialExpanded: true,
+            child: ExpandablePanel(
+              theme: const ExpandableThemeData(
+                tapHeaderToExpand: true,
+                headerAlignment: ExpandablePanelHeaderAlignment.center,
+                tapBodyToCollapse: true,
+              ),
+              header: Center(
+                child: GradientText(
+                  "         Your Going Lists",
+                  gradient: LinearGradient(colors: [
+                    Colors.blue.shade400,
+                    Colors.blue.shade900,
+                  ]),
+                ),
+              ),
+              expanded: StreamBuilder(
+                  stream: postsRef
+                      .where("userId", isEqualTo: currentUser.id)
+                      // .orderBy("startDate")
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData || snapshot.data == null) {
+                      return Container();
+                    }
+                    if (snapshot.data.docs.length == 0) {
+                      return Container();
+                    }
+                    int count = snapshot.data.docs.length;
 
-                for (int i = 0; i < count; i++) {
-                  DocumentSnapshot course = snapshot.data.docs[pageNumber];
+                    for (int i = 0; i < count; i++) {
+                      DocumentSnapshot course = snapshot.data.docs[pageNumber];
 
-                  return Container(
-                      height: isLargePhone
-                          ? MediaQuery.of(context).size.height * .45
-                          : MediaQuery.of(context).size.height * .4,
-                      child: Column(children: [
-                        SizedBox(height: isLargePhone ? 20 : 10),
-                        Container(
-                            height: 20,
-                            child: Center(
-                              child: GradientText(
-                                "Your Going Lists",
-                                gradient: LinearGradient(colors: [
-                                  Colors.blue.shade400,
-                                  Colors.blue.shade900,
-                                ]),
+                      return Container(
+                          height: isLargePhone
+                              ? MediaQuery.of(context).size.height * .5
+                              : MediaQuery.of(context).size.height * .6,
+                          child: Column(children: [
+                            SizedBox(height: isLargePhone ? 10 : 0),
+                            Container(
+                              height: isLargePhone ? 160 : 145,
+                              child: Stack(
+                                children: <Widget>[
+                                  buildPageView(
+                                      snapshot, count, _goingController),
+                                  buildSuggestionsIndicatorWithShapeAndBottomPos(
+                                      circleShape,
+                                      isLargePhone ? 0 : 10,
+                                      count,
+                                      _goingController),
+                                ],
                               ),
-                            )),
-                        Container(
-                          height: isLargePhone ? 160 : 145,
-                          child: Stack(
-                            children: <Widget>[
-                              buildPageView(snapshot, count, _goingController),
-                              buildSuggestionsIndicatorWithShapeAndBottomPos(
-                                  circleShape,
-                                  isLargePhone ? 0 : 10,
-                                  count,
-                                  _goingController),
-                            ],
-                          ),
-                        ),
-                        isLargePhone
-                            ? SizedBox(
-                                height: 6,
-                              )
-                            : Container(),
-                        Expanded(
-                          child: SingleChildScrollView(
-                              physics: AlwaysScrollableScrollPhysics(),
-                              child: GoingPage(course['postId'])),
-                        )
-                      ]));
-                }
-              }),
+                            ),
+                            isLargePhone
+                                ? SizedBox(
+                                    height: 6,
+                                  )
+                                : Container(),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  child: GoingPage(course['postId'])),
+                            )
+                          ]));
+                    }
+                  }),
+            ),
+          ),
           (isUploading)
               ? circularProgress()
               : ExpandablePanel(
-                 theme: const ExpandableThemeData(
-                   tapHeaderToExpand: true,
-                  headerAlignment: ExpandablePanelHeaderAlignment.center,
-                  tapBodyToCollapse: true,
-                ),
-                  header: Text("HI"),
-                expanded: StreamBuilder(
+                  controller: _expandableController,
+                  theme: const ExpandableThemeData(
+                    tapHeaderToExpand: true,
+                    headerAlignment: ExpandablePanelHeaderAlignment.center,
+                    tapBodyToCollapse: true,
+                  ),
+                  header: Center(
+                    child: GradientText(
+                      "        Post Again",
+                      gradient: LinearGradient(colors: [
+                        Colors.blue.shade400,
+                        Colors.blue.shade900,
+                      ]),
+                    ),
+                  ),
+                  expanded: StreamBuilder(
                       stream: archiveRef
                           .where("userId", isEqualTo: currentUser.id)
                           .snapshots(),
@@ -284,228 +312,247 @@ class _BizState extends State<Biz> {
                           DocumentSnapshot course2 = snapshot2.data.docs[i];
 
                           return Container(
-              height: isLargePhone
-                  ? MediaQuery.of(context).size.height / 3.9
-                  : MediaQuery.of(context).size.height / 2.75,
-              child: Column(children: [
-                SizedBox(height: isLargePhone ? 10 : 10),
-                Center(
-                  child: GradientText(
-                    "Post Again",
-                    gradient: LinearGradient(colors: [
-                      Colors.blue.shade400,
-                      Colors.blue.shade900,
-                    ]),
-                  ),
-                ),
-                Container(
-                  height: isLargePhone ? 150 : 140,
-                  child: Stack(
-                    children: <Widget>[
-                      buildPageView(
-                          snapshot2, count, _againController),
-                      buildSuggestionsIndicatorWithShapeAndBottomPos(
-                          circleShape,
-                          isLargePhone ? 0 : 10,
-                          count,
-                          _againController),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 300,
-                        child: DateTimeField(
-                          format: format,
-                          keyboardType: TextInputType.datetime,
-                          decoration: InputDecoration(
-                              icon: Icon(Icons.timelapse,
-                                  color: TextThemes.ndGold),
-                              suffixIcon: Icon(
-                                Icons.calendar_today,
-                                color: needDate
-                                    ? Colors.red
-                                    : TextThemes.ndGold,
-                              ),
-                              labelText: 'Enter Start Time',
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(10.0)),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always),
-                          onChanged: (DateTime newValue) {
-                            setState(() {
-                              currentValue =
-                                  currentValues; // = newValue;
-                              //   newValue = currentValue;
-                            });
-                          },
-                          onShowPicker:
-                              (context, currentValue) async {
-                            final date = await showDatePicker(
-                              context: context,
-                              firstDate: DateTime(2021),
-                              initialDate:
-                                  currentValue ?? DateTime.now(),
-                              lastDate: DateTime(2100),
-                              builder: (BuildContext context,
-                                  Widget child) {
-                                return Theme(
-                                  data: ThemeData.light().copyWith(
-                                    primaryColor: TextThemes.ndGold,
-                                    accentColor: TextThemes.ndGold,
-                                    colorScheme: ColorScheme.light(
-                                        primary: TextThemes.ndBlue),
-                                    buttonTheme: ButtonThemeData(
-                                        textTheme: ButtonTextTheme
-                                            .primary),
+                              height: isLargePhone
+                                  ? MediaQuery.of(context).size.height / 2
+                                  : MediaQuery.of(context).size.height / 2,
+                              child: Column(children: [
+                                SizedBox(height: isLargePhone ? 10 : 10),
+                                Container(
+                                  height: isLargePhone ? 150 : 140,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      buildPageView(
+                                          snapshot2, count, _againController),
+                                      buildSuggestionsIndicatorWithShapeAndBottomPos(
+                                          circleShape,
+                                          isLargePhone ? 0 : 10,
+                                          count,
+                                          _againController),
+                                    ],
                                   ),
-                                  child: child,
-                                );
-                              },
-                            );
-                            if (date != null) {
-                              final time = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.fromDateTime(
-                                    currentValue ?? DateTime.now()),
-                                builder: (BuildContext context,
-                                    Widget child) {
-                                  return Theme(
-                                    data:
-                                        ThemeData.light().copyWith(
-                                      primaryColor:
-                                          TextThemes.ndGold,
-                                      accentColor:
-                                          TextThemes.ndGold,
-                                      colorScheme:
-                                          ColorScheme.light(
-                                              primary: TextThemes
-                                                  .ndBlue),
-                                      buttonTheme: ButtonThemeData(
-                                          textTheme: ButtonTextTheme
-                                              .primary),
-                                    ),
-                                    child: child,
-                                  );
-                                },
-                              );
-                              currentValues =
-                                  DateTimeField.combine(date, time);
-                              return currentValues;
-                            } else {
-                              return currentValue;
-                            }
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            HapticFeedback.lightImpact();
-
-                            if (DateTime.now()
-                                    .subtract(Duration(hours: 1))
-                                    .isBefore(currentValue) &&
-                                DateTime.now()
-                                    .add(Duration(hours: 1))
-                                    .isAfter(currentValue)) {
-                              setState(() {
-                                needDate = true;
-                              });
-                            } else {
-                              setState(() {
-                                isUploading = true;
-                              });
-                              final GoogleSignInAccount user =
-                                  googleSignIn.currentUser;
-                              final strUserId = user.id;
-                              print("here");
-
-                              currentUser.isBusiness
-                                  ? Database().createBusinessPost(
-                                      title: course2['title'],
-                                      type: course2['type'],
-                                      privacy: course2['privacy'],
-                                      description:
-                                          course2['description'],
-                                      address: course2['address'],
-                                      startDate: currentValue,
-                                      unix: currentValue
-                                          .millisecondsSinceEpoch,
-                                      statuses: course2['statuses'],
-                                      maxOccupancy:
-                                          course2['maxOccupancy'],
-                                      venmo: course2['venmo'],
-                                      imageUrl: course2['image'],
-                                      userId: course2['userId'],
-                                      postId:
-                                          generateRandomString(20),
-                                      posterName:
-                                          currentUser.displayName,
-                                      push: course2['push'])
-                                  : Database().createPost(
-                                      title: course2['title'],
-                                      type: course2['type'],
-                                      privacy: course2['privacy'],
-                                      description:
-                                          course2['description'],
-                                      address: course2['address'],
-                                      startDate: currentValue,
-                                      unix: currentValue
-                                          .millisecondsSinceEpoch,
-                                      statuses: course2['statuses'],
-                                      maxOccupancy:
-                                          course2['maxOccupancy'],
-                                      venmo: course2['venmo'],
-                                      imageUrl: course2['image'],
-                                      userId: course2['userId'],
-                                      postId:
-                                          generateRandomString(20),
-                                      posterName:
-                                          currentUser.displayName,
-                                      push: course2['push']);
-
-                              setState(() {
-                                isUploading = false;
-                              });
-                            }
-                          },
-                          child: Container(
-                            height: 30,
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.blue[400],
-                                    Colors.blue[300]
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
                                 ),
-                                borderRadius:
-                                    BorderRadius.circular(10.0)),
-                            child: Text(
-                              "Post!",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ]));
+                                SizedBox(height: 7),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        width: 300,
+                                        child: DateTimeField(
+                                          format: format,
+                                          keyboardType: TextInputType.datetime,
+                                          decoration: InputDecoration(
+                                              icon: Icon(Icons.timelapse,
+                                                  color: TextThemes.ndGold),
+                                              suffixIcon: Icon(
+                                                Icons.calendar_today,
+                                                color: needDate
+                                                    ? Colors.red
+                                                    : TextThemes.ndGold,
+                                              ),
+                                              labelText: 'Enter Start Time',
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always),
+                                          onChanged: (DateTime newValue) {
+                                            setState(() {
+                                              currentValue =
+                                                  currentValues; // = newValue;
+                                              //   newValue = currentValue;
+                                            });
+                                          },
+                                          onShowPicker:
+                                              (context, currentValue) async {
+                                            final date = await showDatePicker(
+                                              context: context,
+                                              firstDate: DateTime(2021),
+                                              initialDate: currentValue ??
+                                                  DateTime.now(),
+                                              lastDate: DateTime(2100),
+                                              builder: (BuildContext context,
+                                                  Widget child) {
+                                                return Theme(
+                                                  data: ThemeData.light()
+                                                      .copyWith(
+                                                    primaryColor:
+                                                        TextThemes.ndGold,
+                                                    accentColor:
+                                                        TextThemes.ndGold,
+                                                    colorScheme:
+                                                        ColorScheme.light(
+                                                            primary: TextThemes
+                                                                .ndBlue),
+                                                    buttonTheme:
+                                                        ButtonThemeData(
+                                                            textTheme:
+                                                                ButtonTextTheme
+                                                                    .primary),
+                                                  ),
+                                                  child: child,
+                                                );
+                                              },
+                                            );
+                                            if (date != null) {
+                                              final time = await showTimePicker(
+                                                context: context,
+                                                initialTime:
+                                                    TimeOfDay.fromDateTime(
+                                                        currentValue ??
+                                                            DateTime.now()),
+                                                builder: (BuildContext context,
+                                                    Widget child) {
+                                                  return Theme(
+                                                    data: ThemeData.light()
+                                                        .copyWith(
+                                                      primaryColor:
+                                                          TextThemes.ndGold,
+                                                      accentColor:
+                                                          TextThemes.ndGold,
+                                                      colorScheme:
+                                                          ColorScheme.light(
+                                                              primary:
+                                                                  TextThemes
+                                                                      .ndBlue),
+                                                      buttonTheme:
+                                                          ButtonThemeData(
+                                                              textTheme:
+                                                                  ButtonTextTheme
+                                                                      .primary),
+                                                    ),
+                                                    child: child,
+                                                  );
+                                                },
+                                              );
+                                              currentValues =
+                                                  DateTimeField.combine(
+                                                      date, time);
+                                              return currentValues;
+                                            } else {
+                                              return currentValue;
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            HapticFeedback.lightImpact();
+
+                                            if (DateTime.now()
+                                                    .subtract(
+                                                        Duration(hours: 1))
+                                                    .isBefore(currentValue) &&
+                                                DateTime.now()
+                                                    .add(Duration(hours: 1))
+                                                    .isAfter(currentValue)) {
+                                              setState(() {
+                                                needDate = true;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                isUploading = true;
+                                              });
+                                              final GoogleSignInAccount user =
+                                                  googleSignIn.currentUser;
+                                              final strUserId = user.id;
+                                              print("here");
+
+                                              currentUser.isBusiness
+                                                  ? Database().createBusinessPost(
+                                                      title: course2['title'],
+                                                      type: course2['type'],
+                                                      privacy:
+                                                          course2['privacy'],
+                                                      description: course2[
+                                                          'description'],
+                                                      address:
+                                                          course2['address'],
+                                                      startDate: currentValue,
+                                                      unix: currentValue
+                                                          .millisecondsSinceEpoch,
+                                                      statuses:
+                                                          course2['statuses'],
+                                                      maxOccupancy: course2[
+                                                          'maxOccupancy'],
+                                                      venmo: course2['venmo'],
+                                                      imageUrl:
+                                                          course2['image'],
+                                                      userId: course2['userId'],
+                                                      postId:
+                                                          generateRandomString(
+                                                              20),
+                                                      posterName: currentUser
+                                                          .displayName,
+                                                      push: course2['push'])
+                                                  : Database().createPost(
+                                                      title: course2['title'],
+                                                      type: course2['type'],
+                                                      privacy:
+                                                          course2['privacy'],
+                                                      description: course2[
+                                                          'description'],
+                                                      address:
+                                                          course2['address'],
+                                                      startDate: currentValue,
+                                                      unix: currentValue
+                                                          .millisecondsSinceEpoch,
+                                                      statuses:
+                                                          course2['statuses'],
+                                                      maxOccupancy: course2[
+                                                          'maxOccupancy'],
+                                                      venmo: course2['venmo'],
+                                                      imageUrl:
+                                                          course2['image'],
+                                                      userId: course2['userId'],
+                                                      postId:
+                                                          generateRandomString(
+                                                              20),
+                                                      posterName:
+                                                          currentUser.displayName,
+                                                      push: course2['push']);
+
+                                              setState(() {
+                                                isUploading = false;
+                                              });
+                                            }
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            padding: EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Colors.blue[400],
+                                                    Colors.blue[300]
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10.0)),
+                                            child: Text(
+                                              "Post!",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 25)
+                              ]));
                         }
                         return Container();
                       }),
