@@ -12,10 +12,8 @@ import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
-import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
-import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/locationCheckIn.dart';
@@ -198,13 +196,40 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
 
     _fcm.configure(onLaunch: (Map<String, dynamic> message) async {
-      print('message: $message');
-      final String pushId = message['link'];
-      final String page = message['page'];
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['title'] +
-          ' ' +
-          message['notification']['body'];
+      print('message onlaunch: $message');
+
+      String pushId = "";
+      String page = "";
+      String recipientId = "";
+      String body = "";
+
+      if (Platform.isIOS) {
+        if (message.containsKey("notification")) {
+          pushId = message['link'];
+          page = message['page'];
+          recipientId = message['recipient'];
+          body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+        } else {
+          pushId = message['link'];
+          page = message['page'];
+          recipientId = message['recipient'];
+          body = message["aps"]["alert"]['title'] +
+              ' ' +
+              message['aps']["alert"]['body'];
+        }
+      } else {
+        pushId = message["data"]['link'];
+        page = message["data"]['page'];
+        recipientId = message["data"]['recipient'];
+      }
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
+
 //      FlutterAppBadger.updateBadgeCount(1);
       // if (page == 'chat') {
       //   Navigator.push(context,
@@ -225,40 +250,39 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //          if (recipientId == currentUser.id) {
       print('Notification shown');
 
-      Flushbar snackbar = Flushbar(
-          onTap: (data) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-          },
-          flushbarStyle: FlushbarStyle.FLOATING,
-          boxShadows: [
-            BoxShadow(
-                color: Colors.blue[800],
-                offset: Offset(0.0, 2.0),
-                blurRadius: 3.0)
-          ],
-          backgroundGradient:
-              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
-          icon: Icon(
-            Icons.directions_run,
-            color: Colors.green[700],
-          ),
-          duration: Duration(seconds: 4),
-          flushbarPosition: FlushbarPosition.TOP,
-          backgroundColor: Colors.green,
-          messageText: Text(
-            body,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.white),
-          ));
-      // SnackBar snackybar = SnackBar(
-      //     content: Text(body, overflow: TextOverflow.ellipsis),
-      //     backgroundColor: Colors.green);
-      // _scaffoldKey.currentState.showSnackBar(snackybar);
-      snackbar.show(context);
+//      Flushbar snackbar = Flushbar(
+//          onTap: (data) {
+//            Navigator.push(context,
+//                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+//          },
+//          flushbarStyle: FlushbarStyle.FLOATING,
+//          boxShadows: [
+//            BoxShadow(
+//                color: Colors.blue[800],
+//                offset: Offset(0.0, 2.0),
+//                blurRadius: 3.0)
+//          ],
+//          backgroundGradient:
+//              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
+//          icon: Icon(
+//            Icons.directions_run,
+//            color: Colors.green[700],
+//          ),
+//          duration: Duration(seconds: 4),
+//          flushbarPosition: FlushbarPosition.TOP,
+//          backgroundColor: Colors.green,
+//          messageText: Text(
+//            body,
+//            overflow: TextOverflow.ellipsis,
+//            style: TextStyle(color: Colors.white),
+//          ));
+//      // SnackBar snackybar = SnackBar(
+//      //     content: Text(body, overflow: TextOverflow.ellipsis),
+//      //     backgroundColor: Colors.green);
+//      // _scaffoldKey.currentState.showSnackBar(snackybar);
+//      snackbar.show(context);
       // Get.snackbar("Message", body);
 //          }
-      print('Notification not shown :(');
     },
 //        onBackgroundMessage: myBackgroundMessageHandler,
         onResume: (Map<String, dynamic> message) async {
@@ -278,12 +302,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       // }
 
       print('message resume: $message');
-      final String pushId = message['link'];
-      final String page = message['page'];
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['title'] +
-          ' ' +
-          message['notification']['body'];
+      String pushId = "";
+      String page = "";
+      String recipientId = "";
+      String body = "";
+
+      if (Platform.isIOS) {
+        if (message.containsKey("notification")) {
+          pushId = message['link'];
+          page = message['page'];
+          recipientId = message['recipient'];
+          body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+        } else {
+          pushId = message['link'];
+          page = message['page'];
+          recipientId = message['recipient'];
+          body = message["aps"]["alert"]['title'] +
+              ' ' +
+              message['aps']["alert"]['body'];
+        }
+      } else {
+        pushId = message["data"]['link'];
+        page = message["data"]['page'];
+        recipientId = message["data"]['recipient'];
+      }
+
 //      FlutterAppBadger.updateBadgeCount(1);
       // if (page == 'chat') {
       //   Navigator.push(context,
@@ -304,39 +349,45 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //          if (recipientId == currentUser.id) {
       print('Notification shown');
       print(page);
-      Flushbar snackbar = Flushbar(
-          onTap: (data) {
-            page == "post" ?
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId))):
-                 page == "user" ?  Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OtherProfile(pushId))) : page == "group" ?  Navigator.push(context,
-                MaterialPageRoute(builder: (context) => GroupDetail(pushId))) : null;
-          },
-          flushbarStyle: FlushbarStyle.FLOATING,
-          boxShadows: [
-            BoxShadow(
-                color: Colors.blue[800],
-                offset: Offset(0.0, 2.0),
-                blurRadius: 3.0)
-          ],
-          backgroundGradient:
-              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
-          icon: Icon(
-            Icons.directions_run,
-            color: Colors.green[700],
-          ),
-          duration: Duration(seconds: 4),
-          flushbarPosition: FlushbarPosition.TOP,
-          backgroundColor: Colors.green,
-          messageText: Text(body,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.white)));
-      // SnackBar snackybar = SnackBar(
-      //     content: Text(body, overflow: TextOverflow.ellipsis),
-      //     backgroundColor: Colors.green);
-      // _scaffoldKey.currentState.showSnackBar(snackybar);
-      snackbar.show(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
+      //No more flushbar
+
+//      Flushbar snackbar = Flushbar(
+//          onTap: (data) {
+////            page == "post" ?
+//            Navigator.push(context,
+//                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+////                 page == "user" ?  Navigator.push(context,
+////                MaterialPageRoute(builder: (context) => OtherProfile(pushId))) : page == "group" ?  Navigator.push(context,
+////                MaterialPageRoute(builder: (context) => GroupDetail(pushId))) : null;
+//          },
+//          flushbarStyle: FlushbarStyle.FLOATING,
+//          boxShadows: [
+//            BoxShadow(
+//                color: Colors.blue[800],
+//                offset: Offset(0.0, 2.0),
+//                blurRadius: 3.0)
+//          ],
+//          backgroundGradient:
+//              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
+//          icon: Icon(
+//            Icons.directions_run,
+//            color: Colors.green[700],
+//          ),
+//          duration: Duration(seconds: 4),
+//          flushbarPosition: FlushbarPosition.TOP,
+//          backgroundColor: Colors.green,
+//          messageText: Text(body,
+//              overflow: TextOverflow.ellipsis,
+//              style: TextStyle(color: Colors.white)));
+//      // SnackBar snackybar = SnackBar(
+//      //     content: Text(body, overflow: TextOverflow.ellipsis),
+//      //     backgroundColor: Colors.green);
+//      // _scaffoldKey.currentState.showSnackBar(snackybar);
+//      snackbar.show(context);
 
       // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
 //          }
@@ -360,7 +411,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //        pushId = message['link'];
 //        page = message['page'];
 //        recipientId = message['recipient'];
-        body = message["aps"]["alert"]['title'] + ' ' + message['aps']["alert"]['body'];
+        body = message["aps"]["alert"]['title'] +
+            ' ' +
+            message['aps']["alert"]['body'];
       }
 
 //      FlutterAppBadger.updateBadgeCount(1);
