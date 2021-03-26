@@ -457,7 +457,7 @@ class PostOnTrending extends StatelessWidget {
                     ),
                     height: 130,
                     width: isLargePhone
-                        ? MediaQuery.of(context).size.width * 0.315
+                        ? MediaQuery.of(context).size.width * 0.31
                         : MediaQuery.of(context).size.width * 0.29,
                   ),
                 ),

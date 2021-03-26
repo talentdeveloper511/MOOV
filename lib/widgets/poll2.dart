@@ -73,28 +73,20 @@ class _PollViewState extends State<PollView> {
 
     String day = DateFormat('MMMd').format(aDate);
 
-    return FutureBuilder(
-        future: request2(day),
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('notreDame')
+            .doc('data')
+            .collection('poll')
+            .doc(day)
+            .snapshots(),
         // ignore: missing_return
         builder: (context, snapshot) {
+           if (!snapshot.hasData) {
+                                        return Container();
+                                      }
           // dynamic moovId;
           bool isLargePhone = Screen.diagonal(context) > 766;
-
-          if (!snapshot.hasData ||
-              snapshot.connectionState != ConnectionState.done)
-            return Shimmer.fromColors(
-              baseColor: Colors.grey[300],
-              highlightColor: Colors.grey[100],
-              child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  height: 150.0,
-                  width: MediaQuery.of(context).size.width * .9,
-                ),
-              ),
-            );
 
           voters = snapshot.data['voters'];
           question = snapshot.data['question'];
@@ -275,15 +267,14 @@ class _PollViewState extends State<PollView> {
 
                                 var p = voters.keys.toList();
 
-                                return FutureBuilder(
-                                    future: request(p[index]),
+                                return StreamBuilder(
+                                    stream: usersRef.doc(p[index]).snapshots(),
                                     builder: (context, snapshot2) {
+                                      if (!snapshot2.hasData) {
+                                        return Container();
+                                      }
                                       // bool isLargePhone = Screen.diagonal(context) > 766;
 
-                                      if (!snapshot2.hasData ||
-                                          snapshot.connectionState !=
-                                              ConnectionState.done)
-                                        return Container();
                                       var name = snapshot2.data['displayName'];
                                       var pic = snapshot2.data['photoUrl'];
                                       var id = snapshot2.data['id'];
@@ -365,16 +356,14 @@ class _PollViewState extends State<PollView> {
 
                                 var w = voters.keys.toList();
 
-                                return FutureBuilder(
-                                    future: request(w[index]),
+                                return StreamBuilder(
+                                    stream: usersRef.doc(w[index]).snapshots(),
                                     builder: (context, snapshot3) {
-                                      // bool isLargePhone = Screen.diagonal(context) > 766;
-
-                                      if (!snapshot3.hasData ||
-                                          snapshot3.connectionState !=
-                                              ConnectionState.done) {
+                                      if (!snapshot3.hasData) {
                                         return Container();
                                       }
+                                      // bool isLargePhone = Screen.diagonal(context) > 766;
+
                                       var name2 = snapshot3.data['displayName'];
                                       var pic2 =
                                           snapshot3.data['photoUrl'] ?? "";
