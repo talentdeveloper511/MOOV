@@ -15,6 +15,7 @@ import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -199,7 +200,7 @@ class _BizState extends State<Biz> {
     );
     return Scaffold(
         backgroundColor: Colors.white,
-        body: Column(children: [
+        body: ListView(children: [
           StreamBuilder(
               stream: postsRef
                   .where("userId", isEqualTo: currentUser.id)
@@ -262,245 +263,253 @@ class _BizState extends State<Biz> {
               }),
           (isUploading)
               ? circularProgress()
-              : StreamBuilder(
-                  stream: archiveRef
-                      .where("userId", isEqualTo: currentUser.id)
-                      .snapshots(),
-                  builder: (context, snapshot2) {
-                    if (!snapshot2.hasData || snapshot2.data == null) {
-                      return Container();
-                    }
-                    int count = snapshot2.data.docs.length;
+              : ExpandablePanel(
+                 theme: const ExpandableThemeData(
+                   tapHeaderToExpand: true,
+                  headerAlignment: ExpandablePanelHeaderAlignment.center,
+                  tapBodyToCollapse: true,
+                ),
+                  header: Text("HI"),
+                expanded: StreamBuilder(
+                      stream: archiveRef
+                          .where("userId", isEqualTo: currentUser.id)
+                          .snapshots(),
+                      builder: (context, snapshot2) {
+                        if (!snapshot2.hasData || snapshot2.data == null) {
+                          return Container();
+                        }
+                        int count = snapshot2.data.docs.length;
 
-                    for (int i = 0; i < count; i++) {
-                      DocumentSnapshot course2 = snapshot2.data.docs[i];
+                        for (int i = 0; i < count; i++) {
+                          DocumentSnapshot course2 = snapshot2.data.docs[i];
 
-                      return Container(
-                          height: isLargePhone
-                              ? MediaQuery.of(context).size.height / 3.9
-                              : MediaQuery.of(context).size.height / 2.75,
-                          child: Column(children: [
-                            SizedBox(height: isLargePhone ? 10 : 10),
-                            Center(
-                              child: GradientText(
-                                "Post Again",
-                                gradient: LinearGradient(colors: [
-                                  Colors.blue.shade400,
-                                  Colors.blue.shade900,
-                                ]),
+                          return Container(
+              height: isLargePhone
+                  ? MediaQuery.of(context).size.height / 3.9
+                  : MediaQuery.of(context).size.height / 2.75,
+              child: Column(children: [
+                SizedBox(height: isLargePhone ? 10 : 10),
+                Center(
+                  child: GradientText(
+                    "Post Again",
+                    gradient: LinearGradient(colors: [
+                      Colors.blue.shade400,
+                      Colors.blue.shade900,
+                    ]),
+                  ),
+                ),
+                Container(
+                  height: isLargePhone ? 150 : 140,
+                  child: Stack(
+                    children: <Widget>[
+                      buildPageView(
+                          snapshot2, count, _againController),
+                      buildSuggestionsIndicatorWithShapeAndBottomPos(
+                          circleShape,
+                          isLargePhone ? 0 : 10,
+                          count,
+                          _againController),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 7),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 50,
+                        width: 300,
+                        child: DateTimeField(
+                          format: format,
+                          keyboardType: TextInputType.datetime,
+                          decoration: InputDecoration(
+                              icon: Icon(Icons.timelapse,
+                                  color: TextThemes.ndGold),
+                              suffixIcon: Icon(
+                                Icons.calendar_today,
+                                color: needDate
+                                    ? Colors.red
+                                    : TextThemes.ndGold,
                               ),
-                            ),
-                            Container(
-                              height: isLargePhone ? 150 : 140,
-                              child: Stack(
-                                children: <Widget>[
-                                  buildPageView(
-                                      snapshot2, count, _againController),
-                                  buildSuggestionsIndicatorWithShapeAndBottomPos(
-                                      circleShape,
-                                      isLargePhone ? 0 : 10,
-                                      count,
-                                      _againController),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 7),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: 300,
-                                    child: DateTimeField(
-                                      format: format,
-                                      keyboardType: TextInputType.datetime,
-                                      decoration: InputDecoration(
-                                          icon: Icon(Icons.timelapse,
-                                              color: TextThemes.ndGold),
-                                          suffixIcon: Icon(
-                                            Icons.calendar_today,
-                                            color: needDate
-                                                ? Colors.red
-                                                : TextThemes.ndGold,
-                                          ),
-                                          labelText: 'Enter Start Time',
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0)),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.always),
-                                      onChanged: (DateTime newValue) {
-                                        setState(() {
-                                          currentValue =
-                                              currentValues; // = newValue;
-                                          //   newValue = currentValue;
-                                        });
-                                      },
-                                      onShowPicker:
-                                          (context, currentValue) async {
-                                        final date = await showDatePicker(
-                                          context: context,
-                                          firstDate: DateTime(2021),
-                                          initialDate:
-                                              currentValue ?? DateTime.now(),
-                                          lastDate: DateTime(2100),
-                                          builder: (BuildContext context,
-                                              Widget child) {
-                                            return Theme(
-                                              data: ThemeData.light().copyWith(
-                                                primaryColor: TextThemes.ndGold,
-                                                accentColor: TextThemes.ndGold,
-                                                colorScheme: ColorScheme.light(
-                                                    primary: TextThemes.ndBlue),
-                                                buttonTheme: ButtonThemeData(
-                                                    textTheme: ButtonTextTheme
-                                                        .primary),
-                                              ),
-                                              child: child,
-                                            );
-                                          },
-                                        );
-                                        if (date != null) {
-                                          final time = await showTimePicker(
-                                            context: context,
-                                            initialTime: TimeOfDay.fromDateTime(
-                                                currentValue ?? DateTime.now()),
-                                            builder: (BuildContext context,
-                                                Widget child) {
-                                              return Theme(
-                                                data:
-                                                    ThemeData.light().copyWith(
-                                                  primaryColor:
-                                                      TextThemes.ndGold,
-                                                  accentColor:
-                                                      TextThemes.ndGold,
-                                                  colorScheme:
-                                                      ColorScheme.light(
-                                                          primary: TextThemes
-                                                              .ndBlue),
-                                                  buttonTheme: ButtonThemeData(
-                                                      textTheme: ButtonTextTheme
-                                                          .primary),
-                                                ),
-                                                child: child,
-                                              );
-                                            },
-                                          );
-                                          currentValues =
-                                              DateTimeField.combine(date, time);
-                                          return currentValues;
-                                        } else {
-                                          return currentValue;
-                                        }
-                                      },
-                                    ),
+                              labelText: 'Enter Start Time',
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(10.0)),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always),
+                          onChanged: (DateTime newValue) {
+                            setState(() {
+                              currentValue =
+                                  currentValues; // = newValue;
+                              //   newValue = currentValue;
+                            });
+                          },
+                          onShowPicker:
+                              (context, currentValue) async {
+                            final date = await showDatePicker(
+                              context: context,
+                              firstDate: DateTime(2021),
+                              initialDate:
+                                  currentValue ?? DateTime.now(),
+                              lastDate: DateTime(2100),
+                              builder: (BuildContext context,
+                                  Widget child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    primaryColor: TextThemes.ndGold,
+                                    accentColor: TextThemes.ndGold,
+                                    colorScheme: ColorScheme.light(
+                                        primary: TextThemes.ndBlue),
+                                    buttonTheme: ButtonThemeData(
+                                        textTheme: ButtonTextTheme
+                                            .primary),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        HapticFeedback.lightImpact();
-
-                                        if (DateTime.now()
-                                                .subtract(Duration(hours: 1))
-                                                .isBefore(currentValue) &&
-                                            DateTime.now()
-                                                .add(Duration(hours: 1))
-                                                .isAfter(currentValue)) {
-                                          setState(() {
-                                            needDate = true;
-                                          });
-                                        } else {
-                                          setState(() {
-                                            isUploading = true;
-                                          });
-                                          final GoogleSignInAccount user =
-                                              googleSignIn.currentUser;
-                                          final strUserId = user.id;
-                                          print("here");
-
-                                          currentUser.isBusiness
-                                              ? Database().createBusinessPost(
-                                                  title: course2['title'],
-                                                  type: course2['type'],
-                                                  privacy: course2['privacy'],
-                                                  description:
-                                                      course2['description'],
-                                                  address: course2['address'],
-                                                  startDate: currentValue,
-                                                  unix: currentValue
-                                                      .millisecondsSinceEpoch,
-                                                  statuses: course2['statuses'],
-                                                  maxOccupancy:
-                                                      course2['maxOccupancy'],
-                                                  venmo: course2['venmo'],
-                                                  imageUrl: course2['image'],
-                                                  userId: course2['userId'],
-                                                  postId:
-                                                      generateRandomString(20),
-                                                  posterName:
-                                                      currentUser.displayName,
-                                                  push: course2['push'])
-                                              : Database().createPost(
-                                                  title: course2['title'],
-                                                  type: course2['type'],
-                                                  privacy: course2['privacy'],
-                                                  description:
-                                                      course2['description'],
-                                                  address: course2['address'],
-                                                  startDate: currentValue,
-                                                  unix: currentValue
-                                                      .millisecondsSinceEpoch,
-                                                  statuses: course2['statuses'],
-                                                  maxOccupancy:
-                                                      course2['maxOccupancy'],
-                                                  venmo: course2['venmo'],
-                                                  imageUrl: course2['image'],
-                                                  userId: course2['userId'],
-                                                  postId:
-                                                      generateRandomString(20),
-                                                  posterName:
-                                                      currentUser.displayName,
-                                                  push: course2['push']);
-
-                                          setState(() {
-                                            isUploading = false;
-                                          });
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        padding: EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                Colors.blue[400],
-                                                Colors.blue[300]
-                                              ],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(10.0)),
-                                        child: Text(
-                                          "Post!",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                      ),
+                                  child: child,
+                                );
+                              },
+                            );
+                            if (date != null) {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.fromDateTime(
+                                    currentValue ?? DateTime.now()),
+                                builder: (BuildContext context,
+                                    Widget child) {
+                                  return Theme(
+                                    data:
+                                        ThemeData.light().copyWith(
+                                      primaryColor:
+                                          TextThemes.ndGold,
+                                      accentColor:
+                                          TextThemes.ndGold,
+                                      colorScheme:
+                                          ColorScheme.light(
+                                              primary: TextThemes
+                                                  .ndBlue),
+                                      buttonTheme: ButtonThemeData(
+                                          textTheme: ButtonTextTheme
+                                              .primary),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    child: child,
+                                  );
+                                },
+                              );
+                              currentValues =
+                                  DateTimeField.combine(date, time);
+                              return currentValues;
+                            } else {
+                              return currentValue;
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            HapticFeedback.lightImpact();
+
+                            if (DateTime.now()
+                                    .subtract(Duration(hours: 1))
+                                    .isBefore(currentValue) &&
+                                DateTime.now()
+                                    .add(Duration(hours: 1))
+                                    .isAfter(currentValue)) {
+                              setState(() {
+                                needDate = true;
+                              });
+                            } else {
+                              setState(() {
+                                isUploading = true;
+                              });
+                              final GoogleSignInAccount user =
+                                  googleSignIn.currentUser;
+                              final strUserId = user.id;
+                              print("here");
+
+                              currentUser.isBusiness
+                                  ? Database().createBusinessPost(
+                                      title: course2['title'],
+                                      type: course2['type'],
+                                      privacy: course2['privacy'],
+                                      description:
+                                          course2['description'],
+                                      address: course2['address'],
+                                      startDate: currentValue,
+                                      unix: currentValue
+                                          .millisecondsSinceEpoch,
+                                      statuses: course2['statuses'],
+                                      maxOccupancy:
+                                          course2['maxOccupancy'],
+                                      venmo: course2['venmo'],
+                                      imageUrl: course2['image'],
+                                      userId: course2['userId'],
+                                      postId:
+                                          generateRandomString(20),
+                                      posterName:
+                                          currentUser.displayName,
+                                      push: course2['push'])
+                                  : Database().createPost(
+                                      title: course2['title'],
+                                      type: course2['type'],
+                                      privacy: course2['privacy'],
+                                      description:
+                                          course2['description'],
+                                      address: course2['address'],
+                                      startDate: currentValue,
+                                      unix: currentValue
+                                          .millisecondsSinceEpoch,
+                                      statuses: course2['statuses'],
+                                      maxOccupancy:
+                                          course2['maxOccupancy'],
+                                      venmo: course2['venmo'],
+                                      imageUrl: course2['image'],
+                                      userId: course2['userId'],
+                                      postId:
+                                          generateRandomString(20),
+                                      posterName:
+                                          currentUser.displayName,
+                                      push: course2['push']);
+
+                              setState(() {
+                                isUploading = false;
+                              });
+                            }
+                          },
+                          child: Container(
+                            height: 30,
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.blue[400],
+                                    Colors.blue[300]
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(10.0)),
+                            child: Text(
+                              "Post!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18),
                             ),
-                          ]));
-                    }
-                    return Container();
-                  })
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ]));
+                        }
+                        return Container();
+                      }),
+                )
         ]));
   }
 }
