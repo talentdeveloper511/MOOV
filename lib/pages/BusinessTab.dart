@@ -270,11 +270,11 @@ class _BizState extends State<Biz> {
                                     height: 6,
                                   )
                                 : Container(),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  child: GoingPage(course['postId'])),
-                            )
+                            // Expanded(
+                            //   child: SingleChildScrollView(
+                            //       physics: AlwaysScrollableScrollPhysics(),
+                            //       child: GoingPage(course['postId'])),
+                            // )
                           ]));
                     }
                     return Container();

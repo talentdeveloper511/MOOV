@@ -1057,7 +1057,7 @@ class _HomePageState extends State<HomePage>
                                                                         top:
                                                                             8.0),
                                                                 child: Text(
-                                                                    "Do you have the MOOV of the Day? Email admin@whatsthemoov.com."),
+                                                                    "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
                                                               ),
                                                             ),
                                                         barrierDismissible:

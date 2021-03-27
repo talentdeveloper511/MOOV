@@ -190,6 +190,7 @@ class _PostDetailState extends State<PostDetail>
                     FloatingActionButtonLocation.endFloat,
                 body: SafeArea(
                   top: false,
+                  bottom: false,
                   child: Stack(children: [
                     StreamBuilder(
                         stream: postsRef.doc(postId).snapshots(),
@@ -219,6 +220,7 @@ class _PostDetailState extends State<PostDetail>
                           return Container(
                             color: Colors.white,
                             child: ListView(
+                              physics: ClampingScrollPhysics(),
                               controller: _scrollController,
                               children: <Widget>[
                                 _BannerImage(bannerImage, userId, postId,
@@ -231,7 +233,8 @@ class _PostDetailState extends State<PostDetail>
                                     userId,
                                     postId,
                                     course,
-                                    commentCount),
+                                    commentCount,
+                                    venmo),
                               ],
                             ),
                           );
@@ -364,10 +367,10 @@ class _NonImageContents extends StatelessWidget {
   String title, description, userId;
   dynamic startDate, address, moovId;
   DocumentSnapshot course;
-  var commentCount;
+  int commentCount, venmo, isBusiness;
 
   _NonImageContents(this.title, this.description, this.startDate, this.address,
-      this.userId, this.moovId, this.course, this.commentCount);
+      this.userId, this.moovId, this.course, this.commentCount, this.venmo);
 
   @override
   Widget build(BuildContext context) {
@@ -378,8 +381,8 @@ class _NonImageContents extends StatelessWidget {
         children: <Widget>[
           _Title(title),
           _Description(description),
-          PostTimeAndPlace(
-              startDate, address, course['venmo'], course['userId']),
+          PostTimeAndPlace(startDate, address, course['venmo'],
+              course['userId'], course['businessPost'], course['postId']),
           _AuthorContent(userId, course),
           GestureDetector(
             onTap: () {
@@ -532,7 +535,7 @@ class _NonImageContents extends StatelessWidget {
                   ),
                 ))
           ]),
-          Seg2(moovId: moovId),
+          GoingListSegment(moovId: moovId),
         ],
       ),
     );
@@ -600,11 +603,12 @@ class _Description extends StatelessWidget {
 }
 
 class PostTimeAndPlace extends StatelessWidget {
-  dynamic startDate, address;
-  int venmo;
-  String userId;
+  final dynamic startDate, address;
+  final int venmo;
+  final String userId, moovId;
+  final bool isBusiness;
 
-  PostTimeAndPlace(this.startDate, this.address, this.venmo, this.userId);
+  PostTimeAndPlace(this.startDate, this.address, this.venmo, this.userId, this.isBusiness, this.moovId);
 
   @override
   Widget build(BuildContext context) {
@@ -645,14 +649,17 @@ class PostTimeAndPlace extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                      width: MediaQuery.of(context).size.width * .65,
+                      width: MediaQuery.of(context).size.width * .35,
                       child: GestureDetector(
                         onTap: () => MapsLauncher.launchQuery(address),
                         child: Text(
                           address,
+                          // textAlign: TextAlign.center,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.blue[800], decoration: TextDecoration.underline),
+                          style: TextStyle(
+                              color: Colors.blue[800],
+                              decoration: TextDecoration.underline),
                         ),
                       ))
                 ],
@@ -660,7 +667,7 @@ class PostTimeAndPlace extends StatelessWidget {
             )
           ],
         ),
-        venmo != null && venmo != 0
+        venmo != null && venmo != 0 && !isBusiness
             ? Positioned(
                 top: 0,
                 right: 20,
@@ -714,6 +721,13 @@ class PostTimeAndPlace extends StatelessWidget {
                 ),
               )
             : Text(""),
+        venmo != null && venmo != 0 && isBusiness
+            ? Positioned(
+                top: 0,
+                right: 30,
+                child: PaymentButton(moovId)
+              )
+            : Text(""),
       ]),
     );
   }
@@ -722,7 +736,6 @@ class PostTimeAndPlace extends StatelessWidget {
 class _AuthorContent extends StatelessWidget {
   String userId;
   DocumentSnapshot course;
-  var data;
   _AuthorContent(this.userId, this.course);
 
   @override
@@ -864,20 +877,27 @@ class _AuthorContent extends StatelessWidget {
   }
 }
 
-class Seg2 extends StatefulWidget {
-  dynamic moovId;
-  Seg2({Key key, @required this.moovId}) : super(key: key);
+class GoingListSegment extends StatefulWidget {
+  final String moovId;
+  GoingListSegment({Key key, @required this.moovId});
+
+  static _GoingListSegmentState of(BuildContext context) =>
+      context.findAncestorStateOfType<_GoingListSegmentState>();
 
   @override
-  _Seg2State createState() => _Seg2State(moovId);
+  _GoingListSegmentState createState() => _GoingListSegmentState(moovId);
 }
 
-class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
+class _GoingListSegmentState extends State<GoingListSegment>
+    with SingleTickerProviderStateMixin {
+  dynamic _statusHeight = 0;
+  set intt(dynamic value) => setState(() => _statusHeight = value);
+
   // TabController to control and switch tabs
   TabController _tabController;
   dynamic moovId;
 
-  _Seg2State(this.moovId);
+  _GoingListSegmentState(this.moovId);
 
   // Current Index of tab
   int _currentIndex = 0;
@@ -905,10 +925,11 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: _statusHeight.toDouble() + 200 ?? 300,
       child: Column(
         children: <Widget>[
-          new Padding(
+          //  Text((_statusHeight / 55).round().toString()),
+          Padding(
             padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: Container(
               height: 40,
@@ -965,9 +986,11 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
                 children: [
                   Center(
                     child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: 1,
                         itemBuilder: (context, index) {
-                          return GoingPage(moovId);
+                          return GoingPage(moovId,
+                              (val) => setState(() => _statusHeight = val));
                         }),
                   ),
                   Center(
@@ -1437,30 +1460,109 @@ class _ButtonsState extends State<Buttons> {
           }
         });
   }
+}
 
-  void showMax(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text("This MOOV is currently full",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nHate to see it"),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text("Fuck me", style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              Navigator.pop(context);
+void showMax(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: Text("This MOOV is currently full",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+      content: Text("\nHate to see it"),
+      actions: [
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          child: Text("Fuck me", style: TextStyle(color: Colors.red)),
+          onPressed: () {
+            Navigator.pop(context);
 
-              // Database().deletePost(postId, userId);
-            },
-          ),
-          // CupertinoDialogAction(
-          //   child: Text("Cancel"),
-          //   onPressed: () => Navigator.of(context).pop(true),
-          // )
-        ],
-      ),
-    );
+            // Database().deletePost(postId, userId);
+          },
+        ),
+        // CupertinoDialogAction(
+        //   child: Text("Cancel"),
+        //   onPressed: () => Navigator.of(context).pop(true),
+        // )
+      ],
+    ),
+  );
+}
+
+class PaymentButton extends StatefulWidget {
+  final String postId;
+  PaymentButton(this.postId);
+
+  @override
+  _PaymentButtonState createState() => _PaymentButtonState();
+}
+
+class _PaymentButtonState extends State<PaymentButton> {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: postsRef.doc(widget.postId).snapshots(),
+        // ignore: missing_return
+        builder: (context, snapshot) {
+          // title = snapshot.data['title'];
+          // pic = snapshot.data['pic'];
+          if (!snapshot.hasData) return circularProgress();
+
+          DocumentSnapshot course = snapshot.data;
+          Map<String, dynamic> statuses = course['statuses'];
+          int maxOccupancy = course['maxOccupancy'];
+          int goingCount = course['going'].length;
+          bool hasPaid = false;
+
+          List<dynamic> statusesIds = statuses.keys.toList();
+
+          List<dynamic> statusesValues = statuses.values.toList();
+          List pushList = currentUser.pushSettings.values.toList();
+          if (statuses[currentUser.id] == 5) {
+            hasPaid = true;
+          }
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  side: BorderSide(color: Colors.black)),
+              onPressed: () {
+                HapticFeedback.lightImpact();
+
+                if (goingCount == maxOccupancy &&
+                    statuses[currentUser.id] != 3) {
+                  showMax(context);
+                }
+                if (hasPaid == false) {
+                  //process payment
+
+                  //if successful, set button
+                  setState(() {});
+                }
+              },
+              color: (hasPaid == true) ? Colors.orange[600] : Colors.white,
+              padding: EdgeInsets.all(5.0),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 3.0, right: 3),
+                child: (hasPaid == true)
+                    ? Column(
+                        children: [
+                          Text('Paid', style: TextStyle(color: Colors.white)),
+                          Icon(Icons.attach_money,
+                              color: Colors.white, size: 25),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Text('Pay'),
+                          Icon(Icons.attach_money,
+                              color: Colors.orange[600], size: 25),
+                        ],
+                      ),
+              ),
+            ),
+          );
+        });
   }
 }
