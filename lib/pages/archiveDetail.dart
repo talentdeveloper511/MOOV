@@ -902,26 +902,7 @@ class _GoingListSegmentState extends State<GoingListSegment>
               ),
             ),
           ),
-          Expanded(
-            child: TabBarView(controller: _tabController,
-                // Restrict scroll by user
-                children: [
-                  // Center(
-                  //   child: ListView.builder(
-                  //       itemCount: 1,
-                  //       itemBuilder: (context, index) {
-                  //         return GoingPage(moovId);
-                  //       }),
-                  // ),
-                  Center(
-                    child: ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          return GoingPageFriends(moovId);
-                        }),
-                  )
-                ]),
-          )
+       
         ],
       ),
     );

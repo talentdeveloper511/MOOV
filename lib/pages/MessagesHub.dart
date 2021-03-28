@@ -772,7 +772,7 @@ class MessageList extends StatelessWidget {
                                             otherPerson,
                                             false,
                                             " ",
-                                            [])));
+                                            [],{})));
                               },
                               child: Container(
                                 height: 100,
@@ -883,7 +883,7 @@ class MessageList extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MessageDetail(
-                                            " ", " ", true, gid, snapshot.data['members'])));
+                                            " ", " ", true, gid, snapshot.data['members'], {})));
                               },
                               child: Container(
                                 height: 100,
@@ -1034,22 +1034,16 @@ class MessageDetail extends StatefulWidget {
   final String otherPerson, directMessageId, gid;
   final bool isGroupChat;
   final List<dynamic> members;
+  final Map<String, String> sendingPost;
 
   MessageDetail(this.directMessageId, this.otherPerson, this.isGroupChat,
-      this.gid, this.members);
+      this.gid, this.members, this.sendingPost);
 
   @override
-  _MessageDetailState createState() => _MessageDetailState(this.directMessageId,
-      this.otherPerson, this.isGroupChat, this.gid, this.members);
+  _MessageDetailState createState() => _MessageDetailState();
 }
 
 class _MessageDetailState extends State<MessageDetail> {
-  String otherPerson, directMessageId, gid;
-  bool isGroupChat;
-  List<dynamic> members;
-
-  _MessageDetailState(
-      this.directMessageId, this.otherPerson, this.isGroupChat, this.gid, this.members);
 
   @override
   Widget build(BuildContext context) {
@@ -1077,18 +1071,18 @@ class _MessageDetailState extends State<MessageDetail> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
-                  onTap: isGroupChat
+                  onTap: widget.isGroupChat
                       ? () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => GroupDetail(gid)));
+                              builder: (context) => GroupDetail(widget.gid)));
                         }
                       : () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => OtherProfile(otherPerson)));
+                              builder: (context) => OtherProfile(widget.otherPerson)));
                         },
-                  child: (isGroupChat == false)
+                  child: (widget.isGroupChat == false)
                       ? StreamBuilder(
-                          stream: usersRef.doc(otherPerson).snapshots(),
+                          stream: usersRef.doc(widget.otherPerson).snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData || snapshot.data == null) {
                               return circularProgress();
@@ -1115,7 +1109,7 @@ class _MessageDetailState extends State<MessageDetail> {
                             );
                           })
                       : StreamBuilder(
-                          stream: groupsRef.doc(gid).snapshots(),
+                          stream: groupsRef.doc(widget.gid).snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData || snapshot.data == null) {
                               return circularProgress();
@@ -1162,18 +1156,16 @@ class _MessageDetailState extends State<MessageDetail> {
         child: Container(
           child: Column(
             children: [
-              isGroupChat
+              widget.isGroupChat
                   ? Chat(
-                      gid: gid,
+                      gid: widget.gid,
                       isGroupChat: true,
-                      directMessageId: " ",
-                      otherPerson: " ",
-                      members: members)
+                      members: widget.members)
                   : Chat(
-                      gid: " ",
                       isGroupChat: false,
-                      directMessageId: directMessageId,
-                      otherPerson: otherPerson),
+                      directMessageId: widget.directMessageId,
+                      otherPerson: widget.otherPerson,
+                      sendingPost: widget.sendingPost),
               SizedBox(height: 20),
               MessageScreenshot()
             ],

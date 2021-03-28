@@ -1044,6 +1044,7 @@ class _HomePageState extends State<HomePage>
                                                 alignment: Alignment.center,
                                                 child: GestureDetector(
                                                   onTap: () {
+                                                    
                                                     showDialog(
                                                         context: context,
                                                         builder: (_) =>

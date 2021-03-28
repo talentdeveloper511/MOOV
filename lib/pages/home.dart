@@ -183,14 +183,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     context,
                     MaterialPageRoute(
                         builder: (context) => MessageDetail(
-                            pushId, recipientId, false, " ", [])));
+                            pushId, recipientId, false, " ", [],{})));
               }
               if (page == "chat" && !_isNumeric(pushId)) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            MessageDetail(" ", " ", true, pushId, [])));
+                            MessageDetail(" ", " ", true, pushId, [],{})));
               }
 
               if (page == "user") {
@@ -272,14 +272,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetail(pushId, recipientId, false, " ", [])));
+                    MessageDetail(pushId, recipientId, false, " ", [],{})));
       }
       if (page == "chat" && !_isNumeric(pushId)) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetail(" ", " ", true, pushId, [])));
+                    MessageDetail(" ", " ", true, pushId, [],{})));
       }
 
       if (page == "user") {
@@ -424,14 +424,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetail(pushId, recipientId, false, " ", [])));
+                    MessageDetail(pushId, recipientId, false, " ", [],{})));
       }
       if (page == "chat" && !_isNumeric(pushId)) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetail(" ", " ", true, pushId, [])));
+                    MessageDetail(" ", " ", true, pushId, [],{})));
       }
 
       if (page == "user") {
@@ -521,14 +521,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MessageDetail(pushId, recipientId, false, " ", [])));
+                          MessageDetail(pushId, recipientId, false, " ", [],{})));
             }
             if (page == "chat" && !_isNumeric(pushId)) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MessageDetail(" ", " ", true, pushId, [])));
+                          MessageDetail(" ", " ", true, pushId, [],{})));
             }
 
             if (page == "user") {

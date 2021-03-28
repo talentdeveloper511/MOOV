@@ -552,10 +552,12 @@ class GoingPage extends StatelessWidget {
 }
 
 class GoingPageFriends extends StatelessWidget {
+    final HeightAdjustCallback callback;
+
   dynamic moovId, likeCount;
   int status = 0;
 
-  GoingPageFriends(this.moovId);
+  GoingPageFriends(this.moovId, this.callback);
 
   @override
   Widget build(BuildContext context) {
@@ -586,6 +588,9 @@ class GoingPageFriends extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: statusesIds.length,
                       itemBuilder: (context, index) {
+                         Timer(Duration(microseconds: 1), () {
+                          callback(statusesIds.length * 55);
+                        });
                         bool hide = false;
                         if (!_isNumeric(statusesIds[index])) {
                           hide = true;

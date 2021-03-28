@@ -995,9 +995,11 @@ class _GoingListSegmentState extends State<GoingListSegment>
                   ),
                   Center(
                     child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                         itemCount: 1,
                         itemBuilder: (context, index) {
-                          return GoingPageFriends(moovId);
+                          return GoingPageFriends(moovId,
+                          (val) => setState(() => _statusHeight = val));
                         }),
                   )
                 ]),

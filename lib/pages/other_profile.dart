@@ -169,7 +169,7 @@ class _OtherProfileState extends State<OtherProfile> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  MessageDetail(directMessageId, id, false, "", [])));
+                  MessageDetail(directMessageId, id, false, "", [],{})));
     });
   }
 

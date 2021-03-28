@@ -1,39 +1,35 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
-import 'package:MOOV/services/database.dart';
-import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/widgets/progress.dart';
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duration/duration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
-import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_1.dart';
-import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_2.dart';
-import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:intl/intl.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class Chat extends StatefulWidget {
   final String gid, directMessageId, otherPerson;
   final bool isGroupChat;
   final List<dynamic> members;
+  Map<String, String> sendingPost;
 
   Chat(
       {this.gid,
       this.isGroupChat,
       this.directMessageId,
       this.otherPerson,
-      this.members});
+      this.members,
+      this.sendingPost});
 
   @override
   ChatState createState() => ChatState(
@@ -51,7 +47,7 @@ class ChatState extends State<Chat> {
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) =>
-              MessageDetail(directMessageId, otherPerson, false, " ", []),
+              MessageDetail(directMessageId, otherPerson, false, " ", [], {}),
           transitionDuration: Duration(seconds: 0),
         ),
       );
@@ -148,7 +144,94 @@ class ChatState extends State<Chat> {
     if (directMessageId == "nothing" || directMessageId == null) {
       directMessageId = currentUser.id + otherPerson;
     }
-    if (commentController.text.isNotEmpty) {
+
+    if (widget.sendingPost != null && widget.sendingPost.isNotEmpty) {
+      //sending the MOOV
+      isGroupChat
+          ? messagesRef
+              .doc(gid)
+              .collection("chat")
+              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id)
+              .set({
+              "seen": false,
+              "displayName": currentUser.displayName,
+              "comment": widget.sendingPost['postId'],
+              "timestamp": DateTime.now().millisecondsSinceEpoch,
+              "avatarUrl": currentUser.photoUrl,
+              "userId": currentUser.id,
+              "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id,
+              "gid": gid,
+              "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+              "directMessageId": "",
+              "isGroupChat": true,
+              "reactions": {}
+            })
+          : messagesRef
+              .doc(directMessageId)
+              .collection("chat")
+              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id)
+              .set({
+              "seen": false,
+              "displayName": currentUser.displayName,
+              "comment": widget.sendingPost['postId'],
+              "timestamp": DateTime.now().millisecondsSinceEpoch,
+              "avatarUrl": currentUser.photoUrl,
+              "userId": currentUser.id,
+              "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id,
+              "gid": " ",
+              "directMessageId": directMessageId,
+              "isGroupChat": false,
+              "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+              "reactions": {}
+            });
+      isGroupChat
+          ? messagesRef.doc(gid).set({
+              "lastMessage": "Sent a MOOV",
+              "seen": false,
+              "sender": currentUser.id,
+              "receiver": otherPerson,
+              "timestamp": DateTime.now().millisecondsSinceEpoch,
+              "gid": gid,
+              "directMessageId": directMessageId,
+              "people": members,
+              "isGroupChat": true,
+            }, SetOptions(merge: true))
+          : messagesRef.doc(directMessageId).set({
+              "lastMessage": "Sent a MOOV",
+              "seen": false,
+              "sender": currentUser.id,
+              "receiver": otherPerson,
+              "timestamp": DateTime.now().millisecondsSinceEpoch,
+              "gid": "",
+              "directMessageId": directMessageId,
+              "people": [currentUser.id, otherPerson],
+              "isGroupChat": false,
+            }, SetOptions(merge: true));
+
+      setState(() {
+        widget.sendingPost = null;
+      });
+
+      Timer(Duration(milliseconds: 200), () {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              curve: Curves.easeIn,
+              duration: Duration(milliseconds: 200));
+        }
+      });
+      commentController.clear();
+    }
+
+    if (commentController.text.isNotEmpty && widget.sendingPost == null) {
       isGroupChat
           ? messagesRef
               .doc(gid)
@@ -196,7 +279,9 @@ class ChatState extends State<Chat> {
             });
       isGroupChat
           ? messagesRef.doc(gid).set({
-              "lastMessage": commentController.text,
+              "lastMessage": widget.sendingPost != null || widget.sendingPost.isNotEmpty
+                  ? "Sent a MOOV":
+                  commentController.text,
               "seen": false,
               "sender": currentUser.id,
               "receiver": otherPerson,
@@ -207,7 +292,9 @@ class ChatState extends State<Chat> {
               "isGroupChat": true,
             }, SetOptions(merge: true))
           : messagesRef.doc(directMessageId).set({
-              "lastMessage": commentController.text,
+               "lastMessage": widget.sendingPost != null || widget.sendingPost.isNotEmpty
+                  ? "Sent a MOOV":
+                  commentController.text,
               "seen": false,
               "sender": currentUser.id,
               "receiver": otherPerson,
@@ -244,6 +331,103 @@ class ChatState extends State<Chat> {
         children: <Widget>[
           Expanded(child: buildChat()),
           Divider(),
+          widget.sendingPost != null && widget.sendingPost.isNotEmpty
+              ? Container(
+                  //this is for sending a MOOV or image message
+                  alignment: Alignment.center,
+                  // width: width * 0.8,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          height: isLargePhone
+                              ? SizeConfig.blockSizeVertical * 09
+                              : SizeConfig.blockSizeVertical * 10,
+                          width: 200,
+                          child: OpenContainer(
+                            transitionType: ContainerTransitionType.fade,
+                            transitionDuration: Duration(milliseconds: 500),
+                            openBuilder: (context, _) =>
+                                PostDetail(widget.sendingPost['postId']),
+                            closedElevation: 0,
+                            closedBuilder: (context, _) =>
+                                Stack(children: <Widget>[
+                              FractionallySizedBox(
+                                widthFactor: 1,
+                                child: Container(
+                                  child: Container(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(
+                                        imageUrl: widget.sendingPost["pic"],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 5,
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    alignment: Alignment(0.0, 0.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: <Color>[
+                                            Colors.black.withAlpha(0),
+                                            Colors.black,
+                                            Colors.black12,
+                                          ],
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Text(
+                                          widget.sendingPost['title'],
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontFamily: 'Solway',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 14.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : Container(),
           ListTile(
             title: TextFormField(
               controller: commentController,
@@ -280,7 +464,7 @@ class ChatState extends State<Chat> {
                                 pageBuilder:
                                     (context, animation1, animation2) =>
                                         MessageDetail(directMessageId,
-                                            otherPerson, false, " ", []),
+                                            otherPerson, false, " ", [], {}),
                                 transitionDuration: Duration(seconds: 0),
                               ),
                             );
@@ -417,8 +601,7 @@ class _CommentState extends State<Comment> {
         (userId != currentUser.id)
             ? ListTile(
                 // tileColor: Colors.blue[100],
-                title: isGroupChat
-                    ? ChatBubble(
+                title:  ChatBubble(
                         alignment: Alignment.centerLeft,
                         clipper:
                             ChatBubbleClipper5(type: BubbleType.receiverBubble),
@@ -428,116 +611,118 @@ class _CommentState extends State<Comment> {
                             constraints: BoxConstraints(
                               maxWidth: MediaQuery.of(context).size.width * 0.7,
                             ),
-                            child: Text(comment)))
-                    : FlutterReactionButtonCheck(
-                        onReactionChanged: (reaction, index, isChecked) {
-                          // FLIPPED OFF NOTIF HERE
-                          // if (reactionValues[0] == 0) {
-                          //   setState(() {
-                          //     middleFinger = false;
-                          //   });
-                          // } else
-                          //  if (reactionValues[0] == 1) {
-                          //   setState(() {
-                          //     middleFinger = false;
-                          //   });
-                          // }
-                          // // } else {
-                          // //   setState(() {
-                          // //     reactionValues[0] = -1;
-                          // //   });
-                          // // }
-                          // Database().chatReaction(currentUser.id,
-                          //     directMessageId, chatId, index, false);
-                          // setState(() {
-                          //   middleFinger = !middleFinger;
-                          // });
+                            child: Text(comment))),
+                    // : 
+                    // FlutterReactionButtonCheck(
+                    //     onReactionChanged: (reaction, index, isChecked) {
+                    //       // FLIPPED OFF NOTIF HERE
+                    //       // if (reactionValues[0] == 0) {
+                    //       //   setState(() {
+                    //       //     middleFinger = false;
+                    //       //   });
+                    //       // } else
+                    //       //  if (reactionValues[0] == 1) {
+                    //       //   setState(() {
+                    //       //     middleFinger = false;
+                    //       //   });
+                    //       // }
+                    //       // // } else {
+                    //       // //   setState(() {
+                    //       // //     reactionValues[0] = -1;
+                    //       // //   });
+                    //       // // }
+                    //       // Database().chatReaction(currentUser.id,
+                    //       //     directMessageId, chatId, index, false);
+                    //       // setState(() {
+                    //       //   middleFinger = !middleFinger;
+                    //       // });
 
-                          // print(reactionValues[0]);
-                          // print(middleFinger);
-                        },
-                        reactions: [
-                            Reaction(
-                                previewIcon: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 8.0, top: 6, bottom: 6, left: 8),
-                                    child: Text("Coming soon")),
-                                // previewIcon: Padding(
-                                //   padding: const EdgeInsets.only(
-                                //       right: 8.0, top: 4, bottom: 6),
-                                //   child: Image.asset(
-                                //     'lib/assets/middleFinger.gif',
-                                //     height: 40,
-                                //   ),
-                                // ),
-                                // title: Text("Flip 'em off"),
-                                icon: Stack(children: [
-                                  ChatBubble(
-                                      alignment: Alignment.centerLeft,
-                                      clipper: ChatBubbleClipper5(
-                                          type: BubbleType.receiverBubble),
-                                      backGroundColor: Colors.grey[200],
-                                      margin: EdgeInsets.only(top: 5),
-                                      child: Container(
-                                          constraints: BoxConstraints(
-                                            maxWidth: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                          ),
-                                          child: Text(comment))),
-                                  Positioned(
-                                      left: comment.length < 25
-                                          ? comment.length.toDouble() * 8
-                                          : comment.length < 40
-                                              ? comment.length.toDouble() * 6
-                                              : 220,
-                                      child: middleFinger
-                                          ? Image.asset(
-                                              'lib/assets/middleFinger.gif',
-                                              height: 40,
-                                            )
-                                          : Container())
-                                ])),
-                            // Reaction(
-                            //     // previewIcon: Padding(
-                            //     //   padding: const EdgeInsets.only(
-                            //     //       right: 8.0, top: 4, bottom: 6),
-                            //     //   child: Image.asset(
-                            //     //     'lib/assets/chens.jpg',
-                            //     //     height: 40,
-                            //     //   ),
-                            //     // ),
-                            //     // title: Text("Flip 'em off"),
-                            //     icon: Stack(children: [
-                            //       ChatBubble(
-                            //           alignment: Alignment.centerLeft,
-                            //           clipper: ChatBubbleClipper5(
-                            //               type: BubbleType.receiverBubble),
-                            //           backGroundColor: Colors.grey[200],
-                            //           margin: EdgeInsets.only(top: 5),
-                            //           child: Container(
-                            //               constraints: BoxConstraints(
-                            //                 maxWidth: MediaQuery.of(context)
-                            //                         .size
-                            //                         .width *
-                            //                     0.7,
-                            //               ),
-                            //               child: Text(comment))),
-                            //       Positioned(
-                            //           left: comment.length < 25
-                            //               ? comment.length.toDouble() * 8
-                            //               : comment.length < 40
-                            //                   ? comment.length.toDouble() * 6
-                            //                   : 220,
-                            //           child: middleFinger
-                            //               ? Image.asset(
-                            //                   'lib/assets/middleFinger.gif',
-                            //                   height: 40,
-                            //                 )
-                            //               : Container())
-                            //     ])),
-                          ]),
+                    //       // print(reactionValues[0]);
+                    //       // print(middleFinger);
+                    //     },
+                    //     reactions: [
+                    //         Reaction(
+                    //             previewIcon: Padding(
+                    //                 padding: const EdgeInsets.only(
+                    //                     right: 8.0, top: 6, bottom: 6, left: 8),
+                    //                 child: Text("Coming soon")),
+                    //             // previewIcon: Padding(
+                    //             //   padding: const EdgeInsets.only(
+                    //             //       right: 8.0, top: 4, bottom: 6),
+                    //             //   child: Image.asset(
+                    //             //     'lib/assets/middleFinger.gif',
+                    //             //     height: 40,
+                    //             //   ),
+                    //             // ),
+                    //             // title: Text("Flip 'em off"),
+                    //             icon: Stack(children: [
+                    //               ChatBubble(
+                    //                   alignment: Alignment.centerLeft,
+                    //                   clipper: ChatBubbleClipper5(
+                    //                       type: BubbleType.receiverBubble),
+                    //                   backGroundColor: Colors.grey[200],
+                    //                   margin: EdgeInsets.only(top: 5),
+                    //                   child: Container(
+                    //                       constraints: BoxConstraints(
+                    //                         maxWidth: MediaQuery.of(context)
+                    //                                 .size
+                    //                                 .width *
+                    //                             0.7,
+                    //                       ),
+                    //                       child: Text(comment))),
+                    //               Positioned(
+                    //                   left: comment.length < 25
+                    //                       ? comment.length.toDouble() * 8
+                    //                       : comment.length < 40
+                    //                           ? comment.length.toDouble() * 6
+                    //                           : 220,
+                    //                   child: middleFinger
+                    //                       ? Image.asset(
+                    //                           'lib/assets/middleFinger.gif',
+                    //                           height: 40,
+                    //                         )
+                    //                       : Container())
+                    //             ])
+                    //             ),
+                    //         // Reaction(
+                    //         //     // previewIcon: Padding(
+                    //         //     //   padding: const EdgeInsets.only(
+                    //         //     //       right: 8.0, top: 4, bottom: 6),
+                    //         //     //   child: Image.asset(
+                    //         //     //     'lib/assets/chens.jpg',
+                    //         //     //     height: 40,
+                    //         //     //   ),
+                    //         //     // ),
+                    //         //     // title: Text("Flip 'em off"),
+                    //         //     icon: Stack(children: [
+                    //         //       ChatBubble(
+                    //         //           alignment: Alignment.centerLeft,
+                    //         //           clipper: ChatBubbleClipper5(
+                    //         //               type: BubbleType.receiverBubble),
+                    //         //           backGroundColor: Colors.grey[200],
+                    //         //           margin: EdgeInsets.only(top: 5),
+                    //         //           child: Container(
+                    //         //               constraints: BoxConstraints(
+                    //         //                 maxWidth: MediaQuery.of(context)
+                    //         //                         .size
+                    //         //                         .width *
+                    //         //                     0.7,
+                    //         //               ),
+                    //         //               child: Text(comment))),
+                    //         //       Positioned(
+                    //         //           left: comment.length < 25
+                    //         //               ? comment.length.toDouble() * 8
+                    //         //               : comment.length < 40
+                    //         //                   ? comment.length.toDouble() * 6
+                    //         //                   : 220,
+                    //         //           child: middleFinger
+                    //         //               ? Image.asset(
+                    //         //                   'lib/assets/middleFinger.gif',
+                    //         //                   height: 40,
+                    //         //                 )
+                    //         //               : Container())
+                    //         //     ])),
+                    //       ]),
                 leading: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: CircleAvatar(
@@ -559,20 +744,8 @@ class _CommentState extends State<Comment> {
                 children: [
                   ListTile(
                     // tileColor: Colors.blue[100],
-                    title: isGroupChat
-                        ? ChatBubble(
-                            alignment: Alignment.centerRight,
-                            clipper:
-                                ChatBubbleClipper5(type: BubbleType.sendBubble),
-                            backGroundColor: Colors.blue[200],
-                            margin: EdgeInsets.only(top: 5),
-                            child: Container(
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                ),
-                                child: Text(comment)))
-                        : GestureDetector(
+                    title: 
+                       GestureDetector(
                             onLongPress: () => {
                                   showAlertDialog(context, chatId, gid, millis,
                                       isGroupChat, directMessageId)
