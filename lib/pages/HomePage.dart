@@ -1017,7 +1017,6 @@ class _HomePageState extends State<HomePage>
                                   AnimatedBuilder(
                                     animation: _notifier,
                                     builder: (context, _) {
-                                      print(_notifier);
                                       return Container(
                                         color: _colorTween(
                                             Colors.white, Colors.black87),
