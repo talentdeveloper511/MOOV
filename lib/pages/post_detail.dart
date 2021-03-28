@@ -608,7 +608,8 @@ class PostTimeAndPlace extends StatelessWidget {
   final String userId, moovId;
   final bool isBusiness;
 
-  PostTimeAndPlace(this.startDate, this.address, this.venmo, this.userId, this.isBusiness, this.moovId);
+  PostTimeAndPlace(this.startDate, this.address, this.venmo, this.userId,
+      this.isBusiness, this.moovId);
 
   @override
   Widget build(BuildContext context) {
@@ -722,11 +723,7 @@ class PostTimeAndPlace extends StatelessWidget {
               )
             : Text(""),
         venmo != null && venmo != 0 && isBusiness
-            ? Positioned(
-                top: 0,
-                right: 30,
-                child: PaymentButton(moovId)
-              )
+            ? Positioned(top: 0, right: 30, child: PaymentButton(moovId))
             : Text(""),
       ]),
     );
@@ -995,11 +992,11 @@ class _GoingListSegmentState extends State<GoingListSegment>
                   ),
                   Center(
                     child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: 1,
                         itemBuilder: (context, index) {
                           return GoingPageFriends(moovId,
-                          (val) => setState(() => _statusHeight = val));
+                              (val) => setState(() => _statusHeight = val));
                         }),
                   )
                 ]),
@@ -1066,6 +1063,7 @@ class _ButtonsState extends State<Buttons> {
           int goingCount = course['going'].length;
           List<dynamic> goingList = course['going'];
           String postOwnerId = course['userId'];
+          String title = course['title'];
 
           List<dynamic> statusesIds = statuses.keys.toList();
 
@@ -1143,8 +1141,12 @@ class _ButtonsState extends State<Buttons> {
                               positivePointAnimationNotGoing = false;
                             });
                           });
-                          Database()
-                              .addNotGoing(currentUser.id, moovId, goingList);
+                          Database().addNotGoing(
+                            currentUser.id,
+                            moovId,
+                            goingList,
+                            title
+                          );
                           if (status != 3 && status != 2) {
                             changeScore(postOwnerId, true);
                           }
@@ -1262,7 +1264,7 @@ class _ButtonsState extends State<Buttons> {
                               });
                             });
                             Database().addUndecided(
-                                currentUser.id, moovId, goingList);
+                                currentUser.id, moovId, goingList, title);
                             if (status != 1 && status != 3) {
                               changeScore(postOwnerId, true);
                             }

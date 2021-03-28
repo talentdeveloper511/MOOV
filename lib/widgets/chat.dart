@@ -8,6 +8,7 @@ import 'package:MOOV/widgets/progress.dart';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/home.dart';
@@ -138,6 +139,8 @@ class ChatState extends State<Chat> {
   }
 
   addComment() {
+    Map<String, dynamic> livePosts = {}; //for moovs sent in chats
+
     if (directMessageId == null) {
       circularProgress();
     }
@@ -169,7 +172,6 @@ class ChatState extends State<Chat> {
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
               "isGroupChat": true,
-              "reactions": {},
               "postId": widget.sendingPost['postId']
             })
           : messagesRef
@@ -192,7 +194,6 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "isGroupChat": false,
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
-              "reactions": {},
               "postId": widget.sendingPost['postId']
             });
 
@@ -222,7 +223,6 @@ class ChatState extends State<Chat> {
                 "millis": DateTime.now().millisecondsSinceEpoch.toString(),
                 "directMessageId": "",
                 "isGroupChat": true,
-                "reactions": {},
                 "postId": null
               })
             : messagesRef
@@ -248,9 +248,11 @@ class ChatState extends State<Chat> {
                 "directMessageId": directMessageId,
                 "isGroupChat": false,
                 "millis": DateTime.now().millisecondsSinceEpoch.toString(),
-                "reactions": {},
                 "postId": null
               });
+      }
+      if (!livePosts.containsKey(widget.sendingPost['postId'])) {
+        livePosts[widget.sendingPost['postId']] = currentUser.id;
       }
 
       isGroupChat
@@ -264,6 +266,7 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "people": members,
               "isGroupChat": true,
+              "livePosts": livePosts
             }, SetOptions(merge: true))
           : messagesRef.doc(directMessageId).set({
               "lastMessage": "Sent a MOOV",
@@ -275,6 +278,7 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "people": [currentUser.id, otherPerson],
               "isGroupChat": false,
+              "livePosts": livePosts
             }, SetOptions(merge: true));
 
       setState(() {
@@ -314,7 +318,6 @@ class ChatState extends State<Chat> {
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
               "isGroupChat": true,
-              "reactions": {},
               "postId": null
             })
           : messagesRef
@@ -337,7 +340,6 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "isGroupChat": false,
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
-              "reactions": {},
               "postId": null
             });
       isGroupChat
@@ -353,6 +355,7 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "people": members,
               "isGroupChat": true,
+              "livePosts": livePosts
             }, SetOptions(merge: true))
           : messagesRef.doc(directMessageId).set({
               "lastMessage": widget.sendingPost.isNotEmpty
@@ -366,6 +369,7 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "people": [currentUser.id, otherPerson],
               "isGroupChat": false,
+              "livePosts": livePosts
             }, SetOptions(merge: true));
       Timer(Duration(milliseconds: 200), () {
         if (_scrollController.hasClients) {
@@ -473,8 +477,6 @@ class Comment extends StatefulWidget {
   final String directMessageId, postId;
   final bool isGroupChat;
 
-  final Map<String, dynamic> reactions;
-
   Comment(
       {this.displayName,
       this.userId,
@@ -486,7 +488,6 @@ class Comment extends StatefulWidget {
       this.millis,
       this.directMessageId,
       this.isGroupChat,
-      this.reactions,
       this.postId});
 
   factory Comment.fromDocument(DocumentSnapshot doc) {
@@ -501,7 +502,6 @@ class Comment extends StatefulWidget {
       millis: doc['millis'],
       directMessageId: doc['directMessageId'],
       isGroupChat: doc['isGroupChat'],
-      reactions: doc['reactions'],
       postId: doc['postId'],
     );
   }
@@ -518,7 +518,6 @@ class Comment extends StatefulWidget {
       this.millis,
       this.directMessageId,
       this.isGroupChat,
-      this.reactions,
       this.postId);
 }
 
@@ -533,7 +532,7 @@ class _CommentState extends State<Comment> {
   final String millis, postId;
   String directMessageId;
   final bool isGroupChat;
-  final Map<String, dynamic> reactions;
+
   _CommentState(
       this.displayName,
       this.userId,
@@ -545,8 +544,9 @@ class _CommentState extends State<Comment> {
       this.millis,
       this.directMessageId,
       this.isGroupChat,
-      this.reactions,
       this.postId);
+
+  final Map<String, dynamic> chatPostResponses = {};
 
   @override
   Widget build(BuildContext context) {
@@ -566,7 +566,7 @@ class _CommentState extends State<Comment> {
 
     bool middleFinger = false;
     int status = -1;
-    List reactionValues = reactions.values.toList();
+    // List reactionValues = reactions.values.toList();
     // if (reactions.isNotEmpty && reactionValues[0] == 0) {
     //   middleFinger = true;
     // }
@@ -574,241 +574,133 @@ class _CommentState extends State<Comment> {
       timeAgo = "";
     }
 
+    String chatStatus = "";
+    String title = "";
+
+    if (postId != null) {
+      postId.contains("goingxxx")
+          ? chatStatus = " is GOING to"
+          : postId.contains("undecidedxxx")
+              ? chatStatus = " is UNDECIDED on"
+              : postId.contains("notxxx")
+                  ? chatStatus = " is NOT GOING to"
+                  : chatStatus = "";
+      title = postId
+          .replaceAll("goingxxx", "")
+          .replaceAll("undecidedxxx", "")
+          .replaceAll("notxxx", "");
+    }
+
     return Column(
       children: <Widget>[
-        (userId != currentUser.id)
-            ? Container(
-                child: postId != null
-                    ? FutureBuilder(
-                        future: postsRef.doc(postId).get(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData ||
-                              snapshot.connectionState !=
-                                  ConnectionState.done) {
-                            circularProgress();
-                          }
-                          return Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    ChatMOOV(postId, snapshot.data['image'],
-                                        snapshot.data['title']),
-                                    timeAgo == ""
-                                        ? Container()
-                                        : Text(
-                                            timeAgo,
-                                            style: TextStyle(fontSize: 10),
-                                          ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 12.0, right: 8),
-                                  child: CircleAvatar(
-                                    backgroundImage:
-                                        CachedNetworkImageProvider(avatarUrl),
-                                  ),
-                                ),
-                              ]);
-                        })
-                    : ListTile(
-                        // tileColor: Colors.blue[100],
-                        title: ChatBubble(
-                            alignment: Alignment.centerLeft,
-                            clipper: ChatBubbleClipper5(
-                                type: BubbleType.receiverBubble),
-                            backGroundColor: Colors.grey[200],
-                            margin: EdgeInsets.only(top: 5),
-                            child: Container(
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                ),
-                                child: Text(comment))),
-                        // :
-                        // FlutterReactionButtonCheck(
-                        //     onReactionChanged: (reaction, index, isChecked) {
-                        //       // FLIPPED OFF NOTIF HERE
-                        //       // if (reactionValues[0] == 0) {
-                        //       //   setState(() {
-                        //       //     middleFinger = false;
-                        //       //   });
-                        //       // } else
-                        //       //  if (reactionValues[0] == 1) {
-                        //       //   setState(() {
-                        //       //     middleFinger = false;
-                        //       //   });
-                        //       // }
-                        //       // // } else {
-                        //       // //   setState(() {
-                        //       // //     reactionValues[0] = -1;
-                        //       // //   });
-                        //       // // }
-                        //       // Database().chatReaction(currentUser.id,
-                        //       //     directMessageId, chatId, index, false);
-                        //       // setState(() {
-                        //       //   middleFinger = !middleFinger;
-                        //       // });
-
-                        //       // print(reactionValues[0]);
-                        //       // print(middleFinger);
-                        //     },
-                        //     reactions: [
-                        //         Reaction(
-                        //             previewIcon: Padding(
-                        //                 padding: const EdgeInsets.only(
-                        //                     right: 8.0, top: 6, bottom: 6, left: 8),
-                        //                 child: Text("Coming soon")),
-                        //             // previewIcon: Padding(
-                        //             //   padding: const EdgeInsets.only(
-                        //             //       right: 8.0, top: 4, bottom: 6),
-                        //             //   child: Image.asset(
-                        //             //     'lib/assets/middleFinger.gif',
-                        //             //     height: 40,
-                        //             //   ),
-                        //             // ),
-                        //             // title: Text("Flip 'em off"),
-                        //             icon: Stack(children: [
-                        //               ChatBubble(
-                        //                   alignment: Alignment.centerLeft,
-                        //                   clipper: ChatBubbleClipper5(
-                        //                       type: BubbleType.receiverBubble),
-                        //                   backGroundColor: Colors.grey[200],
-                        //                   margin: EdgeInsets.only(top: 5),
-                        //                   child: Container(
-                        //                       constraints: BoxConstraints(
-                        //                         maxWidth: MediaQuery.of(context)
-                        //                                 .size
-                        //                                 .width *
-                        //                             0.7,
-                        //                       ),
-                        //                       child: Text(comment))),
-                        //               Positioned(
-                        //                   left: comment.length < 25
-                        //                       ? comment.length.toDouble() * 8
-                        //                       : comment.length < 40
-                        //                           ? comment.length.toDouble() * 6
-                        //                           : 220,
-                        //                   child: middleFinger
-                        //                       ? Image.asset(
-                        //                           'lib/assets/middleFinger.gif',
-                        //                           height: 40,
-                        //                         )
-                        //                       : Container())
-                        //             ])
-                        //             ),
-                        //         // Reaction(
-                        //         //     // previewIcon: Padding(
-                        //         //     //   padding: const EdgeInsets.only(
-                        //         //     //       right: 8.0, top: 4, bottom: 6),
-                        //         //     //   child: Image.asset(
-                        //         //     //     'lib/assets/chens.jpg',
-                        //         //     //     height: 40,
-                        //         //     //   ),
-                        //         //     // ),
-                        //         //     // title: Text("Flip 'em off"),
-                        //         //     icon: Stack(children: [
-                        //         //       ChatBubble(
-                        //         //           alignment: Alignment.centerLeft,
-                        //         //           clipper: ChatBubbleClipper5(
-                        //         //               type: BubbleType.receiverBubble),
-                        //         //           backGroundColor: Colors.grey[200],
-                        //         //           margin: EdgeInsets.only(top: 5),
-                        //         //           child: Container(
-                        //         //               constraints: BoxConstraints(
-                        //         //                 maxWidth: MediaQuery.of(context)
-                        //         //                         .size
-                        //         //                         .width *
-                        //         //                     0.7,
-                        //         //               ),
-                        //         //               child: Text(comment))),
-                        //         //       Positioned(
-                        //         //           left: comment.length < 25
-                        //         //               ? comment.length.toDouble() * 8
-                        //         //               : comment.length < 40
-                        //         //                   ? comment.length.toDouble() * 6
-                        //         //                   : 220,
-                        //         //           child: middleFinger
-                        //         //               ? Image.asset(
-                        //         //                   'lib/assets/middleFinger.gif',
-                        //         //                   height: 40,
-                        //         //                 )
-                        //         //               : Container())
-                        //         //     ])),
-                        //       ]),
-                        leading: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: CircleAvatar(
-                            backgroundImage:
-                                CachedNetworkImageProvider(avatarUrl),
-                          ),
+        Container(
+          child: comment == "thisWillTurnIntoAStatus"
+              ? Column(children: [
+                  RichText(
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
                         ),
-                        subtitle: timeAgo == ""
-                            ? Container()
-                            : Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Text(
-                                  timeAgo,
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ),
-                        trailing: Text(''),
-                      ),
-              )
-            : Container(
-                child: postId != null
-                    ? FutureBuilder(
-                        future: postsRef.doc(postId).get(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData ||
-                              snapshot.connectionState !=
-                                  ConnectionState.done ||
-                              snapshot.data == null) {
-                            return circularProgress();
-                          }
-                          return Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    ChatMOOV(postId, snapshot.data['image'],
-                                        snapshot.data['title']),
-                                    timeAgo == ""
-                                        ? Container()
-                                        : Text(
-                                            timeAgo,
-                                            style: TextStyle(fontSize: 10),
-                                          ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 12.0, left: 8),
-                                  child: CircleAvatar(
-                                    backgroundImage:
-                                        CachedNetworkImageProvider(avatarUrl),
-                                  ),
-                                ),
-                              ]);
-                        })
-                    : Stack(
                         children: [
-                          ListTile(
-                            // tileColor: Colors.blue[100],
-                            title: GestureDetector(
-                                onLongPress: () => {
-                                      showAlertDialog(context, chatId, gid,
-                                          millis, isGroupChat, directMessageId)
-                                    },
-                                child: Stack(children: [
-                                  ChatBubble(
-                                      alignment: Alignment.centerRight,
+                          TextSpan(text: "——— "),
+                          TextSpan(
+                            text: displayName,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                              text: chatStatus,
+                              style: TextStyle(
+                                  color: chatStatus == " is GOING to"
+                                      ? Colors.green[600]
+                                      : chatStatus == " is UNDECIDED on"
+                                          ? Colors.yellow[600]
+                                          : Colors.red[600],
+                                  fontWeight: FontWeight.bold)),
+                          TextSpan(
+                            text: title,
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          TextSpan(text: " ———"),
+                        ]),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 5.0),
+                      child: ExpandablePanel(
+                          // controller: _expandableController,
+                          theme: const ExpandableThemeData(
+                            hasIcon: false,
+                            tapHeaderToExpand: true,
+                            headerAlignment:
+                                ExpandablePanelHeaderAlignment.center,
+                            tapBodyToCollapse: true,
+                          ),
+                          header: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                "View all statuses",
+                                style:
+                                    TextStyle(color: Colors.blue, fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          expanded: ChatStatuses(postId)))
+                ])
+              : Container(
+                  child: (userId != currentUser.id)
+                      ? Container(
+                          child: postId != null &&
+                                  !postId.contains("goingxxx") &&
+                                  !postId.contains("undecidedxxx") &&
+                                  !postId.contains("notxxx")
+                              ? FutureBuilder(
+                                  future: postsRef.doc(postId).get(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData ||
+                                        snapshot.connectionState !=
+                                            ConnectionState.done) {
+                                      circularProgress();
+                                    }
+                                    return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              ChatMOOV(
+                                                  postId,
+                                                  snapshot.data['image'],
+                                                  snapshot.data['title']),
+                                              timeAgo == ""
+                                                  ? Container()
+                                                  : Text(
+                                                      timeAgo,
+                                                      style: TextStyle(
+                                                          fontSize: 10),
+                                                    ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 12.0, right: 8),
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  CachedNetworkImageProvider(
+                                                      avatarUrl),
+                                            ),
+                                          ),
+                                        ]);
+                                  })
+                              : ListTile(
+                                  // tileColor: Colors.blue[100],
+                                  title: ChatBubble(
+                                      alignment: Alignment.centerLeft,
                                       clipper: ChatBubbleClipper5(
-                                          type: BubbleType.sendBubble),
-                                      backGroundColor: Colors.blue[200],
+                                          type: BubbleType.receiverBubble),
+                                      backGroundColor: Colors.grey[200],
                                       margin: EdgeInsets.only(top: 5),
                                       child: Container(
                                           constraints: BoxConstraints(
@@ -818,40 +710,256 @@ class _CommentState extends State<Comment> {
                                                 0.7,
                                           ),
                                           child: Text(comment))),
-                                  Positioned(
-                                      right: comment.length < 25
-                                          ? comment.length.toDouble() * 8
-                                          : comment.length < 40
-                                              ? comment.length.toDouble() * 6
-                                              : 220,
-                                      child: status == 0
-                                          ? Image.asset(
-                                              'lib/assets/middleFinger.gif',
-                                              height: 40,
-                                            )
-                                          : Container())
-                                ])),
-                            subtitle: timeAgo == ""
-                                ? Container()
-                                : Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Text(
-                                      timeAgo,
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(fontSize: 10),
+                                  // :
+                                  // FlutterReactionButtonCheck(
+                                  //     onReactionChanged: (reaction, index, isChecked) {
+                                  //       // FLIPPED OFF NOTIF HERE
+                                  //       // if (reactionValues[0] == 0) {
+                                  //       //   setState(() {
+                                  //       //     middleFinger = false;
+                                  //       //   });
+                                  //       // } else
+                                  //       //  if (reactionValues[0] == 1) {
+                                  //       //   setState(() {
+                                  //       //     middleFinger = false;
+                                  //       //   });
+                                  //       // }
+                                  //       // // } else {
+                                  //       // //   setState(() {
+                                  //       // //     reactionValues[0] = -1;
+                                  //       // //   });
+                                  //       // // }
+                                  //       // Database().chatReaction(currentUser.id,
+                                  //       //     directMessageId, chatId, index, false);
+                                  //       // setState(() {
+                                  //       //   middleFinger = !middleFinger;
+                                  //       // });
+
+                                  //       // print(reactionValues[0]);
+                                  //       // print(middleFinger);
+                                  //     },
+                                  //     reactions: [
+                                  //         Reaction(
+                                  //             previewIcon: Padding(
+                                  //                 padding: const EdgeInsets.only(
+                                  //                     right: 8.0, top: 6, bottom: 6, left: 8),
+                                  //                 child: Text("Coming soon")),
+                                  //             // previewIcon: Padding(
+                                  //             //   padding: const EdgeInsets.only(
+                                  //             //       right: 8.0, top: 4, bottom: 6),
+                                  //             //   child: Image.asset(
+                                  //             //     'lib/assets/middleFinger.gif',
+                                  //             //     height: 40,
+                                  //             //   ),
+                                  //             // ),
+                                  //             // title: Text("Flip 'em off"),
+                                  //             icon: Stack(children: [
+                                  //               ChatBubble(
+                                  //                   alignment: Alignment.centerLeft,
+                                  //                   clipper: ChatBubbleClipper5(
+                                  //                       type: BubbleType.receiverBubble),
+                                  //                   backGroundColor: Colors.grey[200],
+                                  //                   margin: EdgeInsets.only(top: 5),
+                                  //                   child: Container(
+                                  //                       constraints: BoxConstraints(
+                                  //                         maxWidth: MediaQuery.of(context)
+                                  //                                 .size
+                                  //                                 .width *
+                                  //                             0.7,
+                                  //                       ),
+                                  //                       child: Text(comment))),
+                                  //               Positioned(
+                                  //                   left: comment.length < 25
+                                  //                       ? comment.length.toDouble() * 8
+                                  //                       : comment.length < 40
+                                  //                           ? comment.length.toDouble() * 6
+                                  //                           : 220,
+                                  //                   child: middleFinger
+                                  //                       ? Image.asset(
+                                  //                           'lib/assets/middleFinger.gif',
+                                  //                           height: 40,
+                                  //                         )
+                                  //                       : Container())
+                                  //             ])
+                                  //             ),
+                                  //         // Reaction(
+                                  //         //     // previewIcon: Padding(
+                                  //         //     //   padding: const EdgeInsets.only(
+                                  //         //     //       right: 8.0, top: 4, bottom: 6),
+                                  //         //     //   child: Image.asset(
+                                  //         //     //     'lib/assets/chens.jpg',
+                                  //         //     //     height: 40,
+                                  //         //     //   ),
+                                  //         //     // ),
+                                  //         //     // title: Text("Flip 'em off"),
+                                  //         //     icon: Stack(children: [
+                                  //         //       ChatBubble(
+                                  //         //           alignment: Alignment.centerLeft,
+                                  //         //           clipper: ChatBubbleClipper5(
+                                  //         //               type: BubbleType.receiverBubble),
+                                  //         //           backGroundColor: Colors.grey[200],
+                                  //         //           margin: EdgeInsets.only(top: 5),
+                                  //         //           child: Container(
+                                  //         //               constraints: BoxConstraints(
+                                  //         //                 maxWidth: MediaQuery.of(context)
+                                  //         //                         .size
+                                  //         //                         .width *
+                                  //         //                     0.7,
+                                  //         //               ),
+                                  //         //               child: Text(comment))),
+                                  //         //       Positioned(
+                                  //         //           left: comment.length < 25
+                                  //         //               ? comment.length.toDouble() * 8
+                                  //         //               : comment.length < 40
+                                  //         //                   ? comment.length.toDouble() * 6
+                                  //         //                   : 220,
+                                  //         //           child: middleFinger
+                                  //         //               ? Image.asset(
+                                  //         //                   'lib/assets/middleFinger.gif',
+                                  //         //                   height: 40,
+                                  //         //                 )
+                                  //         //               : Container())
+                                  //         //     ])),
+                                  //       ]),
+                                  leading: Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(avatarUrl),
                                     ),
                                   ),
-                            trailing: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: CircleAvatar(
-                                backgroundImage:
-                                    CachedNetworkImageProvider(avatarUrl),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
+                                  subtitle: timeAgo == ""
+                                      ? Container()
+                                      : Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Text(
+                                            timeAgo,
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                        ),
+                                  trailing: Text(''),
+                                ),
+                        )
+                      : Container(
+                          child: postId != null &&
+                                  !postId.contains("going") &&
+                                  !postId.contains("undecided") &&
+                                  !postId.contains("notGoing")
+                              ? FutureBuilder(
+                                  future: postsRef.doc(postId).get(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData ||
+                                        snapshot.connectionState !=
+                                            ConnectionState.done ||
+                                        snapshot.data == null) {
+                                      return circularProgress();
+                                    }
+                                    return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              ChatMOOV(
+                                                  postId,
+                                                  snapshot.data['image'],
+                                                  snapshot.data['title']),
+                                              timeAgo == ""
+                                                  ? Container()
+                                                  : Text(
+                                                      timeAgo,
+                                                      style: TextStyle(
+                                                          fontSize: 10),
+                                                    ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 12.0, left: 8),
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  CachedNetworkImageProvider(
+                                                      avatarUrl),
+                                            ),
+                                          ),
+                                        ]);
+                                  })
+                              : Stack(
+                                  children: [
+                                    ListTile(
+                                      // tileColor: Colors.blue[100],
+                                      title: GestureDetector(
+                                          onLongPress: () => {
+                                                showAlertDialog(
+                                                    context,
+                                                    chatId,
+                                                    gid,
+                                                    millis,
+                                                    isGroupChat,
+                                                    directMessageId)
+                                              },
+                                          child: Stack(children: [
+                                            ChatBubble(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                clipper: ChatBubbleClipper5(
+                                                    type:
+                                                        BubbleType.sendBubble),
+                                                backGroundColor:
+                                                    Colors.blue[200],
+                                                margin: EdgeInsets.only(top: 5),
+                                                child: Container(
+                                                    constraints: BoxConstraints(
+                                                      maxWidth:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.7,
+                                                    ),
+                                                    child: Text(comment))),
+                                            Positioned(
+                                                right: comment.length < 25
+                                                    ? comment.length
+                                                            .toDouble() *
+                                                        8
+                                                    : comment.length < 40
+                                                        ? comment.length
+                                                                .toDouble() *
+                                                            6
+                                                        : 220,
+                                                child: status == 0
+                                                    ? Image.asset(
+                                                        'lib/assets/middleFinger.gif',
+                                                        height: 40,
+                                                      )
+                                                    : Container())
+                                          ])),
+                                      subtitle: timeAgo == ""
+                                          ? Container()
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: Text(
+                                                timeAgo,
+                                                textAlign: TextAlign.right,
+                                                style: TextStyle(fontSize: 10),
+                                              ),
+                                            ),
+                                      trailing: Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: CircleAvatar(
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                                  avatarUrl),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        )),
+        )
       ],
     );
   }
@@ -988,9 +1096,65 @@ class ChatMOOV extends StatelessWidget {
                 ]),
               ),
             ),
+            Buttons(postId)
           ],
         ),
       ),
     );
+  }
+}
+
+class ChatStatuses extends StatelessWidget {
+  final String postId;
+  const ChatStatuses(this.postId);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: postsRef.doc(postId).snapshots(),
+        builder: (context, snapshot) {
+
+          
+
+          return Center(
+            child: Container(
+                height: 100.0,
+                width: MediaQuery.of(context).size.width * .95,
+                color: Colors.transparent,
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.blue[50],
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          height: 75,
+                          width: MediaQuery.of(context).size.width * .3,
+                          decoration: BoxDecoration(
+                              color: Colors.red[100],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                        ),
+                        Container(
+                          height: 75,
+                          width: MediaQuery.of(context).size.width * .3,
+                          decoration: BoxDecoration(
+                              color: Colors.yellow[100],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                        ),
+                        Container(
+                          height: 75,
+                          width: MediaQuery.of(context).size.width * .3,
+                          decoration: BoxDecoration(
+                              color: Colors.green[100],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                        )
+                      ],
+                    ))),
+          );
+        });
   }
 }
