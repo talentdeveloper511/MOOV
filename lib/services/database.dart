@@ -493,7 +493,7 @@ class Database {
             "displayName": currentUser.displayName,
             "comment": "thisWillTurnIntoAStatus",
             "timestamp": 0,
-            "avatarUrl": currentUser.photoUrl,
+            "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
             "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                 " " +

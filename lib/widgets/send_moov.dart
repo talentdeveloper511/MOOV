@@ -253,9 +253,9 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                       snapshot.data.length == 0 ||
                       _searchTerm == null) {
                     Timer(Duration(milliseconds: 600), () {
-                      setState(() {
-                        _searchTerm = "a";
-                      });
+                      // setState(() {
+                      //   _searchTerm = "a";
+                      // });
                     });
                   }
 

@@ -646,7 +646,7 @@ class _CommentState extends State<Comment> {
                               ),
                             ),
                           ),
-                          expanded: ChatStatuses(postId)))
+                          expanded: ChatStatuses(avatarUrl, gid)))
                 ])
               : Container(
                   child: (userId != currentUser.id)
@@ -1105,16 +1105,16 @@ class ChatMOOV extends StatelessWidget {
 }
 
 class ChatStatuses extends StatelessWidget {
-  final String postId;
-  const ChatStatuses(this.postId);
+  final String postId, gid;
+  const ChatStatuses(this.postId, this.gid);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: postsRef.doc(postId).snapshots(),
         builder: (context, snapshot) {
-
-          
+          Map<String, dynamic> statuses = snapshot.data['statuses'];
+          print(statuses.keys.where((element) => false));
 
           return Center(
             child: Container(
