@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:MOOV/main.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/group_detail.dart';
@@ -134,47 +135,45 @@ class _SearchBarState extends State<SearchBar>
               bottom: PreferredSize(
                   preferredSize: null,
                   child: Column(children: <Widget>[
-                   TextField(
-                          style: TextStyle(fontSize: 20),
-                          controller: searchController,
-                          onChanged: (val) {
-                            setState(() {
-                              _searchTerm = val;
-                            });
-                          },
-                          // Set Focus Node
-                          focusNode: textFieldFocusNode,
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(fontSize: 20),
-                            border: InputBorder.none,
-                            hintText: 'Search',
-                            hintStyle:
-                                TextStyle(color: Colors.grey, fontSize: 20),
-                            prefixIcon:
-                                const Icon(Icons.search, color: Colors.black),
-                            suffixIcon: GestureDetector(
-                                onTap: () {
-                                  clearSearch();
-                                  // Unfocus all focus nodes
-                                  textFieldFocusNode.unfocus();
+                    TextField(
+                        style: TextStyle(fontSize: 20),
+                        controller: searchController,
+                        onChanged: (val) {
+                          setState(() {
+                            _searchTerm = val;
+                          });
+                        },
+                        // Set Focus Node
+                        focusNode: textFieldFocusNode,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(fontSize: 20),
+                          border: InputBorder.none,
+                          hintText: 'Search',
+                          hintStyle:
+                              TextStyle(color: Colors.grey, fontSize: 20),
+                          prefixIcon:
+                              const Icon(Icons.search, color: Colors.black),
+                          suffixIcon: GestureDetector(
+                              onTap: () {
+                                clearSearch();
+                                // Unfocus all focus nodes
+                                textFieldFocusNode.unfocus();
 
-                                  // Disable text field's focus node request
-                                  textFieldFocusNode.canRequestFocus = false;
+                                // Disable text field's focus node request
+                                textFieldFocusNode.canRequestFocus = false;
 
-                                  //Enable the text field's focus node request after some delay
-                                  Future.delayed(Duration(milliseconds: 10),
-                                      () {
-                                    textFieldFocusNode.canRequestFocus = true;
-                                  });
-                                },
-                                child: IconButton(
-                                    onPressed: null,
-                                    icon: Icon(
-                                      Icons.clear,
-                                      color: Colors.black,
-                                    ))),
-                          )),
-                    
+                                //Enable the text field's focus node request after some delay
+                                Future.delayed(Duration(milliseconds: 10), () {
+                                  textFieldFocusNode.canRequestFocus = true;
+                                });
+                              },
+                              child: IconButton(
+                                  onPressed: null,
+                                  icon: Icon(
+                                    Icons.clear,
+                                    color: Colors.black,
+                                  ))),
+                        )),
                     showTabs == true
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -348,8 +347,8 @@ class _SearchBarState extends State<SearchBar>
                                                                       null
                                                                   ? DisplaySearchResult(
                                                                       displayName:
-                                                                          currSearchStuff[index].data[
-                                                                              "displayName"],
+                                                                          currSearchStuff[index]
+                                                                              .data["displayName"],
                                                                       email: currSearchStuff[index]
                                                                               .data[
                                                                           "email"],
@@ -362,7 +361,10 @@ class _SearchBarState extends State<SearchBar>
                                                                       verifiedStatus:
                                                                           currSearchStuff[index]
                                                                               .data["verifiedStatus"],
-                                                                              isBusiness: currSearchStuff[index].data['isBusiness'],)
+                                                                      isBusiness:
+                                                                          currSearchStuff[index]
+                                                                              .data['isBusiness'],
+                                                                    )
                                                                   : Container();
                                                             },
                                                             childCount:
@@ -479,16 +481,15 @@ class DisplaySearchResult extends StatelessWidget {
   final int verifiedStatus;
   final bool isBusiness;
 
-  DisplaySearchResult({
-    Key key,
-    this.email,
-    this.displayName,
-    this.proPic,
-    this.userId,
-    this.verifiedStatus,
-    this.isBusiness
-    
-  }) : super(key: key);
+  DisplaySearchResult(
+      {Key key,
+      this.email,
+      this.displayName,
+      this.proPic,
+      this.userId,
+      this.verifiedStatus,
+      this.isBusiness})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -518,38 +519,36 @@ class DisplaySearchResult extends StatelessWidget {
                 child: Text(
                   displayName ?? "",
                   style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20),
                 ),
               ),
-               verifiedStatus == 3
-                                    ? Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 5,
-                                          top: 2.5,
-                                        ),
-                                        child: Icon(
-                                          Icons.store,
-                                          size: 25,
-                                          color: Colors.blue,
-                                        ),
-                                      )
-                                    : verifiedStatus == 2
-                                        ? Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 5, top: 5),
-                                            child: Image.asset(
-                                                'lib/assets/verif2.png',
-                                                height: 20),
-                                          )
-                                        : verifiedStatus == 1
-                                            ? Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 2.5, top: 0),
-                                                child: Image.asset(
-                                                    'lib/assets/verif.png',
-                                                    height: 30),
-                                              )
-                                            : Text("")
+              verifiedStatus == 3
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                        left: 5,
+                        top: 2.5,
+                      ),
+                      child: Icon(
+                        Icons.store,
+                        size: 25,
+                        color: Colors.blue,
+                      ),
+                    )
+                  : verifiedStatus == 2
+                      ? Padding(
+                          padding: EdgeInsets.only(left: 5, top: 5),
+                          child:
+                              Image.asset('lib/assets/verif2.png', height: 20),
+                        )
+                      : verifiedStatus == 1
+                          ? Padding(
+                              padding: EdgeInsets.only(left: 2.5, top: 0),
+                              child: Image.asset('lib/assets/verif.png',
+                                  height: 30),
+                            )
+                          : Text("")
             ],
           ),
         ),
@@ -628,13 +627,12 @@ class DisplayMOOVResult extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: OpenContainer(
-                  transitionType: ContainerTransitionType.fade,
-                                  transitionDuration: Duration(milliseconds: 500),
-                                  openBuilder: (context, _) =>
-                                      PostDetail(postId),
-                                  closedElevation: 0,
-                                  closedBuilder: (context, _) => 
-                           Stack(alignment: Alignment.center, children: <Widget>[
+              transitionType: ContainerTransitionType.fade,
+              transitionDuration: Duration(milliseconds: 500),
+              openBuilder: (context, _) => PostDetail(postId),
+              closedElevation: 0,
+              closedBuilder: (context, _) =>
+                  Stack(alignment: Alignment.center, children: <Widget>[
                 Container(
                   width: isLargePhone
                       ? MediaQuery.of(context).size.width * 0.8
@@ -642,33 +640,31 @@ class DisplayMOOVResult extends StatelessWidget {
                   height: isLargePhone
                       ? MediaQuery.of(context).size.height * 0.15
                       : MediaQuery.of(context).size.height * 0.17,
-                  child:
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          imageUrl: image,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      margin:
-                          EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      imageUrl: image,
+                      fit: BoxFit.cover,
                     ),
-                  
-                
+                  ),
+                  margin:
+                      EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                ),
+
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -774,7 +770,7 @@ class DisplayGroupResult extends StatelessWidget {
   final String groupId;
   final String groupPic;
   final List<dynamic> members;
-  final String postId, title;
+  final String postId, title, pic;
   final bool sendMOOV;
 
   DisplayGroupResult(
@@ -785,8 +781,20 @@ class DisplayGroupResult extends StatelessWidget {
       this.members,
       this.postId,
       this.title,
+      this.pic,
       this.sendMOOV})
       : super(key: key);
+
+  void toMessageDetail(
+      BuildContext context, String postId, String pic, String title) {
+    Timer(Duration(milliseconds: 200), () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MessageDetail(" ", " ", true, groupId,
+                  members, {"postId": postId, "pic": pic, "title": title})));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -813,21 +821,21 @@ class DisplayGroupResult extends StatelessWidget {
                       ? MediaQuery.of(context).size.height * 0.15
                       : MediaQuery.of(context).size.height * 0.17,
                   child: OpenContainer(
-                                  transitionType: ContainerTransitionType.fade,
-                                  transitionDuration: Duration(milliseconds: 500),
-                                  openBuilder: (context, _) =>
-                                      members.contains(currentUser.id)
-                        ? GroupDetail(groupId)
-                        : OtherGroup(groupId),
-                                  closedElevation: 0,
-                                  closedBuilder: (context, _) =>  Container(
-                                    child: ClipRRect(
+                    transitionType: ContainerTransitionType.fade,
+                    transitionDuration: Duration(milliseconds: 500),
+                    openBuilder: (context, _) =>
+                        members.contains(currentUser.id)
+                            ? GroupDetail(groupId)
+                            : OtherGroup(groupId),
+                    closedElevation: 0,
+                    closedBuilder: (context, _) => Container(
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: CachedNetworkImage(
                           imageUrl: groupPic,
                           fit: BoxFit.cover,
-                        ),),
-                      
+                        ),
+                      ),
                       margin: EdgeInsets.only(
                           left: 10, top: 0, right: 10, bottom: 0),
                       decoration: BoxDecoration(
@@ -845,9 +853,8 @@ class DisplayGroupResult extends StatelessWidget {
                         ],
                       ),
                     ),
-                                  ),
                   ),
-                
+                ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -898,8 +905,7 @@ class DisplayGroupResult extends StatelessWidget {
                                   )
                                 : Container()),
                         Padding(
-                            padding:
-                                const EdgeInsets.only(top: 4, left: 25.0),
+                            padding: const EdgeInsets.only(top: 4, left: 25.0),
                             child: CircleAvatar(
                               radius: 25.0,
                               backgroundImage: NetworkImage(
@@ -941,9 +947,7 @@ class DisplayGroupResult extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(3.0))),
                             onPressed: () {
-                              Database().sendMOOVNotification(groupId,
-                                  groupPic, postId, "", title, "", "");
-                              Navigator.of(context).pop();
+                              toMessageDetail(context, postId, pic, title);
                             },
                             child: Text(
                               "Send",
@@ -1159,82 +1163,81 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                   ))),
                         )),
                     Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              // Sign In Button
-                              new FlatButton(
-                                splashColor: Colors.white,
-                                color: Colors.white,
-                                onPressed: () {
-                                  _tabController.animateTo(0);
-                                  setState(() {
-                                    _currentIndex = (_tabController
-                                            .animation.value)
-                                        .round(); //_tabController.animation.value returns double
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        // Sign In Button
+                        new FlatButton(
+                          splashColor: Colors.white,
+                          color: Colors.white,
+                          onPressed: () {
+                            _tabController.animateTo(0);
+                            setState(() {
+                              _currentIndex = (_tabController.animation.value)
+                                  .round(); //_tabController.animation.value returns double
 
-                                    _currentIndex = 0;
-                                  });
-                                },
-                                child: _currentIndex == 0
-                                    ? GradientText(
-                                        "     People ",
-                                        gradient: LinearGradient(colors: [
-                                          Colors.blue.shade400,
-                                          Colors.blue.shade900,
-                                        ]),
-                                      )
-                                    : Text(
-                                        "     People ",
-                                      ),
-                              ),
-                              // Sign Up Button
-                              new FlatButton(
-                                splashColor: Colors.white,
-                                color: Colors.white,
-                                onPressed: () {
-                                  _tabController.animateTo(1);
-                                  setState(() {
-                                    _currentIndex = 1;
-                                  });
-                                },
-                                child: _currentIndex == 1
-                                    ? GradientText(
-                                        "    MOOVs",
-                                        gradient: LinearGradient(colors: [
-                                          Colors.blue.shade400,
-                                          Colors.blue.shade900,
-                                        ]),
-                                      )
-                                    : Text(
-                                        "    MOOVs",
-                                        style: TextStyle(fontSize: 16.5),
-                                      ),
-                              ),
-                              FlatButton(
-                                splashColor: Colors.white,
-                                color: Colors.white,
-                                onPressed: () {
-                                  _tabController.animateTo(2);
-                                  setState(() {
-                                    _currentIndex = 2;
-                                  });
-                                },
-                                child: _currentIndex == 2
-                                    ? GradientText(
-                                        "Friend Groups",
-                                        gradient: LinearGradient(colors: [
-                                          Colors.blue.shade400,
-                                          Colors.blue.shade900,
-                                        ]),
-                                      )
-                                    : Text(
-                                        "Friend Groups",
-                                        style: TextStyle(fontSize: 16.5),
-                                      ),
-                              )
-                            ],
-                          )
+                              _currentIndex = 0;
+                            });
+                          },
+                          child: _currentIndex == 0
+                              ? GradientText(
+                                  "     People ",
+                                  gradient: LinearGradient(colors: [
+                                    Colors.blue.shade400,
+                                    Colors.blue.shade900,
+                                  ]),
+                                )
+                              : Text(
+                                  "     People ",
+                                ),
+                        ),
+                        // Sign Up Button
+                        new FlatButton(
+                          splashColor: Colors.white,
+                          color: Colors.white,
+                          onPressed: () {
+                            _tabController.animateTo(1);
+                            setState(() {
+                              _currentIndex = 1;
+                            });
+                          },
+                          child: _currentIndex == 1
+                              ? GradientText(
+                                  "    MOOVs",
+                                  gradient: LinearGradient(colors: [
+                                    Colors.blue.shade400,
+                                    Colors.blue.shade900,
+                                  ]),
+                                )
+                              : Text(
+                                  "    MOOVs",
+                                  style: TextStyle(fontSize: 16.5),
+                                ),
+                        ),
+                        FlatButton(
+                          splashColor: Colors.white,
+                          color: Colors.white,
+                          onPressed: () {
+                            _tabController.animateTo(2);
+                            setState(() {
+                              _currentIndex = 2;
+                            });
+                          },
+                          child: _currentIndex == 2
+                              ? GradientText(
+                                  "Friend Groups",
+                                  gradient: LinearGradient(colors: [
+                                    Colors.blue.shade400,
+                                    Colors.blue.shade900,
+                                  ]),
+                                )
+                              : Text(
+                                  "Friend Groups",
+                                  style: TextStyle(fontSize: 16.5),
+                                ),
+                        )
+                      ],
+                    )
                   ])),
             ),
             backgroundColor: Colors.white,

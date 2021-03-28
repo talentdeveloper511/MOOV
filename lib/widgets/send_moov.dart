@@ -368,6 +368,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                                                                   "members"],
                                                               postId: moovId,
                                                               title: title,
+                                                              pic: previewImg,
                                                               sendMOOV: true,
                                                             )
                                                           : Container();

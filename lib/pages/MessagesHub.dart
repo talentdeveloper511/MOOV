@@ -1160,7 +1160,9 @@ class _MessageDetailState extends State<MessageDetail> {
                   ? Chat(
                       gid: widget.gid,
                       isGroupChat: true,
-                      members: widget.members)
+                      directMessageId: " ",
+                      members: widget.members,
+                      sendingPost: widget.sendingPost)
                   : Chat(
                       isGroupChat: false,
                       directMessageId: widget.directMessageId,
