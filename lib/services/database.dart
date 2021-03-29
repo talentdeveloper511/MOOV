@@ -315,15 +315,15 @@ class Database {
             "displayName": currentUser.displayName,
             "comment": "thisWillTurnIntoAStatus",
             "timestamp": 0,
-            "avatarUrl": currentUser.photoUrl,
+            "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
             "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                 " " +
                 currentUser.id,
-            "gid": "gid",
+            "gid": ds.data()['gid'],
             "millis": DateTime.now().millisecondsSinceEpoch.toString(),
             "directMessageId": "",
-            "isGroupChat": true,
+            "isGroupChat": ds.data()['isGroupChat'],
             "postId": "notxxx " + title
           });
         }
@@ -397,15 +397,15 @@ class Database {
             "displayName": currentUser.displayName,
             "comment": "thisWillTurnIntoAStatus",
             "timestamp": 0,
-            "avatarUrl": currentUser.photoUrl,
+            "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
             "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                 " " +
                 currentUser.id,
-            "gid": "gid",
+            "gid": ds.data()['gid'],
             "millis": DateTime.now().millisecondsSinceEpoch.toString(),
             "directMessageId": "",
-            "isGroupChat": true,
+            "isGroupChat": ds.data()['isGroupChat'],
             "postId": "undecidedxxx " + title
           });
         }
@@ -498,10 +498,10 @@ class Database {
             "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                 " " +
                 currentUser.id,
-            "gid": "gid",
+            "gid": ds.data()['gid'],
             "millis": DateTime.now().millisecondsSinceEpoch.toString(),
             "directMessageId": "",
-            "isGroupChat": true,
+            "isGroupChat": ds.data()['isGroupChat'],
             "postId": "goingxxx " + title
           });
 

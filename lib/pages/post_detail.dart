@@ -1142,11 +1142,7 @@ class _ButtonsState extends State<Buttons> {
                             });
                           });
                           Database().addNotGoing(
-                            currentUser.id,
-                            moovId,
-                            goingList,
-                            title
-                          );
+                              currentUser.id, moovId, goingList, title);
                           if (status != 3 && status != 2) {
                             changeScore(postOwnerId, true);
                           }

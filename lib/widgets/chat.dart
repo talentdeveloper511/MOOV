@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
+import 'package:MOOV/pages/ProfilePageWithHeader.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -625,28 +628,32 @@ class _CommentState extends State<Comment> {
                           TextSpan(text: " ———"),
                         ]),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.only(bottom: 5.0),
-                      child: ExpandablePanel(
-                          // controller: _expandableController,
-                          theme: const ExpandableThemeData(
-                            hasIcon: false,
-                            tapHeaderToExpand: true,
-                            headerAlignment:
-                                ExpandablePanelHeaderAlignment.center,
-                            tapBodyToCollapse: true,
-                          ),
-                          header: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Text(
-                                "View all statuses",
-                                style:
-                                    TextStyle(color: Colors.blue, fontSize: 12),
+                  isGroupChat
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: ExpandablePanel(
+                              // controller: _expandableController,
+                              theme: const ExpandableThemeData(
+                                useInkWell: false,
+                                hasIcon: false,
+                                tapHeaderToExpand: true,
+                                headerAlignment:
+                                    ExpandablePanelHeaderAlignment.center,
+                                tapBodyToCollapse: true,
                               ),
-                            ),
-                          ),
-                          expanded: ChatStatuses(avatarUrl, gid)))
+                              header: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0, bottom: 3),
+                                  child: Text(
+                                    "View all statuses",
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 12),
+                                  ),
+                                ),
+                              ),
+                              expanded: ChatStatuses(avatarUrl, gid)))
+                      : Container()
                 ])
               : Container(
                   child: (userId != currentUser.id)
@@ -1106,55 +1113,323 @@ class ChatMOOV extends StatelessWidget {
 
 class ChatStatuses extends StatelessWidget {
   final String postId, gid;
-  const ChatStatuses(this.postId, this.gid);
+  ChatStatuses(this.postId, this.gid);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: postsRef.doc(postId).snapshots(),
-        builder: (context, snapshot) {
-          Map<String, dynamic> statuses = snapshot.data['statuses'];
-          print(statuses.keys.where((element) => false));
+    String firstName;
 
-          return Center(
-            child: Container(
-                height: 100.0,
-                width: MediaQuery.of(context).size.width * .95,
-                color: Colors.transparent,
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue[50],
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          height: 75,
-                          width: MediaQuery.of(context).size.width * .3,
-                          decoration: BoxDecoration(
-                              color: Colors.red[100],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
-                        ),
-                        Container(
-                          height: 75,
-                          width: MediaQuery.of(context).size.width * .3,
-                          decoration: BoxDecoration(
-                              color: Colors.yellow[100],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
-                        ),
-                        Container(
-                          height: 75,
-                          width: MediaQuery.of(context).size.width * .3,
-                          decoration: BoxDecoration(
-                              color: Colors.green[100],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
-                        )
-                      ],
-                    ))),
-          );
+    return FutureBuilder(
+        future: groupsRef.doc(gid).get(),
+        builder: (context, snapshot0) {
+          if (!snapshot0.hasData) {
+            return Container();
+          }
+          List members = snapshot0.data['members'];
+          return StreamBuilder(
+              stream: postsRef.doc(postId).snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Container();
+                }
+                Map<String, dynamic> statuses = snapshot.data['statuses'];
+                List<String> statusInGroup = statuses.keys
+                    .toList()
+                    .where((element) => members.contains(element))
+                    .toList();
+                List<String> greenList = [];
+                List<String> yellowList = [];
+                List<String> redList = [];
+
+                for (var entry in statuses.entries) {
+                  if (entry.value == 3 && statusInGroup.contains(entry.key)) {
+                    greenList.add(entry.key);
+                  }
+                  if (entry.value == 2 && statusInGroup.contains(entry.key)) {
+                    yellowList.add(entry.key);
+                  }
+                  if (entry.value == 1 && statusInGroup.contains(entry.key)) {
+                    redList.add(entry.key);
+                  }
+                }
+
+                return StreamBuilder(
+                    stream: usersRef
+                        .where("friendGroups", arrayContains: gid)
+                        .snapshots(),
+                    builder: (context, snapshot1) {
+                      if (!snapshot1.hasData) {
+                        return Container();
+                      }
+
+                      return Center(
+                        child: Container(
+                            height: 100.0,
+                            width: MediaQuery.of(context).size.width * .95,
+                            color: Colors.transparent,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.blue[50],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      child: ListView.builder(
+                                          itemCount: snapshot1.data.docs.length,
+                                          itemBuilder: (context, index) {
+                                            bool hide = false;
+
+                                            DocumentSnapshot course =
+                                                snapshot1.data.docs[index];
+
+                                            if (!redList
+                                                .contains(course['id'])) {
+                                              hide = true;
+                                            }
+                                            firstName = firstNameMaker(
+                                                course['displayName']);
+
+                                            return (hide == false)
+                                                ? GestureDetector(
+                                                    onTap: course['id'] ==
+                                                            currentUser.id
+                                                        ? () => Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ProfilePageWithHeader()))
+                                                        : () => Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    OtherProfile(
+                                                                        course[
+                                                                            'id']))),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: CircleAvatar(
+                                                            radius: 18,
+                                                            backgroundColor:
+                                                                TextThemes
+                                                                    .ndBlue,
+                                                            child: CircleAvatar(
+                                                              radius: 17,
+                                                              backgroundColor:
+                                                                  TextThemes
+                                                                      .ndBlue,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        course[
+                                                                            'photoUrl']),
+                                                                radius: 18,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          firstName,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                : Container();
+                                          }),
+                                      height: 75,
+                                      width: MediaQuery.of(context).size.width *
+                                          .3,
+                                      decoration: BoxDecoration(
+                                          color: Colors.red[100],
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0))),
+                                    ),
+                                    Container(
+                                      child: ListView.builder(
+                                          itemCount: snapshot1.data.docs.length,
+                                          itemBuilder: (context, index) {
+                                            bool hide = false;
+
+                                            DocumentSnapshot course =
+                                                snapshot1.data.docs[index];
+
+                                            if (!yellowList
+                                                .contains(course['id'])) {
+                                              hide = true;
+                                            }
+                                            firstName = firstNameMaker(
+                                                course['displayName']);
+
+                                            return (hide == false)
+                                                ? GestureDetector(
+                                                    onTap: course['id'] ==
+                                                            currentUser.id
+                                                        ? () => Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ProfilePageWithHeader()))
+                                                        : () => Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    OtherProfile(
+                                                                        course[
+                                                                            'id']))),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: CircleAvatar(
+                                                            radius: 18,
+                                                            backgroundColor:
+                                                                TextThemes
+                                                                    .ndBlue,
+                                                            child: CircleAvatar(
+                                                              radius: 17,
+                                                              backgroundColor:
+                                                                  TextThemes
+                                                                      .ndBlue,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        course[
+                                                                            'photoUrl']),
+                                                                radius: 18,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          firstName,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                : Container();
+                                          }),
+                                      height: 75,
+                                      width: MediaQuery.of(context).size.width *
+                                          .3,
+                                      decoration: BoxDecoration(
+                                          color: Colors.yellow[100],
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0))),
+                                    ),
+                                    Container(
+                                      child: ListView.builder(
+                                          itemCount: snapshot1.data.docs.length,
+                                          itemBuilder: (context, index) {
+                                            bool hide = false;
+
+                                            DocumentSnapshot course =
+                                                snapshot1.data.docs[index];
+
+                                            if (!greenList
+                                                .contains(course['id'])) {
+                                              hide = true;
+                                            }
+                                            firstName = firstNameMaker(
+                                                course['displayName']);
+
+                                            return (hide == false)
+                                                ? GestureDetector(
+                                                    onTap: course['id'] ==
+                                                            currentUser.id
+                                                        ? () => Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ProfilePageWithHeader()))
+                                                        : () => Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    OtherProfile(
+                                                                        course[
+                                                                            'id']))),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: CircleAvatar(
+                                                            radius: 18,
+                                                            backgroundColor:
+                                                                TextThemes
+                                                                    .ndBlue,
+                                                            child: CircleAvatar(
+                                                              radius: 17,
+                                                              backgroundColor:
+                                                                  TextThemes
+                                                                      .ndBlue,
+                                                              child:
+                                                                  CircleAvatar(
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        course[
+                                                                            'photoUrl']),
+                                                                radius: 18,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          firstName,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                : Container();
+                                          }),
+                                      height: 75,
+                                      width: MediaQuery.of(context).size.width *
+                                          .3,
+                                      decoration: BoxDecoration(
+                                          color: Colors.green[100],
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0))),
+                                    )
+                                  ],
+                                ))),
+                      );
+                    });
+              });
         });
+  }
+
+  String firstNameMaker(String fullName) {
+    List<String> tempList = fullName.split(" ");
+    int start = 0;
+    int end = tempList.length;
+    if (end > 1) {
+      end = 1;
+    }
+    final selectedWords = tempList.sublist(start, end);
+    String firstName = selectedWords.join(" ");
+    return firstName;
   }
 }
