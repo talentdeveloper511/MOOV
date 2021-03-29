@@ -77,6 +77,7 @@ class _ProfilePageState extends State<ProfilePage>
               return Scaffold(
                 backgroundColor: Colors.white,
                 body: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
                   child: Stack(children: [
                     Container(
                       height: 130,

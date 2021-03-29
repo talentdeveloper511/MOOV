@@ -903,6 +903,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
       ),
       body: PageView(
+        physics: ClampingScrollPhysics(),
         children: <Widget>[
           // Timeline(),
           HomePage(),
