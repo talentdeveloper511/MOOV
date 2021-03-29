@@ -175,7 +175,9 @@ class ChatState extends State<Chat> {
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
               "isGroupChat": true,
-              "postId": widget.sendingPost['postId']
+              "postId": widget.sendingPost['postId'],
+              "isMoovInChat": true,
+              "moovInChatTitle": widget.sendingPost['title']
             })
           : messagesRef
               .doc(directMessageId)
@@ -197,7 +199,9 @@ class ChatState extends State<Chat> {
               "directMessageId": directMessageId,
               "isGroupChat": false,
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
-              "postId": widget.sendingPost['postId']
+              "postId": widget.sendingPost['postId'],
+              "isMoovInChat": true,
+              "moovInChatTitle": widget.sendingPost['title']
             });
 
       if (commentController.text.isNotEmpty) {

@@ -34,6 +34,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final Reference storageRef = FirebaseStorage.instance.ref();
@@ -98,6 +99,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   initState() {
     super.initState();
+
     _hideFabAnimController = AnimationController(
       vsync: this,
       duration: kThemeAnimationDuration,
@@ -183,14 +185,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     context,
                     MaterialPageRoute(
                         builder: (context) => MessageDetail(
-                            pushId, recipientId, false, " ", [],{})));
+                            pushId, recipientId, false, " ", [], {})));
               }
               if (page == "chat" && !_isNumeric(pushId)) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            MessageDetail(" ", " ", true, pushId, [],{})));
+                            MessageDetail(" ", " ", true, pushId, [], {})));
               }
 
               if (page == "user") {
@@ -272,14 +274,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetail(pushId, recipientId, false, " ", [],{})));
+                    MessageDetail(pushId, recipientId, false, " ", [], {})));
       }
       if (page == "chat" && !_isNumeric(pushId)) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetail(" ", " ", true, pushId, [],{})));
+                    MessageDetail(" ", " ", true, pushId, [], {})));
       }
 
       if (page == "user") {
@@ -424,14 +426,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetail(pushId, recipientId, false, " ", [],{})));
+                    MessageDetail(pushId, recipientId, false, " ", [], {})));
       }
       if (page == "chat" && !_isNumeric(pushId)) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    MessageDetail(" ", " ", true, pushId, [],{})));
+                    MessageDetail(" ", " ", true, pushId, [], {})));
       }
 
       if (page == "user") {
@@ -520,15 +522,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          MessageDetail(pushId, recipientId, false, " ", [],{})));
+                      builder: (context) => MessageDetail(
+                          pushId, recipientId, false, " ", [], {})));
             }
             if (page == "chat" && !_isNumeric(pushId)) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MessageDetail(" ", " ", true, pushId, [],{})));
+                          MessageDetail(" ", " ", true, pushId, [], {})));
             }
 
             if (page == "user") {

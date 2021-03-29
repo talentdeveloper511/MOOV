@@ -313,7 +313,7 @@ class Database {
               .set({
             "seen": false,
             "displayName": currentUser.displayName,
-            "comment": "thisWillTurnIntoAStatus",
+            "comment": "is not going to " + title,
             "timestamp": 0,
             "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
@@ -395,7 +395,7 @@ class Database {
               .set({
             "seen": false,
             "displayName": currentUser.displayName,
-            "comment": "thisWillTurnIntoAStatus",
+            "comment": "is undecided about " + title,
             "timestamp": 0,
             "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
@@ -491,7 +491,7 @@ class Database {
               .set({
             "seen": false,
             "displayName": currentUser.displayName,
-            "comment": "thisWillTurnIntoAStatus",
+            "comment": "is going to " + title,
             "timestamp": 0,
             "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
@@ -689,45 +689,46 @@ class Database {
     }, SetOptions(merge: true));
   }
 
-  sendMOOVNotification(
-    String ownerId,
-    String previewImg,
-    dynamic moovId,
-    startDate,
-    String title,
-    String ownerProPic,
-    String ownerName,
-  ) {
-    notificationFeedRef
-        .doc(ownerId)
-        .collection("feedItems")
-        .doc('sent ' + moovId)
-        .set({
-      "seen": false,
-      "type": "sent",
-      "username": currentUser.displayName,
-      "userId": currentUser.id,
-      "userProfilePic": currentUser.photoUrl,
-      "previewImg": previewImg,
-      "postId": moovId,
-      "timestamp": timestamp,
-      "startDate": startDate,
-      "title": title,
-      "ownerProPic": ownerProPic,
-      "ownerName": ownerName,
-    });
+  // sendMOOVNotification(
+  //   String ownerId,
+  //   String previewImg,
+  //   dynamic moovId,
+  //   startDate,
+  //   String title,
+  //   String ownerProPic,
+  //   String ownerName,
+  // ) {
+  //   notificationFeedRef
+  //       .doc(ownerId)
+  //       .collection("feedItems")
+  //       .doc('sent ' + moovId)
+  //       .set({
+  //     "seen": false,
+  //     "type": "chat",
+  //     "username": currentUser.displayName,
+  //     "userId": currentUser.id,
+  //     "userProfilePic": currentUser.photoUrl,
+  //     "previewImg": previewImg,
+  //     "postId": moovId,
+  //     "timestamp": timestamp,
+  //     "startDate": startDate,
+  //     "title": title,
+  //     "ownerProPic": ownerProPic,
+  //     "ownerName": ownerName,
 
-    usersRef.doc(currentUser.id).get().then((value) {
-      if (value['sendLimit'] >= 0) {
-        usersRef
-            .doc(currentUser.id)
-            .update({"sendLimit": FieldValue.increment(-1)});
-        usersRef
-            .doc(currentUser.id)
-            .update({"score": FieldValue.increment(50)});
-      }
-    });
-  }
+  //   });
+
+  //   usersRef.doc(currentUser.id).get().then((value) {
+  //     if (value['sendLimit'] >= 0) {
+  //       usersRef
+  //           .doc(currentUser.id)
+  //           .update({"sendLimit": FieldValue.increment(-1)});
+  //       usersRef
+  //           .doc(currentUser.id)
+  //           .update({"score": FieldValue.increment(50)});
+  //     }
+  //   });
+  // }
 
   friendAcceptNotification(
       String ownerId, String ownerProPic, String ownerName, String sender) {

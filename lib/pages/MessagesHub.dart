@@ -730,9 +730,8 @@ class MessageList extends StatelessWidget {
                   if (diff.inMinutes >= 2 && diff.inMinutes <= 60) {
                     timeAgo = (diff.inMinutes).toString() + ' minutes ago';
                   }
-                   if (diff.inMinutes >= 60 && diff.inMinutes <= 119){
-                    timeAgo =
-                        '1 hour ago';
+                  if (diff.inMinutes >= 60 && diff.inMinutes <= 119) {
+                    timeAgo = '1 hour ago';
                   }
                   if (diff.inMinutes >= 120) {
                     timeAgo =
@@ -771,8 +770,7 @@ class MessageList extends StatelessWidget {
                                             course['directMessageId'],
                                             otherPerson,
                                             false,
-                                            " ",
-                                            [],{})));
+                                            " ", [], {})));
                               },
                               child: Container(
                                 height: 100,
@@ -883,7 +881,11 @@ class MessageList extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MessageDetail(
-                                            " ", " ", true, gid, snapshot.data['members'], {})));
+                                            " ",
+                                            " ",
+                                            true,
+                                            gid,
+                                            snapshot.data['members'], {})));
                               },
                               child: Container(
                                 height: 100,
@@ -1036,18 +1038,23 @@ class MessageDetail extends StatefulWidget {
   final List<dynamic> members;
   final Map<String, String> sendingPost;
 
-  MessageDetail(this.directMessageId, this.otherPerson, this.isGroupChat,
-      this.gid, this.members, this.sendingPost);
+  MessageDetail(
+    this.directMessageId,
+    this.otherPerson,
+    this.isGroupChat,
+    this.gid,
+    this.members,
+    this.sendingPost,
+  );
 
   @override
   _MessageDetailState createState() => _MessageDetailState();
 }
 
 class _MessageDetailState extends State<MessageDetail> {
-
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -1078,7 +1085,8 @@ class _MessageDetailState extends State<MessageDetail> {
                         }
                       : () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => OtherProfile(widget.otherPerson)));
+                              builder: (context) =>
+                                  OtherProfile(widget.otherPerson)));
                         },
                   child: (widget.isGroupChat == false)
                       ? StreamBuilder(
@@ -1126,10 +1134,14 @@ class _MessageDetailState extends State<MessageDetail> {
                                       child: CachedNetworkImage(
                                         imageUrl: snapshot.data['groupPic'],
                                         fit: BoxFit.cover,
-                                        height: isLargePhone ?
-                                        MediaQuery.of(context).size.height *
-                                                0.04:
-                                            MediaQuery.of(context).size.height *
+                                        height: isLargePhone
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.04
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .height *
                                                 0.06,
                                         width:
                                             MediaQuery.of(context).size.width *

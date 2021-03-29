@@ -295,7 +295,7 @@ exports.onCreateGroupFeedItem = functions.firestore
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username} requested to join`;
             break;
-          case "chat": //YOOO: if sending MOOV, title = "Sent a MOOV"
+          case "chat":
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username}: ${activityFeedItem.title}`;
             post = "chat";
@@ -426,9 +426,12 @@ exports.directMessage = functions.firestore
        * @return {void} The sum of the two numbers.
        */
       function sendNotification(androidNotificationToken, activityFeedItem) {
-        const body = `${activityFeedItem.comment}`;
+        let body = `${activityFeedItem.comment}`;
         const title = `${activityFeedItem.displayName}`;
         // 4) Create message for push notification
+        if (activityFeedItem.isMoovInChat == true) {
+          body = `sent you ${activityFeedItem.moovInChatTitle}`;
+        }
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
