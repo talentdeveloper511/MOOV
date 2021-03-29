@@ -164,7 +164,7 @@ exports.onCreateActivityFeedItem = functions.firestore
             break;
           case "going":
             title = `${activityFeedItem.title}`;
-            body = `${activityFeedItem.username} is going to your MOOV!`;
+            body = `${activityFeedItem.username} is going!`;
             post = "post";
             break;
           case "friendGroup":
@@ -267,16 +267,21 @@ exports.onCreateGroupFeedItem = functions.firestore
       function sendNotification(androidNotificationToken, activityFeedItem) {
         let body;
         let title;
+        let id;
+        let post;
 
         // 3) switch body value based off of notification type
         switch (activityFeedItem.type) {
           case "invite":
             title = `${name}`;
             body = `${activityFeedItem.username} has invited you all to ${activityFeedItem.title}`;
+            post = "post";
+            id = `${activityFeedItem.postId}`;
             break;
           case "suggestion":
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username} suggested ${activityFeedItem.title}`;
+            id = `${activityFeedItem.groupId}`;
             break;
           case "canceled":
             title = `${activityFeedItem.title}`;
@@ -293,6 +298,8 @@ exports.onCreateGroupFeedItem = functions.firestore
           case "chat": //YOOO: if sending MOOV, title = "Sent a MOOV"
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username}: ${activityFeedItem.title}`;
+            post = "chat";
+            id = `${activityFeedItem.groupId}`;
             break;
           default:
             break;
@@ -302,7 +309,7 @@ exports.onCreateGroupFeedItem = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId, click_action: "FLUTTER_NOTIFICATION_CLICK"},
+          data: {recipient: userId, click_action: "FLUTTER_NOTIFICATION_CLICK", link: id, page: post},
         };
 
         // 5) Send message with admin.messaging()
@@ -365,7 +372,7 @@ exports.groupChat = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: userId, page: "group", click_action: "FLUTTER_NOTIFICATION_CLICK"},
+          data: {recipient: userId, page: "group", click_action: "FLUTTER_NOTIFICATION_CLICK", link: groupId},
         };
 
         // 5) Send message with admin.messaging()
@@ -425,7 +432,7 @@ exports.directMessage = functions.firestore
         const message = {
           notification: {title, body},
           token: androidNotificationToken,
-          data: {recipient: receiverId, page: "chat", click_action: "FLUTTER_NOTIFICATION_CLICK"},
+          data: {recipient: receiverId, page: "chat", click_action: "FLUTTER_NOTIFICATION_CLICK", link: chatId},
         };
 
         // 5) Send message with admin.messaging()
@@ -561,7 +568,7 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
                   data: {recipient: user.id, click_action: "FLUTTER_NOTIFICATION_CLICK"},
                 };
                 if (data.startDate.toDate().getDate() == now.toDate().getDate() && data.startDate.toDate().getMonth() == now.toDate().getMonth() && data.startDate.toDate().getFullYear() == now.toDate().getFullYear()) {
-                  if ((data.startDate.toDate().getHours() - 1 == now.toDate().getHours()) && data.scheduled != "true") {
+                  if ((data.startDate.toDate().getMinutes() - 60 == now.toDate().getMinutes()) && data.scheduled != "true") {
                     admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${data.postId}`).set({
                       scheduled: "true",
                     }, {merge: true});
