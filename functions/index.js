@@ -295,7 +295,7 @@ exports.onCreateGroupFeedItem = functions.firestore
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username} requested to join`;
             break;
-          case "chat":
+          case "chat": //YOOO: if sending MOOV, title = "Sent a MOOV"
             title = `${activityFeedItem.groupName}`;
             body = `${activityFeedItem.username}: ${activityFeedItem.title}`;
             post = "chat";

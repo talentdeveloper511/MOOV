@@ -267,11 +267,9 @@ class _BannerImage extends StatelessWidget {
         ),
       ),
       userId == currentUser.id ||
-      currentUser.id == "108155010592087635288" ||
-                                                                          currentUser.id ==
-                                                                              "118426518878481598299" ||
-                                                                          currentUser.id ==
-                                                                              "107290090512658207959"
+              currentUser.id == "108155010592087635288" ||
+              currentUser.id == "118426518878481598299" ||
+              currentUser.id == "107290090512658207959"
           ? Positioned(
               top: 5,
               right: 5,
@@ -487,7 +485,6 @@ class _NonImageContents extends StatelessWidget {
               color: Colors.grey[700],
             ),
           ),
-        
         ],
       ),
     );
@@ -807,20 +804,23 @@ class _AuthorContent extends StatelessWidget {
   }
 }
 
-class Seg2 extends StatefulWidget {
+class GoingListSegment extends StatefulWidget {
   dynamic moovId;
-  Seg2({Key key, @required this.moovId}) : super(key: key);
+  GoingListSegment({Key key, @required this.moovId}) : super(key: key);
 
   @override
-  _Seg2State createState() => _Seg2State(moovId);
+  _GoingListSegmentState createState() => _GoingListSegmentState(moovId);
+
+  static of(BuildContext context) {}
 }
 
-class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
+class _GoingListSegmentState extends State<GoingListSegment>
+    with SingleTickerProviderStateMixin {
   // TabController to control and switch tabs
   TabController _tabController;
   dynamic moovId;
 
-  _Seg2State(this.moovId);
+  _GoingListSegmentState(this.moovId);
 
   // Current Index of tab
   int _currentIndex = 0;
@@ -902,26 +902,7 @@ class _Seg2State extends State<Seg2> with SingleTickerProviderStateMixin {
               ),
             ),
           ),
-          Expanded(
-            child: TabBarView(controller: _tabController,
-                // Restrict scroll by user
-                children: [
-                  Center(
-                    child: ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          return GoingPage(moovId);
-                        }),
-                  ),
-                  Center(
-                    child: ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          return GoingPageFriends(moovId);
-                        }),
-                  )
-                ]),
-          )
+       
         ],
       ),
     );
@@ -945,7 +926,6 @@ class __ButtonsState extends State<_Buttons> {
   bool negativePointAnimationNotGoing = false;
   dynamic moovId;
 
-  
   __ButtonsState(this.moovId);
 
   int status;
@@ -1016,26 +996,24 @@ class __ButtonsState extends State<_Buttons> {
                           side: BorderSide(color: Colors.black)),
                       onPressed: () {
                         HapticFeedback.lightImpact();
-                       
                       },
                       color: (status == 1) ? Colors.red : Colors.white,
                       padding: EdgeInsets.all(5.0),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 4.0),
                         child: Column(
-                                children: [
-                                  Text('Not going'),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 3.0, top: 3.0),
-                                    child: Icon(Icons.directions_walk,
-                                        color: Colors.red),
-                                  ),
-                                ],
-                              ),
+                          children: [
+                            Text('Not going'),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 3.0, top: 3.0),
+                              child: Icon(Icons.directions_walk,
+                                  color: Colors.red),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                   
                   ]),
                   Padding(
                     padding: const EdgeInsets.only(left: 0.0, bottom: 0.0),
@@ -1046,23 +1024,21 @@ class __ButtonsState extends State<_Buttons> {
                             side: BorderSide(color: Colors.black)),
                         onPressed: () {
                           HapticFeedback.lightImpact();
-
                         },
                         color:
                             (status == 2) ? Colors.yellow[600] : Colors.white,
                         padding: EdgeInsets.all(5.0),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 3.0, right: 3),
-                          child:  Column(
-                                  children: [
-                                    Text('Undecided'),
-                                    Icon(Icons.accessibility,
-                                        color: Colors.yellow[600], size: 30),
-                                  ],
-                                ),
+                          child: Column(
+                            children: [
+                              Text('Undecided'),
+                              Icon(Icons.accessibility,
+                                  color: Colors.yellow[600], size: 30),
+                            ],
+                          ),
                         ),
                       ),
-                  
                     ]),
                   ),
                   Padding(
@@ -1074,22 +1050,19 @@ class __ButtonsState extends State<_Buttons> {
                             side: BorderSide(color: Colors.black)),
                         onPressed: () {
                           HapticFeedback.lightImpact();
-
-                         
                         },
                         color: (status == 3) ? Colors.green : Colors.white,
                         padding: EdgeInsets.all(5.0),
                         child: Padding(
                             padding: const EdgeInsets.only(left: 4.0),
                             child: Column(
-                                    children: [
-                                      Text('Going'),
-                                      Icon(Icons.directions_run_outlined,
-                                          color: Colors.green[500], size: 30),
-                                    ],
-                                  )),
+                              children: [
+                                Text('Going'),
+                                Icon(Icons.directions_run_outlined,
+                                    color: Colors.green[500], size: 30),
+                              ],
+                            )),
                       ),
-                     
                     ]),
                   ),
                 ],

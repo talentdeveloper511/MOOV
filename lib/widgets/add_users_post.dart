@@ -1787,7 +1787,7 @@ class _MessageResultAddState extends State<MessageResultAdd> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  MessageDetail(directMessageId, userId, false, " ", [])));
+                  MessageDetail(directMessageId, userId, false, " ", [],{})));
     });
   }
 

@@ -12,9 +12,7 @@ import 'home.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostComments extends StatefulWidget {
-  final String postId;
-  final String postOwnerId;
-  final String postMediaUrl;
+  final String postId, postOwnerId, postMediaUrl;
 
   PostComments({
     this.postId,

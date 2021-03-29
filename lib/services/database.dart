@@ -139,8 +139,7 @@ class Database {
       'address': address,
       'startDate': startDate,
       'unix': unix,
-      'statuses': {
-      },
+      'statuses': {},
       'maxOccupancy': maxOccupancy,
       'venmo': venmo,
       'image': imageUrl,
@@ -163,8 +162,7 @@ class Database {
       'address': address,
       'startDate': startDate,
       'unix': unix,
-      'statuses': {
-      },
+      'statuses': {},
       'maxOccupancy': maxOccupancy,
       'venmo': venmo,
       'image': imageUrl,
@@ -231,8 +229,7 @@ class Database {
       'address': address,
       'startDate': startDate,
       'unix': unix,
-      'statuses': {
-      },
+      'statuses': {},
       'maxOccupancy': maxOccupancy,
       'venmo': venmo,
       'image': imageUrl,
@@ -257,8 +254,7 @@ class Database {
       'address': address,
       'startDate': startDate,
       'unix': unix,
-      'statuses': {
-      },
+      'statuses': {},
       'maxOccupancy': maxOccupancy,
       'venmo': venmo,
       'image': imageUrl,
@@ -279,7 +275,8 @@ class Database {
     }
   }
 
-  Future<void> addNotGoing(userId, postId, List<dynamic> goingList) async {
+  Future<void> addNotGoing(String userId, String postId,
+      List<dynamic> goingList, String title) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
@@ -299,6 +296,37 @@ class Database {
 
         // 'notGoing': FieldValue.arrayUnion([serialUser]),
         // 'notGoingCounter': FieldValue.increment(1)
+      });
+      messagesRef //sending a status update in chats where this moov is sent
+          .where("people", arrayContains: currentUser.id)
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          print(ds.data()['livePosts'][postId] != null);
+
+          messagesRef
+              .doc(ds.id)
+              .collection("chat")
+              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id)
+              .set({
+            "seen": false,
+            "displayName": currentUser.displayName,
+            "comment": "thisWillTurnIntoAStatus",
+            "timestamp": 0,
+            "avatarUrl": currentUser.photoUrl,
+            "userId": currentUser.id,
+            "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
+                " " +
+                currentUser.id,
+            "gid": "gid",
+            "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+            "directMessageId": "",
+            "isGroupChat": true,
+            "postId": "notxxx " + title
+          });
+        }
       });
     });
   }
@@ -330,7 +358,8 @@ class Database {
     });
   }
 
-  Future<void> addUndecided(userId, postId, List<dynamic> goingList) async {
+  Future<void> addUndecided(String userId, String postId,
+      List<dynamic> goingList, String title) async {
     return dbRef.runTransaction((transaction) async {
       final DocumentReference ref = dbRef.doc('notreDame/data/food/$postId');
       // final DocumentReference ref2 = dbRef.doc('notreDame/data/users/$userId');
@@ -348,9 +377,38 @@ class Database {
 
       transaction.update(ref, {
         'going': FieldValue.arrayRemove([serialUser]),
+      });
 
-        // 'undecided': FieldValue.arrayUnion([serialUser]),
-        // 'undecidedCounter': FieldValue.increment(1)
+      messagesRef //sending a status update in chats where this moov is sent
+          .where("people", arrayContains: currentUser.id)
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          print(ds.data()['livePosts'][postId] != null);
+
+          messagesRef
+              .doc(ds.id)
+              .collection("chat")
+              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id)
+              .set({
+            "seen": false,
+            "displayName": currentUser.displayName,
+            "comment": "thisWillTurnIntoAStatus",
+            "timestamp": 0,
+            "avatarUrl": currentUser.photoUrl,
+            "userId": currentUser.id,
+            "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
+                " " +
+                currentUser.id,
+            "gid": "gid",
+            "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+            "directMessageId": "",
+            "isGroupChat": true,
+            "postId": "undecidedxxx " + title
+          });
+        }
       });
     });
   }
@@ -415,6 +473,42 @@ class Database {
       transaction.update(ref, {
         'going': FieldValue.arrayUnion([serialUser]),
         // 'goingCounter': FieldValue.increment(1)
+      });
+
+      messagesRef //sending a status update in chats where this moov is sent
+          .where("people", arrayContains: currentUser.id)
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          print(ds.data()['livePosts'][postId] != null);
+
+          messagesRef
+              .doc(ds.id)
+              .collection("chat")
+              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                  " " +
+                  currentUser.id)
+              .set({
+            "seen": false,
+            "displayName": currentUser.displayName,
+            "comment": "thisWillTurnIntoAStatus",
+            "timestamp": 0,
+            "avatarUrl": postId, // just doing this to conserve data writes
+            "userId": currentUser.id,
+            "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
+                " " +
+                currentUser.id,
+            "gid": "gid",
+            "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+            "directMessageId": "",
+            "isGroupChat": true,
+            "postId": "goingxxx " + title
+          });
+
+          messagesRef.doc(ds.id).set({
+            "livePosts": {userId: 3},
+          }, SetOptions(merge: true));
+        }
       });
     });
   }

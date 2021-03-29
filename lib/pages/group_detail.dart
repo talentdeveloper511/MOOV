@@ -521,6 +521,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                                 gid: gid,
                                                 isGroupChat: true,
                                                 members: members,
+                                                sendingPost: {},
                                               ),
                                             ),
                                           ),

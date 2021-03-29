@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/widgets/chat.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -247,53 +251,13 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                 builder: (context, snapshot) {
                   if (!snapshot.hasData ||
                       snapshot.data.length == 0 ||
-                      _searchTerm == null)
-                    return Container(
-                        height: MediaQuery.of(context).size.height,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.pink[300], Colors.pink[200]],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                    padding: const EdgeInsets.all(50.0),
-                                    child: RichText(
-                                        textAlign: TextAlign.center,
-                                        text: TextSpan(
-                                            style: TextThemes.mediumbody,
-                                            children: [
-                                              TextSpan(
-                                                  text: "Send the",
-                                                  style: TextStyle(
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.w300)),
-                                              TextSpan(
-                                                  text: " MOOV",
-                                                  style: TextStyle(
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.w600)),
-                                              TextSpan(
-                                                  text: ".",
-                                                  style: TextStyle(
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.w300))
-                                            ]))),
-                                Image.asset('lib/assets/ff.png')
-                              ],
-                            ),
-                          ),
-                        ));
+                      _searchTerm == null) {
+                    Timer(Duration(milliseconds: 600), () {
+                      // setState(() {
+                      //   _searchTerm = "a";
+                      // });
+                    });
+                  }
 
                   List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
 
@@ -302,7 +266,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                       return Container();
                     default:
                       if (snapshot.hasError)
-                        return new Text('Error: ${snapshot.error}');
+                        return Container();
                       else
                         return StreamBuilder<List<AlgoliaObjectSnapshot>>(
                             stream: Stream.fromFuture(_operation1(_searchTerm)),
@@ -319,12 +283,13 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                                   return Container();
                                 default:
                                   if (snapshot1.hasError)
-                                    return new Text('Error: ${snapshot1.error}');
+                                    return new Text(
+                                        'Error: ${snapshot1.error}');
                                   else
                                     return Container(
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.90,
+                                              1,
                                       child: TabBarView(
                                           controller: _tabController,
                                           children: [
@@ -401,9 +366,10 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                                                                           index]
                                                                       .data[
                                                                   "members"],
-                                                                  postId: moovId,
-                                                                  title: title,
-                                                                  sendMOOV: true,
+                                                              postId: moovId,
+                                                              title: title,
+                                                              pic: previewImg,
+                                                              sendMOOV: true,
                                                             )
                                                           : Container();
                                                     },
@@ -492,6 +458,38 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
       this.ownerName,
       this.ownerProPic);
 
+  String directMessageId;
+
+  Future dmChecker() async {
+    messagesRef.doc(userId + currentUser.id).get().then((doc) async {
+      messagesRef.doc(currentUser.id + userId).get().then((doc2) async {
+        if (!doc2.exists && !doc.exists) {
+          directMessageId = "nothing";
+        } else if (!doc2.exists) {
+          directMessageId = doc['directMessageId'];
+        } else if (!doc.exists) {
+          directMessageId = doc2['directMessageId'];
+        }
+        print(directMessageId);
+      });
+    });
+  }
+
+  void toMessageDetail(String postId, String pic, String title) {
+    Timer(Duration(milliseconds: 200), () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MessageDetail(
+                  directMessageId,
+                  userId,
+                  false,
+                  "",
+                  [],
+                  {"postId": postId, "pic": pic, "title": title})));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
@@ -540,11 +538,7 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
                     padding: EdgeInsets.only(
                       left: 2.5,
                     ),
-                    child: Icon(
-                      Icons.store,
-                      size: 20,
-                      color: Colors.blue
-                    ),
+                    child: Icon(Icons.store, size: 20, color: Colors.blue),
                   )
                 : verifiedStatus == 2
                     ? Padding(
@@ -606,18 +600,21 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(3.0))),
                         onPressed: () {
-                          Database().sendMOOVNotification(
-                            userId,
-                            previewImg,
-                            moovId,
-                            startDate,
-                            title,
-                            ownerProPic,
-                            ownerName,
-                          );
-                          setState(() {
-                            status = true;
-                          });
+                          dmChecker().then((value) =>
+                              toMessageDetail(moovId, previewImg, title));
+
+                          // Database().sendMOOVNotification(
+                          //   userId,
+                          //   previewImg,
+                          //   moovId,
+                          //   startDate,
+                          //   title,
+                          //   ownerProPic,
+                          //   ownerName,
+                          // );
+                          // setState(() {
+                          //   status = true;
+                          // });
                         },
                         child: Text(
                           "Send MOOV",

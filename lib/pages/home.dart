@@ -28,7 +28,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -140,7 +139,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   handleSignIn(GoogleSignInAccount account) {
     if (account == null) {
-      configurePushNotifications();
       setState(() {
         isAuth = false;
       });
@@ -168,10 +166,46 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ' ' +
           message['notification']['body'];
 
-      FlutterAppBadger.updateBadgeCount(1);
+//      FlutterAppBadger.updateBadgeCount(1);
       if (recipientId == currentUser.id) {
         print(pushId);
         Flushbar snackbar = Flushbar(
+            onTap: (data) {
+              // print("DATA ${data}");
+              if (page == "post") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PostDetail(pushId)));
+              }
+              if (page == "chat" && _isNumeric(pushId)) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MessageDetail(
+                            pushId, recipientId, false, " ", [],{})));
+              }
+              if (page == "chat" && !_isNumeric(pushId)) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MessageDetail(" ", " ", true, pushId, [],{})));
+              }
+
+              if (page == "user") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OtherProfile(pushId)));
+              }
+              if (page == "group") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GroupDetail(pushId)));
+              }
+            },
             padding: EdgeInsets.all(20),
             borderRadius: 15,
             flushbarStyle: FlushbarStyle.FLOATING,
@@ -200,14 +234,64 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
 
     _fcm.configure(onLaunch: (Map<String, dynamic> message) async {
-      print('message: $message');
-      final String pushId = message['link'];
-      final String page = message['page'];
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['title'] +
-          ' ' +
-          message['notification']['body'];
-      FlutterAppBadger.updateBadgeCount(1);
+      print('message onlaunch: $message');
+
+      String pushId = "";
+      String page = "";
+      String recipientId = "";
+      String body = "";
+
+      if (Platform.isIOS) {
+        if (message.containsKey("notification")) {
+          pushId = message['link'];
+          page = message['page'];
+          recipientId = message['recipient'];
+          body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+        } else {
+          pushId = message['link'];
+          page = message['page'];
+          recipientId = message['recipient'];
+          body = message["aps"]["alert"]['title'] +
+              ' ' +
+              message['aps']["alert"]['body'];
+        }
+      } else {
+        pushId = message["data"]['link'];
+        page = message["data"]['page'];
+        recipientId = message["data"]['recipient'];
+      }
+
+      if (page == "post") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+      }
+      if (page == "chat" && _isNumeric(pushId)) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MessageDetail(pushId, recipientId, false, " ", [],{})));
+      }
+      if (page == "chat" && !_isNumeric(pushId)) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MessageDetail(" ", " ", true, pushId, [],{})));
+      }
+
+      if (page == "user") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+      }
+      if (page == "group") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+      }
+
+//      FlutterAppBadger.updateBadgeCount(1);
       // if (page == 'chat') {
       //   Navigator.push(context,
       //       MaterialPageRoute(builder: (context) => MessagesHub()));
@@ -227,40 +311,39 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //          if (recipientId == currentUser.id) {
       print('Notification shown');
 
-      Flushbar snackbar = Flushbar(
-          onTap: (data) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-          },
-          flushbarStyle: FlushbarStyle.FLOATING,
-          boxShadows: [
-            BoxShadow(
-                color: Colors.blue[800],
-                offset: Offset(0.0, 2.0),
-                blurRadius: 3.0)
-          ],
-          backgroundGradient:
-              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
-          icon: Icon(
-            Icons.directions_run,
-            color: Colors.green[700],
-          ),
-          duration: Duration(seconds: 4),
-          flushbarPosition: FlushbarPosition.TOP,
-          backgroundColor: Colors.green,
-          messageText: Text(
-            body,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.white),
-          ));
-      // SnackBar snackybar = SnackBar(
-      //     content: Text(body, overflow: TextOverflow.ellipsis),
-      //     backgroundColor: Colors.green);
-      // _scaffoldKey.currentState.showSnackBar(snackybar);
-      snackbar.show(context);
+//      Flushbar snackbar = Flushbar(
+//          onTap: (data) {
+//            Navigator.push(context,
+//                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+//          },
+//          flushbarStyle: FlushbarStyle.FLOATING,
+//          boxShadows: [
+//            BoxShadow(
+//                color: Colors.blue[800],
+//                offset: Offset(0.0, 2.0),
+//                blurRadius: 3.0)
+//          ],
+//          backgroundGradient:
+//              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
+//          icon: Icon(
+//            Icons.directions_run,
+//            color: Colors.green[700],
+//          ),
+//          duration: Duration(seconds: 4),
+//          flushbarPosition: FlushbarPosition.TOP,
+//          backgroundColor: Colors.green,
+//          messageText: Text(
+//            body,
+//            overflow: TextOverflow.ellipsis,
+//            style: TextStyle(color: Colors.white),
+//          ));
+//      // SnackBar snackybar = SnackBar(
+//      //     content: Text(body, overflow: TextOverflow.ellipsis),
+//      //     backgroundColor: Colors.green);
+//      // _scaffoldKey.currentState.showSnackBar(snackybar);
+//      snackbar.show(context);
       // Get.snackbar("Message", body);
 //          }
-      print('Notification not shown :(');
     },
 //        onBackgroundMessage: myBackgroundMessageHandler,
         onResume: (Map<String, dynamic> message) async {
@@ -279,14 +362,35 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       //    );
       // }
 
-      print('message: $message');
-      final String pushId = message['link'];
-      final String page = message['page'];
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['title'] +
-          ' ' +
-          message['notification']['body'];
-      FlutterAppBadger.updateBadgeCount(1);
+      print('message resume: $message');
+      String pushId = "";
+      String page = "";
+      String recipientId = "";
+      String body = "";
+
+      if (Platform.isIOS) {
+        if (message.containsKey("notification")) {
+          pushId = message['link'];
+          page = message['page'];
+          recipientId = message['recipient'];
+          body = message['notification']['title'] +
+              ' ' +
+              message['notification']['body'];
+        } else {
+          pushId = message['link'];
+          page = message['page'];
+          recipientId = message['recipient'];
+          body = message["aps"]["alert"]['title'] +
+              ' ' +
+              message['aps']["alert"]['body'];
+        }
+      } else {
+        pushId = message["data"]['link'];
+        page = message["data"]['page'];
+        recipientId = message["data"]['recipient'];
+      }
+
+//      FlutterAppBadger.updateBadgeCount(1);
       // if (page == 'chat') {
       //   Navigator.push(context,
       //       MaterialPageRoute(builder: (context) => MessagesHub()));
@@ -306,77 +410,137 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //          if (recipientId == currentUser.id) {
       print('Notification shown');
       print(page);
-      Flushbar snackbar = Flushbar(
-          onTap: (data) {
-            page == "post" ?
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId))):
-                 page == "user" ?  Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OtherProfile(pushId))) : page == "group" ?  Navigator.push(context,
-                MaterialPageRoute(builder: (context) => GroupDetail(pushId))) : null;
-          },
-          flushbarStyle: FlushbarStyle.FLOATING,
-          boxShadows: [
-            BoxShadow(
-                color: Colors.blue[800],
-                offset: Offset(0.0, 2.0),
-                blurRadius: 3.0)
-          ],
-          backgroundGradient:
-              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
-          icon: Icon(
-            Icons.directions_run,
-            color: Colors.green[700],
-          ),
-          duration: Duration(seconds: 4),
-          flushbarPosition: FlushbarPosition.TOP,
-          backgroundColor: Colors.green,
-          messageText: Text(body,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.white)));
-      // SnackBar snackybar = SnackBar(
-      //     content: Text(body, overflow: TextOverflow.ellipsis),
-      //     backgroundColor: Colors.green);
-      // _scaffoldKey.currentState.showSnackBar(snackybar);
-      snackbar.show(context);
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
+      // print("DATA ${data}");
+      if (page == "post") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+      }
+      if (page == "chat" && _isNumeric(pushId)) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MessageDetail(pushId, recipientId, false, " ", [],{})));
+      }
+      if (page == "chat" && !_isNumeric(pushId)) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MessageDetail(" ", " ", true, pushId, [],{})));
+      }
+
+      if (page == "user") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+      }
+      if (page == "group") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+      }
+      //No more flushbar
+
+//      Flushbar snackbar = Flushbar(
+//          onTap: (data) {
+////            page == "post" ?
+//            Navigator.push(context,
+//                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+////                 page == "user" ?  Navigator.push(context,
+////                MaterialPageRoute(builder: (context) => OtherProfile(pushId))) : page == "group" ?  Navigator.push(context,
+////                MaterialPageRoute(builder: (context) => GroupDetail(pushId))) : null;
+//          },
+//          flushbarStyle: FlushbarStyle.FLOATING,
+//          boxShadows: [
+//            BoxShadow(
+//                color: Colors.blue[800],
+//                offset: Offset(0.0, 2.0),
+//                blurRadius: 3.0)
+//          ],
+//          backgroundGradient:
+//              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
+//          icon: Icon(
+//            Icons.directions_run,
+//            color: Colors.green[700],
+//          ),
+//          duration: Duration(seconds: 4),
+//          flushbarPosition: FlushbarPosition.TOP,
+//          backgroundColor: Colors.green,
+//          messageText: Text(body,
+//              overflow: TextOverflow.ellipsis,
+//              style: TextStyle(color: Colors.white)));
+//      // SnackBar snackybar = SnackBar(
+//      //     content: Text(body, overflow: TextOverflow.ellipsis),
+//      //     backgroundColor: Colors.green);
+//      // _scaffoldKey.currentState.showSnackBar(snackybar);
+//      snackbar.show(context);
 
       // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
 //          }
       print('Notification not shown :(');
     }, onMessage: (Map<String, dynamic> message) async {
-      print('message1: $message');
-      final String pushId = message['link'];
-      final String page = message['page'];
-      final String recipientId = message['recipient'];
-      final String body = message['notification']['title'] +
-          ' ' +
-          message['notification']['body'];
-      FlutterAppBadger.updateBadgeCount(1);
-      // if (page == 'chat') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => MessagesHub()));
-      // } else if (page == 'post') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-      // } else if (page == 'group') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-      // } else if (page == 'user') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-      // } else {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => NotificationFeed()));
-      // }
+      print('message onmessage: $message');
 
-      FlutterAppBadger.updateBadgeCount(1);
-//          if (recipientId == currentUser.id) {
-//            print(pushId);
-//            print(page);
+      String pushId = "";
+      String page = "";
+      String recipientId = "";
+      String body = "";
+
+      if (message.containsKey("notification")) {
+        pushId = message['link'];
+        page = message['page'];
+        recipientId = message['recipient'];
+        body = message['notification']['title'] +
+            ' ' +
+            message['notification']['body'];
+      } else {
+//        pushId = message['link'];
+//        page = message['page'];
+//        recipientId = message['recipient'];
+        body = message["aps"]["alert"]['title'] +
+            ' ' +
+            message['aps']["alert"]['body'];
+      }
+
+      print(page);
+
+      usersRef.doc(user.id).update({'test': message.toString()});
+
       Flushbar snackbar = Flushbar(
           onTap: (data) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+            // print("DATA ${data}");
+            if (page == "post") {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+            }
+            if (page == "chat" && _isNumeric(pushId)) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MessageDetail(pushId, recipientId, false, " ", [],{})));
+            }
+            if (page == "chat" && !_isNumeric(pushId)) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MessageDetail(" ", " ", true, pushId, [],{})));
+            }
+
+            if (page == "user") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OtherProfile(pushId)));
+            }
+            if (page == "group") {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+            }
           },
           padding: EdgeInsets.all(20),
           borderRadius: 15,
@@ -397,19 +561,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           messageText: Text(body,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.black)));
-      // SnackBar snackybar = SnackBar(
-      //     content: Text(body, overflow: TextOverflow.ellipsis),
-      //     backgroundColor: Colors.green);
-      // _scaffoldKey.currentState.showSnackBar(snackybar);
+
       snackbar.show(context);
+
+      usersRef.doc(user.id).update({'snackbar': message.toString()});
 //          }
       print('Notification not shown :(');
+      print(body);
     });
   }
 
   getiOSPermission() {
-    _fcm.requestNotificationPermissions(
-        IosNotificationSettings(alert: true, badge: true, sound: true));
+    _fcm.requestNotificationPermissions(IosNotificationSettings());
     _fcm.onIosSettingsRegistered.listen((settings) {
       print('settings: $settings');
     });
@@ -480,6 +643,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   int currentIndex = 0;
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return double.tryParse(result) != null;
+  }
 
   @override
   void dispose() {

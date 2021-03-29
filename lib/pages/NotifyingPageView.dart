@@ -29,9 +29,11 @@ class _NotifyingPageViewState extends State<NotifyingPageView> {
   @override
   void initState() {
     _pageController = PageController(
-      initialPage: 0,
+      initialPage: widget.currentIndex,
       viewportFraction: 0.9,
-    )..addListener(_onScroll);
+    )
+      ..addListener(_onScroll)
+      ..addListener(() {});
 
     _previousPage = _pageController.initialPage;
     super.initState();
@@ -46,16 +48,12 @@ class _NotifyingPageViewState extends State<NotifyingPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return PageStorage(
-      key: homeKey,
-      bucket: bucketGlobalHome,
-      child: PageView(
-        onPageChanged: (value) {
-          setState(() {});
-        },
-        children: _pages,
-        controller: _pageController,
-      ),
+    return PageView(
+      onPageChanged: (value) {
+        setState(() {});
+      },
+      children: _pages,
+      controller: _pageController,
     );
   }
 }

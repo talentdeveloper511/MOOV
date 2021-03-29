@@ -115,8 +115,7 @@ void locationCheckIn(BuildContext context, Function callback) {
                         }, SetOptions(merge: true));
                       });
                       Timer(Duration(seconds: 60), () {
-                       postsRef.doc(postId)
-                            .set({
+                        postsRef.doc(postId).set({
                           "checkInMap": {currentUser.id: FieldValue.delete()}
                         }, SetOptions(merge: true));
                       });
@@ -318,9 +317,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           left: 10,
           right: 10,
           child: Container(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
+            child: Stack(alignment: Alignment.center, children: [
               ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 child: CachedNetworkImage(

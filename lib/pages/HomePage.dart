@@ -35,10 +35,14 @@ import 'dart:math' as math;
 import 'friend_finder.dart';
 import 'notification_feed.dart';
 
+PageStorageKey motnKey = PageStorageKey("motnKey");
+
+
 class HomePage extends StatefulWidget {
-  final int pageIndex;
+  final int pageIndex, motdIndex;
   User user;
-  HomePage({Key key, this.user, this.pageIndex}) : super(key: key);
+  HomePage({Key key, this.user, this.pageIndex, this.motdIndex})
+      : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -48,14 +52,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+        final PageStorageBucket motnBucket = PageStorageBucket();
+
   int _getInitialIndex() {
     int initialIndex = PageStorage.of(context).readState(
           context,
           identifier: widget.pageIndex,
         ) ??
         0;
-    print("Initial Index ${initialIndex}");
     return initialIndex;
+  }
+
+  int _getMOTDIndex() {
+    int motdIndex = PageStorage.of(context).readState(
+          context,
+          identifier: widget.motdIndex,
+        ) ??
+        0;
+    return motdIndex;
   }
 
   ScrollController _scrollController;
@@ -76,7 +90,8 @@ class _HomePageState extends State<HomePage>
 
   // Current Index of tab
   int _currentIndex = 0;
-  ValueNotifier<double> _notifier;
+  int motdIndex = 0;
+  ValueNotifier<double> _notifier = ValueNotifier<double>(0);
 
   Map<int, Widget> map =
       new Map(); // Cupertino Segmented Control takes children in form of Map.
@@ -98,8 +113,6 @@ class _HomePageState extends State<HomePage>
 
   void initState() {
     super.initState();
-    _notifier = ValueNotifier<double>(0);
-
     _controller = EasyRefreshController();
     _scrollController = ScrollController();
     _hideFabAnimController = AnimationController(
@@ -113,15 +126,11 @@ class _HomePageState extends State<HomePage>
     _tabController.animation
       ..addListener(() {
         setState(() {
-          PageStorage.of(context).writeState(
-            context,
-            _tabController.index,
-            identifier: widget.pageIndex,
-          );
-
           _currentIndex = (_tabController.animation.value).round();
         });
       });
+
+
   }
 
   var percentage = 0.0;
@@ -179,9 +188,7 @@ class _HomePageState extends State<HomePage>
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 20,
-                                                  top: 10,
-                                                  bottom: 5),
+                                                  left: 20, top: 10, bottom: 5),
                                               child: Column(
                                                 children: [
                                                   Padding(
@@ -218,16 +225,13 @@ class _HomePageState extends State<HomePage>
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(0);
-                                              print(_currentIndex);
                                               setState(() {
                                                 _currentIndex = 0;
                                               });
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 20,
-                                                  top: 10,
-                                                  bottom: 5),
+                                                  left: 20, top: 10, bottom: 5),
                                               child: Column(
                                                 children: [
                                                   Image.asset(
@@ -260,7 +264,6 @@ class _HomePageState extends State<HomePage>
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(2);
-                                              print(_currentIndex);
 
                                               setState(() {
                                                 _currentIndex = 2;
@@ -353,16 +356,13 @@ class _HomePageState extends State<HomePage>
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(3);
-                                              print(_currentIndex);
                                               setState(() {
                                                 _currentIndex = 3;
                                               });
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 5.0,
-                                                  right: 15,
-                                                  top: 5),
+                                                  left: 5.0, right: 15, top: 5),
                                               child: Column(
                                                 children: [
                                                   Image.asset(
@@ -397,16 +397,13 @@ class _HomePageState extends State<HomePage>
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(0);
-                                              print(_currentIndex);
                                               setState(() {
                                                 _currentIndex = 0;
                                               });
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 5.0,
-                                                  right: 15,
-                                                  top: 5),
+                                                  left: 5.0, right: 15, top: 5),
                                               child: Column(
                                                 children: [
                                                   Image.asset(
@@ -442,7 +439,6 @@ class _HomePageState extends State<HomePage>
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(4);
-                                              print(_currentIndex);
                                               setState(() {
                                                 _currentIndex = 4;
                                               });
@@ -461,8 +457,7 @@ class _HomePageState extends State<HomePage>
                                                 ),
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.all(
-                                                          8.0),
+                                                      const EdgeInsets.all(8.0),
                                                   child: Text(
                                                     "Sports",
                                                     style: TextStyle(
@@ -480,7 +475,6 @@ class _HomePageState extends State<HomePage>
                                         : GestureDetector(
                                             onTap: () {
                                               _tabController.animateTo(0);
-                                              print(_currentIndex);
                                               setState(() {
                                                 _currentIndex = 0;
                                                 ;
@@ -525,7 +519,6 @@ class _HomePageState extends State<HomePage>
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(5);
-                                              print(_currentIndex);
                                               setState(() {
                                                 _currentIndex = 5;
                                               });
@@ -564,7 +557,6 @@ class _HomePageState extends State<HomePage>
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(0);
-                                              print(_currentIndex);
                                               setState(() {
                                                 _currentIndex = 0;
                                               });
@@ -618,9 +610,7 @@ class _HomePageState extends State<HomePage>
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 4.0,
-                                                  top: 8,
-                                                  right: 5),
+                                                  left: 4.0, top: 8, right: 5),
                                               child: Column(
                                                 children: [
                                                   Image.asset(
@@ -661,9 +651,7 @@ class _HomePageState extends State<HomePage>
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 4.0,
-                                                  right: 5,
-                                                  top: 9),
+                                                  left: 4.0, right: 5, top: 9),
                                               child: Column(
                                                 children: [
                                                   Image.asset(
@@ -719,8 +707,7 @@ class _HomePageState extends State<HomePage>
                                         scrollDirection: Axis.horizontal,
                                         children: [
                                           SizedBox(
-                                              width:
-                                                  isLargePhone ? 47.5 : 40),
+                                              width: isLargePhone ? 47.5 : 40),
                                           Padding(
                                               padding: const EdgeInsets.only(
                                                   bottom: 2.0,
@@ -736,8 +723,7 @@ class _HomePageState extends State<HomePage>
                                                           todayOnly = 1;
                                                         });
                                                       },
-                                                      color:
-                                                          TextThemes.ndBlue,
+                                                      color: TextThemes.ndBlue,
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
@@ -767,11 +753,12 @@ class _HomePageState extends State<HomePage>
                                                           ],
                                                         ),
                                                       ),
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      8.0)),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0)),
                                                     )
                                                   : RaisedButton(
                                                       onPressed: () {
@@ -786,8 +773,7 @@ class _HomePageState extends State<HomePage>
                                                                 .all(0.0),
                                                         child: Row(
                                                           mainAxisSize:
-                                                              MainAxisSize
-                                                                  .min,
+                                                              MainAxisSize.min,
                                                           children: [
                                                             Padding(
                                                               padding: EdgeInsets
@@ -809,16 +795,16 @@ class _HomePageState extends State<HomePage>
                                                           ],
                                                         ),
                                                       ),
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      8.0)),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0)),
                                                     )),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 10.0,
-                                                vertical: 1),
+                                                horizontal: 10.0, vertical: 1),
                                             child: Container(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -829,8 +815,8 @@ class _HomePageState extends State<HomePage>
                                                       BorderRadius.circular(
                                                           10.0)),
                                               child: Theme(
-                                                data: Theme.of(context)
-                                                    .copyWith(
+                                                data:
+                                                    Theme.of(context).copyWith(
                                                   canvasColor:
                                                       TextThemes.ndBlue,
                                                 ),
@@ -838,45 +824,39 @@ class _HomePageState extends State<HomePage>
                                                   height: 10,
                                                   child:
                                                       DropdownButtonFormField(
-                                                    decoration:
-                                                        InputDecoration(
-                                                            contentPadding:
-                                                                EdgeInsets.only(
-                                                                    bottom: 8,
-                                                                    left: 10,
-                                                                    right: 5),
-                                                            border:
-                                                                UnderlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .all(
-                                                              const Radius
-                                                                      .circular(
-                                                                  10.0),
-                                                            )),
-                                                            filled: true,
-                                                            hintStyle: TextStyle(
-                                                                color: Colors
-                                                                        .grey[
-                                                                    800]),
-                                                            fillColor:
-                                                                TextThemes
-                                                                    .ndBlue),
+                                                    decoration: InputDecoration(
+                                                        contentPadding:
+                                                            EdgeInsets.only(
+                                                                bottom: 15,
+                                                                left: 10,
+                                                                right: 5),
+                                                        border:
+                                                            UnderlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .all(
+                                                          const Radius.circular(
+                                                              10.0),
+                                                        )),
+                                                        filled: true,
+                                                        hintStyle: TextStyle(
+                                                            color: Colors
+                                                                .grey[800]),
+                                                        fillColor:
+                                                            TextThemes.ndBlue),
                                                     style: isLargePhone
                                                         ? TextStyle(
                                                             fontSize: 14,
-                                                            color:
-                                                                Colors.white)
+                                                            color: Colors.white)
                                                         : TextStyle(
                                                             fontSize: 12.5,
                                                             color:
                                                                 Colors.white),
-                                                    value:
-                                                        privacyDropdownValue,
+                                                    value: privacyDropdownValue,
                                                     icon: Icon(
                                                         Icons.arrow_drop_down,
-                                                        color: TextThemes
-                                                            .ndGold),
+                                                        color:
+                                                            TextThemes.ndGold),
                                                     items: privacyList
                                                         .map((String value) {
                                                       return DropdownMenuItem<
@@ -914,8 +894,7 @@ class _HomePageState extends State<HomePage>
                       //THE DEFAULT NO FILTERS FEED
                       future: request(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState !=
-                            ConnectionState.done) {
+                        if (snapshot.connectionState != ConnectionState.done) {
                           return Container();
                         }
 
@@ -935,14 +914,13 @@ class _HomePageState extends State<HomePage>
                           controller: _controller,
                           header: BezierCircleHeader(
                               color: TextThemes.ndBlue,
-                              backgroundColor: _colorTween(
-                                            Colors.white, Colors.black87)),
-                          footer: BezierBounceFooter(
-                              backgroundColor: Colors.white),
+                              backgroundColor:
+                                  _colorTween(Colors.white, Colors.black87)),
+                          footer:
+                              BezierBounceFooter(backgroundColor: Colors.white),
                           bottomBouncing: false,
                           child: ListView.builder(
-                           key: PageStorageKey("defaultKey"),
-
+                            key: PageStorageKey("defaultKey"),
                             controller: _scrollController,
                             itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {
@@ -1034,11 +1012,6 @@ class _HomePageState extends State<HomePage>
                                       .contains(currentUser.id)) {
                                 hide = false;
                               }
-
-                              // if (course['featured'] != true) {
-                              //   hide = true;
-                              // }
-
                               if (index == 0) {
                                 return Column(children: [
                                   AnimatedBuilder(
@@ -1050,11 +1023,16 @@ class _HomePageState extends State<HomePage>
                                         height: isLargePhone ? 390 : 360,
                                         child: Column(children: <Widget>[
                                           Container(
-                                            height: isLargePhone ? 170 : 140,
+                                            height: isLargePhone ? 155 : 140,
                                             child: GestureDetector(
-                                              child: NotifyingPageView(
-                                                key: homeKey,
-                                                notifier: _notifier,
+                                              child: PageStorage(
+                                                key: motnKey,
+                                                bucket: motnBucket,
+                                                child: NotifyingPageView(
+                                                  
+                                                  notifier: _notifier,
+                                                  currentIndex: _notifier.value.toInt(),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -1065,19 +1043,21 @@ class _HomePageState extends State<HomePage>
                                                 alignment: Alignment.center,
                                                 child: GestureDetector(
                                                   onTap: () {
+                                                    
                                                     showDialog(
                                                         context: context,
                                                         builder: (_) =>
                                                             CupertinoAlertDialog(
                                                               title: Text(
                                                                   "Your MOOV."),
-                                                              content:
-                                                                  Padding(
-                                                                padding: const EdgeInsets
-                                                                        .only(
-                                                                    top: 8.0),
+                                                              content: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            8.0),
                                                                 child: Text(
-                                                                    "Do you have the MOOV of the Day? Email admin@whatsthemoov.com."),
+                                                                    "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
                                                               ),
                                                             ),
                                                         barrierDismissible:
@@ -1092,8 +1072,7 @@ class _HomePageState extends State<HomePage>
                                                         opacity:
                                                             _notifier.value,
                                                         duration: Duration(
-                                                            milliseconds:
-                                                                250),
+                                                            milliseconds: 250),
                                                         child: Text(
                                                           "MOOV of the Night",
                                                           style: TextStyle(
@@ -1102,17 +1081,16 @@ class _HomePageState extends State<HomePage>
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                              color: Colors
-                                                                  .white,
+                                                              color:
+                                                                  Colors.white,
                                                               fontSize: 16.0),
                                                         ),
                                                       ),
                                                       AnimatedOpacity(
-                                                        opacity: 1 -
-                                                            _notifier.value,
+                                                        opacity:
+                                                            1 - _notifier.value,
                                                         duration: Duration(
-                                                            milliseconds:
-                                                                100),
+                                                            milliseconds: 100),
                                                         child: Text(
                                                           "MOOV of the Day",
                                                           style: TextStyle(
@@ -1121,8 +1099,8 @@ class _HomePageState extends State<HomePage>
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                              color: Colors
-                                                                  .black,
+                                                              color:
+                                                                  Colors.black,
                                                               fontSize: 16.0),
                                                         ),
                                                       ),
@@ -1139,8 +1117,8 @@ class _HomePageState extends State<HomePage>
                                                   return Container(
                                                     color: _colorTween(
                                                         Colors.white,
-                                                        Color.fromRGBO(204,
-                                                            204, 204, 0)),
+                                                        Color.fromRGBO(
+                                                            204, 204, 204, 0)),
                                                     width:
                                                         MediaQuery.of(context)
                                                             .size
@@ -1151,15 +1129,16 @@ class _HomePageState extends State<HomePage>
                                                           MainAxisAlignment
                                                               .center,
                                                       children: <Widget>[
-                                                        _currentIndex == 0 &&
+                                                        _currentIndex == 0||
                                                                 todayOnly ==
-                                                                    0 &&
-                                                                privacyDropdownValue ==
+                                                                    0 ||
+                                                                privacyDropdownValue !=
                                                                     'Featured'
                                                             ? CarouselSlider(
                                                                 options:
                                                                     CarouselOptions(
-                                                                      scrollPhysics: NeverScrollableScrollPhysics(),
+                                                                  scrollPhysics:
+                                                                      NeverScrollableScrollPhysics(),
                                                                   height:
                                                                       isLargePhone
                                                                           ? 170
@@ -1230,12 +1209,10 @@ class _HomePageState extends State<HomePage>
                     ),
                     FutureBuilder(
                       //Parties
-                      future: postsRef
-                          .where("type", isEqualTo: "Food/Drink")
-                          .get(),
+                      future:
+                          postsRef.where("type", isEqualTo: "Food/Drink").get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Center(
                             child: Container(),
                           );
@@ -1244,16 +1221,14 @@ class _HomePageState extends State<HomePage>
                           controller: _scrollController,
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1274,8 +1249,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1352,23 +1327,20 @@ class _HomePageState extends State<HomePage>
                           .orderBy("startDate")
                           .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1389,8 +1361,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1461,23 +1433,20 @@ class _HomePageState extends State<HomePage>
                           .orderBy("startDate")
                           .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1498,8 +1467,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1576,23 +1545,20 @@ class _HomePageState extends State<HomePage>
                           .orderBy("startDate")
                           .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1613,8 +1579,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1690,23 +1656,20 @@ class _HomePageState extends State<HomePage>
                           .orderBy("startDate")
                           .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1727,8 +1690,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
@@ -1804,23 +1767,20 @@ class _HomePageState extends State<HomePage>
                           .orderBy("startDate")
                           .get(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.docs.length == 0)
+                        if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Container();
 
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index];
+                            DocumentSnapshot course = snapshot.data.docs[index];
                             Timestamp startDate = course["startDate"];
                             privacy = course['privacy'];
                             Map<String, dynamic> statuses =
                                 (snapshot.data.docs[index]['statuses']);
 
                             int status = 0;
-                            List<dynamic> statusesIds =
-                                statuses.keys.toList();
+                            List<dynamic> statusesIds = statuses.keys.toList();
 
                             List<dynamic> statusesValues =
                                 statuses.values.toList();
@@ -1841,8 +1801,8 @@ class _HomePageState extends State<HomePage>
                                 Timestamp.now().millisecondsSinceEpoch -
                                     3600000) {
                               print("Expired. See ya later.");
-                              Future.delayed(
-                                  const Duration(milliseconds: 1000), () {
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
                                 Database().deletePost(
                                     course['postId'],
                                     course['userId'],
