@@ -397,7 +397,10 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           : SingleChildScrollView(
               child: Column(children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(bottom: currentUser.isBusiness ? 5 : 15.0, left: 15, right: 15),
+                  padding: EdgeInsets.only(
+                      bottom: currentUser.isBusiness ? 5 : 15.0,
+                      left: 15,
+                      right: 15),
                   child: TextFormField(
                     controller: titleController,
                     decoration: InputDecoration(
@@ -419,116 +422,124 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                     },
                   ),
                 ),
-               currentUser.isBusiness ? Container() : Padding(
-                  padding: EdgeInsets.only(top: 5, bottom: 15.0, left: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0, left: 8),
-                        child: Icon(Icons.question_answer,
-                            color: TextThemes.ndGold),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * .45,
-                        child: ButtonTheme(
-                          child: DropdownButtonFormField(
-                            style: isLargePhone
-                                ? null
-                                : TextStyle(
-                                    fontSize: 12.5, color: Colors.black),
-                            value: typeDropdownValue,
-                            icon: Icon(Icons.museum, color: TextThemes.ndGold),
-                            decoration: InputDecoration(
-                              labelText: "Select Event Type",
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            items: listOfTypes.map((String value) {
-                              return new DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                typeDropdownValue = newValue;
-                              });
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'What are we doing?';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * .35,
-                          child: ButtonTheme(
-                            child: DropdownButtonFormField(
-                              style: isLargePhone
-                                  ? null
-                                  : TextStyle(
-                                      fontSize: 12.5, color: Colors.black),
-                              value: privacyDropdownValue,
-                              icon: Icon(Icons.privacy_tip_outlined,
+                currentUser.isBusiness
+                    ? Container()
+                    : Padding(
+                        padding: EdgeInsets.only(top: 5, bottom: 15.0, left: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 10.0, left: 8),
+                              child: Icon(Icons.question_answer,
                                   color: TextThemes.ndGold),
-                              decoration: InputDecoration(
-                                labelText: "Visibility",
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * .45,
+                              child: ButtonTheme(
+                                child: DropdownButtonFormField(
+                                  style: isLargePhone
+                                      ? null
+                                      : TextStyle(
+                                          fontSize: 12.5, color: Colors.black),
+                                  value: typeDropdownValue,
+                                  icon: Icon(Icons.museum,
+                                      color: TextThemes.ndGold),
+                                  decoration: InputDecoration(
+                                    labelText: "Select Event Type",
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                  items: listOfTypes.map((String value) {
+                                    return new DropdownMenuItem<String>(
+                                      value: value,
+                                      child: new Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      typeDropdownValue = newValue;
+                                    });
+                                  },
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'What are we doing?';
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
-                              items: privacyList.map((String value) {
-                                return new DropdownMenuItem<String>(
-                                  value: value,
-                                  child: new Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String newValue) {
-                                setState(() {
-                                  privacyDropdownValue = newValue;
-                                });
-                              },
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Who can come?';
-                                }
-                                return null;
-                              },
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * .35,
+                                child: ButtonTheme(
+                                  child: DropdownButtonFormField(
+                                    style: isLargePhone
+                                        ? null
+                                        : TextStyle(
+                                            fontSize: 12.5,
+                                            color: Colors.black),
+                                    value: privacyDropdownValue,
+                                    icon: Icon(Icons.privacy_tip_outlined,
+                                        color: TextThemes.ndGold),
+                                    decoration: InputDecoration(
+                                      labelText: "Visibility",
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    items: privacyList.map((String value) {
+                                      return new DropdownMenuItem<String>(
+                                        value: value,
+                                        child: new Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String newValue) {
+                                      setState(() {
+                                        privacyDropdownValue = newValue;
+                                      });
+                                    },
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Who can come?';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-               !currentUser.isBusiness ? Padding(
-                  padding:
-                      EdgeInsets.only(left: 15.0, right: 15, top: 5, bottom: 5),
-                  child: TextFormField(
-                    controller: addressController,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.place, color: TextThemes.ndGold),
-                      labelText: "Location or Address",
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Where's it at?";
-                      }
-                      return null;
-                    },
-                  ),
-                ): Container(),
+                !currentUser.isBusiness
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            left: 15.0, right: 15, top: 5, bottom: 5),
+                        child: TextFormField(
+                          controller: addressController,
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.place, color: TextThemes.ndGold),
+                            labelText: "Location or Address",
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          // The validator receives the text that the user has entered.
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Where's it at?";
+                            }
+                            return null;
+                          },
+                        ),
+                      )
+                    : Container(),
 
                 Padding(
                   padding: EdgeInsets.all(15.0),
@@ -1288,7 +1299,13 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                     currentUser.isBusiness
                                         ? Database().createBusinessPost(
                                             title: titleController.text,
-                                            type: "Food/Drink",
+                                            type: currentUser.businessType ==
+                                                    "Restaurant/Bar"
+                                                ? "Food/Drink"
+                                                : currentUser.businessType ==
+                                                        "Theatre"
+                                                    ? "Shows"
+                                                    : "Recreation",
                                             privacy: "Public",
                                             description:
                                                 descriptionController.text,

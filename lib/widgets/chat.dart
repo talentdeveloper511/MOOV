@@ -612,7 +612,7 @@ class _CommentState extends State<Comment> {
     return Column(
       children: <Widget>[
         Container(
-          child: comment == "thisWillTurnIntoAStatus"
+          child: comment.contains("thisWillTurnIntoAStatus")
               ? Column(children: [
                   RichText(
                     overflow: TextOverflow.ellipsis,
@@ -683,11 +683,10 @@ class _CommentState extends State<Comment> {
                               ? FutureBuilder(
                                   future: postsRef.doc(postId).get(),
                                   builder: (context, snapshot) {
-                                    if (!snapshot.hasData ||
-                                        snapshot.connectionState !=
-                                            ConnectionState.done) {
-                                      circularProgress();
+                                    if (!snapshot.hasData) {
+                                      Container();
                                     }
+
                                     return Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -697,9 +696,9 @@ class _CommentState extends State<Comment> {
                                             children: [
                                               ChatMOOV(
                                                   postId: postId,
-                                                  pic: snapshot.data['image'],
+                                                  pic: snapshot.data['image'] ?? "",
                                                   title:
-                                                      snapshot.data['title']),
+                                                      snapshot.data['title'] ?? ""),
                                               timeAgo == ""
                                                   ? Container()
                                                   : Text(

@@ -311,7 +311,7 @@ class Database {
               .set({
             "seen": false,
             "displayName": currentUser.displayName,
-            "comment": "thisWillTurnIntoAStatus",
+            "comment": "thisWillTurnIntoAStatusNotGoing",
             "timestamp": 0,
             "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
@@ -393,7 +393,7 @@ class Database {
               .set({
             "seen": false,
             "displayName": currentUser.displayName,
-            "comment": "thisWillTurnIntoAStatus",
+            "comment": "thisWillTurnIntoAStatusUndecided",
             "timestamp": 0,
             "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
@@ -491,7 +491,7 @@ class Database {
               .set({
             "seen": false,
             "displayName": currentUser.displayName,
-            "comment": "thisWillTurnIntoAStatus",
+            "comment": "thisWillTurnIntoAStatusGoing",
             "timestamp": 0,
             "avatarUrl": postId, // just doing this to conserve data writes
             "userId": currentUser.id,
