@@ -304,6 +304,7 @@ class _PostDetailState extends State<PostDetail>
 
   @override
   Widget build(BuildContext context) {
+    
     bool isIncognito;
 
     return StreamBuilder(

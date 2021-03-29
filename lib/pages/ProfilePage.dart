@@ -77,6 +77,7 @@ class _ProfilePageState extends State<ProfilePage>
               return Scaffold(
                 backgroundColor: Colors.white,
                 body: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
                   child: Stack(children: [
                     Container(
                       height: 130,
@@ -919,7 +920,12 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                             ),
                           ),
+                          currentUser.businessType == "Restaurant/Bar"
+                              ? RestaurantMenu()
+                              : Container(),
+
                           PopularityBadges(currentUser.id),
+
                           StreamBuilder(
                               stream: postsRef
                                   .where('userId', isEqualTo: currentUser.id)
@@ -1630,5 +1636,51 @@ class PopularityBadges extends StatelessWidget {
               ),
             ),
         barrierDismissible: true);
+  }
+}
+
+class RestaurantMenu extends StatelessWidget {
+  const RestaurantMenu({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0, bottom: 7.5),
+              child: Text(
+                "Menus",
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 24),
+              ),
+            )),
+        Container(
+          width: MediaQuery.of(context).size.width * .9,
+          height: 200,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              Container(
+                  height: 200,
+                  width: 175,
+                  decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)))),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8),
+                child: Container(
+                    height: 200,
+                    width: 175,
+                    decoration: BoxDecoration(
+                        color: Colors.blue[50],
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)))),
+              )
+            ],
+          ),
+        ),
+        SizedBox(height: 10)
+      ],
+    );
   }
 }

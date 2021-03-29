@@ -45,6 +45,13 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey8 = GlobalKey<FormState>();
   final yearList = ["Freshman", "Sophomore", "Junior", "Senior", "Grad"];
   final genderList = ["Female", "Male", "Other"];
+  final bizTypeList = [
+    "Restaurant/Bar",
+    "Theatre",
+    "Night Club",
+    "Student Club",
+  ];
+  String typeDropdownValue = 'Restaurant/Bar';
 
   String yearDropdownValue = "Freshman";
   String genderDropdownValue = "Female";
@@ -96,9 +103,7 @@ class _CreateAccountState extends State<CreateAccount> {
     final form6 = _formKey6.currentState;
     final form8 = _formKey8.currentState;
 
-    if (form5.validate() &&
-        form6.validate() &&
-        form8.validate()) {
+    if (form5.validate() && form6.validate() && form8.validate()) {
       form5.save();
       form6.save();
       form8.save();
@@ -322,6 +327,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "email": user.email,
         "displayName": businessName,
         "businessLocation": GeoPoint(businessLatitude, businessLongitude),
+        "businessType": typeDropdownValue,
         "photoUrl": user.photoUrl,
         "badges": {},
         "bio": businessDescription ?? "Create a bio here",
@@ -704,6 +710,45 @@ class _CreateAccountState extends State<CreateAccount> {
                                     labelStyle: TextStyle(fontSize: 13.0),
                                   ),
                                 ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 25),
+                          Text("Type of Business"),
+                          SizedBox(height: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width * .45,
+                            child: ButtonTheme(
+                              child: DropdownButtonFormField(
+                                style: isLargePhone
+                                    ? null
+                                    : TextStyle(
+                                        fontSize: 12.5, color: Colors.black),
+                                value: typeDropdownValue,
+                                icon: Icon(Icons.museum,
+                                    color: TextThemes.ndGold),
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                items: bizTypeList.map((String value) {
+                                  return new DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    typeDropdownValue = newValue;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'What are we doing?';
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
                           ),

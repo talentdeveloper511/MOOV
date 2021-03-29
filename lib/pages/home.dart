@@ -490,6 +490,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       String page = "";
       String recipientId = "";
       String body = "";
+      String name = "";
 
       if (message.containsKey("notification")) {
         pushId = message['link'];
@@ -498,6 +499,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         body = message['notification']['title'] +
             ' ' +
             message['notification']['body'];
+        name = message['notification']['title'];
       } else {
 //        pushId = message['link'];
 //        page = message['page'];
@@ -505,9 +507,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         body = message["aps"]["alert"]['title'] +
             ' ' +
             message['aps']["alert"]['body'];
+        name = message['aps']['alert']['title'];
       }
-
-      print(page);
+      if (body.contains("thisWillTurnIntoAStatusGoing")) {
+        body = "$name is going to <moovTitle>";
+      }
+      if (body.contains("thisWillTurnIntoAStatusUndecided")) {
+        body = "$name is undecided about <moovTitle>";
+      }
+      if (body.contains("thisWillTurnIntoAStatusNotGoing")) {
+        body = "$name is not going to <moovTitle>";
+      }
 
       usersRef.doc(user.id).update({'test': message.toString()});
 
@@ -560,16 +570,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           duration: Duration(seconds: 4),
           flushbarPosition: FlushbarPosition.TOP,
           backgroundColor: Colors.white,
-          messageText: Text(body,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: Colors.black)));
+          messageText: //send moov in chat
+              Text(body,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.black)));
 
       snackbar.show(context);
 
       usersRef.doc(user.id).update({'snackbar': message.toString()});
-//          }
+
       print('Notification not shown :(');
-      print(body);
     });
   }
 
@@ -905,6 +915,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
       ),
       body: PageView(
+        physics: ClampingScrollPhysics(),
         children: <Widget>[
           // Timeline(),
           HomePage(),

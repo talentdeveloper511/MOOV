@@ -302,8 +302,6 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          print(ds.data()['livePosts'][postId] != null);
-
           messagesRef
               .doc(ds.id)
               .collection("chat")
@@ -324,7 +322,9 @@ class Database {
             "millis": DateTime.now().millisecondsSinceEpoch.toString(),
             "directMessageId": "",
             "isGroupChat": ds.data()['isGroupChat'],
-            "postId": "notxxx " + title
+            "postId": "notxxx " + title,
+            "realPostId": postId,
+            "hasExpired": false
           });
         }
       });
@@ -384,8 +384,6 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          print(ds.data()['livePosts'][postId] != null);
-
           messagesRef
               .doc(ds.id)
               .collection("chat")
@@ -406,7 +404,9 @@ class Database {
             "millis": DateTime.now().millisecondsSinceEpoch.toString(),
             "directMessageId": "",
             "isGroupChat": ds.data()['isGroupChat'],
-            "postId": "undecidedxxx " + title
+            "postId": "undecidedxxx " + title,
+            "realPostId": postId,
+            "hasExpired": false
           });
         }
       });
@@ -480,7 +480,7 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          print(ds.data()['livePosts'][postId] != null);
+          // print(ds.data()['livePosts'][postId] != null);
 
           messagesRef
               .doc(ds.id)
@@ -502,12 +502,14 @@ class Database {
             "millis": DateTime.now().millisecondsSinceEpoch.toString(),
             "directMessageId": "",
             "isGroupChat": ds.data()['isGroupChat'],
-            "postId": "goingxxx " + title
+            "postId": "goingxxx " + title,
+            "realPostId": postId,
+            "hasExpired": false
           });
 
-          messagesRef.doc(ds.id).set({
-            "livePosts": {userId: 3},
-          }, SetOptions(merge: true));
+          // messagesRef.doc(ds.id).set({
+          //   "livePosts": {userId: 3},
+          // }, SetOptions(merge: true));
         }
       });
     });
@@ -834,6 +836,19 @@ class Database {
         .then((snapshot) {
       for (DocumentSnapshot ds in snapshot.docs) {
         ds.reference.delete();
+      }
+    });
+
+    //expiring moovs that appear in chats
+    FirebaseFirestore.instance
+        .collectionGroup("chat")
+        .where("realPostId", isEqualTo: postId)
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.update({"hasExpired": true});
+
+        print(ds.data()['hasExpired']);
       }
     });
 

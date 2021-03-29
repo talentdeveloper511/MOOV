@@ -24,6 +24,7 @@ class User {
   final bool isBusiness;
   final int nameChangeLimit;
   final GeoPoint businessLocation;
+  final String businessType;
 
   User(
       {this.id,
@@ -48,7 +49,8 @@ class User {
       this.nameChangeLimit,
       this.isBusiness,
       this.followers,
-      this.businessLocation});
+      this.businessLocation,
+      this.businessType});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -74,6 +76,7 @@ class User {
         nameChangeLimit: doc.data()['nameChangeLimit'],
         isBusiness: doc.data()['isBusiness'],
         followers: doc.data()['followers'],
-        businessLocation: doc.data()['businessLocation']);
+        businessLocation: doc.data()['businessLocation'],
+        businessType: doc.data()['businessType']);
   }
 }

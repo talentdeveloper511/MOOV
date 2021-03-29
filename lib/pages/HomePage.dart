@@ -278,8 +278,8 @@ class _HomePageState extends State<HomePage>
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            bottom: 3.0,
-                                                            top: 6),
+                                                            bottom: 2.0,
+                                                            top: 8),
                                                     child: Image.asset(
                                                       'lib/assets/icons/PartyICON.png',
                                                       height: 50,
@@ -323,8 +323,8 @@ class _HomePageState extends State<HomePage>
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            bottom: 3.0,
-                                                            top: 6),
+                                                            bottom: 2.0,
+                                                            top: 8),
                                                     child: Image.asset(
                                                       'lib/assets/icons/PartyICON2.png',
                                                       height: 50,
@@ -610,7 +610,7 @@ class _HomePageState extends State<HomePage>
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 4.0, top: 8, right: 5),
+                                                  left: 4.0, top: 9, right: 5),
                                               child: Column(
                                                 children: [
                                                   Image.asset(
@@ -651,7 +651,7 @@ class _HomePageState extends State<HomePage>
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 4.0, right: 5, top: 9),
+                                                  left: 4.0, right: 5, top: 10),
                                               child: Column(
                                                 children: [
                                                   Image.asset(
