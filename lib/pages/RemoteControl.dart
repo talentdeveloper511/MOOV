@@ -136,6 +136,8 @@ class _RemoteControlState extends State<RemoteControl> {
                           "choice1": choice1Controller.text,
                           "choice2": choice2Controller.text,
                           "question": pollTitleController.text,
+                          "suggestorName": null,
+                          "suggestorYear": null,
                           "voters": {currentUser.id: 1}
                         }, SetOptions(merge: true));
                       }

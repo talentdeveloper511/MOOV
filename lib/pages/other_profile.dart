@@ -200,9 +200,6 @@ class _OtherProfileState extends State<OtherProfile> {
           String venmo = snapshot.data['venmoUsername'];
           bool isBusiness = snapshot.data['isBusiness'];
           List<dynamic> followers = snapshot.data['followers'];
-          
-          
-          
 
           return (!isBusiness)
               ? Scaffold(
@@ -245,6 +242,7 @@ class _OtherProfileState extends State<OtherProfile> {
                     ),
                   ),
                   body: SingleChildScrollView(
+                    physics: ClampingScrollPhysics(),
                     child: Stack(children: [
                       Container(
                         height: 130,
@@ -924,6 +922,7 @@ class _OtherProfileState extends State<OtherProfile> {
                     ),
                   ),
                   body: SingleChildScrollView(
+                    physics: ClampingScrollPhysics(),
                     child: Stack(children: [
                       Container(
                         height: 130,
@@ -1268,7 +1267,6 @@ class _OtherProfileState extends State<OtherProfile> {
                               : Text(""),
                           PopularityBadges(id),
                           RestaurantMenu(id),
-
                           StreamBuilder(
                               stream: postsRef
                                   .where('userId', isEqualTo: id)

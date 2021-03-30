@@ -103,6 +103,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                 ),
                 backgroundColor: Colors.white,
                 body: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
                   child: Stack(children: [
                     Container(
                       height: 130,
@@ -665,6 +666,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
               return Scaffold(
                 backgroundColor: Colors.white,
                 body: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
                   child: Stack(children: [
                     Container(
                       height: 130,
@@ -936,6 +938,9 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                               ),
                             ),
                           ),
+                          currentUser.businessType == "Restaurant/Bar"
+                              ? RestaurantMenu(currentUser.id)
+                              : Container(),
 
                           PopularityBadges(currentUser.id),
 

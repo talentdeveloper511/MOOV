@@ -1704,7 +1704,7 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                           ]),
                     ),
                     Container(),
-                    "");
+                    "",0);
               }
               if (snapshot.data['menu'].isEmpty &&
                   widget.id != currentUser.id) {
@@ -1750,7 +1750,7 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(10.0))))),
                                   Container(),
-                                  snapshot.data['menu'][index])
+                                  snapshot.data['menu'][index], index)
                               : Padding(
                                   padding: const EdgeInsets.only(left: 8),
                                   child: OpenContainer(
@@ -1760,7 +1760,7 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                           Duration(milliseconds: 500),
                                       openBuilder: (context, _) =>
                                           PhotoFullScreen(
-                                              snapshot.data['menu'][index]),
+                                              snapshot.data['menu'][index], index),
                                       closedElevation: 0,
                                       closedBuilder: (context, _) => Container(
                                           child: ClipRRect(

@@ -12,12 +12,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:random_string/random_string.dart';
 
 class PhotoPick extends StatefulWidget {
   final Widget beforeUI, afterUI;
   final String pic;
-  PhotoPick(this.beforeUI, this.afterUI, this.pic);
+  final int index;
+  PhotoPick(this.beforeUI, this.afterUI, this.pic, this.index);
 
   @override
   _PhotoPickState createState() => _PhotoPickState();
@@ -231,7 +233,8 @@ class _PhotoPickState extends State<PhotoPick> {
                                   BorderRadius.all(Radius.circular(10.0)))),
                     ),
                     Container(),
-                    ""),
+                    "",
+                    0),
               ]),
             )
           : !isUploading
@@ -243,7 +246,7 @@ class _PhotoPickState extends State<PhotoPick> {
                                 transitionType: ContainerTransitionType.fade,
                                 transitionDuration: Duration(milliseconds: 500),
                                 openBuilder: (context, _) =>
-                                    PhotoFullScreen(widget.pic),
+                                    PhotoFullScreen(widget.pic, widget.index),
                                 closedElevation: 0,
                                 closedBuilder: (context, _) => widget.beforeUI),
                             // Container(child: widget.beforeUI),
@@ -252,7 +255,10 @@ class _PhotoPickState extends State<PhotoPick> {
                                 right: 30,
                                 child: GestureDetector(
                                     onTap: () => showAlertDialog(context),
-                                    child: Icon(Icons.delete, color: Colors.red,))),
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ))),
                             Positioned(
                                 top: 10,
                                 right: 10,
@@ -298,7 +304,8 @@ class _PhotoPickState extends State<PhotoPick> {
 
 class PhotoFullScreen extends StatelessWidget {
   final String image;
-  const PhotoFullScreen(this.image);
+  final int index;
+  const PhotoFullScreen(this.image, this.index);
   final bool includeMarkAsDoneButton = true;
 
   @override
@@ -348,13 +355,34 @@ class PhotoFullScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: Container(
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(image, fit: BoxFit.cover)),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)))));
+        body: GestureDetector(
+          onPanUpdate: index == 0
+              ? (details) {
+                  if (details.delta.dx < 0) {
+                    print('right');
+                  }
+                  if (details.delta.dx > 0) {
+                    Navigator.pop(context);
+                  }
+                }
+              : (details) {
+                  if (details.delta.dx > 0) {
+                    Navigator.pop(context);
+                  }
+                },
+          child: Container(
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: PhotoView(
+                    
+                    gestureDetectorBehavior: HitTestBehavior.deferToChild,
+
+                    initialScale: .52,
+                    imageProvider: NetworkImage(image))),
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)))),
+        ));
   }
 }

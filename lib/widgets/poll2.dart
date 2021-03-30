@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/pointAnimation.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -82,9 +84,9 @@ class _PollViewState extends State<PollView> {
             .snapshots(),
         // ignore: missing_return
         builder: (context, snapshot) {
-           if (!snapshot.hasData) {
-                                        return Container();
-                                      }
+          if (!snapshot.hasData) {
+            return Container();
+          }
           // dynamic moovId;
           bool isLargePhone = Screen.diagonal(context) > 766;
 
@@ -92,6 +94,8 @@ class _PollViewState extends State<PollView> {
           question = snapshot.data['question'];
           choice1 = snapshot.data['choice1'];
           choice2 = snapshot.data['choice2'];
+          String suggestorName = snapshot.data['suggestorName'];
+          String suggestorYear = snapshot.data['suggestorYear'];
 
           var _list = voters.values.toList();
           var _list2 = voters.keys.toList();
@@ -423,9 +427,267 @@ class _PollViewState extends State<PollView> {
                         ),
                       )
                     : Container(),
+                Positioned(
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PollMaker(),
+                    )),
+                    child: Text(
+                      "Suggest a poll",
+                      style: TextStyle(
+                          color: Colors.blue, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  bottom: 0,
+                  right: 10,
+                ),
+                suggestorName != null ? Positioned(
+                  child: Text(
+                    "Poll by $suggestorName $suggestorYear",
+                    style: TextStyle(
+                        color: _colorTween(TextThemes.ndBlue, Colors.white),
+                        fontWeight: FontWeight.w500),
+                  ),
+                  bottom: 0,
+                  left: 10,
+                ) : Container(),
               ]),
             );
           }
         });
+  }
+}
+
+class PollMaker extends StatefulWidget {
+  PollMaker();
+
+  @override
+  _PollMakerState createState() => _PollMakerState();
+}
+
+class _PollMakerState extends State<PollMaker> {
+  final pollTitleController = TextEditingController();
+  final choice1Controller = TextEditingController();
+  final choice2Controller = TextEditingController();
+  bool isUploading = false;
+  bool blankField = false;
+  bool goodCheck = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
+        backgroundColor: TextThemes.ndBlue,
+        flexibleSpace: FlexibleSpaceBar(
+          titlePadding: EdgeInsets.all(5),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: Image.asset(
+                  'lib/assets/moovblue.png',
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: (isUploading)
+          ? linearProgress()
+          : (goodCheck)
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Thank you!",
+                        style: TextThemes.headline1,
+                      ),
+                      SizedBox(height: 30),
+                      Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      )
+                    ],
+                  ),
+                )
+              : SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset(
+                              "lib/assets/poll.png",
+                              width: MediaQuery.of(context).size.width,
+                            ),
+                            Text(
+                              "Poll Maker",
+                              style: TextThemes.headlineWhite,
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 20),
+                          child: TextFormField(
+                            controller: pollTitleController,
+                            decoration: InputDecoration(
+                              labelText: "Poll Title",
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 20),
+                          child: TextFormField(
+                            controller: choice1Controller,
+                            decoration: InputDecoration(
+                              labelText: "Choice 1",
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: TextFormField(
+                            controller: choice2Controller,
+                            decoration: InputDecoration(
+                              labelText: "Choice 2",
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        blankField
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  blankField
+                                      ? Text("Fill out all fields!",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ))
+                                      : Container(),
+                                ],
+                              )
+                            : Container(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 50.0, top: 20),
+                          child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(80.0)),
+                              padding: EdgeInsets.all(0.0),
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        TextThemes.ndBlue,
+                                        Color(0xff64B6FF)
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth: 125.0, minHeight: 50.0),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Suggest",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 22),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () async {
+                                HapticFeedback.lightImpact();
+
+                                if (pollTitleController.text == "" ||
+                                    choice1Controller.text == "" ||
+                                    choice2Controller.text == "") {
+                                  blankField = true;
+                                }
+                                if (blankField == false) {
+                                  setState(() {
+                                    isUploading = true;
+                                  });
+                                  FirebaseFirestore.instance
+                                      .collection('notreDame')
+                                      .doc('data')
+                                      .collection('poll')
+                                      .doc("xSuggestions")
+                                      .collection("suggestions")
+                                      .doc()
+                                      .set({
+                                        "choice1": choice1Controller.text,
+                                        "choice2": choice2Controller.text,
+                                        "question": pollTitleController.text,
+                                        "suggestor": currentUser.displayName,
+                                        "suggestorClass": currentUser.year ==
+                                                "Freshman"
+                                            ? "'ND 24"
+                                            : currentUser.year == "Sophomore"
+                                                ? "'ND 23"
+                                                : currentUser.year == "Junior"
+                                                    ? "'ND 22"
+                                                    : currentUser.year ==
+                                                            "Senior"
+                                                        ? "'ND 21"
+                                                        : "",
+                                        "when": DateTime.now(),
+                                        "voters": {"115805501102171844515": 1}
+                                      }, SetOptions(merge: true))
+                                      .then((value) => setState(() {
+                                            isUploading = false;
+                                          }))
+                                      .then((value) => setState(() {
+                                            goodCheck = true;
+                                          }))
+                                      .then((value) =>
+                                          Timer(Duration(seconds: 1), () {
+                                            Navigator.of(context).pop();
+                                          }));
+                                }
+                              }),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+    );
   }
 }

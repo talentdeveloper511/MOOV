@@ -269,7 +269,8 @@ class _BannerImage extends StatelessWidget {
       userId == currentUser.id ||
               currentUser.id == "108155010592087635288" ||
               currentUser.id == "118426518878481598299" ||
-              currentUser.id == "107290090512658207959"
+              currentUser.id == "107290090512658207959" ||
+              currentUser.id == "115805501102171844515"
           ? Positioned(
               top: 5,
               right: 5,

@@ -76,6 +76,7 @@ class _MoovMakerState extends State<MoovMaker> {
         ),
       ),
       body: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
