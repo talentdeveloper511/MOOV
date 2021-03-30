@@ -441,16 +441,19 @@ class _PollViewState extends State<PollView> {
                   bottom: 0,
                   right: 10,
                 ),
-                suggestorName != null ? Positioned(
-                  child: Text(
-                    "Poll by $suggestorName $suggestorYear",
-                    style: TextStyle(
-                        color: _colorTween(TextThemes.ndBlue, Colors.white),
-                        fontWeight: FontWeight.w500),
-                  ),
-                  bottom: 0,
-                  left: 10,
-                ) : Container(),
+                suggestorName != null
+                    ? Positioned(
+                        child: Text(
+                          "Poll by $suggestorName $suggestorYear",
+                          style: TextStyle(
+                              color:
+                                  _colorTween(TextThemes.ndBlue, Colors.white),
+                              fontWeight: FontWeight.w500),
+                        ),
+                        bottom: 0,
+                        left: 10,
+                      )
+                    : Container(),
               ]),
             );
           }
@@ -639,7 +642,9 @@ class _PollMakerState extends State<PollMaker> {
                                 if (pollTitleController.text == "" ||
                                     choice1Controller.text == "" ||
                                     choice2Controller.text == "") {
-                                  blankField = true;
+                                  setState(() {
+                                    blankField = true;
+                                  });
                                 }
                                 if (blankField == false) {
                                   setState(() {
