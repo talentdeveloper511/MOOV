@@ -616,9 +616,9 @@ class _CommentState extends State<Comment> {
     return Column(
       children: <Widget>[
         Container(
-          child: postId.contains("goingxxx") ||
+          child: postId != null && (postId.contains("goingxxx") ||
                   postId.contains("undecidedxxx") ||
-                  postId.contains("notxxx")
+                  postId.contains("notxxx"))
               ? Column(children: [
                   RichText(
                     overflow: TextOverflow.ellipsis,
