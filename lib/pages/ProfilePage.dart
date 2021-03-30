@@ -19,6 +19,7 @@ import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/photo_pick.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -924,7 +925,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                           ),
                           currentUser.businessType == "Restaurant/Bar"
-                              ? RestaurantMenu()
+                              ? RestaurantMenu(currentUser.id)
                               : Container(),
 
                           PopularityBadges(currentUser.id),
@@ -1643,7 +1644,8 @@ class PopularityBadges extends StatelessWidget {
 }
 
 class RestaurantMenu extends StatefulWidget {
-  RestaurantMenu({Key key}) : super(key: key);
+  final String id;
+  RestaurantMenu(this.id);
 
   @override
   _RestaurantMenuState createState() => _RestaurantMenuState();
@@ -1654,89 +1656,131 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20.0, bottom: 7.5),
-              child: Text(
-                "Menu",
-                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 24),
-              ),
-            )),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            width: MediaQuery.of(context).size.width * .99,
-            height: 200,
-            child: StreamBuilder(
-                stream: usersRef.doc(currentUser.id).snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Container();
-                  }
-                  if (snapshot.data['menu'].isEmpty) {
-                    return PhotoPick(
-                        Container(
-                          width: MediaQuery.of(context).size.width * .99,
-                          height: 200,
-                          child: ListView(
-                              physics: AlwaysScrollableScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Container(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.menu_book),
-                                          Text("Add your menu")
-                                        ],
-                                      ),
-                                      height: 200,
-                                      width: 175,
-                                      decoration: BoxDecoration(
-                                          color: Colors.purple[50],
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10.0)))),
-                                ),
-                                Container(
-                                    height: 200,
-                                    width: 175,
-                                    decoration: BoxDecoration(
-                                        color: Colors.purple[50],
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0))))
-                              ]),
-                        ),
-                        Container(),"");
-                  }
-                  return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: snapshot.data['menu'].length,
-                      itemBuilder: (context, index) => PhotoPick(
-                          Padding(
-                              padding: const EdgeInsets.only(left: 8),
+        StreamBuilder(
+            stream: usersRef.doc(widget.id).snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Container();
+              }
+              if (snapshot.data['businessType'] != "Restaurant/Bar") {
+                return Container();
+              }
+              if (snapshot.data['menu'].isEmpty &&
+                  widget.id == currentUser.id) {
+                return PhotoPick(
+                    Container(
+                      width: MediaQuery.of(context).size.width * .99,
+                      height: 200,
+                      child: ListView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Container(
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                          snapshot.data['menu'][index],
-                                          fit: BoxFit.cover)),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.menu_book),
+                                      Text("Add your menu")
+                                    ],
+                                  ),
                                   height: 200,
                                   width: 175,
                                   decoration: BoxDecoration(
-                                      color: Colors.red[50],
+                                      color: Colors.purple[50],
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0))))),
-                          Container(),
-                          snapshot.data['menu'][index]),
-                          );
-                }),
-          ),
-        ),
+                                          Radius.circular(10.0)))),
+                            ),
+                            Container(
+                                height: 200,
+                                width: 175,
+                                decoration: BoxDecoration(
+                                    color: Colors.purple[50],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))))
+                          ]),
+                    ),
+                    Container(),
+                    "");
+              }
+              if (snapshot.data['menu'].isEmpty &&
+                  widget.id != currentUser.id) {
+                return Container();
+              }
+              return Container(
+                    width: MediaQuery.of(context).size.width * .99,
+        height: 250,
+                child: Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(left: 20.0, bottom: 7.5),
+                          child: Text(
+                            "Menu",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 24),
+                          ),
+                        )),
+                    Expanded(
+                      child: ListView.builder(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data['menu'].length,
+                          itemBuilder: (context, index) => widget.id ==
+                                  currentUser.id
+                              ? PhotoPick(
+                                  Padding(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: Container(
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.network(
+                                                  snapshot.data['menu'][index],
+                                                  fit: BoxFit.cover)),
+                                          height: 200,
+                                          width: 175,
+                                          decoration: BoxDecoration(
+                                              color: Colors.red[50],
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0))))),
+                                  Container(),
+                                  snapshot.data['menu'][index])
+                              : Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: OpenContainer(
+                                      transitionType:
+                                          ContainerTransitionType.fade,
+                                      transitionDuration:
+                                          Duration(milliseconds: 500),
+                                      openBuilder: (context, _) =>
+                                          PhotoFullScreen(
+                                              snapshot.data['menu'][index]),
+                                      closedElevation: 0,
+                                      closedBuilder: (context, _) => Container(
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.network(
+                                                  snapshot.data['menu'][index],
+                                                  fit: BoxFit.cover)),
+                                          height: 200,
+                                          width: 175,
+                                          decoration: BoxDecoration(
+                                              color: Colors.red[50],
+                                              borderRadius:
+                                                  BorderRadius.all(Radius.circular(10.0))))),
+                                )),
+                    ),
+                  ],
+                ),
+              );
+            }),
         SizedBox(height: 10)
       ],
     );

@@ -1267,6 +1267,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                 )
                               : Text(""),
                           PopularityBadges(id),
+                          RestaurantMenu(id),
+
                           StreamBuilder(
                               stream: postsRef
                                   .where('userId', isEqualTo: id)

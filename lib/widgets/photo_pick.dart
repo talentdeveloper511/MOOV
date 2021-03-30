@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/progress.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -250,12 +251,8 @@ class _PhotoPickState extends State<PhotoPick> {
                                 top: 10,
                                 right: 30,
                                 child: GestureDetector(
-                                    onTap: () =>
-                                        usersRef.doc(currentUser.id).set({
-                                          "menu": FieldValue.arrayRemove(
-                                              [widget.pic]),
-                                        }, SetOptions(merge: true)),
-                                    child: Icon(Icons.delete))),
+                                    onTap: () => showAlertDialog(context),
+                                    child: Icon(Icons.delete, color: Colors.red,))),
                             Positioned(
                                 top: 10,
                                 right: 10,
@@ -270,6 +267,32 @@ class _PhotoPickState extends State<PhotoPick> {
                 )
               : circularProgress(),
     ]);
+  }
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text("Delete",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: Text("Delete this?"),
+        actions: [
+          CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text("Keep pic", style: TextStyle()),
+              onPressed: () => Navigator.of(context).pop(true)),
+          CupertinoDialogAction(
+            child: Text("Delete", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              usersRef.doc(currentUser.id).set({
+                "menu": FieldValue.arrayRemove([widget.pic]),
+              }, SetOptions(merge: true));
+              Navigator.of(context).pop(true);
+            },
+          )
+        ],
+      ),
+    );
   }
 }
 
