@@ -616,7 +616,7 @@ class _CommentState extends State<Comment> {
     return Column(
       children: <Widget>[
         Container(
-          child: comment.contains("thisWillTurnIntoAStatus")
+          child: postId.contains("goingxxx") || postId.contains("undecidedxxx") || postId.contains("notxxx") 
               ? Column(children: [
                   RichText(
                     overflow: TextOverflow.ellipsis,
@@ -672,22 +672,22 @@ class _CommentState extends State<Comment> {
                                       ),
                                     ),
                                   ),
-                                  expanded: ChatStatuses(avatarUrl, gid))
+                                  expanded: ChatStatuses(realPostId, gid))
                               : Container())
                       : Container()
                 ])
               : Container(
                   child: (userId != currentUser.id)
                       ? Container(
-                          child: postId != null &&
+                          child: realPostId != null &&
                                   !postId.contains("goingxxx") &&
                                   !postId.contains("undecidedxxx") &&
                                   !postId.contains("notxxx") &&
                                   !hasExpired
                               ? FutureBuilder(
-                                  future: postsRef.doc(postId).get(),
+                                  future: postsRef.doc(realPostId).get(),
                                   builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
+                                    if (!snapshot.hasData || snapshot.data == null) {
                                       Container();
                                     }
 
@@ -695,6 +695,15 @@ class _CommentState extends State<Comment> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 12.0, right: 8),
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  CachedNetworkImageProvider(
+                                                      avatarUrl),
+                                            ),
+                                          ),
                                           Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -704,7 +713,8 @@ class _CommentState extends State<Comment> {
                                                       "",
                                                   title:
                                                       snapshot.data['title'] ??
-                                                          ""),
+                                                          "",
+                                                  ),
                                               timeAgo == ""
                                                   ? Container()
                                                   : Text(
@@ -713,15 +723,6 @@ class _CommentState extends State<Comment> {
                                                           fontSize: 10),
                                                     ),
                                             ],
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 12.0, right: 8),
-                                            child: CircleAvatar(
-                                              backgroundImage:
-                                                  CachedNetworkImageProvider(
-                                                      avatarUrl),
-                                            ),
                                           ),
                                         ]);
                                   })
@@ -746,9 +747,9 @@ class _CommentState extends State<Comment> {
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   ChatMOOV(
-                                                      postId: postId,
+                                                      postId: realPostId,
                                                       pic: snapshot
-                                                          .data['image'],
+                                                          .data['image'] ?? "",
                                                       title: snapshot
                                                           .data['title'],
                                                       hasButtons: false),
@@ -944,7 +945,7 @@ class _CommentState extends State<Comment> {
                                             children: [
                                               ChatMOOV(
                                                 postId: postId,
-                                                pic: snapshot.data['image'],
+                                                pic: snapshot.data['image'] ?? "",
                                                 title: snapshot.data['title'],
                                               ),
                                               timeAgo == ""
@@ -991,7 +992,7 @@ class _CommentState extends State<Comment> {
                                                   ChatMOOV(
                                                       postId: postId,
                                                       pic: snapshot
-                                                          .data['image'],
+                                                          .data['image'] ?? "",
                                                       title: snapshot
                                                           .data['title'],
                                                       hasButtons: false),
@@ -1363,7 +1364,6 @@ class ChatStatuses extends StatelessWidget {
                       if (!snapshot1.hasData) {
                         return Container();
                       }
-
                       return Center(
                         child: Container(
                             height: 100.0,

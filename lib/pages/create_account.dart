@@ -328,6 +328,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "displayName": businessName,
         "businessLocation": GeoPoint(businessLatitude, businessLongitude),
         "businessType": typeDropdownValue,
+        "menu": [],
         "photoUrl": user.photoUrl,
         "badges": {},
         "bio": businessDescription ?? "Create a bio here",

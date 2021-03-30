@@ -6,6 +6,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
+import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
@@ -169,7 +170,7 @@ class _OtherProfileState extends State<OtherProfile> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  MessageDetail(directMessageId, id, false, "", [],{})));
+                  MessageDetail(directMessageId, id, false, "", [], {})));
     });
   }
 
@@ -199,6 +200,9 @@ class _OtherProfileState extends State<OtherProfile> {
           String venmo = snapshot.data['venmoUsername'];
           bool isBusiness = snapshot.data['isBusiness'];
           List<dynamic> followers = snapshot.data['followers'];
+          
+          
+          
 
           return (!isBusiness)
               ? Scaffold(
@@ -1028,21 +1032,17 @@ class _OtherProfileState extends State<OtherProfile> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 2.0, bottom: 12.0),
-                                child: SizedBox(
-                                  width: 275,
-                                  child: Text(
-                                  
-                                          
-                                              snapshot.data['dorm'],
-                                              textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: 15),
-                                          maxLines: 2,
-                                        ),
-                                )
-                                   
-                              )
+                                  padding: const EdgeInsets.only(
+                                      top: 2.0, bottom: 12.0),
+                                  child: SizedBox(
+                                    width: 275,
+                                    child: Text(
+                                      snapshot.data['dorm'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 15),
+                                      maxLines: 2,
+                                    ),
+                                  ))
                             ],
                           ),
                           Row(

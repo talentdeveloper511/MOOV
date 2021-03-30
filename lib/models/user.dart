@@ -50,7 +50,8 @@ class User {
       this.isBusiness,
       this.followers,
       this.businessLocation,
-      this.businessType});
+      this.businessType,
+      });
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -77,6 +78,7 @@ class User {
         isBusiness: doc.data()['isBusiness'],
         followers: doc.data()['followers'],
         businessLocation: doc.data()['businessLocation'],
-        businessType: doc.data()['businessType']);
+        businessType: doc.data()['businessType'],
+        );
   }
 }

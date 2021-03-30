@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
@@ -15,6 +16,7 @@ import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/contacts_button.dart';
+import 'package:MOOV/widgets/photo_pick.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:flutter/material.dart';
@@ -645,6 +647,7 @@ class _ProfilePageState extends State<ProfilePage>
               return Scaffold(
                 backgroundColor: Colors.white,
                 body: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
                   child: Stack(children: [
                     Container(
                       height: 130,
@@ -1639,9 +1642,14 @@ class PopularityBadges extends StatelessWidget {
   }
 }
 
-class RestaurantMenu extends StatelessWidget {
-  const RestaurantMenu({Key key}) : super(key: key);
+class RestaurantMenu extends StatefulWidget {
+  RestaurantMenu({Key key}) : super(key: key);
 
+  @override
+  _RestaurantMenuState createState() => _RestaurantMenuState();
+}
+
+class _RestaurantMenuState extends State<RestaurantMenu> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -1655,28 +1663,57 @@ class RestaurantMenu extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.w900, fontSize: 24),
               ),
             )),
-        Container(
-          width: MediaQuery.of(context).size.width * .9,
-          height: 200,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              Container(
-                  height: 200,
-                  width: 175,
-                  decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)))),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: Container(
-                    height: 200,
-                    width: 175,
-                    decoration: BoxDecoration(
-                        color: Colors.blue[50],
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)))),
-              )
-            ],
+        GestureDetector(
+          onTap: () {},
+          child: Container(
+            width: MediaQuery.of(context).size.width * .9,
+            height: 200,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                StreamBuilder(
+                    stream: usersRef.doc(currentUser.id).snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Container();
+                      }
+                      // if (snapshot.data['menu'].isEmpty) {
+                      //   return PhotoPick(
+                      //       Container(
+                      //           child: Column(
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             children: [
+                      //               Icon(Icons.menu_book),
+                      //               Text("Add your menu")
+                      //             ],
+                      //           ),
+                      //           height: 200,
+                      //           width: 175,
+                      //           decoration: BoxDecoration(
+                      //               color: Colors.purple[50],
+                      //               borderRadius: BorderRadius.all(
+                      //                   Radius.circular(10.0)))),
+                      //       Container(
+                      //           child: Image.network("src"),
+                      //           height: 200,
+                      //           width: 175,
+                      //           decoration: BoxDecoration(
+                      //               color: Colors.purple[50],
+                      //               borderRadius: BorderRadius.all(
+                      //                   Radius.circular(10.0)))));
+                      // }
+                      return Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          child: Container(
+                              height: 200,
+                              width: 175,
+                              decoration: BoxDecoration(
+                                  color: Colors.purple[50],
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0)))));
+                    }),
+              ],
+            ),
           ),
         ),
         SizedBox(height: 10)
