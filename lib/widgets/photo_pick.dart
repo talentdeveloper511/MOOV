@@ -1,22 +1,29 @@
 import 'dart:io';
 
 import 'package:MOOV/main.dart';
+import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:animations/animations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:MOOV/widgets/camera.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:random_string/random_string.dart';
 
 class PhotoPick extends StatefulWidget {
   final Widget beforeUI, afterUI;
-  PhotoPick(this.beforeUI, this.afterUI);
+  final String pic;
+  PhotoPick(this.beforeUI, this.afterUI, this.pic);
 
   @override
   _PhotoPickState createState() => _PhotoPickState();
 }
 
 class _PhotoPickState extends State<PhotoPick> {
-     File _image;
+  File _image;
 
   bool isUploading = false;
 
@@ -70,12 +77,38 @@ class _PhotoPickState extends State<PhotoPick> {
     }
   }
 
+  firebase_storage.Reference ref;
+  firebase_storage.UploadTask uploadTask;
+  firebase_storage.TaskSnapshot taskSnapshot;
+  String downloadUrl = "";
   void openGallery(context) async {
     final image = await CustomCamera.openGallery();
     setState(() {
       _image = image;
     });
-    _cropImage();
+    _cropImage().then((_image != null)
+        ? {
+            setState(() {
+              isUploading = true;
+            }),
+            ref = firebase_storage.FirebaseStorage.instance
+                .ref()
+                .child("images/" + currentUser.id + "menu/" + randomString(3)),
+            uploadTask = ref.putFile(_image),
+            taskSnapshot = await uploadTask,
+            if (uploadTask.snapshot.state == firebase_storage.TaskState.success)
+              {
+                print("added to Firebase Storage"),
+                downloadUrl = await taskSnapshot.ref.getDownloadURL(),
+                usersRef.doc(currentUser.id).set({
+                  "menu": FieldValue.arrayUnion([downloadUrl]),
+                }, SetOptions(merge: true)),
+                setState(() {
+                  isUploading = false;
+                })
+              }
+          }
+        : circularProgress());
   }
 
   Future handleTakePhoto() async {
@@ -151,24 +184,154 @@ class _PhotoPickState extends State<PhotoPick> {
     );
   }
 
-  bool noImage = false;
-
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return Column(children: [
       _image != null
-          ? Container(child: widget.afterUI)
-          : GestureDetector(
-              onTap: () => selectImage(context),
-              child: Container(child: widget.beforeUI)),
-      noImage == true && _image == null
-          ? Text(
-              "No pic, no fun.",
-              style: TextStyle(color: Colors.red),
+          ? Container(
+              height: 200,
+              width: MediaQuery.of(context).size.width * .99,
+              child: ListView(scrollDirection: Axis.horizontal, children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Container(
+                    height: 200,
+                    width: 175,
+                    decoration: BoxDecoration(
+                        color: Colors.purple[50],
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: Center(
+                        child: AspectRatio(
+                            aspectRatio: 9 / 10,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(_image, fit: BoxFit.cover),
+                            ))),
+                  ),
+                ),
+                PhotoPick(
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.menu_book),
+                              Text("Add your menu")
+                            ],
+                          ),
+                          height: 200,
+                          width: 175,
+                          decoration: BoxDecoration(
+                              color: Colors.purple[50],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)))),
+                    ),
+                    Container(),
+                    ""),
+              ]),
             )
-          : Container(),
+          : !isUploading
+              ? Container(
+                  child: widget.pic != null && widget.pic != ""
+                      ? Stack(
+                          children: [
+                            OpenContainer(
+                                transitionType: ContainerTransitionType.fade,
+                                transitionDuration: Duration(milliseconds: 500),
+                                openBuilder: (context, _) =>
+                                    PhotoFullScreen(widget.pic),
+                                closedElevation: 0,
+                                closedBuilder: (context, _) => widget.beforeUI),
+                            // Container(child: widget.beforeUI),
+                            Positioned(
+                                top: 10,
+                                right: 30,
+                                child: GestureDetector(
+                                    onTap: () =>
+                                        usersRef.doc(currentUser.id).set({
+                                          "menu": FieldValue.arrayRemove(
+                                              [widget.pic]),
+                                        }, SetOptions(merge: true)),
+                                    child: Icon(Icons.delete))),
+                            Positioned(
+                                top: 10,
+                                right: 10,
+                                child: GestureDetector(
+                                    onTap: () => selectImage(context),
+                                    child: Icon(Icons.add)))
+                          ],
+                        )
+                      : GestureDetector(
+                          onTap: () => selectImage(context),
+                          child: Container(child: widget.beforeUI)),
+                )
+              : circularProgress(),
     ]);
+  }
+}
+
+class PhotoFullScreen extends StatelessWidget {
+  final String image;
+  const PhotoFullScreen(this.image);
+  final bool includeMarkAsDoneButton = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          leading: (includeMarkAsDoneButton)
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  tooltip: 'Mark as done',
+                )
+              : IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(
+                      context,
+                    );
+                  },
+                ),
+          backgroundColor: TextThemes.ndBlue,
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.all(5),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  child: Image.asset(
+                    'lib/assets/moovblue.png',
+                    fit: BoxFit.cover,
+                    height: 50.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: Container(
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(image, fit: BoxFit.cover)),
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)))));
   }
 }

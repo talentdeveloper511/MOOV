@@ -1659,7 +1659,7 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, bottom: 7.5),
               child: Text(
-                "Menus",
+                "Menu",
                 style: TextStyle(fontWeight: FontWeight.w900, fontSize: 24),
               ),
             )),
@@ -1680,50 +1680,60 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                           width: MediaQuery.of(context).size.width * .99,
                           height: 200,
                           child: ListView(
-                            physics: AlwaysScrollableScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.menu_book),
-                                      Text("Add your menu")
-                                    ],
-                                  ),
-                                  height: 200,
-                                  width: 175,
-                                  decoration: BoxDecoration(
-                                      color: Colors.purple[50],
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)))),
-                            ),
-                            Container(
-                                height: 200,
-                                width: 175,
-                                decoration: BoxDecoration(
-                                    color: Colors.purple[50],
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0))))
-                          ]),
+                              physics: AlwaysScrollableScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Container(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.menu_book),
+                                          Text("Add your menu")
+                                        ],
+                                      ),
+                                      height: 200,
+                                      width: 175,
+                                      decoration: BoxDecoration(
+                                          color: Colors.purple[50],
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0)))),
+                                ),
+                                Container(
+                                    height: 200,
+                                    width: 175,
+                                    decoration: BoxDecoration(
+                                        color: Colors.purple[50],
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0))))
+                              ]),
                         ),
-                        Container());
+                        Container(),"");
                   }
                   return ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: snapshot.data['menu'].length,
-                      itemBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8),
-                          child: Container(
-                              child: Text(snapshot.data['menu'][index]),
-                              height: 200,
-                              width: 175,
-                              decoration: BoxDecoration(
-                                  color: Colors.red[50],
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0))))));
+                      itemBuilder: (context, index) => PhotoPick(
+                          Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Container(
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                          snapshot.data['menu'][index],
+                                          fit: BoxFit.cover)),
+                                  height: 200,
+                                  width: 175,
+                                  decoration: BoxDecoration(
+                                      color: Colors.red[50],
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0))))),
+                          Container(),
+                          snapshot.data['menu'][index]),
+                          );
                 }),
           ),
         ),
