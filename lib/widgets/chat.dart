@@ -616,7 +616,9 @@ class _CommentState extends State<Comment> {
     return Column(
       children: <Widget>[
         Container(
-          child: postId.contains("goingxxx") || postId.contains("undecidedxxx") || postId.contains("notxxx") 
+          child: postId.contains("goingxxx") ||
+                  postId.contains("undecidedxxx") ||
+                  postId.contains("notxxx")
               ? Column(children: [
                   RichText(
                     overflow: TextOverflow.ellipsis,
@@ -686,9 +688,14 @@ class _CommentState extends State<Comment> {
                                   !hasExpired
                               ? FutureBuilder(
                                   future: postsRef.doc(realPostId).get(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData || snapshot.data == null) {
+                                  builder: (context, snapshot3) {
+                                    if (!snapshot3.hasData ||
+                                        snapshot3.data == null) {
                                       Container();
+                                    }
+                                    if (snapshot3.connectionState !=
+                                        ConnectionState.done) {
+                                      return circularProgress();
                                     }
 
                                     return Row(
@@ -708,13 +715,13 @@ class _CommentState extends State<Comment> {
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               ChatMOOV(
-                                                  postId: postId,
-                                                  pic: snapshot.data['image'] ??
-                                                      "",
-                                                  title:
-                                                      snapshot.data['title'] ??
-                                                          "",
-                                                  ),
+                                                postId: postId,
+                                                pic: snapshot3.data['image'] ??
+                                                    "",
+                                                title:
+                                                    snapshot3.data['title'] ??
+                                                        "",
+                                              ),
                                               timeAgo == ""
                                                   ? Container()
                                                   : Text(
@@ -735,9 +742,12 @@ class _CommentState extends State<Comment> {
                                       future: archiveRef.doc(postId).get(),
                                       builder: (context, snapshot) {
                                         if (!snapshot.hasData ||
-                                            snapshot.connectionState !=
-                                                ConnectionState.done) {
-                                          circularProgress();
+                                            snapshot.data == null) {
+                                          Container();
+                                        }
+                                        if (snapshot.connectionState !=
+                                            ConnectionState.done) {
+                                          return circularProgress();
                                         }
                                         return Row(
                                             mainAxisAlignment:
@@ -749,7 +759,8 @@ class _CommentState extends State<Comment> {
                                                   ChatMOOV(
                                                       postId: realPostId,
                                                       pic: snapshot
-                                                          .data['image'] ?? "",
+                                                              .data['image'] ??
+                                                          "",
                                                       title: snapshot
                                                           .data['title'],
                                                       hasButtons: false),
@@ -931,9 +942,11 @@ class _CommentState extends State<Comment> {
                                   future: postsRef.doc(postId).get(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData ||
-                                        snapshot.connectionState !=
-                                            ConnectionState.done ||
                                         snapshot.data == null) {
+                                      return circularProgress();
+                                    }
+                                    if (snapshot.connectionState !=
+                                        ConnectionState.done) {
                                       return circularProgress();
                                     }
                                     return Row(
@@ -945,7 +958,8 @@ class _CommentState extends State<Comment> {
                                             children: [
                                               ChatMOOV(
                                                 postId: postId,
-                                                pic: snapshot.data['image'] ?? "",
+                                                pic: snapshot.data['image'] ??
+                                                    "",
                                                 title: snapshot.data['title'],
                                               ),
                                               timeAgo == ""
@@ -982,6 +996,10 @@ class _CommentState extends State<Comment> {
                                             snapshot.data == null) {
                                           return circularProgress();
                                         }
+                                        if (snapshot.connectionState !=
+                                            ConnectionState.done) {
+                                          return circularProgress();
+                                        }
                                         return Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
@@ -992,7 +1010,8 @@ class _CommentState extends State<Comment> {
                                                   ChatMOOV(
                                                       postId: postId,
                                                       pic: snapshot
-                                                          .data['image'] ?? "",
+                                                              .data['image'] ??
+                                                          "",
                                                       title: snapshot
                                                           .data['title'],
                                                       hasButtons: false),

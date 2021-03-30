@@ -1666,54 +1666,65 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
         GestureDetector(
           onTap: () {},
           child: Container(
-            width: MediaQuery.of(context).size.width * .9,
+            width: MediaQuery.of(context).size.width * .99,
             height: 200,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                StreamBuilder(
-                    stream: usersRef.doc(currentUser.id).snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Container();
-                      }
-                      // if (snapshot.data['menu'].isEmpty) {
-                      //   return PhotoPick(
-                      //       Container(
-                      //           child: Column(
-                      //             mainAxisAlignment: MainAxisAlignment.center,
-                      //             children: [
-                      //               Icon(Icons.menu_book),
-                      //               Text("Add your menu")
-                      //             ],
-                      //           ),
-                      //           height: 200,
-                      //           width: 175,
-                      //           decoration: BoxDecoration(
-                      //               color: Colors.purple[50],
-                      //               borderRadius: BorderRadius.all(
-                      //                   Radius.circular(10.0)))),
-                      //       Container(
-                      //           child: Image.network("src"),
-                      //           height: 200,
-                      //           width: 175,
-                      //           decoration: BoxDecoration(
-                      //               color: Colors.purple[50],
-                      //               borderRadius: BorderRadius.all(
-                      //                   Radius.circular(10.0)))));
-                      // }
-                      return Padding(
+            child: StreamBuilder(
+                stream: usersRef.doc(currentUser.id).snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
+                  if (snapshot.data['menu'].isEmpty) {
+                    return PhotoPick(
+                        Container(
+                          width: MediaQuery.of(context).size.width * .99,
+                          height: 200,
+                          child: ListView(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.menu_book),
+                                      Text("Add your menu")
+                                    ],
+                                  ),
+                                  height: 200,
+                                  width: 175,
+                                  decoration: BoxDecoration(
+                                      color: Colors.purple[50],
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)))),
+                            ),
+                            Container(
+                                height: 200,
+                                width: 175,
+                                decoration: BoxDecoration(
+                                    color: Colors.purple[50],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))))
+                          ]),
+                        ),
+                        Container());
+                  }
+                  return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data['menu'].length,
+                      itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8),
                           child: Container(
+                              child: Text(snapshot.data['menu'][index]),
                               height: 200,
                               width: 175,
                               decoration: BoxDecoration(
-                                  color: Colors.purple[50],
+                                  color: Colors.red[50],
                                   borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0)))));
-                    }),
-              ],
-            ),
+                                      Radius.circular(10.0))))));
+                }),
           ),
         ),
         SizedBox(height: 10)
