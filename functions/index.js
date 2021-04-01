@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const algoliasearch = require("algoliasearch");
+const stripe = require("stripe")(functions.config().stripe.testkey);
 // const {user} = require("firebase-functions/lib/providers/auth");
 admin.initializeApp(functions.config().firebase);
 
@@ -600,3 +601,54 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
             console.log("Error Alvin: ", error);
           });
     });
+
+exports.StripePI = functions.https.onRequest(async (req, res) => {
+  // go thru standard account tutorial
+  const stripeVendorAccount = "acct_s3r09_SAMPLE";
+  const fee = (req.query.amount/100) | 0;
+
+  // clone payment methods
+  stripe.paymentMethods.create(
+      {
+        payment_method: req.query.paym,
+      }, {
+        stripeAccount: stripeVendorAccount,
+      },
+      function(err, clonedPaymentMethod) {
+        if (err !== null) {
+          console.log("Error clone: ", err);
+          res.send("Error");
+        } else {
+          console.log("clonedPaymentMethod: ", clonedPaymentMethod);
+          // create payment intent on the cloned payment method
+          stripe.paymentIntents.create(
+              {
+                amount: req.query.amount,
+                currency: req.query.currency,
+                payment_method: clonedPaymentMethod.id,
+                confirmation_method: "automatic",
+                confirm: true,
+                application_fee_amount: fee,
+                description: req.query.description,
+              }, {
+                stripeAccount: stripeVendorAccount,
+              },
+              function(err, paymentIntent) {
+              // asynchronously called
+              // const paymentIntentReference = paymentIntent;
+
+                // return payment intent or error
+                if (err !== null) {
+                  console.log("Error payment Intent: ", err);
+                  res.send("Error");
+                } else {
+                  console.log("Created paymentintent: ", paymentIntent);
+                  res.json({
+                    paymentIntent: paymentIntent,
+                    stripeAccount: stripeVendorAccount});
+                }
+              }
+          );
+        }
+      });
+});

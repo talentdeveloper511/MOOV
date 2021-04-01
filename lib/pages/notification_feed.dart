@@ -9,6 +9,7 @@ import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/friend_requests.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -267,21 +268,33 @@ class _NotificationFeedState extends State<NotificationFeed>
                               style: TextStyle(fontSize: 16.5),
                             ),
                     ),
-                    // Positioned(
-                    //   top: 8,
-                    //   right: 0,
-                    //   child: Container(
-                    //     padding:
-                    //         EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    //     decoration: BoxDecoration(
-                    //         shape: BoxShape.circle, color: Colors.red),
-                    //     alignment: Alignment.center,
-                    //     child: Text(" ", style: TextStyle(color: Colors.white)),
-                    //   ),
-                    // )
                   ]),
                 ],
               ),
+              currentUser.friendRequests.length != 0
+                  ? GestureDetector(
+                      onTap: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        FriendRequests(id: currentUser.id)))
+                          },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.black, width: .25)),
+                        height: 50,
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text(
+                              'Friend Requests (' +
+                                  currentUser.friendRequests.length.toString() +
+                                  ')',
+                            )),
+                        alignment: Alignment.centerLeft,
+                      ))
+                  : Container(),
               SingleChildScrollView(
                 child: Container(
                   height: _currentIndex == 0
