@@ -432,7 +432,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                       child: Container(
                           height: _currentIndex == 0
                               ? MediaQuery.of(context).size.height * .65
-                              : MediaQuery.of(context).size.height * .9,
+                              : MediaQuery.of(context).size.height * .8,
                           child: EasyRefresh(
                             onRefresh: () async {
                               await Future.delayed(Duration(seconds: 1), () {
