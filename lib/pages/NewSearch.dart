@@ -294,6 +294,9 @@ class _SearchBarState extends State<SearchBar>
                                 //   return Container(
                                 //       height: 4000, child: TrendingSegment());
                                 // }
+                                if (!snapshot.hasData) {
+                                  return circularProgress();
+                                }
 
                                 List<AlgoliaObjectSnapshot> currSearchStuff =
                                     snapshot.data;
@@ -306,167 +309,237 @@ class _SearchBarState extends State<SearchBar>
                                       if (_searchTerm == null) {
                                         return linearProgress();
                                       }
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.waiting:
-                                          return LinearProgressIndicator(
-                                              backgroundColor:
-                                                  TextThemes.ndBlue,
-                                              valueColor:
-                                                  new AlwaysStoppedAnimation<
-                                                      Color>(Colors.blue[200]));
-                                        default:
-                                          if (snapshot.hasError) {
-                                            return Text(
-                                                'Error: ${snapshot.error}');
-                                          } else {
-                                            // if (_searchTerm.length <= 0) {
-                                            //   return Container(
-                                            //       height: 4000, child: TrendingSegment());
-                                            // }
-
-                                            List<AlgoliaObjectSnapshot>
-                                                currSearchStuff2 =
-                                                snapshot2.data;
-
-                                            return Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.90,
-                                              child: TabBarView(
-                                                  controller: _tabController,
-                                                  children: [
-                                                    CustomScrollView(
-                                                      shrinkWrap: true,
-                                                      slivers: <Widget>[
-                                                        SliverList(
-                                                          delegate:
-                                                              SliverChildBuilderDelegate(
-                                                            (context, index) {
-                                                              return _searchTerm !=
-                                                                      null
-                                                                  ? DisplaySearchResult(
-                                                                      displayName:
-                                                                          currSearchStuff[index]
-                                                                              .data["displayName"],
-                                                                      email: currSearchStuff[index]
-                                                                              .data[
-                                                                          "email"],
-                                                                      proPic: currSearchStuff[index]
-                                                                              .data[
-                                                                          "photoUrl"],
-                                                                      userId: currSearchStuff[index]
-                                                                              .data[
-                                                                          "id"],
-                                                                      verifiedStatus:
-                                                                          currSearchStuff[index]
-                                                                              .data["verifiedStatus"],
-                                                                      isBusiness:
-                                                                          currSearchStuff[index]
-                                                                              .data['isBusiness'],
-                                                                    )
-                                                                  : Container();
-                                                            },
-                                                            childCount:
-                                                                currSearchStuff
-                                                                        .length ??
-                                                                    0,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    CustomScrollView(
-                                                      shrinkWrap: true,
-                                                      slivers: <Widget>[
-                                                        SliverList(
-                                                          delegate:
-                                                              SliverChildBuilderDelegate(
-                                                            (context, index) {
-                                                              String privacy =
-                                                                  currSearchStuff2[
-                                                                              index]
-                                                                          .data[
-                                                                      "privacy"];
-                                                              bool hide = false;
-                                                              if (privacy ==
-                                                                      "Friends Only" ||
-                                                                  privacy ==
-                                                                      "Invite Only") {
-                                                                hide = true;
-                                                              }
-                                                              return _searchTerm !=
-                                                                          null &&
-                                                                      hide ==
-                                                                          false
-                                                                  ? DisplayMOOVResult(
-                                                                      title: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "title"],
-                                                                      description:
-                                                                          currSearchStuff2[index]
-                                                                              .data["description"],
-                                                                      type: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "type"],
-                                                                      image: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "image"],
-                                                                      userId: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "userId"],
-                                                                      postId: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "postId"],
-                                                                    )
-                                                                  : Container();
-                                                            },
-                                                            childCount:
-                                                                currSearchStuff2
-                                                                        .length ??
-                                                                    0,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    CustomScrollView(
-                                                      shrinkWrap: true,
-                                                      slivers: <Widget>[
-                                                        SliverList(
-                                                          delegate:
-                                                              SliverChildBuilderDelegate(
-                                                            (context, index) {
-                                                              return _searchTerm !=
-                                                                      null
-                                                                  ? DisplayGroupResult(
-                                                                      groupName:
-                                                                          currSearchStuff0[index]
-                                                                              .data["groupName"],
-                                                                      groupId: currSearchStuff0[index]
-                                                                              .data[
-                                                                          "groupId"],
-                                                                      groupPic:
-                                                                          currSearchStuff0[index]
-                                                                              .data["groupPic"],
-                                                                      members: currSearchStuff0[index]
-                                                                              .data[
-                                                                          "members"],
-                                                                      sendMOOV:
-                                                                          false,
-                                                                    )
-                                                                  : Container();
-                                                            },
-                                                            childCount:
-                                                                currSearchStuff0
-                                                                        .length ??
-                                                                    0,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ]),
-                                            );
-                                          }
+                                      if (!snapshot2.hasData) {
+                                        return circularProgress();
                                       }
+                                      // switch (snapshot.connectionState) {
+                                      //   case ConnectionState.waiting:
+                                      //     return LinearProgressIndicator(
+                                      //         backgroundColor:
+                                      //             TextThemes.ndBlue,
+                                      //         valueColor:
+                                      //             new AlwaysStoppedAnimation<
+                                      //                 Color>(Colors.blue[200]));
+                                      //   default:
+                                      //     if (snapshot.hasError) {
+                                      //       return Text(
+                                      //           'Error: ${snapshot.error}');
+                                      //     } else {
+                                      // if (_searchTerm.length <= 0) {
+                                      //   return Container(
+                                      //       height: 4000, child: TrendingSegment());
+                                      // }
+
+                                      List<AlgoliaObjectSnapshot>
+                                          currSearchStuff2 = snapshot2.data;
+
+                                      return Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.90,
+                                        child: TabBarView(
+                                            controller: _tabController,
+                                            children: [
+                                              CustomScrollView(
+                                                shrinkWrap: true,
+                                                slivers: <Widget>[
+                                                  SliverList(
+                                                    delegate:
+                                                        SliverChildBuilderDelegate(
+                                                      (context, index) {
+                                                        return _searchTerm !=
+                                                                    null &&
+                                                                _currentIndex ==
+                                                                    0
+                                                            ? DisplaySearchResult(
+                                                                displayName: currSearchStuff[
+                                                                            index]
+                                                                        .data[
+                                                                    "displayName"],
+                                                                email: currSearchStuff[
+                                                                            index]
+                                                                        .data[
+                                                                    "email"],
+                                                                proPic: currSearchStuff[
+                                                                            index]
+                                                                        .data[
+                                                                    "photoUrl"],
+                                                                userId: currSearchStuff[
+                                                                        index]
+                                                                    .data["id"],
+                                                                verifiedStatus:
+                                                                    currSearchStuff[index]
+                                                                            .data[
+                                                                        "verifiedStatus"],
+                                                                isBusiness: currSearchStuff[
+                                                                            index]
+                                                                        .data[
+                                                                    'isBusiness'],
+                                                              )
+                                                            : _searchTerm !=
+                                                                        null &&
+                                                                    _currentIndex ==
+                                                                        1
+                                                                ? DisplayMOOVResult(
+                                                                    title: currSearchStuff2[index]
+                                                                            .data[
+                                                                        "title"],
+                                                                    description:
+                                                                        currSearchStuff2[index]
+                                                                            .data["description"],
+                                                                    type: currSearchStuff2[index]
+                                                                            .data[
+                                                                        "type"],
+                                                                    image: currSearchStuff2[index]
+                                                                            .data[
+                                                                        "image"],
+                                                                    userId: currSearchStuff2[index]
+                                                                            .data[
+                                                                        "userId"],
+                                                                    postId: currSearchStuff2[index]
+                                                                            .data[
+                                                                        "postId"],
+                                                                  )
+                                                                : _searchTerm !=
+                                                                            null &&
+                                                                        _currentIndex ==
+                                                                            2
+                                                                    ? DisplayGroupResult(
+                                                                        groupName:
+                                                                            currSearchStuff0[index].data["groupName"],
+                                                                        groupId:
+                                                                            currSearchStuff0[index].data["groupId"],
+                                                                        groupPic:
+                                                                            currSearchStuff0[index].data["groupPic"],
+                                                                        members:
+                                                                            currSearchStuff0[index].data["members"],
+                                                                        sendMOOV:
+                                                                            false,
+                                                                      )
+                                                                    : Container();
+                                                      },
+                                                      childCount: currSearchStuff
+                                                                      .length !=
+                                                                  null &&
+                                                              _currentIndex == 0
+                                                          ? currSearchStuff
+                                                              .length
+                                                          : currSearchStuff0
+                                                                          .length !=
+                                                                      null &&
+                                                                  _currentIndex ==
+                                                                      2
+                                                              ? currSearchStuff0
+                                                                  .length
+                                                              : currSearchStuff2
+                                                                              .length !=
+                                                                          null &&
+                                                                      _currentIndex ==
+                                                                          1
+                                                                  ? currSearchStuff2
+                                                                      .length
+                                                                  : 0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              CustomScrollView(
+                                                shrinkWrap: true,
+                                                slivers: <Widget>[
+                                                  SliverList(
+                                                    delegate:
+                                                        SliverChildBuilderDelegate(
+                                                      (context, index) {
+                                                        String privacy =
+                                                            currSearchStuff2[
+                                                                        index]
+                                                                    .data[
+                                                                "privacy"];
+                                                        bool hide = false;
+                                                        if (privacy ==
+                                                                "Friends Only" ||
+                                                            privacy ==
+                                                                "Invite Only") {
+                                                          hide = true;
+                                                        }
+                                                        return _searchTerm !=
+                                                                    null &&
+                                                                hide == false
+                                                            ? DisplayMOOVResult(
+                                                                title: currSearchStuff2[
+                                                                            index]
+                                                                        .data[
+                                                                    "title"],
+                                                                description: currSearchStuff2[
+                                                                            index]
+                                                                        .data[
+                                                                    "description"],
+                                                                type: currSearchStuff2[
+                                                                        index]
+                                                                    .data["type"],
+                                                                image: currSearchStuff2[
+                                                                            index]
+                                                                        .data[
+                                                                    "image"],
+                                                                userId: currSearchStuff2[
+                                                                            index]
+                                                                        .data[
+                                                                    "userId"],
+                                                                postId: currSearchStuff2[
+                                                                            index]
+                                                                        .data[
+                                                                    "postId"],
+                                                              )
+                                                            : Container();
+                                                      },
+                                                      childCount:
+                                                          currSearchStuff2
+                                                                  .length ??
+                                                              0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              CustomScrollView(
+                                                shrinkWrap: true,
+                                                slivers: <Widget>[
+                                                  SliverList(
+                                                    delegate:
+                                                        SliverChildBuilderDelegate(
+                                                      (context, index) {
+                                                        return _searchTerm !=
+                                                                null
+                                                            ? DisplayGroupResult(
+                                                                groupName: currSearchStuff0[
+                                                                            index]
+                                                                        .data[
+                                                                    "groupName"],
+                                                                groupId: currSearchStuff0[
+                                                                            index]
+                                                                        .data[
+                                                                    "groupId"],
+                                                                groupPic: currSearchStuff0[
+                                                                            index]
+                                                                        .data[
+                                                                    "groupPic"],
+                                                                members: currSearchStuff0[
+                                                                            index]
+                                                                        .data[
+                                                                    "members"],
+                                                                sendMOOV: false,
+                                                              )
+                                                            : Container();
+                                                      },
+                                                      childCount:
+                                                          currSearchStuff0
+                                                                  .length ??
+                                                              0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ]),
+                                      );
                                     });
                               }));
                     })));

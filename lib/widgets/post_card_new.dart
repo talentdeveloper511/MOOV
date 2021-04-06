@@ -185,6 +185,7 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                   snapshot2.data['displayName'];
                               String email = snapshot2.data['email'];
                               String proPic = snapshot2.data['photoUrl'];
+                              bool isBusiness = snapshot2.data['isBusiness'];
 
                               if (currentUser.id == widget.course['userId']) {
                                 isPostOwner = true;
@@ -265,18 +266,24 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                                     child: SizedBox(
                                                       child: Row(
                                                         children: [
-                                                          Text(displayName,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .visible,
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  color:
-                                                                      TextThemes
-                                                                          .ndBlue,
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .none)),
+                                                          ConstrainedBox(
+                                                            constraints: BoxConstraints(
+                                                              maxWidth: 100
+                                                            ),
+
+                                                            child: Text(displayName,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color:
+                                                                        TextThemes
+                                                                            .ndBlue,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .none)),
+                                                          ),
                                                           verifiedStatus == 3
                                                               ? Padding(
                                                                   padding:
@@ -324,20 +331,32 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                                   padding:
                                                       const EdgeInsets.only(
                                                           left: 2.0),
-                                                  child: Text(
-                                                      userYear +
-                                                          " in " +
-                                                          userDorm,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 2,
-                                                      style: TextStyle(
-                                                          fontSize: 11,
-                                                          color:
-                                                              TextThemes.ndBlue,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .none)),
+                                                  child: isBusiness
+                                                      ? Text(userDorm,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 2,
+                                                          style: TextStyle(
+                                                              fontSize: 11,
+                                                              color: TextThemes
+                                                                  .ndBlue,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .none))
+                                                      : Text(
+                                                          userYear +
+                                                              " in " +
+                                                              userDorm,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 2,
+                                                          style: TextStyle(
+                                                              fontSize: 11,
+                                                              color: TextThemes
+                                                                  .ndBlue,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .none)),
                                                 ),
                                               ],
                                             ),

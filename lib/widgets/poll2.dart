@@ -560,7 +560,7 @@ class _PollMakerState extends State<PollMaker> {
                           child: TextFormField(
                             controller: pollTitleController,
                             decoration: InputDecoration(
-                              labelText: "Poll Title",
+                              labelText: "Poll Question",
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
