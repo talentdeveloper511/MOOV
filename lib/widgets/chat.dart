@@ -269,6 +269,8 @@ class ChatState extends State<Chat> {
 
       isGroupChat
           ? messagesRef.doc(gid).set({
+              "livePosts":
+                  FieldValue.arrayUnion([widget.sendingPost['postId']]),
               "lastMessage": "Sent a MOOV",
               "seen": false,
               "sender": currentUser.id,
@@ -280,6 +282,8 @@ class ChatState extends State<Chat> {
               "isGroupChat": true,
             }, SetOptions(merge: true))
           : messagesRef.doc(directMessageId).set({
+              "livePosts":
+                  FieldValue.arrayUnion([widget.sendingPost['postId']]),
               "lastMessage": "Sent a MOOV",
               "seen": false,
               "sender": currentUser.id,
@@ -616,9 +620,10 @@ class _CommentState extends State<Comment> {
     return Column(
       children: <Widget>[
         Container(
-          child: postId != null && (postId.contains("goingxxx") ||
-                  postId.contains("undecidedxxx") ||
-                  postId.contains("notxxx"))
+          child: postId != null &&
+                  (postId.contains("goingxxx") ||
+                      postId.contains("undecidedxxx") ||
+                      postId.contains("notxxx"))
               ? Column(children: [
                   RichText(
                     overflow: TextOverflow.ellipsis,

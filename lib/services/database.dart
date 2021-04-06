@@ -302,30 +302,32 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          messagesRef
-              .doc(ds.id)
-              .collection("chat")
-              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+          if (ds.data()['livePosts'].contains(postId)) {
+            messagesRef
+                .doc(ds.id)
+                .collection("chat")
+                .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                    " " +
+                    currentUser.id)
+                .set({
+              "seen": false,
+              "displayName": currentUser.displayName,
+              "comment": "is not going to " + title,
+              "timestamp": 0,
+              "avatarUrl": postId, // just doing this to conserve data writes
+              "userId": currentUser.id,
+              "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
-                  currentUser.id)
-              .set({
-            "seen": false,
-            "displayName": currentUser.displayName,
-            "comment": "is not going to " + title,
-            "timestamp": 0,
-            "avatarUrl": postId, // just doing this to conserve data writes
-            "userId": currentUser.id,
-            "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
-                " " +
-                currentUser.id,
-            "gid": ds.data()['gid'],
-            "millis": DateTime.now().millisecondsSinceEpoch.toString(),
-            "directMessageId": "",
-            "isGroupChat": ds.data()['isGroupChat'],
-            "postId": "notxxx " + title,
-            "realPostId": postId,
-            "hasExpired": false
-          });
+                  currentUser.id,
+              "gid": ds.data()['gid'],
+              "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+              "directMessageId": "",
+              "isGroupChat": ds.data()['isGroupChat'],
+              "postId": "notxxx " + title,
+              "realPostId": postId,
+              "hasExpired": false
+            });
+          }
         }
       });
     });
@@ -384,30 +386,32 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          messagesRef
-              .doc(ds.id)
-              .collection("chat")
-              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+          if (ds.data()['livePosts'].contains(postId)) {
+            messagesRef
+                .doc(ds.id)
+                .collection("chat")
+                .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                    " " +
+                    currentUser.id)
+                .set({
+              "seen": false,
+              "displayName": currentUser.displayName,
+              "comment": "is undecided about " + title,
+              "timestamp": 0,
+              "avatarUrl": postId, // just doing this to conserve data writes
+              "userId": currentUser.id,
+              "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
-                  currentUser.id)
-              .set({
-            "seen": false,
-            "displayName": currentUser.displayName,
-            "comment": "is undecided about " + title,
-            "timestamp": 0,
-            "avatarUrl": postId, // just doing this to conserve data writes
-            "userId": currentUser.id,
-            "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
-                " " +
-                currentUser.id,
-            "gid": ds.data()['gid'],
-            "millis": DateTime.now().millisecondsSinceEpoch.toString(),
-            "directMessageId": "",
-            "isGroupChat": ds.data()['isGroupChat'],
-            "postId": "undecidedxxx " + title,
-            "realPostId": postId,
-            "hasExpired": false
-          });
+                  currentUser.id,
+              "gid": ds.data()['gid'],
+              "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+              "directMessageId": "",
+              "isGroupChat": ds.data()['isGroupChat'],
+              "postId": "undecidedxxx " + title,
+              "realPostId": postId,
+              "hasExpired": false
+            });
+          }
         }
       });
     });
@@ -480,36 +484,32 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          // print(ds.data()['livePosts'][postId] != null);
-
-          messagesRef
-              .doc(ds.id)
-              .collection("chat")
-              .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+          if (ds.data()['livePosts'].contains(postId)) {
+            messagesRef
+                .doc(ds.id)
+                .collection("chat")
+                .doc(DateTime.now().millisecondsSinceEpoch.toString() +
+                    " " +
+                    currentUser.id)
+                .set({
+              "seen": false,
+              "displayName": currentUser.displayName,
+              "comment": "is going to " + title,
+              "timestamp": 0,
+              "avatarUrl": postId, // just doing this to conserve data writes
+              "userId": currentUser.id,
+              "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
-                  currentUser.id)
-              .set({
-            "seen": false,
-            "displayName": currentUser.displayName,
-            "comment": "is going to " + title,
-            "timestamp": 0,
-            "avatarUrl": postId, // just doing this to conserve data writes
-            "userId": currentUser.id,
-            "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
-                " " +
-                currentUser.id,
-            "gid": ds.data()['gid'],
-            "millis": DateTime.now().millisecondsSinceEpoch.toString(),
-            "directMessageId": "",
-            "isGroupChat": ds.data()['isGroupChat'],
-            "postId": "goingxxx " + title,
-            "realPostId": postId,
-            "hasExpired": false
-          });
-
-          // messagesRef.doc(ds.id).set({
-          //   "livePosts": {userId: 3},
-          // }, SetOptions(merge: true));
+                  currentUser.id,
+              "gid": ds.data()['gid'],
+              "millis": DateTime.now().millisecondsSinceEpoch.toString(),
+              "directMessageId": "",
+              "isGroupChat": ds.data()['isGroupChat'],
+              "postId": "goingxxx " + title,
+              "realPostId": postId,
+              "hasExpired": false
+            });
+          }
         }
       });
     });
