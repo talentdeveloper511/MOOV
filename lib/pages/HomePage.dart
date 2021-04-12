@@ -14,10 +14,12 @@ import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/widgets/group_carousel_card.dart';
 import 'package:MOOV/widgets/hottestMOOV.dart';
+import 'package:MOOV/widgets/locationCheckIn.dart';
 import 'package:MOOV/widgets/poll2.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/suggestionBox.dart';
+import 'package:MOOV/widgets/sundayWrapUp.dart';
 import 'package:animations/animations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,7 +39,6 @@ import 'notification_feed.dart';
 
 PageStorageKey motnKey = PageStorageKey("motnKey");
 
-
 class HomePage extends StatefulWidget {
   final int pageIndex, motdIndex;
   User user;
@@ -52,7 +53,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-        final PageStorageBucket motnBucket = PageStorageBucket();
+  final PageStorageBucket motnBucket = PageStorageBucket();
 
   int _getInitialIndex() {
     int initialIndex = PageStorage.of(context).readState(
@@ -129,8 +130,6 @@ class _HomePageState extends State<HomePage>
           _currentIndex = (_tabController.animation.value).round();
         });
       });
-
-
   }
 
   var percentage = 0.0;
@@ -178,6 +177,26 @@ class _HomePageState extends State<HomePage>
                                     _currentIndex != 1
                                         ? GestureDetector(
                                             onTap: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return SundayWrapUp(
+                                                      title: "Sunday Wrap Up",
+                                                      description:
+                                                          "What a week! Here's your recap, be sure to save any Memorable MOOVs before they expire at the end of today!",
+                                                      choice1: "Check In",
+                                                      // choice1Action:
+                                                      //     (context) {},
+                                                      // choice2Action:
+                                                      //     (context) {},
+                                                      choice2: "Later",
+                                                      image:
+                                                          "value.docs[i]['image']",
+                                                      postTitle: "",
+                                                    );
+                                                  });
+
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(1);
@@ -1029,9 +1048,9 @@ class _HomePageState extends State<HomePage>
                                                 key: motnKey,
                                                 bucket: motnBucket,
                                                 child: NotifyingPageView(
-                                                  
                                                   notifier: _notifier,
-                                                  currentIndex: _notifier.value.toInt(),
+                                                  currentIndex:
+                                                      _notifier.value.toInt(),
                                                 ),
                                               ),
                                             ),
@@ -1043,7 +1062,6 @@ class _HomePageState extends State<HomePage>
                                                 alignment: Alignment.center,
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    
                                                     showDialog(
                                                         context: context,
                                                         builder: (_) =>
@@ -1129,7 +1147,7 @@ class _HomePageState extends State<HomePage>
                                                           MainAxisAlignment
                                                               .center,
                                                       children: <Widget>[
-                                                        _currentIndex == 0||
+                                                        _currentIndex == 0 ||
                                                                 todayOnly ==
                                                                     0 ||
                                                                 privacyDropdownValue !=
