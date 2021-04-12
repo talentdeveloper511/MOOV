@@ -124,62 +124,16 @@ class _ArchiveDetailState extends State<ArchiveDetail>
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => Home()),
-                              (Route<dynamic> route) => false,
-                            );
-                          },
-                          child: Image.asset(
-                            'lib/assets/moovblue.png',
-                            fit: BoxFit.cover,
-                            height: 50.0,
-                          ),
+                        Image.asset(
+                          'lib/assets/moovblue.png',
+                          fit: BoxFit.cover,
+                          height: 50.0,
                         ),
                       ],
                     ),
                   ),
                 ),
-                floatingActionButton: FadeTransition(
-                  opacity: _hideFabAnimController,
-                  child: ScaleTransition(
-                    scale: _hideFabAnimController,
-                    child: FloatingActionButton.extended(
-                        backgroundColor:
-                            isIncognito ? Colors.black : Colors.white,
-                        onPressed: () {
-                          HapticFeedback.lightImpact();
-
-                          isIncognito
-                              ? usersRef.doc(currentUser.id).set({
-                                  "privacySettings": {"incognito": false}
-                                }, SetOptions(merge: true))
-                              : usersRef.doc(currentUser.id).set({
-                                  "privacySettings": {
-                                    "incognito": true,
-                                    "friendsOnly": false
-                                  }
-                                }, SetOptions(merge: true));
-                        },
-                        label: !isIncognito
-                            ? Text("Go Incognito",
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black))
-                            : Row(
-                                children: [
-                                  Image.asset('lib/assets/incognito.png',
-                                      height: 20),
-                                  Text(" Incognito",
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white)),
-                                ],
-                              )),
-                  ),
-                ),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endFloat,
+             
                 body: SafeArea(
                   top: false,
                   child: Stack(children: [
@@ -758,45 +712,7 @@ class _AuthorContent extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  Padding(
-                    padding: isLargePhone
-                        ? const EdgeInsets.only(right: 42.0, top: 10.0)
-                        : const EdgeInsets.only(right: 30.0, top: 10.0),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          side: BorderSide(color: Colors.black)),
-                      onPressed: () {
-                        HapticFeedback.lightImpact();
-
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.bottomToTop,
-                                child: SendMOOVSearch(
-                                  course['userId'],
-                                  course['image'],
-                                  course['startDate'],
-                                  course['postId'],
-                                  course['title'],
-                                  course1['photoUrl'],
-                                  course1['displayName'],
-                                )));
-                      },
-                      color: Colors.white,
-                      padding: EdgeInsets.all(5.0),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: Column(
-                          children: [
-                            Text('Send'),
-                            Icon(Icons.send_rounded,
-                                color: Colors.blue[500], size: 25),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  
                 ],
               )),
             ),

@@ -1,13 +1,11 @@
-import 'dart:async';
 import 'dart:math';
-
+import 'package:MOOV/pages/archiveDetail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 
 class SundayWrapUp extends StatefulWidget {
   final String title, description, choice1, choice2, image, postTitle, day;
@@ -38,9 +36,8 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
   final List<Color> colorList = [
     Colors.purple[50],
     Colors.purple[100],
-    Colors.purple[200],
     Colors.pink[50],
-    Colors.pink[100],
+    Colors.blue[50]
   ];
   final _random = new Random();
 
@@ -90,7 +87,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                 padding: const EdgeInsets.only(
                     top: 0.0, left: 20, right: 20, bottom: 25),
                 child: Text(
-                  "What a week, $firstName! Here's your recap, be sure to save any Memorable MOOVs before they expire tonight!",
+                  "What a week, $firstName! Here's your recap, be sure to save any Memorable MOOVs before they expire tonight.",
                   style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15),
                   textAlign: TextAlign.center,
                 ),
@@ -106,9 +103,10 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                       if (!snapshot.hasData || snapshot.data == null) {
                         return Container();
                       }
-                      Map goingMOOVs = {};
-                      Map ownMOOVs = {};
-                      Map newFriends = {};
+                      List goingMOOVs = [];
+                      List ownMOOVs = [];
+                      List newFriends = [];
+                      List nextDeals = [];
 
                       if (snapshot.data.data()['goingMOOVs'] != null) {
                         goingMOOVs = snapshot.data.data()['goingMOOVs'];
@@ -122,6 +120,10 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                         newFriends = snapshot.data.data()['newFriends'];
                         length = length + 1;
                       }
+                      if (snapshot.data.data()['nextDeals'] != null) {
+                        nextDeals = snapshot.data.data()['nextDeals'];
+                        length = length + 1;
+                      }
 
                       return DraggableScrollbar.arrows(
                         // labelTextBuilder: (double offset) =>
@@ -133,8 +135,6 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                               ? Column(
                                   children: [
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -161,6 +161,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         color: colorList[
                                             _random.nextInt(colorList.length)],
                                         child: ListView.builder(
+                                          // physics: AlwaysScrollableScrollPhysics(),
                                           scrollDirection: Axis.horizontal,
                                           itemExtent: MediaQuery.of(context)
                                                   .size
@@ -171,12 +172,13 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                             return Padding(
                                               padding: index == 0
                                                   ? EdgeInsets.only(
-                                                      right: 10.0, left: 10)
+                                                      right: 10.0, left: 0)
                                                   : EdgeInsets.only(
                                                       right: 20.0, left: 0),
                                               child: Container(
                                                 height: 100,
-                                                child: WrapMOOV(),
+                                                child:
+                                                    WrapMOOV(index, ownMOOVs),
                                               ),
                                             );
                                           },
@@ -233,7 +235,8 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                                       right: 20.0, left: 0),
                                               child: Container(
                                                 height: 100,
-                                                child: WrapMOOV(),
+                                                child:
+                                                    WrapMOOV(index, goingMOOVs),
                                               ),
                                             );
                                           },
@@ -279,7 +282,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                           itemExtent: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .6,
+                                              .4,
                                           itemCount: newFriends.length,
                                           itemBuilder: (context, index) {
                                             return Padding(
@@ -307,6 +310,88 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                                       )),
                                                 ),
                                               ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                          (nextDeals.isNotEmpty)
+                              ? Column(
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, top: 10),
+                                          child: Text(
+                                            "Next Week's Deals.",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Another week of absurd deals.",
+                                          style: TextStyle(fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                    Container(
+                                      height: 150,
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Material(
+                                        elevation: 4.0,
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                        color: colorList[
+                                            _random.nextInt(colorList.length)],
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemExtent: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .4,
+                                          itemCount: nextDeals.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: index == 0
+                                                  ? EdgeInsets.only(
+                                                      right: 10.0,
+                                                      left: 0,
+                                                      top: 10,
+                                                      bottom: 10)
+                                                  : EdgeInsets.only(
+                                                      right: 20.0,
+                                                      left: 0,
+                                                      top: 10,
+                                                      bottom: 10),
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                      border: index ==
+                                                              nextDeals.length - 1
+                                                          ? null
+                                                          : Border(
+                                                              right: BorderSide(
+                                                                  width: 2.0,
+                                                                  color: Colors
+                                                                      .black),
+                                                            )),
+                                                  height: 100,
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        nextDeals[index]['day'],
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                    ],
+                                                  )),
                                             );
                                           },
                                         ),
@@ -359,7 +444,9 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
 }
 
 class WrapMOOV extends StatelessWidget {
-  const WrapMOOV({Key key}) : super(key: key);
+  final int index;
+  final List moovType;
+  const WrapMOOV(this.index, this.moovType);
 
   @override
   Widget build(BuildContext context) {
@@ -369,45 +456,72 @@ class WrapMOOV extends StatelessWidget {
           height: 200,
           width: 200,
           child: Stack(children: <Widget>[
-            FractionallySizedBox(
-              widthFactor: 1,
-              heightFactor: 1.0,
-              child: Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset('lib/assets/motd.jpg', fit: BoxFit.cover),
-                ),
-                margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: OpenContainer(
+                transitionType: ContainerTransitionType.fade,
+                transitionDuration: Duration(milliseconds: 500),
+                openBuilder: (context, _) =>
+                    ArchiveDetail(moovType[index]['postId']),
+                closedElevation: 0,
+                closedBuilder: (context, _) => FractionallySizedBox(
+                  widthFactor: 1,
+                  heightFactor: 1,
+                  child: Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(moovType[index]['pic'],
+                          fit: BoxFit.cover),
                     ),
-                  ],
+                    // margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                alignment: Alignment(0.0, 0.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.center,
                 child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      "YOUR MOOV",
-                      style: TextStyle(
-                          fontFamily: 'Solway',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 20.0),
+                  alignment: Alignment(0.0, 0.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Colors.black.withAlpha(0),
+                          Colors.black,
+                          Colors.black12,
+                        ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        moovType[index]['title'],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'Solway',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 16.0),
+                      ),
                     ),
                   ),
                 ),
@@ -417,7 +531,7 @@ class WrapMOOV extends StatelessWidget {
         ),
         Positioned(
           top: 10,
-          right: 12.5,
+          right: 25,
           child: Container(
             height: 30,
             padding: EdgeInsets.all(4),
