@@ -190,20 +190,22 @@ class _HomePageState extends State<HomePage>
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
-                                                    return SundayWrapUp(
-                                                      title: "Sunday Wrap Up",
-                                                      description:
-                                                          "What a week! Here's your recap, be sure to save any Memorable MOOVs before they expire at the end of today!",
-                                                      choice1: "Check In",
-                                                      // choice1Action:
-                                                      //     (context) {},
-                                                      // choice2Action:
-                                                      //     (context) {},
-                                                      choice2: "Later",
-                                                      image:
-                                                          "value.docs[i]['image']",
-                                                      postTitle: "",
-                                                      day: day,
+                                                    return Container(
+                                                      child: SundayWrapUp(
+                                                        title: "Sunday Wrap Up",
+                                                        description:
+                                                            "What a week! Here's your recap, be sure to save any Memorable MOOVs before they expire at the end of today!",
+                                                        choice1: "Check In",
+                                                        // choice1Action:
+                                                        //     (context) {},
+                                                        // choice2Action:
+                                                        //     (context) {},
+                                                        choice2: "Later",
+                                                        image:
+                                                            "value.docs[i]['image']",
+                                                        postTitle: "",
+                                                        day: day,
+                                                      ),
                                                     );
                                                   });
 
