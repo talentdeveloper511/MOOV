@@ -19,7 +19,7 @@ import 'package:MOOV/widgets/poll2.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/suggestionBox.dart';
-import 'package:MOOV/widgets/sundayWrapUp.dart';
+import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'package:animations/animations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,6 +28,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
@@ -145,6 +146,13 @@ class _HomePageState extends State<HomePage>
   String privacyDropdownValue = 'Featured';
 
   Widget build(BuildContext context) {
+    //check if its sunday for the weekly recap
+    final dateToCheck = Timestamp.now().toDate();
+    final aDate =
+        DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
+    String day = DateFormat('MMMd').format(aDate);
+    bool isSunday = DateFormat('EEEE').format(aDate) == 'Sunday';
+
     super.build(context);
 
     SizeConfig().init(context);
@@ -178,6 +186,7 @@ class _HomePageState extends State<HomePage>
                                         ? GestureDetector(
                                             onTap: () {
                                               showDialog(
+                                                  barrierDismissible: false,
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
@@ -194,6 +203,7 @@ class _HomePageState extends State<HomePage>
                                                       image:
                                                           "value.docs[i]['image']",
                                                       postTitle: "",
+                                                      day: day,
                                                     );
                                                   });
 

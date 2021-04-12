@@ -65,6 +65,10 @@ final archiveRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('postArchives');
+final wrapupRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('sundayWrapup');
 
 final DateTime timestamp = DateTime.now();
 User currentUser;
