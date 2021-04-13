@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:MOOV/pages/archiveDetail.dart';
 import 'package:MOOV/pages/home.dart';
@@ -5,7 +6,10 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 
 class SundayWrapUp extends StatefulWidget {
   final String title, description, choice1, choice2, image, postTitle, day;
@@ -106,7 +110,6 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                       List goingMOOVs = [];
                       List ownMOOVs = [];
                       List newFriends = [];
-                      List nextDeals = [];
 
                       if (snapshot.data.data()['goingMOOVs'] != null) {
                         goingMOOVs = snapshot.data.data()['goingMOOVs'];
@@ -118,10 +121,6 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                       }
                       if (snapshot.data.data()['newFriends'] != null) {
                         newFriends = snapshot.data.data()['newFriends'];
-                        length = length + 1;
-                      }
-                      if (snapshot.data.data()['nextDeals'] != null) {
-                        nextDeals = snapshot.data.data()['nextDeals'];
                         length = length + 1;
                       }
 
@@ -318,8 +317,20 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                   ],
                                 )
                               : Container(),
-                          (nextDeals.isNotEmpty)
-                              ? Column(
+                          FutureBuilder(
+                              future: wrapupRef.doc('nextDeals').get(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData ||
+                                    snapshot.data == null) {
+                                  return Container();
+                                }
+                                List nextDeals = [];
+
+                                if (snapshot.data.data()['nextDeals'] != null) {
+                                  nextDeals = snapshot.data.data()['nextDeals'];
+                                  length = length + 1;
+                                }
+                                return Column(
                                   children: [
                                     Column(
                                       mainAxisAlignment:
@@ -350,29 +361,31 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         color: colorList[
                                             _random.nextInt(colorList.length)],
                                         child: ListView.builder(
+                                          // physics: AlwaysScrollableScrollPhysics(),
                                           scrollDirection: Axis.horizontal,
                                           itemExtent: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .4,
+                                              .37,
                                           itemCount: nextDeals.length,
                                           itemBuilder: (context, index) {
                                             return Padding(
                                               padding: index == 0
                                                   ? EdgeInsets.only(
-                                                      right: 10.0,
+                                                      right: 0.0,
                                                       left: 0,
                                                       top: 10,
                                                       bottom: 10)
                                                   : EdgeInsets.only(
-                                                      right: 20.0,
+                                                      right: 0.0,
                                                       left: 0,
                                                       top: 10,
                                                       bottom: 10),
                                               child: Container(
                                                   decoration: BoxDecoration(
                                                       border: index ==
-                                                              nextDeals.length - 1
+                                                              nextDeals.length -
+                                                                  1
                                                           ? null
                                                           : Border(
                                                               right: BorderSide(
@@ -390,6 +403,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                                                 FontWeight
                                                                     .w600),
                                                       ),
+                                                      WrapMOOV(index, nextDeals)
                                                     ],
                                                   )),
                                             );
@@ -398,8 +412,8 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                       ),
                                     ),
                                   ],
-                                )
-                              : Container(),
+                                );
+                              }),
                         ]),
                       );
                     }),
@@ -450,10 +464,17 @@ class WrapMOOV extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Timer _timer;
+
+    bool isDeal = false;
+    if (moovType[0]['day'] != null) {
+      isDeal = true;
+    }
+
     return Stack(
       children: [
         Container(
-          height: 200,
+          height: isDeal ? 95 : 200,
           width: 200,
           child: Stack(children: <Widget>[
             Padding(
@@ -520,7 +541,7 @@ class WrapMOOV extends StatelessWidget {
                             fontFamily: 'Solway',
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
-                            fontSize: 16.0),
+                            fontSize: isDeal ? 13 : 16),
                       ),
                     ),
                   ),
@@ -529,26 +550,96 @@ class WrapMOOV extends StatelessWidget {
             ),
           ]),
         ),
-        Positioned(
-          top: 10,
-          right: 25,
-          child: Container(
-            height: 30,
-            padding: EdgeInsets.all(4),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue[900], Colors.blue[800]],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
+        isDeal
+            ? Container()
+            : Positioned(
+                top: 10,
+                right: 25,
+                child: Container(
+                  height: 30,
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue[900], Colors.blue[800]],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: FocusedMenuHolder(
+                    menuWidth: MediaQuery.of(context).size.width * 0.62,
+                    blurSize: 5.0,
+                    menuItemExtent: 45,
+                    menuBoxDecoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    duration: Duration(milliseconds: 20),
+                    animateMenuItems: true,
+                    blurBackgroundColor: Colors.black54,
+                    openWithTap:
+                        true, // Open Focused-Menu on Tap rather than Long Press
+                    menuOffset:
+                        10.0, // Offset value to show menuItem from the selected item
+                    bottomOffsetHeight:
+                        80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                    menuItems: <FocusedMenuItem>[
+                      // Add Each FocusedMenuItem  for Menu Options
+
+                      FocusedMenuItem(
+                          title: Text(
+                            "Save to MOOV Memories?",
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          trailingIcon: Icon(Icons.save_sharp,
+                              size: 20, color: Colors.blue),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext builderContext) {
+                                  _timer = Timer(Duration(seconds: 1), () {
+                                    Navigator.of(context).pop();
+                                  });
+
+                                  return AlertDialog(
+                                    backgroundColor: Colors.green,
+                                    title: Center(
+                                      child: Text(
+                                        'Saved',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                    content: Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ),
+                                  );
+                                }).then((val) {
+                              if (_timer.isActive) {
+                                _timer.cancel();
+                              }
+                            });
+                          }),
+                      FocusedMenuItem(
+                          title: Text(
+                            "Nvm",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          trailingIcon: Icon(Icons.cancel, size: 20),
+                          onPressed: () {}),
+                    ],
+
+                    onPressed: () {},
+                    child: Text(
+                      "Save",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Text(
-              "Save",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
-          ),
-        )
+              )
       ],
     );
   }

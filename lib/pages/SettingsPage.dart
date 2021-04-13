@@ -1,5 +1,6 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/RemoteControl.dart';
 import 'package:MOOV/pages/ChangePrivacy.dart';
 import 'package:MOOV/pages/edit_profile.dart';
@@ -150,7 +151,17 @@ class _SettingsPageState extends State<SettingsPage> {
                                     ),
                                   ),
                                 ])),
-                                const SizedBox(height: 10.0),
+                                SizedBox(height: 10.0),
+                                Center(
+                                  child: GradientText(
+                                    "MOOV Memories",
+                                    gradient: LinearGradient(colors: [
+                                      Colors.blue.shade400,
+                                      Colors.blue.shade900,
+                                    ]),
+                                  ),
+                                ),
+                                SizedBox(height: 10.0),
                                 Card(
                                   elevation: 4.0,
                                   margin: const EdgeInsets.fromLTRB(
