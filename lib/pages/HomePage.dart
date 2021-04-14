@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage>
                                                         image:
                                                             "value.docs[i]['image']",
                                                         postTitle: "",
-                                                        day: day,
+                                                        day: "Apr 18",
                                                       ),
                                                     );
                                                   });

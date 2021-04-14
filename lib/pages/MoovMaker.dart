@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
@@ -1229,8 +1230,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                             ),
                             onPressed: () async {
                               HapticFeedback.lightImpact();
-                              print(currentValue);
-
+                              
                               // for (int i = 0;
                               //     i < inviteesNameList.length;
                               //     i++) {
@@ -1295,6 +1295,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                   if (uploadTask.snapshot.state ==
                                       firebase_storage.TaskState.success) {
                                     print("added to Firebase Storage");
+                                    final String postId = generateRandomString(20);
                                     final String downloadUrl =
                                         await taskSnapshot.ref.getDownloadURL();
                                     currentUser.isBusiness
@@ -1319,7 +1320,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                             venmo: venmoInt,
                                             imageUrl: downloadUrl,
                                             userId: strUserId,
-                                            postId: generateRandomString(20),
+                                            postId: postId,
                                             posterName: currentUser.displayName,
                                             push: push)
                                         : Database().createPost(
@@ -1337,14 +1338,25 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                             venmo: venmoInt,
                                             imageUrl: downloadUrl,
                                             userId: strUserId,
-                                            postId: generateRandomString(20),
+                                            postId: postId,
                                             posterName: currentUser.displayName,
                                             push: push);
 
-                                    Database().betaActivityTracker(
-                                        currentUser.displayName,
-                                        Timestamp.now(),
-                                        "post");
+                                   
+                                   nextSunday().then((value) {
+                                wrapupRef
+                                    .doc(currentUser.id)
+                                    .collection('wrapUp')
+                                    .doc(value)
+                                    .set({
+                                      "ownMOOVs": FieldValue.arrayUnion([{
+                                        "pic": downloadUrl,
+                                        "postId": postId,
+                                        "title": titleController.text
+                                      }]), 
+                                    },SetOptions(merge: true));
+                              });
+
                                     setState(() {
                                       isUploading = false;
                                     });

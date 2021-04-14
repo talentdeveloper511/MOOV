@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:intl/intl.dart';
 
 class SundayWrapUp extends StatefulWidget {
   final String title, description, choice1, choice2, image, postTitle, day;
@@ -152,8 +153,9 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                       ],
                                     ),
                                     Container(
+                                      width: MediaQuery.of(context).size.width * .75,
                                       height: 150,
-                                      padding: EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(2.0),
                                       child: Material(
                                         elevation: 4.0,
                                         borderRadius:
@@ -172,9 +174,9 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                             return Padding(
                                               padding: index == 0
                                                   ? EdgeInsets.only(
-                                                      right: 10.0, left: 0)
+                                                      right: 0.0, left: 10)
                                                   : EdgeInsets.only(
-                                                      right: 20.0, left: 0),
+                                                      right: 10.0, left: 0),
                                               child: Container(
                                                 height: 100,
                                                 child:
@@ -367,18 +369,18 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                           itemExtent: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .37,
+                                              .385,
                                           itemCount: nextDeals.length,
                                           itemBuilder: (context, index) {
                                             return Padding(
                                               padding: index == 0
                                                   ? EdgeInsets.only(
-                                                      right: 0.0,
-                                                      left: 0,
+                                                      right: 10.0,
+                                                      left: 10,
                                                       top: 10,
                                                       bottom: 10)
                                                   : EdgeInsets.only(
-                                                      right: 0.0,
+                                                      right: 10.0,
                                                       left: 0,
                                                       top: 10,
                                                       bottom: 10),
@@ -395,17 +397,20 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                                                       .black),
                                                             )),
                                                   height: 100,
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                        nextDeals[index]['day'],
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                      WrapMOOV(index, nextDeals)
-                                                    ],
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(right: 8.0),
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          nextDeals[index]['day'],
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                        WrapMOOV(index, nextDeals)
+                                                      ],
+                                                    ),
                                                   )),
                                             );
                                           },
@@ -479,7 +484,7 @@ class WrapMOOV extends StatelessWidget {
           width: 200,
           child: Stack(children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8),
               child: OpenContainer(
                 transitionType: ContainerTransitionType.fade,
                 transitionDuration: Duration(milliseconds: 500),
@@ -560,7 +565,7 @@ class WrapMOOV extends StatelessWidget {
             ? Container()
             : Positioned(
                 top: 10,
-                right: 25,
+                right: 17.5,
                 child: Container(
                   height: 30,
                   padding: EdgeInsets.all(4),
@@ -600,31 +605,39 @@ class WrapMOOV extends StatelessWidget {
                           trailingIcon: Icon(Icons.save_sharp,
                               size: 20, color: Colors.blue),
                           onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext builderContext) {
-                                  _timer = Timer(Duration(seconds: 1), () {
-                                    Navigator.of(context).pop();
-                                  });
+                            archiveRef
+                                .doc(moovType[index]['postId'])
+                                .set({
+                                  "memories":
+                                      FieldValue.arrayUnion([currentUser.id])
+                                }, SetOptions(merge: true))
+                                .then((value) => showDialog(
+                                    context: context,
+                                    builder: (BuildContext builderContext) {
+                                      _timer = Timer(Duration(seconds: 1), () {
+                                        Navigator.of(context).pop();
+                                      });
 
-                                  return AlertDialog(
-                                    backgroundColor: Colors.green,
-                                    title: Center(
-                                      child: Text(
-                                        'Saved',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    content: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                    ),
-                                  );
-                                }).then((val) {
-                              if (_timer.isActive) {
-                                _timer.cancel();
-                              }
-                            });
+                                      return AlertDialog(
+                                        backgroundColor: Colors.green,
+                                        title: Center(
+                                          child: Text(
+                                            'Saved',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                        content: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    }))
+                                .then((val) {
+                                  if (_timer.isActive) {
+                                    _timer.cancel();
+                                  }
+                                });
                           }),
                       FocusedMenuItem(
                           title: Text(
@@ -649,4 +662,21 @@ class WrapMOOV extends StatelessWidget {
       ],
     );
   }
+}
+
+//this function gets the next sunday for items to be saved for the wrapup
+Future<String> nextSunday() async {
+  int sunday = 7;
+  DateTime now = new DateTime.now();
+  if (now.weekday == 7) {
+    now = now.add(new Duration(days: 7));
+  }
+  while (now.weekday != sunday) {
+    now = now.add(new Duration(days: 1));
+  }
+  final aDate = DateTime(now.year, now.month, now.day);
+
+  String nextSunday = DateFormat('MMMd').format(aDate);
+
+  return nextSunday;
 }
