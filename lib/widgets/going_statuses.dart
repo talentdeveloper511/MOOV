@@ -6,7 +6,6 @@ import 'package:MOOV/models/going.dart';
 import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
-import 'package:MOOV/pages/archiveDetail.dart';
 import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';

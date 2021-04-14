@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:MOOV/pages/archiveDetail.dart';
+import 'package:MOOV/pages/dealDetail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:animations/animations.dart';
@@ -482,8 +483,13 @@ class WrapMOOV extends StatelessWidget {
               child: OpenContainer(
                 transitionType: ContainerTransitionType.fade,
                 transitionDuration: Duration(milliseconds: 500),
-                openBuilder: (context, _) =>
-                    ArchiveDetail(moovType[index]['postId']),
+                openBuilder: (context, _) => isDeal
+                    ? DealDetail(
+                        moovType[index]['title'],
+                        moovType[index]['pic'],
+                        moovType[index]['description'],
+                        moovType[index]['day'])
+                    : ArchiveDetail(moovType[index]['postId']),
                 closedElevation: 0,
                 closedBuilder: (context, _) => FractionallySizedBox(
                   widthFactor: 1,

@@ -5,6 +5,7 @@ import 'package:MOOV/pages/RemoteControl.dart';
 import 'package:MOOV/pages/ChangePrivacy.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart' as home;
+import 'package:MOOV/pages/moovMemories.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -153,12 +154,19 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ])),
                                 SizedBox(height: 10.0),
                                 Center(
-                                  child: GradientText(
-                                    "MOOV Memories",
-                                    gradient: LinearGradient(colors: [
-                                      Colors.blue.shade400,
-                                      Colors.blue.shade900,
-                                    ]),
+                                  child: GestureDetector(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MOOVMemories())),
+                                    child: GradientText(
+                                      "MOOV Memories",
+                                      gradient: LinearGradient(colors: [
+                                        Colors.blue.shade400,
+                                        Colors.blue.shade900,
+                                      ]),
+                                    ),
                                   ),
                                 ),
                                 SizedBox(height: 10.0),

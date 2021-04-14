@@ -189,6 +189,7 @@ flutter:
     - lib/assets/dorm1.png
     - lib/assets/rec.png
     - lib/assets/charitybutton1.png
+    - lib/assets/clouds.jpeg
     - lib/assets/tailgatebutton1.png
     - lib/assets/gamesbutton1.png
     - lib/assets/otherbutton2.png
