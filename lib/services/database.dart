@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:google_sign_in/google_sign_in.dart';
@@ -801,8 +802,33 @@ class Database {
   deletePost(String postId, String ownerId, String title, Map statuses,
       String posterName) {
     postsRef.doc(postId).get().then((value) {
-      if (value['statuses'].entries.length == 10) {
+      if (value['statuses'].entries.length >= 10) {
         giveBadge(ownerId, "moovMaker");
+      }
+
+      List<String> statusesList = statuses.keys.toList();
+
+      //this is saving the moov to sunday wrapup for going list people
+      if (statuses != null &&
+          statuses.length != 0 &&
+          statuses[currentUser.id] >= 3)
+      // for (int i = 0; i < statuses.length; i++) {
+      {
+        String who;
+        nextSunday().then((value2) {
+          wrapupRef.doc(currentUser.id).collection('wrapUp').doc(value2).set({
+            "goingMOOVs": FieldValue.arrayUnion([
+              {"pic": value['image'], "title": value['title'], "postId": postId}
+            ]),
+          }, SetOptions(merge: true));
+          print("YAY");
+        });
+
+        // usersRef.doc(statusNames[i]).get().then((snap) => {
+        //       who = snap.data()['displayName'],
+        //       betaActivityTracker(
+        //           who, Timestamp.now(), "responded to post " + postId)
+        //     });
       }
     });
     String filePath = 'images/$ownerId$title';
@@ -814,19 +840,6 @@ class Database {
     if (statuses.length >= 5) {
       betaActivityTracker(posterName, Timestamp.now(), "5+ statuses");
     }
-    List<String> statusNames = statuses.keys.toList();
-
-    if (statuses != null && statuses.length != 0)
-      for (int i = 0; i < statuses.length; i++) {
-        String who;
-
-        usersRef.doc(statusNames[i]).get().then((snap) => {
-              who = snap.data()['displayName'],
-              betaActivityTracker(
-                  who, Timestamp.now(), "responded to post " + postId)
-            });
-      }
-    //BETA
 
     ///this is for deleting related notifications
     FirebaseFirestore.instance
@@ -908,9 +921,31 @@ class Database {
     return (number).abs() % 10;
   }
 
-  Future<void> acceptFriendRequest(
-      String senderId, String receiverId, String strName, String strPic) async {
+  Future<void> acceptFriendRequest(String senderId, String receiverId,
+      String otherName, String otherPic) async {
     return dbRef.runTransaction((transaction) async {
+      //adding to sunday wrapup for receiver
+      nextSunday().then((value) {
+        wrapupRef.doc(currentUser.id).collection('wrapUp').doc(value).set({
+          "newFriends": FieldValue.arrayUnion([
+            {"pic": otherPic, "id": senderId, "name": otherName}
+          ]),
+        }, SetOptions(merge: true));
+      });
+
+      //adding to sunday wrapup for sender
+      nextSunday().then((value) {
+        wrapupRef.doc(senderId).collection('wrapUp').doc(value).set({
+          "newFriends": FieldValue.arrayUnion([
+            {
+              "pic": currentUser.photoUrl,
+              "id": currentUser.id,
+              "name": currentUser.displayName
+            }
+          ]),
+        }, SetOptions(merge: true));
+      });
+
       usersRef.doc(receiverId).get().then((value) {
         if (value['friendArray'] != null &&
             lastDigit(value['friendArray'].length) == 9) {

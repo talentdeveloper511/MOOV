@@ -152,8 +152,10 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         )
                                       ],
                                     ),
+                                    SizedBox(height: 8),
                                     Container(
-                                      width: MediaQuery.of(context).size.width * .75,
+                                      width: MediaQuery.of(context).size.width *
+                                          .75,
                                       height: 150,
                                       padding: EdgeInsets.all(2.0),
                                       child: Material(
@@ -193,6 +195,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                           (goingMOOVs.isNotEmpty)
                               ? Column(
                                   children: [
+                                    SizedBox(height: 8),
                                     Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -212,8 +215,9 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         )
                                       ],
                                     ),
+                                    SizedBox(height: 4),
                                     Container(
-                                      height: 150,
+                                      height: 165,
                                       padding: EdgeInsets.all(8.0),
                                       child: Material(
                                         elevation: 4.0,
@@ -232,9 +236,9 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                             return Padding(
                                               padding: index == 0
                                                   ? EdgeInsets.only(
-                                                      right: 10.0, left: 10)
+                                                      right: 0.0, left: 10)
                                                   : EdgeInsets.only(
-                                                      right: 20.0, left: 0),
+                                                      right: 10.0, left: 0),
                                               child: Container(
                                                 height: 100,
                                                 child:
@@ -335,6 +339,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                 }
                                 return Column(
                                   children: [
+                                    SizedBox(height: 4),
                                     Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -351,7 +356,8 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         Text(
                                           "Another week of absurd deals.",
                                           style: TextStyle(fontSize: 12),
-                                        )
+                                        ),
+                                        SizedBox(height: 4),
                                       ],
                                     ),
                                     Container(
@@ -369,7 +375,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                           itemExtent: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              .385,
+                                              .41,
                                           itemCount: nextDeals.length,
                                           itemBuilder: (context, index) {
                                             return Padding(
@@ -380,7 +386,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                                       top: 10,
                                                       bottom: 10)
                                                   : EdgeInsets.only(
-                                                      right: 10.0,
+                                                      right: 20.0,
                                                       left: 0,
                                                       top: 10,
                                                       bottom: 10),
@@ -398,17 +404,21 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                                             )),
                                                   height: 100,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.only(right: 8.0),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 8.0),
                                                     child: Column(
                                                       children: [
                                                         Text(
-                                                          nextDeals[index]['day'],
+                                                          nextDeals[index]
+                                                              ['day'],
                                                           style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600),
                                                         ),
-                                                        WrapMOOV(index, nextDeals)
+                                                        WrapMOOV(
+                                                            index, nextDeals)
                                                       ],
                                                     ),
                                                   )),
@@ -417,6 +427,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         ),
                                       ),
                                     ),
+                                    SizedBox(height: 15)
                                   ],
                                 );
                               }),

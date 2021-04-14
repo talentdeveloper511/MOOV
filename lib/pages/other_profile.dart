@@ -506,8 +506,8 @@ class _OtherProfileState extends State<OtherProfile> {
                                                           .acceptFriendRequest(
                                                               id,
                                                               strUserId,
-                                                              strUserName,
-                                                              strPic);
+                                                              displayName,
+                                                              photoUrl);
                                                       setState(() {
                                                         status = 1;
                                                       });
