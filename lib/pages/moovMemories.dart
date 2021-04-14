@@ -45,6 +45,7 @@ class MOOVMemories extends StatelessWidget {
           FutureBuilder(
               future: archiveRef
                   .where("memories", arrayContains: currentUser.id)
+                  .orderBy("startDate")
                   .get(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
@@ -52,7 +53,7 @@ class MOOVMemories extends StatelessWidget {
                     height: 100,
                     child: Center(
                         child: Text(
-                      "Post yoccur",
+                      "Error :(",
                       style: TextStyle(
                           color: TextThemes.ndBlue,
                           fontWeight: FontWeight.bold,

@@ -18,6 +18,7 @@ import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/studentClubs/studentClubDashboard.dart';
 import 'package:MOOV/widgets/locationCheckIn.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -734,7 +735,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     context,
                     PageTransition(
                         type: PageTransitionType.topToBottom,
-                        child: MoovMaker(postModel: PostModel())));
+                        child: MoovMaker()));
               },
               label: Row(
                 children: [
@@ -924,7 +925,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
           SearchBar(),
 
-          currentUser.isBusiness ? Biz() : MOOVSPage(),
+          currentUser.isBusiness
+              ? Biz()
+              : currentUser.userType == "clubExecutive"
+                  ? StudentClubDashboard()
+                  : MOOVSPage(),
           ProfilePage()
         ],
         controller: pageController,
@@ -938,7 +943,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
             BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
-            BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
+            currentUser.userType == "clubExecutive"
+                ? BottomNavigationBarItem(
+                    icon: Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text("YOUR \nTAB",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center),
+                  ))
+                : BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
             BottomNavigationBarItem(
                 icon: CircleAvatar(
                     radius: 16,

@@ -32,9 +32,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:image_cropper/image_cropper.dart';
 
 class MoovMaker extends StatefulWidget {
-  final PostModel postModel;
 
-  MoovMaker({Key key, @required this.postModel}) : super(key: key);
   @override
   _MoovMakerState createState() => _MoovMakerState();
 }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:MOOV/pages/archiveDetail.dart';
 import 'package:MOOV/pages/dealDetail.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -255,6 +256,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                           (newFriends.isNotEmpty)
                               ? Column(
                                   children: [
+                                    SizedBox(height: 4),
                                     Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -271,7 +273,8 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         Text(
                                           "Check in with your new friends.",
                                           style: TextStyle(fontSize: 12),
-                                        )
+                                        ),
+                                        SizedBox(height: 4),
                                       ],
                                     ),
                                     Container(
@@ -305,15 +308,27 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                                       bottom: 10),
                                               child: Container(
                                                 height: 100,
-                                                child: CircleAvatar(
-                                                  backgroundColor:
-                                                      TextThemes.ndBlue,
+                                                child: GestureDetector(
+                                                  onTap: () => Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OtherProfile(
+                                                                newFriends[
+                                                                        index]
+                                                                    ['id'])),
+                                                  ),
                                                   child: CircleAvatar(
-                                                      radius: 52.5,
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        currentUser.photoUrl,
-                                                      )),
+                                                    backgroundColor:
+                                                        TextThemes.ndBlue,
+                                                    child: CircleAvatar(
+                                                        radius: 52.5,
+                                                        backgroundImage:
+                                                            NetworkImage(
+                                                          newFriends[index]
+                                                              ['pic'],
+                                                        )),
+                                                  ),
                                                 ),
                                               ),
                                             );

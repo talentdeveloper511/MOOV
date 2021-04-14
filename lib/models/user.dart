@@ -25,6 +25,7 @@ class User {
   final int nameChangeLimit;
   final GeoPoint businessLocation;
   final String businessType;
+  final String userType;
 
   User(
       {this.id,
@@ -51,7 +52,7 @@ class User {
       this.followers,
       this.businessLocation,
       this.businessType,
-      });
+      this.userType});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -79,6 +80,6 @@ class User {
         followers: doc.data()['followers'],
         businessLocation: doc.data()['businessLocation'],
         businessType: doc.data()['businessType'],
-        );
+        userType: doc.data()['userType']);
   }
 }
