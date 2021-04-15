@@ -927,7 +927,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
           currentUser.isBusiness
               ? Biz()
-              : currentUser.userType == "clubExecutive"
+              : currentUser.userType['type'] == "clubExecutive"
                   ? StudentClubDashboard()
                   : MOOVSPage(),
           ProfilePage()
@@ -943,7 +943,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
             BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
-            currentUser.userType == "clubExecutive"
+            currentUser.userType['type'] == "clubExecutive"
                 ? BottomNavigationBarItem(
                     icon: Padding(
                     padding: const EdgeInsets.only(top: 4.0),

@@ -204,6 +204,7 @@ flutter:
     - lib/assets/club2.png
     - lib/assets/bag1.png
     - lib/assets/fg1.png
+    - lib/assets/clubMeeting.gif
     - lib/assets/ff.png
     - lib/assets/egg.png
     - lib/assets/moovblue.png

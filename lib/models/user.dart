@@ -25,7 +25,7 @@ class User {
   final int nameChangeLimit;
   final GeoPoint businessLocation;
   final String businessType;
-  final String userType;
+  final Map userType;
 
   User(
       {this.id,

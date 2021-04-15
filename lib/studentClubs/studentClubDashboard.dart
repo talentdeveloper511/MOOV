@@ -1,107 +1,126 @@
+import 'dart:async';
+import 'dart:math';
+
+import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:animations/animations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class StudentClubDashboard extends StatelessWidget {
   const StudentClubDashboard({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButton: Row(
-          children: [
-            SizedBox(
-              width: 160,
-              child: ExpandableFab(
-                distance: 80.0,
-                children: [
-                  ActionButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.chat_bubble, color: Colors.white),
-                  ),
-                  ActionButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.campaign, size: 30, color: Colors.white,),
-                  ),
-                  ActionButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.trending_up, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            Stack(
-              alignment: Alignment.center,
+    return (currentUser.userType['name'] == "")
+        ? ClubMaker()
+        : Scaffold(
+            floatingActionButton: Row(
               children: [
-                Image.asset(
-                  "lib/assets/clubDash.jpeg",
-                  width: MediaQuery.of(context).size.width,
-                  height: 150,
-                  fit: BoxFit.cover,
+                SizedBox(
+                  width: 160,
+                  child: ExpandableFab(
+                    distance: 80.0,
+                    children: [
+                      ActionButton(
+                        onPressed: () {},
+                        icon:
+                            const Icon(Icons.chat_bubble, color: Colors.white),
+                      ),
+                      ActionButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.campaign,
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                      ),
+                      ActionButton(
+                        onPressed: () {},
+                        icon:
+                            const Icon(Icons.trending_up, color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  "Club Dashboard",
-                  style: TextThemes.headlineWhite,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(top: 65.0, left: 20, right: 20),
-                  child: Text("Here's your club's new best friend",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 13)),
-                ),
-                Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: Text("Edit", style: TextStyle(color: Colors.blue)),
-                )
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Row(
-                children: [
-                  Container(
-                      height: 100.0,
-                      width: MediaQuery.of(context).size.width * .8,
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.blue[50],
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Center(
-                                child: Text(
-                              "Add your members now!",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: TextThemes.ndBlue),
-                            ))),
-                      )),
-                  Container(
-                    width: MediaQuery.of(context).size.width * .2,
-                    child: Column(
-                      children: [Icon(Icons.person_search), Text("Recruit")],
+            backgroundColor: Colors.white,
+            body: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      "lib/assets/clubDash.jpeg",
+                      width: MediaQuery.of(context).size.width,
+                      height: 150,
+                      fit: BoxFit.cover,
                     ),
+                    Text(
+                      "Club Dashboard",
+                      style: TextThemes.headlineWhite,
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 65.0, left: 20, right: 20),
+                      child: Text("Here's your club's new best friend",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 13)),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: Text("Edit", style: TextStyle(color: Colors.blue)),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    children: [
+                      Container(
+                          height: 100.0,
+                          width: MediaQuery.of(context).size.width * .8,
+                          color: Colors.transparent,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.blue[50],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                child: Center(
+                                    child: Text(
+                                  "Add your members now!",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: TextThemes.ndBlue),
+                                ))),
+                          )),
+                      Container(
+                        width: MediaQuery.of(context).size.width * .2,
+                        child: Column(
+                          children: [
+                            Icon(Icons.person_search),
+                            Text("Recruit")
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height: 30),
-            Text("Next Meeting",
-                style: TextStyle(color: TextThemes.ndBlue, fontSize: 18)),
-            SizedBox(height: 10),
-            StudentClubMOOV(),
-          ],
-        ));
+                ),
+                SizedBox(height: 30),
+                Text("Next Meeting",
+                    style: TextStyle(color: TextThemes.ndBlue, fontSize: 18)),
+                SizedBox(height: 10),
+                StudentClubMOOV(),
+              ],
+            ));
   }
 }
 
@@ -130,8 +149,7 @@ class StudentClubMOOV extends StatelessWidget {
                     child: Container(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                            "https://firebasestorage.googleapis.com/v0/b/moov4-4d3c4.appspot.com/o/images?alt=media&token=2cc05217-1041-4b9b-b427-2251b3ca429d",
+                        child: Image.asset("lib/assets/clubMeeting.gif",
                             fit: BoxFit.cover),
                       ),
                       // margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
@@ -175,19 +193,43 @@ class StudentClubMOOV extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          "title",
+                          "Meeting Title",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontFamily: 'Solway',
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 16),
+                              fontSize: 20),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
+              Positioned(
+                          top: 10,
+                          right: 2.5,
+                          child: Container(
+                            height: 30,
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.pink[400],
+                                    Colors.purple[300]
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Text(
+                              "Friday, Aug. 27",
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        )
             ]),
           )
         ]),
@@ -396,7 +438,8 @@ class _ExpandableFabState extends State<ExpandableFab>
           child: FloatingActionButton.extended(
             onPressed: _toggle,
             icon: const Icon(Icons.home_repair_service, color: Colors.white),
-            label: Text("Toolkit", style: TextStyle(color: Colors.white, fontSize: 18)),
+            label: Text("Toolkit",
+                style: TextStyle(color: Colors.white, fontSize: 18)),
           ),
         ),
       ),
@@ -494,5 +537,232 @@ class FakeItem extends StatelessWidget {
         color: Colors.grey.shade300,
       ),
     );
+  }
+}
+
+class ClubMaker extends StatefulWidget {
+  ClubMaker();
+
+  @override
+  _ClubMakerState createState() => _ClubMakerState();
+}
+
+class _ClubMakerState extends State<ClubMaker> {
+  final clubNameController = TextEditingController();
+  final bioController = TextEditingController();
+  bool isUploading = false;
+  bool blankField = false;
+  bool goodCheck = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: (isUploading)
+          ? linearProgress()
+          : (goodCheck)
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Sweet!",
+                        style: TextThemes.headline1,
+                      ),
+                      SizedBox(height: 30),
+                      Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      )
+                    ],
+                  ),
+                )
+              : SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset(
+                              "lib/assets/clubDash.jpeg",
+                              width: MediaQuery.of(context).size.width,
+                              height: 150,
+                              fit: BoxFit.cover,
+                            ),
+                            Text(
+                              "Club Maker",
+                              style: TextThemes.headlineWhite,
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30.0),
+                          child: Text("What's your club's name?"),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 20),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                blankField = false;
+                              });
+                            },
+                            controller: clubNameController,
+                            decoration: InputDecoration(
+                              labelText: "Club Name",
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30.0),
+                          child: Text(".. and a lil bit about it? (optional)"),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 20),
+                          child: TextFormField(
+                            controller: bioController,
+                            decoration: InputDecoration(
+                              labelText: "Short Club Bio",
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        blankField
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  blankField
+                                      ? Text("what's your name again?",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ))
+                                      : Container(),
+                                ],
+                              )
+                            : Container(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0, top: 20),
+                          child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(80.0)),
+                              padding: EdgeInsets.all(0.0),
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        TextThemes.ndBlue,
+                                        Color(0xff64B6FF)
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth: 125.0, minHeight: 50.0),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Save",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 22),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () async {
+                                HapticFeedback.lightImpact();
+
+                                if (clubNameController.text == "") {
+                                  setState(() {
+                                    blankField = true;
+                                  });
+                                }
+                                if (blankField == false) {
+                                  setState(() {
+                                    isUploading = true;
+                                  });
+                                  String clubId = generateRandomString(20);
+                                  FirebaseFirestore.instance
+                                      .collection('notreDame')
+                                      .doc('data')
+                                      .collection('clubs')
+                                      .doc(clubId)
+                                      .set({
+                                    "bio": bioController.text,
+                                    "clubName": clubNameController.text,
+                                    "clubId": clubId,
+                                    "joinDate": DateTime.now(),
+                                  }, SetOptions(merge: true));
+
+                                  usersRef
+                                      .doc(currentUser.id)
+                                      .set({
+                                        "userType": {
+                                          "name": clubNameController.text
+                                        }
+                                      }, SetOptions(merge: true))
+                                      .then((value) => setState(() {
+                                            isUploading = false;
+                                          }))
+                                      .then((value) => setState(() {
+                                            goodCheck = true;
+                                          }))
+                                      .then((value) =>
+                                          Timer(Duration(seconds: 1), () {
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              PageRouteBuilder(
+                                                  pageBuilder: (_, __, ___) =>
+                                                      Home()),
+                                              (Route<dynamic> route) => false,
+                                            );
+                                          }));
+                                }
+                              }),
+                        ),
+                        Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Club already made?",
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "Have another exec. add you \nas an exec.",
+                                    style: TextStyle(fontSize: 12),
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                ),
+    );
+  }
+
+  String generateRandomString(int len) {
+    var r = Random();
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
+        .join();
   }
 }
