@@ -118,190 +118,207 @@ class StudentClubDashboard extends StatelessWidget {
                 Text("Next Meeting",
                     style: TextStyle(color: TextThemes.ndBlue, fontSize: 18)),
                 SizedBox(height: 10),
-                StudentClubMOOV(),
+                StudentClubMOOV(currentUser.userType['id']),
               ],
             ));
   }
 }
 
 class StudentClubMOOV extends StatelessWidget {
-  const StudentClubMOOV({Key key}) : super(key: key);
+  final String clubId;
+  const StudentClubMOOV(this.clubId);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(children: [
-          Container(
-            height: 150,
-            width: 300,
-            child: Stack(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 8),
-                child: OpenContainer(
-                  transitionType: ContainerTransitionType.fade,
-                  transitionDuration: Duration(milliseconds: 500),
-                  openBuilder: (context, _) => PostDetail("id"),
-                  closedElevation: 0,
-                  closedBuilder: (context, _) => FractionallySizedBox(
-                    widthFactor: 1,
-                    heightFactor: 1,
-                    child: Container(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset("lib/assets/clubMeeting.gif",
-                            fit: BoxFit.cover),
-                      ),
-                      // margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    alignment: Alignment(0.0, 0.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: <Color>[
-                            Colors.black.withAlpha(0),
-                            Colors.black,
-                            Colors.black12,
-                          ],
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(
-                          "Meeting Title",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Solway',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 20),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                          top: 10,
-                          right: 2.5,
+    return StreamBuilder(
+        stream: postsRef
+            .where("clubId", isEqualTo: clubId)
+            // .orderBy("startDate")
+            .limit(1)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data == null) {
+            Container();
+          }
+          String id = snapshot.data.docs[0]['postId'];
+          String pic = snapshot.data.docs[0]['image'];
+          String title = snapshot.data.docs[0]['title'];
+
+          return Column(
+            children: [
+              Stack(children: [
+                Container(
+                  height: 150,
+                  width: 300,
+                  child: Stack(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 8),
+                      child: OpenContainer(
+                        transitionType: ContainerTransitionType.fade,
+                        transitionDuration: Duration(milliseconds: 500),
+                        openBuilder: (context, _) => PostDetail(id),
+                        closedElevation: 0,
+                        closedBuilder: (context, _) => FractionallySizedBox(
+                          widthFactor: 1,
+                          heightFactor: 1,
                           child: Container(
-                            height: 30,
-                            padding: EdgeInsets.all(4),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(pic,
+                                  fit: BoxFit.cover),
+                            ),
+                            // margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
                             decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.pink[400],
-                                    Colors.purple[300]
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
                                 ),
-                                borderRadius: BorderRadius.circular(10.0)),
-                            child: Text(
-                              "Friday, Aug. 27",
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              ],
                             ),
                           ),
-                        )
-            ]),
-          )
-        ]),
-        SizedBox(height: 5),
-        Container(
-            height: 80,
-            width: MediaQuery.of(context).size.width * .6,
-            color: Colors.transparent,
-            child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.green[50],
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                child: Column(children: [
-                  Padding(
+                        ),
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Member Statuses",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * .2,
-                        child: Column(
-                          children: [
-                            Text(
-                              "5",
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          alignment: Alignment(0.0, 0.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: <Color>[
+                                  Colors.black.withAlpha(0),
+                                  Colors.black,
+                                  Colors.black12,
+                                ],
+                              ),
                             ),
-                            Text("Going ", style: TextStyle(fontSize: 10))
-                          ],
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(
+                                title,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Solway',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * .2,
-                        child: Column(
-                          children: [
-                            Text(
-                              "2",
-                              style: TextStyle(
-                                  color: Colors.yellow[800],
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700),
+                    ),
+                    Positioned(
+                      top: 10,
+                      right: 2.5,
+                      child: Container(
+                        height: 30,
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Colors.pink[400], Colors.purple[300]],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
-                            Text("Undecided", style: TextStyle(fontSize: 10))
-                          ],
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Text(
+                          "Thursday, Aug. 15",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * .2,
-                        child: Column(
+                    )
+                  ]),
+                )
+              ]),
+              SizedBox(height: 5),
+              Container(
+                  height: 80,
+                  width: MediaQuery.of(context).size.width * .6,
+                  color: Colors.transparent,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.green[50],
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: Column(children: [
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Member Statuses",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(
-                              "2",
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700),
+                            Container(
+                              width: MediaQuery.of(context).size.width * .2,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "5",
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text("Going ", style: TextStyle(fontSize: 10))
+                                ],
+                              ),
                             ),
-                            Text("Not Going", style: TextStyle(fontSize: 10))
+                            Container(
+                              width: MediaQuery.of(context).size.width * .2,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "2",
+                                    style: TextStyle(
+                                        color: Colors.yellow[800],
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text("Undecided",
+                                      style: TextStyle(fontSize: 10))
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * .2,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "2",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text("Not Going",
+                                      style: TextStyle(fontSize: 10))
+                                ],
+                              ),
+                            ),
                           ],
-                        ),
-                      ),
-                    ],
-                  )
-                ]))),
-      ],
-    );
+                        )
+                      ]))),
+            ],
+          );
+        });
   }
 }
 
