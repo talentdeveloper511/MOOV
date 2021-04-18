@@ -251,58 +251,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
           ),
           backgroundColor: Colors.white,
           body: _searchTerm == null
-              ? SingleChildScrollView(
-                  child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.pink[300], Colors.pink[200]],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                  padding: isLargePhone
-                                      ? const EdgeInsets.only(bottom: 50)
-                                      : const EdgeInsets.only(bottom: 20),
-                                  child: RichText(
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                          style: TextThemes.mediumbody,
-                                          children: [
-                                            TextSpan(
-                                                text: "Invite them,",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w300)),
-                                            TextSpan(
-                                                text: " now",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            TextSpan(
-                                                text: ".",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w300))
-                                          ]))),
-                              Padding(
-                                  padding: EdgeInsets.only(bottom: 250),
-                                  child: Image.asset('lib/assets/ff.png'))
-                            ],
-                          ),
-                        ),
-                      )),
-                )
+              ? Container()
               : StreamBuilder<List<AlgoliaObjectSnapshot>>(
                   stream: Stream.fromFuture(_operation0(_searchTerm)),
                   builder: (context, snapshot0) {

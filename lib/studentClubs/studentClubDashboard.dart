@@ -4,12 +4,17 @@ import 'dart:math';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/post_detail.dart';
+import 'package:MOOV/studentClubs/recruitClub.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StudentClubDashboard extends StatelessWidget {
   const StudentClubDashboard({Key key}) : super(key: key);
@@ -83,32 +88,20 @@ class StudentClubDashboard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Row(
                     children: [
-                      Container(
-                          height: 100.0,
-                          width: MediaQuery.of(context).size.width * .8,
-                          color: Colors.transparent,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.blue[50],
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0))),
-                                child: Center(
-                                    child: Text(
-                                  "Add your members now!",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: TextThemes.ndBlue),
-                                ))),
-                          )),
+                      ClubMembersList("0ssovEcwdPXLkXQmEJKr"),
                       Container(
                         width: MediaQuery.of(context).size.width * .2,
-                        child: Column(
-                          children: [
-                            Icon(Icons.person_search),
-                            Text("Recruit")
-                          ],
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RecruitClub([]))),
+                          child: Column(
+                            children: [
+                              Icon(Icons.person_search),
+                              Text("Recruit")
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -150,42 +143,44 @@ class StudentClubMOOV extends StatelessWidget {
                       width: 300,
                       child: Stack(children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0, bottom: 8),
-                          child: 
-                          
-                          OpenContainer(
-                            transitionType: ContainerTransitionType.fade,
-                            transitionDuration: Duration(milliseconds: 500),
-                            openBuilder: (context, _) => PostDetail("aSjYC6ALUy8UIedyzBQ9"),
-                            closedElevation: 0,
-                            closedBuilder: (context, _) => FractionallySizedBox(
-                            widthFactor: 1,
-                            heightFactor: 1,
-                            child: Container(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset("lib/assets/clubMeeting.gif",
-                                    fit: BoxFit.cover),
-                              ),
-                              // margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset:
-                                        Offset(0, 3), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ))
-                        ),
+                            padding: const EdgeInsets.only(top: 8.0, bottom: 8),
+                            child: OpenContainer(
+                                transitionType: ContainerTransitionType.fade,
+                                transitionDuration: Duration(milliseconds: 500),
+                                openBuilder: (context, _) =>
+                                    PostDetail("aSjYC6ALUy8UIedyzBQ9"),
+                                closedElevation: 0,
+                                closedBuilder: (context, _) =>
+                                    FractionallySizedBox(
+                                      widthFactor: 1,
+                                      heightFactor: 1,
+                                      child: Container(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.asset(
+                                              "lib/assets/clubMeeting.gif",
+                                              fit: BoxFit.cover),
+                                        ),
+                                        // margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 5,
+                                              blurRadius: 7,
+                                              offset: Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ))),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Align(
@@ -230,7 +225,10 @@ class StudentClubMOOV extends StatelessWidget {
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Colors.pink[400], Colors.purple[300]],
+                                  colors: [
+                                    Colors.pink[400],
+                                    Colors.purple[300]
+                                  ],
                                   begin: Alignment.centerLeft,
                                   end: Alignment.centerRight,
                                 ),
@@ -238,7 +236,8 @@ class StudentClubMOOV extends StatelessWidget {
                             child: Text(
                               "Monday, Aug. 30",
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white, fontSize: 18),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
                             ),
                           ),
                         )
@@ -247,74 +246,75 @@ class StudentClubMOOV extends StatelessWidget {
                   ]),
                 ),
                 Container(
-                  height: 80,
-                  width: MediaQuery.of(context).size.width * .6,
-                  color: Colors.transparent,
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.green[50],
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                      child: Column(children: [
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Member Statuses",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * .2,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "5",
-                                    style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  Text("Going ", style: TextStyle(fontSize: 10))
-                                ],
+                    height: 80,
+                    width: MediaQuery.of(context).size.width * .6,
+                    color: Colors.transparent,
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.green[50],
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
+                        child: Column(children: [
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Member Statuses",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width * .2,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "5",
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    Text("Going ",
+                                        style: TextStyle(fontSize: 10))
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * .2,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "2",
-                                    style: TextStyle(
-                                        color: Colors.yellow[800],
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  Text("Undecided",
-                                      style: TextStyle(fontSize: 10))
-                                ],
+                              Container(
+                                width: MediaQuery.of(context).size.width * .2,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "2",
+                                      style: TextStyle(
+                                          color: Colors.yellow[800],
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    Text("Undecided",
+                                        style: TextStyle(fontSize: 10))
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * .2,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "2",
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  Text("Not Going",
-                                      style: TextStyle(fontSize: 10))
-                                ],
+                              Container(
+                                width: MediaQuery.of(context).size.width * .2,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "2",
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    Text("Not Going",
+                                        style: TextStyle(fontSize: 10))
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      ]))),
+                            ],
+                          )
+                        ]))),
               ],
             );
           }
@@ -959,5 +959,205 @@ class _ClubMakerState extends State<ClubMaker> {
         'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
         .join();
+  }
+}
+
+class ClubMembersList extends StatefulWidget {
+  final String clubId;
+  ClubMembersList(this.clubId);
+
+  @override
+  _ClubMembersListState createState() => _ClubMembersListState();
+}
+
+class _ClubMembersListState extends State<ClubMembersList> {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: clubsRef.doc(widget.clubId).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data == null) {
+            return Container();
+          }
+
+          Map members = snapshot.data['members'];
+          List memberNames = members.keys.toList();
+          List memberStatus = members.values.toList();
+
+          if (memberNames.length <= 1) {
+            return Container(
+                height: 100.0,
+                width: MediaQuery.of(context).size.width * .8,
+                color: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: Center(
+                          child: Text(
+                        "Add your members now!",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: TextThemes.ndBlue),
+                      ))),
+                ));
+          }
+          return Stack(
+            children: [
+              Container(
+                  height: 100.0,
+                  width: MediaQuery.of(context).size.width * .8,
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: ListView.builder(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: memberNames.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return StreamBuilder(
+                              stream:
+                                  usersRef.doc(memberNames[index]).snapshots(),
+                              builder: (context, snapshot2) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 4),
+                                      FocusedMenuHolder(
+                                        menuWidth:
+                                            MediaQuery.of(context).size.width *
+                                                0.50,
+                                        blurSize: 5.0,
+                                        menuItemExtent: 45,
+                                        menuBoxDecoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15.0))),
+                                        duration: Duration(milliseconds: 100),
+                                        animateMenuItems: true,
+                                        blurBackgroundColor: Colors.black54,
+                                        openWithTap:
+                                            true, // Open Focused-Menu on Tap rather than Long Press
+                                        menuOffset:
+                                            10.0, // Offset value to show menuItem from the selected item
+                                        bottomOffsetHeight:
+                                            80.0, // Offset height to consider, for showing the menu item ( for Suggestions bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                                        menuItems: <FocusedMenuItem>[
+                                          // Add Each FocusedMenuItem  for Menu Options
+
+                                          FocusedMenuItem(
+                                              title: Text("Message"),
+                                              trailingIcon:
+                                                  Icon(Icons.message),
+                                              onPressed: () {}),
+
+                                          FocusedMenuItem(
+                                              title: Text("Change title/status"),
+                                              trailingIcon: Icon(Icons.edit),
+                                              onPressed: () {}),
+                                          FocusedMenuItem(
+                                              title: Text(
+                                                "Remove from club",
+                                                style: TextStyle(
+                                                    color: Colors.redAccent),
+                                              ),
+                                              trailingIcon: Icon(
+                                                Icons.directions_walk,
+                                                color: Colors.redAccent,
+                                              ),
+                                              onPressed: () {}),
+                                        ],
+                                        onPressed: () {},
+                                        child: CircleAvatar(
+                                            radius: 35,
+                                            backgroundColor:
+                                                memberStatus[index] == -1
+                                                    ? Colors.blue
+                                                    : memberStatus[index] == 1
+                                                        ? Colors.red
+                                                        : TextThemes.ndGold,
+                                            child: CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  snapshot2.data['photoUrl']),
+                                              radius: 32,
+                                              backgroundColor:
+                                                  TextThemes.ndBlue,
+                                            )),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(firstNamer(
+                                          snapshot2.data['displayName']))
+                                    ],
+                                  ),
+                                );
+                              });
+                        },
+                      ),
+                    ),
+                  )),
+              Positioned(
+                  bottom: 5,
+                  right: 5,
+                  child: GestureDetector(
+                      onTap: () => showDialog(
+                          context: context,
+                          builder: (_) => CupertinoAlertDialog(
+                                title: Text("Member States"),
+                                content: Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                          "The outer ring color indicates your member's state.\n"),
+                                      Text(
+                                        "Blue = Member has been invited",
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                      Text(
+                                        "Red = Member has not yet paid dues",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      Text(
+                                        "Gold = Member is good to go!",
+                                        style:
+                                            TextStyle(color: Colors.amber[700]),
+                                      ),
+                                      Text(
+                                          "\nPro Tip: Hold down on a pic to see more settings!",
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic)),
+                                    ],
+                                  ),
+                                ),
+                              )),
+                      child: Image.asset(
+                        "lib/assets/colorGrid.png",
+                        height: 20,
+                      )))
+            ],
+          );
+        });
+  }
+
+  String firstNamer(String fullName) {
+    List<String> tempList = fullName.split(" ");
+    int start = 0;
+    int end = tempList.length;
+    if (end > 1) {
+      end = 1;
+    }
+    final selectedWords = tempList.sublist(start, end);
+    String firstName = selectedWords.join(" ");
+    return firstName;
   }
 }

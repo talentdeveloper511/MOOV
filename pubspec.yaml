@@ -219,6 +219,8 @@ flutter:
     - lib/assets/betaDisclaimer.png
     - lib/assets/plate.png
     - lib/assets/dance.png
+    - lib/assets/recruit.jpeg
+    - lib/assets/colorGrid.png
     - lib/assets/trophy.png
     - lib/assets/trophy2.png
     - lib/assets/verif.png

@@ -70,6 +70,10 @@ final wrapupRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('sundayWrapup');
+final clubsRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('clubs');
 
 final DateTime timestamp = DateTime.now();
 User currentUser;
@@ -944,7 +948,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
             BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
             BottomNavigationBarItem(icon: Icon(Icons.corporate_fare)),
-          currentUser.userType.containsKey("clubExecutive")
+            currentUser.userType.containsKey("clubExecutive")
                 ? BottomNavigationBarItem(icon: Icon(Icons.group_outlined))
                 : BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
             BottomNavigationBarItem(
