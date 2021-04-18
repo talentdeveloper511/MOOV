@@ -924,12 +924,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           HomePage(),
 
           SearchBar(),
+          currentUser.userType.containsKey("clubExecutive")
+              ? StudentClubDashboard()
+              : null,
 
-          currentUser.isBusiness
-              ? Biz()
-              : currentUser.userType['type'] == "clubExecutive"
-                  ? StudentClubDashboard()
-                  : MOOVSPage(),
+          currentUser.isBusiness ? Biz() : MOOVSPage(),
+
           ProfilePage()
         ],
         controller: pageController,
@@ -943,15 +943,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
             BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
-            currentUser.userType['type'] == "clubExecutive"
-                ? BottomNavigationBarItem(
-                    icon: Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Text("YOUR \nTAB",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center),
-                  ))
+            BottomNavigationBarItem(icon: Icon(Icons.corporate_fare)),
+          currentUser.userType.containsKey("clubExecutive")
+                ? BottomNavigationBarItem(icon: Icon(Icons.group_outlined))
                 : BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
             BottomNavigationBarItem(
                 icon: CircleAvatar(

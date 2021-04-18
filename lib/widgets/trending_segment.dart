@@ -80,19 +80,19 @@ class TrendingSegmentState extends State<TrendingSegment>
   // }
   Future request(String type, bool other) async => await Future.delayed(
         const Duration(milliseconds: 500),
-       !other ? () => postsRef
-            .where('type', isEqualTo: type)
-            .where('privacy', isEqualTo: "Public")
-            .orderBy("goingCount", descending: true)
-            .limit(6)
-            .get():
-             () => postsRef
-           .where('isPartyOrBar', isEqualTo: false)
-                          .where('privacy', isEqualTo: 'Public')
-                          .orderBy("goingCount", descending: true)
-                          .limit(6)
-            .get()
-            ,
+        !other
+            ? () => postsRef
+                .where('type', isEqualTo: type)
+                .where('privacy', isEqualTo: "Public")
+                .orderBy("goingCount", descending: true)
+                .limit(6)
+                .get()
+            : () => postsRef
+                .where('isPartyOrBar', isEqualTo: false)
+                .where('privacy', isEqualTo: 'Public')
+                .orderBy("goingCount", descending: true)
+                .limit(6)
+                .get(),
       );
 
   @override
@@ -151,18 +151,18 @@ class TrendingSegmentState extends State<TrendingSegment>
                         if (snapshot.connectionState != ConnectionState.done) {
                           return Column(
                             children: [
-                               Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Image.asset(
-                                              'lib/assets/icons/BarICON.png',
-                                              height: 35),
-                                        ),
-                                        Text('Food/Drink',
-                                            style: TextThemes.extraBold),
-                                      ],
-                                    ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                        'lib/assets/icons/BarICON.png',
+                                        height: 35),
+                                  ),
+                                  Text('Food/Drink',
+                                      style: TextThemes.extraBold),
+                                ],
+                              ),
                               PostOnTrending(
                                 isLoading: true,
                               ),
@@ -233,21 +233,20 @@ class TrendingSegmentState extends State<TrendingSegment>
                         bool hide = false;
                         if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Text('');
-                           if (snapshot.connectionState != ConnectionState.done) {
+                        if (snapshot.connectionState != ConnectionState.done) {
                           return Column(
                             children: [
-                               Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Image.asset(
-                                              'lib/assets/icons/PartyICON.png',
-                                              height: 35),
-                                        ),
-                                        Text('Parties',
-                                            style: TextThemes.extraBold),
-                                      ],
-                                    ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                        'lib/assets/icons/PartyICON.png',
+                                        height: 35),
+                                  ),
+                                  Text('Parties', style: TextThemes.extraBold),
+                                ],
+                              ),
                               PostOnTrending(
                                 isLoading: true,
                               ),
@@ -325,28 +324,27 @@ class TrendingSegmentState extends State<TrendingSegment>
                         bool hide = false;
                         if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Text('');
-                            if (snapshot.connectionState != ConnectionState.done) {
+                        if (snapshot.connectionState != ConnectionState.done) {
                           return Column(
                             children: [
-                               Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Image.asset(
-                                              'lib/assets/icons/ShowICON.png',
-                                              height: 35),
-                                        ),
-                                        Text('More',
-                                            style: TextThemes.extraBold),
-                                      ],
-                                    ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                        'lib/assets/icons/ShowICON.png',
+                                        height: 35),
+                                  ),
+                                  Text('More', style: TextThemes.extraBold),
+                                ],
+                              ),
                               PostOnTrending(
                                 isLoading: true,
                               ),
                             ],
                           );
                         }
-                          
+
                         return Container(
                           height: (snapshot.data.docs.length <= 3 &&
                                   isLargePhone)
@@ -461,7 +459,7 @@ class PostOnTrending extends StatelessWidget {
                         : MediaQuery.of(context).size.width * 0.29,
                   ),
                 ),
-                  Card(
+                Card(
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
@@ -483,7 +481,7 @@ class PostOnTrending extends StatelessWidget {
                         : MediaQuery.of(context).size.width * 0.32,
                   ),
                 ),
-                 Card(
+                Card(
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[300],

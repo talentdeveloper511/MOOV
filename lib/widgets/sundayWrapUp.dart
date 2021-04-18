@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/archiveDetail.dart';
 import 'package:MOOV/pages/dealDetail.dart';
 import 'package:MOOV/pages/home.dart';
@@ -166,7 +167,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         color: colorList[
                                             _random.nextInt(colorList.length)],
                                         child: ListView.builder(
-                                          // physics: AlwaysScrollableScrollPhysics(),
+                                          physics: AlwaysScrollableScrollPhysics(),
                                           scrollDirection: Axis.horizontal,
                                           itemExtent: MediaQuery.of(context)
                                                   .size
@@ -227,6 +228,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         color: colorList[
                                             _random.nextInt(colorList.length)],
                                         child: ListView.builder(
+                                          physics: AlwaysScrollableScrollPhysics(),
                                           scrollDirection: Axis.horizontal,
                                           itemExtent: MediaQuery.of(context)
                                                   .size
@@ -287,6 +289,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         color: colorList[
                                             _random.nextInt(colorList.length)],
                                         child: ListView.builder(
+                                          physics: AlwaysScrollableScrollPhysics(),
                                           scrollDirection: Axis.horizontal,
                                           itemExtent: MediaQuery.of(context)
                                                   .size
@@ -385,7 +388,7 @@ class _SundayWrapUpState extends State<SundayWrapUp> {
                                         color: colorList[
                                             _random.nextInt(colorList.length)],
                                         child: ListView.builder(
-                                          // physics: AlwaysScrollableScrollPhysics(),
+                                          physics: AlwaysScrollableScrollPhysics(),
                                           scrollDirection: Axis.horizontal,
                                           itemExtent: MediaQuery.of(context)
                                                   .size
@@ -497,6 +500,7 @@ class WrapMOOV extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Timer _timer;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     bool isDeal = false;
     if (moovType[0]['day'] != null) {
@@ -591,7 +595,7 @@ class WrapMOOV extends StatelessWidget {
             ? Container()
             : Positioned(
                 top: 10,
-                right: 17.5,
+                right: isLargePhone ? 50 : 17.5,
                 child: Container(
                   height: 30,
                   padding: EdgeInsets.all(4),

@@ -12,6 +12,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/other_profile.dart';
+import 'package:MOOV/studentClubs/studentClubDashboard.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/send_moov.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -94,6 +95,17 @@ class _MOOVSPageState extends State<MOOVSPage>
                 mainAxisAlignment: MainAxisAlignment.center,
                 selectedIndex: selectedIndex,
                 items: [
+                   currentUser.userType.containsKey("clubExecutive")
+                  ? BottomNavyBarItem(
+                    icon: Image.asset('lib/assets/ff.png', height: 27),
+                    title: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Friends'"),
+                        Text("Plans"),
+                      ],
+                    ),
+                  ) : 
                   BottomNavyBarItem(
                     icon: Image.asset('lib/assets/ff.png', height: 27),
                     title: Column(

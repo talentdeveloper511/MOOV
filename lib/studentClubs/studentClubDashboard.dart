@@ -16,7 +16,7 @@ class StudentClubDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (currentUser.userType['name'] == "")
+    return (currentUser.userType[("clubExecutive")] == null)
         ? ClubMaker()
         : Scaffold(
             floatingActionButton: Row(
@@ -138,8 +138,187 @@ class StudentClubMOOV extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data == null) {
-            Container();
+            return Container();
           }
+          if (snapshot.data.docs.isEmpty) {
+            return Column(
+              children: [
+                Container(
+                  child: Stack(children: [
+                    Container(
+                      height: 150,
+                      width: 300,
+                      child: Stack(children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 8),
+                          child: 
+                          
+                          OpenContainer(
+                            transitionType: ContainerTransitionType.fade,
+                            transitionDuration: Duration(milliseconds: 500),
+                            openBuilder: (context, _) => PostDetail("aSjYC6ALUy8UIedyzBQ9"),
+                            closedElevation: 0,
+                            closedBuilder: (context, _) => FractionallySizedBox(
+                            widthFactor: 1,
+                            heightFactor: 1,
+                            child: Container(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset("lib/assets/clubMeeting.gif",
+                                    fit: BoxFit.cover),
+                              ),
+                              // margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset:
+                                        Offset(0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ))
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              alignment: Alignment(0.0, 0.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: <Color>[
+                                      Colors.black.withAlpha(0),
+                                      Colors.black,
+                                      Colors.black12,
+                                    ],
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "Next Meeting",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: 'Solway',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 2.5,
+                          child: Container(
+                            height: 30,
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Colors.pink[400], Colors.purple[300]],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Text(
+                              "Monday, Aug. 30",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        )
+                      ]),
+                    )
+                  ]),
+                ),
+                Container(
+                  height: 80,
+                  width: MediaQuery.of(context).size.width * .6,
+                  color: Colors.transparent,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.green[50],
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      child: Column(children: [
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Member Statuses",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * .2,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "5",
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text("Going ", style: TextStyle(fontSize: 10))
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * .2,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "2",
+                                    style: TextStyle(
+                                        color: Colors.yellow[800],
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text("Undecided",
+                                      style: TextStyle(fontSize: 10))
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * .2,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "2",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  Text("Not Going",
+                                      style: TextStyle(fontSize: 10))
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      ]))),
+              ],
+            );
+          }
+
           String id = snapshot.data.docs[0]['postId'];
           String pic = snapshot.data.docs[0]['image'];
           String title = snapshot.data.docs[0]['title'];
@@ -164,8 +343,7 @@ class StudentClubMOOV extends StatelessWidget {
                           child: Container(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(pic,
-                                  fit: BoxFit.cover),
+                              child: Image.network(pic, fit: BoxFit.cover),
                             ),
                             // margin: EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 5),
                             decoration: BoxDecoration(
@@ -725,9 +903,9 @@ class _ClubMakerState extends State<ClubMaker> {
                                   usersRef
                                       .doc(currentUser.id)
                                       .set({
-                                        "userType": {
-                                          "name": clubNameController.text
-                                        }
+                                        // "userType": {
+                                        //   "name": clubNameController.text
+                                        // }
                                       }, SetOptions(merge: true))
                                       .then((value) => setState(() {
                                             isUploading = false;

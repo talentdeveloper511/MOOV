@@ -152,11 +152,34 @@ class _HomePageState extends State<HomePage>
         DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
     String day = DateFormat('MMMd').format(aDate);
     bool isSunday = DateFormat('EEEE').format(aDate) == 'Sunday';
-
     super.build(context);
 
     SizeConfig().init(context);
     bool isLargePhone = Screen.diagonal(context) > 766;
+
+    if (isSunday) {
+      wrapupRef
+          .doc(currentUser.id)
+          .collection('wrapUp')
+          .doc(DateFormat('MMMd').format(aDate))
+          .get()
+          .then((value) {
+        if (!value.data()['seen']) {
+          Future.delayed(const Duration(seconds: 2), () {
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    child: SundayWrapUp(
+                      day: DateFormat('MMMd').format(aDate),
+                    ),
+                  );
+                });
+          });
+        }
+      });
+    }
 
     return PageStorage(
       bucket: bucketGlobalHome,
@@ -185,30 +208,6 @@ class _HomePageState extends State<HomePage>
                                     _currentIndex != 1
                                         ? GestureDetector(
                                             onTap: () {
-                                              showDialog(
-                                                  barrierDismissible: false,
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return Container(
-                                                      child: SundayWrapUp(
-                                                        title: "Sunday Wrap Up",
-                                                        description:
-                                                            "What a week! Here's your recap, be sure to save any Memorable MOOVs before they expire at the end of today!",
-                                                        choice1: "Check In",
-                                                        // choice1Action:
-                                                        //     (context) {},
-                                                        // choice2Action:
-                                                        //     (context) {},
-                                                        choice2: "Later",
-                                                        image:
-                                                            "value.docs[i]['image']",
-                                                        postTitle: "",
-                                                        day: "Apr 18",
-                                                      ),
-                                                    );
-                                                  });
-
                                               HapticFeedback.lightImpact();
 
                                               _tabController.animateTo(1);
@@ -953,96 +952,9 @@ class _HomePageState extends State<HomePage>
                           child: ListView.builder(
                             key: PageStorageKey("defaultKey"),
                             controller: _scrollController,
-                            itemCount: snapshot.data.docs.length,
+                            itemCount: snapshot.data.docs.length + 1,
                             itemBuilder: (context, index) {
-                              DocumentSnapshot course =
-                                  snapshot.data.docs[index];
-                              Timestamp startDate = course["startDate"];
-                              privacy = course['privacy'];
-                              Map<String, dynamic> statuses =
-                                  (snapshot.data.docs[index]['statuses']);
-
-                              int status = 0;
-                              List<dynamic> statusesIds =
-                                  statuses.keys.toList();
-
-                              List<dynamic> statusesValues =
-                                  statuses.values.toList();
-
-                              if (statuses != null) {
-                                for (int i = 0; i < statuses.length; i++) {
-                                  if (statusesIds[i] == currentUser.id) {
-                                    if (statusesValues[i] == 3) {
-                                      status = 3;
-                                    }
-                                  }
-                                }
-                              }
-
-                              bool hide = false;
-
-                              if (startDate.millisecondsSinceEpoch <
-                                  Timestamp.now().millisecondsSinceEpoch -
-                                      3600000) {
-                                print("Expired. See ya later.");
-                                Future.delayed(
-                                    const Duration(milliseconds: 1000), () {
-                                  Database().deletePost(
-                                      course['postId'],
-                                      course['userId'],
-                                      course['title'],
-                                      course['statuses'],
-                                      course['posterName']);
-                                });
-                              }
-                              final now = DateTime.now();
-                              bool isToday = false;
-                              bool isTomorrow = false;
-
-                              final today =
-                                  DateTime(now.year, now.month, now.day);
-
-                              final tomorrow =
-                                  DateTime(now.year, now.month, now.day + 1);
-
-                              final dateToCheck = startDate.toDate();
-                              final aDate = DateTime(dateToCheck.year,
-                                  dateToCheck.month, dateToCheck.day);
-
-                              if (aDate == today) {
-                                isToday = true;
-                              } else if (aDate == tomorrow) {
-                                isTomorrow = true;
-                              }
-                              if (course['featured'] != true &&
-                                  privacyDropdownValue == "Featured") {
-                                hide = true;
-                              }
-                              if (isToday == false && todayOnly == 1) {
-                                hide = true;
-                              }
-                              if (privacy == "Friends Only" ||
-                                  privacy == "Invite Only") {
-                                hide = true;
-                              }
-                              if (privacyDropdownValue == "Private" &&
-                                  (privacy != "Friends Only" ||
-                                      privacy != "Invite Only")) {
-                                hide = true;
-                              }
-                              if (privacy == "Friends Only" &&
-                                  privacyDropdownValue == "Private" &&
-                                  currentUser.friendArray
-                                      .contains(course['userId'])) {
-                                hide = false;
-                              }
-                              if (privacy == "Invite Only" &&
-                                  privacyDropdownValue == "Private" &&
-                                  course['statuses']
-                                      .keys
-                                      .contains(currentUser.id)) {
-                                hide = false;
-                              }
+                            
                               if (index == 0) {
                                 return Column(children: [
                                   AnimatedBuilder(
@@ -1229,8 +1141,97 @@ class _HomePageState extends State<HomePage>
                                   ),
                                 ]);
                               }
+                                DocumentSnapshot course =
+                                  snapshot.data.docs[index-1];
+                              Timestamp startDate = course["startDate"];
+                              privacy = course['privacy'];
+                              Map<String, dynamic> statuses =
+                                  (snapshot.data.docs[index-1]['statuses']);
+
+                              int status = 0;
+                              List<dynamic> statusesIds =
+                                  statuses.keys.toList();
+
+                              List<dynamic> statusesValues =
+                                  statuses.values.toList();
+
+                              if (statuses != null) {
+                                for (int i = 0; i < statuses.length; i++) {
+                                  if (statusesIds[i] == currentUser.id) {
+                                    if (statusesValues[i] == 3) {
+                                      status = 3;
+                                    }
+                                  }
+                                }
+                              }
+
+                              bool hide = false;
+
+                              if (startDate.millisecondsSinceEpoch <
+                                  Timestamp.now().millisecondsSinceEpoch -
+                                      3600000) {
+                                print("Expired. See ya later.");
+                                Future.delayed(
+                                    const Duration(milliseconds: 1000), () {
+                                  Database().deletePost(
+                                      course['postId'],
+                                      course['userId'],
+                                      course['title'],
+                                      course['statuses'],
+                                      course['posterName']);
+                                });
+                              }
+                              final now = DateTime.now();
+                              bool isToday = false;
+                              bool isTomorrow = false;
+
+                              final today =
+                                  DateTime(now.year, now.month, now.day);
+
+                              final tomorrow =
+                                  DateTime(now.year, now.month, now.day + 1);
+
+                              final dateToCheck = startDate.toDate();
+                              final aDate = DateTime(dateToCheck.year,
+                                  dateToCheck.month, dateToCheck.day);
+
+                              if (aDate == today) {
+                                isToday = true;
+                              } else if (aDate == tomorrow) {
+                                isTomorrow = true;
+                              }
+                              if (course['featured'] != true &&
+                                  privacyDropdownValue == "Featured") {
+                                hide = true;
+                              }
+                              if (isToday == false && todayOnly == 1) {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" ||
+                                  privacy == "Invite Only") {
+                                hide = true;
+                              }
+                              if (privacyDropdownValue == "Private" &&
+                                  (privacy != "Friends Only" ||
+                                      privacy != "Invite Only")) {
+                                hide = true;
+                              }
+                              if (privacy == "Friends Only" &&
+                                  privacyDropdownValue == "Private" &&
+                                  currentUser.friendArray
+                                      .contains(course['userId'])) {
+                                hide = false;
+                              }
+                              if (privacy == "Invite Only" &&
+                                  privacyDropdownValue == "Private" &&
+                                  course['statuses']
+                                      .keys
+                                      .contains(currentUser.id)) {
+                                hide = false;
+                              }
                               return (hide == false)
-                                  ? PostOnFeedNew(course, _notifier)
+                                  ? PostOnFeedNew(
+                                  course, _notifier)
                                   : Container();
                             },
                           ),
