@@ -8,6 +8,7 @@ import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
+import 'package:MOOV/studentClubs/editClub.dart';
 import 'package:MOOV/studentClubs/promoteClub.dart';
 import 'package:MOOV/studentClubs/recruitClub.dart';
 import 'package:MOOV/utils/themes_styles.dart';
@@ -118,10 +119,16 @@ class StudentClubDashboard extends StatelessWidget {
                           Positioned(
                             bottom: 10,
                             right: 10,
-                            child: Text("Edit",
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold)),
+                            child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditClub(snapshot.data.docs[0]['clubId']))),
+                              child: Text("Edit",
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold)),
+                            ),
                           )
                         ],
                       ),
@@ -1119,9 +1126,9 @@ class _ClubMembersListState extends State<ClubMembersList> {
                                                   Text("Change title/status"),
                                               trailingIcon: Icon(Icons.edit),
                                               onPressed: () {}),
-                                          memberStatus[index] == -1
+                                          memberStatus[index] == 1
                                               ? FocusedMenuItem(
-                                                  title: Text("Ask to pay dues",
+                                                  title: Text("Ask for/manage dues",
                                                       style: TextStyle(
                                                           color: Colors.green)),
                                                   trailingIcon: Icon(
