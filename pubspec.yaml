@@ -224,6 +224,7 @@ flutter:
     - lib/assets/colorGrid.png
     - lib/assets/trophy.png
     - lib/assets/trophy2.png
+    - lib/assets/lead.png
     - lib/assets/verif.png
     - lib/assets/verif2.png
     - lib/assets/music1.png

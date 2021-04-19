@@ -3,8 +3,11 @@ import 'dart:math';
 
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
+import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
+import 'package:MOOV/studentClubs/promoteClub.dart';
 import 'package:MOOV/studentClubs/recruitClub.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -25,72 +28,94 @@ class StudentClubDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return (currentUser.userType[("clubExecutive")] == null)
         ? ClubMaker()
-        : Scaffold(
-            floatingActionButton: Row(
-              children: [
-                SizedBox(
-                  width: 160,
-                  child: ExpandableFab(
-                    distance: 80.0,
+        : StreamBuilder(
+            stream: clubsRef
+                .where("execs", arrayContains: currentUser.id)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData || snapshot.data == null) {
+                return Container();
+              }
+              if (snapshot.data.docs.isEmpty) {
+                return Container(
+                  child: Text("Error"),
+                );
+              }
+              return Scaffold(
+                  floatingActionButton: Row(
                     children: [
-                      ActionButton(
-                        onPressed: () {},
-                        icon:
-                            const Icon(Icons.chat_bubble, color: Colors.white),
-                      ),
-                      ActionButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.campaign,
-                          size: 30,
-                          color: Colors.white,
+                      SizedBox(
+                        width: 160,
+                        child: ExpandableFab(
+                          distance: 80.0,
+                          children: [
+                            ActionButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.chat_bubble,
+                                  color: Colors.white),
+                            ),
+                            ActionButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PromoteClub(
+                                            snapshot.data.docs[0]['clubId'])));
+                              },
+                              icon: const Icon(
+                                Icons.campaign,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                            ),
+                            ActionButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.trending_up,
+                                  color: Colors.white),
+                            ),
+                          ],
                         ),
-                      ),
-                      ActionButton(
-                        onPressed: () {},
-                        icon:
-                            const Icon(Icons.trending_up, color: Colors.white),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            backgroundColor: Colors.white,
-            body: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      "lib/assets/clubDash.jpeg",
-                      width: MediaQuery.of(context).size.width,
-                      height: 150,
-                      fit: BoxFit.cover,
-                    ),
-                    Text(
-                      "Club Dashboard",
-                      style: TextThemes.headlineWhite,
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 65.0, left: 20, right: 20),
-                      child: Text("Here's your club's new best friend",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 13)),
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: Text("Edit",
-                          style: TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold)),
-                    )
-                  ],
-                ),
-                ClubDashBody()
-              ],
-            ));
+                  backgroundColor: Colors.white,
+                  body: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.asset(
+                            "lib/assets/clubDash.jpeg",
+                            width: MediaQuery.of(context).size.width,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                          Text(
+                            "Club Dashboard",
+                            style: TextThemes.headlineWhite,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 65.0, left: 20, right: 20),
+                            child: Text("Here's your club's new best friend",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 13)),
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: Text("Edit",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold)),
+                          )
+                        ],
+                      ),
+                      ClubDashBody()
+                    ],
+                  ));
+            });
   }
 }
 
@@ -962,6 +987,7 @@ class ClubMembersList extends StatefulWidget {
 }
 
 class _ClubMembersListState extends State<ClubMembersList> {
+  String directMessageId;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -1050,16 +1076,58 @@ class _ClubMembersListState extends State<ClubMembersList> {
                                         menuItems: <FocusedMenuItem>[
                                           // Add Each FocusedMenuItem  for Menu Options
 
-                                          FocusedMenuItem(
-                                              title: Text("Message"),
-                                              trailingIcon: Icon(Icons.message),
-                                              onPressed: () {}),
+                                          (memberNames[index] != currentUser.id)
+                                              ? FocusedMenuItem(
+                                                  title: Text("Message"),
+                                                  trailingIcon:
+                                                      Icon(Icons.message),
+                                                  onPressed: () {
+                                                    dmChecker(
+                                                            memberNames[index],
+                                                            directMessageId)
+                                                        .then((value) =>
+                                                            toMessageDetail(
+                                                                memberNames[
+                                                                    index],
+                                                                directMessageId,
+                                                                context));
+                                                  })
+                                              : FocusedMenuItem(
+                                                  title: Text("Edit Profile"),
+                                                  trailingIcon:
+                                                      Icon(Icons.person),
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                EditProfile()));
+                                                  }),
 
                                           FocusedMenuItem(
                                               title:
                                                   Text("Change title/status"),
                                               trailingIcon: Icon(Icons.edit),
                                               onPressed: () {}),
+                                          memberStatus[index] == -1
+                                              ? FocusedMenuItem(
+                                                  title: Text("Ask to pay dues",
+                                                      style: TextStyle(
+                                                          color: Colors.green)),
+                                                  trailingIcon: Icon(
+                                                      Icons
+                                                          .monetization_on_outlined,
+                                                      color: Colors.green),
+                                                  onPressed: () {})
+                                              : FocusedMenuItem(
+                                                  title: Text("Refund dues",
+                                                      style: TextStyle(
+                                                          color: Colors.green)),
+                                                  trailingIcon: Icon(
+                                                      Icons
+                                                          .monetization_on_outlined,
+                                                      color: Colors.green),
+                                                  onPressed: () {}),
                                           FocusedMenuItem(
                                               title: Text(
                                                 "Remove from club",
