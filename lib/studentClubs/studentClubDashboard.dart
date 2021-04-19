@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
+import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
@@ -50,7 +51,17 @@ class StudentClubDashboard extends StatelessWidget {
                           distance: 80.0,
                           children: [
                             ActionButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MessageDetail(
+                                            " ",
+                                            " ",
+                                            true,
+                                            snapshot.data.docs[0]['clubId'],
+                                            snapshot.data.docs[0]['memberNames'], {})));
+                              },
                               icon: const Icon(Icons.chat_bubble,
                                   color: Colors.white),
                             ),
