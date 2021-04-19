@@ -63,7 +63,7 @@ class _CreateAccountState extends State<CreateAccount> {
   String venmoUsername;
   String businessName;
   String businessDescription;
-  Map userType = {};
+  Map userTypeMap = {};
 
   submit() {
     final form0 = _formKey0.currentState;
@@ -81,6 +81,11 @@ class _CreateAccountState extends State<CreateAccount> {
       form2.save();
       form3.save();
       form4.save();
+
+      if (_clubExecChecked) {
+        userTypeMap = {"clubExecutive": []};
+      }
+
       SnackBar snackbar = SnackBar(
           backgroundColor: Colors.green, content: Text("Welcome to MOOV!"));
       _scaffoldKey.currentState.showSnackBar(snackbar);
@@ -292,7 +297,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],
-        "userType": userType,
+        "userType": userTypeMap,
         "venmoUsername": venmoUsername,
         "pushSettings": {
           "going": true,
@@ -349,6 +354,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],
+        "userType": userTypeMap,
         "venmoUsername": venmoUsername,
         "pushSettings": {
           "friendPosts": true,
@@ -373,6 +379,8 @@ class _CreateAccountState extends State<CreateAccount> {
     }
     currentUser = User.fromDocument(doc);
   }
+
+  bool _clubExecChecked = false;
 
   @override
   Widget build(BuildContext parentContext) {
@@ -596,6 +604,15 @@ class _CreateAccountState extends State<CreateAccount> {
                           ),
                           SizedBox(height: 50),
                           Text("Optional Details"),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: 194,
+                            child: CheckboxListTile(
+                                title: new Text("I'm a club exec."),
+                                value: _clubExecChecked,
+                                onChanged: (bool value) =>
+                                    setState(() => _clubExecChecked = value)),
+                          ),
                           Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Row(

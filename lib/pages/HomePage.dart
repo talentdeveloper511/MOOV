@@ -954,7 +954,6 @@ class _HomePageState extends State<HomePage>
                             controller: _scrollController,
                             itemCount: snapshot.data.docs.length + 1,
                             itemBuilder: (context, index) {
-                            
                               if (index == 0) {
                                 return Column(children: [
                                   AnimatedBuilder(
@@ -1141,12 +1140,12 @@ class _HomePageState extends State<HomePage>
                                   ),
                                 ]);
                               }
-                                DocumentSnapshot course =
-                                  snapshot.data.docs[index-1];
+                              DocumentSnapshot course =
+                                  snapshot.data.docs[index - 1];
                               Timestamp startDate = course["startDate"];
                               privacy = course['privacy'];
                               Map<String, dynamic> statuses =
-                                  (snapshot.data.docs[index-1]['statuses']);
+                                  (snapshot.data.docs[index - 1]['statuses']);
 
                               int status = 0;
                               List<dynamic> statusesIds =
@@ -1230,8 +1229,7 @@ class _HomePageState extends State<HomePage>
                                 hide = false;
                               }
                               return (hide == false)
-                                  ? PostOnFeedNew(
-                                  course, _notifier)
+                                  ? PostOnFeedNew(course, _notifier)
                                   : Container();
                             },
                           ),

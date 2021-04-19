@@ -1301,7 +1301,7 @@ class Database {
 
         for (var document in documents) {
           await document.reference.set({
-            "badges": {}
+            "userType": {}
             // "badges": [],
             // "isBusiness": false
             // "groupLimit": 2

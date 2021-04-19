@@ -335,7 +335,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   ];
 
   final List<String> clubList =
-  List<String>.from(currentUser.userType['clubExecutive']);
+  List<String>.from(currentUser.userType['clubExecutive'] ?? []);
   Map<String, String> clubNameMap = {};
   Map<String, String> clubIdMap = {};
 
@@ -344,7 +344,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
     List<String> n = [];
     List<String> m = [];
 
-    for (int i = 0; i < currentUser.userType['clubExecutive'].length; i++) {
+    for (int i = 0; i < clubList.length; i++) {
       clubsRef
           .doc(currentUser.userType['clubExecutive'][i])
           .get()
@@ -1306,7 +1306,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
-                              
+
                               HapticFeedback.lightImpact();
 
                               // for (int i = 0;

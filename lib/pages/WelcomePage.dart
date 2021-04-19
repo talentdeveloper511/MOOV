@@ -23,7 +23,7 @@ class WelcomePage extends StatelessWidget {
               child: RaisedButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => BetaWelcome()));
+                      MaterialPageRoute(builder: (context) => CreateAccount()));
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(80.0)),

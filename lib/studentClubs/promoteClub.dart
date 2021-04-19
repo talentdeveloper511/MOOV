@@ -31,7 +31,7 @@ class _PromoteClubState extends State<PromoteClub> {
             alignment: Alignment.center,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
                   "lib/assets/lead.png",
                   color: TextThemes.ndBlue,
@@ -94,76 +94,71 @@ class _PromoteClubState extends State<PromoteClub> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 30),
                     Text(
                       "Shout us out on socials @MOOV.ND \n..maybe we'll hook you up.",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20.0,
-                        ),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(80.0)),
-                          padding: EdgeInsets.all(0.0),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    TextThemes.ndBlue,
-                                    Color(0xff64B6FF)
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                ),
-                                borderRadius: BorderRadius.circular(30.0)),
-                            child: Container(
-                              constraints: BoxConstraints(
-                                  maxWidth: 125.0, minHeight: 50.0),
-                              alignment: Alignment.center,
-                              child: Text(
-                                "Submit",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 22),
-                              ),
+                    RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80.0)),
+                      padding: EdgeInsets.all(0.0),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                TextThemes.ndBlue,
+                                Color(0xff64B6FF)
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
+                            borderRadius: BorderRadius.circular(30.0)),
+                        child: Container(
+                          constraints: BoxConstraints(
+                              maxWidth: 125.0, minHeight: 50.0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Submit",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 22),
                           ),
-                          onPressed: () {
-                            // Validate returns true if the form is valid, or false
-                            // otherwise.
-                            if (_formKey.currentState.validate()) {
-                              final dateToCheck = Timestamp.now().toDate();
-                              final aDate = DateTime(dateToCheck.year,
-                                  dateToCheck.month, dateToCheck.day);
+                        ),
+                      ),
+                      onPressed: () {
+                        // Validate returns true if the form is valid, or false
+                        // otherwise.
+                        if (_formKey.currentState.validate()) {
+                          final dateToCheck = Timestamp.now().toDate();
+                          final aDate = DateTime(dateToCheck.year,
+                              dateToCheck.month, dateToCheck.day);
 
-                              String whenString =
-                                  DateFormat('MMMd').format(aDate);
-                              FirebaseFirestore.instance
-                                  .collection("promotionPitches")
-                                  .doc(whenString)
-                                  .collection(widget.clubId)
-                                  .doc(DateTime.now()
-                                      .millisecondsSinceEpoch
-                                      .toString())
-                                  .set({
-                                "story": storyController.text,
-                                "when": DateTime.now()
-                              });
+                          String whenString =
+                              DateFormat('MMMd').format(aDate);
+                          FirebaseFirestore.instance
+                              .collection("promotionPitches")
+                              .doc(whenString)
+                              .collection(widget.clubId)
+                              .doc(DateTime.now()
+                                  .millisecondsSinceEpoch
+                                  .toString())
+                              .set({
+                            "story": storyController.text,
+                            "when": DateTime.now()
+                          });
 
-                              SnackBar snackbar = SnackBar(
-                                  backgroundColor: Colors.green,
-                                  content: Text(
-                                      "Thank you, ${currentUser.displayName}!"));
-                              _scaffoldKey.currentState.showSnackBar(snackbar);
-                              Timer(Duration(seconds: 2), () {
-                                Navigator.pop(context);
-                              });
-                            }
-                          },
-                        ))
+                          SnackBar snackbar = SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text(
+                                  "Thank you, ${currentUser.displayName}!"));
+                          _scaffoldKey.currentState.showSnackBar(snackbar);
+                          Timer(Duration(seconds: 2), () {
+                            Navigator.pop(context);
+                          });
+                        }
+                      },
+                    )
                   ],
                 ),
               ),

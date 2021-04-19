@@ -923,52 +923,81 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       body: PageView(
         physics: ClampingScrollPhysics(),
-        children: <Widget>[
-          // Timeline(),
-          HomePage(),
-
-          SearchBar(),
-          currentUser.userType.containsKey("clubExecutive")
-              ? StudentClubDashboard()
-              : null,
-
-          currentUser.isBusiness ? Biz() : MOOVSPage(),
-
-          ProfilePage()
-        ],
+        children: currentUser.userType.containsKey("clubExecutive")
+            ? <Widget>[
+                HomePage(),
+                SearchBar(),
+                StudentClubDashboard(),
+                MOOVSPage(),
+                ProfilePage()
+              ]
+            : <Widget>[
+                HomePage(),
+                SearchBar(),
+                currentUser.isBusiness ? Biz() : MOOVSPage(),
+                ProfilePage()
+              ],
         controller: pageController,
         onPageChanged: onPageChanged,
       ),
-      bottomNavigationBar: CupertinoTabBar(
-          inactiveColor: Colors.black,
-          currentIndex: currentIndex,
-          onTap: onTap,
-          activeColor: TextThemes.ndGold,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
-            BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
-            BottomNavigationBarItem(icon: Icon(Icons.corporate_fare)),
-            currentUser.userType.containsKey("clubExecutive")
-                ? BottomNavigationBarItem(icon: Icon(Icons.group_outlined))
-                : BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
-            BottomNavigationBarItem(
-                icon: CircleAvatar(
-                    radius: 16,
-                    backgroundColor:
-                        pageIndex == 3 ? TextThemes.ndGold : Colors.black,
-                    child: currentUser.photoUrl != null
-                        ? CircleAvatar(
-                            radius: 14,
-                            backgroundImage: NetworkImage(currentUser.photoUrl))
-                        : CircleAvatar(
-                            radius: 14,
-                            backgroundImage:
-                                AssetImage('lib/assets/incognitoPic.jpg')))
-                // CircleAvatar(
-                //   backgroundImage: NetworkImage(currentUser.photoUrl),
-                //   radius: 13)
-                ),
-          ]),
+      bottomNavigationBar: currentUser.userType.containsKey("clubExecutive")
+          ? CupertinoTabBar(
+              inactiveColor: Colors.black,
+              currentIndex: currentIndex,
+              onTap: onTap,
+              activeColor: TextThemes.ndGold,
+              items: [
+                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
+                  BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
+                  BottomNavigationBarItem(icon: Icon(Icons.corporate_fare)),
+                  BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
+                  BottomNavigationBarItem(
+                      icon: CircleAvatar(
+                          radius: 16,
+                          backgroundColor:
+                              pageIndex == 3 ? TextThemes.ndGold : Colors.black,
+                          child: currentUser.photoUrl != null
+                              ? CircleAvatar(
+                                  radius: 14,
+                                  backgroundImage:
+                                      NetworkImage(currentUser.photoUrl))
+                              : CircleAvatar(
+                                  radius: 14,
+                                  backgroundImage: AssetImage(
+                                      'lib/assets/incognitoPic.jpg')))
+                      // CircleAvatar(
+                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
+                      //   radius: 13)
+                      ),
+                ])
+          : CupertinoTabBar(
+              inactiveColor: Colors.black,
+              currentIndex: currentIndex,
+              onTap: onTap,
+              activeColor: TextThemes.ndGold,
+              items: [
+                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
+                  BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
+                  BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
+                  BottomNavigationBarItem(
+                      icon: CircleAvatar(
+                          radius: 16,
+                          backgroundColor:
+                              pageIndex == 3 ? TextThemes.ndGold : Colors.black,
+                          child: currentUser.photoUrl != null
+                              ? CircleAvatar(
+                                  radius: 14,
+                                  backgroundImage:
+                                      NetworkImage(currentUser.photoUrl))
+                              : CircleAvatar(
+                                  radius: 14,
+                                  backgroundImage: AssetImage(
+                                      'lib/assets/incognitoPic.jpg')))
+                      // CircleAvatar(
+                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
+                      //   radius: 13)
+                      ),
+                ]),
     );
     // return RaisedButton(
     //   child: Text('Logout'),

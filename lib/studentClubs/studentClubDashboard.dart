@@ -120,10 +120,11 @@ class StudentClubDashboard extends StatelessWidget {
                             bottom: 10,
                             right: 10,
                             child: GestureDetector(
-                                  onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditClub(snapshot.data.docs[0]['clubId']))),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditClub(
+                                          snapshot.data.docs[0]['clubId']))),
                               child: Text("Edit",
                                   style: TextStyle(
                                       color: Colors.blue,
@@ -141,7 +142,8 @@ class StudentClubDashboard extends StatelessWidget {
 
 class StudentClubMOOV extends StatelessWidget {
   final String clubId;
-  const StudentClubMOOV(this.clubId);
+  final List<String> memberIds;
+  const StudentClubMOOV(this.clubId, this.memberIds);
 
   @override
   Widget build(BuildContext context) {
@@ -354,13 +356,19 @@ class StudentClubMOOV extends StatelessWidget {
           int notGoingCount = 0;
 
           for (int i = 0; i <= statuses.length - 1; i++) {
-            if (statuses.isNotEmpty && statuses.values.toList()[i] == 3) {
+            if (statuses.isNotEmpty &&
+                statuses.values.toList()[i] == 3 &&
+                memberIds.contains(statuses.keys.toList()[i])) {
               goingCount++;
             }
-            if (statuses.isNotEmpty && statuses.values.toList()[i] == 2) {
+            if (statuses.isNotEmpty &&
+                statuses.values.toList()[i] == 2 &&
+                memberIds.contains(statuses.keys.toList()[i])) {
               undecidedCount++;
             }
-            if (statuses.isNotEmpty && statuses.values.toList()[i] == 1) {
+            if (statuses.isNotEmpty &&
+                statuses.values.toList()[i] == 1 &&
+                memberIds.contains(statuses.keys.toList()[i])) {
               notGoingCount++;
             }
           }
@@ -938,7 +946,8 @@ class _ClubMakerState extends State<ClubMaker> {
                                         "clubId": clubId,
                                         "joinDate": DateTime.now(),
                                         "execs": [currentUser.id],
-                                        "members": {currentUser.id: 2}
+                                        "members": {currentUser.id: 3},
+                                        "memberIds": [currentUser.id]
                                       }, SetOptions(merge: true))
                                       .then((value) => setState(() {
                                             isUploading = false;
@@ -1015,7 +1024,7 @@ class _ClubMembersListState extends State<ClubMembersList> {
           }
 
           Map members = snapshot.data['members'];
-          List memberNames = members.keys.toList();
+          List<String> memberNames = List<String>.from(members.keys.toList());
           List memberStatus = members.values.toList();
 
           if (memberNames.length <= 1) {
@@ -1125,17 +1134,29 @@ class _ClubMembersListState extends State<ClubMembersList> {
                                               title:
                                                   Text("Change title/status"),
                                               trailingIcon: Icon(Icons.edit),
-                                              onPressed: () {}),
+                                              onPressed: () {
+                                                showAlertDialog3(
+                                                    context,
+                                                    memberNames[index],
+                                                    widget.clubId,
+                                                    memberStatus[index]);
+                                              }),
                                           memberStatus[index] == 1
                                               ? FocusedMenuItem(
-                                                  title: Text("Ask for/manage dues",
+                                                  title: Text(
+                                                      "Ask for/manage dues",
                                                       style: TextStyle(
                                                           color: Colors.green)),
                                                   trailingIcon: Icon(
                                                       Icons
                                                           .monetization_on_outlined,
                                                       color: Colors.green),
-                                                  onPressed: () {})
+                                                  onPressed: () {
+                                                    showAlertDialog2(
+                                                        context,
+                                                        memberNames[index],
+                                                        widget.clubId);
+                                                  })
                                               : FocusedMenuItem(
                                                   title: Text("Refund dues",
                                                       style: TextStyle(
@@ -1281,6 +1302,84 @@ class _ClubMembersListState extends State<ClubMembersList> {
     );
   }
 
+  void showAlertDialog2(BuildContext context, String userId, String clubId) {
+    showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text("Manage Dues",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        actions: [
+          CupertinoDialogAction(
+            child: Text("Set status to 'paid'?",
+                style: TextStyle(color: Colors.green)),
+            onPressed: () {
+              clubsRef.doc(clubId).set({
+                "members": {userId: 2}
+              }, SetOptions(merge: true));
+
+              Navigator.of(context).pop(true);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Remind about dues"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
+  }
+
+  void showAlertDialog3(
+      BuildContext context, String userId, String clubId, int status) {
+    showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text("Change Status",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        actions: [
+          CupertinoDialogAction(
+            child: Text("Set status to 'unpaid'?",
+                style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              clubsRef.doc(clubId).set({
+                "members": {userId: 1},
+              }, SetOptions(merge: true));
+
+              Navigator.of(context).pop(true);
+            },
+          ),
+          (status != 3)
+              ? CupertinoDialogAction(
+                  child: Text("Make Exec",
+                      style: TextStyle(
+                          color: TextThemes.ndBlue,
+                          fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    clubsRef.doc(clubId).set({
+                      "members": {userId: 3}
+                    }, SetOptions(merge: true));
+
+                    Navigator.of(context).pop(true);
+                  },
+                )
+              : CupertinoDialogAction(
+                  child: Text("Revoke Exec",
+                      style: TextStyle(
+                          color: TextThemes.ndBlue,
+                          fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    clubsRef.doc(clubId).set({
+                      "members": {userId: 2}
+                    }, SetOptions(merge: true));
+
+                    Navigator.of(context).pop(true);
+                  },
+                )
+        ],
+      ),
+    );
+  }
+
   String firstNamer(String fullName) {
     List<String> tempList = fullName.split(" ");
     int start = 0;
@@ -1329,8 +1428,8 @@ class _ClubDashBodyState extends State<ClubDashBody> {
           if (snapshot.data.docs.length > 1) {
             // List<String> memberNames = snapshot.data.docs[selectedIndex]['memberNames'];
 
-List<String> memberNames =
-  List<String>.from(snapshot.data.docs[selectedIndex]['memberNames']);
+            List<String> memberNames = List<String>.from(
+                snapshot.data.docs[selectedIndex]['memberNames']);
 
             return Column(children: [
               Container(
@@ -1395,7 +1494,10 @@ List<String> memberNames =
                         onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RecruitClub(memberNames, snapshot.data.docs[selectedIndex]['clubId']))),
+                                builder: (context) => RecruitClub(
+                                    memberNames,
+                                    snapshot.data.docs[selectedIndex]
+                                        ['clubId']))),
                         child: Column(
                           children: [
                             Icon(Icons.person_search),
@@ -1411,13 +1513,13 @@ List<String> memberNames =
               Text("Next Meeting",
                   style: TextStyle(color: TextThemes.ndBlue, fontSize: 18)),
               SizedBox(height: 10),
-              StudentClubMOOV(snapshot.data.docs[selectedIndex]['clubId'])
+              StudentClubMOOV(
+                  snapshot.data.docs[selectedIndex]['clubId'], memberNames)
             ]);
           }
 
-List<String> memberNames =
-  List<String>.from(snapshot.data.docs[selectedIndex]['memberNames']);
-
+          List<String> memberNames = List<String>.from(
+              snapshot.data.docs[selectedIndex]['memberNames']);
 
           //you only exec one club
           return Column(children: [
@@ -1432,7 +1534,10 @@ List<String> memberNames =
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RecruitClub(memberNames,snapshot.data.docs[selectedIndex]['clubId']))),
+                              builder: (context) => RecruitClub(
+                                  memberNames,
+                                  snapshot.data.docs[selectedIndex]
+                                      ['clubId']))),
                       child: Column(
                         children: [Icon(Icons.person_search), Text("Recruit")],
                       ),
@@ -1445,7 +1550,8 @@ List<String> memberNames =
             Text("Next Meeting",
                 style: TextStyle(color: TextThemes.ndBlue, fontSize: 18)),
             SizedBox(height: 10),
-            StudentClubMOOV(snapshot.data.docs[selectedIndex]['clubId'])
+            StudentClubMOOV(
+                snapshot.data.docs[selectedIndex]['clubId'], memberNames)
           ]);
         });
   }
