@@ -47,26 +47,12 @@ class _MOOVSPageState extends State<MOOVSPage>
   dynamic moovId;
   String type;
   var todayOnly = 0;
-  int selectedIndex = 0;
 
-  // Current Index of tab
-
-  int _currentIndex = 1;
-
-  String text = 'https://www.whatsthemoov.com';
-  String subject = 'Check out MOOV. You get paid to download!';
-  Map<int, Widget> map =
-      new Map(); // Cupertino Segmented Control takes children in form of Map.
-  List<Widget>
-      childWidgets; //The Widgets that has to be loaded when a tab is selected.
-
-  bool _isPressed;
 
   @override
   void initState() {
     super.initState();
-    _tabController =
-        new TabController(vsync: this, length: 2, initialIndex: _currentIndex);
+ 
   }
 
   @override
@@ -75,65 +61,15 @@ class _MOOVSPageState extends State<MOOVSPage>
     super.dispose();
   }
 
-  Widget getChildWidget() => childWidgets[selectedIndex];
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    SharedPreferences preferences;
-
-    bool isLargePhone = Screen.diagonal(context) > 766;
-
-    bool isIncognito = false;
-    bool friendFinderVisibility = true;
-
+   
     return Scaffold(
         backgroundColor: Colors.white,
         body: Scaffold(
-          appBar: PreferredSize(
-              preferredSize: Size.fromHeight(100),
-              child: BottomNavyBar(
-                mainAxisAlignment: MainAxisAlignment.center,
-                selectedIndex: selectedIndex,
-                items: [
-                   currentUser.userType.containsKey("clubExecutive")
-                  ? BottomNavyBarItem(
-                    icon: Image.asset('lib/assets/ff.png', height: 27),
-                    title: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Friends'"),
-                        Text("Plans"),
-                      ],
-                    ),
-                  ) : 
-                  BottomNavyBarItem(
-                    icon: Image.asset('lib/assets/ff.png', height: 27),
-                    title: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Friends'"),
-                        Text("Plans"),
-                      ],
-                    ),
-                  ),
-                  BottomNavyBarItem(
-                    icon: Image.asset('lib/assets/fg1.png', height: 27),
-                    title: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Friend"),
-                        Text("Groups"),
-                      ],
-                    ),
-                  ),
-                ],
-                onItemSelected: (index) {
-                  HapticFeedback.lightImpact();
-
-                  setState(() => selectedIndex = index);
-                },
-              )),
-          body: selectedIndex == 0 ? FriendFinder() : FriendGroupsPage(),
+         
+          body: FriendGroupsPage(),
         ));
 
     // FloatingActionButton.extended(

@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StudentClubDashboard extends StatelessWidget {
@@ -81,7 +82,9 @@ class StudentClubDashboard extends StatelessWidget {
                     Positioned(
                       bottom: 10,
                       right: 10,
-                      child: Text("Edit", style: TextStyle(color: Colors.blue)),
+                      child: Text("Edit",
+                          style: TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold)),
                     )
                   ],
                 ),
@@ -97,10 +100,11 @@ class StudentClubMOOV extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(clubId);
     return StreamBuilder(
         stream: postsRef
             .where("clubId", isEqualTo: clubId)
-            // .orderBy("startDate")
+            .orderBy("startDate")
             .limit(1)
             .snapshots(),
         builder: (context, snapshot) {
@@ -296,6 +300,25 @@ class StudentClubMOOV extends StatelessWidget {
           String id = snapshot.data.docs[0]['postId'];
           String pic = snapshot.data.docs[0]['image'];
           String title = snapshot.data.docs[0]['title'];
+          Timestamp startDate = snapshot.data.docs[0]['startDate'];
+          String time = DateFormat('MMMd').add_jm().format(startDate.toDate());
+          Map statuses = snapshot.data.docs[0]['statuses'];
+          // int goingCount = statuses.wh
+          int goingCount = 0;
+          int undecidedCount = 0;
+          int notGoingCount = 0;
+
+          for (int i = 0; i <= statuses.length - 1; i++) {
+            if (statuses.isNotEmpty && statuses.values.toList()[i] == 3) {
+              goingCount++;
+            }
+            if (statuses.isNotEmpty && statuses.values.toList()[i] == 2) {
+              undecidedCount++;
+            }
+            if (statuses.isNotEmpty && statuses.values.toList()[i] == 1) {
+              notGoingCount++;
+            }
+          }
 
           return Column(
             children: [
@@ -389,7 +412,7 @@ class StudentClubMOOV extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(10.0)),
                         child: Text(
-                          "Thursday, Aug. 15",
+                          time,
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
@@ -423,7 +446,7 @@ class StudentClubMOOV extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(
-                                    "5",
+                                    goingCount.toString(),
                                     style: TextStyle(
                                         color: Colors.green,
                                         fontSize: 20,
@@ -438,7 +461,7 @@ class StudentClubMOOV extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(
-                                    "2",
+                                    undecidedCount.toString(),
                                     style: TextStyle(
                                         color: Colors.yellow[800],
                                         fontSize: 20,
@@ -454,7 +477,7 @@ class StudentClubMOOV extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(
-                                    "2",
+                                    notGoingCount.toString(),
                                     style: TextStyle(
                                         color: Colors.red,
                                         fontSize: 20,
@@ -868,18 +891,12 @@ class _ClubMakerState extends State<ClubMaker> {
                                       .collection('clubs')
                                       .doc(clubId)
                                       .set({
-                                    "bio": bioController.text,
-                                    "clubName": clubNameController.text,
-                                    "clubId": clubId,
-                                    "joinDate": DateTime.now(),
-                                  }, SetOptions(merge: true));
-
-                                  usersRef
-                                      .doc(currentUser.id)
-                                      .set({
-                                        // "userType": {
-                                        //   "name": clubNameController.text
-                                        // }
+                                        "bio": bioController.text,
+                                        "clubName": clubNameController.text,
+                                        "clubId": clubId,
+                                        "joinDate": DateTime.now(),
+                                        "execs": [currentUser.id],
+                                        "members": {currentUser.id: 2}
                                       }, SetOptions(merge: true))
                                       .then((value) => setState(() {
                                             isUploading = false;
@@ -1073,8 +1090,26 @@ class _ClubMembersListState extends State<ClubMembersList> {
                                             )),
                                       ),
                                       SizedBox(height: 4),
-                                      Text(firstNamer(
-                                          snapshot2.data['displayName']))
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(firstNamer(
+                                              snapshot2.data['displayName'])),
+                                          memberStatus[index] == 3
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 2.0),
+                                                  child: Icon(
+                                                      Icons
+                                                          .admin_panel_settings_outlined,
+                                                      color: TextThemes.ndGold,
+                                                      size: 15),
+                                                )
+                                              : Container()
+                                        ],
+                                      )
                                     ],
                                   ),
                                 );
@@ -1099,16 +1134,21 @@ class _ClubMembersListState extends State<ClubMembersList> {
                                           "The outer ring color indicates your member's state.\n"),
                                       Text(
                                         "Blue = Member has been invited",
-                                        style: TextStyle(color: Colors.blue),
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         "Red = Member has not yet paid dues",
-                                        style: TextStyle(color: Colors.red),
+                                        style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         "Gold = Member is good to go!",
-                                        style:
-                                            TextStyle(color: Colors.amber[700]),
+                                        style: TextStyle(
+                                            color: Colors.amber[700],
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                           "\nPro Tip: Hold down on a pic to see more settings!",
@@ -1163,57 +1203,97 @@ class _ClubDashBodyState extends State<ClubDashBody> {
             );
           }
 
-          return Column(children: [
-            Container(
-              height: 50,
-              child: ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  String clubName = snapshot.data.docs[0]['clubName'];
-                  String clubName2 = snapshot.data.docs[1]['clubName'];
+          //you exec multiple clubs
+          if (snapshot.data.docs.length > 1) {
+            // List<String> memberNames = snapshot.data.docs[selectedIndex]['memberNames'];
 
-                  return BottomNavyBar(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    selectedIndex: selectedIndex,
-                    items: [
-                      BottomNavyBarItem(
-                        icon: Icon(Icons.corporate_fare,
-                            color: TextThemes.ndBlue),
-                        title: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(clubName,
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: TextThemes.ndBlue),
-                                overflow: TextOverflow.ellipsis),
-                          ],
-                        ),
-                      ),
-                      BottomNavyBarItem(
-                        icon: Icon(Icons.corporate_fare,
-                            color: TextThemes.ndBlue),
-                        title: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(clubName2,
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: TextThemes.ndBlue),
-                                overflow: TextOverflow.ellipsis),
-                          ],
-                        ),
-                      ),
-                    ],
-                    onItemSelected: (index) {
-                      HapticFeedback.lightImpact();
+            List<String> memberNames = [];
 
-                      setState(() => selectedIndex = index);
-                    },
-                  );
-                },
+            return Column(children: [
+              Container(
+                height: 50,
+                child: ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    String clubName = snapshot.data.docs[0]['clubName'];
+                    String clubName2 = snapshot.data.docs[1]['clubName'];
+
+                    return BottomNavyBar(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      selectedIndex: selectedIndex,
+                      items: [
+                        BottomNavyBarItem(
+                          icon: Icon(Icons.corporate_fare,
+                              color: TextThemes.ndBlue),
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(clubName,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: TextThemes.ndBlue),
+                                  overflow: TextOverflow.ellipsis),
+                            ],
+                          ),
+                        ),
+                        BottomNavyBarItem(
+                          icon: Icon(Icons.corporate_fare,
+                              color: TextThemes.ndBlue),
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(clubName2,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: TextThemes.ndBlue),
+                                  overflow: TextOverflow.ellipsis),
+                            ],
+                          ),
+                        ),
+                      ],
+                      onItemSelected: (index) {
+                        HapticFeedback.lightImpact();
+
+                        setState(() => selectedIndex = index);
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  children: [
+                    ClubMembersList(
+                        snapshot.data.docs[selectedIndex]['clubId']),
+                    Container(
+                      width: MediaQuery.of(context).size.width * .2,
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RecruitClub([]))),
+                        child: Column(
+                          children: [
+                            Icon(Icons.person_search),
+                            Text("Recruit")
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+              Text("Next Meeting",
+                  style: TextStyle(color: TextThemes.ndBlue, fontSize: 18)),
+              SizedBox(height: 10),
+              StudentClubMOOV(snapshot.data.docs[selectedIndex]['clubId'])
+            ]);
+          }
+
+          //you only exec one club
+          return Column(children: [
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Row(
@@ -1225,8 +1305,7 @@ class _ClubDashBodyState extends State<ClubDashBody> {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RecruitClub(snapshot
-                                  .data.docs[selectedIndex]['memberNames']))),
+                              builder: (context) => RecruitClub([]))),
                       child: Column(
                         children: [Icon(Icons.person_search), Text("Recruit")],
                       ),

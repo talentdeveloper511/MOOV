@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
+import 'package:MOOV/studentClubs/studentClubDashboard.dart';
 import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle;
@@ -32,7 +33,6 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:image_cropper/image_cropper.dart';
 
 class MoovMaker extends StatefulWidget {
-
   @override
   _MoovMakerState createState() => _MoovMakerState();
 }
@@ -334,12 +334,40 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
     "Service"
   ];
 
+  final List<String> clubList =
+  List<String>.from(currentUser.userType['clubExecutive']);
+  Map<String, String> clubNameMap = {};
+  Map<String, String> clubIdMap = {};
+
+  clubNamer() {
+    //gets club names for execs posting meetings
+    List<String> n = [];
+    List<String> m = [];
+
+    for (int i = 0; i < currentUser.userType['clubExecutive'].length; i++) {
+      clubsRef
+          .doc(currentUser.userType['clubExecutive'][i])
+          .get()
+          .then((value) {
+        n.add(value['clubName']);
+        m.add(value['clubId']);
+
+        setState(() {});
+
+        n.forEach((clubName) => clubNameMap[clubName] = value['clubId']);
+        clubNameMap['No'] = null;
+      });
+    }
+  }
+
   DateTime currentValue = DateTime.now();
   DateTime currentValues;
   // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
   // DateTime endTimes;
   String privacyDropdownValue = 'Public';
   String typeDropdownValue = 'Parties';
+  String clubPostValue = 'No';
+
   // String locationDropdownValue = 'Off Campus';
   final titleController = TextEditingController();
   final addressController = TextEditingController();
@@ -384,6 +412,11 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(milliseconds: 300), () {
+      //this gets the club names for posting club execs posting meetings
+      clubNamer();
+    });
+
     bool isLargePhone = Screen.diagonal(context) > 766;
     List pushList = currentUser.pushSettings.values.toList();
     if (pushList[0] == false) {
@@ -396,6 +429,52 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
           ? linearProgress()
           : SingleChildScrollView(
               child: Column(children: <Widget>[
+                //posting on behalf of student club
+                currentUser.userType['clubExecutive'] != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 18.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * .45,
+                          child: ButtonTheme(
+                            child: DropdownButtonFormField(
+                              style: isLargePhone
+                                  ? null
+                                  : TextStyle(
+                                      fontSize: 12.5, color: Colors.black),
+                              value: clubPostValue,
+                              icon: Icon(Icons.corporate_fare,
+                                  color: TextThemes.ndGold),
+                              decoration: InputDecoration(
+                                labelText: "Posting your club meeting?",
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              items: clubNameMap.keys
+                                  .toList()
+                                  .map((dynamic value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  clubPostValue = newValue;
+                                });
+                              },
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'What are we doing?';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+
                 Padding(
                   padding: EdgeInsets.only(
                       bottom: currentUser.isBusiness ? 5 : 15.0,
@@ -1227,8 +1306,9 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
+                              print(clubNameMap[clubPostValue]);
                               HapticFeedback.lightImpact();
-                              
+
                               // for (int i = 0;
                               //     i < inviteesNameList.length;
                               //     i++) {
@@ -1293,7 +1373,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                   if (uploadTask.snapshot.state ==
                                       firebase_storage.TaskState.success) {
                                     print("added to Firebase Storage");
-                                    final String postId = generateRandomString(20);
+                                    final String postId =
+                                        generateRandomString(20);
                                     final String downloadUrl =
                                         await taskSnapshot.ref.getDownloadURL();
                                     currentUser.isBusiness
@@ -1329,6 +1410,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                                 descriptionController.text,
                                             address: addressController.text,
                                             startDate: currentValue,
+                                            clubId: clubNameMap[clubPostValue],
                                             unix: currentValue
                                                 .millisecondsSinceEpoch,
                                             statuses: inviteesNameList,
@@ -1340,20 +1422,21 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                             posterName: currentUser.displayName,
                                             push: push);
 
-                                   
-                                   nextSunday().then((value) {
-                                wrapupRef
-                                    .doc(currentUser.id)
-                                    .collection('wrapUp')
-                                    .doc(value)
-                                    .set({
-                                      "ownMOOVs": FieldValue.arrayUnion([{
-                                        "pic": downloadUrl,
-                                        "postId": postId,
-                                        "title": titleController.text
-                                      }]), 
-                                    },SetOptions(merge: true));
-                              });
+                                    nextSunday().then((value) {
+                                      wrapupRef
+                                          .doc(currentUser.id)
+                                          .collection('wrapUp')
+                                          .doc(value)
+                                          .set({
+                                        "ownMOOVs": FieldValue.arrayUnion([
+                                          {
+                                            "pic": downloadUrl,
+                                            "postId": postId,
+                                            "title": titleController.text
+                                          }
+                                        ]),
+                                      }, SetOptions(merge: true));
+                                    });
 
                                     setState(() {
                                       isUploading = false;

@@ -63,6 +63,7 @@ class _CreateAccountState extends State<CreateAccount> {
   String venmoUsername;
   String businessName;
   String businessDescription;
+  Map userType = {};
 
   submit() {
     final form0 = _formKey0.currentState;
@@ -291,6 +292,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "friendArray": [],
         "friendRequests": [],
         "friendGroups": [],
+        "userType": userType,
         "venmoUsername": venmoUsername,
         "pushSettings": {
           "going": true,
