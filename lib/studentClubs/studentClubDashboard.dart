@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/studentClubs/recruitClub.dart';
@@ -84,34 +85,7 @@ class StudentClubDashboard extends StatelessWidget {
                     )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    children: [
-                      ClubMembersList("0ssovEcwdPXLkXQmEJKr"),
-                      Container(
-                        width: MediaQuery.of(context).size.width * .2,
-                        child: GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RecruitClub([]))),
-                          child: Column(
-                            children: [
-                              Icon(Icons.person_search),
-                              Text("Recruit")
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 30),
-                Text("Next Meeting",
-                    style: TextStyle(color: TextThemes.ndBlue, fontSize: 18)),
-                SizedBox(height: 10),
-                StudentClubMOOV(currentUser.userType['id']),
+                ClubDashBody()
               ],
             ));
   }
@@ -1027,6 +1001,10 @@ class _ClubMembersListState extends State<ClubMembersList> {
                               stream:
                                   usersRef.doc(memberNames[index]).snapshots(),
                               builder: (context, snapshot2) {
+                                if (!snapshot2.hasData ||
+                                    snapshot2.data == null) {
+                                  return Container();
+                                }
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
@@ -1057,12 +1035,12 @@ class _ClubMembersListState extends State<ClubMembersList> {
 
                                           FocusedMenuItem(
                                               title: Text("Message"),
-                                              trailingIcon:
-                                                  Icon(Icons.message),
+                                              trailingIcon: Icon(Icons.message),
                                               onPressed: () {}),
 
                                           FocusedMenuItem(
-                                              title: Text("Change title/status"),
+                                              title:
+                                                  Text("Change title/status"),
                                               trailingIcon: Icon(Icons.edit),
                                               onPressed: () {}),
                                           FocusedMenuItem(
@@ -1159,5 +1137,110 @@ class _ClubMembersListState extends State<ClubMembersList> {
     final selectedWords = tempList.sublist(start, end);
     String firstName = selectedWords.join(" ");
     return firstName;
+  }
+}
+
+class ClubDashBody extends StatefulWidget {
+  @override
+  _ClubDashBodyState createState() => _ClubDashBodyState();
+}
+
+class _ClubDashBodyState extends State<ClubDashBody> {
+  int selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream:
+            clubsRef.where("execs", arrayContains: currentUser.id).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data == null) {
+            return Container();
+          }
+          if (snapshot.data.docs.isEmpty) {
+            return Container(
+              child: Text("Error"),
+            );
+          }
+
+          return Column(children: [
+            Container(
+              height: 50,
+              child: ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  String clubName = snapshot.data.docs[0]['clubName'];
+                  String clubName2 = snapshot.data.docs[1]['clubName'];
+
+                  return BottomNavyBar(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    selectedIndex: selectedIndex,
+                    items: [
+                      BottomNavyBarItem(
+                        icon: Icon(Icons.corporate_fare,
+                            color: TextThemes.ndBlue),
+                        title: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(clubName,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: TextThemes.ndBlue),
+                                overflow: TextOverflow.ellipsis),
+                          ],
+                        ),
+                      ),
+                      BottomNavyBarItem(
+                        icon: Icon(Icons.corporate_fare,
+                            color: TextThemes.ndBlue),
+                        title: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(clubName2,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: TextThemes.ndBlue),
+                                overflow: TextOverflow.ellipsis),
+                          ],
+                        ),
+                      ),
+                    ],
+                    onItemSelected: (index) {
+                      HapticFeedback.lightImpact();
+
+                      setState(() => selectedIndex = index);
+                    },
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                children: [
+                  ClubMembersList(snapshot.data.docs[selectedIndex]['clubId']),
+                  Container(
+                    width: MediaQuery.of(context).size.width * .2,
+                    child: GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RecruitClub(snapshot
+                                  .data.docs[selectedIndex]['memberNames']))),
+                      child: Column(
+                        children: [Icon(Icons.person_search), Text("Recruit")],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 30),
+            Text("Next Meeting",
+                style: TextStyle(color: TextThemes.ndBlue, fontSize: 18)),
+            SizedBox(height: 10),
+            StudentClubMOOV(snapshot.data.docs[selectedIndex]['clubId'])
+          ]);
+        });
   }
 }

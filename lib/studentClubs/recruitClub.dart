@@ -6,7 +6,7 @@ import 'package:MOOV/widgets/progress.dart';
 import 'package:flutter/material.dart';
 
 class RecruitClub extends StatefulWidget {
-  final List members;
+  final List<String> members;
   RecruitClub(this.members);
 
   @override
@@ -29,6 +29,7 @@ class _RecruitClubState extends State<RecruitClub> {
 
   @override
   Widget build(BuildContext context) {
+  
     print(invitees);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -73,7 +74,7 @@ class _RecruitClubState extends State<RecruitClub> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          AddUsersFromCreateGroup(invitees)))
+                                          AddUsersFromCreateGroup(widget.members)))
                               .then(onGoBack),
                           child: Column(
                             children: [
