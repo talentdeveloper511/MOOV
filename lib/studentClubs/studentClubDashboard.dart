@@ -60,7 +60,9 @@ class StudentClubDashboard extends StatelessWidget {
                                             " ",
                                             true,
                                             snapshot.data.docs[0]['clubId'],
-                                            snapshot.data.docs[0]['memberNames'], {})));
+                                            snapshot.data.docs[0]
+                                                ['memberNames'],
+                                            {})));
                               },
                               icon: const Icon(Icons.chat_bubble,
                                   color: Colors.white),
@@ -921,10 +923,7 @@ class _ClubMakerState extends State<ClubMaker> {
                                     isUploading = true;
                                   });
                                   String clubId = generateRandomString(20);
-                                  FirebaseFirestore.instance
-                                      .collection('notreDame')
-                                      .doc('data')
-                                      .collection('clubs')
+                                  clubsRef
                                       .doc(clubId)
                                       .set({
                                         "bio": bioController.text,
@@ -1149,7 +1148,12 @@ class _ClubMembersListState extends State<ClubMembersList> {
                                                 Icons.directions_walk,
                                                 color: Colors.redAccent,
                                               ),
-                                              onPressed: () {}),
+                                              onPressed: () {
+                                                showAlertDialog(
+                                                    context,
+                                                    memberNames[index],
+                                                    widget.clubId);
+                                              }),
                                         ],
                                         onPressed: () {},
                                         child: CircleAvatar(
@@ -1246,6 +1250,30 @@ class _ClubMembersListState extends State<ClubMembersList> {
         });
   }
 
+  void showAlertDialog(BuildContext context, String userId, String clubId) {
+    showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text("Remove from the club?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text("Remove", style: TextStyle(color: Colors.red)),
+            onPressed: () {
+              removeMember(userId, clubId);
+              Navigator.of(context).pop(true);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("Nah, my bad"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
+      ),
+    );
+  }
+
   String firstNamer(String fullName) {
     List<String> tempList = fullName.split(" ");
     int start = 0;
@@ -1256,6 +1284,14 @@ class _ClubMembersListState extends State<ClubMembersList> {
     final selectedWords = tempList.sublist(start, end);
     String firstName = selectedWords.join(" ");
     return firstName;
+  }
+
+  removeMember(String userId, String clubId) {
+    clubsRef.doc(clubId).set({
+      "memberNames": FieldValue.arrayRemove([userId]),
+      "execs": FieldValue.arrayRemove([userId]),
+      "members": {userId: FieldValue.delete()}
+    }, SetOptions(merge: true));
   }
 }
 
@@ -1286,7 +1322,8 @@ class _ClubDashBodyState extends State<ClubDashBody> {
           if (snapshot.data.docs.length > 1) {
             // List<String> memberNames = snapshot.data.docs[selectedIndex]['memberNames'];
 
-            List<String> memberNames = [];
+List<String> memberNames =
+  List<String>.from(snapshot.data.docs[selectedIndex]['memberNames']);
 
             return Column(children: [
               Container(
@@ -1351,7 +1388,7 @@ class _ClubDashBodyState extends State<ClubDashBody> {
                         onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RecruitClub([]))),
+                                builder: (context) => RecruitClub(memberNames, snapshot.data.docs[selectedIndex]['clubId']))),
                         child: Column(
                           children: [
                             Icon(Icons.person_search),
@@ -1371,6 +1408,10 @@ class _ClubDashBodyState extends State<ClubDashBody> {
             ]);
           }
 
+List<String> memberNames =
+  List<String>.from(snapshot.data.docs[selectedIndex]['memberNames']);
+
+
           //you only exec one club
           return Column(children: [
             Padding(
@@ -1384,7 +1425,7 @@ class _ClubDashBodyState extends State<ClubDashBody> {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RecruitClub([]))),
+                              builder: (context) => RecruitClub(memberNames,snapshot.data.docs[selectedIndex]['clubId']))),
                       child: Column(
                         children: [Icon(Icons.person_search), Text("Recruit")],
                       ),

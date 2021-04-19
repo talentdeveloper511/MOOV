@@ -1306,7 +1306,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
-                              print(clubNameMap[clubPostValue]);
+                              
                               HapticFeedback.lightImpact();
 
                               // for (int i = 0;

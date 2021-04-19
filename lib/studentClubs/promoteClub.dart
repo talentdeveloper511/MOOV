@@ -24,7 +24,7 @@ class _PromoteClubState extends State<PromoteClub> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: TextThemes.ndBlue,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Stack(
@@ -74,12 +74,6 @@ class _PromoteClubState extends State<PromoteClub> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      "Why should someone join?",
-                      style: TextThemes.headline1,
-                      textAlign: TextAlign.center,
-                    ),
-     
                     TextFormField(
                       controller: storyController,
                       decoration: InputDecoration(
@@ -90,7 +84,7 @@ class _PromoteClubState extends State<PromoteClub> {
                               fontFamily: 'Akrobat-Bold'),
                           border: UnderlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0)),
-                          hintText: 'Why should someone join?'),
+                          hintText: 'Why should someone join your club?'),
                       keyboardType: TextInputType.multiline,
                       maxLines: 5,
                       validator: (value) {

@@ -176,7 +176,7 @@ class _GroupDetailState extends State<GroupDetail> {
                                 child: Text(
                                   groupName,
                                   style: TextStyle(
-                                      fontSize: isLargePhone ? 30.0 : 22,
+                                      fontSize: isLargePhone ? 24.0 : 22,
                                       color: Colors.white),
                                   overflow: TextOverflow.ellipsis,
                                 ),
