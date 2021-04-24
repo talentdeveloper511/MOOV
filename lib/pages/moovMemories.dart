@@ -49,16 +49,26 @@ class MOOVMemories extends StatelessWidget {
                   .get(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
-                  return Container(
-                    height: 100,
-                    child: Center(
-                        child: Text(
-                      "Error :(",
-                      style: TextStyle(
-                          color: TextThemes.ndBlue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30),
-                    )),
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image.asset(
+                        "lib/assets/clouds.jpeg",
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                      Text(
+                        "No memories yet.",
+                        style: TextThemes.headlineWhite,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 175.0, left: 20, right: 20),
+                        child: Text("Go make some!",
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 13)),
+                      )
+                    ],
                   );
                 }
                 return Expanded(
@@ -70,7 +80,7 @@ class MOOVMemories extends StatelessWidget {
                             height: 100,
                             child: Center(
                                 child: Text(
-                              "Post yoccur",
+                              "Error :(",
                               style: TextStyle(
                                   color: TextThemes.ndBlue,
                                   fontWeight: FontWeight.bold,

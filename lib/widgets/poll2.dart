@@ -52,7 +52,7 @@ class _PollViewState extends State<PollView> {
             .collection('notreDame')
             .doc('data')
             .collection('poll')
-            .doc(day)
+            .doc("PERMANENT")
             .get(),
       );
 
@@ -80,7 +80,7 @@ class _PollViewState extends State<PollView> {
             .collection('notreDame')
             .doc('data')
             .collection('poll')
-            .doc(day)
+            .doc("PERMANENT")
             .snapshots(),
         // ignore: missing_return
         builder: (context, snapshot) {
@@ -172,7 +172,7 @@ class _PollViewState extends State<PollView> {
                                   .collection('notreDame')
                                   .doc('data')
                                   .collection('poll')
-                                  .doc(day)
+                                  .doc("PERMANENT")
                                   .set({
                                 "voters": {currentUser.id ?? "": choice}
                               }, SetOptions(merge: true));

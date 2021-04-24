@@ -28,7 +28,7 @@ class StudentClubDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (currentUser.userType[("clubExecutive")] == null)
+    return (currentUser.userType[("clubExecutive")].isEmpty)
         ? ClubMaker()
         : StreamBuilder(
             stream: clubsRef
@@ -938,6 +938,11 @@ class _ClubMakerState extends State<ClubMaker> {
                                     isUploading = true;
                                   });
                                   String clubId = generateRandomString(20);
+                                  usersRef.doc(currentUser.id).set({
+                                    "userType": {
+                                      "clubExecutive": [clubId]
+                                    }
+                                  });
                                   clubsRef
                                       .doc(clubId)
                                       .set({
@@ -1356,7 +1361,14 @@ class _ClubMembersListState extends State<ClubMembersList> {
                           fontWeight: FontWeight.bold)),
                   onPressed: () {
                     clubsRef.doc(clubId).set({
-                      "members": {userId: 3}
+                      "members": {userId: 3},
+                      "execs": FieldValue.arrayUnion([userId])
+                    }, SetOptions(merge: true));
+                    usersRef.doc(userId).set({
+                      "userType": {
+                        "clubExecutive": [clubId]
+                      },
+                      "execs": FieldValue.arrayUnion([userId])
                     }, SetOptions(merge: true));
 
                     Navigator.of(context).pop(true);

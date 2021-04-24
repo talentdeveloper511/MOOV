@@ -1117,10 +1117,10 @@ class _HomePageState extends State<HomePage>
                                                                       Axis.horizontal,
                                                                 ),
                                                                 items: [
-                                                                    // PollView(
-                                                                    //     notifier:
-                                                                    //         _notifier),
-                                                                    SuggestionBoxCarousel(),
+                                                                    PollView(
+                                                                        notifier:
+                                                                            _notifier),
+                                                                    // SuggestionBoxCarousel(),
                                                                     // currentUser.friendGroups !=
                                                                     //         null
                                                                     //     ? GroupCarousel()

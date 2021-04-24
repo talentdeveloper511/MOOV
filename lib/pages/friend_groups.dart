@@ -84,42 +84,103 @@ class _FriendGroupsState extends State<FriendGroupsPage>
               if (snapshot.data.docs.length == 0) {
                 return Container(
                   child: Center(
-                      child: Padding(
-                    padding: const EdgeInsets.all(40.0),
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                              "lib/assets/clouds.jpeg",
-                              width: MediaQuery.of(context).size.width,
+                      child: Column(
+                    children: [
+                      Stack(alignment: Alignment.center, children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15.0),
+                          child: SizedBox(
+                            height: isLargePhone
+                                ? MediaQuery.of(context).size.height * 0.175
+                                : MediaQuery.of(context).size.height * .2,
+                            width: MediaQuery.of(context).size.width,
+                            child: Container(
+                              child: ClipRRect(
+                                child: Image.asset(
+                                  'lib/assets/fg.jpeg',
+                                  color: Colors.black12,
+                                  colorBlendMode: BlendMode.darken,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              margin: EdgeInsets.only(
+                                  left: 0, top: 0, right: 0, bottom: 7.5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
                             ),
-                            Text(
-                              "Yours forever.",
-                              style: TextThemes.headline1,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 175.0, left: 20, right: 20),
+                          ),
+                        ),
+                        Positioned(
+                            bottom: isLargePhone ? 30 : 25,
+                            right: 20,
+                            child: GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => GroupForm())),
                               child: Text(
-                                  """MOOVs delete one hour after start time for privacy. """
-                                  """\
-                    But those you save to memory will stay here, \nfor your eyes only.""",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 13)),
-                            )
-                          ],
+                                "Create one",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: <Color>[
+                                      Colors.black.withAlpha(0),
+                                      Colors.black,
+                                      Colors.black12,
+                                    ],
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "Friend Groups",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: 'Solway',
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 24),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                        Text(
-                          "When added to a Friend Group,\n it will appear here.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w300),
-                        ),
-                      ],
-                    ),
+                      ]),
+                      Text(
+                        "\n\nWhen added to Friend Groups,\n they will appear here.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w300),
+                      ),
+                    ],
                   )),
                 );
               }
@@ -132,7 +193,9 @@ class _FriendGroupsState extends State<FriendGroupsPage>
                     Padding(
                       padding: const EdgeInsets.only(bottom: 15.0),
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.175,
+                        height: isLargePhone
+                            ? MediaQuery.of(context).size.height * 0.175
+                            : MediaQuery.of(context).size.height * 0.2,
                         width: MediaQuery.of(context).size.width,
                         child: Container(
                           child: ClipRRect(
@@ -164,7 +227,7 @@ class _FriendGroupsState extends State<FriendGroupsPage>
                       ),
                     ),
                     Positioned(
-                        bottom: 30,
+                        bottom: isLargePhone ? 30 : 25,
                         right: 20,
                         child: GestureDetector(
                           onTap: () => Navigator.push(

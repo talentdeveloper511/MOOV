@@ -6,6 +6,7 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -171,6 +172,9 @@ class _EditClubState extends State<EditClub> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       GestureDetector(
+                                        onTap: () {
+                                          showAlertDialog(context);
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                               color: Colors.white,
@@ -281,6 +285,40 @@ class _EditClubState extends State<EditClub> {
                 ],
               );
             }),
+      ),
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text("Leave Club?",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        actions: [
+          CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text("Leave", style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  PageRouteBuilder(pageBuilder: (_, __, ___) => Home()),
+                  (Route<dynamic> route) => false,
+                );
+                usersRef.doc(currentUser.id).set({
+                  "userType": {"clubExecutive": FieldValue.delete()}
+                });
+                clubsRef.doc(widget.clubId).set({
+                  "execs": FieldValue.arrayRemove([currentUser.id]),
+                  "members": {currentUser.id: FieldValue.delete()},
+                  "memberIds": FieldValue.arrayRemove([currentUser.id])
+                }, SetOptions(merge: true));
+              }),
+          CupertinoDialogAction(
+            child: Text("Nah, my bad"),
+            onPressed: () => Navigator.of(context).pop(true),
+          )
+        ],
       ),
     );
   }

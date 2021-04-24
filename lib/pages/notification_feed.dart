@@ -271,30 +271,30 @@ class _NotificationFeedState extends State<NotificationFeed>
                   ]),
                 ],
               ),
-              currentUser.friendRequests.length != 0
-                  ? GestureDetector(
-                      onTap: () => {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        FriendRequests(id: currentUser.id)))
-                          },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.black, width: .25)),
-                        height: 50,
-                        child: Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Text(
-                              'Friend Requests (' +
-                                  currentUser.friendRequests.length.toString() +
-                                  ')',
-                            )),
-                        alignment: Alignment.centerLeft,
-                      ))
-                  : Container(),
+              // currentUser.friendRequests.length != 0
+              //     ? GestureDetector(
+              //         onTap: () => {
+              //               Navigator.push(
+              //                   context,
+              //                   MaterialPageRoute(
+              //                       builder: (context) =>
+              //                           FriendRequests(id: currentUser.id)))
+              //             },
+              //         child: Container(
+              //           decoration: BoxDecoration(
+              //               border:
+              //                   Border.all(color: Colors.black, width: .25)),
+              //           height: 50,
+              //           child: Padding(
+              //               padding: EdgeInsets.only(left: 20),
+              //               child: Text(
+              //                 'Friend Requests (' +
+              //                     currentUser.friendRequests.length.toString() +
+              //                     ')',
+              //               )),
+              //           alignment: Alignment.centerLeft,
+              //         ))
+              //     : Container(),
               SingleChildScrollView(
                 child: Container(
                   height: _currentIndex == 0

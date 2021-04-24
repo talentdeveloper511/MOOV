@@ -681,6 +681,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   login() {
+    HapticFeedback.lightImpact();
     googleSignIn.signIn();
   }
 
@@ -752,122 +753,158 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
-        leadingWidth: 55,
-        leading: CarouselSlider(
-          options: CarouselOptions(
-            height: 400,
-            aspectRatio: 16 / 9,
-            viewportFraction: 1,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            scrollPhysics: NeverScrollableScrollPhysics(),
-            pauseAutoPlayOnTouch: false,
-            reverse: false,
-            autoPlay: false,
-            autoPlayInterval: Duration(seconds: 4),
-            autoPlayAnimationDuration: Duration(milliseconds: 800),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            enlargeCenterPage: true,
-            // onPageChanged: callbackFunction,
-            scrollDirection: Axis.horizontal,
-          ),
-          items: [
+        leadingWidth: 101,
+        leading: Row(
+          children: [
+            IconButton(
+              padding: EdgeInsets.only(left: 9.0),
+              icon: Row(
+                children: [
+                  Icon(Icons.monetization_on_outlined),
+                  SizedBox(width: 5),
+                  Text("0",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold))
+                ],
+              ),
+              color: Colors.white,
+              splashColor: Colors.transparent,
+              onPressed: () async {
+                //moov money
+              },
+            ),
             IconButton(
               padding: EdgeInsets.only(left: 5.0),
               icon: Icon(Icons.insert_chart_outlined),
               color: Colors.white,
-              splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+              splashColor: Colors.transparent,
               onPressed: () async {
                 // Implement navigation to leaderboard page here...
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => LeaderBoardPage()));
               },
             ),
-            // GestureDetector(
-            //   onTap: () async {
-            //     var randomPost = await randomPostMaker();
-            //     Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //             builder: (context) => PostDetail(randomPost)));
-            //   },
-            //   child: Container(
-            //     margin: const EdgeInsets.all(7.0),
-            //     padding: const EdgeInsets.all(7.0),
-            //     decoration: BoxDecoration(
-            //         border: Border.all(color: Colors.white),
-            //         borderRadius: BorderRadius.circular(7)),
-            //     child: Text(
-            //       "Surprise",
-            //       style: TextStyle(fontSize: 14.0, color: Colors.white),
+            // Expanded(
+            //   child: CarouselSlider(
+            //     options: CarouselOptions(
+            //       height: 400,
+            //       aspectRatio: 16 / 9,
+            //       viewportFraction: 1,
+            //       initialPage: 0,
+            //       enableInfiniteScroll: true,
+            //       scrollPhysics: NeverScrollableScrollPhysics(),
+            //       pauseAutoPlayOnTouch: false,
+            //       reverse: false,
+            //       autoPlay: false,
+            //       autoPlayInterval: Duration(seconds: 4),
+            //       autoPlayAnimationDuration: Duration(milliseconds: 800),
+            //       autoPlayCurve: Curves.fastOutSlowIn,
+            //       enlargeCenterPage: true,
+            //       // onPageChanged: callbackFunction,
+            //       scrollDirection: Axis.horizontal,
             //     ),
+            //     items: [
+            //       IconButton(
+            //         padding: EdgeInsets.only(left: 5.0),
+            //         icon: Icon(Icons.insert_chart_outlined),
+            //         color: Colors.white,
+            //         splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+            //         onPressed: () async {
+            //           // Implement navigation to leaderboard page here...
+            //           Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                   builder: (context) => LeaderBoardPage()));
+            //         },
+            //       ),
+            //       // GestureDetector(
+            //       //   onTap: () async {
+            //       //     var randomPost = await randomPostMaker();
+            //       //     Navigator.push(
+            //       //         context,
+            //       //         MaterialPageRoute(
+            //       //             builder: (context) => PostDetail(randomPost)));
+            //       //   },
+            //       //   child: Container(
+            //       //     margin: const EdgeInsets.all(7.0),
+            //       //     padding: const EdgeInsets.all(7.0),
+            //       //     decoration: BoxDecoration(
+            //       //         border: Border.all(color: Colors.white),
+            //       //         borderRadius: BorderRadius.circular(7)),
+            //       //     child: Text(
+            //       //       "Surprise",
+            //       //       style: TextStyle(fontSize: 14.0, color: Colors.white),
+            //       //     ),
+            //       //   ),
+            //       // ),
+            //       // FocusedMenuHolder(
+            //       //   menuWidth: MediaQuery.of(context).size.width * .95,
+
+            //       //   blurSize: 5.0,
+            //       //   menuItemExtent: 200,
+            //       //   menuBoxDecoration: BoxDecoration(
+            //       //       color: Colors.grey,
+            //       //       borderRadius: BorderRadius.all(Radius.circular(15.0))),
+            //       //   duration: Duration(milliseconds: 100),
+            //       //   animateMenuItems: true,
+            //       //   blurBackgroundColor: Colors.black54,
+            //       //   openWithTap:
+            //       //       true, // Open Focused-Menu on Tap rather than Long Press
+            //       //   menuOffset:
+            //       //       10.0, // Offset value to show menuItem from the selected item
+            //       //   bottomOffsetHeight:
+            //       //       80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+            //       //   menuItems: <FocusedMenuItem>[
+            //       //     // Add Each FocusedMenuItem  for Menu Options
+
+            //       //     FocusedMenuItem(
+            //       //         title: Center(
+            //       //             child: Text(
+            //       //           "     Lowkey / Chill",
+            //       //           style: GoogleFonts.robotoSlab(fontSize: 40),
+            //       //         )),
+            //       //         // trailingIcon: Icon(Icons.edit),
+            //       //         onPressed: () {
+            //       //           navigateToCategoryFeed(context, "Shows");
+            //       //         }),
+            //       //     FocusedMenuItem(
+            //       //         backgroundColor: Colors.red[50],
+            //       //         title: Text("          Rage",
+            //       //             style: GoogleFonts.yeonSung(
+            //       //                 fontSize: 50, color: Colors.red)),
+            //       //         onPressed: () {
+            //       //           navigateToCategoryFeed(context, "Parties");
+            //       //         }),
+            //       //   ],
+            //       //   onPressed: () {},
+            //       //   child: Container(
+            //       //     margin: const EdgeInsets.all(7.0),
+            //       //     padding: const EdgeInsets.all(7.0),
+            //       //     decoration: BoxDecoration(
+            //       //         border: Border.all(color: Colors.white),
+            //       //         borderRadius: BorderRadius.circular(7)),
+            //       //     child: Text(
+            //       //       "Mood",
+            //       //       style: TextStyle(fontSize: 14.0, color: Colors.white),
+            //       //     ),
+            //       //   ),
+            //       // ),
+            //     ].map((i) {
+            //       return Builder(
+            //         builder: (BuildContext context) {
+            //           return Container(
+            //               width: MediaQuery.of(context).size.width * 3,
+            //               margin: EdgeInsets.symmetric(horizontal: 5.0),
+            //               decoration: BoxDecoration(),
+            //               child: Center(
+            //                 child: i,
+            //               ));
+            //         },
+            //       );
+            //     }).toList(),
             //   ),
             // ),
-            // FocusedMenuHolder(
-            //   menuWidth: MediaQuery.of(context).size.width * .95,
-
-            //   blurSize: 5.0,
-            //   menuItemExtent: 200,
-            //   menuBoxDecoration: BoxDecoration(
-            //       color: Colors.grey,
-            //       borderRadius: BorderRadius.all(Radius.circular(15.0))),
-            //   duration: Duration(milliseconds: 100),
-            //   animateMenuItems: true,
-            //   blurBackgroundColor: Colors.black54,
-            //   openWithTap:
-            //       true, // Open Focused-Menu on Tap rather than Long Press
-            //   menuOffset:
-            //       10.0, // Offset value to show menuItem from the selected item
-            //   bottomOffsetHeight:
-            //       80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
-            //   menuItems: <FocusedMenuItem>[
-            //     // Add Each FocusedMenuItem  for Menu Options
-
-            //     FocusedMenuItem(
-            //         title: Center(
-            //             child: Text(
-            //           "     Lowkey / Chill",
-            //           style: GoogleFonts.robotoSlab(fontSize: 40),
-            //         )),
-            //         // trailingIcon: Icon(Icons.edit),
-            //         onPressed: () {
-            //           navigateToCategoryFeed(context, "Shows");
-            //         }),
-            //     FocusedMenuItem(
-            //         backgroundColor: Colors.red[50],
-            //         title: Text("          Rage",
-            //             style: GoogleFonts.yeonSung(
-            //                 fontSize: 50, color: Colors.red)),
-            //         onPressed: () {
-            //           navigateToCategoryFeed(context, "Parties");
-            //         }),
-            //   ],
-            //   onPressed: () {},
-            //   child: Container(
-            //     margin: const EdgeInsets.all(7.0),
-            //     padding: const EdgeInsets.all(7.0),
-            //     decoration: BoxDecoration(
-            //         border: Border.all(color: Colors.white),
-            //         borderRadius: BorderRadius.circular(7)),
-            //     child: Text(
-            //       "Mood",
-            //       style: TextStyle(fontSize: 14.0, color: Colors.white),
-            //     ),
-            //   ),
-            // ),
-          ].map((i) {
-            return Builder(
-              builder: (BuildContext context) {
-                return Container(
-                    width: MediaQuery.of(context).size.width * 3,
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(),
-                    child: Center(
-                      child: i,
-                    ));
-              },
-            );
-          }).toList(),
+          ],
         ),
 
         // child: Padding(
@@ -1021,14 +1058,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             GestureDetector(
               onTap: login,
               child: Container(
+                height: 50.0,
                 width: 300.0,
-                height: 60.0,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'lib/assets/google.png',
-                    ),
-                    fit: BoxFit.cover,
+                  color: TextThemes.ndGold,
+                  borderRadius: BorderRadius.circular(7.0),
+                ),
+                child: Center(
+                  child: Text(
+                    "Sign in",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -1074,6 +1116,7 @@ class NamedIconMessages extends StatelessWidget {
           int notifs = snapshot.data.docs.length;
 
           return InkWell(
+            splashColor: Colors.transparent,
             onTap: onTap,
             child: Container(
               width: 50,
