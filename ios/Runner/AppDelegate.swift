@@ -14,6 +14,7 @@ import GoogleMaps
   ) -> Bool {
     FirebaseApp.configure()
     GMSServices.provideAPIKey("AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A")
+    BTAppSwitch.setReturnURLScheme("com.MOOV.ND.braintree")
    
     UNUserNotificationCenter.current().delegate = self
     

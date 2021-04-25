@@ -26,6 +26,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.539403240889-1jenth4caipickvn7guka4mohiov020c</string>
+				<string>com.MOOV.ND.braintree</string>
 			</array>
 		</dict>
 		<dict>
@@ -34,6 +35,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.MOOV.ND</string>
+				<string>com.MOOV.ND.braintree</string>
 			</array>
 		</dict>
 	</array>
