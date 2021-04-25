@@ -2,6 +2,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //this pag4 handles deposits and withdraws of MOOV Money
@@ -148,23 +149,36 @@ class MoovMoneyAdd extends StatelessWidget {
                         ),
                       )),
                 ),
-                Container(
-                height: 50.0,
-                width: 300.0,
-                decoration: BoxDecoration(
-                  color: TextThemes.ndGold,
-                  borderRadius: BorderRadius.circular(7.0),
-                ),
-                child: Center(
-                  child: Text(
-                    "Deposit",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold),
+                GestureDetector(
+                  onTap: () => showDialog(
+                      context: context,
+                      builder: (_) => CupertinoAlertDialog(
+                            title: Text("Workin' on this!"),
+                            content: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                  "Hopefully live next update."),
+                            ),
+                          ),
+                      barrierDismissible: true),
+                  child: Container(
+                    height: 50.0,
+                    width: 300.0,
+                    decoration: BoxDecoration(
+                      color: TextThemes.ndGold,
+                      borderRadius: BorderRadius.circular(7.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Deposit",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
-              ),
               ],
             )
           ],
