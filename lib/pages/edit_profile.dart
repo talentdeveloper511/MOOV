@@ -469,7 +469,7 @@ class _EditProfileState extends State<EditProfile> {
                       )
                     : Container(),
                 Padding(
-                  padding: const EdgeInsets.only(top: 30.0, bottom: 5),
+                  padding: const EdgeInsets.only(top: 30.0, bottom: 10),
                   child: Text(
                     "Bio",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -489,7 +489,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 30.0, bottom: 5),
+                  padding: const EdgeInsets.only(top: 30.0, bottom: 10),
                   child: Text(
                     "Venmo",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),

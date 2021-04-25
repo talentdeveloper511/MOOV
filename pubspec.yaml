@@ -218,6 +218,7 @@ flutter:
     - lib/assets/incognitoPic.jpg
     - lib/assets/welcomePage.png
     - lib/assets/betaWelcome.png
+    - lib/assets/moovmoney.jpg
     - lib/assets/betaDisclaimer.png
     - lib/assets/plate.png
     - lib/assets/dance.png

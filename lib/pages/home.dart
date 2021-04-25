@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
+import 'package:MOOV/moovMoney/moovMoneyAdd.dart';
 import 'package:MOOV/pages/BusinessTab.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
@@ -770,7 +771,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               color: Colors.white,
               splashColor: Colors.transparent,
               onPressed: () async {
-                //moov money
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MoovMoneyAdd()));
               },
             ),
             IconButton(
