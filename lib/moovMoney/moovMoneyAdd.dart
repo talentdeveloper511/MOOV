@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/progress.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,7 +59,8 @@ class MoovMoneyAdd extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.white,
-        body: Column(
+        body: ListView(
+          physics: ClampingScrollPhysics(),
           children: [
             Stack(alignment: Alignment.center, children: <Widget>[
               Padding(
@@ -148,7 +153,7 @@ class MoovMoneyAdd extends StatelessWidget {
                         padding: const EdgeInsets.all(14.0),
                         child: Text(
                           "Use MOOV Money to buy anything at your MOOVs. Drinks at the bar, Venmo for house covers, skipping lines, club dues, you name it.",
-                          style: TextStyle(fontWeight: FontWeight.w300),
+                          style: TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.center,
                         ),
                       )),
@@ -252,6 +257,8 @@ class MoneyAmount extends StatefulWidget {
 
 class _MoneyAmountState extends State<MoneyAmount> {
   static final String tokenizationKey = 'sandbox_x6rsh5jt_63hmws26h3ncb2m4';
+  bool successCheck = false;
+  bool isUploading = false;
 
   void showNonce(BraintreePaymentMethodNonce nonce, context) {
     showDialog(
@@ -280,102 +287,136 @@ class _MoneyAmountState extends State<MoneyAmount> {
 
   @override
   Widget build(BuildContext context) {
-    print(amountInt);
-    return Column(
-      children: [
-        ListTile(
-          title: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: TextField(
-                  decoration: InputDecoration(
-                      hintText: "Enter Amount",
-                      hintStyle: TextStyle(fontWeight: FontWeight.w100)),
-                  style: TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center,
-                  inputFormatters: [
-                    CurrencyTextInputFormatter(
-                      decimalDigits: 0,
-                      symbol: '\$',
+    return (isUploading)
+        ? linearProgress()
+        : (successCheck)
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Sweet!",
+                      style: TextThemes.headline1,
+                    ),
+                    SizedBox(height: 30),
+                    Icon(
+                      Icons.check,
+                      color: Colors.green,
                     )
                   ],
-                  controller: amountController,
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() => amountString = value);
-                    if (value != "0") {
-                      String x = amountController.text.substring(1).replaceAll(",", "");
-                      amountInt = int.parse(x);
-                    }
-                  },
                 ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 10),
-        GestureDetector(
-          onTap: () async {
-            HapticFeedback.lightImpact();
-            var request = BraintreeDropInRequest(
-              vaultManagerEnabled: true,
-              applePayRequest: BraintreeApplePayRequest(
-                  amount: amountInt.toDouble(),
-                  displayName: "MOOV MONEY",
-                  countryCode: "US",
-                  currencyCode: "USD",
-                  appleMerchantID: "merchant.com.MOOV.ND"),
-              venmoEnabled: true,
-              tokenizationKey: tokenizationKey,
-              collectDeviceData: true,
-              googlePaymentRequest: BraintreeGooglePaymentRequest(
-                totalPrice: amountInt.toString(),
-                currencyCode: 'USD',
-                billingAddressRequired: false,
-              ),
-              paypalRequest: BraintreePayPalRequest(
-                amount:  amountInt.toString(),
-                displayName: 'MOOV',
-              ),
-              cardEnabled: true,
-            );
-            final result = await BraintreeDropIn.start(request);
-            if (result != null) {
-              String orderId = generateRandomString(20);
-              usersRef
-                  .doc(currentUser.id)
-                  .collection('payments')
-                  .doc(orderId)
-                  .set({
-                "nonce": result.paymentMethodNonce.nonce,
-                "amount": amountInt,
-                "orderDate": DateTime.now(),
-                "orderId": orderId,
-                "deviceData": "iPhone",
-              });
-              showNonce(result.paymentMethodNonce, context);
-            }
-          },
-          child: Container(
-            height: 50.0,
-            width: 300.0,
-            decoration: BoxDecoration(
-              color: TextThemes.ndGold,
-              borderRadius: BorderRadius.circular(7.0),
-            ),
-            child: Center(
-              child: Text(
-                "Deposit",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+              )
+            : Column(
+                children: [
+                  ListTile(
+                    title: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText: "Enter Amount",
+                                hintStyle:
+                                    TextStyle(fontWeight: FontWeight.w100)),
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center,
+                            inputFormatters: [
+                              CurrencyTextInputFormatter(
+                                decimalDigits: 0,
+                                symbol: '\$',
+                              )
+                            ],
+                            controller: amountController,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() => amountString = value);
+                              if (value != "0") {
+                                String x = amountController.text
+                                    .substring(1)
+                                    .replaceAll(",", "");
+                                amountInt = int.parse(x);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () async {
+                      HapticFeedback.lightImpact();
+                      var request = BraintreeDropInRequest(
+                        vaultManagerEnabled: true,
+                        applePayRequest: BraintreeApplePayRequest(
+                            amount: amountInt.toDouble(),
+                            displayName: "MOOV MONEY",
+                            countryCode: "US",
+                            currencyCode: "USD",
+                            appleMerchantID: "merchant.com.MOOV.ND"),
+                        venmoEnabled: true,
+                        tokenizationKey: tokenizationKey,
+                        collectDeviceData: true,
+                        googlePaymentRequest: BraintreeGooglePaymentRequest(
+                          totalPrice: amountInt.toString(),
+                          currencyCode: 'USD',
+                          billingAddressRequired: false,
+                        ),
+                        paypalRequest: BraintreePayPalRequest(
+                          amount: amountInt.toString(),
+                          displayName: 'MOOV',
+                        ),
+                        cardEnabled: true,
+                      );
+                      final result = await BraintreeDropIn.start(request);
+                      if (result != null) {
+                        setState(() {
+                          isUploading = true;
+                        });
+                        String orderId = generateRandomString(20);
+                        usersRef
+                            .doc(currentUser.id)
+                            .collection('payments')
+                            .doc(orderId)
+                            .set({
+                          "nonce": result.paymentMethodNonce.nonce,
+                          "amount": amountInt,
+                          "orderDate": DateTime.now(),
+                          "orderId": orderId,
+                          "deviceData": "iPhone",
+                        });
+                        usersRef
+                            .doc(currentUser.id)
+                            .update(
+                                {"moovMoney": FieldValue.increment(amountInt)})
+                            .then((value) => setState(() {
+                                  isUploading = false;
+                                  successCheck = true;
+                                }))
+                            .then((value) => Timer(Duration(seconds: 3), () {
+                                  Navigator.pop(context);
+                                }));
+                      }
+                    },
+                    child: Container(
+                      height: 50.0,
+                      width: 300.0,
+                      decoration: BoxDecoration(
+                        color: TextThemes.ndGold,
+                        borderRadius: BorderRadius.circular(7.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Deposit",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
   }
 }

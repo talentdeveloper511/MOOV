@@ -1,20 +1,11 @@
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/pages/CategoryFeed.dart';
+
 import 'package:MOOV/pages/NotifyingPageView.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/friend_groups.dart';
-import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
-import 'package:MOOV/widgets/MOTD.dart';
-import 'package:MOOV/pages/CategoryFeed.dart';
-import 'package:MOOV/widgets/group_carousel_card.dart';
-import 'package:MOOV/widgets/hottestMOOV.dart';
-import 'package:MOOV/widgets/locationCheckIn.dart';
 import 'package:MOOV/widgets/poll2.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -33,16 +24,12 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/bezier_circle_header.dart';
-import 'dart:math' as math;
-
-import 'friend_finder.dart';
-import 'notification_feed.dart';
 
 PageStorageKey motnKey = PageStorageKey("motnKey");
 
 class HomePage extends StatefulWidget {
   final int pageIndex, motdIndex;
-  User user;
+  final User user;
   HomePage({Key key, this.user, this.pageIndex, this.motdIndex})
       : super(key: key);
 

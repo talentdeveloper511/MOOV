@@ -754,11 +754,7 @@ class _UserPostResultState extends State<UserPostResult> {
                   padding: EdgeInsets.only(
                     left: 2.5,
                   ),
-                  child: Icon(
-                    Icons.store,
-                    size: 25,
-                    color: Colors.blue
-                  ),
+                  child: Icon(Icons.store, size: 25, color: Colors.blue),
                 )
               : verifiedStatus == 2
                   ? Padding(
@@ -1470,6 +1466,9 @@ class _InviteGroupState extends State<InviteGroup> {
 }
 
 class SearchUsersMessage extends StatefulWidget {
+  bool needAppBar;
+  SearchUsersMessage(this.needAppBar);
+
   @override
   _SearchUsersMessageState createState() => _SearchUsersMessageState();
 }
@@ -1515,7 +1514,7 @@ class _SearchUsersMessageState extends State<SearchUsersMessage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: widget.needAppBar ? AppBar(
         leading: IconButton(
             icon: Icon(Icons.arrow_drop_down_outlined,
                 color: Colors.white, size: 35),
@@ -1547,129 +1546,129 @@ class _SearchUsersMessageState extends State<SearchUsersMessage> {
             ],
           ),
         ),
-      ),
+      ) : null,
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          TextField(
-              style: TextStyle(fontSize: 20),
-              controller: searchController,
-              onChanged: (val) {
-                setState(() {
-                  _searchTerm = val;
-                });
-              },
-              // Set Focus Node
-              decoration: InputDecoration(
-                labelStyle: TextStyle(fontSize: 20),
-                border: InputBorder.none,
-                hintText: 'Search',
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
-                prefixIcon: const Icon(Icons.search, color: Colors.black),
-                suffixIcon: GestureDetector(
-                    onTap: () {
-                      clearSearch();
-                      // Unfocus all focus nodes
+      body: ListView(
+        physics: ClampingScrollPhysics(),
+        children: <Widget>[
+        TextField(
+            style: TextStyle(fontSize: 20),
+            controller: searchController,
+            onChanged: (val) {
+              setState(() {
+                _searchTerm = val;
+              });
+            },
+            // Set Focus Node
+            decoration: InputDecoration(
+              labelStyle: TextStyle(fontSize: 20),
+              border: InputBorder.none,
+              hintText: 'Search',
+              hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
+              prefixIcon: const Icon(Icons.search, color: Colors.black),
+              suffixIcon: GestureDetector(
+                  onTap: () {
+                    clearSearch();
+                    // Unfocus all focus nodes
 
-                      // Disable text field's focus node request
+                    // Disable text field's focus node request
 
-                      //Enable the text field's focus node request after some delay
-                    },
-                    child: IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          Icons.clear,
-                          color: Colors.black,
-                        ))),
-              )),
-          StreamBuilder<List<AlgoliaObjectSnapshot>>(
-              stream: Stream.fromFuture(_operation(_searchTerm)),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData ||
-                    snapshot.data.length == 0 ||
-                    _searchTerm == null)
-                  return Container(
+                    //Enable the text field's focus node request after some delay
+                  },
+                  child: IconButton(
+                      onPressed: null,
+                      icon: Icon(
+                        Icons.clear,
+                        color: Colors.black,
+                      ))),
+            )),
+        StreamBuilder<List<AlgoliaObjectSnapshot>>(
+            stream: Stream.fromFuture(_operation(_searchTerm)),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData ||
+                  snapshot.data.length == 0 ||
+                  _searchTerm == null)
+                return Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: Container(
                       height: MediaQuery.of(context).size.height,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.pink[300], Colors.pink[200]],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.pink[300], Colors.pink[200]],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
                         ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.all(50.0),
-                                  child: RichText(
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                          style: TextThemes.mediumbody,
-                                          children: [
-                                            TextSpan(
-                                                text: "Slide",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w300)),
-                                            TextSpan(
-                                                text: " in",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            TextSpan(
-                                                text: ".",
-                                                style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.w300))
-                                          ]))),
-                              Image.asset('lib/assets/ff.png')
-                            ],
-                          ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.all(50.0),
+                                child: RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                        style: TextThemes.mediumbody,
+                                        children: [
+                                          TextSpan(
+                                              text: "Slide",
+                                              style: TextStyle(
+                                                  fontSize: 30,
+                                                  fontWeight:
+                                                      FontWeight.w300)),
+                                          TextSpan(
+                                              text: " in",
+                                              style: TextStyle(
+                                                  fontSize: 30,
+                                                  fontWeight:
+                                                      FontWeight.w600)),
+                                          TextSpan(
+                                              text: ".",
+                                              style: TextStyle(
+                                                  fontSize: 30,
+                                                  fontWeight:
+                                                      FontWeight.w300))
+                                        ]))),
+                            Image.asset('lib/assets/ff.png')
+                          ],
                         ),
-                      ));
-                List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
+                      ),
+                    ));
+              List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
 
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return Container();
-                  default:
-                    if (snapshot.hasError)
-                      return new Text('Error: ${snapshot.error}');
-                    else
-                      return CustomScrollView(
-                        shrinkWrap: true,
-                        slivers: <Widget>[
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                return _searchTerm.length > 0
-                                    ? MessageResultAdd(
-                                        currSearchStuff[index]
-                                            .data["displayName"],
-                                        currSearchStuff[index].data["email"],
-                                        currSearchStuff[index].data["photoUrl"],
-                                        currSearchStuff[index].data["id"],
-                                        currSearchStuff[index]
-                                            .data["verifiedStatus"],
-                                      )
-                                    : Container();
-                              },
-                              childCount: currSearchStuff.length ?? 0,
-                            ),
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Container();
+                default:
+                  if (snapshot.hasError)
+                    return new Text('Error: ${snapshot.error}');
+                  else
+                    return CustomScrollView(
+                      shrinkWrap: true,
+                      slivers: <Widget>[
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return _searchTerm.length > 0
+                                  ? MessageResultAdd(
+                                      currSearchStuff[index]
+                                          .data["displayName"],
+                                      currSearchStuff[index].data["email"],
+                                      currSearchStuff[index].data["photoUrl"],
+                                      currSearchStuff[index].data["id"],
+                                      currSearchStuff[index]
+                                          .data["verifiedStatus"],
+                                    )
+                                  : Container();
+                            },
+                            childCount: currSearchStuff.length ?? 0,
                           ),
-                        ],
-                      );
-                }
-              }),
-        ]),
-      ),
+                        ),
+                      ],
+                    );
+              }
+            }),
+      ]),
     );
   }
 }
@@ -1736,7 +1735,7 @@ class _MessageResultAddState extends State<MessageResultAdd> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  MessageDetail(directMessageId, userId, false, " ", [],{})));
+                  MessageDetail(directMessageId, userId, false, " ", [], {})));
     });
   }
 

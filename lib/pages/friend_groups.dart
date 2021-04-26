@@ -186,6 +186,7 @@ class _FriendGroupsState extends State<FriendGroupsPage>
               }
 
               return CustomScrollView(
+                physics: ClampingScrollPhysics(),
                 slivers: [
                   SliverToBoxAdapter(
                       child:
