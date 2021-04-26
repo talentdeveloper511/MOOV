@@ -347,6 +347,8 @@ class _MoneyAmountState extends State<MoneyAmount> {
                   GestureDetector(
                     onTap: () async {
                       String orderId = generateRandomString(20);
+                      String clientToken = "";
+
                       usersRef
                           .doc(currentUser.id)
                           .collection('payments')
@@ -356,10 +358,19 @@ class _MoneyAmountState extends State<MoneyAmount> {
                         "customerId": currentUser.id
                       });
                       HapticFeedback.lightImpact();
-                      usersRef.doc(currentUser.id).snapshots().listen((event) {
-                        print(event);
+                      usersRef
+                          .doc(currentUser.id)
+                          .collection('payments')
+                          .doc(orderId)
+                          .snapshots()
+                          .listen((event) {
+                        if (event.data() == null) {
+                          print("don't have the token yet");
+                        }
+                        clientToken = event['clientToken'];
                       });
                       var request = BraintreeDropInRequest(
+                        clientToken: clientToken,
                         vaultManagerEnabled: true,
                         applePayRequest: BraintreeApplePayRequest(
                             amount: amountInt.toDouble(),
