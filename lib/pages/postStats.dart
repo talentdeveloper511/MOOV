@@ -110,6 +110,11 @@ class PostStatsState extends State<PostStats> {
                   ],
                 ),
 
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(thickness: 2),
+                ),
+
                 //MOOV Mountain Indicator
                 SizedBox(
                   height: 20,

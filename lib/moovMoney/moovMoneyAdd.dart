@@ -346,6 +346,14 @@ class _MoneyAmountState extends State<MoneyAmount> {
                   SizedBox(height: 10),
                   GestureDetector(
                     onTap: () async {
+                      String orderId = generateRandomString(20);
+                      usersRef
+                          .doc(currentUser.id)
+                          .collection('payments')
+                          .doc(orderId)
+                          .set({
+                            "clientToken": ""
+                          });
                       HapticFeedback.lightImpact();
                       var request = BraintreeDropInRequest(
                         vaultManagerEnabled: true,
@@ -374,7 +382,6 @@ class _MoneyAmountState extends State<MoneyAmount> {
                         setState(() {
                           isUploading = true;
                         });
-                        String orderId = generateRandomString(20);
                         usersRef
                             .doc(currentUser.id)
                             .collection('payments')
@@ -385,7 +392,7 @@ class _MoneyAmountState extends State<MoneyAmount> {
                           "orderDate": DateTime.now(),
                           "orderId": orderId,
                           "deviceData": "iPhone",
-                        });
+                        }, SetOptions(merge: true));
                         usersRef
                             .doc(currentUser.id)
                             .update(
