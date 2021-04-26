@@ -72,6 +72,7 @@ class PostStatsState extends State<PostStats> {
             int otherRaceCount = 0;
 
             Map stats = snapshot.data['stats'];
+           
             if (stats.containsKey('maleCount')) {
               maleCount = stats['maleCount'];
             }

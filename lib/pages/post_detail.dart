@@ -233,6 +233,7 @@ class _PostDetailState extends State<PostDetail>
                           int maxOccupancy = course['maxOccupancy'];
                           int venmo = course['venmo'];
                           int goingCount = course['going'].length;
+                          Map stats = course['stats'];
 
                           return Container(
                             color: Colors.white,
@@ -241,7 +242,7 @@ class _PostDetailState extends State<PostDetail>
                               controller: _scrollController,
                               children: <Widget>[
                                 _BannerImage(bannerImage, userId, postId,
-                                    maxOccupancy, goingCount),
+                                    maxOccupancy, goingCount, stats),
                                 _NonImageContents(
                                     title,
                                     description,
@@ -264,10 +265,11 @@ class _PostDetailState extends State<PostDetail>
 }
 
 class _BannerImage extends StatelessWidget {
-  String bannerImage, userId, postId;
-  int maxOccupancy, goingCount;
+  final String bannerImage, userId, postId;
+  final int maxOccupancy, goingCount;
+  final Map stats;
   _BannerImage(this.bannerImage, this.userId, this.postId, this.maxOccupancy,
-      this.goingCount);
+      this.goingCount, this.stats);
 
   @override
   Widget build(BuildContext context) {
@@ -376,7 +378,7 @@ class _BannerImage extends StatelessWidget {
               ),
             )
           : Container(),
-      Positioned(
+      stats.isNotEmpty ? Positioned(
           left: 5,
           bottom: 5,
           child: GestureDetector(
@@ -385,7 +387,7 @@ class _BannerImage extends StatelessWidget {
               child: Image.asset(
                 'lib/assets/ratioChart.png',
                 height: 50,
-              ))),
+              ))) : Container(),
     ]);
   }
 }

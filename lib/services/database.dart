@@ -1388,7 +1388,9 @@ class Database {
 
         for (var document in documents) {
           await document.reference.set({
-            "moovMoney": 0
+            // "moovMoney": 0,
+            // "race": "White",
+            // "isSingle": false
             // "badges": [],
             // "isBusiness": false
             // "groupLimit": 2
