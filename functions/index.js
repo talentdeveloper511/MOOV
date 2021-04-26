@@ -2,8 +2,67 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const algoliasearch = require("algoliasearch");
 const stripe = require("stripe")(functions.config().stripe.testkey);
-// const {user} = require("firebase-functions/lib/providers/auth");
+const braintree = require("braintree");
 admin.initializeApp(functions.config().firebase);
+
+exports.onCreateActivityFeedItem = functions.firestore
+    .document("{college}/data/users/{userId}/payments/{paymentMethodItem}")
+    .onCreate(async (snapshot, context) => {
+
+      const paymentMethod = context.params.paymentMethodItem;
+      const user = context.params.userId;
+      const college = context.params.college;
+
+      const paymentRef = admin.firestore().doc(`${college}/data/users/${user}/payments/${paymentMethod}`);
+      const doc = await paymentRef.get();
+
+      const nonce = doc.data().nonce;
+      const amountCharged = doc.data()..amount;
+      const devData = doc.data().deviceData;
+
+      const gateway = new braintree.BraintreeGateway({
+        environment: braintree.Environment.Sandbox,
+        merchantId: "63hmws26h3ncb2m4",
+        publicKey: "4w8d3g69x27qrtv2",
+        privateKey: "d6e6441e1b10e2126f5e8a4e534a981b"
+      });
+
+      gateway.clientToken.generate({
+        customerId: aCustomerId
+      }, (err, response) => {
+        // pass clientToken to your front-end
+        const clientToken = response.clientToken;
+        admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`).collection("payments").doc(`${paymentMethod}`).set({
+          client_token: clientToken,
+          status: "success",
+        }, {merge: true});
+      });
+    
+      // create transaction
+      gateway.transaction.sale({
+        amount: amountCharged,
+        paymentMethodNonce: nonce,
+        deviceData: devData,
+        options: {
+          submitForSettlement: true
+        }
+      }, (err, result) => {
+        console.log(result);
+      });
+    }
+
+// send client token to client
+app.get("/client_token", (req, res) => {
+  gateway.clientToken.generate({}, (err, response) => {
+    res.send(response.clientToken);
+  });
+});
+
+// receive payment method nonce from client
+app.post("/checkout", (req, res) => {
+  const nonceFromTheClient = req.body.payment_method_nonce;
+  // Use payment method nonce here
+});
 
 const ALGOLIA_APP_ID = "CUWBHO409I";
 const ALGOLIA_ADMIN_KEY = "53390b64ddeba1e1f32e81485ebf9492";
