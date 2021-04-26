@@ -42,9 +42,11 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey4 = GlobalKey<FormState>();
   final _formKey5 = GlobalKey<FormState>();
   final _formKey6 = GlobalKey<FormState>();
+  final _formKey7 = GlobalKey<FormState>();
   final _formKey8 = GlobalKey<FormState>();
   final yearList = ["Freshman", "Sophomore", "Junior", "Senior", "Grad"];
   final genderList = ["Female", "Male", "Other"];
+  final raceList = ["Black", "Latino", "Asian", "White", "Other"];
   final bizTypeList = [
     "Restaurant/Bar",
     "Theatre",
@@ -55,15 +57,18 @@ class _CreateAccountState extends State<CreateAccount> {
 
   String yearDropdownValue = "Freshman";
   String genderDropdownValue = "Female";
+  String raceDropdownValue = "Black";
 
   String dorm;
   String gender;
+  String race;
   String year;
   String referral;
   String venmoUsername;
   String businessName;
   String businessDescription;
   Map userTypeMap = {};
+  bool isSingle = false;
 
   submit() {
     final form0 = _formKey0.currentState;
@@ -71,6 +76,7 @@ class _CreateAccountState extends State<CreateAccount> {
     final form2 = _formKey2.currentState;
     final form3 = _formKey3.currentState;
     final form4 = _formKey4.currentState;
+    final form7 = _formKey7.currentState;
 
     if (form0.validate() &&
         form.validate() &&
@@ -81,9 +87,13 @@ class _CreateAccountState extends State<CreateAccount> {
       form2.save();
       form3.save();
       form4.save();
+      form7.save();
 
       if (_clubExecChecked) {
         userTypeMap = {"clubExecutive": []};
+      }
+      if (_isSingleChecked) {
+        isSingle = true;
       }
 
       SnackBar snackbar = SnackBar(
@@ -286,7 +296,9 @@ class _CreateAccountState extends State<CreateAccount> {
         "header": "",
         "timestamp": timestamp,
         "score": 0,
+        "moovMoney": 0,
         "gender": gender,
+        "race": race,
         "year": year,
         "dorm": dorm,
         "referral": referral,
@@ -298,6 +310,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "friendRequests": [],
         "friendGroups": [],
         "userType": userTypeMap,
+        "isSingle": false,
         "venmoUsername": venmoUsername,
         "pushSettings": {
           "going": true,
@@ -342,7 +355,9 @@ class _CreateAccountState extends State<CreateAccount> {
         "header": "",
         "timestamp": timestamp,
         "score": 0,
+        "moovMoney": 0,
         "gender": "",
+        "race": "",
         "year": "",
         "dorm": businessAddress ?? "",
         "referral": "",
@@ -355,6 +370,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "friendRequests": [],
         "friendGroups": [],
         "userType": userTypeMap,
+        "isSingle": false,
         "venmoUsername": venmoUsername,
         "pushSettings": {
           "friendPosts": true,
@@ -381,6 +397,7 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   bool _clubExecChecked = false;
+  bool _isSingleChecked = false;
 
   @override
   Widget build(BuildContext parentContext) {
@@ -517,13 +534,53 @@ class _CreateAccountState extends State<CreateAccount> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
+                                Form(
+                                  key: _formKey3,
+                                  autovalidate: true,
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * .23,
+                                    child: ButtonTheme(
+                                      child: DropdownButtonFormField(
+                                        value: genderDropdownValue,
+                                        icon: Icon(Icons.arrow_downward,
+                                            color: TextThemes.ndGold),
+                                        decoration: InputDecoration(
+                                          labelText: "Gender",
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        items: genderList.map((String value) {
+                                          return new DropdownMenuItem<String>(
+                                            value: value,
+                                            child: new Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            genderDropdownValue = newValue;
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'What gender are you?';
+                                          }
+                                          return null;
+                                        },
+                                        onSaved: (value) => gender = value,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 Container(
                                   child: Form(
                                     key: _formKey2,
                                     autovalidate: true,
                                     child: Container(
                                       width: MediaQuery.of(context).size.width *
-                                          .35,
+                                          .3,
                                       child: ButtonTheme(
                                         child: DropdownButtonFormField(
                                           value: yearDropdownValue,
@@ -560,24 +617,24 @@ class _CreateAccountState extends State<CreateAccount> {
                                   ),
                                 ),
                                 Form(
-                                  key: _formKey3,
+                                  key: _formKey7,
                                   autovalidate: true,
                                   child: Container(
                                     width:
-                                        MediaQuery.of(context).size.width * .35,
+                                        MediaQuery.of(context).size.width * .23,
                                     child: ButtonTheme(
                                       child: DropdownButtonFormField(
-                                        value: genderDropdownValue,
+                                        value: raceDropdownValue,
                                         icon: Icon(Icons.arrow_downward,
                                             color: TextThemes.ndGold),
                                         decoration: InputDecoration(
-                                          labelText: "Gender",
+                                          labelText: "Race",
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
                                           ),
                                         ),
-                                        items: genderList.map((String value) {
+                                        items: raceList.map((String value) {
                                           return new DropdownMenuItem<String>(
                                             value: value,
                                             child: new Text(value),
@@ -585,16 +642,16 @@ class _CreateAccountState extends State<CreateAccount> {
                                         }).toList(),
                                         onChanged: (String newValue) {
                                           setState(() {
-                                            genderDropdownValue = newValue;
+                                            raceDropdownValue = newValue;
                                           });
                                         },
                                         validator: (value) {
                                           if (value.isEmpty) {
-                                            return 'What gender are you?';
+                                            return 'What race are you?';
                                           }
                                           return null;
                                         },
-                                        onSaved: (value) => gender = value,
+                                        onSaved: (value) => race = value,
                                       ),
                                     ),
                                   ),
@@ -603,16 +660,27 @@ class _CreateAccountState extends State<CreateAccount> {
                             ),
                           ),
                           SizedBox(height: 50),
-                          Text("Optional Details"),
+                          Text("—Optional Details—"),
                           SizedBox(height: 10),
                           SizedBox(
                             width: 194,
+                            height: 35,
                             child: CheckboxListTile(
                                 title: new Text("I'm a club exec."),
                                 value: _clubExecChecked,
                                 onChanged: (bool value) =>
                                     setState(() => _clubExecChecked = value)),
                           ),
+                          SizedBox(
+                            height: 40,
+                            width: 194,
+                            child: CheckboxListTile(
+                                title: new Text("I'm single."),
+                                value: _isSingleChecked,
+                                onChanged: (bool value) =>
+                                    setState(() => _isSingleChecked = value)),
+                          ),
+                          SizedBox(height: 20),
                           Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Row(
