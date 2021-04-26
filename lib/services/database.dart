@@ -153,7 +153,8 @@ class Database {
       "push": push,
       "goingCount": 0,
       "going": [],
-      "isPartyOrBar": isPartyOrBar
+      "isPartyOrBar": isPartyOrBar,
+      "stats": {}
     });
 
     postsRef.doc(postId).set({
@@ -177,7 +178,8 @@ class Database {
       "push": push,
       "goingCount": 0,
       "going": [],
-      "isPartyOrBar": isPartyOrBar
+      "isPartyOrBar": isPartyOrBar,
+      "stats": {}
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {
@@ -244,7 +246,8 @@ class Database {
       "push": push,
       "goingCount": 0,
       "going": [],
-      "isPartyOrBar": isPartyOrBar
+      "isPartyOrBar": isPartyOrBar,
+      "stats": {}
     });
 
     postsRef.doc(postId).set({
@@ -269,7 +272,8 @@ class Database {
       "push": push,
       "goingCount": 0,
       "going": [],
-      "isPartyOrBar": isPartyOrBar
+      "isPartyOrBar": isPartyOrBar,
+      "stats": {}
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {
@@ -453,7 +457,7 @@ class Database {
       transaction.update(ref, {'goingCount': FieldValue.increment(1)});
 
       await postsRef.doc(postId).set({
-        "statuses": {userId: 3}
+        "statuses": {userId: 3},
       }, SetOptions(merge: true));
 
       ///NOTIF FUNCTION BELOW
@@ -516,6 +520,48 @@ class Database {
           }
         }
       });
+
+      //add to various moov stats
+      if (currentUser.gender == 'Male') {
+        postsRef.doc(postId).set({
+          "stats": {"maleCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+      if (currentUser.gender == 'Female') {
+        postsRef.doc(postId).set({
+          "stats": {"femaleCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+      if (currentUser.gender == 'Other') {
+        postsRef.doc(postId).set({
+          "stats": {"otherGenderCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'Black') {
+        postsRef.doc(postId).set({
+          "stats": {"blackCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'Latino') {
+        postsRef.doc(postId).set({
+          "stats": {"latinoCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'Asian') {
+        postsRef.doc(postId).set({
+          "stats": {"asianCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'White') {
+        postsRef.doc(postId).set({
+          "stats": {"whiteCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'Other') {
+        postsRef.doc(postId).set({
+          "stats": {"otherRaceCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
     });
   }
 
@@ -551,6 +597,47 @@ class Database {
         'going': FieldValue.arrayRemove([serialUser]),
         // 'goingCounter': FieldValue.increment(-5)
       });
+         //add to various moov stats
+      if (currentUser.gender == 'Male') {
+        postsRef.doc(postId).set({
+          "stats": {"maleCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+      if (currentUser.gender == 'Female') {
+        postsRef.doc(postId).set({
+          "stats": {"femaleCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+      if (currentUser.gender == 'Other') {
+        postsRef.doc(postId).set({
+          "stats": {"otherGenderCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'Black') {
+        postsRef.doc(postId).set({
+          "stats": {"blackCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'Latino') {
+        postsRef.doc(postId).set({
+          "stats": {"latinoCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'Asian') {
+        postsRef.doc(postId).set({
+          "stats": {"asianCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'White') {
+        postsRef.doc(postId).set({
+          "stats": {"whiteCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+       if (currentUser.race == 'Other') {
+        postsRef.doc(postId).set({
+          "stats": {"otherRaceCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
     });
   }
 

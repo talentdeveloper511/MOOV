@@ -11,6 +11,7 @@ class User {
   final String dorm;
   final String header;
   final String gender;
+  final String race;
   final List<dynamic> friendArray;
   final List<dynamic> friendRequests;
   final postLimit;
@@ -38,6 +39,7 @@ class User {
       this.dorm,
       this.header,
       this.gender,
+      this.race,
       this.friendArray,
       this.friendRequests,
       this.postLimit,
@@ -66,6 +68,7 @@ class User {
         header: doc.data()['header'],
         year: doc.data()['year'],
         gender: doc.data()['gender'],
+        race: doc.data()['race'],
         friendArray: doc.data()['friendArray'],
         friendRequests: doc.data()['friendRequests'],
         postLimit: doc.data()['postLimit'],

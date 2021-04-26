@@ -60,7 +60,43 @@ class PostStatsState extends State<PostStats> {
             if (!snapshot.hasData || snapshot.data == null) {
               return Container();
             }
+
             bool isMoovMountain;
+            int maleCount = 0;
+            int femaleCount = 0;
+            int otherGenderCount = 0;
+            int blackCount = 0;
+            int latinoCount = 0;
+            int asianCount = 0;
+            int whiteCount = 0;
+            int otherRaceCount = 0;
+
+            Map stats = snapshot.data['stats'];
+            if (stats.containsKey('maleCount')) {
+              maleCount = stats['maleCount'];
+            }
+            if (stats.containsKey('femaleCount')) {
+              femaleCount = stats['femaleCount'];
+            }
+            if (stats.containsKey('otherGenderCount')) {
+              otherGenderCount = stats['otherGenderCount'];
+            }
+            if (stats.containsKey('blackCount')) {
+              blackCount = stats['blackCount'];
+            }
+            if (stats.containsKey('latinoCount')) {
+              latinoCount = stats['latinoCount'];
+            }
+            if (stats.containsKey('asianCount')) {
+              asianCount = stats['asianCount'];
+            }
+            if (stats.containsKey('whiteCount')) {
+              whiteCount = stats['whiteCount'];
+            }
+            if (stats.containsKey('otherRaceCount')) {
+              otherRaceCount = stats['otherRaceCount'];
+            }
+
             return Column(
               children: [
                 SizedBox(height: 30),
@@ -78,22 +114,33 @@ class PostStatsState extends State<PostStats> {
                       width: MediaQuery.of(context).size.width * .7,
                       child: Center(
                           child: SfCircularChart(
+                              palette: [
+                                Colors.blue[400],
+                                Colors.pink[200],
+                                Colors.purple[200],
+                              ],
                               legend: Legend(isVisible: true),
                               series: <PieSeries<PieData, String>>[
-                            PieSeries<PieData, String>(
-                                explode: true,
-                                explodeIndex: 0,
-                                dataSource: [
-                                  PieData("Guys", 2),
-                                  PieData("Girls", 1)
-                                ],
-                                xValueMapper: (PieData data, _) => data.xData,
-                                yValueMapper: (PieData data, _) => data.yData,
-                                dataLabelMapper: (PieData data, _) => data.text,
-                                dataLabelSettings: DataLabelSettings(
-                                    isVisible: true,
-                                    textStyle: TextStyle(fontSize: 20)))
-                          ])),
+                                PieSeries<PieData, String>(
+                                    explode: true,
+                                    explodeIndex:
+                                        currentUser.gender == "Female" ? 0 : 1,
+                                    dataSource: [
+                                      PieData("Guys", maleCount),
+                                      PieData("Girls", femaleCount),
+                                      PieData("Other", otherGenderCount)
+                                    ],
+                                    xValueMapper: (PieData data, _) =>
+                                        data.xData,
+                                    yValueMapper: (PieData data, _) =>
+                                        data.yData,
+                                    dataLabelMapper: (PieData data, _) =>
+                                        data.text,
+                                    dataLabelSettings: DataLabelSettings(
+                                        isVisible: true,
+                                        showZeroValue: false,
+                                        textStyle: TextStyle(fontSize: 20)))
+                              ])),
                     ),
                     Positioned(
                         top: 10,
@@ -106,9 +153,34 @@ class PostStatsState extends State<PostStats> {
                               style: TextStyle(fontSize: 8),
                             )
                           ],
-                        ))
+                        )),
+                    (maleCount > femaleCount + otherGenderCount)
+                        ? Positioned(
+                            bottom: 0,
+                            left: 45,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text("Sausage Fest",
+                                        style: TextStyle(color: Colors.brown)),
+                                    SizedBox(width: 5),
+                                    Image.asset('lib/assets/sausage.png',
+                                        height: 10)
+                                  ],
+                                ),
+                                Text(
+                                  "(Majority Guys!)",
+                                  style: TextStyle(fontSize: 8),
+                                ),
+                              ],
+                            ))
+                        : Container()
                   ],
                 ),
+                (maleCount > femaleCount + otherGenderCount)
+                    ? SizedBox(height: 7.5)
+                    : Container(),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -141,7 +213,7 @@ class PostStatsState extends State<PostStats> {
                                   content: Padding(
                                     padding: const EdgeInsets.only(top: 8.0),
                                     child: Text(
-                                        "MOOV Mountain events are those considered to be forces for good. \n\nGo to these and earn sweet rewards!"),
+                                        "MOOV Mountain events are those considered to be forces for good. \n\n Examples of these include: \n-Volunteering in the community\n-Intermixing in diverse events\n-Making someone's day \n\nGo to these and earn sweet rewards!"),
                                   ),
                                   actions: [
                                     CupertinoDialogAction(
@@ -190,11 +262,11 @@ class PostStatsState extends State<PostStats> {
                                     // explode: true,
                                     // explodeIndex: 0,
                                     dataSource: [
-                                      PieData("Black", 1),
-                                      PieData("Latino", 1),
-                                      PieData("Asian", 1),
-                                      PieData("White", 2),
-                                      PieData("Other", 2)
+                                      PieData("Black", blackCount),
+                                      PieData("Latino", latinoCount),
+                                      PieData("Asian", asianCount),
+                                      PieData("White", whiteCount),
+                                      PieData("Other", otherRaceCount)
                                     ],
                                     xValueMapper: (PieData data, _) =>
                                         data.xData,
@@ -204,6 +276,7 @@ class PostStatsState extends State<PostStats> {
                                         data.text,
                                     dataLabelSettings: DataLabelSettings(
                                         isVisible: true,
+                                        showZeroValue: false,
                                         textStyle: TextStyle(fontSize: 20)))
                               ])),
                     ),
@@ -221,9 +294,11 @@ class PostStatsState extends State<PostStats> {
                         ))
                   ],
                 ),
-                Text("The more diverse the pie, \nthe bigger your reward!", textAlign: TextAlign.center),
+                Text("The more diverse the pie, \nthe bigger your reward!",
+                    textAlign: TextAlign.center),
                 SizedBox(height: 4),
-                Text("—Must be on Going List, 10+ people—", style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic))
+                Text("—Must be on Going List, 10+ people—",
+                    style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic))
               ],
             );
           }),
