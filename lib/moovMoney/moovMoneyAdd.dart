@@ -321,7 +321,7 @@ class _MoneyAmountState extends State<MoneyAmount> {
             var request = BraintreeDropInRequest(
               vaultManagerEnabled: true,
               applePayRequest: BraintreeApplePayRequest(
-                  amount: 0.01,
+                  amount: amountInt.toDouble(),
                   displayName: "MOOV MONEY",
                   countryCode: "US",
                   currencyCode: "USD",
@@ -330,13 +330,13 @@ class _MoneyAmountState extends State<MoneyAmount> {
               tokenizationKey: tokenizationKey,
               collectDeviceData: true,
               googlePaymentRequest: BraintreeGooglePaymentRequest(
-                totalPrice: '0.01',
+                totalPrice: amountInt.toString(),
                 currencyCode: 'USD',
                 billingAddressRequired: false,
               ),
               paypalRequest: BraintreePayPalRequest(
-                amount: '0.01',
-                displayName: 'Example company',
+                amount:  amountInt.toString(),
+                displayName: 'MOOV',
               ),
               cardEnabled: true,
             );
