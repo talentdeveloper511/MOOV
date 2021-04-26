@@ -3,10 +3,35 @@ import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_braintree/flutter_braintree.dart';
 
 //this pag4 handles deposits and withdraws of MOOV Money
 class MoovMoneyAdd extends StatelessWidget {
   MoovMoneyAdd({Key key}) : super(key: key);
+
+  static final String tokenizationKey = 'sandbox_x6rsh5jt_63hmws26h3ncb2m4';
+
+  void showNonce(BraintreePaymentMethodNonce nonce, context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.blueGrey,
+        title: Text('Payment method nonce:'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text('Nonce: ${nonce.nonce}'),
+            SizedBox(height: 16),
+            Text('Type label: ${nonce.typeLabel}'),
+            SizedBox(height: 16),
+            Text('Description: ${nonce.description}'),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,25 +173,136 @@ class MoovMoneyAdd extends StatelessWidget {
                         ),
                       )),
                 ),
-                Container(
-                height: 50.0,
-                width: 300.0,
-                decoration: BoxDecoration(
-                  color: TextThemes.ndGold,
-                  borderRadius: BorderRadius.circular(7.0),
-                ),
-                child: Center(
-                  child: Text(
-                    "Deposit",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold),
+                GestureDetector(
+                  onTap: () async {
+                    HapticFeedback.lightImpact();
+                    var request = BraintreeDropInRequest(
+                      vaultManagerEnabled: true,
+                      applePayRequest: BraintreeApplePayRequest(
+                          amount: 0.01,
+                          displayName: "MOOV MONEY",
+                          countryCode: "US",
+                          currencyCode: "USD",
+                          appleMerchantID: "merchant.com.MOOV.ND"),
+                      venmoEnabled: true,
+                      tokenizationKey: tokenizationKey,
+                      collectDeviceData: true,
+                      googlePaymentRequest: BraintreeGooglePaymentRequest(
+                        totalPrice: '0.01',
+                        currencyCode: 'USD',
+                        billingAddressRequired: false,
+                      ),
+                      paypalRequest: BraintreePayPalRequest(
+                        amount: '0.01',
+                        displayName: 'Example company',
+                      ),
+                      cardEnabled: true,
+                    );
+                    final result = await BraintreeDropIn.start(request);
+                    if (result != null) {
+                      showNonce(result.paymentMethodNonce, context);
+                    }
+                  },
+                  child: Container(
+                    height: 50.0,
+                    width: 300.0,
+                    decoration: BoxDecoration(
+                      color: TextThemes.ndGold,
+                      borderRadius: BorderRadius.circular(7.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Deposit",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     var request = BraintreeDropInRequest(
+                //       vaultManagerEnabled: true,
+                //       applePayRequest: BraintreeApplePayRequest(
+                //           amount: 0.01,
+                //           displayName: "MOOV MONEY",
+                //           countryCode: "US",
+                //           currencyCode: "USD",
+                //           appleMerchantID: "merchant.com.MOOV.ND"),
+                //       venmoEnabled: true,
+                //       tokenizationKey: tokenizationKey,
+                //       collectDeviceData: true,
+                //       googlePaymentRequest: BraintreeGooglePaymentRequest(
+                //         totalPrice: '0.01',
+                //         currencyCode: 'USD',
+                //         billingAddressRequired: false,
+                //       ),
+                //       paypalRequest: BraintreePayPalRequest(
+                //         amount: '0.01',
+                //         displayName: 'Example company',
+                //       ),
+                //       cardEnabled: true,
+                //     );
+                //     final result = await
+                //     BraintreeDropIn.start(request);
+                //     if (result != null) {
+                //       showNonce(result.paymentMethodNonce, context);
+                //     }
+                //   },
+                //   child: Text('LAUNCH NATIVE DROP-IN'),
+                // ),
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     final request = BraintreeCreditCardRequest(
+                //       cardNumber: '4111111111111111',
+                //       expirationMonth: '12',
+                //       expirationYear: '2021',
+                //       cvv: '123',
+                //     );
+                //     final result = await Braintree.tokenizeCreditCard(
+                //       tokenizationKey,
+                //       request,
+                //     );
+                //     if (result != null) {
+                //       showNonce(result, context);
+                //     }
+                //   },
+                //   child: Text('TOKENIZE CREDIT CARD'),
+                // ),
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     final request = BraintreePayPalRequest(
+                //       billingAgreementDescription:
+                //           'I hereby agree that flutter_braintree is great.',
+                //       displayName: 'Your Company',
+                //     );
+                //     final result = await Braintree.requestPaypalNonce(
+                //       tokenizationKey,
+                //       request,
+                //     );
+                //     if (result != null) {
+                //       showNonce(result, context);
+                //     }
+                //   },
+                //   child: Text('PAYPAL VAULT FLOW'),
+                // ),
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     final request = BraintreePayPalRequest(amount: '13.37');
+                //     final result = await Braintree.requestPaypalNonce(
+                //       tokenizationKey,
+                //       request,
+                //     );
+                //     if (result != null) {
+                //       showNonce(result, context);
+                //     }
+                //   },
+                //   child: Text('PAYPAL CHECKOUT FLOW'),
+                // ),
               ],
-            )
+            ),
           ],
         ));
   }

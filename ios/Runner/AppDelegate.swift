@@ -2,6 +2,8 @@ import UIKit
 import Flutter
 import Firebase
 import GoogleMaps
+import BraintreeDropIn
+import Braintree
 
 @available(iOS 10.0, *)
 @UIApplicationMain
@@ -201,4 +203,11 @@ import GoogleMaps
 
 
 //  }
+override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if url.scheme == "com.MOOV.ND.payments" {
+            return BTAppSwitch.handleOpen(url, options:options)
+        }
+        
+        return false
+    }
 }

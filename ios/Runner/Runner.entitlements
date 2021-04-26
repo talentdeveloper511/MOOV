@@ -5,7 +5,9 @@
 	<key>aps-environment</key>
 	<string>development</string>
 	<key>com.apple.developer.in-app-payments</key>
-	<array/>
+	<array>
+		<string>merchant.com.MOOV.ND</string>
+	</array>
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)com.MOOV.ND</string>
