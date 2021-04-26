@@ -147,6 +147,7 @@ dependencies:
 
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -214,6 +215,7 @@ flutter:
     - lib/assets/launchscreen1.png
     - lib/assets/landingpage.png
     - lib/assets/fg.jpeg
+    - lib/assets/ratioChart.png
     - lib/assets/moovlogo2.png
     - lib/assets/editclub.jpeg
     - lib/assets/fire.png
@@ -272,7 +274,7 @@ flutter:
     - lib/assets/badges/moovMaker.png
     - lib/assets/badges/mountain.png
     - lib/assets/poll.png
-
+    - lib/assets/greenmountain.png
 
 
 
