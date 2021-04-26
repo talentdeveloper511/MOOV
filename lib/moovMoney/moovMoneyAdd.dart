@@ -346,6 +346,8 @@ class _MoneyAmountState extends State<MoneyAmount> {
                   SizedBox(height: 10),
                   GestureDetector(
                     onTap: () async {
+                      HapticFeedback.lightImpact();
+
                       String orderId = generateRandomString(20);
                       String clientToken = "";
 
@@ -357,69 +359,73 @@ class _MoneyAmountState extends State<MoneyAmount> {
                         "clientToken": "",
                         "customerId": currentUser.id
                       });
-                      HapticFeedback.lightImpact();
                       usersRef
                           .doc(currentUser.id)
                           .collection('payments')
                           .doc(orderId)
                           .snapshots()
-                          .listen((event) {
+                          .listen((event) async {
                         if (event.data() == null) {
                           print("don't have the token yet");
+                          return circularProgress();
                         }
-                        clientToken = event['clientToken'];
+                        clientToken = await event['clientToken'];
+
+                        print(clientToken);
+
+                        var request = BraintreeDropInRequest(
+                          clientToken: clientToken,
+                          vaultManagerEnabled: true,
+                          applePayRequest: BraintreeApplePayRequest(
+                              amount: amountInt.toDouble(),
+                              displayName: "MOOV MONEY",
+                              countryCode: "US",
+                              currencyCode: "USD",
+                              appleMerchantID: "merchant.com.MOOV.ND"),
+                          venmoEnabled: true,
+                          tokenizationKey: tokenizationKey,
+                          collectDeviceData: true,
+                          googlePaymentRequest: BraintreeGooglePaymentRequest(
+                            totalPrice: amountInt.toString(),
+                            currencyCode: 'USD',
+                            billingAddressRequired: false,
+                          ),
+                          paypalRequest: BraintreePayPalRequest(
+                            amount: amountInt.toString(),
+                            displayName: 'MOOV',
+                          ),
+                          cardEnabled: true,
+                        );
+                        final result = await BraintreeDropIn.start(request);
+                        if (result != null) {
+                          setState(() {
+                            isUploading = true;
+                          });
+                          usersRef
+                              .doc(currentUser.id)
+                              .collection('payments')
+                              .doc(orderId)
+                              .set({
+                            "nonce": result.paymentMethodNonce.nonce,
+                            "amount": amountInt,
+                            "orderDate": DateTime.now(),
+                            "orderId": orderId,
+                            "deviceData": "iPhone",
+                          }, SetOptions(merge: true));
+                          usersRef
+                              .doc(currentUser.id)
+                              .update({
+                                "moovMoney": FieldValue.increment(amountInt)
+                              })
+                              .then((value) => setState(() {
+                                    isUploading = false;
+                                    successCheck = true;
+                                  }))
+                              .then((value) => Timer(Duration(seconds: 3), () {
+                                    Navigator.pop(context);
+                                  }));
+                        }
                       });
-                      var request = BraintreeDropInRequest(
-                        clientToken: clientToken,
-                        vaultManagerEnabled: true,
-                        applePayRequest: BraintreeApplePayRequest(
-                            amount: amountInt.toDouble(),
-                            displayName: "MOOV MONEY",
-                            countryCode: "US",
-                            currencyCode: "USD",
-                            appleMerchantID: "merchant.com.MOOV.ND"),
-                        venmoEnabled: true,
-                        tokenizationKey: tokenizationKey,
-                        collectDeviceData: true,
-                        googlePaymentRequest: BraintreeGooglePaymentRequest(
-                          totalPrice: amountInt.toString(),
-                          currencyCode: 'USD',
-                          billingAddressRequired: false,
-                        ),
-                        paypalRequest: BraintreePayPalRequest(
-                          amount: amountInt.toString(),
-                          displayName: 'MOOV',
-                        ),
-                        cardEnabled: true,
-                      );
-                      final result = await BraintreeDropIn.start(request);
-                      if (result != null) {
-                        setState(() {
-                          isUploading = true;
-                        });
-                        usersRef
-                            .doc(currentUser.id)
-                            .collection('payments')
-                            .doc(orderId)
-                            .set({
-                          "nonce": result.paymentMethodNonce.nonce,
-                          "amount": amountInt,
-                          "orderDate": DateTime.now(),
-                          "orderId": orderId,
-                          "deviceData": "iPhone",
-                        }, SetOptions(merge: true));
-                        usersRef
-                            .doc(currentUser.id)
-                            .update(
-                                {"moovMoney": FieldValue.increment(amountInt)})
-                            .then((value) => setState(() {
-                                  isUploading = false;
-                                  successCheck = true;
-                                }))
-                            .then((value) => Timer(Duration(seconds: 3), () {
-                                  Navigator.pop(context);
-                                }));
-                      }
                     },
                     child: Container(
                       height: 50.0,
