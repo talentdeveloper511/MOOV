@@ -379,7 +379,7 @@ class _MoneyAmountState extends State<MoneyAmount> {
                             currencyCode: "USD",
                             appleMerchantID: "merchant.com.MOOV.ND"),
                         venmoEnabled: true,
-                        tokenizationKey: tokenizationKey,
+                        // tokenizationKey: tokenizationKey,
                         collectDeviceData: true,
                         googlePaymentRequest: BraintreeGooglePaymentRequest(
                           totalPrice: amountInt.toString(),

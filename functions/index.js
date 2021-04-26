@@ -1,68 +1,54 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const algoliasearch = require("algoliasearch");
-const stripe = require("stripe")(functions.config().stripe.testkey);
+// const stripe = require("stripe")(functions.config().stripe.testkey);
 const braintree = require("braintree");
 admin.initializeApp(functions.config().firebase);
 
-exports.onCreateActivityFeedItem = functions.firestore
+exports.brainTree = functions.firestore
     .document("{college}/data/users/{userId}/payments/{paymentMethodItem}")
     .onCreate(async (snapshot, context) => {
-
       const paymentMethod = context.params.paymentMethodItem;
       const user = context.params.userId;
       const college = context.params.college;
-
-      const paymentRef = admin.firestore().doc(`${college}/data/users/${user}/payments/${paymentMethod}`);
-      const doc = await paymentRef.get();
-
-      const nonce = doc.data().nonce;
-      const amountCharged = doc.data()..amount;
-      const devData = doc.data().deviceData;
 
       const gateway = new braintree.BraintreeGateway({
         environment: braintree.Environment.Sandbox,
         merchantId: "63hmws26h3ncb2m4",
         publicKey: "4w8d3g69x27qrtv2",
-        privateKey: "d6e6441e1b10e2126f5e8a4e534a981b"
+        privateKey: "d6e6441e1b10e2126f5e8a4e534a981b",
       });
 
       gateway.clientToken.generate({
-        customerId: aCustomerId
+        customerId: customerId,
       }, (err, response) => {
         // pass clientToken to your front-end
         const clientToken = response.clientToken;
         admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`).collection("payments").doc(`${paymentMethod}`).set({
-          client_token: clientToken,
+          clientToken: clientToken,
           status: "success",
         }, {merge: true});
       });
-    
+      // get updated payment information
+      const paymentRef = admin.firestore().doc(`${college}/data/users/${user}/payments/${paymentMethod}`);
+      const doc = await paymentRef.get();
+
+      const nonce = doc.data().nonce;
+      const amountCharged = doc.data().amount;
+      const devData = doc.data().deviceData;
+      const customerId = doc.data().customerId;
       // create transaction
       gateway.transaction.sale({
         amount: amountCharged,
         paymentMethodNonce: nonce,
         deviceData: devData,
         options: {
-          submitForSettlement: true
-        }
+          submitForSettlement: true,
+        },
       }, (err, result) => {
         console.log(result);
       });
-    }
-
-// send client token to client
-app.get("/client_token", (req, res) => {
-  gateway.clientToken.generate({}, (err, response) => {
-    res.send(response.clientToken);
-  });
-});
-
-// receive payment method nonce from client
-app.post("/checkout", (req, res) => {
-  const nonceFromTheClient = req.body.payment_method_nonce;
-  // Use payment method nonce here
-});
+    });
 
 const ALGOLIA_APP_ID = "CUWBHO409I";
 const ALGOLIA_ADMIN_KEY = "53390b64ddeba1e1f32e81485ebf9492";
@@ -661,54 +647,51 @@ exports.scheduledFunction = functions.pubsub.schedule("* * * * *")
           });
     });
 
-exports.StripePI = functions.https.onRequest(async (req, res) => {
-      // go thru standard account tutorial
-      const stripeVendorAccount = "acct_s3r09_SAMPLE";
-      const fee = (req.query.amount/100) | 0;
-    
-      // clone payment methods
-      stripe.paymentMethods.create(
-          {
-            payment_method: req.query.paym,
-          }, {
-            stripeAccount: stripeVendorAccount,
-          },
-          function(err, clonedPaymentMethod) {
-            if (err !== null) {
-              console.log("Error clone: ", err);
-              res.send("Error");
-            } else {
-              console.log("clonedPaymentMethod: ", clonedPaymentMethod);
-              // create payment intent on the cloned payment method
-              stripe.paymentIntents.create(
-                  {
-                    amount: req.query.amount,
-                    currency: req.query.currency,
-                    payment_method: clonedPaymentMethod.id,
-                    confirmation_method: "automatic",
-                    confirm: true,
-                    application_fee_amount: fee,
-                    description: req.query.description,
-                  }, {
-                    stripeAccount: stripeVendorAccount,
-                  },
-                  function(err, paymentIntent) {
-                  // asynchronously called
-                  // const paymentIntentReference = paymentIntent;
-    
-                    // return payment intent or error
-                    if (err !== null) {
-                      console.log("Error payment Intent: ", err);
-                      res.send("Error");
-                    } else {
-                      console.log("Created paymentintent: ", paymentIntent);
-                      res.json({
-                        paymentIntent: paymentIntent,
-                        stripeAccount: stripeVendorAccount});
-                    }
-                  }
-              );
-            }
-          });
-    });
-    
+// exports.StripePI = functions.https.onRequest(async (req, res) => {
+//       // go thru standard account tutorial
+//       const stripeVendorAccount = "acct_s3r09_SAMPLE";
+//       const fee = (req.query.amount/100) | 0;
+//       // clone payment methods
+//       stripe.paymentMethods.create(
+//           {
+//             payment_method: req.query.paym,
+//           }, {
+//             stripeAccount: stripeVendorAccount,
+//           },
+//           function(err, clonedPaymentMethod) {
+//             if (err !== null) {
+//               console.log("Error clone: ", err);
+//               res.send("Error");
+//             } else {
+//               console.log("clonedPaymentMethod: ", clonedPaymentMethod);
+//               // create payment intent on the cloned payment method
+//               stripe.paymentIntents.create(
+//                   {
+//                     amount: req.query.amount,
+//                     currency: req.query.currency,
+//                     payment_method: clonedPaymentMethod.id,
+//                     confirmation_method: "automatic",
+//                     confirm: true,
+//                     application_fee_amount: fee,
+//                     description: req.query.description,
+//                   }, {
+//                     stripeAccount: stripeVendorAccount,
+//                   },
+//                   function(err, paymentIntent) {
+//                   // asynchronously called
+//                   // const paymentIntentReference = paymentIntent;
+//                     // return payment intent or error
+//                     if (err !== null) {
+//                       console.log("Error payment Intent: ", err);
+//                       res.send("Error");
+//                     } else {
+//                       console.log("Created paymentintent: ", paymentIntent);
+//                       res.json({
+//                         paymentIntent: paymentIntent,
+//                         stripeAccount: stripeVendorAccount});
+//                     }
+//                   }
+//               );
+//             }
+//           });
+//     });
