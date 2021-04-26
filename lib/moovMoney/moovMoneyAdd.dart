@@ -15,7 +15,8 @@ import 'package:flutter_braintree/flutter_braintree.dart';
 //this pag4 handles deposits and withdraws of MOOV Money
 class MoovMoneyAdd extends StatelessWidget {
   final int amount;
-  MoovMoneyAdd(this.amount);
+  final int currentBalance;
+  MoovMoneyAdd(this.amount, this.currentBalance);
 
   @override
   Widget build(BuildContext context) {
@@ -133,11 +134,11 @@ class MoovMoneyAdd extends StatelessWidget {
             ]),
             Column(
               children: [
-                Text("Current Balance ",
+                Text("Current Balance",
                     style:
                         TextStyle(fontWeight: FontWeight.w600, fontSize: 23)),
                 SizedBox(height: 5),
-                Text("\$0",
+                Text("\$" + currentBalance.toString(),
                     style:
                         TextStyle(fontWeight: FontWeight.w400, fontSize: 23)),
                 Padding(

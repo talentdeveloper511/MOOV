@@ -761,7 +761,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               if (!snapshot.hasData || snapshot.data == null) {
                 return Container();
               }
-              int moovMoney = snapshot.data['moovMoney'];
+              int moovMoneyBalance = snapshot.data['moovMoney'];
               return Row(
                 children: [
                   Expanded(
@@ -772,7 +772,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           Icon(Icons.monetization_on_outlined),
                           SizedBox(width: 5),
                           Expanded(
-                            child: Text(moovMoney.toString(),
+                            child: Text(moovMoneyBalance.toString(),
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: Colors.white,
@@ -786,7 +786,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MoovMoneyAdd(0)));
+                                builder: (context) => MoovMoneyAdd(0, moovMoneyBalance)));
                       },
                     ),
                   ),
