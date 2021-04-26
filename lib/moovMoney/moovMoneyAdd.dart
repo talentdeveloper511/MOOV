@@ -305,7 +305,9 @@ class _MoneyAmountState extends State<MoneyAmount> {
                   onChanged: (value) {
                     setState(() => amountString = value);
                     if (value != "0") {
-                      String x = amountController.text.substring(1).replaceAll(",", "");
+                      String x = amountController.text
+                          .substring(1)
+                          .replaceAll(",", "");
                       amountInt = int.parse(x);
                     }
                   },
@@ -319,6 +321,7 @@ class _MoneyAmountState extends State<MoneyAmount> {
           onTap: () async {
             HapticFeedback.lightImpact();
             var request = BraintreeDropInRequest(
+              // clientToken: ,
               vaultManagerEnabled: true,
               applePayRequest: BraintreeApplePayRequest(
                   amount: amountInt.toDouble(),
@@ -335,7 +338,7 @@ class _MoneyAmountState extends State<MoneyAmount> {
                 billingAddressRequired: false,
               ),
               paypalRequest: BraintreePayPalRequest(
-                amount:  amountInt.toString(),
+                amount: amountInt.toString(),
                 displayName: 'MOOV',
               ),
               cardEnabled: true,
@@ -353,6 +356,7 @@ class _MoneyAmountState extends State<MoneyAmount> {
                 "orderDate": DateTime.now(),
                 "orderId": orderId,
                 "deviceData": "iPhone",
+                "status": "pending"
               });
               showNonce(result.paymentMethodNonce, context);
             }
