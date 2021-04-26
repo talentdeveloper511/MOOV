@@ -352,9 +352,13 @@ class _MoneyAmountState extends State<MoneyAmount> {
                           .collection('payments')
                           .doc(orderId)
                           .set({
-                            "clientToken": ""
-                          });
+                        "clientToken": "",
+                        "customerId": currentUser.id
+                      });
                       HapticFeedback.lightImpact();
+                      usersRef.doc(currentUser.id).snapshots().listen((event) {
+                        print(event);
+                      });
                       var request = BraintreeDropInRequest(
                         vaultManagerEnabled: true,
                         applePayRequest: BraintreeApplePayRequest(
