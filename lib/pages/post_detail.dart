@@ -36,8 +36,7 @@ import 'package:stripe_payment/stripe_payment.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostDetail extends StatefulWidget {
-  String postId;
-  bool isArchive;
+  final String postId;
   PostDetail(this.postId);
 
   @override
@@ -393,10 +392,10 @@ class _BannerImage extends StatelessWidget {
 }
 
 class _NonImageContents extends StatelessWidget {
-  String title, description, userId;
-  dynamic startDate, address, moovId;
-  DocumentSnapshot course;
-  int commentCount, venmo, isBusiness;
+  final String title, description, userId;
+  final dynamic startDate, address, moovId;
+  final DocumentSnapshot course;
+  final int commentCount, venmo;
 
   _NonImageContents(this.title, this.description, this.startDate, this.address,
       this.userId, this.moovId, this.course, this.commentCount, this.venmo);
@@ -583,7 +582,7 @@ class _NonImageContents extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  String title;
+  final String title;
   _Title(this.title);
 
   @override
@@ -604,7 +603,7 @@ class _Title extends StatelessWidget {
 }
 
 class _Description extends StatelessWidget {
-  String description;
+  final String description;
   _Description(this.description);
 
   @override
@@ -642,7 +641,6 @@ class PostTimeAndPlace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle timeTheme = TextThemes.dateStyle;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -760,8 +758,8 @@ class PostTimeAndPlace extends StatelessWidget {
 }
 
 class _AuthorContent extends StatelessWidget {
-  String userId;
-  DocumentSnapshot course;
+  final String userId;
+  final DocumentSnapshot course;
   _AuthorContent(this.userId, this.course);
 
   @override
@@ -1037,8 +1035,8 @@ class _GoingListSegmentState extends State<GoingListSegment>
 }
 
 class Buttons extends StatefulWidget {
-  dynamic moovId, likeCount;
-  String text = 'https://www.whatsthemoov.com';
+  final dynamic moovId;
+  final String text = 'https://www.whatsthemoov.com';
 
   Buttons(this.moovId);
   @override
@@ -1074,7 +1072,6 @@ class _ButtonsState extends State<Buttons> {
 
   int status;
   bool push = true;
-  GlobalKey _buttonsKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -1793,10 +1790,6 @@ class _PaymentButtonState extends State<PaymentButton> {
           int goingCount = course['going'].length;
           bool hasPaid = false;
 
-          List<dynamic> statusesIds = statuses.keys.toList();
-
-          List<dynamic> statusesValues = statuses.values.toList();
-          List pushList = currentUser.pushSettings.values.toList();
           if (statuses[currentUser.id] == 5) {
             hasPaid = true;
           }
