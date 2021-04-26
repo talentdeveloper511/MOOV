@@ -70,6 +70,7 @@ class PostStatsState extends State<PostStats> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
                 ),
                 Text('"Ratio!"'),
+                SizedBox(height: 30),
                 Stack(
                   children: [
                     SizedBox(
@@ -83,8 +84,8 @@ class PostStatsState extends State<PostStats> {
                                 explode: true,
                                 explodeIndex: 0,
                                 dataSource: [
-                                  PieData("guys", 2),
-                                  PieData("girls", 1)
+                                  PieData("Guys", 2),
+                                  PieData("Girls", 1)
                                 ],
                                 xValueMapper: (PieData data, _) => data.xData,
                                 yValueMapper: (PieData data, _) => data.yData,
@@ -111,7 +112,7 @@ class PostStatsState extends State<PostStats> {
 
                 //MOOV Mountain Indicator
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -139,12 +140,11 @@ class PostStatsState extends State<PostStats> {
                                   ),
                                   actions: [
                                     CupertinoDialogAction(
-                                      child: Text(
-                                        "Recommend for Mountain",
-                                        style: TextStyle(color: Colors.green),
-                                      ),
-                                      onPressed: () => Navigator.pop(context)
-                                    )
+                                        child: Text(
+                                          "Recommend for Mountain",
+                                          style: TextStyle(color: Colors.green),
+                                        ),
+                                        onPressed: () => Navigator.pop(context))
                                   ]),
                           barrierDismissible: true),
                       child: CircleAvatar(
@@ -161,7 +161,64 @@ class PostStatsState extends State<PostStats> {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(height: 15),
+
+                //race pie chart
+                Stack(
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width * .7,
+                      child: Center(
+                          child: SfCircularChart(
+                              palette: [
+                                Colors.brown[400],
+                                Colors.orange[300],
+                                Colors.red[200],
+                                Colors.amber[50],
+                                Colors.blue[100]
+                              ],
+                              legend: Legend(isVisible: true),
+                              series: <PieSeries<PieData, String>>[
+                                PieSeries<PieData, String>(
+                                    // explode: true,
+                                    // explodeIndex: 0,
+                                    dataSource: [
+                                      PieData("Black", 1),
+                                      PieData("Latino", 1),
+                                      PieData("Asian", 1),
+                                      PieData("White", 2),
+                                      PieData("Other", 2)
+                                    ],
+                                    xValueMapper: (PieData data, _) =>
+                                        data.xData,
+                                    yValueMapper: (PieData data, _) =>
+                                        data.yData,
+                                    dataLabelMapper: (PieData data, _) =>
+                                        data.text,
+                                    dataLabelSettings: DataLabelSettings(
+                                        isVisible: true,
+                                        textStyle: TextStyle(fontSize: 20)))
+                              ])),
+                    ),
+                    Positioned(
+                        top: 10,
+                        left: 0,
+                        child: Column(
+                          children: [
+                            Text("Diversity"),
+                            Text(
+                              "Going List",
+                              style: TextStyle(fontSize: 8),
+                            )
+                          ],
+                        ))
+                  ],
+                ),
+                Text("The more diverse the pie, \nthe bigger your reward!", textAlign: TextAlign.center),
+                SizedBox(height: 4),
+                Text("—Must be on Going List, 10+ people—", style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic))
               ],
             );
           }),
