@@ -309,6 +309,7 @@ class _GroupDetailState extends State<GroupDetail> {
                               )
                             ]),
                         body: SingleChildScrollView(
+                          physics: ClampingScrollPhysics(),
                           child: Container(
                             child: Column(
                               children: [
@@ -317,7 +318,10 @@ class _GroupDetailState extends State<GroupDetail> {
                                       height: 200,
                                       width: MediaQuery.of(context).size.width,
                                       child: Image.network(groupPic,
-                                          fit: BoxFit.cover)),
+                                          fit: BoxFit.cover,
+                                          color: Colors.black26,
+                                          colorBlendMode: BlendMode.darken,
+                                          )),
                                   Container(
                                       child: Column(children: [
                                     Container(
