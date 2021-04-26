@@ -1,37 +1,17 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
+import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_braintree/flutter_braintree.dart';
 
 //this pag4 handles deposits and withdraws of MOOV Money
 class MoovMoneyAdd extends StatelessWidget {
-  MoovMoneyAdd({Key key}) : super(key: key);
-
-  static final String tokenizationKey = 'sandbox_x6rsh5jt_63hmws26h3ncb2m4';
-
-  void showNonce(BraintreePaymentMethodNonce nonce, context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: Colors.blueGrey,
-        title: Text('Payment method nonce:'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text('Nonce: ${nonce.nonce}'),
-            SizedBox(height: 16),
-            Text('Type label: ${nonce.typeLabel}'),
-            SizedBox(height: 16),
-            Text('Description: ${nonce.description}'),
-          ],
-        ),
-      ),
-    );
-  }
+  final int amount;
+  MoovMoneyAdd(this.amount);
 
   @override
   Widget build(BuildContext context) {
@@ -173,54 +153,8 @@ class MoovMoneyAdd extends StatelessWidget {
                         ),
                       )),
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    HapticFeedback.lightImpact();
-                    var request = BraintreeDropInRequest(
-                      vaultManagerEnabled: true,
-                      applePayRequest: BraintreeApplePayRequest(
-                          amount: 0.01,
-                          displayName: "MOOV MONEY",
-                          countryCode: "US",
-                          currencyCode: "USD",
-                          appleMerchantID: "merchant.com.MOOV.ND"),
-                      venmoEnabled: true,
-                      tokenizationKey: tokenizationKey,
-                      collectDeviceData: true,
-                      googlePaymentRequest: BraintreeGooglePaymentRequest(
-                        totalPrice: '0.01',
-                        currencyCode: 'USD',
-                        billingAddressRequired: false,
-                      ),
-                      paypalRequest: BraintreePayPalRequest(
-                        amount: '0.01',
-                        displayName: 'Example company',
-                      ),
-                      cardEnabled: true,
-                    );
-                    final result = await BraintreeDropIn.start(request);
-                    if (result != null) {
-                      showNonce(result.paymentMethodNonce, context);
-                    }
-                  },
-                  child: Container(
-                    height: 50.0,
-                    width: 300.0,
-                    decoration: BoxDecoration(
-                      color: TextThemes.ndGold,
-                      borderRadius: BorderRadius.circular(7.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Deposit",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
+                MoneyAmount(amount),
+
                 // ElevatedButton(
                 //   onPressed: () async {
                 //     var request = BraintreeDropInRequest(
@@ -305,5 +239,143 @@ class MoovMoneyAdd extends StatelessWidget {
             ),
           ],
         ));
+  }
+}
+
+class MoneyAmount extends StatefulWidget {
+  final int amountInt;
+  MoneyAmount(this.amountInt);
+
+  @override
+  _MoneyAmountState createState() => _MoneyAmountState();
+}
+
+class _MoneyAmountState extends State<MoneyAmount> {
+  static final String tokenizationKey = 'sandbox_x6rsh5jt_63hmws26h3ncb2m4';
+
+  void showNonce(BraintreePaymentMethodNonce nonce, context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.blueGrey,
+        title: Text('Payment method nonce:'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text('Nonce: ${nonce.nonce}'),
+            SizedBox(height: 16),
+            Text('Type label: ${nonce.typeLabel}'),
+            SizedBox(height: 16),
+            Text('Description: ${nonce.description}'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String amountString;
+  int amountInt;
+  final amountController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    print(amountInt);
+    return Column(
+      children: [
+        ListTile(
+          title: Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: TextField(
+                  decoration: InputDecoration(
+                      hintText: "Enter Amount",
+                      hintStyle: TextStyle(fontWeight: FontWeight.w100)),
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                  inputFormatters: [
+                    CurrencyTextInputFormatter(
+                      decimalDigits: 0,
+                      symbol: '\$',
+                    )
+                  ],
+                  controller: amountController,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    setState(() => amountString = value);
+                    if (value != "0") {
+                      String x = amountController.text.substring(1).replaceAll(",", "");
+                      amountInt = int.parse(x);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 10),
+        GestureDetector(
+          onTap: () async {
+            HapticFeedback.lightImpact();
+            var request = BraintreeDropInRequest(
+              vaultManagerEnabled: true,
+              applePayRequest: BraintreeApplePayRequest(
+                  amount: 0.01,
+                  displayName: "MOOV MONEY",
+                  countryCode: "US",
+                  currencyCode: "USD",
+                  appleMerchantID: "merchant.com.MOOV.ND"),
+              venmoEnabled: true,
+              tokenizationKey: tokenizationKey,
+              collectDeviceData: true,
+              googlePaymentRequest: BraintreeGooglePaymentRequest(
+                totalPrice: '0.01',
+                currencyCode: 'USD',
+                billingAddressRequired: false,
+              ),
+              paypalRequest: BraintreePayPalRequest(
+                amount: '0.01',
+                displayName: 'Example company',
+              ),
+              cardEnabled: true,
+            );
+            final result = await BraintreeDropIn.start(request);
+            if (result != null) {
+              String orderId = generateRandomString(20);
+              usersRef
+                  .doc(currentUser.id)
+                  .collection('payments')
+                  .doc(orderId)
+                  .set({
+                "nonce": result.paymentMethodNonce.nonce,
+                "amount": amountInt,
+                "orderDate": DateTime.now(),
+                "orderId": orderId,
+                "deviceData": "iPhone",
+              });
+              showNonce(result.paymentMethodNonce, context);
+            }
+          },
+          child: Container(
+            height: 50.0,
+            width: 300.0,
+            decoration: BoxDecoration(
+              color: TextThemes.ndGold,
+              borderRadius: BorderRadius.circular(7.0),
+            ),
+            child: Center(
+              child: Text(
+                "Deposit",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

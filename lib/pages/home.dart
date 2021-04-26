@@ -772,7 +772,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               splashColor: Colors.transparent,
               onPressed: () async {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MoovMoneyAdd()));
+                    MaterialPageRoute(builder: (context) => MoovMoneyAdd(0)));
               },
             ),
             IconButton(

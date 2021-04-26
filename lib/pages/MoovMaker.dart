@@ -393,13 +393,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   List groupMembers = [];
   bool push = true;
 
-  String generateRandomString(int len) {
-    var r = Random();
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
-        .join();
-  }
+  
 
   void refreshData() {
     id++;
@@ -806,8 +800,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) =>
                                         setState(() => venmo = value),
-
-                                    // your TextField's Content
                                   ),
                                 ),
                               ],
@@ -1529,4 +1521,13 @@ class _DatePickerState extends State<DatePicker> {
       ],
     );
   }
+  
 }
+
+String generateRandomString(int len) {
+    var r = Random();
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
+        .join();
+  }
