@@ -1,9 +1,9 @@
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class PostStats extends StatefulWidget {
   final String postId;
@@ -61,7 +61,7 @@ class PostStatsState extends State<PostStats> {
               return Container();
             }
 
-            bool isMoovMountain;
+            bool moovMountain = false;
             int maleCount = 0;
             int femaleCount = 0;
             int otherGenderCount = 0;
@@ -72,7 +72,7 @@ class PostStatsState extends State<PostStats> {
             int otherRaceCount = 0;
 
             Map stats = snapshot.data['stats'];
-           
+
             if (stats.containsKey('maleCount')) {
               maleCount = stats['maleCount'];
             }
@@ -96,6 +96,9 @@ class PostStatsState extends State<PostStats> {
             }
             if (stats.containsKey('otherRaceCount')) {
               otherRaceCount = stats['otherRaceCount'];
+            }
+            if (stats.containsKey('moovMountain')) {
+              moovMountain = true;
             }
 
             return Column(
@@ -200,11 +203,12 @@ class PostStatsState extends State<PostStats> {
                       child: Image.asset(
                         'lib/assets/greenmountain.png',
                         height: 40,
-                        color: Colors.grey,
+                        color: moovMountain ? null : Colors.grey,
                       ),
                     ),
-                    Text("not ", style: TextStyle(color: Colors.red)),
-                    Text("a MOOV Mountain event."),
+                    !moovMountain ? Text("not ", style: TextStyle(color: Colors.red)) : Container(),
+                    !moovMountain ? Text("a") : Container(),
+                    Text("MOOV Mountain event."),
                     SizedBox(width: 7.5),
                     GestureDetector(
                       onTap: () => showDialog(
@@ -217,12 +221,31 @@ class PostStatsState extends State<PostStats> {
                                         "MOOV Mountain events are those considered to be forces for good. \n\n Examples of these include: \n-Volunteering in the community\n-Intermixing in diverse events\n-Making someone's day \n\nGo to these and earn sweet rewards!"),
                                   ),
                                   actions: [
-                                    CupertinoDialogAction(
-                                        child: Text(
-                                          "Recommend for Mountain",
-                                          style: TextStyle(color: Colors.green),
-                                        ),
-                                        onPressed: () => Navigator.pop(context))
+                                    currentUser.id == "108155010592087635288" ||
+                                            currentUser.id ==
+                                                "118426518878481598299" ||
+                                            currentUser.id ==
+                                                "107290090512658207959"
+                                        ? CupertinoDialogAction(
+                                            child: Text(
+                                              "Make Mountain",
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                            onPressed: () {
+                                              postsRef.doc(widget.postId).set({
+                                                "stats": {"moovMountain": true}
+                                              }, SetOptions(merge: true));
+                                              Navigator.pop(context);
+                                            })
+                                        : CupertinoDialogAction(
+                                            child: Text(
+                                              "Recommend for Mountain",
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.pop(context)),
                                   ]),
                           barrierDismissible: true),
                       child: CircleAvatar(
