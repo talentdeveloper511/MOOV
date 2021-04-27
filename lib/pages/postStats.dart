@@ -14,6 +14,8 @@ class PostStats extends StatefulWidget {
 }
 
 class PostStatsState extends State<PostStats> {
+  bool hornyButtonPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +67,10 @@ class PostStatsState extends State<PostStats> {
             int maleCount = 0;
             int femaleCount = 0;
             int otherGenderCount = 0;
+            int singleMaleCount = 0;
+            int singleFemaleCount = 0;
+            int singleOtherCount = 0;
+
             int blackCount = 0;
             int latinoCount = 0;
             int asianCount = 0;
@@ -82,6 +88,16 @@ class PostStatsState extends State<PostStats> {
             if (stats.containsKey('otherGenderCount')) {
               otherGenderCount = stats['otherGenderCount'];
             }
+            if (stats.containsKey('singleMaleCount')) {
+              singleMaleCount = stats['singleMaleCount'];
+            }
+            if (stats.containsKey('singleFemaleCount')) {
+              singleFemaleCount = stats['singleFemaleCount'];
+            }
+            if (stats.containsKey('singleOtherCount')) {
+              singleOtherCount = stats['singleOtherCount'];
+            }
+
             if (stats.containsKey('blackCount')) {
               blackCount = stats['blackCount'];
             }
@@ -130,9 +146,21 @@ class PostStatsState extends State<PostStats> {
                                     explodeIndex:
                                         currentUser.gender == "Female" ? 0 : 1,
                                     dataSource: [
-                                      PieData("Guys", maleCount),
-                                      PieData("Girls", femaleCount),
-                                      PieData("Other", otherGenderCount)
+                                      hornyButtonPressed
+                                          ? PieData(
+                                              "Guys ($singleMaleCount single)",
+                                              maleCount)
+                                          : PieData("Guys", maleCount),
+                                      hornyButtonPressed
+                                          ? PieData(
+                                              "Girls ($singleFemaleCount single)",
+                                              femaleCount)
+                                          : PieData("Girls", femaleCount),
+                                      hornyButtonPressed
+                                          ? PieData(
+                                              "Other ($singleOtherCount single)",
+                                              otherGenderCount)
+                                          : PieData("Other", otherGenderCount),
                                     ],
                                     xValueMapper: (PieData data, _) =>
                                         data.xData,
@@ -179,7 +207,48 @@ class PostStatsState extends State<PostStats> {
                                 ),
                               ],
                             ))
-                        : Container()
+                        : Container(),
+                    Positioned(
+                        bottom: 10,
+                        right: 25,
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onLongPress: () {
+                                print(hornyButtonPressed);
+                                setState(() {
+                                  hornyButtonPressed = true;
+                                });
+                              },
+                              onLongPressEnd: (details) {
+                                setState(() {
+                                  hornyButtonPressed = false;
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border:
+                                        Border.all(color: Colors.red, width: 1),
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "Horny",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              "Hold down if horny",
+                              style: TextStyle(fontSize: 8),
+                            )
+                          ],
+                        )),
                   ],
                 ),
                 (maleCount > femaleCount + otherGenderCount)
@@ -206,7 +275,9 @@ class PostStatsState extends State<PostStats> {
                         color: moovMountain ? null : Colors.grey,
                       ),
                     ),
-                    !moovMountain ? Text("not ", style: TextStyle(color: Colors.red)) : Container(),
+                    !moovMountain
+                        ? Text("not ", style: TextStyle(color: Colors.red))
+                        : Container(),
                     !moovMountain ? Text("a") : Container(),
                     Text("MOOV Mountain event."),
                     SizedBox(width: 7.5),

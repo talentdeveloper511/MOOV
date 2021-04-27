@@ -537,6 +537,22 @@ class Database {
           "stats": {"otherGenderCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
+       if (currentUser.gender == 'Male' && currentUser.isSingle == true) {
+        postsRef.doc(postId).set({
+          "stats": {"singleMaleCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+        if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
+        postsRef.doc(postId).set({
+          "stats": {"singleFemaleCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+        if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
+        postsRef.doc(postId).set({
+          "stats": {"singleOtherCount": FieldValue.increment(1)},
+        }, SetOptions(merge: true));
+      }
+
        if (currentUser.race == 'Black') {
         postsRef.doc(postId).set({
           "stats": {"blackCount": FieldValue.increment(1)},
@@ -613,6 +629,22 @@ class Database {
           "stats": {"otherGenderCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
+      if (currentUser.gender == 'Male' && currentUser.isSingle == true) {
+        postsRef.doc(postId).set({
+          "stats": {"singleMaleCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+        if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
+        postsRef.doc(postId).set({
+          "stats": {"singleFemaleCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+        if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
+        postsRef.doc(postId).set({
+          "stats": {"singleOtherCount": FieldValue.increment(-1)},
+        }, SetOptions(merge: true));
+      }
+
        if (currentUser.race == 'Black') {
         postsRef.doc(postId).set({
           "stats": {"blackCount": FieldValue.increment(-1)},

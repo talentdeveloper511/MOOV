@@ -23,6 +23,7 @@ class User {
   final Map pushSettings;
   final List<dynamic> followers;
   final bool isBusiness;
+  final bool isSingle;
   final int nameChangeLimit;
   final GeoPoint businessLocation;
   final String businessType;
@@ -51,6 +52,7 @@ class User {
       this.pushSettings,
       this.nameChangeLimit,
       this.isBusiness,
+      this.isSingle,
       this.followers,
       this.businessLocation,
       this.businessType,
@@ -80,6 +82,7 @@ class User {
         pushSettings: doc.data()['pushSettings'],
         nameChangeLimit: doc.data()['nameChangeLimit'],
         isBusiness: doc.data()['isBusiness'],
+        isSingle: doc.data()['isSingle'],
         followers: doc.data()['followers'],
         businessLocation: doc.data()['businessLocation'],
         businessType: doc.data()['businessType'],
