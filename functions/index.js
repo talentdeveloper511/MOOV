@@ -11,6 +11,10 @@ exports.brainTree = functions.firestore
       const paymentMethod = context.params.paymentMethodItem;
       const user = context.params.userId;
       const college = context.params.college;
+      // get updated payment information
+      const paymentRef = admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`).collection("payments").doc(`${paymentMethod}`);
+      const doc = await paymentRef.get();
+      let custId;
 
       const gateway = new braintree.BraintreeGateway({
         environment: braintree.Environment.Sandbox,
@@ -19,24 +23,31 @@ exports.brainTree = functions.firestore
         privateKey: "d6e6441e1b10e2126f5e8a4e534a981b",
       });
 
+      gateway.customer.create({
+        firstName: "Jen",
+        lastName: "Smith",
+        email: "jen@example.com",
+      }, (err, result) => {
+        result.success;
+        // true
+        custId = result.customer.id;
+        // e.g. 494019
+      });
+
       gateway.clientToken.generate({
-        customerId: customerId,
+        customerId: custId,
       }, (err, response) => {
         // pass clientToken to your front-end
-        const clientToken = response.clientToken;
+        const cToken = response.clientToken;
         admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`).collection("payments").doc(`${paymentMethod}`).set({
-          clientToken: clientToken,
+          clientToken: cToken,
           status: "success",
+          customer_transaction_id: custId,
         }, {merge: true});
       });
-      // get updated payment information
-      const paymentRef = admin.firestore().doc(`${college}/data/users/${user}/payments/${paymentMethod}`);
-      const doc = await paymentRef.get();
-
-      const nonce = doc.data().nonce;
-      const amountCharged = doc.data().amount;
-      const devData = doc.data().deviceData;
-      const customerId = doc.data().customerId;
+      const nonce = await doc.data().nonce;
+      const amountCharged = await doc.data().amount;
+      const devData = await doc.data().deviceData;
       // create transaction
       gateway.transaction.sale({
         amount: amountCharged,
