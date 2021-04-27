@@ -2,8 +2,6 @@ import UIKit
 import Flutter
 import Firebase
 import GoogleMaps
-import BraintreeDropIn
-import Braintree
 
 @available(iOS 10.0, *)
 @UIApplicationMain
@@ -15,9 +13,7 @@ import Braintree
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     FirebaseApp.configure()
-    GMSServices.provideAPIKey("AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A")
-    BTAppSwitch.setReturnURLScheme("com.MOOV.ND.braintree")
-   
+    GMSServices.provideAPIKey("AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A")   
     UNUserNotificationCenter.current().delegate = self
     
    
@@ -203,11 +199,11 @@ import Braintree
 
 
 //  }
-override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        if url.scheme == "com.MOOV.ND.payments" {
-            return BTAppSwitch.handleOpen(url, options:options)
-        }
+// override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+//         if url.scheme == "com.MOOV.ND.payments" {
+//             return BTAppSwitch.handleOpen(url, options:options)
+//         }
         
-        return false
-    }
+//         return false
+//     }
 }

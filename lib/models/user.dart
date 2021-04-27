@@ -11,6 +11,7 @@ class User {
   final String dorm;
   final String header;
   final String gender;
+  final String race;
   final List<dynamic> friendArray;
   final List<dynamic> friendRequests;
   final postLimit;
@@ -22,6 +23,7 @@ class User {
   final Map pushSettings;
   final List<dynamic> followers;
   final bool isBusiness;
+  final bool isSingle;
   final int nameChangeLimit;
   final GeoPoint businessLocation;
   final String businessType;
@@ -38,6 +40,7 @@ class User {
       this.dorm,
       this.header,
       this.gender,
+      this.race,
       this.friendArray,
       this.friendRequests,
       this.postLimit,
@@ -49,6 +52,7 @@ class User {
       this.pushSettings,
       this.nameChangeLimit,
       this.isBusiness,
+      this.isSingle,
       this.followers,
       this.businessLocation,
       this.businessType,
@@ -66,6 +70,7 @@ class User {
         header: doc.data()['header'],
         year: doc.data()['year'],
         gender: doc.data()['gender'],
+        race: doc.data()['race'],
         friendArray: doc.data()['friendArray'],
         friendRequests: doc.data()['friendRequests'],
         postLimit: doc.data()['postLimit'],
@@ -77,6 +82,7 @@ class User {
         pushSettings: doc.data()['pushSettings'],
         nameChangeLimit: doc.data()['nameChangeLimit'],
         isBusiness: doc.data()['isBusiness'],
+        isSingle: doc.data()['isSingle'],
         followers: doc.data()['followers'],
         businessLocation: doc.data()['businessLocation'],
         businessType: doc.data()['businessType'],

@@ -335,7 +335,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   ];
 
   final List<String> clubList =
-  List<String>.from(currentUser.userType['clubExecutive'] ?? []);
+      List<String>.from(currentUser.userType['clubExecutive'] ?? []);
   Map<String, String> clubNameMap = {};
   Map<String, String> clubIdMap = {};
 
@@ -392,8 +392,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   List<String> groupList = [];
   List groupMembers = [];
   bool push = true;
-
-  
 
   void refreshData() {
     id++;
@@ -795,7 +793,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                         symbol: '\$',
                                       )
                                     ],
-
                                     controller: venmoController,
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) =>
@@ -1298,7 +1295,6 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
-
                               HapticFeedback.lightImpact();
 
                               // for (int i = 0;
@@ -1412,7 +1408,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                             userId: strUserId,
                                             postId: postId,
                                             posterName: currentUser.displayName,
-                                            push: push);
+                                            push: push,
+                                          );
 
                                     nextSunday().then((value) {
                                       wrapupRef
@@ -1521,13 +1518,11 @@ class _DatePickerState extends State<DatePicker> {
       ],
     );
   }
-  
 }
 
 String generateRandomString(int len) {
-    var r = Random();
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
-        .join();
-  }
+  var r = Random();
+  const _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  return List.generate(len, (index) => _chars[r.nextInt(_chars.length)]).join();
+}

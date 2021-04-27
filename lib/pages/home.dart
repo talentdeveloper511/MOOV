@@ -22,6 +22,7 @@ import 'package:MOOV/services/database.dart';
 import 'package:MOOV/studentClubs/studentClubDashboard.dart';
 import 'package:MOOV/widgets/locationCheckIn.dart';
 import 'package:another_flushbar/flushbar.dart';
+// import 'package:another_flushbar/flushbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -217,7 +218,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               }
             },
             padding: EdgeInsets.all(20),
-            borderRadius: 15,
+            borderRadius: BorderRadius.circular(15),
             flushbarStyle: FlushbarStyle.FLOATING,
             boxShadows: [
               BoxShadow(
@@ -563,7 +564,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             }
           },
           padding: EdgeInsets.all(20),
-          borderRadius: 15,
+          borderRadius: BorderRadius.circular(15),
           flushbarStyle: FlushbarStyle.FLOATING,
           boxShadows: [
             BoxShadow(

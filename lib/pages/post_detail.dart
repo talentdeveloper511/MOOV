@@ -7,21 +7,17 @@ import 'package:http/http.dart' as http;
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/Comment.dart';
-import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
-import 'package:MOOV/widgets/locationCheckIn.dart';
 import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/send_moov.dart';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -36,8 +32,7 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostDetail extends StatefulWidget {
-  String postId;
-  bool isArchive;
+  final String postId;
   PostDetail(this.postId);
 
   @override
@@ -233,6 +228,7 @@ class _PostDetailState extends State<PostDetail>
                           int maxOccupancy = course['maxOccupancy'];
                           int venmo = course['venmo'];
                           int goingCount = course['going'].length;
+                          Map stats = course['stats'];
 
                           return Container(
                             color: Colors.white,
@@ -241,7 +237,7 @@ class _PostDetailState extends State<PostDetail>
                               controller: _scrollController,
                               children: <Widget>[
                                 _BannerImage(bannerImage, userId, postId,
-                                    maxOccupancy, goingCount),
+                                    maxOccupancy, goingCount, stats),
                                 _NonImageContents(
                                     title,
                                     description,
@@ -264,10 +260,11 @@ class _PostDetailState extends State<PostDetail>
 }
 
 class _BannerImage extends StatelessWidget {
-  String bannerImage, userId, postId;
-  int maxOccupancy, goingCount;
+  final String bannerImage, userId, postId;
+  final int maxOccupancy, goingCount;
+  final Map stats;
   _BannerImage(this.bannerImage, this.userId, this.postId, this.maxOccupancy,
-      this.goingCount);
+      this.goingCount, this.stats);
 
   @override
   Widget build(BuildContext context) {
@@ -376,25 +373,29 @@ class _BannerImage extends StatelessWidget {
               ),
             )
           : Container(),
-      Positioned(
-          left: 5,
-          bottom: 5,
-          child: GestureDetector(
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PostStats(postId))),
-              child: Image.asset(
-                'lib/assets/ratioChart.png',
-                height: 50,
-              ))),
+      stats.isNotEmpty
+          ? Positioned(
+              left: 5,
+              bottom: 5,
+              child: GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PostStats(postId))),
+                  child: Image.asset(
+                    'lib/assets/ratioChart.png',
+                    height: 50,
+                  )))
+          : Container(),
     ]);
   }
 }
 
 class _NonImageContents extends StatelessWidget {
-  String title, description, userId;
-  dynamic startDate, address, moovId;
-  DocumentSnapshot course;
-  int commentCount, venmo, isBusiness;
+  final String title, description, userId;
+  final dynamic startDate, address, moovId;
+  final DocumentSnapshot course;
+  final int commentCount, venmo;
 
   _NonImageContents(this.title, this.description, this.startDate, this.address,
       this.userId, this.moovId, this.course, this.commentCount, this.venmo);
@@ -581,7 +582,7 @@ class _NonImageContents extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  String title;
+  final String title;
   _Title(this.title);
 
   @override
@@ -602,7 +603,7 @@ class _Title extends StatelessWidget {
 }
 
 class _Description extends StatelessWidget {
-  String description;
+  final String description;
   _Description(this.description);
 
   @override
@@ -640,8 +641,6 @@ class PostTimeAndPlace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle timeTheme = TextThemes.dateStyle;
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Stack(children: [
@@ -758,8 +757,8 @@ class PostTimeAndPlace extends StatelessWidget {
 }
 
 class _AuthorContent extends StatelessWidget {
-  String userId;
-  DocumentSnapshot course;
+  final String userId;
+  final DocumentSnapshot course;
   _AuthorContent(this.userId, this.course);
 
   @override
@@ -1035,8 +1034,8 @@ class _GoingListSegmentState extends State<GoingListSegment>
 }
 
 class Buttons extends StatefulWidget {
-  dynamic moovId, likeCount;
-  String text = 'https://www.whatsthemoov.com';
+  final dynamic moovId;
+  final String text = 'https://www.whatsthemoov.com';
 
   Buttons(this.moovId);
   @override
@@ -1072,7 +1071,6 @@ class _ButtonsState extends State<Buttons> {
 
   int status;
   bool push = true;
-  GlobalKey _buttonsKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -1791,10 +1789,6 @@ class _PaymentButtonState extends State<PaymentButton> {
           int goingCount = course['going'].length;
           bool hasPaid = false;
 
-          List<dynamic> statusesIds = statuses.keys.toList();
-
-          List<dynamic> statusesValues = statuses.values.toList();
-          List pushList = currentUser.pushSettings.values.toList();
           if (statuses[currentUser.id] == 5) {
             hasPaid = true;
           }
