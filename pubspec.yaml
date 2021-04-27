@@ -169,6 +169,7 @@ flutter:
     - lib/assets/google.png
     - lib/assets/moovheader.png
     - lib/assets/foodbutton1.png
+    - lib/assets/blockedOverlay.jpg
     - lib/assets/motd.jpg
     - lib/assets/bouts.jpg
     - lib/assets/pete!!.jpg

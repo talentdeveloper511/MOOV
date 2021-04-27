@@ -12,7 +12,9 @@ import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/SettingsPage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
+import 'package:MOOV/pages/blockedPage.dart';
 import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
@@ -76,6 +78,10 @@ final clubsRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('clubs');
+final adminRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('admin');
 
 final DateTime timestamp = DateTime.now();
 User currentUser;
@@ -603,58 +609,40 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // 1) check if user exists in users collection in database (according to their id)
     final GoogleSignInAccount user = googleSignIn.currentUser;
     DocumentSnapshot doc = await usersRef.doc(user.id).get();
+    DocumentSnapshot adminDoc = await adminRef.doc('login').get();
+    bool blocked = false;
 
     if (!doc.exists) {
-      // 2) if the user doesn't exist, then we want to take them to the create account page
-      final result = await Navigator.pushAndRemoveUntil(
-        context,
-        PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
-        (Route<dynamic> route) => false,
-      );
+      //checking if a business or nd.edu address or staff
+      List whiteList =
+          adminDoc.data()['whiteList']; //businesses can get through screening
+      List blackList = adminDoc.data()['blackList']; // staff/faculty blocked
 
-      final String dorm = result[0];
-      final String year = result[2];
-      final String gender = result[1];
-      final String referral = result[3];
-      final String venmoUsername = result[4];
+      if (blackList.contains(user.email)) {
+        blocked = true;
+        print("staff/faculty. get fucked");
+      }
+      if (!user.email.contains('@nd.edu') && !whiteList.contains(user.email)) {
+        blocked = true;
+        print("not a student or a business. get fucked");
+      }
 
-      // 3) get username from create account, use it to make new user document in users collection
-      usersRef.doc(user.id).set({
-        "id": user.id,
-        "photoUrl": user.photoUrl,
-        "email": user.email,
-        "displayName": user.displayName,
-        "bio": "Create a bio here",
-        "header": "",
-        "timestamp": timestamp,
-        "score": 0,
-        "gender": gender,
-        "year": year,
-        "dorm": dorm,
-        "referral": referral,
-        "postLimit": 3,
-        "sendLimit": 5,
-        "suggestLimit": 5,
-        "groupLimit": 2,
-        "nameChangeLimit": 1,
-        "verifiedStatus": 0,
-        "friendArray": [],
-        "friendRequests": [],
-        "friendGroups": [],
-        "venmoUsername": venmoUsername,
-        "pushSettings": {
-          "going": true,
-          "hourBefore": true,
-          "suggestions": true
-        },
-        "privacySettings": {
-          "friendFinderVisibility": true,
-          "friendsOnly": false,
-          "incognito": false,
-          "showDorm": true
-        }
-      });
-      doc = await usersRef.doc(user.id).get();
+      // 2) if the user doesn't exist, and ISNT BLOCKED, then we want to take them to the create account page
+      if (blocked) {
+        final result = await Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteBuilder(pageBuilder: (_, __, ___) => BlockedPage()),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        final result = await Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
+          (Route<dynamic> route) => false,
+        );
+
+        doc = await usersRef.doc(user.id).get();
+      }
     }
     currentUser = User.fromDocument(doc);
     setState(() {
@@ -787,7 +775,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MoovMoneyAdd(0, moovMoneyBalance)));
+                                builder: (context) =>
+                                    MoovMoneyAdd(0, moovMoneyBalance)));
                       },
                     ),
                   ),
