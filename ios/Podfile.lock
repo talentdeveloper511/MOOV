@@ -212,8 +212,6 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - another_flushbar (0.0.1):
-    - Flutter
   - AppAuth (1.4.0):
     - AppAuth/Core (= 1.4.0)
     - AppAuth/ExternalUserAgent (= 1.4.0)
@@ -509,7 +507,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - another_flushbar (from `.symlinks/plugins/another_flushbar/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - contacts_service (from `.symlinks/plugins/contacts_service/ios`)
@@ -578,8 +575,6 @@ SPEC REPOS:
     - TOCropViewController
 
 EXTERNAL SOURCES:
-  another_flushbar:
-    :path: ".symlinks/plugins/another_flushbar/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
@@ -643,7 +638,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
-  another_flushbar: 3bb0a50768cc547ba9dd82cbb92129bf5ca7440c
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   Braintree: 48154e70306eb3e6c81eaa87bbc5c5988c0d2784
@@ -707,6 +701,6 @@ SPEC CHECKSUMS:
   TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
 
 COCOAPODS: 1.10.1

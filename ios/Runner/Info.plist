@@ -2,14 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-	<string>com.venmo.touch.v2</string>
-	</array>
-	<key>CFBundleDisplayName</key>
-	<string>MOOV</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>MOOV</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -49,6 +45,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>NO</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>com.venmo.touch.v2</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<false/>
 	<key>NSAppleMusicUsageDescription</key>

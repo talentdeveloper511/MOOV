@@ -357,7 +357,8 @@ class _MoneyAmountState extends State<MoneyAmount> {
                           .doc(orderId)
                           .set({
                         "clientToken": "",
-                        "customerId": currentUser.id
+                        "userId": currentUser.id,
+                        "amount": amountInt
                       });
                       usersRef
                           .doc(currentUser.id)

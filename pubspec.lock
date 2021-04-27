@@ -35,7 +35,7 @@ packages:
       name: another_flushbar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.8"
+    version: "1.10.16"
   archive:
     dependency: transitive
     description:
