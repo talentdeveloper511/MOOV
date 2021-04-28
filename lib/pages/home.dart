@@ -23,9 +23,8 @@ import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/studentClubs/studentClubDashboard.dart';
 import 'package:MOOV/widgets/locationCheckIn.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:another_flushbar/flushbar.dart';
-// import 'package:another_flushbar/flushbar.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -39,6 +38,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final Reference storageRef = FirebaseStorage.instance.ref();
@@ -92,6 +92,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  bool isLoading = false;
+
   callback() {
     setState(() {});
   }
@@ -606,12 +608,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   createUserInFirestore() async {
+      setState(() {
+      isLoading = true;
+    });
     // 1) check if user exists in users collection in database (according to their id)
     final GoogleSignInAccount user = googleSignIn.currentUser;
+
     DocumentSnapshot doc = await usersRef.doc(user.id).get();
+
+    print('f');
+
     DocumentSnapshot adminDoc = await adminRef.doc('login').get();
     bool blocked = false;
 
+  
     if (!doc.exists) {
       //checking if a business or nd.edu address or staff
       List whiteList =
@@ -645,10 +655,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       }
     }
     currentUser = User.fromDocument(doc);
+
     setState(() {
       isAuth = true;
     });
     configurePushNotifications();
+
+  
   }
 
   int currentIndex = 0;
@@ -1052,42 +1065,50 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Scaffold buildUnAuthScreen() {
-    return Scaffold(
-      body: Container(
-        color: TextThemes.ndBlue,
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'lib/assets/landingpage.png',
-              scale: .5,
-            ),
-            GestureDetector(
-              onTap: login,
-              child: Container(
-                height: 50.0,
-                width: 300.0,
-                decoration: BoxDecoration(
-                  color: TextThemes.ndGold,
-                  borderRadius: BorderRadius.circular(7.0),
-                ),
-                child: Center(
-                  child: Text(
-                    "Sign in",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
+    return (isLoading)
+        ? Scaffold(
+            backgroundColor: TextThemes.ndBlue,
+            body: Center(
+              child: Image.asset(
+                'lib/assets/runningGif.gif',
+                height: 200,
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ))
+        : Scaffold(
+            body: Container(
+            color: TextThemes.ndBlue,
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  'lib/assets/landingpage.png',
+                  scale: .5,
+                ),
+                GestureDetector(
+                  onTap: login,
+                  child: Container(
+                    height: 50.0,
+                    width: 300.0,
+                    decoration: BoxDecoration(
+                      color: TextThemes.ndGold,
+                      borderRadius: BorderRadius.circular(7.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Sign in",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ));
   }
 
   @override
@@ -1216,125 +1237,4 @@ class NamedIcon extends StatelessWidget {
           );
         });
   }
-}
-
-class SharedPreferencesDemo extends StatefulWidget {
-  SharedPreferencesDemo({Key key}) : super(key: key);
-
-  @override
-  SharedPreferencesDemoState createState() => SharedPreferencesDemoState();
-}
-
-class SharedPreferencesDemoState extends State<SharedPreferencesDemo> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  Future<int> _counter = notificationFeedRef
-      .doc(googleSignIn.currentUser.id)
-      .collection('feedItems')
-      .snapshots()
-      .length;
-
-  Future<void> _incrementCounter() async {
-    final SharedPreferences prefs = await _prefs;
-    final int counter = (prefs.getInt('counter') ?? 0) + 1;
-
-    setState(() {
-      _counter = prefs.setInt("counter", counter).then((bool success) {
-        return counter;
-      });
-    });
-  }
-
-  Future<void> _clearCounter() async {
-    final SharedPreferences prefs = await _prefs;
-    final int counter = (prefs.getInt('counter') ?? 0) * 0;
-
-    setState(() {
-      _counter = prefs.setInt("counter", counter).then((bool success) {
-        return counter;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    print(notificationFeedRef
-        .doc(googleSignIn.currentUser.id)
-        .collection('feedItems')
-        .snapshots()
-        .length);
-    _counter = _prefs.then((SharedPreferences prefs) {
-      return (prefs.getInt('counter') ?? 0);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Shared Preferences Demo"),
-      ),
-      body: Column(
-        children: [
-          Center(
-              child: FutureBuilder<int>(
-                  future: _counter,
-                  builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return const CircularProgressIndicator();
-                      default:
-                        if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          return Text(
-                            'Button tapped ${snapshot.data} time${snapshot.data == 1 ? '' : 's'}.\n\n'
-                            'This should persist across restarts.',
-                          );
-                        }
-                    }
-                  })),
-          FlatButton(onPressed: _clearCounter, child: Text("HI"))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-Future<File> cropImage(File _image) async {
-  File croppedFile = await ImageCropper.cropImage(
-      sourcePath: _image.path,
-      aspectRatioPresets: Platform.isAndroid
-          ? [
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9
-            ]
-          : [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio5x3,
-              CropAspectRatioPreset.ratio5x4,
-              CropAspectRatioPreset.ratio7x5,
-              CropAspectRatioPreset.ratio16x9
-            ],
-      androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Croperooni',
-          toolbarColor: Colors.deepOrange,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
-      iosUiSettings: IOSUiSettings(
-        title: 'Croperooni',
-      ));
-  return croppedFile;
 }

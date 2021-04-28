@@ -1,115 +1,115 @@
 {
   "images" : [
     {
-      "filename" : "moovlogo1-2.png",
+      "filename" : "mb-14.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "moovlogo1-3.png",
+      "filename" : "mb-15.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "moovlogo1-4.png",
+      "filename" : "mb-18.png",
       "idiom" : "iphone",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "moovlogo1-5.png",
+      "filename" : "mb-16.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "moovlogo1-6.png",
+      "filename" : "mb-17.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "moovlogo1-7.png",
+      "filename" : "mb-6.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "moovlogo1-8.png",
+      "filename" : "mb-13.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "moovlogo1.png",
+      "filename" : "mb-11.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "moovlogo1-1.png",
+      "filename" : "mb-12.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "moovblue-6.png",
+      "filename" : "mb-7.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
-      "filename" : "moovblue-5.png",
+      "filename" : "mb-8.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "moovblue-8.png",
+      "filename" : "mb-9.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "moovblue-7.png",
+      "filename" : "mb-10.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "moovblue-3.png",
+      "filename" : "mb-5.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "40x40"
     },
     {
-      "filename" : "moovblue-10.png",
+      "filename" : "mb-4.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "moovblue-1.png",
+      "filename" : "mb-3.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
-      "filename" : "moovblue-2.png",
+      "filename" : "mb-2.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "moovblue-9.png",
+      "filename" : "mb-1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "moovblue.png",
+      "filename" : "mb.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
