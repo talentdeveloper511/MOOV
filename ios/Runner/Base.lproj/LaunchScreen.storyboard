@@ -18,7 +18,18 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="8Sc-Y2-gZt">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="8Sc-Y2-gZt" secondAttribute="trailing" id="8R4-O8-jQH"/>
+                            <constraint firstAttribute="bottom" secondItem="8Sc-Y2-gZt" secondAttribute="bottom" id="dui-7c-hdK"/>
+                            <constraint firstItem="8Sc-Y2-gZt" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="rCI-ks-cZN"/>
+                            <constraint firstItem="8Sc-Y2-gZt" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="t45-tg-KWS"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -26,4 +37,7 @@
             <point key="canvasLocation" x="76.811594202898561" y="251.11607142857142"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="splash" width="543" height="989"/>
+    </resources>
 </document>
