@@ -766,33 +766,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               int moovMoneyBalance = snapshot.data['moovMoney'];
               return Row(
                 children: [
-                  Expanded(
-                    child: IconButton(
-                      padding: EdgeInsets.only(left: 9.0),
-                      icon: Row(
-                        children: [
-                          Icon(Icons.monetization_on_outlined),
-                          SizedBox(width: 5),
-                          Expanded(
-                            child: Text(moovMoneyBalance.toString(),
-                                maxLines: 1,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                          )
-                        ],
-                      ),
-                      color: Colors.white,
-                      splashColor: Colors.transparent,
-                      onPressed: () async {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    MoovMoneyAdd(0, moovMoneyBalance)));
-                      },
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: IconButton(
+                  //     padding: EdgeInsets.only(left: 9.0),
+                  //     icon: Row(
+                  //       children: [
+                  //         Icon(Icons.monetization_on_outlined),
+                  //         SizedBox(width: 5),
+                  //         Expanded(
+                  //           child: Text(moovMoneyBalance.toString(),
+                  //               maxLines: 1,
+                  //               style: TextStyle(
+                  //                   color: Colors.white,
+                  //                   fontWeight: FontWeight.bold)),
+                  //         )
+                  //       ],
+                  //     ),
+                  //     color: Colors.white,
+                  //     splashColor: Colors.transparent,
+                  //     onPressed: () async {
+                  //       Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) =>
+                  //                   MoovMoneyAdd(0, moovMoneyBalance)));
+                  //     },
+                  //   ),
+                  // ),
                   IconButton(
                     icon: Icon(Icons.insert_chart_outlined),
                     color: Colors.white,
