@@ -315,41 +315,41 @@ class _FriendFinderState extends State<FriendFinder>
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: currentUser.friendArray.isNotEmpty
-      //     ? buildSearchField()
-      //     : AppBar(
-      //         leading: IconButton(
-      //             icon: Icon(Icons.arrow_drop_up_outlined,
-      //                 color: Colors.white, size: 35),
-      //             onPressed: () {
-      //               Navigator.pop(context);
-      //             }),
-      //         backgroundColor: TextThemes.ndBlue,
-      //         //pinned: true,
+      appBar: currentUser.friendArray.isNotEmpty
+          ? buildSearchField()
+          : AppBar(
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_drop_up_outlined,
+                      color: Colors.white, size: 35),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              backgroundColor: TextThemes.ndBlue,
+              //pinned: true,
 
-      //         flexibleSpace: FlexibleSpaceBar(
-      //           titlePadding: EdgeInsets.all(5),
-      //           title: Row(
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             children: <Widget>[
-      //               GestureDetector(
-      //                 onTap: () {
-      //                   Navigator.pushAndRemoveUntil(
-      //                     context,
-      //                     MaterialPageRoute(builder: (context) => Home()),
-      //                     (Route<dynamic> route) => false,
-      //                   );
-      //                 },
-      //                 child: Image.asset(
-      //                   'lib/assets/moovblue.png',
-      //                   fit: BoxFit.cover,
-      //                   height: 50.0,
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.all(5),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Image.asset(
+                        'lib/assets/moovblue.png',
+                        fit: BoxFit.cover,
+                        height: 50.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
       body: currentUser.friendArray.isEmpty
           ? FutureBuilder(
               future: request(),

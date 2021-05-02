@@ -162,6 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 MOOVMemories())),
                                     child: GradientText(
                                       "MOOV Memories",
+                                        16.5,
                                       gradient: LinearGradient(colors: [
                                         Colors.blue.shade400,
                                         Colors.blue.shade900,

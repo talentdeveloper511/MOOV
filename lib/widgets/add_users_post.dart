@@ -209,6 +209,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                         child: _currentIndex == 0
                             ? GradientText(
                                 "People",
+                                16.5,
                                 gradient: LinearGradient(colors: [
                                   Colors.blue.shade400,
                                   Colors.blue.shade900,
@@ -235,6 +236,7 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                         child: _currentIndex == 1
                             ? GradientText(
                                 "Friend Groups",
+                                16.5,
                                 gradient: LinearGradient(colors: [
                                   Colors.blue.shade400,
                                   Colors.blue.shade900,
@@ -554,6 +556,7 @@ class _AddUsersFromCreateGroupState extends State<AddUsersFromCreateGroup>
                           },
                           child: GradientText(
                             'People',
+                            16.5,
                             gradient: LinearGradient(colors: [
                               Colors.blue.shade400,
                               Colors.blue.shade900,
@@ -1514,43 +1517,43 @@ class _SearchUsersMessageState extends State<SearchUsersMessage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.needAppBar ? AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_drop_down_outlined,
-                color: Colors.white, size: 35),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
+      appBar: widget.needAppBar
+          ? AppBar(
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_drop_down_outlined,
+                      color: Colors.white, size: 35),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              backgroundColor: TextThemes.ndBlue,
+              //pinned: true,
 
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 50.0,
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.all(5),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Image.asset(
+                        'lib/assets/moovblue.png',
+                        fit: BoxFit.cover,
+                        height: 50.0,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ) : null,
+            )
+          : null,
       backgroundColor: Colors.white,
-      body: ListView(
-        physics: ClampingScrollPhysics(),
-        children: <Widget>[
+      body: ListView(physics: ClampingScrollPhysics(), children: <Widget>[
         TextField(
             style: TextStyle(fontSize: 20),
             controller: searchController,
@@ -1614,20 +1617,17 @@ class _SearchUsersMessageState extends State<SearchUsersMessage> {
                                               text: "Slide",
                                               style: TextStyle(
                                                   fontSize: 30,
-                                                  fontWeight:
-                                                      FontWeight.w300)),
+                                                  fontWeight: FontWeight.w300)),
                                           TextSpan(
                                               text: " in",
                                               style: TextStyle(
                                                   fontSize: 30,
-                                                  fontWeight:
-                                                      FontWeight.w600)),
+                                                  fontWeight: FontWeight.w600)),
                                           TextSpan(
                                               text: ".",
                                               style: TextStyle(
                                                   fontSize: 30,
-                                                  fontWeight:
-                                                      FontWeight.w300))
+                                                  fontWeight: FontWeight.w300))
                                         ]))),
                             Image.asset('lib/assets/ff.png')
                           ],

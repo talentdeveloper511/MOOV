@@ -203,6 +203,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                       child: _currentIndex == 0
                           ? GradientText(
                               "People",
+                                16.5,
                               gradient: LinearGradient(colors: [
                                 Colors.blue.shade400,
                                 Colors.blue.shade900,
@@ -229,6 +230,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                       child: _currentIndex == 1
                           ? GradientText(
                               "Friend Groups",
+                                16.5,
                               gradient: LinearGradient(colors: [
                                 Colors.blue.shade400,
                                 Colors.blue.shade900,

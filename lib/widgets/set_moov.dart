@@ -470,10 +470,6 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                                   title,
                                   image,
                                   groupName);
-                              Database().betaActivityTracker(
-                                  currentUser.displayName,
-                                  Timestamp.now(),
-                                  "suggest");
 
                               Navigator.pop(context, moov);
                             },
@@ -528,11 +524,7 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
                                         title,
                                         image,
                                         groupName);
-                                    Database().betaActivityTracker(
-                                        currentUser.displayName,
-                                        Timestamp.now(),
-                                        "suggest");
-
+                                 
                                     Navigator.pop(context, moov);
                                   },
                             child: Container(

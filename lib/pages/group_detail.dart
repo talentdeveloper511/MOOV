@@ -1145,10 +1145,7 @@ class _SuggestionsState extends State<Suggestions> {
                                     positivePointAnimationNo = false;
                                   });
                                 });
-                                Database().betaActivityTracker(
-                                    currentUser.displayName,
-                                    Timestamp.now(),
-                                    "vote on " + suggestorId);
+                             
                                 Database().addNoVote(
                                     unix, currentUser.id, groupId, suggestorId);
                                 status = 1;
@@ -1247,10 +1244,7 @@ class _SuggestionsState extends State<Suggestions> {
                                   });
                                 });
 
-                                Database().betaActivityTracker(
-                                    currentUser.displayName,
-                                    Timestamp.now(),
-                                    "vote on " + suggestorId);
+                             
                                 Database().addYesVote(
                                     unix, currentUser.id, groupId, suggestorId);
                                 status = 2;

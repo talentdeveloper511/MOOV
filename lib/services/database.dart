@@ -945,23 +945,12 @@ class Database {
           }, SetOptions(merge: true));
           print("YAY");
         });
-
-        // usersRef.doc(statusNames[i]).get().then((snap) => {
-        //       who = snap.data()['displayName'],
-        //       betaActivityTracker(
-        //           who, Timestamp.now(), "responded to post " + postId)
-        //     });
       }
     });
     String filePath = 'images/$ownerId$title';
 
     firebase_storage.Reference ref =
         firebase_storage.FirebaseStorage.instance.ref().child(filePath);
-
-    //BETA ACTIVITY
-    if (statuses.length >= 5) {
-      betaActivityTracker(posterName, Timestamp.now(), "5+ statuses");
-    }
 
     ///this is for deleting related notifications
     FirebaseFirestore.instance
@@ -1224,21 +1213,6 @@ class Database {
             .update({"score": FieldValue.increment(75)});
       }
     });
-
-    betaActivityTracker(displayName, Timestamp.now(), "joined Friend Group");
-    return dbRef.runTransaction((transaction) async {
-      final DocumentReference ref = dbRef.doc('notreDame/data/users/$id');
-      final DocumentReference ref2 =
-          dbRef.doc('notreDame/data/friendGroups/$gid');
-      transaction.update(ref, {
-        'friendGroups': FieldValue.arrayUnion([gid]),
-        // 'score': FieldValue.increment(75)
-      });
-      transaction.update(ref2, {
-        'members': FieldValue.arrayUnion([id]),
-        'memberNames': FieldValue.arrayUnion([displayName]),
-      });
-    });
   }
 
   Future<void> setMOOV(gid, moovId) async {
@@ -1300,37 +1274,6 @@ class Database {
         "timestamp": DateTime.now()
       });
     });
-  }
-
-  Future<void> betaActivityTracker(
-      //BETA ACTIVITY TRACKER
-      String who,
-      Timestamp when,
-      String what) async {
-    final dateToCheck = when.toDate();
-    final aDate =
-        DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
-
-    String whenString = DateFormat('MMMd').format(aDate);
-    // if (who != "Alvin Alaphat" && who != "Kevin Camson" && who != "MOOV Team") {
-
-    FirebaseFirestore.instance.collection(who).get().then((value) {
-      print(value);
-    });
-
-    // if (value['postLimit'] >= 1) {
-
-    FirebaseFirestore.instance
-        .collection(who)
-        .doc(whenString)
-        .collection(what)
-        .doc(what)
-        .set({
-      "who": who,
-      "when": when,
-      "what": what,
-    });
-    //}
   }
 
   Future<void> addNoVote(unix, userId, gid, suggestorId) async {

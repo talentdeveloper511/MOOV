@@ -9,6 +9,7 @@ import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/poll2.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
+import 'package:MOOV/widgets/secondCarousel.dart';
 import 'package:MOOV/widgets/suggestionBox.dart';
 import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'package:animations/animations.dart';
@@ -151,7 +152,7 @@ class _HomePageState extends State<HomePage>
           .doc(DateFormat('MMMd').format(aDate))
           .get()
           .then((value) {
-        if (!value.data()['seen']) {
+        if (value.data()['seen'] == null) {
           Future.delayed(const Duration(seconds: 2), () {
             showDialog(
                 barrierDismissible: false,
@@ -1066,7 +1067,7 @@ class _HomePageState extends State<HomePage>
                                                                 options:
                                                                     CarouselOptions(
                                                                   scrollPhysics:
-                                                                      NeverScrollableScrollPhysics(),
+                                                                      AlwaysScrollableScrollPhysics(),
                                                                   height:
                                                                       isLargePhone
                                                                           ? 170
@@ -1085,7 +1086,7 @@ class _HomePageState extends State<HomePage>
                                                                   reverse:
                                                                       false,
                                                                   autoPlay:
-                                                                      false,
+                                                                      true,
                                                                   autoPlayInterval:
                                                                       Duration(
                                                                           seconds:
@@ -1107,6 +1108,7 @@ class _HomePageState extends State<HomePage>
                                                                     PollView(
                                                                         notifier:
                                                                             _notifier),
+                                                                            SecondCarousel(notifier: _notifier)
                                                                     // SuggestionBoxCarousel(),
                                                                     // currentUser.friendGroups !=
                                                                     //         null

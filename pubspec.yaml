@@ -226,7 +226,11 @@ flutter:
     - lib/assets/welcomePage.png
     - lib/assets/betaWelcome.png
     - lib/assets/moovmoney.jpg
+    - lib/assets/mapIcon.png
+    - lib/assets/mapIconWhite.png
     - lib/assets/betaDisclaimer.png
+    - lib/assets/friendsIcon.png
+    - lib/assets/friendsIconWhite.png
     - lib/assets/plate.png
     - lib/assets/dance.png
     - lib/assets/recruit.jpeg
@@ -279,7 +283,9 @@ flutter:
     - lib/assets/poll.png
     - lib/assets/greenmountain.png
     - lib/assets/sausage.png
+    - lib/assets/nd.png
     - lib/assets/runningGif.gif
+    - lib/assets/ndMap.json
 
 
 
