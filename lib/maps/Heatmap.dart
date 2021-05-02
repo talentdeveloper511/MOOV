@@ -1,6 +1,6 @@
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/NewSearch.dart';
-import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show NumberFormat;
@@ -140,6 +140,8 @@ class _MapRangeColorMappingPageState extends SampleViewState {
   }
 
   Widget _buildMapsWidget() {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -157,7 +159,7 @@ class _MapRangeColorMappingPageState extends SampleViewState {
         ),
         backgroundColor: TextThemes.ndBlue,
         flexibleSpace: FlexibleSpaceBar(
-            titlePadding: EdgeInsets.only(top: 30),
+            titlePadding: EdgeInsets.only(top: isLargePhone ? 50 : 30),
             title: Align(
                 alignment: Alignment.center,
                 child: Column(
@@ -181,77 +183,107 @@ class _MapRangeColorMappingPageState extends SampleViewState {
                 ))),
       ),
       body: Center(
-          child: Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.05,
-          bottom: MediaQuery.of(context).size.height * 0.05,
+          child: SfMapsTheme(
+        data: SfMapsThemeData(
+          shapeHoverColor: Color.fromRGBO(176, 237, 131, 1),
         ),
-        child: SfMapsTheme(
-          data: SfMapsThemeData(
-            shapeHoverColor: Color.fromRGBO(176, 237, 131, 1),
-          ),
-          child: Column(children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Image.asset(
-                    "lib/assets/nd.png",
+        child: Column(children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Image.asset("lib/assets/nd.png",
                     height: MediaQuery.of(context).size.height,
-                    fit: BoxFit.cover
+                    fit: BoxFit.cover),
+                Positioned(
+                  bottom: 0,
+                  child: ShaderMask(
+                    shaderCallback: (rect) {
+                      return LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.black, Colors.transparent],
+                      ).createShader(
+                          Rect.fromLTRB(rect.width, rect.height, 0, 0));
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: Container(
+                        height: 80,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: Colors.blue[50],
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                        )),
                   ),
-                  SfMaps(
-                    layers: <MapLayer>[
-                      MapShapeLayer(
-                        loadingBuilder: (BuildContext context) {
-                          return Container(
-                            height: 25,
-                            width: 25,
-                            child: const CircularProgressIndicator(
-                              strokeWidth: 10,
-                            ),
-                          );
-                        },
-                        source: _mapSource,
-                        // Returns the custom tooltip for each shape.
-                        shapeTooltipBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                _worldPopulationDensity[index].countryName +
-                                    ' : ' +
-                                    _numberFormat
-                                        .format(_worldPopulationDensity[index]
-                                            .density)
-                                        .toString() +
-                                    ' people going',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .surface)),
-                          );
-                        },
-                        strokeColor: Colors.white30,
-                        legend: MapLegend.bar(MapElement.shape,
-                            position: MapLegendPosition.bottom,
-                            overflowMode: MapLegendOverflowMode.wrap,
-                            labelsPlacement:
-                                MapLegendLabelsPlacement.betweenItems,
-                            padding: EdgeInsets.only(top: 15),
-                            spacing: 1.0,
-                            segmentSize: Size(55.0, 9.0)),
-                        tooltipSettings: MapTooltipSettings(
-                            color: Color.fromRGBO(0, 32, 128, 1)),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ]),
-        ),
+                ),
+                SfMaps(
+                  layers: <MapLayer>[
+                    MapShapeLayer(
+                      loadingBuilder: (BuildContext context) {
+                        return Container(
+                          height: 25,
+                          width: 25,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 10,
+                          ),
+                        );
+                      },
+                      source: _mapSource,
+                      // Returns the custom tooltip for each shape.
+                      shapeTooltipBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              _worldPopulationDensity[index].countryName +
+                                  ' : ' +
+                                  _numberFormat
+                                      .format(_worldPopulationDensity[index]
+                                          .density)
+                                      .toString() +
+                                  ' people going',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .surface)),
+                        );
+                      },
+                      strokeColor: Colors.white30,
+                      legend: MapLegend.bar(MapElement.shape,
+                          position: MapLegendPosition.bottom,
+                          overflowMode: MapLegendOverflowMode.wrap,
+                          labelsPlacement:
+                              MapLegendLabelsPlacement.betweenItems,
+                          padding: EdgeInsets.only(bottom: 0),
+                          spacing: 1.0,
+                          segmentSize: Size(55.0, 9.0)),
+                      tooltipSettings: MapTooltipSettings(
+                          color: Color.fromRGBO(0, 32, 128, 1)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+              height: 60,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Text(
+                  "People 'going' to MOOVs in these spots",
+                  style: TextStyle(fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.center,
+                ),
+              )),
+        ]),
       )),
     );
   }

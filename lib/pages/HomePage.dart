@@ -127,9 +127,6 @@ class _HomePageState extends State<HomePage>
     return ColorTween(begin: begin, end: end).transform(_notifier.value);
   }
 
-  Future request() async => await Future.delayed(
-      const Duration(seconds: 0), () => postsRef.orderBy("startDate").get());
-
   final privacyList = ["Featured", "All", "Private"];
   String privacyDropdownValue = 'Featured';
 
@@ -152,6 +149,9 @@ class _HomePageState extends State<HomePage>
           .doc(DateFormat('MMMd').format(aDate))
           .get()
           .then((value) {
+        if (value.data() == null) {
+          return;
+        }
         if (value.data()['seen'] == null) {
           Future.delayed(const Duration(seconds: 2), () {
             showDialog(
@@ -910,10 +910,10 @@ class _HomePageState extends State<HomePage>
                     FutureBuilder(
                       key: homeKey,
                       //THE DEFAULT NO FILTERS FEED
-                      future: request(),
+                      future: postsRef.orderBy("startDate").get(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState != ConnectionState.done) {
-                          return Container();
+                          return loadingMOOVs();
                         }
 
                         return EasyRefresh(
@@ -1108,7 +1108,9 @@ class _HomePageState extends State<HomePage>
                                                                     PollView(
                                                                         notifier:
                                                                             _notifier),
-                                                                            SecondCarousel(notifier: _notifier)
+                                                                    SecondCarousel(
+                                                                        notifier:
+                                                                            _notifier)
                                                                     // SuggestionBoxCarousel(),
                                                                     // currentUser.friendGroups !=
                                                                     //         null
