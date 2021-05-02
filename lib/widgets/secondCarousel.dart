@@ -1,4 +1,5 @@
 import 'package:MOOV/maps/Heatmap.dart';
+import 'package:MOOV/maps/map2.dart';
 import 'package:MOOV/pages/friend_finder.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +61,7 @@ class SecondCarousel extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MapRangeColorMappingPage(key))),
+                    MaterialPageRoute(builder: (context) => MapOSMPage(key))),
                 child: Stack(
                     children: [
                       AnimatedOpacity(

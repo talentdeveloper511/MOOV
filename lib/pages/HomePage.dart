@@ -1086,7 +1086,7 @@ class _HomePageState extends State<HomePage>
                                                                   reverse:
                                                                       false,
                                                                   autoPlay:
-                                                                      true,
+                                                                      false,
                                                                   autoPlayInterval:
                                                                       Duration(
                                                                           seconds:
@@ -1105,12 +1105,13 @@ class _HomePageState extends State<HomePage>
                                                                       Axis.horizontal,
                                                                 ),
                                                                 items: [
+                                                                  SecondCarousel(
+                                                                        notifier:
+                                                                            _notifier),
                                                                     PollView(
                                                                         notifier:
                                                                             _notifier),
-                                                                    SecondCarousel(
-                                                                        notifier:
-                                                                            _notifier)
+                                                                    
                                                                     // SuggestionBoxCarousel(),
                                                                     // currentUser.friendGroups !=
                                                                     //         null

@@ -219,8 +219,15 @@ class _MapRangeColorMappingPageState extends SampleViewState {
                   ),
                 ),
                 SfMaps(
+                  
+
                   layers: <MapLayer>[
                     MapShapeLayer(
+                      
+                      
+                      onWillPan: (map) => true,
+                                            onWillZoom: (map) => true,
+
                       loadingBuilder: (BuildContext context) {
                         return Container(
                           height: 25,
