@@ -33,6 +33,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:page_transition/page_transition.dart';
@@ -608,7 +609,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   createUserInFirestore() async {
-      setState(() {
+    setState(() {
       isLoading = true;
     });
     // 1) check if user exists in users collection in database (according to their id)
@@ -621,7 +622,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     DocumentSnapshot adminDoc = await adminRef.doc('login').get();
     bool blocked = false;
 
-  
     if (!doc.exists) {
       //checking if a business or nd.edu address or staff
       List whiteList =
@@ -660,8 +660,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       isAuth = true;
     });
     configurePushNotifications();
-
-  
   }
 
   int currentIndex = 0;
@@ -1065,6 +1063,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Scaffold buildUnAuthScreen() {
+    bool isTablet = false;
+    if (Device.get().isTablet) {
+      isTablet = true;
+    }
     return (isLoading)
         ? Scaffold(
             backgroundColor: TextThemes.ndBlue,
@@ -1082,9 +1084,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Image.asset(
-                  'lib/assets/landingpage.png',
-                  scale: .5,
+                SizedBox(
+                  height:
+                      isTablet ? MediaQuery.of(context).size.height * .7 : null,
+                  child: Image.asset(
+                    'lib/assets/landingpage.png',
+                    scale: .5,
+                  ),
                 ),
                 GestureDetector(
                   onTap: login,

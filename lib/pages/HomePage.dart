@@ -958,7 +958,7 @@ class _HomePageState extends State<HomePage>
                                               child: PageStorage(
                                                 key: motnKey,
                                                 bucket: motnBucket,
-                                                child: NotifyingPageView(
+                                                child: MOTDPageView(
                                                   notifier: _notifier,
                                                   currentIndex:
                                                       _notifier.value.toInt(),

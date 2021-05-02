@@ -2,18 +2,18 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:flutter/material.dart';
 
-class NotifyingPageView extends StatefulWidget {
+class MOTDPageView extends StatefulWidget {
   final ValueNotifier<double> notifier;
-  int currentIndex;
+  final int currentIndex;
 
-  NotifyingPageView({Key key, this.notifier, this.currentIndex})
+  MOTDPageView({Key key, this.notifier, this.currentIndex})
       : super(key: key);
 
   @override
-  _NotifyingPageViewState createState() => _NotifyingPageViewState();
+  _MOTDPageViewState createState() => _MOTDPageViewState();
 }
 
-class _NotifyingPageViewState extends State<NotifyingPageView> {
+class _MOTDPageViewState extends State<MOTDPageView> {
   int _previousPage;
   PageController _pageController;
 
