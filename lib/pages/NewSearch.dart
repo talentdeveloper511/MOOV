@@ -196,6 +196,7 @@ class _SearchBarState extends State<SearchBar>
                                 child: _currentIndex == 0
                                     ? GradientText(
                                         '     People  ',
+                                        16.5,
                                         gradient: LinearGradient(colors: [
                                           Colors.blue.shade400,
                                           Colors.blue.shade900,
@@ -219,6 +220,7 @@ class _SearchBarState extends State<SearchBar>
                                 child: _currentIndex == 1
                                     ? GradientText(
                                         "    MOOVs",
+                                        16.5,
                                         gradient: LinearGradient(colors: [
                                           Colors.blue.shade400,
                                           Colors.blue.shade900,
@@ -241,6 +243,7 @@ class _SearchBarState extends State<SearchBar>
                                 child: _currentIndex == 2
                                     ? GradientText(
                                         "Friend Groups",
+                                        16.5,
                                         gradient: LinearGradient(colors: [
                                           Colors.blue.shade400,
                                           Colors.blue.shade900,
@@ -1041,11 +1044,13 @@ class DisplayGroupResult extends StatelessWidget {
 
 class GradientText extends StatelessWidget {
   GradientText(
-    this.text, {
+    this.text,
+    this.size, {
     @required this.gradient,
   });
 
   final String text;
+  final double size;
   final Gradient gradient;
 
   @override
@@ -1062,7 +1067,7 @@ class GradientText extends StatelessWidget {
         style: TextStyle(
           // The color must be set to white for this to work
           color: Colors.white,
-          fontSize: 16.5,
+          fontSize: size,
         ),
       ),
     );
@@ -1255,6 +1260,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                           child: _currentIndex == 0
                               ? GradientText(
                                   "     People ",
+                                  16.5,
                                   gradient: LinearGradient(colors: [
                                     Colors.blue.shade400,
                                     Colors.blue.shade900,
@@ -1277,6 +1283,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                           child: _currentIndex == 1
                               ? GradientText(
                                   "    MOOVs",
+                                  16.5,
                                   gradient: LinearGradient(colors: [
                                     Colors.blue.shade400,
                                     Colors.blue.shade900,
@@ -1299,6 +1306,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                           child: _currentIndex == 2
                               ? GradientText(
                                   "Friend Groups",
+                                  16.5,
                                   gradient: LinearGradient(colors: [
                                     Colors.blue.shade400,
                                     Colors.blue.shade900,

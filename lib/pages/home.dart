@@ -12,7 +12,9 @@ import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
+import 'package:MOOV/pages/SettingsPage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
+import 'package:MOOV/pages/blockedPage.dart';
 import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
@@ -21,9 +23,8 @@ import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/studentClubs/studentClubDashboard.dart';
 import 'package:MOOV/widgets/locationCheckIn.dart';
+import 'package:MOOV/widgets/progress.dart';
 import 'package:another_flushbar/flushbar.dart';
-// import 'package:another_flushbar/flushbar.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -32,11 +33,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final Reference storageRef = FirebaseStorage.instance.ref();
@@ -76,6 +79,10 @@ final clubsRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('clubs');
+final adminRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('admin');
 
 final DateTime timestamp = DateTime.now();
 User currentUser;
@@ -86,6 +93,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  bool isLoading = false;
+
   callback() {
     setState(() {});
   }
@@ -600,63 +609,53 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   createUserInFirestore() async {
+    setState(() {
+      isLoading = true;
+    });
     // 1) check if user exists in users collection in database (according to their id)
     final GoogleSignInAccount user = googleSignIn.currentUser;
+
     DocumentSnapshot doc = await usersRef.doc(user.id).get();
 
+    print('f');
+
+    DocumentSnapshot adminDoc = await adminRef.doc('login').get();
+    bool blocked = false;
+
     if (!doc.exists) {
-      // 2) if the user doesn't exist, then we want to take them to the create account page
-      final result = await Navigator.pushAndRemoveUntil(
-        context,
-        PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
-        (Route<dynamic> route) => false,
-      );
+      //checking if a business or nd.edu address or staff
+      List whiteList =
+          adminDoc.data()['whiteList']; //businesses can get through screening
+      List blackList = adminDoc.data()['blackList']; // staff/faculty blocked
 
-      final String dorm = result[0];
-      final String year = result[2];
-      final String gender = result[1];
-      final String referral = result[3];
-      final String venmoUsername = result[4];
+      if (blackList.contains(user.email)) {
+        blocked = true;
+        print("staff/faculty. get fucked");
+      }
+      if (!user.email.contains('@nd.edu') && !whiteList.contains(user.email)) {
+        blocked = true;
+        print("not a student or a business. get fucked");
+      }
 
-      // 3) get username from create account, use it to make new user document in users collection
-      usersRef.doc(user.id).set({
-        "id": user.id,
-        "photoUrl": user.photoUrl,
-        "email": user.email,
-        "displayName": user.displayName,
-        "bio": "Create a bio here",
-        "header": "",
-        "timestamp": timestamp,
-        "score": 0,
-        "gender": gender,
-        "year": year,
-        "dorm": dorm,
-        "referral": referral,
-        "postLimit": 3,
-        "sendLimit": 5,
-        "suggestLimit": 5,
-        "groupLimit": 2,
-        "nameChangeLimit": 1,
-        "verifiedStatus": 0,
-        "friendArray": [],
-        "friendRequests": [],
-        "friendGroups": [],
-        "venmoUsername": venmoUsername,
-        "pushSettings": {
-          "going": true,
-          "hourBefore": true,
-          "suggestions": true
-        },
-        "privacySettings": {
-          "friendFinderVisibility": true,
-          "friendsOnly": false,
-          "incognito": false,
-          "showDorm": true
-        }
-      });
-      doc = await usersRef.doc(user.id).get();
+      // 2) if the user doesn't exist, and ISNT BLOCKED, then we want to take them to the create account page
+      if (blocked) {
+        final result = await Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteBuilder(pageBuilder: (_, __, ___) => BlockedPage()),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        final result = await Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
+          (Route<dynamic> route) => false,
+        );
+
+        doc = await usersRef.doc(user.id).get();
+      }
     }
     currentUser = User.fromDocument(doc);
+
     setState(() {
       isAuth = true;
     });
@@ -765,32 +764,33 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               int moovMoneyBalance = snapshot.data['moovMoney'];
               return Row(
                 children: [
-                  Expanded(
-                    child: IconButton(
-                      padding: EdgeInsets.only(left: 9.0),
-                      icon: Row(
-                        children: [
-                          Icon(Icons.monetization_on_outlined),
-                          SizedBox(width: 5),
-                          Expanded(
-                            child: Text(moovMoneyBalance.toString(),
-                                maxLines: 1,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                          )
-                        ],
-                      ),
-                      color: Colors.white,
-                      splashColor: Colors.transparent,
-                      onPressed: () async {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MoovMoneyAdd(0, moovMoneyBalance)));
-                      },
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: IconButton(
+                  //     padding: EdgeInsets.only(left: 9.0),
+                  //     icon: Row(
+                  //       children: [
+                  //         Icon(Icons.monetization_on_outlined),
+                  //         SizedBox(width: 5),
+                  //         Expanded(
+                  //           child: Text(moovMoneyBalance.toString(),
+                  //               maxLines: 1,
+                  //               style: TextStyle(
+                  //                   color: Colors.white,
+                  //                   fontWeight: FontWeight.bold)),
+                  //         )
+                  //       ],
+                  //     ),
+                  //     color: Colors.white,
+                  //     splashColor: Colors.transparent,
+                  //     onPressed: () async {
+                  //       Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) =>
+                  //                   MoovMoneyAdd(0, moovMoneyBalance)));
+                  //     },
+                  //   ),
+                  // ),
                   IconButton(
                     icon: Icon(Icons.insert_chart_outlined),
                     color: Colors.white,
@@ -1063,42 +1063,58 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Scaffold buildUnAuthScreen() {
-    return Scaffold(
-      body: Container(
-        color: TextThemes.ndBlue,
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'lib/assets/landingpage.png',
-              scale: .5,
-            ),
-            GestureDetector(
-              onTap: login,
-              child: Container(
-                height: 50.0,
-                width: 300.0,
-                decoration: BoxDecoration(
-                  color: TextThemes.ndGold,
-                  borderRadius: BorderRadius.circular(7.0),
-                ),
-                child: Center(
-                  child: Text(
-                    "Sign in",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold),
+    bool isTablet = false;
+    if (Device.get().isTablet) {
+      isTablet = true;
+    }
+    return (isLoading)
+        ? Scaffold(
+            backgroundColor: TextThemes.ndBlue,
+            body: Center(
+              child: Image.asset(
+                'lib/assets/runningGif.gif',
+                height: 200,
+              ),
+            ))
+        : Scaffold(
+            body: Container(
+            color: TextThemes.ndBlue,
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height:
+                      isTablet ? MediaQuery.of(context).size.height * .7 : null,
+                  child: Image.asset(
+                    'lib/assets/landingpage.png',
+                    scale: .5,
                   ),
                 ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                GestureDetector(
+                  onTap: login,
+                  child: Container(
+                    height: 50.0,
+                    width: 300.0,
+                    decoration: BoxDecoration(
+                      color: TextThemes.ndGold,
+                      borderRadius: BorderRadius.circular(7.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Sign in",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ));
   }
 
   @override
@@ -1227,125 +1243,4 @@ class NamedIcon extends StatelessWidget {
           );
         });
   }
-}
-
-class SharedPreferencesDemo extends StatefulWidget {
-  SharedPreferencesDemo({Key key}) : super(key: key);
-
-  @override
-  SharedPreferencesDemoState createState() => SharedPreferencesDemoState();
-}
-
-class SharedPreferencesDemoState extends State<SharedPreferencesDemo> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  Future<int> _counter = notificationFeedRef
-      .doc(googleSignIn.currentUser.id)
-      .collection('feedItems')
-      .snapshots()
-      .length;
-
-  Future<void> _incrementCounter() async {
-    final SharedPreferences prefs = await _prefs;
-    final int counter = (prefs.getInt('counter') ?? 0) + 1;
-
-    setState(() {
-      _counter = prefs.setInt("counter", counter).then((bool success) {
-        return counter;
-      });
-    });
-  }
-
-  Future<void> _clearCounter() async {
-    final SharedPreferences prefs = await _prefs;
-    final int counter = (prefs.getInt('counter') ?? 0) * 0;
-
-    setState(() {
-      _counter = prefs.setInt("counter", counter).then((bool success) {
-        return counter;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    print(notificationFeedRef
-        .doc(googleSignIn.currentUser.id)
-        .collection('feedItems')
-        .snapshots()
-        .length);
-    _counter = _prefs.then((SharedPreferences prefs) {
-      return (prefs.getInt('counter') ?? 0);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Shared Preferences Demo"),
-      ),
-      body: Column(
-        children: [
-          Center(
-              child: FutureBuilder<int>(
-                  future: _counter,
-                  builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return const CircularProgressIndicator();
-                      default:
-                        if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          return Text(
-                            'Button tapped ${snapshot.data} time${snapshot.data == 1 ? '' : 's'}.\n\n'
-                            'This should persist across restarts.',
-                          );
-                        }
-                    }
-                  })),
-          FlatButton(onPressed: _clearCounter, child: Text("HI"))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-Future<File> cropImage(File _image) async {
-  File croppedFile = await ImageCropper.cropImage(
-      sourcePath: _image.path,
-      aspectRatioPresets: Platform.isAndroid
-          ? [
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio16x9
-            ]
-          : [
-              CropAspectRatioPreset.original,
-              CropAspectRatioPreset.square,
-              CropAspectRatioPreset.ratio3x2,
-              CropAspectRatioPreset.ratio4x3,
-              CropAspectRatioPreset.ratio5x3,
-              CropAspectRatioPreset.ratio5x4,
-              CropAspectRatioPreset.ratio7x5,
-              CropAspectRatioPreset.ratio16x9
-            ],
-      androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Croperooni',
-          toolbarColor: Colors.deepOrange,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
-      iosUiSettings: IOSUiSettings(
-        title: 'Croperooni',
-      ));
-  return croppedFile;
 }

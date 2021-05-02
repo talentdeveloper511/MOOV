@@ -595,8 +595,6 @@ class _GroupFormState extends State<GroupForm> {
       final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
       createGroupInFirestore(groupName, currentUser.id, downloadUrl);
     }
-    Database().betaActivityTracker(
-        currentUser.displayName, Timestamp.now(), "created Friend Group");
 
     setState(() {
       isUploading = false;

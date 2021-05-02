@@ -32,6 +32,7 @@ class MOOVMemories extends StatelessWidget {
             padding: EdgeInsets.all(10),
             child: GradientText(
               "MOOV Memories",
+                16.5,
               gradient: LinearGradient(colors: [
                 Colors.blue.shade400,
                 Colors.blue.shade900,

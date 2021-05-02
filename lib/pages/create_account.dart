@@ -538,8 +538,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                   key: _formKey3,
                                   autovalidate: true,
                                   child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * .23,
+                                    width: isLargePhone
+                                        ? MediaQuery.of(context).size.width *
+                                            .23
+                                        : MediaQuery.of(context).size.width *
+                                            .26,
                                     child: ButtonTheme(
                                       child: DropdownButtonFormField(
                                         value: genderDropdownValue,
@@ -579,8 +582,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                     key: _formKey2,
                                     autovalidate: true,
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          .3,
+                                      width: isLargePhone
+                                          ? MediaQuery.of(context).size.width *
+                                              .3
+                                          : MediaQuery.of(context).size.width *
+                                              .34,
                                       child: ButtonTheme(
                                         child: DropdownButtonFormField(
                                           value: yearDropdownValue,
@@ -620,8 +626,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                   key: _formKey7,
                                   autovalidate: true,
                                   child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * .23,
+                                    width: isLargePhone
+                                        ? MediaQuery.of(context).size.width *
+                                            .23
+                                        : MediaQuery.of(context).size.width *
+                                            .25,
                                     child: ButtonTheme(
                                       child: DropdownButtonFormField(
                                         value: raceDropdownValue,

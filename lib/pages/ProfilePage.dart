@@ -219,7 +219,7 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 2.0, bottom: 14.0),
+                                const EdgeInsets.only(top: 2.0, bottom: 14.0, left: 30, right: 30),
                             child: showDorm == false
                                 ? Text(
                                     "Top secret year and dorm",

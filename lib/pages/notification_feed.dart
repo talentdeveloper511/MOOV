@@ -218,6 +218,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                       child: _currentIndex == 0
                           ? GradientText(
                               'Personal',
+                              16.5,
                               gradient: LinearGradient(colors: [
                                 Colors.blue.shade400,
                                 Colors.blue.shade900,
@@ -258,6 +259,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                       child: _currentIndex == 1
                           ? GradientText(
                               "Friend Groups",
+                                16.5,
                               gradient: LinearGradient(colors: [
                                 Colors.blue.shade400,
                                 Colors.blue.shade900,

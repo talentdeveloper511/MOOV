@@ -93,7 +93,7 @@ class StudentClubDashboard extends StatelessWidget {
                     ],
                   ),
                   backgroundColor: Colors.white,
-                  body: Column(
+                  body: ListView(
                     children: [
                       Stack(
                         alignment: Alignment.center,

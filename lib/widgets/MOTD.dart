@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MOTD extends StatefulWidget {
@@ -28,6 +29,10 @@ class MOTD extends StatefulWidget {
 class _MOTDState extends State<MOTD> {
   @override
   Widget build(BuildContext context) {
+     bool isTablet = false;
+    if (Device.get().isTablet) {
+      isTablet = true;
+    }
     var title;
     var pic;
 
@@ -71,7 +76,7 @@ class _MOTDState extends State<MOTD> {
                               children: <Widget>[
                                 Container(
                                   height: isLargePhone
-                                      ? SizeConfig.blockSizeVertical * 15
+                                      ? SizeConfig.blockSizeVertical * 15 : isTablet ? 800
                                       : SizeConfig.blockSizeVertical * 18,
                                   child: OpenContainer(
                                     transitionType:

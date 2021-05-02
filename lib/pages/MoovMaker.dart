@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/studentClubs/studentClubDashboard.dart';
+import 'package:MOOV/widgets/google_map.dart';
 import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle;
@@ -402,6 +403,8 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
     setState(() {});
   }
 
+  List coords = [];
+
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(milliseconds: 300), () {
@@ -589,26 +592,53 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                         ),
                       ),
                 !currentUser.isBusiness
-                    ? Padding(
-                        padding: EdgeInsets.only(
-                            left: 15.0, right: 15, top: 5, bottom: 5),
-                        child: TextFormField(
-                          controller: addressController,
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.place, color: TextThemes.ndGold),
-                            labelText: "Location or Address",
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                    ? Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 15.0, right: 0, top: 5, bottom: 5),
+                              child: TextFormField(
+                                controller: addressController,
+                                decoration: InputDecoration(
+                                  icon: Icon(Icons.place,
+                                      color: TextThemes.ndGold),
+                                  labelText: "Location or Address",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                // The validator receives the text that the user has entered.
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Where's it at?";
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
                           ),
-                          // The validator receives the text that the user has entered.
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Where's it at?";
-                            }
-                            return null;
-                          },
-                        ),
+                          GestureDetector(
+                            onTap: () =>
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => GoogleMap(
+                                          fromMOOVMaker: true,
+                                          coords: coords,
+                                        ))),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Column(
+                                children: [
+                                  Image.asset('lib/assets/mapIcon.png',
+                                      height: 30),
+                                  SizedBox(height: 5),
+                                  Text("Map?")
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
                       )
                     : Container(),
 
@@ -1295,6 +1325,15 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
+                              List parse = coords.toString().split(",");
+                              String parse0 = parse[0].replaceAll("[", "");
+
+                              String parse2 = parse[1].replaceAll("]", "");
+                              double latitude = double.parse(parse0);
+
+                              double longitude = double.parse(parse2);
+                              GeoPoint location = GeoPoint(latitude, longitude);
+
                               HapticFeedback.lightImpact();
 
                               // for (int i = 0;

@@ -9,6 +9,7 @@ import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/poll2.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
+import 'package:MOOV/widgets/secondCarousel.dart';
 import 'package:MOOV/widgets/suggestionBox.dart';
 import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'package:animations/animations.dart';
@@ -126,9 +127,6 @@ class _HomePageState extends State<HomePage>
     return ColorTween(begin: begin, end: end).transform(_notifier.value);
   }
 
-  Future request() async => await Future.delayed(
-      const Duration(seconds: 0), () => postsRef.orderBy("startDate").get());
-
   final privacyList = ["Featured", "All", "Private"];
   String privacyDropdownValue = 'Featured';
 
@@ -151,7 +149,10 @@ class _HomePageState extends State<HomePage>
           .doc(DateFormat('MMMd').format(aDate))
           .get()
           .then((value) {
-        if (!value.data()['seen']) {
+        if (value.data() == null) {
+          return;
+        }
+        if (value.data()['seen'] == null) {
           Future.delayed(const Duration(seconds: 2), () {
             showDialog(
                 barrierDismissible: false,
@@ -909,10 +910,10 @@ class _HomePageState extends State<HomePage>
                     FutureBuilder(
                       key: homeKey,
                       //THE DEFAULT NO FILTERS FEED
-                      future: request(),
+                      future: postsRef.orderBy("startDate").get(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState != ConnectionState.done) {
-                          return Container();
+                          return loadingMOOVs();
                         }
 
                         return EasyRefresh(
@@ -957,7 +958,7 @@ class _HomePageState extends State<HomePage>
                                               child: PageStorage(
                                                 key: motnKey,
                                                 bucket: motnBucket,
-                                                child: NotifyingPageView(
+                                                child: MOTDPageView(
                                                   notifier: _notifier,
                                                   currentIndex:
                                                       _notifier.value.toInt(),
@@ -1066,7 +1067,7 @@ class _HomePageState extends State<HomePage>
                                                                 options:
                                                                     CarouselOptions(
                                                                   scrollPhysics:
-                                                                      NeverScrollableScrollPhysics(),
+                                                                      AlwaysScrollableScrollPhysics(),
                                                                   height:
                                                                       isLargePhone
                                                                           ? 170
@@ -1104,9 +1105,13 @@ class _HomePageState extends State<HomePage>
                                                                       Axis.horizontal,
                                                                 ),
                                                                 items: [
+                                                                  SecondCarousel(
+                                                                        notifier:
+                                                                            _notifier),
                                                                     PollView(
                                                                         notifier:
                                                                             _notifier),
+                                                                    
                                                                     // SuggestionBoxCarousel(),
                                                                     // currentUser.friendGroups !=
                                                                     //         null

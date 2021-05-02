@@ -222,6 +222,7 @@ class _BizState extends State<Biz> {
               header: Center(
                 child: GradientText(
                   "         Your Going Lists",
+                    16.5,
                   gradient: LinearGradient(colors: [
                     Colors.blue.shade400,
                     Colors.blue.shade900,
@@ -293,6 +294,7 @@ class _BizState extends State<Biz> {
                   header: Center(
                     child: GradientText(
                       "        Post Again",
+                        16.5,
                       gradient: LinearGradient(colors: [
                         Colors.blue.shade400,
                         Colors.blue.shade900,
