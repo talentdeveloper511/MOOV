@@ -355,11 +355,7 @@ class _MoneyAmountState extends State<MoneyAmount> {
                           .doc(currentUser.id)
                           .collection('payments')
                           .doc(orderId)
-                          .set({
-                        "clientToken": "",
-                        "userId": currentUser.id,
-                        "amount": amountInt
-                      });
+                          .set({"userId": currentUser.id, "amount": amountInt});
                       usersRef
                           .doc(currentUser.id)
                           .collection('payments')
@@ -398,10 +394,12 @@ class _MoneyAmountState extends State<MoneyAmount> {
                           cardEnabled: true,
                         );
                         final result = await BraintreeDropIn.start(request);
+                        print('result' + result.paymentMethodNonce.toString());
                         if (result != null) {
                           setState(() {
                             isUploading = true;
                           });
+                          print("NONCE: " + result.paymentMethodNonce.nonce);
                           usersRef
                               .doc(currentUser.id)
                               .collection('payments')
