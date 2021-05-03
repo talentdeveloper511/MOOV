@@ -147,7 +147,7 @@ class _TileLayerSampleState extends SampleViewState {
 
             _zoomPanBehavior = MapZoomPanBehavior(
               minZoomLevel: 15,
-              maxZoomLevel: 20,
+              maxZoomLevel: 25,
               focalLatLng: MapLatLng(
                   _worldWonders[_currentSelectedIndex].latitude,
                   _worldWonders[_currentSelectedIndex].longitude),
