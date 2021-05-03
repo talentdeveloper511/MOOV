@@ -7,7 +7,6 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 ///Map import
@@ -15,10 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
 
 /// Renders the map widget with OSM map.
-class MapOSMPage extends SampleView {
+class Heatmap extends SampleView {
   /// Creates the map widget with OSM map.
-  const MapOSMPage(Key key) : super(key: key);
-
   @override
   _TileLayerSampleState createState() => _TileLayerSampleState();
 }
@@ -40,6 +37,7 @@ class _TileLayerSampleState extends SampleViewState {
   bool _canUpdateFocalLatLng;
   bool _canUpdateZoomLevel;
   bool _isDesktop = false;
+  bool legendClosed = false;
 
   @override
   void initState() {
@@ -68,7 +66,7 @@ class _TileLayerSampleState extends SampleViewState {
 
   @override
   Widget build(BuildContext context) {
-        bool isLargePhone = Screen.diagonal(context) > 766;
+    bool isLargePhone = Screen.diagonal(context) > 766;
 
     if (_canUpdateZoomLevel) {
       _canUpdateZoomLevel = false;
@@ -154,207 +152,266 @@ class _TileLayerSampleState extends SampleViewState {
                   _worldWonders[_currentSelectedIndex].latitude,
                   _worldWonders[_currentSelectedIndex].longitude),
             );
-            return Material(
-              child: Stack(
-                children: [
-                  SfMaps(
-                    layers: [
-                      MapTileLayer(
-                        /// URL to request the tiles from the providers.
-                        ///
-                        /// The [urlTemp] accepts the URL in WMTS format i.e. {z} —
-                        /// zoom level, {x} and {y} — tile coordinates.
-                        ///
-                        /// We will replace the {z}, {x}, {y} internally based on the
-                        /// current center point and the zoom level.
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        zoomPanBehavior: _zoomPanBehavior,
-                        controller: _mapController,
-                        initialMarkersCount: _worldWonders.length,
-                        tooltipSettings: MapTooltipSettings(
-                          color: Colors.transparent,
-                        ),
-                        markerTooltipBuilder:
-                            (BuildContext context, int index) {
-                          if (_isDesktop) {
-                            return ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 150,
-                                      height: 80,
-                                      color: Colors.grey,
-                                      child: Image.network(
-                                        _worldWonders[index].tooltipImagePath,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  ]),
-                            );
-                          }
-
-                          return SizedBox();
-                        },
-                        markerBuilder: (BuildContext context, int index) {
-                          final _WonderDetails item = _worldWonders[index];
-                          int heat;
-                          if (item.goingCount < 5) {
-                            heat = 50;
-                          }
-                          if (item.goingCount < 10) {
-                            heat = 100;
-                          }
-                          if (item.goingCount < 30) {
-                            heat = 400;
-                          }
-                          if (item.goingCount < 50) {
-                            heat = 500;
-                          }
-                          if (item.goingCount > 50) {
-                            heat = 700;
-                          }
-                          return MapMarker(
-                            latitude: _worldWonders[index].latitude,
-                            longitude: _worldWonders[index].longitude,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    if (_currentSelectedIndex != index) {
-                                      _canUpdateFocalLatLng = false;
-                                      _tappedMarkerIndex = index;
-                                      _pageViewController.animateToPage(
-                                        index,
-                                        duration:
-                                            const Duration(milliseconds: 500),
-                                        curve: Curves.easeInOut,
-                                      );
-                                    }
-                                  },
-                                  child: Opacity(
-                                    opacity: .7,
-                                    child: Icon(Icons.circle,
-                                        color: Colors.red[heat], size: 30.0),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: (_currentSelectedIndex == index
-                                      ? 40
-                                      : 25),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      height: _cardHeight,
-                      padding: EdgeInsets.only(bottom: 10),
-
-                      /// PageView which shows the world wonder details at the bottom.
-                      child: PageView.builder(
-                        itemCount: _worldWonders.length,
-                        onPageChanged: _handlePageChange,
-                        controller: _pageViewController,
-                        itemBuilder: (BuildContext context, int index) {
-                          final _WonderDetails item = _worldWonders[index];
-                          return Transform.scale(
-                              scale: index == _currentSelectedIndex ? 1 : 0.85,
-                              child: OpenContainer(
-                                openShape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50)),
-                                transitionType: ContainerTransitionType.fade,
-                                transitionDuration: Duration(milliseconds: 500),
-                                openBuilder: (context, _) =>
-                                    PostDetail(item.id),
-                                closedElevation: 0,
-                                closedBuilder: (context, _) =>
-                                    Stack(children: <Widget>[
-                                  FractionallySizedBox(
-                                    widthFactor: 1,
-                                    child: Container(
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: CachedNetworkImage(
-                                          imageUrl: item.tooltipImagePath,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 5,
-                                            blurRadius: 7,
-                                            offset: Offset(0,
-                                                3), // changes position of shadow
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Container(
-                                      alignment: Alignment(0.0, 0.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: <Color>[
-                                              Colors.black.withAlpha(15),
-                                              Colors.black,
-                                              Colors.black12,
-                                            ],
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                                maxWidth: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    .7),
-                                            child: Text(
-                                              item.title,
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                              ));
-                        },
-                      ),
+            return Stack(children: [
+              SfMaps(
+                layers: [
+                  MapTileLayer(
+                    /// URL to request the tiles from the providers.
+                    ///
+                    /// The [urlTemp] accepts the URL in WMTS format i.e. {z} —
+                    /// zoom level, {x} and {y} — tile coordinates.
+                    ///
+                    /// We will replace the {z}, {x}, {y} internally based on the
+                    /// current center point and the zoom level.
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    zoomPanBehavior: _zoomPanBehavior,
+                    controller: _mapController,
+                    initialMarkersCount: _worldWonders.length,
+                    tooltipSettings: MapTooltipSettings(
+                      color: Colors.transparent,
                     ),
+                    markerTooltipBuilder: (BuildContext context, int index) {
+                      if (_isDesktop) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          child:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
+                            Container(
+                              width: 150,
+                              height: 80,
+                              color: Colors.grey,
+                              child: Image.network(
+                                _worldWonders[index].tooltipImagePath,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ]),
+                        );
+                      }
+
+                      return SizedBox();
+                    },
+                    markerBuilder: (BuildContext context, int index) {
+                      final _WonderDetails item = _worldWonders[index];
+                      int heat = 50;
+                      if (item.goingCount > 5) {
+                        heat = 100;
+                      }
+                      if (item.goingCount > 10) {
+                        heat = 400;
+                      }
+                      if (item.goingCount > 30) {
+                        heat = 900;
+                      }
+                      if (item.goingCount > 50) {
+                        heat = 900;
+                      }
+                      return MapMarker(
+                        latitude: _worldWonders[index].latitude,
+                        longitude: _worldWonders[index].longitude,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (_currentSelectedIndex != index) {
+                                  _canUpdateFocalLatLng = false;
+                                  _tappedMarkerIndex = index;
+                                  _pageViewController.animateToPage(
+                                    index,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                              },
+                              child: Opacity(
+                                opacity: .7,
+                                child: Icon(Icons.circle,
+                                    color: Colors.red[heat], size: 30.0),
+                              ),
+                            ),
+                            SizedBox(
+                              height:
+                                  (_currentSelectedIndex == index ? 40 : 25),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
-            );
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: _cardHeight,
+                  padding: EdgeInsets.only(bottom: 10),
+
+                  /// PageView which shows the world wonder details at the bottom.
+                  child: PageView.builder(
+                    itemCount: _worldWonders.length,
+                    onPageChanged: _handlePageChange,
+                    controller: _pageViewController,
+                    itemBuilder: (BuildContext context, int index) {
+                      final _WonderDetails item = _worldWonders[index];
+                      return Transform.scale(
+                          scale: index == _currentSelectedIndex ? 1 : 0.85,
+                          child: OpenContainer(
+                            openShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            transitionType: ContainerTransitionType.fade,
+                            transitionDuration: Duration(milliseconds: 500),
+                            openBuilder: (context, _) => PostDetail(item.id),
+                            closedElevation: 0,
+                            closedBuilder: (context, _) =>
+                                Stack(children: <Widget>[
+                              FractionallySizedBox(
+                                widthFactor: 1,
+                                child: Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      imageUrl: item.tooltipImagePath,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  alignment: Alignment(0.0, 0.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: <Color>[
+                                          Colors.black.withAlpha(15),
+                                          Colors.black,
+                                          Colors.black12,
+                                        ],
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .7),
+                                        child: Text(
+                                          item.title,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ));
+                    },
+                  ),
+                ),
+              ),
+              Align(
+                  alignment: Alignment.topRight,
+                  child: legendClosed
+                      ? GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              legendClosed = false;
+                            });
+                          },
+                          child: Icon(Icons.close_fullscreen))
+                      : Opacity(
+                          opacity: .7,
+                          child: Stack(children: [
+                            Container(
+                                height: 125,
+                                width: 120,
+                                decoration: BoxDecoration(
+                                    color: Colors.blue[50],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        "People going",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.circle,
+                                            color: Colors.red[50]),
+                                        Text(" 1-5"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.circle,
+                                            color: Colors.red[100]),
+                                        Text(" 6-10"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.circle,
+                                            color: Colors.red[400]),
+                                        Text(" 11-30"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.circle,
+                                            color: Colors.red[900]),
+                                        Text(" 30+"),
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                            Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        legendClosed = true;
+                                      });
+                                    },
+                                    child: Icon(Icons.close_fullscreen))),
+                          ])))
+            ]);
           }),
     );
   }

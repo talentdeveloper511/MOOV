@@ -1,4 +1,3 @@
-import 'package:MOOV/maps/Heatmap.dart';
 import 'package:MOOV/maps/map2.dart';
 import 'package:MOOV/pages/friend_finder.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +46,8 @@ class SecondCarousel extends StatelessWidget {
                       opacity: notifier.value,
                       child: Column(
                         children: [
-                          Image.asset('lib/assets/friendsIconWhite.png', height: 60),
+                          Image.asset('lib/assets/friendsIconWhite.png',
+                              height: 60),
                           SizedBox(height: 5),
                           Text(
                             "Find Friends",
@@ -61,39 +61,40 @@ class SecondCarousel extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MapOSMPage(key))),
+                    MaterialPageRoute(builder: (context) => Heatmap())),
                 child: Stack(
-                    children: [
-                      AnimatedOpacity(
-                        duration: Duration(milliseconds: 250),
-                        opacity: 1 - notifier.value,
-                        child: Column(
-                          children: [
-                            Image.asset('lib/assets/mapIcon.png', height: 60),
-                            SizedBox(height: 5),
-                            Text(
-                              "Find Everyone",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ],
-                        ),
+                  children: [
+                    AnimatedOpacity(
+                      duration: Duration(milliseconds: 250),
+                      opacity: 1 - notifier.value,
+                      child: Column(
+                        children: [
+                          Image.asset('lib/assets/mapIcon.png', height: 60),
+                          SizedBox(height: 5),
+                          Text(
+                            "Find Everyone",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
                       ),
-                      AnimatedOpacity(
-                        duration: Duration(milliseconds: 250),
-                        opacity: notifier.value,
-                        child: Column(
-                          children: [
-                            Image.asset('lib/assets/mapIconWhite.png', height: 60),
-                            SizedBox(height: 5),
-                            Text(
-                              "Find Everyone",
-                              style: TextStyle(fontSize: 20, color: Colors.white),
-                            ),
-                          ],
-                        ),
+                    ),
+                    AnimatedOpacity(
+                      duration: Duration(milliseconds: 250),
+                      opacity: notifier.value,
+                      child: Column(
+                        children: [
+                          Image.asset('lib/assets/mapIconWhite.png',
+                              height: 60),
+                          SizedBox(height: 5),
+                          Text(
+                            "Find Everyone",
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

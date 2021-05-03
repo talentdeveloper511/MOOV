@@ -125,6 +125,7 @@ class Database {
       postId,
       posterName,
       bool push,
+      GeoPoint location,
       int goingCount //BETA
       }) {
     bool isPartyOrBar = false;
@@ -152,6 +153,7 @@ class Database {
       "posterName": posterName,
       "push": push,
       "goingCount": 0,
+      "location": location,
       "going": [],
       "isPartyOrBar": isPartyOrBar,
       "stats": {}
@@ -177,6 +179,7 @@ class Database {
       "posterName": posterName,
       "push": push,
       "goingCount": 0,
+      "location": location,
       "going": [],
       "isPartyOrBar": isPartyOrBar,
       "stats": {}

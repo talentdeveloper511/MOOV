@@ -619,21 +619,28 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () =>
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => GoogleMap(
-                                          fromMOOVMaker: true,
-                                          coords: coords,
-                                        ))),
+                            onTap: coords.isEmpty
+                                ? () => Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) => GoogleMap(
+                                              fromMOOVMaker: true,
+                                              coords: coords,
+                                            )))
+                                    .then(onGoBack)
+                                : null,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20.0),
                               child: Column(
                                 children: [
-                                  Image.asset('lib/assets/mapIcon.png',
-                                      height: 30),
+                                  coords.isEmpty
+                                      ? Image.asset('lib/assets/mapIcon.png',
+                                          height: 30)
+                                      : Icon(Icons.check, color: Colors.green),
                                   SizedBox(height: 5),
-                                  Text("Map?")
+                                  coords.isEmpty
+                                      ? Text("Map?")
+                                      : Text("Got it!")
                                 ],
                               ),
                             ),
@@ -1325,14 +1332,19 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                               ),
                             ),
                             onPressed: () async {
-                              List parse = coords.toString().split(",");
-                              String parse0 = parse[0].replaceAll("[", "");
+                              GeoPoint location;
 
-                              String parse2 = parse[1].replaceAll("]", "");
-                              double latitude = double.parse(parse0);
+                              if (coords.isNotEmpty) {
+                                List parse = coords.toString().split(",");
+                                String parse0 = parse[0].replaceAll("[", "");
 
-                              double longitude = double.parse(parse2);
-                              GeoPoint location = GeoPoint(latitude, longitude);
+                                String parse2 = parse[1].replaceAll("]", "");
+                                double latitude = double.parse(parse0);
+
+                                double longitude = double.parse(parse2);
+
+                                location = GeoPoint(latitude, longitude);
+                              }
 
                               HapticFeedback.lightImpact();
 
@@ -1448,7 +1460,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                                             postId: postId,
                                             posterName: currentUser.displayName,
                                             push: push,
-                                          );
+                                            location: location);
 
                                     nextSunday().then((value) {
                                       wrapupRef
