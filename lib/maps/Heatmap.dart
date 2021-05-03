@@ -1,149 +1,86 @@
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/NewSearch.dart';
+import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/progress.dart';
+import 'package:animations/animations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' show NumberFormat;
-
-///Core theme import
-import 'package:syncfusion_flutter_core/theme.dart';
 
 ///Map import
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:syncfusion_flutter_maps/maps.dart';
 
-/// Renders the map widget with range color mapping
-class MapRangeColorMappingPage extends SampleView {
-  /// Creates the map widget with range color mapping
-  const MapRangeColorMappingPage(Key key) : super(key: key);
-
+/// Renders the map widget with OSM map.
+class Heatmap extends SampleView {
+  /// Creates the map widget with OSM map.
   @override
-  _MapRangeColorMappingPageState createState() =>
-      _MapRangeColorMappingPageState();
+  _TileLayerSampleState createState() => _TileLayerSampleState();
 }
 
-class _MapRangeColorMappingPageState extends SampleViewState {
-  List<_CountryDensity> _worldPopulationDensity;
+class _TileLayerSampleState extends SampleViewState {
+  PageController _pageViewController;
+  MapTileLayerController _mapController;
 
-  // The format which is used for formatting the tooltip text.
-  final NumberFormat _numberFormat = NumberFormat('#.#');
+  MapZoomPanBehavior _zoomPanBehavior;
 
-  MapShapeSource _mapSource;
+  List<_WonderDetails> _worldWonders;
+
+  int _currentSelectedIndex;
+  int _previousSelectedIndex;
+  int _tappedMarkerIndex;
+
+  double _cardHeight;
+
+  bool _canUpdateFocalLatLng;
+  bool _canUpdateZoomLevel;
+  bool _isDesktop = false;
+  bool legendClosed = false;
 
   @override
   void initState() {
     super.initState();
+    _currentSelectedIndex = 0;
+    _canUpdateFocalLatLng = true;
+    _canUpdateZoomLevel = true;
+    _mapController = MapTileLayerController();
+    _worldWonders = <_WonderDetails>[];
 
-    // Data source to the map.
-    //
-    // [countryName]: Field name in the .json file to identify the shape.
-    // This is the name to be mapped with shapes in .json file.
-    // This should be exactly same as the value of the [shapeDataField]
-    // in the .json file
-    //
-    // [density]: On the basis of this value, color mapping color has been
-    // applied to the shape.
-    _worldPopulationDensity = <_CountryDensity>[
-      _CountryDensity('Morrissey Hall', 2),
-      _CountryDensity("Howard Hall", 10),
-      _CountryDensity("Fisher Hall", 30),
-      _CountryDensity("O'Rourke's", 40),
-      _CountryDensity('Notre Dame Stadium', 10),
-    ];
-
-    _mapSource = MapShapeSource.asset(
-      // Path of the GeoJSON file.
-      'lib/assets/ndMap.json',
-      // Field or group name in the .json file
-      // to identify the shapes.
-      //
-      // Which is used to map the respective
-      // shape to data source.
-      //
-      // On the basis of this value,
-      // shape tooltip text is rendered.
-      shapeDataField: 'name',
-      // The number of data in your data source collection.
-      //
-      // The callback for the [primaryValueMapper]
-      // will be called the number of times equal
-      // to the [dataCount].
-      // The value returned in the [primaryValueMapper]
-      // should be exactly matched with the value of the
-      // [shapeDataField] in the .json file. This is how
-      // the mapping between the data source and the shapes
-      // in the .json file is done.
-      dataCount: _worldPopulationDensity.length,
-      primaryValueMapper: (int index) =>
-          _worldPopulationDensity[index].countryName,
-      // Used for color mapping.
-      //
-      // The value of the [MapColorMapper.from]
-      // and [MapColorMapper.to]
-      // will be compared with the value returned in the
-      // [shapeColorValueMapper] and the respective
-      // [MapColorMapper.color] will be applied to the shape.
-      shapeColorValueMapper: (int index) =>
-          _worldPopulationDensity[index].density,
-      // Group and differentiate the shapes using the color
-      // based on [MapColorMapper.from] and
-      //[MapColorMapper.to] value.
-      //
-      // The value of the [MapColorMapper.from] and
-      // [MapColorMapper.to] will be compared with the value
-      // returned in the [shapeColorValueMapper] and
-      // the respective [MapColorMapper.color] will be applied
-      // to the shape.
-      //
-      // [MapColorMapper.text] which is used for the text of
-      // legend item and [MapColorMapper.color] will be used for
-      // the color of the legend icon respectively.
-      shapeColorMappers: const <MapColorMapper>[
-        MapColorMapper(
-            from: 0,
-            to: 5,
-            color: Color.fromRGBO(255, 204, 204, 1),
-            text: '{0},{5}'),
-        MapColorMapper(
-            from: 5,
-            to: 10,
-            color: Color.fromRGBO(255, 153, 153, 1),
-            text: '10'),
-        MapColorMapper(
-            from: 10,
-            to: 30,
-            color: Color.fromRGBO(255, 102, 102, 1),
-            text: '30'),
-        MapColorMapper(
-            from: 30,
-            to: 50,
-            color: Color.fromRGBO(255, 51, 51, 1),
-            text: '50'),
-        MapColorMapper(
-            from: 50,
-            to: 500,
-            color: Color.fromRGBO(204, 0, 0, 1),
-            text: '500'),
-      ],
+    _zoomPanBehavior = MapZoomPanBehavior(
+      minZoomLevel: 15,
+      maxZoomLevel: 20,
+      // focalLatLng: MapLatLng(_worldWonders[_currentSelectedIndex].latitude,
+      //     _worldWonders[_currentSelectedIndex].longitude),
     );
   }
 
   @override
   void dispose() {
-    _worldPopulationDensity.clear();
+    _pageViewController.dispose();
+    _mapController.dispose();
+    _worldWonders.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildMapsWidget();
-  }
-
-  Widget _buildMapsWidget() {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
+    if (_canUpdateZoomLevel) {
+      _canUpdateZoomLevel = false;
+    }
+    _cardHeight = (MediaQuery.of(context).orientation == Orientation.landscape)
+        ? (_isDesktop ? 120 : 90)
+        : 110;
+    _pageViewController = PageController(
+        initialPage: _currentSelectedIndex,
+        viewportFraction:
+            (MediaQuery.of(context).orientation == Orientation.landscape)
+                ? (_isDesktop ? 0.5 : 0.7)
+                : 0.8);
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -182,125 +119,360 @@ class _MapRangeColorMappingPageState extends SampleViewState {
                   ],
                 ))),
       ),
-      body: Center(
-          child: SfMapsTheme(
-        data: SfMapsThemeData(
-          shapeHoverColor: Color.fromRGBO(176, 237, 131, 1),
-        ),
-        child: Column(children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Image.asset("lib/assets/nd.png",
-                    height: MediaQuery.of(context).size.height,
-                    fit: BoxFit.cover),
-                Positioned(
-                  bottom: 0,
-                  child: ShaderMask(
-                    shaderCallback: (rect) {
-                      return LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.black, Colors.transparent],
-                      ).createShader(
-                          Rect.fromLTRB(rect.width, rect.height, 0, 0));
+      body: FutureBuilder(
+          future: postsRef.where("privacy", isEqualTo: "Public").get(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData || snapshot.data == null) {
+              return loadingMOOVs();
+            }
+            for (int i = 0; i < snapshot.data.docs.length; i++) {
+              String title = snapshot.data.docs[i]['title'];
+              double latitude = snapshot.data.docs[i]['location'].latitude;
+              double longtitude = snapshot.data.docs[i]['location'].longitude;
+              String description = snapshot.data.docs[i]['description'];
+              String pic = snapshot.data.docs[i]['image'];
+              String id = snapshot.data.docs[i]['postId'];
+              int goingCount = snapshot.data.docs[i]['goingCount'];
+
+              _worldWonders.add(_WonderDetails(
+                  title: title,
+                  id: id,
+                  latitude: latitude,
+                  longitude: longtitude,
+                  description: description,
+                  goingCount: goingCount,
+                  imagePath: pic,
+                  tooltipImagePath: pic));
+            }
+
+            _zoomPanBehavior = MapZoomPanBehavior(
+              minZoomLevel: 15,
+              maxZoomLevel: 25,
+              focalLatLng: MapLatLng(
+                  _worldWonders[_currentSelectedIndex].latitude,
+                  _worldWonders[_currentSelectedIndex].longitude),
+            );
+            return Stack(children: [
+              SfMaps(
+                layers: [
+                  MapTileLayer(
+                    /// URL to request the tiles from the providers.
+                    ///
+                    /// The [urlTemp] accepts the URL in WMTS format i.e. {z} —
+                    /// zoom level, {x} and {y} — tile coordinates.
+                    ///
+                    /// We will replace the {z}, {x}, {y} internally based on the
+                    /// current center point and the zoom level.
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    zoomPanBehavior: _zoomPanBehavior,
+                    controller: _mapController,
+                    initialMarkersCount: _worldWonders.length,
+                    tooltipSettings: MapTooltipSettings(
+                      color: Colors.transparent,
+                    ),
+                    markerTooltipBuilder: (BuildContext context, int index) {
+                      if (_isDesktop) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          child:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
+                            Container(
+                              width: 150,
+                              height: 80,
+                              color: Colors.grey,
+                              child: Image.network(
+                                _worldWonders[index].tooltipImagePath,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ]),
+                        );
+                      }
+
+                      return SizedBox();
                     },
-                    blendMode: BlendMode.dstIn,
-                    child: Container(
-                        height: 80,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            color: Colors.blue[50],
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(14.0),
-                        )),
+                    markerBuilder: (BuildContext context, int index) {
+                      final _WonderDetails item = _worldWonders[index];
+                      int heat = 50;
+                      if (item.goingCount > 5) {
+                        heat = 100;
+                      }
+                      if (item.goingCount > 10) {
+                        heat = 400;
+                      }
+                      if (item.goingCount > 30) {
+                        heat = 900;
+                      }
+                      if (item.goingCount > 50) {
+                        heat = 900;
+                      }
+                      return MapMarker(
+                        latitude: _worldWonders[index].latitude,
+                        longitude: _worldWonders[index].longitude,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (_currentSelectedIndex != index) {
+                                  _canUpdateFocalLatLng = false;
+                                  _tappedMarkerIndex = index;
+                                  _pageViewController.animateToPage(
+                                    index,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                              },
+                              child: Opacity(
+                                opacity: .7,
+                                child: Icon(Icons.circle,
+                                    color: Colors.red[heat], size: 30.0),
+                              ),
+                            ),
+                            SizedBox(
+                              height:
+                                  (_currentSelectedIndex == index ? 40 : 25),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: _cardHeight,
+                  padding: EdgeInsets.only(bottom: 10),
+
+                  /// PageView which shows the world wonder details at the bottom.
+                  child: PageView.builder(
+                    itemCount: _worldWonders.length,
+                    onPageChanged: _handlePageChange,
+                    controller: _pageViewController,
+                    itemBuilder: (BuildContext context, int index) {
+                      final _WonderDetails item = _worldWonders[index];
+                      return Transform.scale(
+                          scale: index == _currentSelectedIndex ? 1 : 0.85,
+                          child: OpenContainer(
+                            openShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            transitionType: ContainerTransitionType.fade,
+                            transitionDuration: Duration(milliseconds: 500),
+                            openBuilder: (context, _) => PostDetail(item.id),
+                            closedElevation: 0,
+                            closedBuilder: (context, _) =>
+                                Stack(children: <Widget>[
+                              FractionallySizedBox(
+                                widthFactor: 1,
+                                child: Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: CachedNetworkImage(
+                                      imageUrl: item.tooltipImagePath,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  alignment: Alignment(0.0, 0.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: <Color>[
+                                          Colors.black.withAlpha(15),
+                                          Colors.black,
+                                          Colors.black12,
+                                        ],
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .7),
+                                        child: Text(
+                                          item.title,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ));
+                    },
                   ),
                 ),
-                SfMaps(
-                  
-
-                  layers: <MapLayer>[
-                    MapShapeLayer(
-                      
-                      
-                      onWillPan: (map) => true,
-                                            onWillZoom: (map) => true,
-
-                      loadingBuilder: (BuildContext context) {
-                        return Container(
-                          height: 25,
-                          width: 25,
-                          child: const CircularProgressIndicator(
-                            strokeWidth: 10,
-                          ),
-                        );
-                      },
-                      source: _mapSource,
-                      // Returns the custom tooltip for each shape.
-                      shapeTooltipBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                              _worldPopulationDensity[index].countryName +
-                                  ' : ' +
-                                  _numberFormat
-                                      .format(_worldPopulationDensity[index]
-                                          .density)
-                                      .toString() +
-                                  ' people going',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .caption
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .surface)),
-                        );
-                      },
-                      strokeColor: Colors.white30,
-                      legend: MapLegend.bar(MapElement.shape,
-                          position: MapLegendPosition.bottom,
-                          overflowMode: MapLegendOverflowMode.wrap,
-                          labelsPlacement:
-                              MapLegendLabelsPlacement.betweenItems,
-                          padding: EdgeInsets.only(bottom: 0),
-                          spacing: 1.0,
-                          segmentSize: Size(55.0, 9.0)),
-                      tooltipSettings: MapTooltipSettings(
-                          color: Color.fromRGBO(0, 32, 128, 1)),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-              height: 60,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.blue[50],
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              child: Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Text(
-                  "People 'going' to MOOVs in these spots",
-                  style: TextStyle(fontWeight: FontWeight.w400),
-                  textAlign: TextAlign.center,
-                ),
-              )),
-        ]),
-      )),
+              ),
+              Align(
+                  alignment: Alignment.topRight,
+                  child: legendClosed
+                      ? GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              legendClosed = false;
+                            });
+                          },
+                          child: Icon(Icons.close_fullscreen))
+                      : Opacity(
+                          opacity: .7,
+                          child: Stack(children: [
+                            Container(
+                                height: 125,
+                                width: 120,
+                                decoration: BoxDecoration(
+                                    color: Colors.blue[50],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        "People going",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.circle,
+                                            color: Colors.red[50]),
+                                        Text(" 1-5"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.circle,
+                                            color: Colors.red[100]),
+                                        Text(" 6-10"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.circle,
+                                            color: Colors.red[400]),
+                                        Text(" 11-30"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.circle,
+                                            color: Colors.red[900]),
+                                        Text(" 30+"),
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                            Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        legendClosed = true;
+                                      });
+                                    },
+                                    child: Icon(Icons.close_fullscreen))),
+                          ])))
+            ]);
+          }),
     );
+  }
+
+  void _handlePageChange(int index) {
+    /// While updating the page viewer through interaction, selected position's
+    /// marker should be moved to the center of the maps. However, when the
+    /// marker is directly clicked, only the respective card should be moved to
+    /// center and the marker itself should not move to the center of the maps.
+    if (!_canUpdateFocalLatLng) {
+      if (_tappedMarkerIndex == index) {
+        _updateSelectedCard(index);
+      }
+    } else if (_canUpdateFocalLatLng) {
+      _updateSelectedCard(index);
+    }
+  }
+
+  void _updateSelectedCard(int index) {
+    setState(() {
+      _previousSelectedIndex = _currentSelectedIndex;
+      _currentSelectedIndex = index;
+    });
+
+    /// While updating the page viewer through interaction, selected position's
+    /// marker should be moved to the center of the maps. However, when the
+    /// marker is directly clicked, only the respective card should be moved to
+    /// center and the marker itself should not move to the center of the maps.
+    if (_canUpdateFocalLatLng) {
+      _zoomPanBehavior.focalLatLng = MapLatLng(
+          _worldWonders[_currentSelectedIndex].latitude,
+          _worldWonders[_currentSelectedIndex].longitude);
+    }
+
+    /// Updating the design of the selected marker. Please check the
+    /// `markerBuilder` section in the build method to know how this is done.
+    _mapController
+        .updateMarkers([_currentSelectedIndex, _previousSelectedIndex]);
+    _canUpdateFocalLatLng = true;
   }
 }
 
-class _CountryDensity {
-  _CountryDensity(this.countryName, this.density);
+class _WonderDetails {
+  const _WonderDetails(
+      {@required this.title,
+      @required this.id,
+      @required this.imagePath,
+      @required this.latitude,
+      @required this.longitude,
+      @required this.description,
+      @required this.goingCount,
+      @required this.tooltipImagePath});
 
-  final String countryName;
-  final double density;
+  final String title;
+  final String id;
+  final double latitude;
+  final double longitude;
+  final String description;
+  final int goingCount;
+  final String imagePath;
+  final String tooltipImagePath;
 }
 
 abstract class SampleView extends StatefulWidget {

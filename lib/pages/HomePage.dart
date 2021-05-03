@@ -1086,7 +1086,7 @@ class _HomePageState extends State<HomePage>
                                                                   reverse:
                                                                       false,
                                                                   autoPlay:
-                                                                      false,
+                                                                      true,
                                                                   autoPlayInterval:
                                                                       Duration(
                                                                           seconds:
