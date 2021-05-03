@@ -1,4 +1,4 @@
-import 'package:MOOV/maps/map2.dart';
+import 'package:MOOV/maps/Heatmap.dart';
 import 'package:MOOV/pages/friend_finder.dart';
 import 'package:flutter/material.dart';
 

@@ -29,7 +29,7 @@ class MOTD extends StatefulWidget {
 class _MOTDState extends State<MOTD> {
   @override
   Widget build(BuildContext context) {
-     bool isTablet = false;
+    bool isTablet = false;
     if (Device.get().isTablet) {
       isTablet = true;
     }
@@ -75,88 +75,94 @@ class _MOTDState extends State<MOTD> {
                             child: Column(
                               children: <Widget>[
                                 Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
                                   height: isLargePhone
-                                      ? SizeConfig.blockSizeVertical * 15 : isTablet ? 800
-                                      : SizeConfig.blockSizeVertical * 18,
-                                  child: OpenContainer(
-                                    transitionType:
-                                        ContainerTransitionType.fade,
-                                    transitionDuration:
-                                        Duration(milliseconds: 500),
-                                    openBuilder: (context, _) =>
-                                        PostDetail(course.id),
-                                    closedElevation: 0,
-                                    closedBuilder: (context, _) =>
-                                        Stack(children: <Widget>[
-                                      FractionallySizedBox(
-                                        widthFactor: 1,
-                                        child: Container(
+                                      ? SizeConfig.blockSizeVertical * 15
+                                      : isTablet
+                                          ? 800
+                                          : SizeConfig.blockSizeVertical * 18,
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    child: OpenContainer(
+                                      transitionType:
+                                          ContainerTransitionType.fade,
+                                      transitionDuration:
+                                          Duration(milliseconds: 500),
+                                      openBuilder: (context, _) =>
+                                          PostDetail(course.id),
+                                      closedElevation: 0,
+                                      closedBuilder: (context, _) =>
+                                          Stack(children: <Widget>[
+                                        FractionallySizedBox(
+                                          widthFactor: 1,
                                           child: Container(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
+                                            child: Container(
                                               child: CachedNetworkImage(
                                                 imageUrl: pic,
                                                 fit: BoxFit.cover,
                                               ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 5,
-                                                  blurRadius: 7,
-                                                  offset: Offset(0,
-                                                      3), // changes position of shadow
-                                                ),
-                                              ],
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: Container(
-                                            alignment: Alignment(0.0, 0.0),
-                                            child: Container(
                                               decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 5,
+                                                    blurRadius: 7,
+                                                    offset: Offset(0,
+                                                        3), // changes position of shadow
+                                                  ),
+                                                ],
+                                                color: Colors.white,
                                                 borderRadius: BorderRadius.all(
-                                                    Radius.circular(20)),
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
-                                                  colors: <Color>[
-                                                    Colors.black.withAlpha(0),
-                                                    Colors.black,
-                                                    Colors.black12,
-                                                  ],
-                                                ),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Text(
-                                                  title,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Solway',
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white,
-                                                      fontSize: 20.0),
+                                                  Radius.circular(10),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ]),
+                                        Padding(
+                                          padding: const EdgeInsets.all(0),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              alignment: Alignment(0.0, 0.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(0)),
+                                                  gradient: LinearGradient(
+                                                    begin: Alignment.topCenter,
+                                                    end: Alignment.bottomCenter,
+                                                    colors: <Color>[
+                                                      Colors.black.withAlpha(0),
+                                                      Colors.black,
+                                                      Colors.black12,
+                                                    ],
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Text(
+                                                    title,
+                                                    style: TextStyle(
+                                                        fontFamily: 'Solway',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white,
+                                                        fontSize: 20.0),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -221,18 +227,14 @@ class _MOTDState extends State<MOTD> {
                                         widthFactor: 1,
                                         child: Container(
                                           child: Container(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              child: CachedNetworkImage(
-                                                imageUrl: pic,
-                                                fit: BoxFit.cover,
-                                              ),
+                                            child: CachedNetworkImage(
+                                              imageUrl: pic,
+                                              fit: BoxFit.cover,
                                             ),
                                             decoration: BoxDecoration(
                                               color: Colors.black,
                                               borderRadius: BorderRadius.all(
-                                                Radius.circular(10),
+                                                Radius.circular(0),
                                               ),
                                             ),
                                           ),
