@@ -13,8 +13,13 @@ exports.brainTree = functions.firestore
       const college = context.params.college;
       // get updated payment information
       const paymentRef = admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`).collection("payments").doc(`${paymentMethod}`);
+      const userRef = admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`);
       const doc = await paymentRef.get();
-      let custId;
+      const userDoc = await userRef.get();
+      const amountCharged = doc.data().amount;
+      let custId = userDoc.data().braintree_customer_id;
+      const userDisplayName = userDoc.data().displayName;
+      const userEmail = userDoc.data().email;
 
       const gateway = new braintree.BraintreeGateway({
         environment: braintree.Environment.Sandbox,
@@ -22,18 +27,21 @@ exports.brainTree = functions.firestore
         publicKey: "4w8d3g69x27qrtv2",
         privateKey: "d6e6441e1b10e2126f5e8a4e534a981b",
       });
-
-      gateway.customer.create({
-        firstName: "Jen",
-        lastName: "Smith",
-        email: "jen@example.com",
-      }, (err, result) => {
-        result.success;
-        // true
-        custId = result.customer.id;
-        // e.g. 494019
-      });
-
+      if (!custId) {
+        gateway.customer.create({
+          firstName: userDisplayName,
+          email: userEmail,
+        }, (err, result) => {
+          result.success;
+          // true
+          custId = result.customer.id;
+          // e.g. 494019
+        });
+      } else {
+        gateway.customer.find(custId, function(err, customer) {
+          custId = customer.id;
+        });
+      }
       gateway.clientToken.generate({
         customerId: custId,
       }, (err, response) => {
@@ -41,20 +49,31 @@ exports.brainTree = functions.firestore
         const cToken = response.clientToken;
         admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`).collection("payments").doc(`${paymentMethod}`).set({
           clientToken: cToken,
-          status: "success",
+          status: "processing",
           customer_transaction_id: custId,
+        }, {merge: true});
+        admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`).set({
+          braintree_customer_id: custId,
         }, {merge: true});
       });
       const nonce = await doc.data().nonce;
-      const amountCharged = await doc.data().amount;
+
+      // payment method logic
+      gateway.paymentMethod.create({
+        customerId: custId,
+        paymentMethodNonce: nonce,
+      }, (err, result) => { });
       const devData = await doc.data().deviceData;
+      console.log("payment nonceee: ", nonce);
       // create transaction
       gateway.transaction.sale({
         amount: amountCharged,
-        paymentMethodNonce: nonce,
+        // paymentMethodNonce: nonce,
+        customerId: custId,
         deviceData: devData,
         options: {
           submitForSettlement: true,
+          // storeInVaultOnSuccess: true,
         },
       }, (err, result) => {
         console.log(result);
