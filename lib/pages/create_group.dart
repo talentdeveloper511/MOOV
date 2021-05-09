@@ -412,38 +412,28 @@ class _GroupFormState extends State<GroupForm> {
                                                       height: 50,
                                                       child: Column(
                                                         children: <Widget>[
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.of(context).push(
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) =>
-                                                                          OtherProfile(
-                                                                            memberoonis[index],
-                                                                          )));
-                                                            },
-                                                            child: CircleAvatar(
-                                                              radius: 34,
+                                                          CircleAvatar(
+                                                            radius: 34,
+                                                            backgroundColor:
+                                                                TextThemes
+                                                                    .ndGold,
+                                                            child:
+                                                                CircleAvatar(
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                      userPic),
+                                                              radius: 32,
                                                               backgroundColor:
                                                                   TextThemes
-                                                                      .ndGold,
+                                                                      .ndBlue,
                                                               child:
                                                                   CircleAvatar(
+                                                                // backgroundImage: snapshot.data
+                                                                //     .documents[index].data['photoUrl'],
                                                                 backgroundImage:
                                                                     NetworkImage(
                                                                         userPic),
                                                                 radius: 32,
-                                                                backgroundColor:
-                                                                    TextThemes
-                                                                        .ndBlue,
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  // backgroundImage: snapshot.data
-                                                                  //     .documents[index].data['photoUrl'],
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                          userPic),
-                                                                  radius: 32,
-                                                                ),
                                                               ),
                                                             ),
                                                           ),

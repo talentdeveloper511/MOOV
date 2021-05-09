@@ -227,7 +227,8 @@ flutter:
     - lib/assets/incognitoPic.jpg
     - lib/assets/welcomePage.png
     - lib/assets/betaWelcome.png
-    - lib/assets/moovmoney.jpg
+    - lib/assets/moovmoney2.jpg
+    - lib/assets/moovmoney.png
     - lib/assets/mapIcon.png
     - lib/assets/mapIconWhite.png
     - lib/assets/betaDisclaimer.png

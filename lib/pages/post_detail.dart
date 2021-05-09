@@ -410,7 +410,7 @@ class _NonImageContents extends StatelessWidget {
           _Title(title),
           _Description(description),
           PostTimeAndPlace(startDate, address, course['venmo'],
-              course['userId'], course['businessPost'], course['postId']),
+              course['userId'], course['postId']),
           _AuthorContent(userId, course),
           GestureDetector(
             onTap: () {
@@ -634,10 +634,9 @@ class PostTimeAndPlace extends StatelessWidget {
   final dynamic startDate, address;
   final int venmo;
   final String userId, moovId;
-  final bool isBusiness;
 
-  PostTimeAndPlace(this.startDate, this.address, this.venmo, this.userId,
-      this.isBusiness, this.moovId);
+  PostTimeAndPlace(
+      this.startDate, this.address, this.venmo, this.userId, this.moovId);
 
   @override
   Widget build(BuildContext context) {
@@ -694,61 +693,7 @@ class PostTimeAndPlace extends StatelessWidget {
             )
           ],
         ),
-        venmo != null && venmo != 0 && !isBusiness
-            ? Positioned(
-                top: 0,
-                right: 20,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 35,
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color.fromRGBO(061, 149, 206, 1.0),
-                              Color.fromRGBO(061, 149, 215, 1.0),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'lib/assets/venmo-icon.png',
-                            height: 25,
-                          ),
-                          Text(
-                            "\$$venmo ",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 19),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: StreamBuilder(
-                          stream: usersRef.doc(userId).snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) return circularProgress();
-
-                            String name = snapshot.data['venmoUsername'];
-                            return (name != "" && name != null)
-                                ? Text(
-                                    "@$name",
-                                    textAlign: TextAlign.center,
-                                  )
-                                : Text("");
-                          }),
-                    )
-                  ],
-                ),
-              )
-            : Text(""),
-        venmo != null && venmo != 0 && isBusiness
+        venmo != null && venmo != 0
             ? Positioned(top: 0, right: 30, child: PaymentButton(moovId))
             : Text(""),
       ]),
@@ -1804,7 +1749,8 @@ class _PaymentButtonState extends State<PaymentButton> {
                 HapticFeedback.lightImpact();
 
                 if (goingCount == maxOccupancy &&
-                    statuses[currentUser.id] != 3) {
+                    (statuses[currentUser.id] != 3 ||
+                        statuses[currentUser.id] != 4)) {
                   showMax(context);
                 }
                 if (hasPaid == false) {

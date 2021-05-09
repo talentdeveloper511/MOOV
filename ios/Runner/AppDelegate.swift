@@ -2,6 +2,7 @@ import UIKit
 import Flutter
 import Firebase
 import GoogleMaps
+import Braintree
 
 @available(iOS 10.0, *)
 @UIApplicationMain
@@ -15,12 +16,21 @@ import GoogleMaps
     FirebaseApp.configure()
     GMSServices.provideAPIKey("AIzaSyCXudnefDivWtB4O7nrToB-3Bu13-TEF8A")   
     UNUserNotificationCenter.current().delegate = self
+    BTAppSwitch.setReturnURLScheme("com.MOOV.ND.payments")
     
    
     GeneratedPluginRegistrant.register(with: self)
     application.registerForRemoteNotifications()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+
+  override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if url.scheme == "com.MOOV.ND.payments" {
+            return BTAppSwitch.handleOpen(url, options:options)
+        }
+        
+        return false
+    }
 //     override public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
 //       {
 //           completionHandler([.alert, .badge, .sound])

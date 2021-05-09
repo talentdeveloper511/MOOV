@@ -1,15 +1,11 @@
 import 'dart:math';
-
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/EditArchive.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/archiveDetail.dart';
-import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
-import 'package:MOOV/widgets/going_statuses.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';

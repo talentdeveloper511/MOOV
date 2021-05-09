@@ -29,6 +29,7 @@
 			<array>
 				<string>com.googleusercontent.apps.539403240889-1jenth4caipickvn7guka4mohiov020c</string>
 				<string>com.MOOV.ND.braintree</string>
+				<string>com.MOOV.ND.payments</string>
 			</array>
 		</dict>
 		<dict>
@@ -38,6 +39,7 @@
 			<array>
 				<string>com.MOOV.ND</string>
 				<string>com.MOOV.ND.braintree</string>
+				<string>com.MOOV.ND.payments</string>
 			</array>
 		</dict>
 	</array>
@@ -52,23 +54,23 @@
 	<key>LSRequiresIPhoneOS</key>
 	<false/>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>MOOV requires access to music.</string>
+	<string>MOOV requires access to your media library so that you can share your favorite things with your friends! We will never access this without your consent or permisson!</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>MOOV requires access to your calendar.</string>
+	<string>MOOV requires access to your calendar so that you can easily see future MOOVs! We will never access this without your consent or permisson!</string>
 	<key>NSCameraUsageDescription</key>
-	<string>MOOV requires access to your phone's camera.</string>
+	<string>MOOV requires access to your phone&apos;s camera so that you can upload images with your MOOVs. We will never access this without your consent or permisson!</string>
 	<key>NSContactsUsageDescription</key>
-	<string>This just allows you to invite your friends!</string>
+	<string>This just allows you to invite your friends! We will never access this without your consent or permisson!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>MOOV requires access to your location so that you can check into MOOVs and event hosts can confirm that you are there! We will never access this without your consent or permisson!</string>
 	<key>NSMotionUsageDescription</key>
-	<string>MOOV requires access to your motion.</string>
+	<string>MOOV requires access to your motion so that you can share with friends! We will never access this without your consent or permisson!</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>MOOV requires read and write access to the photo library.</string>
+	<string>MOOV requires read and write access to the photo library so that you can post pictures with your MOOVs! We will never access this without your consent or permisson!</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>MOOV requires access to the photo library.</string>
+	<string>MOOV requires access to the photo library so you can share pictures with your MOOVs! We will never access this without your consent or permisson!</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>MOOV requires access to speech recognition.</string>
+	<string>MOOV requires access to speech recognition so that you can share audio with friends! We will never access this without your consent or permisson!</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

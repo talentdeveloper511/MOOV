@@ -82,6 +82,18 @@ class _GoogleMapState extends State<GoogleMap> {
 
   @override
   Widget build(BuildContext context) {
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return TextThemes.ndGold;
+      }
+      return Colors.green;
+    }
+
     determinePosition();
     return (!widget.fromMOOVMaker)
         ? Container(
@@ -124,17 +136,21 @@ class _GoogleMapState extends State<GoogleMap> {
                                       0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
                                   leftPosition: 0.0,
                                   rightPosition: 0.0,
-                                  width: 500,
+                                  width: 100,
+                                  height: 30,
                                   borderRadius: BorderRadius.circular(12.0),
                                   child: state == SearchingState.Searching
                                       ? Center(
                                           child: CircularProgressIndicator())
-                                      : RaisedButton(
-                                          color: Colors.green[100],
+                                      : TextButton(
                                           child: Text("Set Address",
                                               style: TextStyle(
-                                                  color: Colors.green,
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold)),
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty
+                                                      .resolveWith(getColor)),
                                           onPressed: () {
                                             selectedPlace = _selectedPlace;
                                             setState(() {});
@@ -163,7 +179,7 @@ class _GoogleMapState extends State<GoogleMap> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState !=
                                 ConnectionState.done) {
-                              return circularProgress();
+                              return linearProgress();
                             }
                             print(selectedPlace.geometry.location);
                             if (!snapshot.hasData) {
@@ -223,6 +239,7 @@ class _GoogleMapState extends State<GoogleMap> {
               ),
             ))
         : Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(
@@ -315,19 +332,12 @@ class _GoogleMapState extends State<GoogleMap> {
                                           0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
                                       leftPosition: 0.0,
                                       rightPosition: 0.0,
-                                      width: 500,
+                                      width: 100,
+                                      height: 50,
                                       borderRadius: BorderRadius.circular(12.0),
                                       child: state == SearchingState.Searching
-                                          ? Center(
-                                              child:
-                                                  CircularProgressIndicator())
-                                          : RaisedButton(
-                                              color: Colors.green[100],
-                                              child: Text("Set Address",
-                                                  style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
+                                          ? Center(child: linearProgress())
+                                          : TextButton(
                                               onPressed: () {
                                                 selectedPlace = _selectedPlace;
                                                 widget.coords.add(selectedPlace
@@ -335,8 +345,16 @@ class _GoogleMapState extends State<GoogleMap> {
                                                 setState(() {});
                                                 Navigator.pop(context);
                                               },
-                                            ),
-                                    );
+                                              child: Text("Set Address",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty
+                                                          .resolveWith(
+                                                              getColor))));
                             },
                             // pinBuilder: (context, state) {
                             //   if (state == PinState.Idle) {

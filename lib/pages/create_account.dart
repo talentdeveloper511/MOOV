@@ -850,6 +850,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             ),
                           ),
                           GoogleMap(
+                              fromMOOVMaker: false,
                               callback: (val) => businessLocationLatitude = val,
                               callback2: (val) =>
                                   businessLocationLongitude = val,

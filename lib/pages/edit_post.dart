@@ -1378,27 +1378,32 @@ class _EditPostState extends State<EditPost> {
                                             "featured": true,
                                           }, SetOptions(merge: true));
                                         },
-                                        child: Container(
-                                          height: 30,
-                                          padding: EdgeInsets.all(4),
-                                          decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                colors: [
-                                                  Colors.orange[400],
-                                                  Colors.purple[300]
-                                                ],
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 30,
+                                              padding: EdgeInsets.all(4),
+                                              decoration: BoxDecoration(
+                                                  gradient: LinearGradient(
+                                                    colors: [
+                                                      Colors.orange[400],
+                                                      Colors.purple[300]
+                                                    ],
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10.0)),
+                                              child: Text(
+                                                "FEATURE",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0)),
-                                          child: Text(
-                                            "FEATURE",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18),
-                                          ),
+                                            ),
+                                            SizedBox(height: 50)
+                                          ],
                                         ),
                                       )
                                     : Text(""),

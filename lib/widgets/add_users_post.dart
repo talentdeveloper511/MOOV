@@ -582,9 +582,10 @@ class _AddUsersFromCreateGroupState extends State<AddUsersFromCreateGroup>
                           ),
                         ),
                         child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          child: ListView(
+                            physics: ClampingScrollPhysics(),
                             children: [
+                              SizedBox(height: 50),
                               Padding(
                                   padding: const EdgeInsets.only(bottom: 50),
                                   child: RichText(

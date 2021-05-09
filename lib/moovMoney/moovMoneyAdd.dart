@@ -63,84 +63,50 @@ class MoovMoneyAdd extends StatelessWidget {
         body: ListView(
           physics: ClampingScrollPhysics(),
           children: [
-            Stack(alignment: Alignment.center, children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15.0),
-                child: SizedBox(
-                  height: 190,
-                  width: MediaQuery.of(context).size.width,
-                  child: Container(
-                    child: ClipRRect(
-                      child: Image.asset(
-                        'lib/assets/moovmoney.jpg',
-                        color: Colors.black12,
-                        colorBlendMode: BlendMode.darken,
-                        fit: BoxFit.cover,
-                      ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 15.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * .15,
+                width: MediaQuery.of(context).size.width,
+                child: Container(
+                  child: ClipRRect(
+                    child: Image.asset(
+                      'lib/assets/moovmoney.png',
+                      color: Colors.black12,
+                      colorBlendMode: BlendMode.darken,
+                      fit: BoxFit.cover,
                     ),
-                    margin:
-                        EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 7.5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
+                  ),
+                  margin:
+                      EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 7.5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: <Color>[
-                            Colors.black.withAlpha(0),
-                            Colors.black,
-                            Colors.black12,
-                          ],
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(
-                          "MOOV Money",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Solway',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 24),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ]),
+            ),
             Column(
               children: [
+                SizedBox(height: 15),
                 Text("Current Balance",
                     style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 23)),
+                        TextStyle(fontWeight: FontWeight.w400, fontSize: 18)),
                 SizedBox(height: 5),
                 Text("\$" + currentBalance.toString(),
                     style:
                         TextStyle(fontWeight: FontWeight.w400, fontSize: 23)),
+                SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Container(
