@@ -279,7 +279,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                                     child: Row(
                                       children: [
                                         Image.asset(
-                                            'lib/assets/icons/HangoutsICON2.png',
+                                            'lib/assets/icons/HangoutsICON.png',
                                             height: 25.5),
                                         Padding(
                                           padding:
