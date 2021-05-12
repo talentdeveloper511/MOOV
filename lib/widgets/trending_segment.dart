@@ -244,7 +244,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                                         'lib/assets/icons/PartyICON.png',
                                         height: 35),
                                   ),
-                                  Text('Parties', style: TextThemes.extraBold),
+                                  Text('Hangouts', style: TextThemes.extraBold),
                                 ],
                               ),
                               PostOnTrending(
@@ -284,7 +284,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
-                                          child: Text('Parties',
+                                          child: Text('Hangouts',
                                               style: TextThemes.extraBold),
                                         ),
                                       ],
