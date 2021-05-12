@@ -373,20 +373,20 @@ class _BannerImage extends StatelessWidget {
               ),
             )
           : Container(),
-      stats.isNotEmpty
-          ? Positioned(
-              left: 5,
-              bottom: 5,
-              child: GestureDetector(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PostStats(postId))),
-                  child: Image.asset(
-                    'lib/assets/ratioChart.png',
-                    height: 50,
-                  )))
-          : Container(),
+      // stats.isNotEmpty
+      //     ? Positioned(
+      //         left: 5,
+      //         bottom: 5,
+      //         child: GestureDetector(
+      //             onTap: () => Navigator.push(
+      //                 context,
+      //                 MaterialPageRoute(
+      //                     builder: (context) => PostStats(postId))),
+      //             child: Image.asset(
+      //               'lib/assets/ratioChart.png',
+      //               height: 50,
+      //             )))
+      //     : Container(),
     ]);
   }
 }

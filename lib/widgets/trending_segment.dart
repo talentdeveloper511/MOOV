@@ -241,8 +241,8 @@ class TrendingSegmentState extends State<TrendingSegment>
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Image.asset(
-                                        'lib/assets/icons/PartyICON.png',
-                                        height: 35),
+                                        'lib/assets/icons/HangoutsICON.png',
+                                        height: 3),
                                   ),
                                   Text('Hangouts', style: TextThemes.extraBold),
                                 ],
@@ -279,8 +279,8 @@ class TrendingSegmentState extends State<TrendingSegment>
                                     child: Row(
                                       children: [
                                         Image.asset(
-                                            'lib/assets/icons/PartyICON.png',
-                                            height: 27.5),
+                                            'lib/assets/icons/HangoutsICON2.png',
+                                            height: 25.5),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(left: 8.0),

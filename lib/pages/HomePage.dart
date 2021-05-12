@@ -299,7 +299,7 @@ class _HomePageState extends State<HomePage>
                                                             bottom: 2.0,
                                                             top: 8),
                                                     child: Image.asset(
-                                                      'lib/assets/icons/PartyICON.png',
+                                                      'lib/assets/icons/HangoutsICON.png',
                                                       height: 50,
                                                       width: 50,
                                                     ),
@@ -344,7 +344,7 @@ class _HomePageState extends State<HomePage>
                                                             bottom: 2.0,
                                                             top: 8),
                                                     child: Image.asset(
-                                                      'lib/assets/icons/PartyICON2.png',
+                                                      'lib/assets/icons/HangoutsICON2.png',
                                                       height: 50,
                                                       width: 50,
                                                     ),
