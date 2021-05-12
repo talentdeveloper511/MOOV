@@ -15,6 +15,7 @@ import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/SettingsPage.dart';
 import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/blockedPage.dart';
+import 'package:MOOV/pages/create_account.dart';
 import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/notification_feed.dart';
@@ -647,7 +648,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       } else {
         final result = await Navigator.pushAndRemoveUntil(
           context,
-          PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
+          PageRouteBuilder(pageBuilder: (_, __, ___) => CreateAccount()),
+//ratedPG
+          // PageRouteBuilder(pageBuilder: (_, __, ___) => WelcomePage()),
           (Route<dynamic> route) => false,
         );
 

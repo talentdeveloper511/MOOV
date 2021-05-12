@@ -45,7 +45,7 @@ class BlockedPage extends StatelessWidget {
                           padding: const EdgeInsets.only(
                               top: 50.0, left: 20, right: 20, bottom: 25),
                           child: Text(
-                            "Get fucked.",
+                            "Oops!",
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 25),
                             textAlign: TextAlign.center,

@@ -58,7 +58,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>MOOV requires access to your calendar so that you can easily see future MOOVs! We will never access this without your consent or permisson!</string>
 	<key>NSCameraUsageDescription</key>
-	<string>MOOV requires access to your phone&apos;s camera so that you can upload images with your MOOVs. We will never access this without your consent or permisson!</string>
+	<string>MOOV requires access to your phone's camera so that you can upload images with your MOOVs. We will never access this without your consent or permisson!</string>
 	<key>NSContactsUsageDescription</key>
 	<string>This just allows you to invite your friends! We will never access this without your consent or permisson!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

@@ -680,15 +680,16 @@ class _CreateAccountState extends State<CreateAccount> {
                                 onChanged: (bool value) =>
                                     setState(() => _clubExecChecked = value)),
                           ),
-                          SizedBox(
-                            height: 40,
-                            width: 194,
-                            child: CheckboxListTile(
-                                title: new Text("I'm single."),
-                                value: _isSingleChecked,
-                                onChanged: (bool value) =>
-                                    setState(() => _isSingleChecked = value)),
-                          ),
+                          //ratedPG
+                          // SizedBox(
+                          //   height: 40,
+                          //   width: 194,
+                          //   child: CheckboxListTile(
+                          //       title: new Text("I'm single."),
+                          //       value: _isSingleChecked,
+                          //       onChanged: (bool value) =>
+                          //           setState(() => _isSingleChecked = value)),
+                          // ),
                           SizedBox(height: 20),
                           Padding(
                             padding: EdgeInsets.all(16.0),

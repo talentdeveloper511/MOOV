@@ -215,7 +215,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   void openPlaceholders(context) async {
     Random random = new Random();
     int randomNumber = random.nextInt(4);
-    if (typeDropdownValue == 'Parties') {
+    if (typeDropdownValue == 'Hangouts') {
       placeholderImage = 'placeholderparty' + randomNumber.toString() + '.jpg';
     } else if (typeDropdownValue == 'Bars') {
       placeholderImage = 'placeholderbar' + randomNumber.toString() + '.jpg';
@@ -319,7 +319,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   final privacyList = ["Public", "Friends Only", "Invite Only"];
   final listOfTypes = [
     "Food/Drink",
-    "Parties",
+    "Hangouts",
     "Clubs",
     "Sports",
     "Shows",
@@ -366,7 +366,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
   // DateTime endTime = DateTime.now().add(Duration(minutes: 120));
   // DateTime endTimes;
   String privacyDropdownValue = 'Public';
-  String typeDropdownValue = 'Parties';
+  String typeDropdownValue = 'Hangouts';
   String clubPostValue = 'No';
 
   // String locationDropdownValue = 'Off Campus';
