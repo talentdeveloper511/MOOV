@@ -309,7 +309,7 @@ class _HomePageState extends State<HomePage>
                                                         const EdgeInsets.only(
                                                             top: 1.0),
                                                     child: Text(
-                                                      "Parties",
+                                                      "Hangouts",
                                                       style: TextStyle(
                                                           color: _colorTween(
                                                               Colors.black,
@@ -354,7 +354,7 @@ class _HomePageState extends State<HomePage>
                                                         const EdgeInsets.only(
                                                             top: 1.0),
                                                     child: Text(
-                                                      "Parties",
+                                                      "Hangouts",
                                                       style: TextStyle(
                                                           color: _colorTween(
                                                               Colors.black,

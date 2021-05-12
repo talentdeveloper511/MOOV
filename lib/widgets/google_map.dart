@@ -141,7 +141,7 @@ class _GoogleMapState extends State<GoogleMap> {
                                   borderRadius: BorderRadius.circular(12.0),
                                   child: state == SearchingState.Searching
                                       ? Center(
-                                          child: CircularProgressIndicator())
+                                          child: linearProgress())
                                       : TextButton(
                                           child: Text("Set Address",
                                               style: TextStyle(

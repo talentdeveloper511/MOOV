@@ -110,7 +110,8 @@ class MoovMoneyAdd extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Container(
-                      height: 80,
+                      // height: 80,
+                      height: 45,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           color: Colors.blue[50],
@@ -119,7 +120,8 @@ class MoovMoneyAdd extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(14.0),
                         child: Text(
-                          "Use MOOV Money to buy anything at your MOOVs. Drinks at the bar, Venmo for house covers, skipping lines, club dues, you name it.",
+                          """Use MOOV Money to buy anything at your MOOVs. """,
+                          // """Drinks at the bar, Venmo for house covers, skipping lines, club dues, you name it.""",
                           style: TextStyle(fontWeight: FontWeight.w400),
                           textAlign: TextAlign.center,
                         ),
