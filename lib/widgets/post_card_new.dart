@@ -722,7 +722,7 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,
-            child: Text("Fuck me", style: TextStyle(color: Colors.red)),
+            child: Text("Damn", style: TextStyle(color: Colors.red)),
             onPressed: () {
               Navigator.pop(context);
 

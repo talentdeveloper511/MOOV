@@ -109,7 +109,7 @@ class _OtherProfileState extends State<OtherProfile> {
       builder: (context) => CupertinoAlertDialog(
         title: Text("Unfollow?",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        content: Text("\nDon't fuck with 'em anymore?"),
+        content: Text("\nDon't like with 'em anymore?"),
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,

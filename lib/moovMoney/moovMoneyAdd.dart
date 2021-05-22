@@ -122,7 +122,9 @@ class MoovMoneyAdd extends StatelessWidget {
                         child: Text(
                           """Use MOOV Money to buy anything at your MOOVs. """,
                           // """Drinks at the bar, Venmo for house covers, skipping lines, club dues, you name it.""",
-                          style: TextStyle(fontWeight: FontWeight.w400),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: isLargePhone ? 14 : 12),
                           textAlign: TextAlign.center,
                         ),
                       )),

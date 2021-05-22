@@ -6,8 +6,7 @@ class MOTDPageView extends StatefulWidget {
   final ValueNotifier<double> notifier;
   final int currentIndex;
 
-  MOTDPageView({Key key, this.notifier, this.currentIndex})
-      : super(key: key);
+  MOTDPageView({Key key, this.notifier, this.currentIndex}) : super(key: key);
 
   @override
   _MOTDPageViewState createState() => _MOTDPageViewState();
@@ -31,9 +30,7 @@ class _MOTDPageViewState extends State<MOTDPageView> {
     _pageController = PageController(
       initialPage: widget.currentIndex,
       viewportFraction: 0.9,
-    )
-      ..addListener(_onScroll)
-      ..addListener(() {});
+    )..addListener(_onScroll);
 
     _previousPage = _pageController.initialPage;
     super.initState();
