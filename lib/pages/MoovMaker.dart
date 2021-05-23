@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:MOOV/businessInterfaces/featureDeal.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/post_model.dart';
-import 'package:MOOV/studentClubs/studentClubDashboard.dart';
 import 'package:MOOV/widgets/google_map.dart';
 import 'package:MOOV/widgets/sundayWrapup.dart';
-import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
@@ -42,6 +40,7 @@ class _MoovMakerState extends State<MoovMaker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(Icons.arrow_drop_up_outlined,
@@ -140,7 +139,23 @@ class MoovMakerForm extends StatefulWidget {
   _MoovMakerFormState createState() => _MoovMakerFormState();
 }
 
-class _MoovMakerFormState extends State<MoovMakerForm> {
+class _MoovMakerFormState extends State<MoovMakerForm>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation _animation;
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animation = Tween(begin: 0.0, end: 12.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
+    _animationController.repeat(reverse: true);
+
+    super.initState();
+  }
+
   bool isUploading = false;
 
   File _image;
@@ -649,29 +664,76 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
                       )
                     : Container(),
 
-                Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: TextFormField(
-                    controller: descriptionController,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.description,
-                        color: TextThemes.ndGold,
-                      ),
-                      labelText: "Details about the MOOV",
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "What's going down?";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
+                AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, _) {
+                      return Stack(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: [
+                                for (int i = 1; i <= 2; i++)
+                                  BoxShadow(
+                                    color: TextThemes.ndGold.withOpacity(
+                                        _animationController.value / 2),
+                                    spreadRadius: _animation.value * i,
+                                  )
+                              ],
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: TextFormField(
+                                controller: descriptionController,
+                                decoration: InputDecoration(
+                                  icon: Icon(
+                                    Icons.description,
+                                    color: TextThemes.ndGold,
+                                  ),
+                                  labelText: "Details about the MOOV",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                // The validator receives the text that the user has entered.
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "What's going down?";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 20,
+                            right: 25,
+                            child: GestureDetector(
+                              onTap: () => showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return FeatureDealDialog(
+                                      description:
+                                         """MOOV exists to spotlight local businesses to college students."""
+                                          """\n\nThe better your deal, the more likely they'll come.""",
+                                   
+                                    );
+                                  }),
+                              child: Text(
+                                "Sweeten the deal..",
+                                style: TextStyle(
+                                    color: TextThemes.ndBlue,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+                    }),
+
                 // Padding(
                 //   padding: EdgeInsets.all(20.0),
                 //   child: DropdownButtonFormField(
@@ -1502,6 +1564,7 @@ class _MoovMakerFormState extends State<MoovMakerForm> {
 
   @override
   void dispose() {
+    _animationController.dispose();
     super.dispose();
     addressController.dispose();
     titleController.dispose();

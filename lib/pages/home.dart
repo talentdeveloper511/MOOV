@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:MOOV/businessInterfaces/BusinessDirectory.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
@@ -991,12 +992,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 MOOVSPage(),
                 ProfilePage()
               ]
-            : <Widget>[
-                HomePage(),
-                SearchBar(),
-                currentUser.isBusiness ? Biz() : MOOVSPage(),
-                ProfilePage()
-              ],
+            : currentUser.isBusiness
+                ? <Widget>[HomePage(), BusinessDirectory(), ProfilePage()]
+                : <Widget>[HomePage(), SearchBar(), MOOVSPage(), ProfilePage()],
         controller: pageController,
         onPageChanged: onPageChanged,
       ),
@@ -1030,7 +1028,35 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       //   radius: 13)
                       ),
                 ])
-          : CupertinoTabBar(
+          : currentUser.isBusiness ? 
+          CupertinoTabBar(
+              inactiveColor: Colors.black,
+              currentIndex: currentIndex,
+              onTap: onTap,
+              activeColor: TextThemes.ndGold,
+              items: [
+                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
+                  BottomNavigationBarItem(icon: Icon(Icons.business)),
+  BottomNavigationBarItem(
+                      icon: CircleAvatar(
+                          radius: 16,
+                          backgroundColor:
+                              pageIndex == 3 ? TextThemes.ndGold : Colors.black,
+                          child: currentUser.photoUrl != null
+                              ? CircleAvatar(
+                                  radius: 14,
+                                  backgroundImage:
+                                      NetworkImage(currentUser.photoUrl))
+                              : CircleAvatar(
+                                  radius: 14,
+                                  backgroundImage: AssetImage(
+                                      'lib/assets/incognitoPic.jpg')))
+                      // CircleAvatar(
+                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
+                      //   radius: 13)
+                      ),              
+                ]) :
+          CupertinoTabBar(
               inactiveColor: Colors.black,
               currentIndex: currentIndex,
               onTap: onTap,

@@ -317,7 +317,6 @@ class _HomePageState extends State<HomePage>
                                                   onChanged: (String newValue) {
                                                     HapticFeedback
                                                         .lightImpact();
-
                                                     setState(() {
                                                       privacyDropdownValue =
                                                           newValue;
