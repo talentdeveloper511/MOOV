@@ -745,7 +745,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     context,
                     PageTransition(
                         type: PageTransitionType.topToBottom,
-                        child: MoovMaker()));
+                        child: MoovMaker(fromPostDeal: false)));
               },
               label: Row(
                 children: [

@@ -32,6 +32,9 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:image_cropper/image_cropper.dart';
 
 class MoovMaker extends StatefulWidget {
+  bool fromPostDeal;
+  MoovMaker({this.fromPostDeal});
+
   @override
   _MoovMakerState createState() => _MoovMakerState();
 }
@@ -717,9 +720,8 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                   builder: (BuildContext context) {
                                     return FeatureDealDialog(
                                       description:
-                                         """MOOV exists to spotlight local businesses to college students."""
+                                          """MOOV exists to spotlight local businesses to college students."""
                                           """\n\nThe better your deal, the more likely they'll come.""",
-                                   
                                     );
                                   }),
                               child: Text(
