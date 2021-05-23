@@ -398,6 +398,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   bool _clubExecChecked = false;
   bool _isSingleChecked = false;
+  bool noAddress = false;
 
   @override
   Widget build(BuildContext parentContext) {
@@ -957,8 +958,16 @@ class _CreateAccountState extends State<CreateAccount> {
                             ),
                           ),
                           SizedBox(height: isLargePhone ? 10 : 0),
+                           noAddress ? Text("Set your address!",
+                              style: TextStyle(color: Colors.red)) : Container(),
                           GestureDetector(
-                            onTap: submitBusiness,
+                            onTap: businessAddress == ""
+                                ? () {
+                                    setState(() {
+                                      noAddress = true;
+                                    });
+                                  }
+                                : submitBusiness,
                             child: Padding(
                               padding:
                                   const EdgeInsets.only(top: 18.0, bottom: 18),
@@ -981,6 +990,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               ),
                             ),
                           ),
+                         
                         ],
                       ),
               ],

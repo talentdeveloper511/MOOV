@@ -411,6 +411,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
   List<String> groupList = [];
   List groupMembers = [];
   bool push = true;
+  int detailLength = 0;
 
   void refreshData() {
     id++;
@@ -667,48 +668,103 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                       )
                     : Container(),
 
-                AnimatedBuilder(
-                    animation: _animation,
-                    builder: (context, _) {
-                      return Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(15),
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: [
-                                for (int i = 1; i <= 2; i++)
-                                  BoxShadow(
-                                    color: TextThemes.ndGold.withOpacity(
-                                        _animationController.value / 2),
-                                    spreadRadius: _animation.value * i,
-                                  )
-                              ],
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(15.0),
-                              child: TextFormField(
-                                controller: descriptionController,
-                                decoration: InputDecoration(
-                                  icon: Icon(
-                                    Icons.description,
-                                    color: TextThemes.ndGold,
-                                  ),
-                                  labelText: "Details about the MOOV",
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
+                currentUser.isBusiness
+                    ? AnimatedBuilder(
+                        animation: _animation,
+                        builder: (context, _) {
+                          return Stack(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.all(15),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    for (int i = 1; i <= 2; i++)
+                                      BoxShadow(
+                                        color: TextThemes.ndGold.withOpacity(
+                                            _animationController.value / 2),
+                                        spreadRadius: _animation.value * i,
+                                      )
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(15.0),
+                                  child: TextFormField(
+                                    controller: descriptionController,
+                                    decoration: InputDecoration(
+                                      icon: Icon(
+                                        Icons.description,
+                                        color: TextThemes.ndGold,
+                                      ),
+                                      labelText: "Details about the MOOV",
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    // The validator receives the text that the user has entered.
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return "What's going down?";
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      print(value);
+                                    },
                                   ),
                                 ),
-                                // The validator receives the text that the user has entered.
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "What's going down?";
-                                  }
-                                  return null;
-                                },
                               ),
+                              Positioned(
+                                bottom: 20,
+                                right: 25,
+                                child: GestureDetector(
+                                  onTap: () => showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return FeatureDealDialog(
+                                          description:
+                                              """MOOV exists to spotlight local businesses to college students."""
+                                              """\n\nThe better your deal, the more likely they'll come.""",
+                                        );
+                                      }),
+                                  child: Text(
+                                    "Sweeten the deal..",
+                                    style: TextStyle(
+                                        color: TextThemes.ndBlue,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
+                        })
+                    : Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: TextFormField(
+                              controller: descriptionController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.description,
+                                  color: TextThemes.ndGold,
+                                ),
+                                labelText: "Details about the MOOV",
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              // The validator receives the text that the user has entered.
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "What's going down?";
+                                }
+                                return null;
+                              },
+                              onChanged: (value) => _onChanged(value),
                             ),
                           ),
                           Positioned(
@@ -720,21 +776,20 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                   builder: (BuildContext context) {
                                     return FeatureDealDialog(
                                       description:
-                                          """MOOV exists to spotlight local businesses to college students."""
-                                          """\n\nThe better your deal, the more likely they'll come.""",
+                                          """MOOV can fill your event with students, especially if it's featured."""
+                                          """\n\nYou might want to set your max occupancy, so you don't get swamped!""",
                                     );
                                   }),
-                              child: Text(
-                                "Sweeten the deal..",
+                              child: detailLength < 16 ? Text(
+                                "Feature..",
                                 style: TextStyle(
                                     color: TextThemes.ndBlue,
                                     fontWeight: FontWeight.bold),
-                              ),
+                              ) : Container(),
                             ),
                           )
                         ],
-                      );
-                    }),
+                      ),
 
                 // Padding(
                 //   padding: EdgeInsets.all(20.0),
@@ -1555,6 +1610,13 @@ class _MoovMakerFormState extends State<MoovMakerForm>
               ]),
             ),
     );
+  }
+
+  _onChanged(String value) {
+    setState(() {
+      detailLength = value.length;
+    });
+    print(detailLength);
   }
 
   bool _isNumeric(String result) {

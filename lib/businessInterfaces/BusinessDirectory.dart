@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -22,7 +23,7 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
   AnimationController _dealController;
   AnimationController _crowdController;
   Color _color = Colors.blue[800];
-  Color _color2 = Colors.purple[800];
+  Color _color2 = Colors.deepPurple[300];
 
   @override
   void initState() {
@@ -159,7 +160,7 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
                     ? AnimatedTextKit(
                         isRepeatingAnimation: false,
                         animatedTexts: [
-                            TyperAnimatedText("Never let em down..",
+                            TyperAnimatedText("Never let 'em down..",
                                 textStyle: TextStyle(fontSize: 12),
                                 speed: Duration(milliseconds: 50)),
                           ])
@@ -231,11 +232,10 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
       onEnd: () {
         HapticFeedback.lightImpact();
         Future.delayed(Duration(milliseconds: 500), () {
-          Navigator.push(
+            Navigator.push(
               context,
-              PageTransition(
-                  type: PageTransitionType.topToBottom,
-                  child: MoovMaker(fromPostDeal: true)));
+              MaterialPageRoute(builder: (context) => CrowdManagement()),
+            );
         });
       },
       duration: Duration(seconds: 1),
