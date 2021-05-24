@@ -1,12 +1,9 @@
 import 'dart:async';
-
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
-import 'dart:math';
 
 class Database {
   final dbRef = FirebaseFirestore.instance;
@@ -119,15 +116,15 @@ class Database {
       statuses,
       String clubId,
       int maxOccupancy,
-      int venmo,
+      int paymentAmount,
       imageUrl,
       userId,
       postId,
       posterName,
       bool push,
       GeoPoint location,
-      int goingCount //BETA
-      }) {
+      int goingCount,
+      bool moovOver}) {
     bool isPartyOrBar = false;
     if (type == "Parties" || type == "Bars & Restaurants") {
       isPartyOrBar = true;
@@ -145,7 +142,7 @@ class Database {
       'statuses': {for (var v in statuses) v: -1},
       'clubId': clubId,
       'maxOccupancy': maxOccupancy,
-      'venmo': venmo,
+      'paymentAmount': paymentAmount,
       'image': imageUrl,
       'userId': userId,
       "featured": false,
@@ -156,7 +153,8 @@ class Database {
       "location": location,
       "going": [],
       "isPartyOrBar": isPartyOrBar,
-      "stats": {}
+      "stats": {},
+      "moovOver": moovOver
     });
 
     postsRef.doc(postId).set({
@@ -171,7 +169,7 @@ class Database {
       'clubId': clubId,
       'statuses': {for (var v in statuses) v: -1},
       'maxOccupancy': maxOccupancy,
-      'venmo': venmo,
+      'paymentAmount': paymentAmount,
       'image': imageUrl,
       'userId': userId,
       "featured": false,
@@ -182,8 +180,10 @@ class Database {
       "location": location,
       "going": [],
       "isPartyOrBar": isPartyOrBar,
-      "stats": {}
-    }).then(inviteesNotification(postId, imageUrl, title, statuses));
+      "stats": {},
+      "moovOver": moovOver
+    }).then(      
+      inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {
       var peepsToAlert;
@@ -215,13 +215,14 @@ class Database {
       int unix,
       statuses,
       int maxOccupancy,
-      int venmo,
+      int paymentAmount,
       imageUrl,
       userId,
       postId,
       posterName,
       bool push,
-      int goingCount}) {
+      int goingCount,
+      bool moovOver}) {
     bool isPartyOrBar = false;
     if (type == "Parties" || type == "Bars & Restaurants") {
       isPartyOrBar = true;
@@ -231,7 +232,7 @@ class Database {
       'title': title,
       'type': type,
       "businessPost": true,
-      "businessLocation": currentUser.businessLocation,
+      "location": currentUser.businessLocation,
       "checkInMap": {},
       'privacy': privacy,
       'description': description,
@@ -240,7 +241,7 @@ class Database {
       'unix': unix,
       'statuses': {for (var v in statuses) v: -1},
       'maxOccupancy': maxOccupancy,
-      'venmo': venmo,
+      'paymentAmount': paymentAmount,
       'image': imageUrl,
       'userId': userId,
       "featured": false,
@@ -250,14 +251,15 @@ class Database {
       "goingCount": 0,
       "going": [],
       "isPartyOrBar": isPartyOrBar,
-      "stats": {}
+      "stats": {},
+      "moovOver": moovOver
     });
 
     postsRef.doc(postId).set({
       'title': title,
       'type': type,
       "businessPost": true,
-      "businessLocation": currentUser.businessLocation,
+      "location": currentUser.businessLocation,
       "checkInMap": {},
       'privacy': privacy,
       'description': description,
@@ -266,7 +268,7 @@ class Database {
       'unix': unix,
       'statuses': {for (var v in statuses) v: -1},
       'maxOccupancy': maxOccupancy,
-      'venmo': venmo,
+      'paymentAmount': paymentAmount,
       'image': imageUrl,
       'userId': userId,
       "featured": false,
@@ -276,7 +278,8 @@ class Database {
       "goingCount": 0,
       "going": [],
       "isPartyOrBar": isPartyOrBar,
-      "stats": {}
+      "stats": {},
+      "moovOver": moovOver
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {
@@ -540,43 +543,43 @@ class Database {
           "stats": {"otherGenderCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.gender == 'Male' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Male' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleMaleCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-        if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleFemaleCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-        if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleOtherCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
 
-       if (currentUser.race == 'Black') {
+      if (currentUser.race == 'Black') {
         postsRef.doc(postId).set({
           "stats": {"blackCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Latino') {
+      if (currentUser.race == 'Latino') {
         postsRef.doc(postId).set({
           "stats": {"latinoCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Asian') {
+      if (currentUser.race == 'Asian') {
         postsRef.doc(postId).set({
           "stats": {"asianCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'White') {
+      if (currentUser.race == 'White') {
         postsRef.doc(postId).set({
           "stats": {"whiteCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Other') {
+      if (currentUser.race == 'Other') {
         postsRef.doc(postId).set({
           "stats": {"otherRaceCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
@@ -616,7 +619,7 @@ class Database {
         'going': FieldValue.arrayRemove([serialUser]),
         // 'goingCounter': FieldValue.increment(-5)
       });
-         //add to various moov stats
+      //add to various moov stats
       if (currentUser.gender == 'Male') {
         postsRef.doc(postId).set({
           "stats": {"maleCount": FieldValue.increment(-1)},
@@ -637,38 +640,38 @@ class Database {
           "stats": {"singleMaleCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-        if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleFemaleCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-        if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleOtherCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
 
-       if (currentUser.race == 'Black') {
+      if (currentUser.race == 'Black') {
         postsRef.doc(postId).set({
           "stats": {"blackCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Latino') {
+      if (currentUser.race == 'Latino') {
         postsRef.doc(postId).set({
           "stats": {"latinoCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Asian') {
+      if (currentUser.race == 'Asian') {
         postsRef.doc(postId).set({
           "stats": {"asianCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'White') {
+      if (currentUser.race == 'White') {
         postsRef.doc(postId).set({
           "stats": {"whiteCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Other') {
+      if (currentUser.race == 'Other') {
         postsRef.doc(postId).set({
           "stats": {"otherRaceCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));

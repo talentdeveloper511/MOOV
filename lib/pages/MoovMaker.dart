@@ -406,7 +406,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
   final descriptionController = TextEditingController();
   final startDateController = DatePicker().startDate1;
   final maxOccupancyController = TextEditingController();
-  final venmoController = TextEditingController();
+  final paymentAmountController = TextEditingController();
 
   final format = DateFormat("EEE, MMM d,' at' h:mm a");
   Map<String, int> invitees = {};
@@ -418,14 +418,14 @@ class _MoovMakerFormState extends State<MoovMakerForm>
   bool barcode = false;
   String maxOccupancy;
   int maxOccupancyInt;
-  String venmo;
-  int venmoInt;
+  String paymentAmount;
+  int paymentAmountInt;
   bool noHeight = true;
   List<String> groupList = [];
   List groupMembers = [];
   bool push = true;
   int detailLength = 0;
-  bool _moovOverPass = false;
+  bool _moovOver = false;
 
   void refreshData() {
     id++;
@@ -968,18 +968,18 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                               children: [
                                                 CheckboxListTile(
                                                     title:
-                                                        Text("MOOV Over Pass"),
-                                                    value: _moovOverPass,
+                                                        Text("MOOV Over Pass™"),
+                                                    value: _moovOver,
                                                     onChanged: (bool value) =>
                                                         setState(() =>
-                                                            _moovOverPass =
+                                                            _moovOver =
                                                                 value)),
                                                 Positioned(
                                                     top: 15,
                                                     child: Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              left: 30.0),
+                                                              left: 60.0),
                                                       child: GestureDetector(
                                                         onTap: () => showDialog(
                                                             context: context,
@@ -1031,18 +1031,18 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                               children: [
                                                 CheckboxListTile(
                                                     title:
-                                                        Text("MOOV Over Pass"),
-                                                    value: _moovOverPass,
+                                                        Text("MOOV Over Pass™"),
+                                                    value: _moovOver,
                                                     onChanged: (bool value) =>
                                                         setState(() =>
-                                                            _moovOverPass =
+                                                            _moovOver =
                                                                 value)),
                                                 Positioned(
                                                     top: 15,
                                                     child: Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              left: 30.0),
+                                                              left: 60.0),
                                                       child: GestureDetector(
                                                         onTap: () => showDialog(
                                                             context: context,
@@ -1057,7 +1057,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                                                         top:
                                                                             8.0),
                                                                     child: Text(
-                                                                        "A MOOV Over Pass will allow customers to skip the line in exchange for \$10."),
+                                                                        "A MOOV Over Pass™ will allow customers to skip the line in exchange for \$10."),
                                                                   ),
                                                                 ),
                                                             barrierDismissible:
@@ -1154,10 +1154,10 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                         symbol: '\$',
                                       )
                                     ],
-                                    controller: venmoController,
+                                    controller: paymentAmountController,
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) =>
-                                        setState(() => venmo = value),
+                                        setState(() => paymentAmount = value),
                                   ),
                                 ),
                               ],
@@ -1721,10 +1721,10 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                     maxOccupancyInt =
                                         int.parse(maxOccupancyController.text);
                                   }
-                                  if (venmoController.text.isNotEmpty) {
+                                  if (paymentAmountController.text.isNotEmpty) {
                                     String x =
-                                        venmoController.text.substring(1);
-                                    venmoInt = int.parse(x);
+                                        paymentAmountController.text.substring(1);
+                                    paymentAmountInt = int.parse(x);
                                   }
 
                                   firebase_storage.UploadTask uploadTask;
@@ -1759,12 +1759,13 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                                 .millisecondsSinceEpoch,
                                             statuses: inviteesNameList,
                                             maxOccupancy: maxOccupancyInt,
-                                            venmo: venmoInt,
+                                            paymentAmount: paymentAmountInt,
                                             imageUrl: downloadUrl,
                                             userId: strUserId,
                                             postId: postId,
                                             posterName: currentUser.displayName,
-                                            push: push)
+                                            push: push,
+                                            moovOver: _moovOver)
                                         : Database().createPost(
                                             title: titleController.text,
                                             type: typeDropdownValue,
@@ -1778,13 +1779,14 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                                 .millisecondsSinceEpoch,
                                             statuses: inviteesNameList,
                                             maxOccupancy: maxOccupancyInt,
-                                            venmo: venmoInt,
+                                            paymentAmount: paymentAmountInt,
                                             imageUrl: downloadUrl,
                                             userId: strUserId,
                                             postId: postId,
                                             posterName: currentUser.displayName,
                                             push: push,
-                                            location: location);
+                                            location: location,
+                                            moovOver: _moovOver);
 
                                     nextSunday().then((value) {
                                       wrapupRef
