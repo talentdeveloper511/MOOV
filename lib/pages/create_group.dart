@@ -55,7 +55,8 @@ class _GroupFormState extends State<GroupForm> {
     final QuerySnapshot result =
         await groupsRef.where('groupName', isEqualTo: groupName).get();
     for (int i = 0; i < result.docs.length; i++) {
-      groupNames.add(result.docs[i].data()['groupName']);
+      groupNames
+          .add((result.docs[i].data() as Map<String, dynamic>)['groupName']);
     }
     if (groupNames.contains(groupName)) {
       nameExists = true;
@@ -417,8 +418,7 @@ class _GroupFormState extends State<GroupForm> {
                                                             backgroundColor:
                                                                 TextThemes
                                                                     .ndGold,
-                                                            child:
-                                                                CircleAvatar(
+                                                            child: CircleAvatar(
                                                               backgroundImage:
                                                                   NetworkImage(
                                                                       userPic),

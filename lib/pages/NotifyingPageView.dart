@@ -12,7 +12,8 @@ class MOTDPageView extends StatefulWidget {
   _MOTDPageViewState createState() => _MOTDPageViewState();
 }
 
-class _MOTDPageViewState extends State<MOTDPageView> {
+class _MOTDPageViewState extends State<MOTDPageView>
+    with AutomaticKeepAliveClientMixin {
   int _previousPage;
   PageController _pageController;
 
@@ -45,6 +46,7 @@ class _MOTDPageViewState extends State<MOTDPageView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return PageView(
       onPageChanged: (value) {
         setState(() {});
@@ -53,4 +55,8 @@ class _MOTDPageViewState extends State<MOTDPageView> {
       controller: _pageController,
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

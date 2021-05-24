@@ -259,7 +259,7 @@ class _NotificationFeedState extends State<NotificationFeed>
                       child: _currentIndex == 1
                           ? GradientText(
                               "Friend Groups",
-                                16.5,
+                              16.5,
                               gradient: LinearGradient(colors: [
                                 Colors.blue.shade400,
                                 Colors.blue.shade900,
@@ -829,26 +829,26 @@ class NotificationFeedItem extends StatelessWidget {
 
   factory NotificationFeedItem.fromDocument(DocumentSnapshot doc) {
     return NotificationFeedItem(
-      username: doc.data()['username'],
-      userEmail: doc.data()['userEmail'],
-      userId: doc.data()['userId'],
-      type: doc.data()['type'],
-      postId: doc.data()['postId'],
-      userProfilePic: doc.data()['userProfilePic'],
-      timestamp: doc.data()['timestamp'],
-      title: doc.data()['title'],
-      description: doc.data()['description'],
-      ownerProPic: doc.data()['ownerProPic'],
-      ownerName: doc.data()['ownerName'],
-      ownerEmail: doc.data()['ownerEmail'],
-      address: doc.data()['address'],
-      moovId: doc.data()['moovId'],
-      previewImg: doc.data()['previewImg'],
-      members: doc.data()['members'],
-      groupId: doc.data()['groupId'],
-      groupPic: doc.data()['groupPic'],
-      groupName: doc.data()['groupName'],
-      message: doc.data()['message'],
+      username: (doc.data() as Map<String, dynamic>)['username'],
+      userEmail: (doc.data() as Map<String, dynamic>)['userEmail'],
+      userId: (doc.data() as Map<String, dynamic>)['userId'],
+      type: (doc.data() as Map<String, dynamic>)['type'],
+      postId: (doc.data() as Map<String, dynamic>)['postId'],
+      userProfilePic: (doc.data() as Map<String, dynamic>)['userProfilePic'],
+      timestamp: (doc.data() as Map<String, dynamic>)['timestamp'],
+      title: (doc.data() as Map<String, dynamic>)['title'],
+      description: (doc.data() as Map<String, dynamic>)['description'],
+      ownerProPic: (doc.data() as Map<String, dynamic>)['ownerProPic'],
+      ownerName: (doc.data() as Map<String, dynamic>)['ownerName'],
+      ownerEmail: (doc.data() as Map<String, dynamic>)['ownerEmail'],
+      address: (doc.data() as Map<String, dynamic>)['address'],
+      moovId: (doc.data() as Map<String, dynamic>)['moovId'],
+      previewImg: (doc.data() as Map<String, dynamic>)['previewImg'],
+      members: (doc.data() as Map<String, dynamic>)['members'],
+      groupId: (doc.data() as Map<String, dynamic>)['groupId'],
+      groupPic: (doc.data() as Map<String, dynamic>)['groupPic'],
+      groupName: (doc.data() as Map<String, dynamic>)['groupName'],
+      message: (doc.data() as Map<String, dynamic>)['message'],
     );
   }
 

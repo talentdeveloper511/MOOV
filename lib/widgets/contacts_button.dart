@@ -95,8 +95,7 @@ class SeeContactsButton extends StatelessWidget {
         permission != PermissionStatus.denied) {
       final Map<Permission, PermissionStatus> permissionStatus =
           await [Permission.contacts].request();
-      return permissionStatus[Permission.contacts] ??
-          PermissionStatus.undetermined;
+      return permissionStatus[Permission.contacts] ?? null;
     } else {
       return permission;
     }

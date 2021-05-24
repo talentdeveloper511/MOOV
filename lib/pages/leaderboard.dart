@@ -266,10 +266,10 @@ class _LeaderBoardState extends State<LeaderBoardPage>
                             child: ListView.builder(
                               itemCount: snapshot.data.docs.length,
                               itemBuilder: (_, index) {
-                                score =
-                                    snapshot.data.docs[index].data()['score'];
-                                pic = snapshot.data.docs[index]
-                                    .data()['photoUrl'];
+                                score = (snapshot.data.docs[index].data()
+                                    as Map<String, dynamic>)['score'];
+                                pic = (snapshot.data.docs[index].data()
+                                    as Map<String, dynamic>)['photoUrl'];
 
                                 return GestureDetector(
                                     onTap: () => {
@@ -277,14 +277,17 @@ class _LeaderBoardState extends State<LeaderBoardPage>
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       OtherProfile(
-                                                        snapshot
-                                                            .data.docs[index]
-                                                            .data()['id'],
+                                                        (snapshot.data
+                                                                .docs[index]
+                                                                .data()
+                                                            as Map<String,
+                                                                dynamic>)['id'],
                                                       )))
                                         },
                                     child: Card(
-                                      color: snapshot.data.docs[index]
-                                                  .data()['displayName'] ==
+                                      color: (snapshot.data.docs[index].data()
+                                                      as Map<String, dynamic>)[
+                                                  'displayName'] ==
                                               currentUser.displayName
                                           ? Colors.green[300]
                                           : Colors.grey[50],
@@ -324,8 +327,11 @@ class _LeaderBoardState extends State<LeaderBoardPage>
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Text(
-                                                    snapshot.data.docs[index]
-                                                        .data()['displayName'],
+                                                    (snapshot.data.docs[index]
+                                                                .data()
+                                                            as Map<String,
+                                                                dynamic>)[
+                                                        'displayName'],
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
@@ -339,8 +345,9 @@ class _LeaderBoardState extends State<LeaderBoardPage>
                                               ],
                                             ),
                                             Text(
-                                              snapshot.data.docs[index]
-                                                  .data()['score']
+                                              (snapshot.data.docs[index].data()
+                                                      as Map<String,
+                                                          dynamic>)['score']
                                                   .toString(),
                                               style: TextStyle(
                                                   color: TextThemes.ndBlue,

@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:MOOV/businessInterfaces/featureDeal.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/widgets/google_map.dart';
-import 'package:MOOV/widgets/sundayWrapup.dart';
+import 'package:MOOV/widgets/sundayWrapUp.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
@@ -717,9 +717,8 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                   builder: (BuildContext context) {
                                     return FeatureDealDialog(
                                       description:
-                                         """MOOV exists to spotlight local businesses to college students."""
+                                          """MOOV exists to spotlight local businesses to college students."""
                                           """\n\nThe better your deal, the more likely they'll come.""",
-                                   
                                     );
                                   }),
                               child: Text(

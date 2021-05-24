@@ -42,7 +42,7 @@ class MOOV extends StatelessWidget {
     return ScreenUtilInit(
       designSize: Size(1284, 2778),
       allowFontScaling: false,
-      child: GestureDetector(
+      builder: () => GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
 

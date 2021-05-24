@@ -5,7 +5,8 @@ import 'package:image_picker/image_picker.dart';
 
 class CustomCamera {
   static Future<dynamic> openCamera({bool getBase64 = true}) async {
-    final image = await ImagePicker.pickImage(source: ImageSource.camera);
+    final image =
+        File((await ImagePicker().getImage(source: ImageSource.camera)).path);
 
     if (getBase64 == false) {
       List<int> base64Byte = image.readAsBytesSync();
@@ -23,7 +24,8 @@ class CustomCamera {
 
   static Future<dynamic> openGallery({bool getBase64 = true}) async {
     // ignore: deprecated_member_use
-    final image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final image =
+        File((await ImagePicker().getImage(source: ImageSource.gallery)).path);
 
     if (getBase64 == false) {
       List<int> base64Byte = image.readAsBytesSync();

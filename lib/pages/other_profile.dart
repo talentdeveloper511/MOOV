@@ -25,28 +25,28 @@ import 'package:MOOV/services/database.dart';
 import 'home.dart';
 
 Future dmChecker(String otherPersonId, String directMessageId) async {
-    messagesRef.doc(otherPersonId + currentUser.id).get().then((doc) async {
-      messagesRef.doc(currentUser.id + otherPersonId).get().then((doc2) async {
-        if (!doc2.exists && !doc.exists) {
-          directMessageId = "nothing";
-        } else if (!doc2.exists) {
-          directMessageId = doc['directMessageId'];
-        } else if (!doc.exists) {
-          directMessageId = doc2['directMessageId'];
-        }
-      });
+  messagesRef.doc(otherPersonId + currentUser.id).get().then((doc) async {
+    messagesRef.doc(currentUser.id + otherPersonId).get().then((doc2) async {
+      if (!doc2.exists && !doc.exists) {
+        directMessageId = "nothing";
+      } else if (!doc2.exists) {
+        directMessageId = doc['directMessageId'];
+      } else if (!doc.exists) {
+        directMessageId = doc2['directMessageId'];
+      }
     });
-  }
+  });
+}
 
-  void toMessageDetail(String otherPersonId, String directMessageId, context) {
-    Timer(Duration(milliseconds: 200), () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  MessageDetail(directMessageId, otherPersonId, false, "", [], {})));
-    });
-  }
+void toMessageDetail(String otherPersonId, String directMessageId, context) {
+  Timer(Duration(milliseconds: 200), () {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MessageDetail(
+                directMessageId, otherPersonId, false, "", [], {})));
+  });
+}
 
 class OtherProfile extends StatefulWidget {
   String id;
@@ -153,8 +153,8 @@ class _OtherProfileState extends State<OtherProfile> {
     Database().checkStatus(strUserId, id).then((QuerySnapshot docs) => {
           if (docs.docs.isNotEmpty)
             {
-              setState(
-                  () => userRequests = docs.docs[0].data()['friendRequests']),
+              setState(() => userRequests = (docs.docs[0].data()
+                  as Map<String, dynamic>)['friendRequests']),
               if (userRequests[0] != null) {status = 0}
             }
         });
@@ -166,14 +166,13 @@ class _OtherProfileState extends State<OtherProfile> {
           if (docs.docs.isNotEmpty)
             {
               setState(
-                () => userRequests = docs.docs[0].data()['friendRequests'],
+                () => userRequests = (docs.docs[0].data()
+                    as Map<String, dynamic>)['friendRequests'],
               ),
               status = 1
             }
         });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -477,8 +476,9 @@ class _OtherProfileState extends State<OtherProfile> {
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(3.0))),
                                       onPressed: () {
-                                        dmChecker(id, directMessageId)
-                                            .then((value) => toMessageDetail(id, directMessageId, context));
+                                        dmChecker(id, directMessageId).then(
+                                            (value) => toMessageDetail(
+                                                id, directMessageId, context));
                                       },
                                       child: Text("Message",
                                           style:
@@ -1113,8 +1113,9 @@ class _OtherProfileState extends State<OtherProfile> {
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(3.0))),
                                       onPressed: () {
-                                        dmChecker(id, directMessageId)
-                                            .then((value) => toMessageDetail(id, directMessageId, context));
+                                        dmChecker(id, directMessageId).then(
+                                            (value) => toMessageDetail(
+                                                id, directMessageId, context));
                                       },
                                       child: Text("Message",
                                           style:

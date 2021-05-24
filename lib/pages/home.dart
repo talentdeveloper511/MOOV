@@ -89,6 +89,9 @@ final adminRef = FirebaseFirestore.instance
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
+final PageStorageKey _pageKey = PageStorageKey("HOME");
+final PageStorageBucket _bucket = PageStorageBucket();
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -109,17 +112,46 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   bool isAuth = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  FirebaseMessaging _fcm = FirebaseMessaging();
   PageController pageController;
   int pageIndex = 0;
   dynamic startDate, moovId;
   List<dynamic> likedArray;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-
+  List<Widget> _screenList = [];
   StreamSubscription iosSubscription;
+
+  _formScreens() {
+    if (mounted && currentUser != null) {
+      _screenList = currentUser.userType.containsKey("clubExecutive")
+          ? <Widget>[
+              PageStorage(bucket: _bucket, key: _pageKey, child: HomePage()),
+              SearchBar(),
+              StudentClubDashboard(),
+              MOOVSPage(),
+              ProfilePage()
+            ]
+          : currentUser.isBusiness
+              ? <Widget>[
+                  PageStorage(
+                      bucket: _bucket, key: _pageKey, child: HomePage()),
+                  BusinessDirectory(),
+                  ProfilePage()
+                ]
+              : <Widget>[
+                  PageStorage(
+                      bucket: _bucket, key: _pageKey, child: HomePage()),
+                  SearchBar(),
+                  MOOVSPage(),
+                  ProfilePage()
+                ];
+      setState(() {});
+    }
+  }
+
   @override
   initState() {
     super.initState();
+    _formScreens();
     _hideFabAnimController = AnimationController(
       vsync: this,
       duration: kThemeAnimationDuration,
@@ -173,13 +205,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     final GoogleSignInAccount user = googleSignIn.currentUser;
     if (Platform.isIOS) getiOSPermission();
 
-    _fcm.getToken().then((token) {
+    FirebaseMessaging.instance.getToken().then((token) {
       print('token: $token\n');
       usersRef.doc(user.id).update({'androidNotificationToken': token});
     });
 
-    Future<dynamic> myBackgroundMessageHandler(
-        Map<String, dynamic> message) async {
+    Future<dynamic> myBackgroundMessageHandler(RemoteMessage rMessage) async {
+      final message = rMessage.data;
       print("BG?");
       final String pushId = message['link'];
       final String page = message['page'];
@@ -255,7 +287,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       }
     }
 
-    _fcm.configure(onLaunch: (Map<String, dynamic> message) async {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage rMessage) async {
+      Map message = rMessage.data;
       print('message onlaunch: $message');
 
       String pushId = "";
@@ -366,144 +399,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 //      snackbar.show(context);
       // Get.snackbar("Message", body);
 //          }
-    },
+    });
 //        onBackgroundMessage: myBackgroundMessageHandler,
-        onResume: (Map<String, dynamic> message) async {
-      // if (Platform.isIOS) {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => MessageList()));
-      // }
-      //   _navigationService.navigateTo(
-      //   routes.EventDetail,
-      //      arguments: '${message["eventId"]}',
-      //   );
-      // } else {
-      //   _navigationService.navigateTo(
-      //    routes.EventDetail,
-      //      arguments: '${message["data"]["eventId"]}',
-      //    );
-      // }
 
-      print('message resume: $message');
-      String pushId = "";
-      String page = "";
-      String recipientId = "";
-      String body = "";
-
-      if (Platform.isIOS) {
-        if (message.containsKey("notification")) {
-          pushId = message['link'];
-          page = message['page'];
-          recipientId = message['recipient'];
-          body = message['notification']['title'] +
-              ' ' +
-              message['notification']['body'];
-        } else {
-          pushId = message['link'];
-          page = message['page'];
-          recipientId = message['recipient'];
-          body = message["aps"]["alert"]['title'] +
-              ' ' +
-              message['aps']["alert"]['body'];
-        }
-      } else {
-        pushId = message["data"]['link'];
-        page = message["data"]['page'];
-        recipientId = message["data"]['recipient'];
-      }
-
-//      FlutterAppBadger.updateBadgeCount(1);
-      // if (page == 'chat') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => MessagesHub()));
-      // } else if (page == 'post') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-      // } else if (page == 'group') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-      // } else if (page == 'user') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-      // } else {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => NotificationFeed()));
-      // }
-//          if (recipientId == currentUser.id) {
-      print('Notification shown');
-      print(page);
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
-      // print("DATA ${data}");
-      if (page == "post") {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-      }
-      if (page == "chat" && _isNumeric(pushId)) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MessageDetail(pushId, recipientId, false, " ", [], {})));
-      }
-      if (page == "chat" && !_isNumeric(pushId)) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MessageDetail(" ", " ", true, pushId, [], {})));
-      }
-
-      if (page == "user") {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-      }
-      if (page == "group") {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-      }
-      //No more flushbar
-
-//      Flushbar snackbar = Flushbar(
-//          onTap: (data) {
-////            page == "post" ?
-//            Navigator.push(context,
-//                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-////                 page == "user" ?  Navigator.push(context,
-////                MaterialPageRoute(builder: (context) => OtherProfile(pushId))) : page == "group" ?  Navigator.push(context,
-////                MaterialPageRoute(builder: (context) => GroupDetail(pushId))) : null;
-//          },
-//          flushbarStyle: FlushbarStyle.FLOATING,
-//          boxShadows: [
-//            BoxShadow(
-//                color: Colors.blue[800],
-//                offset: Offset(0.0, 2.0),
-//                blurRadius: 3.0)
-//          ],
-//          backgroundGradient:
-//              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
-//          icon: Icon(
-//            Icons.directions_run,
-//            color: Colors.green[700],
-//          ),
-//          duration: Duration(seconds: 4),
-//          flushbarPosition: FlushbarPosition.TOP,
-//          backgroundColor: Colors.green,
-//          messageText: Text(body,
-//              overflow: TextOverflow.ellipsis,
-//              style: TextStyle(color: Colors.white)));
-//      // SnackBar snackybar = SnackBar(
-//      //     content: Text(body, overflow: TextOverflow.ellipsis),
-//      //     backgroundColor: Colors.green);
-//      // _scaffoldKey.currentState.showSnackBar(snackybar);
-//      snackbar.show(context);
-
-      // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
-//          }
-      print('Notification not shown :(');
-    }, onMessage: (Map<String, dynamic> message) async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage rMessage) async {
+      final message = rMessage.data;
       print('message onmessage: $message');
 
       String pushId = "";
@@ -601,13 +501,154 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
       print('Notification not shown :(');
     });
+
+    FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+
+//         FirebaseMessaging.((
+//           Map<String, dynamic> message) async {
+//       // if (Platform.isIOS) {
+//       //   Navigator.push(context,
+//       //       MaterialPageRoute(builder: (context) => MessageList()));
+//       // }
+//       //   _navigationService.navigateTo(
+//       //   routes.EventDetail,
+//       //      arguments: '${message["eventId"]}',
+//       //   );
+//       // } else {
+//       //   _navigationService.navigateTo(
+//       //    routes.EventDetail,
+//       //      arguments: '${message["data"]["eventId"]}',
+//       //    );
+//       // }
+
+//       print('message resume: $message');
+//       String pushId = "";
+//       String page = "";
+//       String recipientId = "";
+//       String body = "";
+
+//       if (Platform.isIOS) {
+//         if (message.containsKey("notification")) {
+//           pushId = message['link'];
+//           page = message['page'];
+//           recipientId = message['recipient'];
+//           body = message['notification']['title'] +
+//               ' ' +
+//               message['notification']['body'];
+//         } else {
+//           pushId = message['link'];
+//           page = message['page'];
+//           recipientId = message['recipient'];
+//           body = message["aps"]["alert"]['title'] +
+//               ' ' +
+//               message['aps']["alert"]['body'];
+//         }
+//       } else {
+//         pushId = message["data"]['link'];
+//         page = message["data"]['page'];
+//         recipientId = message["data"]['recipient'];
+//       }
+
+// //      FlutterAppBadger.updateBadgeCount(1);
+//       // if (page == 'chat') {
+//       //   Navigator.push(context,
+//       //       MaterialPageRoute(builder: (context) => MessagesHub()));
+//       // } else if (page == 'post') {
+//       //   Navigator.push(context,
+//       //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+//       // } else if (page == 'group') {
+//       //   Navigator.push(context,
+//       //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+//       // } else if (page == 'user') {
+//       //   Navigator.push(context,
+//       //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+//       // } else {
+//       //   Navigator.push(context,
+//       //       MaterialPageRoute(builder: (context) => NotificationFeed()));
+//       // }
+// //          if (recipientId == currentUser.id) {
+//       print('Notification shown');
+//       print(page);
+//       // Navigator.push(
+//       //     context,
+//       //     MaterialPageRoute(
+//       //         builder: (context) => PostDetail("MEB1KyztxCHY50VT29wL")));
+//       // print("DATA ${data}");
+//       if (page == "post") {
+//         Navigator.push(context,
+//             MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+//       }
+//       if (page == "chat" && _isNumeric(pushId)) {
+//         Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//                 builder: (context) =>
+//                     MessageDetail(pushId, recipientId, false, " ", [], {})));
+//       }
+//       if (page == "chat" && !_isNumeric(pushId)) {
+//         Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//                 builder: (context) =>
+//                     MessageDetail(" ", " ", true, pushId, [], {})));
+//       }
+
+//       if (page == "user") {
+//         Navigator.push(context,
+//             MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
+//       }
+//       if (page == "group") {
+//         Navigator.push(context,
+//             MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
+//       }
+//       //No more flushbar
+
+// //      Flushbar snackbar = Flushbar(
+// //          onTap: (data) {
+// ////            page == "post" ?
+// //            Navigator.push(context,
+// //                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
+// ////                 page == "user" ?  Navigator.push(context,
+// ////                MaterialPageRoute(builder: (context) => OtherProfile(pushId))) : page == "group" ?  Navigator.push(context,
+// ////                MaterialPageRoute(builder: (context) => GroupDetail(pushId))) : null;
+// //          },
+// //          flushbarStyle: FlushbarStyle.FLOATING,
+// //          boxShadows: [
+// //            BoxShadow(
+// //                color: Colors.blue[800],
+// //                offset: Offset(0.0, 2.0),
+// //                blurRadius: 3.0)
+// //          ],
+// //          backgroundGradient:
+// //              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
+// //          icon: Icon(
+// //            Icons.directions_run,
+// //            color: Colors.green[700],
+// //          ),
+// //          duration: Duration(seconds: 4),
+// //          flushbarPosition: FlushbarPosition.TOP,
+// //          backgroundColor: Colors.green,
+// //          messageText: Text(body,
+// //              overflow: TextOverflow.ellipsis,
+// //              style: TextStyle(color: Colors.white)));
+// //      // SnackBar snackybar = SnackBar(
+// //      //     content: Text(body, overflow: TextOverflow.ellipsis),
+// //      //     backgroundColor: Colors.green);
+// //      // _scaffoldKey.currentState.showSnackBar(snackybar);
+// //      snackbar.show(context);
+
+//       // Get.snackbar(recipientId, body, backgroundColor: Colors.green);
+// //          }
+//       print('Notification not shown :(');
+//     });
   }
 
   getiOSPermission() {
-    _fcm.requestNotificationPermissions(IosNotificationSettings());
-    _fcm.onIosSettingsRegistered.listen((settings) {
-      print('settings: $settings');
-    });
+    FirebaseMessaging.instance.requestPermission();
+    // _fcm.requestNotificationPermissions(IosNotificationSettings());
+    // _fcm.onIosSettingsRegistered.listen((settings) {
+    //   print('settings: $settings');
+    // });
   }
 
   createUserInFirestore() async {
@@ -626,9 +667,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     if (!doc.exists) {
       //checking if a business or nd.edu address or staff
-      List whiteList =
-          adminDoc.data()['whiteList']; //businesses can get through screening
-      List blackList = adminDoc.data()['blackList']; // staff/faculty blocked
+      List whiteList = (adminDoc.data() as Map<String, dynamic>)[
+          'whiteList']; //businesses can get through screening
+      List blackList = (adminDoc.data()
+          as Map<String, dynamic>)['blackList']; // staff/faculty blocked
 
       if (blackList.contains(user.email)) {
         blocked = true;
@@ -984,17 +1026,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       body: PageView(
         physics: ClampingScrollPhysics(),
-        children: currentUser.userType.containsKey("clubExecutive")
-            ? <Widget>[
-                HomePage(),
-                SearchBar(),
-                StudentClubDashboard(),
-                MOOVSPage(),
-                ProfilePage()
-              ]
-            : currentUser.isBusiness
-                ? <Widget>[HomePage(), BusinessDirectory(), ProfilePage()]
-                : <Widget>[HomePage(), SearchBar(), MOOVSPage(), ProfilePage()],
+        children: _screenList,
         controller: pageController,
         onPageChanged: onPageChanged,
       ),
@@ -1028,62 +1060,65 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       //   radius: 13)
                       ),
                 ])
-          : currentUser.isBusiness ? 
-          CupertinoTabBar(
-              inactiveColor: Colors.black,
-              currentIndex: currentIndex,
-              onTap: onTap,
-              activeColor: TextThemes.ndGold,
-              items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
-                  BottomNavigationBarItem(icon: Icon(Icons.business)),
-  BottomNavigationBarItem(
-                      icon: CircleAvatar(
-                          radius: 16,
-                          backgroundColor:
-                              pageIndex == 3 ? TextThemes.ndGold : Colors.black,
-                          child: currentUser.photoUrl != null
-                              ? CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage:
-                                      NetworkImage(currentUser.photoUrl))
-                              : CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage: AssetImage(
-                                      'lib/assets/incognitoPic.jpg')))
-                      // CircleAvatar(
-                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
-                      //   radius: 13)
-                      ),              
-                ]) :
-          CupertinoTabBar(
-              inactiveColor: Colors.black,
-              currentIndex: currentIndex,
-              onTap: onTap,
-              activeColor: TextThemes.ndGold,
-              items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
-                  BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
-                  BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
-                  BottomNavigationBarItem(
-                      icon: CircleAvatar(
-                          radius: 16,
-                          backgroundColor:
-                              pageIndex == 3 ? TextThemes.ndGold : Colors.black,
-                          child: currentUser.photoUrl != null
-                              ? CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage:
-                                      NetworkImage(currentUser.photoUrl))
-                              : CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage: AssetImage(
-                                      'lib/assets/incognitoPic.jpg')))
-                      // CircleAvatar(
-                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
-                      //   radius: 13)
-                      ),
-                ]),
+          : currentUser.isBusiness
+              ? CupertinoTabBar(
+                  inactiveColor: Colors.black,
+                  currentIndex: currentIndex,
+                  onTap: onTap,
+                  activeColor: TextThemes.ndGold,
+                  items: [
+                      BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
+                      BottomNavigationBarItem(icon: Icon(Icons.business)),
+                      BottomNavigationBarItem(
+                          icon: CircleAvatar(
+                              radius: 16,
+                              backgroundColor: pageIndex == 3
+                                  ? TextThemes.ndGold
+                                  : Colors.black,
+                              child: currentUser.photoUrl != null
+                                  ? CircleAvatar(
+                                      radius: 14,
+                                      backgroundImage:
+                                          NetworkImage(currentUser.photoUrl))
+                                  : CircleAvatar(
+                                      radius: 14,
+                                      backgroundImage: AssetImage(
+                                          'lib/assets/incognitoPic.jpg')))
+                          // CircleAvatar(
+                          //   backgroundImage: NetworkImage(currentUser.photoUrl),
+                          //   radius: 13)
+                          ),
+                    ])
+              : CupertinoTabBar(
+                  inactiveColor: Colors.black,
+                  currentIndex: currentIndex,
+                  onTap: onTap,
+                  activeColor: TextThemes.ndGold,
+                  items: [
+                      BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
+                      BottomNavigationBarItem(
+                          icon: Icon(Icons.search_outlined)),
+                      BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
+                      BottomNavigationBarItem(
+                          icon: CircleAvatar(
+                              radius: 16,
+                              backgroundColor: pageIndex == 3
+                                  ? TextThemes.ndGold
+                                  : Colors.black,
+                              child: currentUser.photoUrl != null
+                                  ? CircleAvatar(
+                                      radius: 14,
+                                      backgroundImage:
+                                          NetworkImage(currentUser.photoUrl))
+                                  : CircleAvatar(
+                                      radius: 14,
+                                      backgroundImage: AssetImage(
+                                          'lib/assets/incognitoPic.jpg')))
+                          // CircleAvatar(
+                          //   backgroundImage: NetworkImage(currentUser.photoUrl),
+                          //   radius: 13)
+                          ),
+                    ]),
     );
     // return RaisedButton(
     //   child: Text('Logout'),

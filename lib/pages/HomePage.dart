@@ -9,7 +9,7 @@ import 'package:MOOV/widgets/poll2.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/secondCarousel.dart';
-import 'package:MOOV/widgets/sundayWrapup.dart';
+import 'package:MOOV/widgets/sundayWrapUp.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage>
   String privacyDropdownValue = 'Featured';
 
   Widget build(BuildContext context) {
-    
     //check if its sunday for the weekly recap
     final dateToCheck = Timestamp.now().toDate();
     final aDate =

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/widgets/sundayWrapup.dart';
+import 'package:MOOV/widgets/sundayWrapUp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:google_sign_in/google_sign_in.dart';
@@ -313,7 +313,8 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          if (ds.data()['livePosts'].contains(postId)) {
+          if ((ds.data() as Map<String, dynamic>)['livePosts']
+              .contains(postId)) {
             messagesRef
                 .doc(ds.id)
                 .collection("chat")
@@ -330,10 +331,10 @@ class Database {
               "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
                   currentUser.id,
-              "gid": ds.data()['gid'],
+              "gid": (ds.data() as Map<String, dynamic>)['gid'],
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
-              "isGroupChat": ds.data()['isGroupChat'],
+              "isGroupChat": (ds.data() as Map<String, dynamic>)['isGroupChat'],
               "postId": "notxxx " + title,
               "realPostId": postId,
               "hasExpired": false
@@ -397,7 +398,8 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          if (ds.data()['livePosts'].contains(postId)) {
+          if ((ds.data() as Map<String, dynamic>)['livePosts']
+              .contains(postId)) {
             messagesRef
                 .doc(ds.id)
                 .collection("chat")
@@ -414,10 +416,10 @@ class Database {
               "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
                   currentUser.id,
-              "gid": ds.data()['gid'],
+              "gid": (ds.data() as Map<String, dynamic>)['gid'],
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
-              "isGroupChat": ds.data()['isGroupChat'],
+              "isGroupChat": (ds.data() as Map<String, dynamic>)['isGroupChat'],
               "postId": "undecidedxxx " + title,
               "realPostId": postId,
               "hasExpired": false
@@ -495,7 +497,8 @@ class Database {
           .get()
           .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
-          if (ds.data()['livePosts'].contains(postId)) {
+          if ((ds.data() as Map<String, dynamic>)['livePosts']
+              .contains(postId)) {
             messagesRef
                 .doc(ds.id)
                 .collection("chat")
@@ -512,10 +515,10 @@ class Database {
               "chatId": DateTime.now().millisecondsSinceEpoch.toString() +
                   " " +
                   currentUser.id,
-              "gid": ds.data()['gid'],
+              "gid": (ds.data() as Map<String, dynamic>)['gid'],
               "millis": DateTime.now().millisecondsSinceEpoch.toString(),
               "directMessageId": "",
-              "isGroupChat": ds.data()['isGroupChat'],
+              "isGroupChat": (ds.data() as Map<String, dynamic>)['isGroupChat'],
               "postId": "goingxxx " + title,
               "realPostId": postId,
               "hasExpired": false
@@ -540,43 +543,43 @@ class Database {
           "stats": {"otherGenderCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.gender == 'Male' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Male' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleMaleCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-        if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleFemaleCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-        if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleOtherCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
 
-       if (currentUser.race == 'Black') {
+      if (currentUser.race == 'Black') {
         postsRef.doc(postId).set({
           "stats": {"blackCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Latino') {
+      if (currentUser.race == 'Latino') {
         postsRef.doc(postId).set({
           "stats": {"latinoCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Asian') {
+      if (currentUser.race == 'Asian') {
         postsRef.doc(postId).set({
           "stats": {"asianCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'White') {
+      if (currentUser.race == 'White') {
         postsRef.doc(postId).set({
           "stats": {"whiteCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Other') {
+      if (currentUser.race == 'Other') {
         postsRef.doc(postId).set({
           "stats": {"otherRaceCount": FieldValue.increment(1)},
         }, SetOptions(merge: true));
@@ -616,7 +619,7 @@ class Database {
         'going': FieldValue.arrayRemove([serialUser]),
         // 'goingCounter': FieldValue.increment(-5)
       });
-         //add to various moov stats
+      //add to various moov stats
       if (currentUser.gender == 'Male') {
         postsRef.doc(postId).set({
           "stats": {"maleCount": FieldValue.increment(-1)},
@@ -637,38 +640,38 @@ class Database {
           "stats": {"singleMaleCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-        if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Female' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleFemaleCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-        if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
+      if (currentUser.gender == 'Other' && currentUser.isSingle == true) {
         postsRef.doc(postId).set({
           "stats": {"singleOtherCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
 
-       if (currentUser.race == 'Black') {
+      if (currentUser.race == 'Black') {
         postsRef.doc(postId).set({
           "stats": {"blackCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Latino') {
+      if (currentUser.race == 'Latino') {
         postsRef.doc(postId).set({
           "stats": {"latinoCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Asian') {
+      if (currentUser.race == 'Asian') {
         postsRef.doc(postId).set({
           "stats": {"asianCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'White') {
+      if (currentUser.race == 'White') {
         postsRef.doc(postId).set({
           "stats": {"whiteCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
       }
-       if (currentUser.race == 'Other') {
+      if (currentUser.race == 'Other') {
         postsRef.doc(postId).set({
           "stats": {"otherRaceCount": FieldValue.increment(-1)},
         }, SetOptions(merge: true));
@@ -975,7 +978,7 @@ class Database {
       for (DocumentSnapshot ds in snapshot.docs) {
         ds.reference.update({"hasExpired": true});
 
-        print(ds.data()['hasExpired']);
+        print((ds.data() as Map<String, dynamic>)['hasExpired']);
       }
     });
 

@@ -14,11 +14,12 @@ class _UploadState extends State<Upload> {
 
   handleTakePhoto() async {
     Navigator.pop(context);
-    File file = await ImagePicker.pickImage(
+    File file = File((await ImagePicker().getImage(
       source: ImageSource.camera,
       maxHeight: 675,
       maxWidth: 960,
-    );
+    ))
+        .path);
     setState(() {
       this.file = file;
     });
@@ -26,7 +27,8 @@ class _UploadState extends State<Upload> {
 
   handleChooseFromGallery() async {
     Navigator.pop(context);
-    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    File file =
+        File((await ImagePicker().getImage(source: ImageSource.gallery)).path);
     setState(() {
       this.file = file;
     });
