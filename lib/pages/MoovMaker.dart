@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/businessInterfaces/featureDeal.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/widgets/google_map.dart';
 import 'package:MOOV/widgets/sundayWrapup.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
@@ -32,8 +34,11 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:image_cropper/image_cropper.dart';
 
 class MoovMaker extends StatefulWidget {
-  bool fromPostDeal;
-  MoovMaker({this.fromPostDeal});
+  final bool fromPostDeal, fromMoovOver, fromMaxOc;
+  MoovMaker(
+      {this.fromPostDeal = false,
+      this.fromMoovOver = false,
+      this.fromMaxOc = false});
 
   @override
   _MoovMakerState createState() => _MoovMakerState();
@@ -128,7 +133,10 @@ class _MoovMakerState extends State<MoovMaker> {
                   ),
                 ),
               ]),
-              MoovMakerForm(),
+              MoovMakerForm(
+                  fromPostDeal: widget.fromPostDeal,
+                  fromMoovOver: widget.fromMoovOver,
+                  fromMaxOc: widget.fromMaxOc)
             ]),
       ),
     );
@@ -136,7 +144,12 @@ class _MoovMakerState extends State<MoovMaker> {
 }
 
 class MoovMakerForm extends StatefulWidget {
-  MoovMakerForm({Key key}) : super(key: key);
+  final bool fromPostDeal, fromMoovOver, fromMaxOc;
+
+  MoovMakerForm(
+      {this.fromPostDeal = false,
+      this.fromMoovOver = false,
+      this.fromMaxOc = false});
 
   @override
   _MoovMakerFormState createState() => _MoovMakerFormState();
@@ -412,6 +425,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
   List groupMembers = [];
   bool push = true;
   int detailLength = 0;
+  bool _moovOverPass = false;
 
   void refreshData() {
     id++;
@@ -509,7 +523,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Enter Event Title';
+                        return 'Title?';
                       }
                       return null;
                     },
@@ -668,7 +682,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                       )
                     : Container(),
 
-                currentUser.isBusiness
+                widget.fromPostDeal
                     ? AnimatedBuilder(
                         animation: _animation,
                         builder: (context, _) {
@@ -780,12 +794,14 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                           """\n\nYou might want to set your max occupancy, so you don't get swamped!""",
                                     );
                                   }),
-                              child: detailLength < 16 ? Text(
-                                "Feature..",
-                                style: TextStyle(
-                                    color: TextThemes.ndBlue,
-                                    fontWeight: FontWeight.bold),
-                              ) : Container(),
+                              child: detailLength < 16
+                                  ? Text(
+                                      "Feature..",
+                                      style: TextStyle(
+                                          color: TextThemes.ndBlue,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : Container(),
                             ),
                           )
                         ],
@@ -899,41 +915,230 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                   child: Column(
                     children: <Widget>[
                       ExpansionTile(
+                        initiallyExpanded:
+                            widget.fromMaxOc || widget.fromMoovOver
+                                ? true
+                                : false,
                         title: Text(
                           "Optional Details",
                           style: TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.bold),
                         ),
                         children: <Widget>[
-                          // ExpansionTile(
-                          //   title: Text(
-                          //     'Sub title',
-                          //   ),
-                          //   children: <Widget>[
-                          //     // ListTile(
-                          //     //   title: Text('data'),
-                          //     // )
-                          //   ],
-                          // ),
-                          ListTile(
-                            title: Row(
-                              children: <Widget>[
-                                Expanded(flex: 4, child: Text('Max Occupancy')),
-                                Expanded(
-                                  flex: 1,
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    controller: maxOccupancyController,
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) =>
-                                        setState(() => maxOccupancy = value),
+                          widget.fromMoovOver
+                              ? AnimatedBuilder(
+                                  animation: _animation,
+                                  builder: (context, _) {
+                                    return Container(
+                                      margin: EdgeInsets.all(7.5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          for (int i = 1; i <= 2; i++)
+                                            BoxShadow(
+                                              color: TextThemes.ndGold
+                                                  .withOpacity(
+                                                      _animationController
+                                                              .value /
+                                                          2),
+                                              spreadRadius:
+                                                  _animation.value * i / 2,
+                                            )
+                                        ],
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(width: 10),
+                                          GradientIcon(
+                                              Icons.confirmation_num_outlined,
+                                              25.0,
+                                              LinearGradient(
+                                                colors: <Color>[
+                                                  Colors.red,
+                                                  Colors.yellow,
+                                                  Colors.blue,
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              )),
+                                          Expanded(
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                CheckboxListTile(
+                                                    title:
+                                                        Text("MOOV Over Pass"),
+                                                    value: _moovOverPass,
+                                                    onChanged: (bool value) =>
+                                                        setState(() =>
+                                                            _moovOverPass =
+                                                                value)),
+                                                Positioned(
+                                                    top: 15,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 30.0),
+                                                      child: GestureDetector(
+                                                        onTap: () => showDialog(
+                                                            context: context,
+                                                            builder: (_) =>
+                                                                CupertinoAlertDialog(
+                                                                  title: Text(
+                                                                      "No more waiting"),
+                                                                  content:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            8.0),
+                                                                    child: Text(
+                                                                        "A MOOV Over Pass will allow customers to skip the line in exchange for \$10."),
+                                                                  ),
+                                                                ),
+                                                            barrierDismissible:
+                                                                true),
+                                                        child: Icon(
+                                                            Icons.info_outline),
+                                                      ),
+                                                    ))
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  })
+                              : Row(
+                                        children: [
+                                          SizedBox(width: 10),
+                                          GradientIcon(
+                                              Icons.confirmation_num_outlined,
+                                              25.0,
+                                              LinearGradient(
+                                                colors: <Color>[
+                                                  Colors.red,
+                                                  Colors.yellow,
+                                                  Colors.blue,
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              )),
+                                          Expanded(
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                CheckboxListTile(
+                                                    title:
+                                                        Text("MOOV Over Pass"),
+                                                    value: _moovOverPass,
+                                                    onChanged: (bool value) =>
+                                                        setState(() =>
+                                                            _moovOverPass =
+                                                                value)),
+                                                Positioned(
+                                                    top: 15,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 30.0),
+                                                      child: GestureDetector(
+                                                        onTap: () => showDialog(
+                                                            context: context,
+                                                            builder: (_) =>
+                                                                CupertinoAlertDialog(
+                                                                  title: Text(
+                                                                      "No more waiting"),
+                                                                  content:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            8.0),
+                                                                    child: Text(
+                                                                        "A MOOV Over Pass will allow customers to skip the line in exchange for \$10."),
+                                                                  ),
+                                                                ),
+                                                            barrierDismissible:
+                                                                true),
+                                                        child: Icon(
+                                                            Icons.info_outline),
+                                                      ),
+                                                    ))
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                          widget.fromMaxOc
+                              ? AnimatedBuilder(
+                                  animation: _animation,
+                                  builder: (context, _) {
+                                    return Container(
+                                      margin: EdgeInsets.all(7.5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          for (int i = 1; i <= 2; i++)
+                                            BoxShadow(
+                                              color: TextThemes.ndGold
+                                                  .withOpacity(
+                                                      _animationController
+                                                              .value /
+                                                          2),
+                                              spreadRadius:
+                                                  _animation.value * i / 2,
+                                            )
+                                        ],
+                                      ),
+                                      child: ListTile(
+                                        title: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                                flex: 4,
+                                                child: Text('Max Occupancy')),
+                                            Expanded(
+                                              flex: 1,
+                                              child: TextField(
+                                                textAlign: TextAlign.center,
+                                                controller:
+                                                    maxOccupancyController,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                onChanged: (value) => setState(
+                                                    () => maxOccupancy = value),
 
-                                    // your TextField's Content
+                                                // your TextField's Content
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  })
+                              : ListTile(
+                                  title: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          flex: 4,
+                                          child: Text('Max Occupancy')),
+                                      Expanded(
+                                        flex: 1,
+                                        child: TextField(
+                                          textAlign: TextAlign.center,
+                                          controller: maxOccupancyController,
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) => setState(
+                                              () => maxOccupancy = value),
+
+                                          // your TextField's Content
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
                           ListTile(
                             title: Row(
                               children: <Widget>[

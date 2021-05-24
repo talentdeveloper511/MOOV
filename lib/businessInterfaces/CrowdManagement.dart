@@ -1,6 +1,9 @@
+import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:worm_indicator/indicator.dart';
 import 'package:worm_indicator/shape.dart';
 
@@ -179,66 +182,108 @@ class MoovOverPass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(
-          elevation: 20,
-          color: Colors.blue[50],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: SizedBox(
-            width: 300,
-            height: 400,
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                Text('MOOV Over',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700,
-                        color: TextThemes.ndBlue)),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                      'Is there ever a wait to get into your place? Profit from it.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: TextThemes.ndBlue)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: TextThemes.ndBlue,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                          'For \$10, let your customers purchase a MOOV Over Pass to skip the wait!',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: TextThemes.ndBlue)),
-                    ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Column(
+            children: [
+              SizedBox(height: 50),
+              Card(
+                  elevation: 20,
+                  color: Colors.blue[50],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
                   ),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                      elevation: 5.0,
+                  child: SizedBox(
+                    width: 300,
+                    height: 400,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 60),
+                        Text('MOOV Over',
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w700,
+                                color: TextThemes.ndBlue)),
+                        SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                              'Is there ever a wait to get into your place? Profit from it.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: TextThemes.ndBlue)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: TextThemes.ndBlue,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                  'For \$10, let your customers purchase a MOOV Over Pass to skip the wait!',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      color: TextThemes.ndBlue)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.blue,
+                              elevation: 5.0,
+                            ),
+                            onPressed: () {
+                              HapticFeedback.lightImpact();
+
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.topToBottom,
+                                      child: MoovMaker(fromMoovOver: true)));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Set it',
+                                  style: TextStyle(color: Colors.white)),
+                            ))
+                      ],
                     ),
-                    onPressed: () {},
-                    child:
-                        Text('Set it', style: TextStyle(color: Colors.white)))
-              ],
-            ),
-          )),
+                  )),
+            ],
+          ),
+          Positioned(
+              top: 20,
+              child: CircleAvatar(
+                  radius: 32,
+                  backgroundColor: Colors.blue[50],
+                  child: CircleAvatar(
+                      child: GradientIcon(
+                          Icons.confirmation_num_outlined,
+                          35.0,
+                          LinearGradient(
+                            colors: <Color>[
+                              Colors.red,
+                              Colors.yellow,
+                              Colors.blue,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )),
+                      radius: 30,
+                      backgroundColor: Colors.white)))
+        ],
+      ),
     );
   }
 }
@@ -247,66 +292,97 @@ class Occupancy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(
-          elevation: 20,
-          color: Colors.red[50],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: SizedBox(
-            width: 300,
-            height: 400,
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                Text('Limit Occupancy',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.red[900])),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                      'Getting swamped? Only want the first few to get your deal?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.red[900])),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.red[900],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                          "Set the max occupancy of your MOOV; it'll lock once it fills.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.red[900])),
-                    ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Column(
+            children: [
+              SizedBox(height: 50),
+              Card(
+                  elevation: 20,
+                  color: Colors.red[50],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
                   ),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      elevation: 5.0,
+                  child: SizedBox(
+                    width: 300,
+                    height: 400,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 60),
+                        Text('Limit Occupancy',
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.red[900])),
+                        SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                              'Getting swamped? Only want the first few to get your deal?',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.red[900])),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.red[900],
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                  "Set the max occupancy of your MOOV—it'll lock once it fills.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.red[900])),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.red,
+                              elevation: 5.0,
+                            ),
+                            onPressed: () {
+                              HapticFeedback.lightImpact();
+
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      type: PageTransitionType.topToBottom,
+                                      child: MoovMaker(fromMaxOc: true)));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Set it',
+                                  style: TextStyle(color: Colors.white)),
+                            ))
+                      ],
                     ),
-                    onPressed: () {},
-                    child:
-                        Text('Set it', style: TextStyle(color: Colors.white)))
-              ],
-            ),
-          )),
+                  )),
+            ],
+          ),
+          Positioned(
+              top: 20,
+              child: CircleAvatar(
+                  radius: 32,
+                  backgroundColor: Colors.red[50],
+                  child: CircleAvatar(
+                      child: Icon(Icons.group),
+                      radius: 30,
+                      backgroundColor: Colors.white)))
+        ],
+      ),
     );
   }
 }
