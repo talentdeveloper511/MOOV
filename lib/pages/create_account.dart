@@ -372,6 +372,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "userType": userTypeMap,
         "isSingle": false,
         "venmoUsername": venmoUsername,
+        "mobileOrderMenu" : {},
         "pushSettings": {
           "friendPosts": true,
           "going": true,

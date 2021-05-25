@@ -2,8 +2,10 @@ import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/photo_pick.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
@@ -328,7 +330,7 @@ class MobileItemTwo extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(10))),
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
-                              child: Text("\$7 regular,\n\$10 frozen",
+                              child: Text("\$7 regular\n\$10 frozen",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 13,
@@ -446,12 +448,11 @@ class MobileItemThree extends StatelessWidget {
                             ),
                             onPressed: () {
                               HapticFeedback.lightImpact();
-
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.topToBottom,
-                                      child: MoovMaker(fromMaxOc: true)));
+                              showBottomSheet(
+                                  context: context,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  builder: (context) => BottomSheetWidget());
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -465,7 +466,8 @@ class MobileItemThree extends StatelessWidget {
           ),
           Positioned(
               top: 20,
-              child: CircleAvatar(radius: 43,
+              child: CircleAvatar(
+                  radius: 43,
                   backgroundColor: Colors.orange[50],
                   child: CircleAvatar(
                       backgroundColor: Colors.white,
@@ -474,6 +476,179 @@ class MobileItemThree extends StatelessWidget {
                           size: 50, color: Colors.grey))))
         ],
       ),
+    );
+  }
+}
+
+class BottomSheetWidget extends StatefulWidget {
+  @override
+  _BottomSheetWidgetState createState() => _BottomSheetWidgetState();
+}
+
+class _BottomSheetWidgetState extends State<BottomSheetWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      height: 375,
+      child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DecoratedTextField(),
+            SheetButton(),
+          ]),
+    );
+  }
+}
+
+class SheetButton extends StatefulWidget {
+  _SheetButtonState createState() => _SheetButtonState();
+}
+
+class _SheetButtonState extends State<SheetButton> {
+  bool checkingFlight = false;
+  bool success = false;
+  @override
+  Widget build(BuildContext context) {
+    return !checkingFlight
+        ? ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.orange,
+              elevation: 5.0,
+            ),
+            onPressed: () {},
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Add',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+        : !success
+            ? CircularProgressIndicator()
+            : Icon(
+                Icons.check,
+                color: Colors.green,
+              );
+  }
+}
+
+class DecoratedTextField extends StatefulWidget {
+  _DecoratedTextFieldState createState() => _DecoratedTextFieldState();
+}
+
+class _DecoratedTextFieldState extends State<DecoratedTextField> {
+  String priceString, titleString, descriptionString, typeString;
+  int priceInt;
+  final priceController = TextEditingController();
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final typeController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+            radius: 43,
+            backgroundColor: Colors.orange[50],
+            child: GestureDetector(
+              onTap: PhotoPick(beforeUI, afterUI, pic, index)
+                          child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 41,
+                  child: Icon(Icons.local_pizza, size: 50, color: Colors.grey)),
+            )),
+        Container(
+            height: 50,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10)),
+            child: TextField(
+              controller: titleController,
+              decoration: InputDecoration.collapsed(
+                hintText: 'Enter your item name',
+              ),
+            )),
+        Container(
+            height: 50,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10)),
+            child: TextField(
+              controller: descriptionController,
+              decoration: InputDecoration.collapsed(
+                hintText: 'Describe it',
+              ),
+            )),
+        Row(
+          children: [
+            Flexible(
+              flex: 2,
+              child: Container(
+                  height: 50,
+                  alignment: Alignment.center,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Price",
+                    ),
+                    textAlign: TextAlign.center,
+                    inputFormatters: [
+                      CurrencyTextInputFormatter(
+                        decimalDigits: 0,
+                        symbol: '\$',
+                      )
+                    ],
+                    controller: priceController,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() => priceString = value);
+                      if (value != "0") {
+                        String x = priceController.text
+                            .substring(1)
+                            .replaceAll(",", "");
+                        priceInt = int.parse(x);
+                      }
+                    },
+                  )),
+            ),
+            Flexible(
+              flex: 5,
+              child: Container(
+                  height: 50,
+                  alignment: Alignment.center,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextField(
+                    controller: typeController,
+                    decoration: InputDecoration.collapsed(
+                      hintText: 'Item type (ex: Frozen)',
+                    ),
+                  )),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
