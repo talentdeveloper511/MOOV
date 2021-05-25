@@ -279,41 +279,45 @@ class _MoneyAmountState extends State<MoneyAmount> {
               )
             : Column(
                 children: [
+                  SizedBox(height: 50),
                   ListTile(
                     title: Row(
                       children: <Widget>[
                         Expanded(
                           flex: 1,
-                          child: TextField(
-                            decoration: InputDecoration(
-                                hintText: "Enter Amount",
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w100)),
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center,
-                            inputFormatters: [
-                              CurrencyTextInputFormatter(
-                                decimalDigits: 0,
-                                symbol: '\$',
-                              )
-                            ],
-                            controller: amountController,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() => amountString = value);
-                              if (value != "0") {
-                                String x = amountController.text
-                                    .substring(1)
-                                    .replaceAll(",", "");
-                                amountInt = int.parse(x);
-                              }
-                            },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 150),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  hintText: "\$",
+                                  hintStyle:
+                                      TextStyle(fontWeight: FontWeight.w100)),
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center,
+                              inputFormatters: [
+                                CurrencyTextInputFormatter(
+                                  decimalDigits: 0,
+                                  symbol: '\$',
+                                )
+                              ],
+                              controller: amountController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                setState(() => amountString = value);
+                                if (value != "0") {
+                                  String x = amountController.text
+                                      .substring(1)
+                                      .replaceAll(",", "");
+                                  amountInt = int.parse(x);
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 50),
                   GestureDetector(
                     onTap: () async {
                       HapticFeedback.lightImpact();

@@ -439,7 +439,7 @@ class _EditPostState extends State<EditPost> {
                                     // The validator receives the text that the user has entered.
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return 'Enter Event Title';
+                                        return 'Title?';
                                       }
                                       return null;
                                     },
@@ -470,7 +470,7 @@ class _EditPostState extends State<EditPost> {
                                     // The validator receives the text that the user has entered.
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return 'Enter Event Title';
+                                        return 'Title?';
                                       }
                                       return null;
                                     },

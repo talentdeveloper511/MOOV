@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/pages/postStats.dart';
+import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:http/http.dart' as http;
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
@@ -226,7 +228,7 @@ class _PostDetailState extends State<PostDetail>
                           userId = course['userId'];
                           postId = course['postId'];
                           int maxOccupancy = course['maxOccupancy'];
-                          int venmo = course['venmo'];
+                          int paymentAmount = course['paymentAmount'];
                           int goingCount = course['going'].length;
                           Map stats = course['stats'];
 
@@ -247,7 +249,7 @@ class _PostDetailState extends State<PostDetail>
                                     postId,
                                     course,
                                     commentCount,
-                                    venmo),
+                                    paymentAmount),
                               ],
                             ),
                           );
@@ -336,8 +338,7 @@ class _BannerImage extends StatelessWidget {
           : Text(''),
       maxOccupancy != null && maxOccupancy != 8000000 && maxOccupancy != 0
           ? Positioned(
-              bottom: 0,
-              right: 50,
+              bottom: 10,
               child: Container(
                 height: 45,
                 width: maxOccupancy > 99
@@ -387,6 +388,11 @@ class _BannerImage extends StatelessWidget {
       //               height: 50,
       //             )))
       //     : Container(),
+      Positioned(
+        bottom: 10,
+        right: 5,
+        child: PostOwnerInfo(userId),
+      ),
     ]);
   }
 }
@@ -395,10 +401,18 @@ class _NonImageContents extends StatelessWidget {
   final String title, description, userId;
   final dynamic startDate, address, moovId;
   final DocumentSnapshot course;
-  final int commentCount, venmo;
+  final int commentCount, paymentAmount;
 
-  _NonImageContents(this.title, this.description, this.startDate, this.address,
-      this.userId, this.moovId, this.course, this.commentCount, this.venmo);
+  _NonImageContents(
+      this.title,
+      this.description,
+      this.startDate,
+      this.address,
+      this.userId,
+      this.moovId,
+      this.course,
+      this.commentCount,
+      this.paymentAmount);
 
   @override
   Widget build(BuildContext context) {
@@ -409,9 +423,10 @@ class _NonImageContents extends StatelessWidget {
         children: <Widget>[
           _Title(title),
           _Description(description),
-          PostTimeAndPlace(startDate, address, course['venmo'],
+          PostTimeAndPlace(startDate, address, course['paymentAmount'],
               course['userId'], course['postId']),
-          _AuthorContent(userId, course),
+          // _AuthorContent(userId, course),
+          PaySkipSendRow(course['paymentAmount']),
           GestureDetector(
             onTap: () {
               showComments(context,
@@ -632,11 +647,11 @@ class _Description extends StatelessWidget {
 
 class PostTimeAndPlace extends StatelessWidget {
   final dynamic startDate, address;
-  final int venmo;
+  final int paymentAmount;
   final String userId, moovId;
 
-  PostTimeAndPlace(
-      this.startDate, this.address, this.venmo, this.userId, this.moovId);
+  PostTimeAndPlace(this.startDate, this.address, this.paymentAmount,
+      this.userId, this.moovId);
 
   @override
   Widget build(BuildContext context) {
@@ -675,7 +690,7 @@ class PostTimeAndPlace extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                      width: MediaQuery.of(context).size.width * .35,
+                      width: MediaQuery.of(context).size.width * .65,
                       child: GestureDetector(
                         onTap: () => MapsLauncher.launchQuery(address),
                         child: Text(
@@ -693,9 +708,6 @@ class PostTimeAndPlace extends StatelessWidget {
             )
           ],
         ),
-        venmo != null && venmo != 0
-            ? Positioned(top: 0, right: 30, child: PaymentButton(moovId))
-            : Text(""),
       ]),
     );
   }
@@ -972,6 +984,42 @@ class _GoingListSegmentState extends State<GoingListSegment>
                   )
                 ]),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class PaySkipSendRow extends StatelessWidget {
+  final int paymentAmount;
+  PaySkipSendRow(this.paymentAmount);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          paymentAmount != null && paymentAmount != 0
+              ? Icon(Icons.attach_money, color: Colors.orange)
+              : Container(),
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 20),
+            child: GradientIcon(
+                Icons.confirmation_num_outlined,
+                35.0,
+                LinearGradient(
+                  colors: <Color>[
+                    Colors.red,
+                    Colors.yellow,
+                    Colors.blue,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )),
+          ),
+          Icon(Icons.send, color: Colors.blue),
         ],
       ),
     );

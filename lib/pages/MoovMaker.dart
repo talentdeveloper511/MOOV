@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/businessInterfaces/featureDeal.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/widgets/google_map.dart';
 import 'package:MOOV/widgets/sundayWrapUp.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
@@ -32,6 +34,12 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:image_cropper/image_cropper.dart';
 
 class MoovMaker extends StatefulWidget {
+  final bool fromPostDeal, fromMoovOver, fromMaxOc;
+  MoovMaker(
+      {this.fromPostDeal = false,
+      this.fromMoovOver = false,
+      this.fromMaxOc = false});
+
   @override
   _MoovMakerState createState() => _MoovMakerState();
 }
@@ -125,7 +133,10 @@ class _MoovMakerState extends State<MoovMaker> {
                   ),
                 ),
               ]),
-              MoovMakerForm(),
+              MoovMakerForm(
+                  fromPostDeal: widget.fromPostDeal,
+                  fromMoovOver: widget.fromMoovOver,
+                  fromMaxOc: widget.fromMaxOc)
             ]),
       ),
     );
@@ -133,7 +144,12 @@ class _MoovMakerState extends State<MoovMaker> {
 }
 
 class MoovMakerForm extends StatefulWidget {
-  MoovMakerForm({Key key}) : super(key: key);
+  final bool fromPostDeal, fromMoovOver, fromMaxOc;
+
+  MoovMakerForm(
+      {this.fromPostDeal = false,
+      this.fromMoovOver = false,
+      this.fromMaxOc = false});
 
   @override
   _MoovMakerFormState createState() => _MoovMakerFormState();
@@ -390,7 +406,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
   final descriptionController = TextEditingController();
   final startDateController = DatePicker().startDate1;
   final maxOccupancyController = TextEditingController();
-  final venmoController = TextEditingController();
+  final paymentAmountController = TextEditingController();
 
   final format = DateFormat("EEE, MMM d,' at' h:mm a");
   Map<String, int> invitees = {};
@@ -402,12 +418,14 @@ class _MoovMakerFormState extends State<MoovMakerForm>
   bool barcode = false;
   String maxOccupancy;
   int maxOccupancyInt;
-  String venmo;
-  int venmoInt;
+  String paymentAmount;
+  int paymentAmountInt;
   bool noHeight = true;
   List<String> groupList = [];
   List groupMembers = [];
   bool push = true;
+  int detailLength = 0;
+  bool _moovOver = false;
 
   void refreshData() {
     id++;
@@ -505,7 +523,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                     // The validator receives the text that the user has entered.
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Enter Event Title';
+                        return 'Title?';
                       }
                       return null;
                     },
@@ -664,48 +682,103 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                       )
                     : Container(),
 
-                AnimatedBuilder(
-                    animation: _animation,
-                    builder: (context, _) {
-                      return Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(15),
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: [
-                                for (int i = 1; i <= 2; i++)
-                                  BoxShadow(
-                                    color: TextThemes.ndGold.withOpacity(
-                                        _animationController.value / 2),
-                                    spreadRadius: _animation.value * i,
-                                  )
-                              ],
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(15.0),
-                              child: TextFormField(
-                                controller: descriptionController,
-                                decoration: InputDecoration(
-                                  icon: Icon(
-                                    Icons.description,
-                                    color: TextThemes.ndGold,
-                                  ),
-                                  labelText: "Details about the MOOV",
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
+                widget.fromPostDeal
+                    ? AnimatedBuilder(
+                        animation: _animation,
+                        builder: (context, _) {
+                          return Stack(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.all(15),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    for (int i = 1; i <= 2; i++)
+                                      BoxShadow(
+                                        color: TextThemes.ndGold.withOpacity(
+                                            _animationController.value / 2),
+                                        spreadRadius: _animation.value * i,
+                                      )
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(15.0),
+                                  child: TextFormField(
+                                    controller: descriptionController,
+                                    decoration: InputDecoration(
+                                      icon: Icon(
+                                        Icons.description,
+                                        color: TextThemes.ndGold,
+                                      ),
+                                      labelText: "Details about the MOOV",
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    // The validator receives the text that the user has entered.
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return "What's going down?";
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      print(value);
+                                    },
                                   ),
                                 ),
-                                // The validator receives the text that the user has entered.
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "What's going down?";
-                                  }
-                                  return null;
-                                },
                               ),
+                              Positioned(
+                                bottom: 20,
+                                right: 25,
+                                child: GestureDetector(
+                                  onTap: () => showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return FeatureDealDialog(
+                                          description:
+                                              """MOOV exists to spotlight local businesses to college students."""
+                                              """\n\nThe better your deal, the more likely they'll come.""",
+                                        );
+                                      }),
+                                  child: Text(
+                                    "Sweeten the deal..",
+                                    style: TextStyle(
+                                        color: TextThemes.ndBlue,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
+                        })
+                    : Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: TextFormField(
+                              controller: descriptionController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.description,
+                                  color: TextThemes.ndGold,
+                                ),
+                                labelText: "Details about the MOOV",
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              // The validator receives the text that the user has entered.
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "What's going down?";
+                                }
+                                return null;
+                              },
+                              onChanged: (value) => _onChanged(value),
                             ),
                           ),
                           Positioned(
@@ -717,21 +790,22 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                   builder: (BuildContext context) {
                                     return FeatureDealDialog(
                                       description:
-                                          """MOOV exists to spotlight local businesses to college students."""
-                                          """\n\nThe better your deal, the more likely they'll come.""",
+                                          """MOOV can fill your event with students, especially if it's featured."""
+                                          """\n\nYou might want to set your max occupancy, so you don't get swamped!""",
                                     );
                                   }),
-                              child: Text(
-                                "Sweeten the deal..",
-                                style: TextStyle(
-                                    color: TextThemes.ndBlue,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              child: detailLength < 16
+                                  ? Text(
+                                      "Feature..",
+                                      style: TextStyle(
+                                          color: TextThemes.ndBlue,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : Container(),
                             ),
                           )
                         ],
-                      );
-                    }),
+                      ),
 
                 // Padding(
                 //   padding: EdgeInsets.all(20.0),
@@ -841,41 +915,224 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                   child: Column(
                     children: <Widget>[
                       ExpansionTile(
+                        initiallyExpanded:
+                            widget.fromMaxOc || widget.fromMoovOver
+                                ? true
+                                : false,
                         title: Text(
                           "Optional Details",
                           style: TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.bold),
                         ),
                         children: <Widget>[
-                          // ExpansionTile(
-                          //   title: Text(
-                          //     'Sub title',
-                          //   ),
-                          //   children: <Widget>[
-                          //     // ListTile(
-                          //     //   title: Text('data'),
-                          //     // )
-                          //   ],
-                          // ),
-                          ListTile(
-                            title: Row(
-                              children: <Widget>[
-                                Expanded(flex: 4, child: Text('Max Occupancy')),
-                                Expanded(
-                                  flex: 1,
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    controller: maxOccupancyController,
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) =>
-                                        setState(() => maxOccupancy = value),
+                          widget.fromMoovOver
+                              ? AnimatedBuilder(
+                                  animation: _animation,
+                                  builder: (context, _) {
+                                    return Container(
+                                      margin: EdgeInsets.all(7.5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          for (int i = 1; i <= 2; i++)
+                                            BoxShadow(
+                                              color: TextThemes.ndGold
+                                                  .withOpacity(
+                                                      _animationController
+                                                              .value /
+                                                          2),
+                                              spreadRadius:
+                                                  _animation.value * i / 2,
+                                            )
+                                        ],
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(width: 10),
+                                          GradientIcon(
+                                              Icons.confirmation_num_outlined,
+                                              25.0,
+                                              LinearGradient(
+                                                colors: <Color>[
+                                                  Colors.red,
+                                                  Colors.yellow,
+                                                  Colors.blue,
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              )),
+                                          Expanded(
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                CheckboxListTile(
+                                                    title:
+                                                        Text("MOOV Over Pass™"),
+                                                    value: _moovOver,
+                                                    onChanged: (bool value) =>
+                                                        setState(() =>
+                                                            _moovOver = value)),
+                                                Positioned(
+                                                    top: 15,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 60.0),
+                                                      child: GestureDetector(
+                                                        onTap: () => showDialog(
+                                                            context: context,
+                                                            builder: (_) =>
+                                                                CupertinoAlertDialog(
+                                                                  title: Text(
+                                                                      "No more waiting"),
+                                                                  content:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            8.0),
+                                                                    child: Text(
+                                                                        "A MOOV Over Pass will allow customers to skip the line in exchange for \$10."),
+                                                                  ),
+                                                                ),
+                                                            barrierDismissible:
+                                                                true),
+                                                        child: Icon(
+                                                            Icons.info_outline),
+                                                      ),
+                                                    ))
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  })
+                              : Row(
+                                  children: [
+                                    SizedBox(width: 10),
+                                    GradientIcon(
+                                        Icons.confirmation_num_outlined,
+                                        25.0,
+                                        LinearGradient(
+                                          colors: <Color>[
+                                            Colors.red,
+                                            Colors.yellow,
+                                            Colors.blue,
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        )),
+                                    Expanded(
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          CheckboxListTile(
+                                              title: Text("MOOV Over Pass™"),
+                                              value: _moovOver,
+                                              onChanged: (bool value) =>
+                                                  setState(
+                                                      () => _moovOver = value)),
+                                          Positioned(
+                                              top: 15,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 60.0),
+                                                child: GestureDetector(
+                                                  onTap: () => showDialog(
+                                                      context: context,
+                                                      builder: (_) =>
+                                                          CupertinoAlertDialog(
+                                                            title: Text(
+                                                                "No more waiting"),
+                                                            content: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 8.0),
+                                                              child: Text(
+                                                                  "A MOOV Over Pass™ will allow customers to skip the line in exchange for \$10."),
+                                                            ),
+                                                          ),
+                                                      barrierDismissible: true),
+                                                  child:
+                                                      Icon(Icons.info_outline),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                          widget.fromMaxOc
+                              ? AnimatedBuilder(
+                                  animation: _animation,
+                                  builder: (context, _) {
+                                    return Container(
+                                      margin: EdgeInsets.all(7.5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          for (int i = 1; i <= 2; i++)
+                                            BoxShadow(
+                                              color: TextThemes.ndGold
+                                                  .withOpacity(
+                                                      _animationController
+                                                              .value /
+                                                          2),
+                                              spreadRadius:
+                                                  _animation.value * i / 2,
+                                            )
+                                        ],
+                                      ),
+                                      child: ListTile(
+                                        title: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                                flex: 4,
+                                                child: Text('Max Occupancy')),
+                                            Expanded(
+                                              flex: 1,
+                                              child: TextField(
+                                                textAlign: TextAlign.center,
+                                                controller:
+                                                    maxOccupancyController,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                onChanged: (value) => setState(
+                                                    () => maxOccupancy = value),
 
-                                    // your TextField's Content
+                                                // your TextField's Content
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  })
+                              : ListTile(
+                                  title: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          flex: 4,
+                                          child: Text('Max Occupancy')),
+                                      Expanded(
+                                        flex: 1,
+                                        child: TextField(
+                                          textAlign: TextAlign.center,
+                                          controller: maxOccupancyController,
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) => setState(
+                                              () => maxOccupancy = value),
+
+                                          // your TextField's Content
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
                           ListTile(
                             title: Row(
                               children: <Widget>[
@@ -891,10 +1148,10 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                         symbol: '\$',
                                       )
                                     ],
-                                    controller: venmoController,
+                                    controller: paymentAmountController,
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) =>
-                                        setState(() => venmo = value),
+                                        setState(() => paymentAmount = value),
                                   ),
                                 ),
                               ],
@@ -1458,10 +1715,10 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                     maxOccupancyInt =
                                         int.parse(maxOccupancyController.text);
                                   }
-                                  if (venmoController.text.isNotEmpty) {
-                                    String x =
-                                        venmoController.text.substring(1);
-                                    venmoInt = int.parse(x);
+                                  if (paymentAmountController.text.isNotEmpty) {
+                                    String x = paymentAmountController.text
+                                        .substring(1);
+                                    paymentAmountInt = int.parse(x);
                                   }
 
                                   firebase_storage.UploadTask uploadTask;
@@ -1496,12 +1753,13 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                                 .millisecondsSinceEpoch,
                                             statuses: inviteesNameList,
                                             maxOccupancy: maxOccupancyInt,
-                                            venmo: venmoInt,
+                                            paymentAmount: paymentAmountInt,
                                             imageUrl: downloadUrl,
                                             userId: strUserId,
                                             postId: postId,
                                             posterName: currentUser.displayName,
-                                            push: push)
+                                            push: push,
+                                            moovOver: _moovOver)
                                         : Database().createPost(
                                             title: titleController.text,
                                             type: typeDropdownValue,
@@ -1515,13 +1773,14 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                                 .millisecondsSinceEpoch,
                                             statuses: inviteesNameList,
                                             maxOccupancy: maxOccupancyInt,
-                                            venmo: venmoInt,
+                                            paymentAmount: paymentAmountInt,
                                             imageUrl: downloadUrl,
                                             userId: strUserId,
                                             postId: postId,
                                             posterName: currentUser.displayName,
                                             push: push,
-                                            location: location);
+                                            location: location,
+                                            moovOver: _moovOver);
 
                                     nextSunday().then((value) {
                                       wrapupRef
@@ -1552,6 +1811,13 @@ class _MoovMakerFormState extends State<MoovMakerForm>
               ]),
             ),
     );
+  }
+
+  _onChanged(String value) {
+    setState(() {
+      detailLength = value.length;
+    });
+    print(detailLength);
   }
 
   bool _isNumeric(String result) {

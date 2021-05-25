@@ -1,3 +1,5 @@
+import 'package:MOOV/main.dart';
+import 'package:MOOV/utils/themes_styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +35,8 @@ class _FeatureDealDialogState extends State<FeatureDealDialog> {
   }
 
   contentBox(context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Stack(
       children: <Widget>[
         Container(
@@ -50,9 +54,8 @@ class _FeatureDealDialogState extends State<FeatureDealDialog> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(
-                height: 110,
+                height: isLargePhone ? 140 : 110,
               ),
-          
               SizedBox(
                 height: 15,
               ),
@@ -67,8 +70,14 @@ class _FeatureDealDialogState extends State<FeatureDealDialog> {
               Text(
                 "Want to send your MOOV to the top of the list? Text (631) 560-9452 for a quick price estimate.",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 10, color: Colors.green),
-              )
+                style: TextStyle(
+                    fontSize: 11,
+                    color: TextThemes.ndBlue,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),
@@ -82,6 +91,7 @@ class _FeatureDealDialogState extends State<FeatureDealDialog> {
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 child: Image.asset(
                   'lib/assets/lead.png',
+                  color: TextThemes.ndBlue,
                   fit: BoxFit.cover,
                   height: MediaQuery.of(context).size.height * 0.15,
                   width: MediaQuery.of(context).size.width * 0.75,

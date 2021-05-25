@@ -36,7 +36,7 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
     int goingCount = widget.course['going'].length ?? 0;
     Timestamp startDate = widget.course["startDate"];
     String privacy = widget.course['privacy'];
-    int venmo = widget.course['venmo'];
+    int paymentAmount = widget.course['paymentAmount'];
     int maxOccupancy = widget.course['maxOccupancy'];
     if (startDate.millisecondsSinceEpoch <
         Timestamp.now().millisecondsSinceEpoch - 3600000) {
@@ -149,234 +149,9 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                     ),
                   ),
                   Positioned(
-                    bottom: 10,
-                    right: 22.5,
-                    child: ElevatedButton(
-                        onPressed: widget.course['userId'] == currentUser.id
-                            ? () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ProfilePageWithHeader()))
-                            : () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        OtherProfile(widget.course['userId']))),
-                        child: StreamBuilder(
-                            stream: usersRef
-                                .doc(widget.course['userId'])
-                                .snapshots(),
-                            builder: (context, snapshot2) {
-                              bool isLargePhone =
-                                  Screen.diagonal(context) > 766;
-                              bool isPostOwner = false;
-
-                              if (snapshot2.hasError)
-                                return CircularProgressIndicator();
-                              if (!snapshot2.hasData)
-                                return CircularProgressIndicator();
-
-                              int verifiedStatus =
-                                  snapshot2.data['verifiedStatus'];
-                              String userYear = snapshot2.data['year'];
-                              String userDorm = snapshot2.data['dorm'];
-                              String displayName =
-                                  snapshot2.data['displayName'];
-                              String email = snapshot2.data['email'];
-                              String proPic = snapshot2.data['photoUrl'];
-                              bool isBusiness = snapshot2.data['isBusiness'];
-
-                              if (currentUser.id == widget.course['userId']) {
-                                isPostOwner = true;
-                              }
-
-                              return Container(
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 10, 4, 10),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                if (widget.course['userId'] ==
-                                                    currentUser.id) {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ProfilePageWithHeader()));
-                                                } else {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OtherProfile(
-                                                                widget.course[
-                                                                    'userId'],
-                                                              )));
-                                                }
-                                              },
-                                              child: CircleAvatar(
-                                                radius: 22.0,
-                                                backgroundImage:
-                                                    CachedNetworkImageProvider(
-                                                        proPic),
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                              ),
-                                            )),
-                                        ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxWidth: 130,
-                                          ),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              if (widget.course['userId'] ==
-                                                  currentUser.id) {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ProfilePageWithHeader()));
-                                              } else {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            OtherProfile(
-                                                              widget.course[
-                                                                  'userId'],
-                                                            )));
-                                              }
-                                            },
-                                            child: Column(
-                                              //  mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 2.0),
-                                                  child: ConstrainedBox(
-                                                    constraints: BoxConstraints(
-                                                      maxWidth: 130,
-                                                    ),
-                                                    child: SizedBox(
-                                                      child: Row(
-                                                        children: [
-                                                          ConstrainedBox(
-                                                            constraints: BoxConstraints(
-                                                              maxWidth: 100
-                                                            ),
-
-                                                            child: Text(displayName,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: TextStyle(
-                                                                    fontSize: 14,
-                                                                    color:
-                                                                        TextThemes
-                                                                            .ndBlue,
-                                                                    decoration:
-                                                                        TextDecoration
-                                                                            .none)),
-                                                          ),
-                                                          verifiedStatus == 3
-                                                              ? Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .only(
-                                                                    left: 2.5,
-                                                                  ),
-                                                                  child: Icon(
-                                                                      Icons
-                                                                          .store,
-                                                                      size: 20,
-                                                                      color: Colors
-                                                                          .blue),
-                                                                )
-                                                              : verifiedStatus ==
-                                                                      2
-                                                                  ? Padding(
-                                                                      padding:
-                                                                          EdgeInsets
-                                                                              .only(
-                                                                        left: 5,
-                                                                      ),
-                                                                      child: Image.asset(
-                                                                          'lib/assets/verif2.png',
-                                                                          height:
-                                                                              15),
-                                                                    )
-                                                                  : verifiedStatus ==
-                                                                          1
-                                                                      ? Padding(
-                                                                          padding: EdgeInsets.only(
-                                                                              left: 2.5,
-                                                                              top: 0),
-                                                                          child: Image.asset(
-                                                                              'lib/assets/verif.png',
-                                                                              height: 22),
-                                                                        )
-                                                                      : Text("")
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 2.0),
-                                                  child: isBusiness
-                                                      ? Text(userDorm,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 2,
-                                                          style: TextStyle(
-                                                              fontSize: 11,
-                                                              color: TextThemes
-                                                                  .ndBlue,
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .none))
-                                                      : Text(
-                                                          userYear +
-                                                              " in " +
-                                                              userDorm,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 2,
-                                                          style: TextStyle(
-                                                              fontSize: 11,
-                                                              color: TextThemes
-                                                                  .ndBlue,
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .none)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ]));
-                            }),
-                        style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.blueGrey[50]),
-                            elevation: MaterialStateProperty.all(10),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            )))),
-                  ),
+                      bottom: 10,
+                      right: 22.5,
+                      child: PostOwnerInfo(widget.course['userId'])),
                   isToday == true
                       ? Positioned(
                           top: 5,
@@ -428,7 +203,7 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                               ),
                             )
                           : Text(""),
-                  venmo != null && venmo != 0
+                  paymentAmount != null && paymentAmount != 0
                       ? Positioned(
                           top: 5,
                           left: 25,
@@ -445,16 +220,11 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                   end: Alignment.centerRight,
                                 ),
                                 borderRadius: BorderRadius.circular(10.0)),
-                            child: Row(
-                              children: [
-                                Image.asset('lib/assets/venmo-icon.png'),
-                                Text(
-                                  "\$$venmo",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                              ],
+                            child: Text(
+                              "\$$paymentAmount",
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
                             ),
                           ),
                         )
@@ -736,5 +506,179 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
         ],
       ),
     );
+  }
+}
+
+class PostOwnerInfo extends StatelessWidget {
+  final String userId;
+  PostOwnerInfo(this.userId);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: userId == currentUser.id
+            ? () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProfilePageWithHeader()))
+            : () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => OtherProfile(userId))),
+        child: StreamBuilder(
+            stream: usersRef.doc(userId).snapshots(),
+            builder: (context, snapshot2) {
+              bool isLargePhone = Screen.diagonal(context) > 766;
+              bool isPostOwner = false;
+
+              if (snapshot2.hasError) return CircularProgressIndicator();
+              if (!snapshot2.hasData) return CircularProgressIndicator();
+
+              int verifiedStatus = snapshot2.data['verifiedStatus'];
+              String userYear = snapshot2.data['year'];
+              String userDorm = snapshot2.data['dorm'];
+              String displayName = snapshot2.data['displayName'];
+              String email = snapshot2.data['email'];
+              String proPic = snapshot2.data['photoUrl'];
+              bool isBusiness = snapshot2.data['isBusiness'];
+
+              if (currentUser.id == userId) {
+                isPostOwner = true;
+              }
+
+              return Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                    Row(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 4, 10),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (userId == currentUser.id) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProfilePageWithHeader()));
+                                } else {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          OtherProfile(userId)));
+                                }
+                              },
+                              child: CircleAvatar(
+                                radius: 22.0,
+                                backgroundImage:
+                                    CachedNetworkImageProvider(proPic),
+                                backgroundColor: Colors.transparent,
+                              ),
+                            )),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: 130,
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (userId == currentUser.id) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProfilePageWithHeader()));
+                              } else {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        OtherProfile(userId)));
+                              }
+                            },
+                            child: Column(
+                              //  mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth: 130,
+                                    ),
+                                    child: SizedBox(
+                                      child: Row(
+                                        children: [
+                                          ConstrainedBox(
+                                            constraints:
+                                                BoxConstraints(maxWidth: 100),
+                                            child: Text(displayName,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: TextThemes.ndBlue,
+                                                    decoration:
+                                                        TextDecoration.none)),
+                                          ),
+                                          verifiedStatus == 3
+                                              ? Padding(
+                                                  padding: EdgeInsets.only(
+                                                    left: 2.5,
+                                                  ),
+                                                  child: Icon(Icons.store,
+                                                      size: 20,
+                                                      color: Colors.blue),
+                                                )
+                                              : verifiedStatus == 2
+                                                  ? Padding(
+                                                      padding: EdgeInsets.only(
+                                                        left: 5,
+                                                      ),
+                                                      child: Image.asset(
+                                                          'lib/assets/verif2.png',
+                                                          height: 15),
+                                                    )
+                                                  : verifiedStatus == 1
+                                                      ? Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 2.5,
+                                                                  top: 0),
+                                                          child: Image.asset(
+                                                              'lib/assets/verif.png',
+                                                              height: 22),
+                                                        )
+                                                      : Text("")
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: isBusiness
+                                      ? Text(userDorm,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              color: TextThemes.ndBlue,
+                                              decoration: TextDecoration.none))
+                                      : Text(userYear + " in " + userDorm,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              color: TextThemes.ndBlue,
+                                              decoration: TextDecoration.none)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ]));
+            }),
+        style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            backgroundColor:
+                MaterialStateProperty.all<Color>(Colors.blueGrey[50]),
+            elevation: MaterialStateProperty.all(10),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ))));
   }
 }
