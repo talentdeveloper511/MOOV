@@ -28,6 +28,7 @@ class User {
   final GeoPoint businessLocation;
   final String businessType;
   final Map userType;
+  final Map mobileOrderMenu;
 
   User(
       {this.id,
@@ -56,7 +57,8 @@ class User {
       this.followers,
       this.businessLocation,
       this.businessType,
-      this.userType});
+      this.userType,
+      this.mobileOrderMenu});
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
@@ -86,6 +88,7 @@ class User {
         followers: doc.data()['followers'],
         businessLocation: doc.data()['businessLocation'],
         businessType: doc.data()['businessType'],
-        userType: doc.data()['userType']);
+        userType: doc.data()['userType'],
+        mobileOrderMenu: doc.data()['mobileOrderMenu'] == null ? null : doc.data()['mobileOrderMenu']);
   }
 }

@@ -887,6 +887,54 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                     ),
                   ),
                 ),
+                currentUser.mobileOrderMenu != null &&
+                        currentUser.mobileOrderMenu.isNotEmpty
+                    ? Stack(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(border: Border.all()),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  currentUser.mobileOrderMenu['item1'].isNotEmpty
+                                      ? Expanded(
+                                          child: CheckboxListTile(
+                                              title: Text(currentUser
+                                                      .mobileOrderMenu['item1']
+                                                  ['name']),
+                                              value: _moovOver,
+                                              onChanged: (bool value) => setState(
+                                                  () => _moovOver = value)),
+                                        )
+                                      : Container(),
+                                  Expanded(
+                                    child: CheckboxListTile(
+                                        title: Text("Item 1"),
+                                        value: _moovOver,
+                                        onChanged: (bool value) =>
+                                            setState(() => _moovOver = value)),
+                                  ),
+                                  Expanded(
+                                    child: CheckboxListTile(
+                                        title: Text("Item 1"),
+                                        value: _moovOver,
+                                        onChanged: (bool value) =>
+                                            setState(() => _moovOver = value)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                           Padding(
+                             padding: const EdgeInsets.all(8.0),
+                             child: Text("Offer Mobile Ordering?",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 12)),
+                           ),
+                      ],
+                    )
+                    : Container(),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 0.0, left: 40, right: 12.5),
