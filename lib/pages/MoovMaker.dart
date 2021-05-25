@@ -49,7 +49,6 @@ class _MoovMakerState extends State<MoovMaker> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
         child: Column(
@@ -102,12 +101,12 @@ class _MoovMakerState extends State<MoovMaker> {
                 ),
                 Align(
                   alignment: Alignment.topLeft,
-                                  child: IconButton(
-            icon: Icon(Icons.arrow_drop_up_outlined,
-                  color: Colors.white, size: 35),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+                  child: IconButton(
+                      icon: Icon(Icons.arrow_drop_up_outlined,
+                          color: Colors.white, size: 35),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
                 ),
               ]),
               MoovMakerForm(
@@ -273,6 +272,8 @@ class _MoovMakerFormState extends State<MoovMakerForm>
       context: parentContext,
       builder: (context) {
         return SimpleDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           title: Text(
             "Show it off",
             style: TextStyle(color: Colors.white),
@@ -949,8 +950,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                                     value: _moovOver,
                                                     onChanged: (bool value) =>
                                                         setState(() =>
-                                                            _moovOver =
-                                                                value)),
+                                                            _moovOver = value)),
                                                 Positioned(
                                                     top: 15,
                                                     child: Padding(
@@ -988,66 +988,61 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                     );
                                   })
                               : Row(
+                                  children: [
+                                    SizedBox(width: 10),
+                                    GradientIcon(
+                                        Icons.confirmation_num_outlined,
+                                        25.0,
+                                        LinearGradient(
+                                          colors: <Color>[
+                                            Colors.red,
+                                            Colors.yellow,
+                                            Colors.blue,
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        )),
+                                    Expanded(
+                                      child: Stack(
+                                        alignment: Alignment.center,
                                         children: [
-                                          SizedBox(width: 10),
-                                          GradientIcon(
-                                              Icons.confirmation_num_outlined,
-                                              25.0,
-                                              LinearGradient(
-                                                colors: <Color>[
-                                                  Colors.red,
-                                                  Colors.yellow,
-                                                  Colors.blue,
-                                                ],
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                              )),
-                                          Expanded(
-                                            child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                CheckboxListTile(
-                                                    title:
-                                                        Text("MOOV Over Pass™"),
-                                                    value: _moovOver,
-                                                    onChanged: (bool value) =>
-                                                        setState(() =>
-                                                            _moovOver =
-                                                                value)),
-                                                Positioned(
-                                                    top: 15,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 60.0),
-                                                      child: GestureDetector(
-                                                        onTap: () => showDialog(
-                                                            context: context,
-                                                            builder: (_) =>
-                                                                CupertinoAlertDialog(
-                                                                  title: Text(
-                                                                      "No more waiting"),
-                                                                  content:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        top:
-                                                                            8.0),
-                                                                    child: Text(
-                                                                        "A MOOV Over Pass™ will allow customers to skip the line in exchange for \$10."),
-                                                                  ),
-                                                                ),
-                                                            barrierDismissible:
-                                                                true),
-                                                        child: Icon(
-                                                            Icons.info_outline),
-                                                      ),
-                                                    ))
-                                              ],
-                                            ),
-                                          ),
+                                          CheckboxListTile(
+                                              title: Text("MOOV Over Pass™"),
+                                              value: _moovOver,
+                                              onChanged: (bool value) =>
+                                                  setState(
+                                                      () => _moovOver = value)),
+                                          Positioned(
+                                              top: 15,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 60.0),
+                                                child: GestureDetector(
+                                                  onTap: () => showDialog(
+                                                      context: context,
+                                                      builder: (_) =>
+                                                          CupertinoAlertDialog(
+                                                            title: Text(
+                                                                "No more waiting"),
+                                                            content: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 8.0),
+                                                              child: Text(
+                                                                  "A MOOV Over Pass™ will allow customers to skip the line in exchange for \$10."),
+                                                            ),
+                                                          ),
+                                                      barrierDismissible: true),
+                                                  child:
+                                                      Icon(Icons.info_outline),
+                                                ),
+                                              ))
                                         ],
                                       ),
+                                    ),
+                                  ],
+                                ),
                           widget.fromMaxOc
                               ? AnimatedBuilder(
                                   animation: _animation,
@@ -1699,8 +1694,8 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                         int.parse(maxOccupancyController.text);
                                   }
                                   if (paymentAmountController.text.isNotEmpty) {
-                                    String x =
-                                        paymentAmountController.text.substring(1);
+                                    String x = paymentAmountController.text
+                                        .substring(1);
                                     paymentAmountInt = int.parse(x);
                                   }
 

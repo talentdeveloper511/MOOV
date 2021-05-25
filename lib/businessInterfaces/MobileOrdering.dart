@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
-import 'package:MOOV/widgets/photo_pick.dart';
+import 'package:MOOV/widgets/camera.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:worm_indicator/indicator.dart';
 import 'package:worm_indicator/shape.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class MobileOrdering extends StatelessWidget {
   MobileOrdering({Key key}) : super(key: key);
@@ -58,72 +63,129 @@ class MobileOrdering extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                onTap: () => controller.animateToPage(0,
-                    duration: Duration(seconds: 1),
-                    curve: Curves.fastOutSlowIn),
-                child: Column(
+      body: StreamBuilder(
+          stream: usersRef.doc(currentUser.id).snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return linearProgress();
+            }
+            Map mobileOrderMenu = snapshot.data['mobileOrderMenu'];
+            Map item1 = mobileOrderMenu['item1'];
+            Map item2 = mobileOrderMenu['item2'];
+            Map item3 = mobileOrderMenu['item3'];
+
+            return Column(
+              children: [
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(height: 10),
-                    Icon(
-                      Icons.brunch_dining,
-                      size: 30,
-                      color: Colors.grey,
+                    GestureDetector(
+                      onTap: () => controller.animateToPage(0,
+                          duration: Duration(seconds: 1),
+                          curve: Curves.fastOutSlowIn),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          item1.isNotEmpty
+                              ? CircleAvatar(
+                                  backgroundImage: NetworkImage(item1['photo']))
+                              : Icon(
+                                  Icons.brunch_dining,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
+                          SizedBox(height: 5),
+                          item1.isNotEmpty
+                              ? SizedBox(
+                                  width: 40,
+                                  height: 35,
+                                  child: Text(
+                                    item1['name'],
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.clip,
+                                    maxLines: 2,
+                                  ),
+                                )
+                              : Text("Item\nOne", textAlign: TextAlign.center),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 5),
-                    Text("Item\nOne", textAlign: TextAlign.center),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () => controller.animateToPage(1,
-                    duration: Duration(seconds: 1),
-                    curve: Curves.fastOutSlowIn),
-                child: Column(
-                  children: [
-                    Image.asset('lib/assets/marg.png', height: 40),
-                    SizedBox(height: 5),
-                    Text("Item\nTwo", textAlign: TextAlign.center),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () => controller.animateToPage(2,
-                    duration: Duration(seconds: 1),
-                    curve: Curves.fastOutSlowIn),
-                child: Column(
-                  children: [
-                    SizedBox(height: 10),
-                    Icon(
-                      Icons.local_pizza,
-                      size: 30,
-                      color: Colors.grey,
+                    GestureDetector(
+                      onTap: () => controller.animateToPage(1,
+                          duration: Duration(seconds: 1),
+                          curve: Curves.fastOutSlowIn),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          item2.isNotEmpty
+                              ? CircleAvatar(
+                                  backgroundImage: NetworkImage(item2['photo']))
+                              : Image.asset('lib/assets/marg.png', height: 40),
+                          SizedBox(height: 5),
+                          item2.isNotEmpty
+                              ? SizedBox(
+                                  width: 40,
+                                  height: 35,
+                                  child: Text(
+                                    item2['name'],
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.clip,
+                                    maxLines: 2,
+                                  ),
+                                )
+                              : Text("Item\nTwo", textAlign: TextAlign.center),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 5),
-                    Text("Item\nThree", textAlign: TextAlign.center),
+                    GestureDetector(
+                      onTap: () => controller.animateToPage(2,
+                          duration: Duration(seconds: 1),
+                          curve: Curves.fastOutSlowIn),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          item3.isNotEmpty
+                              ? CircleAvatar(
+                                  backgroundImage: NetworkImage(item3['photo']))
+                              : Icon(
+                                  Icons.local_pizza,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
+                          SizedBox(height: 5),
+                          item3.isNotEmpty
+                              ? SizedBox(
+                                  width: 40,
+                                  height: 35,
+                                  child: Text(
+                                    item3['name'],
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.clip,
+                                    maxLines: 2,
+                                  ),
+                                )
+                              : Text("Item\nThree",
+                                  textAlign: TextAlign.center),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              )
-            ],
-          ),
-          Expanded(
-            child: MobileOrderPageView(controller),
-          )
-        ],
-      ),
+                Expanded(
+                  child: MobileOrderPageView(controller, mobileOrderMenu),
+                )
+              ],
+            );
+          }),
     );
   }
 }
 
 class MobileOrderPageView extends StatefulWidget {
+  final Map mobileOrderMenu;
   final PageController controller;
-  MobileOrderPageView(this.controller);
+  MobileOrderPageView(this.controller, this.mobileOrderMenu);
 
   @override
   _MobileOrderPageViewState createState() => _MobileOrderPageViewState();
@@ -148,39 +210,25 @@ class _MobileOrderPageViewState extends State<MobileOrderPageView> {
               width: 135, height: 20, spacing: 0, shape: DotShape.Rectangle),
         ),
         Expanded(
-          child: StreamBuilder(
-              stream: usersRef.doc(currentUser.id).snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return circularProgress();
-                }
-                Map mobileOrderMenu = snapshot.data['mobileOrderMenu'];
-                return PageView(
-                  controller: widget.controller,
-                  children: [
-                    MobileItemOne(mobileOrderMenu),
-                    MobileItemTwo(mobileOrderMenu),
-                    MobileItemThree(mobileOrderMenu),
-                  ],
-                );
-              }),
-        ),
+            child: PageView(
+          controller: widget.controller,
+          children: [
+            MobileItemOne(widget.mobileOrderMenu['item1']),
+            MobileItemTwo(widget.mobileOrderMenu['item2']),
+            MobileItemThree(widget.mobileOrderMenu['item3']),
+          ],
+        )),
       ],
     );
   }
 }
 
 class MobileItemOne extends StatelessWidget {
-  final Map mobileOrderMenu;
-  MobileItemOne(this.mobileOrderMenu);
+  final Map item1;
+  MobileItemOne(this.item1);
 
   @override
   Widget build(BuildContext context) {
-    bool empty = true;
-
-    if (mobileOrderMenu.isNotEmpty) {
-      empty = false;
-    }
     return Center(
       child: Stack(
         alignment: Alignment.center,
@@ -200,21 +248,47 @@ class MobileItemOne extends StatelessWidget {
                     child: Column(
                       children: [
                         SizedBox(height: 60),
-                        Text('Add an item',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w700,
-                                color: TextThemes.ndBlue)),
+                        item1.isNotEmpty
+                            ? SizedBox(
+                                width: 300,
+                                child: Text(
+                                  item1['name'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.blue[900]),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              )
+                            : Text('Add an item',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w700,
+                                    color: TextThemes.ndBlue)),
                         SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
-                          child: Text(
-                              'Describe your item. Customers can then pay for it in advance.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: TextThemes.ndBlue)),
+                          child: item1.isNotEmpty
+                              ? SizedBox(
+                                  width: 300,
+                                  child: Text(item1['description'],
+                                      textAlign: TextAlign.center,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.blue[900])),
+                                )
+                              : Text(
+                                  'Describe your item. Customers can then pay for it in advance.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: TextThemes.ndBlue)),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
@@ -227,13 +301,24 @@ class MobileItemOne extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(10))),
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                  'Set your price, and any customizations.',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: TextThemes.ndBlue)),
+                              child: item1.isNotEmpty
+                                  ? Text(
+                                      "\$" +
+                                          item1['price'].toString() +
+                                          " " +
+                                          item1['itemType'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.blue[900]))
+                                  : Text(
+                                      'Set your price, and any customizations.',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                          color: TextThemes.ndBlue)),
                             ),
                           ),
                         ),
@@ -246,11 +331,11 @@ class MobileItemOne extends StatelessWidget {
                             onPressed: () {
                               HapticFeedback.lightImpact();
 
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.topToBottom,
-                                      child: MoovMaker(fromMoovOver: true)));
+                              showBottomSheet(
+                                  context: context,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  builder: (context) => BottomSheetWidget(1));
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -265,13 +350,18 @@ class MobileItemOne extends StatelessWidget {
           Positioned(
               top: 20,
               child: CircleAvatar(
-                  radius: 43,
+                  radius: 45,
                   backgroundColor: Colors.blue[50],
                   child: CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 41,
-                      child: Icon(Icons.brunch_dining,
-                          size: 50, color: Colors.grey))))
+                      backgroundImage: item1.isNotEmpty
+                          ? NetworkImage(item1['photo'])
+                          : null,
+                      child: item1.isNotEmpty
+                          ? null
+                          : Icon(Icons.brunch_dining,
+                              size: 50, color: Colors.grey))))
         ],
       ),
     );
@@ -279,8 +369,8 @@ class MobileItemOne extends StatelessWidget {
 }
 
 class MobileItemTwo extends StatelessWidget {
-  final Map mobileOrderMenu;
-  MobileItemTwo(this.mobileOrderMenu);
+  final Map item2;
+  MobileItemTwo(this.item2);
 
   @override
   Widget build(BuildContext context) {
@@ -303,21 +393,47 @@ class MobileItemTwo extends StatelessWidget {
                     child: Column(
                       children: [
                         SizedBox(height: 60),
-                        Text('Margarita',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.pink[900])),
+                        item2.isNotEmpty
+                            ? SizedBox(
+                                width: 300,
+                                child: Text(
+                                  item2['name'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.pink[900]),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              )
+                            : Text('Margarita',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.pink[900])),
                         SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
-                          child: Text(
-                              'Our famous margs come frozen or regular. 21+ only.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.pink[900])),
+                          child: item2.isNotEmpty
+                              ? SizedBox(
+                                  width: 300,
+                                  child: Text(item2['description'],
+                                      textAlign: TextAlign.center,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.pink[900])),
+                                )
+                              : Text(
+                                  'Our famous margs come frozen or regular. 21+ only.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.pink[900])),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
@@ -330,12 +446,23 @@ class MobileItemTwo extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(10))),
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
-                              child: Text("\$7 regular\n\$10 frozen",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.pink[900])),
+                              child: item2.isNotEmpty
+                                  ? Text(
+                                      "\$" +
+                                          item2['price'].toString() +
+                                          " " +
+                                          item2['itemType'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.pink[900]))
+                                  : Text("\$7 regular\n\$10 frozen",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.pink[900])),
                             ),
                           ),
                         ),
@@ -348,11 +475,11 @@ class MobileItemTwo extends StatelessWidget {
                             onPressed: () {
                               HapticFeedback.lightImpact();
 
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.topToBottom,
-                                      child: MoovMaker(fromMaxOc: true)));
+                              showBottomSheet(
+                                  context: context,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  builder: (context) => BottomSheetWidget(2));
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -367,10 +494,15 @@ class MobileItemTwo extends StatelessWidget {
           Positioned(
               top: 20,
               child: CircleAvatar(
-                  radius: 43,
+                  radius: 45,
                   backgroundColor: Colors.red[50],
                   child: CircleAvatar(
-                      child: Image.asset('lib/assets/marg.png', height: 70),
+                      backgroundImage: item2.isNotEmpty
+                          ? NetworkImage(item2['photo'])
+                          : null,
+                      child: item2.isNotEmpty
+                          ? null
+                          : Image.asset('lib/assets/marg.png', height: 70),
                       radius: 41,
                       backgroundColor: Colors.white)))
         ],
@@ -380,8 +512,8 @@ class MobileItemTwo extends StatelessWidget {
 }
 
 class MobileItemThree extends StatelessWidget {
-  final Map mobileOrderMenu;
-  MobileItemThree(this.mobileOrderMenu);
+  final Map item3;
+  MobileItemThree(this.item3);
 
   @override
   Widget build(BuildContext context) {
@@ -404,20 +536,46 @@ class MobileItemThree extends StatelessWidget {
                     child: Column(
                       children: [
                         SizedBox(height: 60),
-                        Text('Item three',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.orange[900])),
+                        item3.isNotEmpty
+                            ? SizedBox(
+                                width: 300,
+                                child: Text(
+                                  item3['name'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.orange[900]),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                ),
+                              )
+                            : Text('Item three',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.orange[900])),
                         SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
-                          child: Text('Another description.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.yellow[900])),
+                          child: item3.isNotEmpty
+                              ? SizedBox(
+                                  width: 300,
+                                  child: Text(item3['description'],
+                                      textAlign: TextAlign.center,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.yellow[900])),
+                                )
+                              : Text('Another description.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.yellow[900])),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
@@ -430,13 +588,24 @@ class MobileItemThree extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(10))),
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                  "Hint: Easy-to-make items are best, customers can then easily show their receipt and grab it!",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.yellow[900])),
+                              child: item3.isNotEmpty
+                                  ? Text(
+                                      "\$" +
+                                          item3['price'].toString() +
+                                          " " +
+                                          item3['itemType'],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.yellow[900]))
+                                  : Text(
+                                      "Hint: Easy-to-make items are best, customers can then easily show their receipt and grab it!",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.yellow[900])),
                             ),
                           ),
                         ),
@@ -448,11 +617,12 @@ class MobileItemThree extends StatelessWidget {
                             ),
                             onPressed: () {
                               HapticFeedback.lightImpact();
+
                               showBottomSheet(
                                   context: context,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
-                                  builder: (context) => BottomSheetWidget());
+                                  builder: (context) => BottomSheetWidget(3));
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -467,13 +637,18 @@ class MobileItemThree extends StatelessWidget {
           Positioned(
               top: 20,
               child: CircleAvatar(
-                  radius: 43,
+                  radius: 44,
                   backgroundColor: Colors.orange[50],
                   child: CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 41,
-                      child: Icon(Icons.local_pizza,
-                          size: 50, color: Colors.grey))))
+                      backgroundImage: item3.isNotEmpty
+                          ? NetworkImage(item3['photo'])
+                          : null,
+                      child: item3.isNotEmpty
+                          ? null
+                          : Icon(Icons.local_pizza,
+                              size: 50, color: Colors.grey))))
         ],
       ),
     );
@@ -481,6 +656,9 @@ class MobileItemThree extends StatelessWidget {
 }
 
 class BottomSheetWidget extends StatefulWidget {
+  final int itemNumber;
+  BottomSheetWidget(this.itemNumber);
+
   @override
   _BottomSheetWidgetState createState() => _BottomSheetWidgetState();
 }
@@ -495,141 +673,205 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            DecoratedTextField(),
-            SheetButton(),
+            DecoratedTextField(widget.itemNumber),
           ]),
     );
   }
 }
 
-class SheetButton extends StatefulWidget {
-  _SheetButtonState createState() => _SheetButtonState();
-}
-
-class _SheetButtonState extends State<SheetButton> {
-  bool checkingFlight = false;
-  bool success = false;
-  @override
-  Widget build(BuildContext context) {
-    return !checkingFlight
-        ? ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.orange,
-              elevation: 5.0,
-            ),
-            onPressed: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Add',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          )
-        : !success
-            ? CircularProgressIndicator()
-            : Icon(
-                Icons.check,
-                color: Colors.green,
-              );
-  }
-}
-
 class DecoratedTextField extends StatefulWidget {
+  final int itemNumber;
+  DecoratedTextField(this.itemNumber);
+
   _DecoratedTextFieldState createState() => _DecoratedTextFieldState();
 }
 
 class _DecoratedTextFieldState extends State<DecoratedTextField> {
-  String priceString, titleString, descriptionString, typeString;
+  File _image;
+  bool isUploading = false;
+  bool success = false;
+
+  var placeholderImage;
+  final picker = ImagePicker();
+
+  void openCamera(context) async {
+    final image = await CustomCamera.openCamera();
+    setState(() {
+      _image = image;
+      //  fileName = p.basename(_image.path);
+    });
+    _cropImage();
+  }
+
+  Future<Null> _cropImage() async {
+    File croppedFile = await ImageCropper.cropImage(
+        cropStyle: CropStyle.circle,
+        maxHeight: 100,
+        sourcePath: _image.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Croperooni',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          title: 'Croperooni',
+        ));
+    if (croppedFile != null) {
+      setState(() {
+        _image = croppedFile;
+      });
+    }
+  }
+
+  void openGallery(context) async {
+    final image = await CustomCamera.openGallery();
+    setState(() {
+      _image = image;
+    });
+    _cropImage();
+  }
+
+  Future handleTakePhoto() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.camera,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
+  }
+
+  handleChooseFromGallery() async {
+    Navigator.pop(context);
+    final file = await picker.getImage(
+      source: ImageSource.gallery,
+      maxHeight: 675,
+      maxWidth: 960,
+    );
+    setState(() {
+      if (_image != null) {
+        _image = File(file.path);
+      }
+    });
+  }
+
+  selectImage(parentContext) {
+    return showDialog(
+      context: parentContext,
+      builder: (context) {
+        return SimpleDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          title: Text(
+            "Whaddaya got? 😋",
+            style: TextStyle(color: Colors.white),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text(
+                "Photo with Camera",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openCamera(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: handleChooseFromGallery),
+              //    child: Text("Image from Gallery", style: TextStyle(color: Colors.white),), onPressed: () => openGallery(context)),
+              child: Text(
+                "Image from Gallery",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                openGallery(context);
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              child: Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  String priceString, nameString, descriptionString, typeString;
   int priceInt;
+  bool emptyFields = false, noImage = false;
   final priceController = TextEditingController();
-  final titleController = TextEditingController();
+  final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final typeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-            radius: 43,
-            backgroundColor: Colors.orange[50],
-            child: GestureDetector(
-              onTap: PhotoPick(beforeUI, afterUI, pic, index)
+    return (success)
+        ? Center(
+            child: Icon(
+              Icons.check,
+              size: 100,
+              color: Colors.green,
+            ),
+          )
+        : Column(
+            children: [
+              _image != null
+                  ? CircleAvatar(
+                      radius: 43,
+                      backgroundColor: Colors.orange[50],
+                      child: CircleAvatar(
+                        backgroundImage: FileImage(_image),
+                        radius: 41,
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: () => selectImage(context),
+                      child: CircleAvatar(
+                          radius: noImage ? 46 : 43,
+                          backgroundColor: noImage
+                              ? Colors.red
+                              : widget.itemNumber == 1
+                                  ? Colors.blue[50]
+                                  : widget.itemNumber == 2
+                                      ? Colors.pink[50]
+                                      : Colors.orange[50],
                           child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 41,
-                  child: Icon(Icons.local_pizza, size: 50, color: Colors.grey)),
-            )),
-        Container(
-            height: 50,
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10)),
-            child: TextField(
-              controller: titleController,
-              decoration: InputDecoration.collapsed(
-                hintText: 'Enter your item name',
-              ),
-            )),
-        Container(
-            height: 50,
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10)),
-            child: TextField(
-              controller: descriptionController,
-              decoration: InputDecoration.collapsed(
-                hintText: 'Describe it',
-              ),
-            )),
-        Row(
-          children: [
-            Flexible(
-              flex: 2,
-              child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Price",
+                              backgroundColor: Colors.white,
+                              radius: 41,
+                              child: Icon(Icons.local_pizza,
+                                  size: 50, color: Colors.grey))),
                     ),
-                    textAlign: TextAlign.center,
-                    inputFormatters: [
-                      CurrencyTextInputFormatter(
-                        decimalDigits: 0,
-                        symbol: '\$',
-                      )
-                    ],
-                    controller: priceController,
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      setState(() => priceString = value);
-                      if (value != "0") {
-                        String x = priceController.text
-                            .substring(1)
-                            .replaceAll(",", "");
-                        priceInt = int.parse(x);
-                      }
-                    },
-                  )),
-            ),
-            Flexible(
-              flex: 5,
-              child: Container(
+              Container(
                   height: 50,
                   alignment: Alignment.center,
                   padding:
@@ -640,15 +882,173 @@ class _DecoratedTextFieldState extends State<DecoratedTextField> {
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(10)),
                   child: TextField(
-                    controller: typeController,
+                    controller: nameController,
                     decoration: InputDecoration.collapsed(
-                      hintText: 'Item type (ex: Frozen)',
-                    ),
+                        hintText: 'Enter your item name',
+                        hintStyle:
+                            emptyFields ? TextStyle(color: Colors.red) : null),
                   )),
-            ),
-          ],
-        ),
-      ],
-    );
+              Container(
+                  height: 50,
+                  alignment: Alignment.center,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextField(
+                    controller: descriptionController,
+                    decoration: InputDecoration.collapsed(
+                        hintText: 'Describe it',
+                        hintStyle:
+                            emptyFields ? TextStyle(color: Colors.red) : null),
+                  )),
+              Row(
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                        height: 50,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: TextField(
+                          decoration: InputDecoration(
+                              hintText: "Price",
+                              hintStyle: emptyFields
+                                  ? TextStyle(color: Colors.red)
+                                  : null),
+                          textAlign: TextAlign.center,
+                          inputFormatters: [
+                            CurrencyTextInputFormatter(
+                              decimalDigits: 0,
+                              symbol: '\$',
+                            )
+                          ],
+                          controller: priceController,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            setState(() => priceString = value);
+                            if (value != "0") {
+                              String x = priceController.text
+                                  .substring(1)
+                                  .replaceAll(",", "");
+                              priceInt = int.parse(x);
+                            }
+                          },
+                        )),
+                  ),
+                  Flexible(
+                    flex: 5,
+                    child: Container(
+                        height: 50,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: TextField(
+                          controller: typeController,
+                          decoration: InputDecoration.collapsed(
+                              hintText: 'Item type (ex: Frozen)',
+                              hintStyle: emptyFields
+                                  ? TextStyle(color: Colors.red)
+                                  : null),
+                        )),
+                  ),
+                ],
+              ),
+              !isUploading
+                  ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: widget.itemNumber == 1
+                            ? Colors.blue
+                            : widget.itemNumber == 2
+                                ? Colors.pink
+                                : Colors.orange,
+                        elevation: 5.0,
+                      ),
+                      onPressed: () async {
+                        if (_image == null) {
+                          setState(() {
+                            noImage = true;
+                          });
+                        }
+                        if (nameController.text.isEmpty ||
+                            descriptionController.text.isEmpty ||
+                            priceInt == null ||
+                            typeController.text.isEmpty) {
+                          setState(() {
+                            emptyFields = true;
+                          });
+                        } else if (nameController.text.isNotEmpty &&
+                            descriptionController.text.isNotEmpty &&
+                            priceInt != null &&
+                            typeController.text.isNotEmpty &&
+                            _image != null) {
+                          setState(() {
+                            isUploading = true;
+                          });
+                          firebase_storage.Reference ref;
+                          firebase_storage.UploadTask uploadTask;
+                          firebase_storage.TaskSnapshot taskSnapshot;
+                          String downloadUrl = "";
+                          ref = firebase_storage.FirebaseStorage.instance
+                              .ref()
+                              .child("images/" +
+                                  currentUser.id +
+                                  "mobileOrderMenu/${widget.itemNumber}");
+                          uploadTask = ref.putFile(_image);
+                          taskSnapshot = await uploadTask;
+                          if (uploadTask.snapshot.state ==
+                              firebase_storage.TaskState.success) {
+                            print("added to Firebase Storage");
+                            downloadUrl =
+                                await taskSnapshot.ref.getDownloadURL();
+                            usersRef.doc(currentUser.id).set({
+                              "mobileOrderMenu": {
+                                "item${widget.itemNumber}": {
+                                  "name": nameController.text,
+                                  "description": descriptionController.text,
+                                  "price": priceInt,
+                                  "itemType": typeController.text,
+                                  "photo": downloadUrl
+                                }
+                              },
+                            }, SetOptions(merge: true));
+                          }
+
+                          setState(() {
+                            isUploading = false;
+                            success = true;
+                          });
+                          Future.delayed(Duration(seconds: 2), () {
+                            Navigator.pop(context);
+                          });
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Add',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  : isUploading
+                      ? linearProgress()
+                      : Container()
+            ],
+          );
   }
 }
