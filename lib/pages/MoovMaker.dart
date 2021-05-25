@@ -49,39 +49,7 @@ class _MoovMakerState extends State<MoovMaker> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_drop_up_outlined,
-                color: Colors.white, size: 35),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
-
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                child: Image.asset(
-                  'lib/assets/moovblue.png',
-                  fit: BoxFit.cover,
-                  height: 50.0,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(),
         child: Column(
@@ -91,7 +59,7 @@ class _MoovMakerState extends State<MoovMaker> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15.0),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.12,
+                    height: MediaQuery.of(context).size.height * 0.17,
                     width: MediaQuery.of(context).size.width,
                     child: Container(
                       child: ClipRRect(
@@ -131,6 +99,15 @@ class _MoovMakerState extends State<MoovMaker> {
                           fontSize: 25.0),
                     ),
                   ),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                                  child: IconButton(
+            icon: Icon(Icons.arrow_drop_up_outlined,
+                  color: Colors.white, size: 35),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
                 ),
               ]),
               MoovMakerForm(

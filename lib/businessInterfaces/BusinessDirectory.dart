@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
+import 'package:MOOV/businessInterfaces/MobileOrdering.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -17,13 +18,17 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
     with TickerProviderStateMixin {
   bool animateDealText = false;
   bool animateCrowdText = false;
+  bool animateMobileOrderingText = false;
 
   double _scaleDeal;
   double _scaleCrowd;
+  double _scaleMobileOrdering;
   AnimationController _dealController;
   AnimationController _crowdController;
+  AnimationController _mobileOrderingController;
   Color _color = Colors.blue[800];
-  Color _color2 = Colors.deepPurple[300];
+  Color _color2 = Colors.purple[400];
+  Color _color3 = Colors.grey[700];
 
   @override
   void initState() {
@@ -70,6 +75,28 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
         });
       });
 
+    _mobileOrderingController = AnimationController(
+      vsync: this,
+      duration: Duration(
+        milliseconds: 500,
+      ),
+      lowerBound: 0.0,
+      upperBound: 0.2,
+    )..addListener(() {
+        HapticFeedback.lightImpact();
+        setState(() {
+          final random = Random();
+
+          animateMobileOrderingText = true;
+          _color3 = Color.fromRGBO(
+            random.nextInt(256),
+            random.nextInt(256),
+            random.nextInt(256),
+            1,
+          );
+        });
+      });
+
     super.initState();
   }
 
@@ -78,12 +105,14 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
     super.dispose();
     _dealController.dispose();
     _crowdController.dispose();
+    _mobileOrderingController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     _scaleDeal = 1 - _dealController.value;
     _scaleCrowd = 1 - _crowdController.value;
+    _scaleMobileOrdering = 1 - _mobileOrderingController.value;
 
     return Scaffold(
       backgroundColor: TextThemes.ndBlue,
@@ -109,6 +138,9 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
           ),
           Center(
             child: GestureDetector(
+              onTap: () => _dealController
+                  .forward()
+                  .then((value) => _dealController.reverse()),
               onTapDown: _tapDown,
               onTapUp: _tapUp,
               child: Transform.scale(
@@ -140,6 +172,9 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
           SizedBox(height: 30),
           Center(
             child: GestureDetector(
+              onTap: () => _crowdController
+                  .forward()
+                  .then((value) => _crowdController.reverse()),
               onTapDown: _tapDown2,
               onTapUp: _tapUp2,
               child: Transform.scale(
@@ -161,6 +196,40 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
                         isRepeatingAnimation: false,
                         animatedTexts: [
                             TyperAnimatedText("Never let 'em down..",
+                                textStyle: TextStyle(fontSize: 12),
+                                speed: Duration(milliseconds: 50)),
+                          ])
+                    : Container(height: 15),
+              ),
+            ),
+          ),
+          SizedBox(height: 35),
+          Center(
+            child: GestureDetector(
+              onTap: () => _mobileOrderingController
+                  .forward()
+                  .then((value) => _mobileOrderingController.reverse()),
+              onTapDown: _tapDown3,
+              onTapUp: _tapUp3,
+              child: Transform.scale(
+                scale: _scaleMobileOrdering,
+                child: _mobileOrderingButton(),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 12.0, left: 100),
+            child: SizedBox(
+              child: DefaultTextStyle(
+                style: const TextStyle(
+                  fontSize: 30.0,
+                  fontFamily: 'Bobbers',
+                ),
+                child: animateMobileOrderingText
+                    ? AnimatedTextKit(
+                        isRepeatingAnimation: false,
+                        animatedTexts: [
+                            TyperAnimatedText("Let us do the work..",
                                 textStyle: TextStyle(fontSize: 12),
                                 speed: Duration(milliseconds: 50)),
                           ])
@@ -227,15 +296,16 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
       ),
     );
   }
-    Widget _crowdButton() {
+
+  Widget _crowdButton() {
     return AnimatedContainer(
       onEnd: () {
         HapticFeedback.lightImpact();
         Future.delayed(Duration(milliseconds: 500), () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CrowdManagement()),
-            );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CrowdManagement()),
+          );
         });
       },
       duration: Duration(seconds: 1),
@@ -281,6 +351,60 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
     );
   }
 
+  Widget _mobileOrderingButton() {
+    return AnimatedContainer(
+      onEnd: () {
+        HapticFeedback.lightImpact();
+        Future.delayed(Duration(milliseconds: 500), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MobileOrdering()),
+          );
+        });
+      },
+      duration: Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+      height: 70,
+      width: 300,
+      decoration: BoxDecoration(
+        color: _color3,
+        borderRadius: BorderRadius.circular(100.0),
+        boxShadow: [
+          BoxShadow(
+            color: _color3,
+            blurRadius: 12.0,
+            offset: Offset(0.0, 5.0),
+          ),
+        ],
+      ),
+      child: Center(
+        child: RichText(
+          overflow: TextOverflow.ellipsis,
+          text: TextSpan(
+              style: TextStyle(
+                color: Colors.black,
+              ),
+              children: [
+                TextSpan(
+                  text: "Set Mobile",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: 20,
+                      color: Colors.white),
+                ),
+                TextSpan(
+                  text: ' ORDERING',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      color: TextThemes.ndGold),
+                ),
+              ]),
+        ),
+      ),
+    );
+  }
+
   void _tapDown(TapDownDetails details) {
     _dealController.forward();
   }
@@ -288,11 +412,20 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
   void _tapUp(TapUpDetails details) {
     _dealController.reverse();
   }
-   void _tapDown2(TapDownDetails details) {
+
+  void _tapDown2(TapDownDetails details) {
     _crowdController.forward();
   }
 
   void _tapUp2(TapUpDetails details) {
     _crowdController.reverse();
+  }
+
+  void _tapDown3(TapDownDetails details) {
+    _mobileOrderingController.forward();
+  }
+
+  void _tapUp3(TapUpDetails details) {
+    _mobileOrderingController.reverse();
   }
 }
