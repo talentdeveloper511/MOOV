@@ -626,18 +626,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     if (!doc.exists) {
       //checking if a business or nd.edu address or staff
-      List whiteList =
-          adminDoc.data()['whiteList']; //businesses can get through screening
-      List blackList = adminDoc.data()['blackList']; // staff/faculty blocked
+      // List whiteList =
+      //     adminDoc.data()['whiteList']; //businesses can get through screening
+      // List blackList = adminDoc.data()['blackList']; // staff/faculty blocked
 
-      if (blackList.contains(user.email)) {
-        blocked = true;
-        print("staff/faculty. get fucked");
-      }
-      if (!user.email.contains('@nd.edu') && !whiteList.contains(user.email)) {
-        blocked = true;
-        print("not a student or a business. get fucked");
-      }
+      // if (blackList.contains(user.email)) {
+      //   blocked = true;
+      //   print("staff/faculty. get fucked");
+      // }
+      // if (!user.email.contains('@nd.edu') && !whiteList.contains(user.email)) {
+      //   blocked = true;
+      //   print("not a student or a business. get fucked");
+      // }
 
       // 2) if the user doesn't exist, and ISNT BLOCKED, then we want to take them to the create account page
       if (blocked) {
