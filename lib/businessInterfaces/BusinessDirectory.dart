@@ -359,7 +359,7 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
         Future.delayed(Duration(milliseconds: 500), () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MobileOrdering(currentUser.id)),
+            MaterialPageRoute(builder: (context) => MobileOrdering(userId: currentUser.id)),
           );
         });
       },

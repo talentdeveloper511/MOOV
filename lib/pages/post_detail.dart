@@ -432,7 +432,7 @@ class _NonImageContents extends StatelessWidget {
               course['userId'], course['postId']),
           // _AuthorContent(userId, course),
           PaySkipSendRow(course['paymentAmount'], course['moovOver'],
-              mobileOrderMenu, course['userId']),
+              mobileOrderMenu, course['userId'], moovId),
           GestureDetector(
             onTap: () {
               showComments(context,
@@ -1000,8 +1000,8 @@ class PaySkipSendRow extends StatelessWidget {
   final int paymentAmount;
   final bool moovOver;
   final Map menu;
-  final String userId;
-  PaySkipSendRow(this.paymentAmount, this.moovOver, this.menu, this.userId);
+  final String userId, postId;
+  PaySkipSendRow(this.paymentAmount, this.moovOver, this.menu, this.userId, this.postId);
 
   @override
   Widget build(BuildContext context) {
@@ -1020,7 +1020,7 @@ class PaySkipSendRow extends StatelessWidget {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MobileOrdering(userId))),
+                              builder: (context) => MobileOrdering(userId: userId, postId: postId))),
                       child: Icon(Icons.menu_book, color: Colors.purple)),
                 )
               : Container(),

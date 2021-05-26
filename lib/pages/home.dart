@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:MOOV/businessInterfaces/BusinessDirectory.dart';
+import 'package:MOOV/businessInterfaces/livePassesSheet.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
@@ -732,358 +733,422 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     locationCheckIn(context, callback);
 
     return Scaffold(
-      key: _scaffoldKey,
-      floatingActionButton: FadeTransition(
-        opacity: _hideFabAnimController,
-        child: ScaleTransition(
-          scale: _hideFabAnimController,
-          child: FloatingActionButton.extended(
-              onPressed: () {
-                HapticFeedback.lightImpact();
+      body: FutureBuilder(
+          future: usersRef.doc(currentUser.id).get(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData || snapshot.data == null) {
+              return Container();
+            }
+            int moovMoneyBalance = snapshot.data['moovMoney'];
+            List livePasses = [];
+            if (snapshot.data.data()['livePasses'] != null) {
+              livePasses = snapshot.data['livePasses'];
+            }
 
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.topToBottom,
-                        child: MoovMaker(fromPostDeal: false)));
-              },
-              label: Row(
+            return Scaffold(
+              key: _scaffoldKey,
+              floatingActionButton: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Post ",
-                      style: TextStyle(fontSize: 20, color: Colors.white)),
-                  Icon(Icons.directions_run, color: Colors.white),
+                  livePasses.isNotEmpty
+                      ? FloatingActionButton.extended(
+                          heroTag: "passBtn",
+                          backgroundColor: Colors.green,
+                          onPressed: () {
+                            HapticFeedback.lightImpact();
+
+                            showBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                builder: (context) =>
+                                    LivePassesSheet(livePasses));
+                          },
+                          label: Row(
+                            children: [
+                              Text("LIVE PASSES ",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.white)),
+                              Icon(Icons.confirmation_num, color: Colors.white),
+                            ],
+                          ))
+                      : Container(height: 1),
+                  FadeTransition(
+                    opacity: _hideFabAnimController,
+                    child: ScaleTransition(
+                      scale: _hideFabAnimController,
+                      child: FloatingActionButton.extended(
+                          heroTag: "postBtn",
+                          onPressed: () {
+                            HapticFeedback.lightImpact();
+
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.topToBottom,
+                                    child: MoovMaker(fromPostDeal: false)));
+                          },
+                          label: Row(
+                            children: [
+                              Text("Post ",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.white)),
+                              Icon(Icons.directions_run, color: Colors.white),
+                            ],
+                          )),
+                    ),
+                  ),
                 ],
-              )),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      appBar: AppBar(
-        leadingWidth: 115,
-        leading: FutureBuilder(
-            future: usersRef.doc(currentUser.id).get(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData || snapshot.data == null) {
-                return Container();
-              }
-              int moovMoneyBalance = snapshot.data['moovMoney'];
-              return Row(
-                children: [
-                  Expanded(
-                    child: IconButton(
-                      padding: EdgeInsets.only(left: 9.0),
-                      icon: Row(
-                        children: [
-                          Icon(Icons.monetization_on_outlined),
-                          SizedBox(width: 5),
-                          Expanded(
-                            child: Text(moovMoneyBalance.toString(),
-                                maxLines: 1,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                          )
-                        ],
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              appBar: AppBar(
+                leadingWidth: 115,
+                leading: Row(
+                  children: [
+                    Expanded(
+                      child: IconButton(
+                        padding: EdgeInsets.only(left: 9.0),
+                        icon: Row(
+                          children: [
+                            Icon(Icons.monetization_on_outlined),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Text(moovMoneyBalance.toString(),
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
+                            )
+                          ],
+                        ),
+                        color: Colors.white,
+                        splashColor: Colors.transparent,
+                        onPressed: () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MoovMoneyAdd(0, moovMoneyBalance)));
+                        },
                       ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.insert_chart_outlined),
                       color: Colors.white,
                       splashColor: Colors.transparent,
                       onPressed: () async {
+                        // Implement navigation to leaderboard page here...
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    MoovMoneyAdd(0, moovMoneyBalance)));
+                                builder: (context) => LeaderBoardPage()));
                       },
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.insert_chart_outlined),
-                    color: Colors.white,
-                    splashColor: Colors.transparent,
-                    onPressed: () async {
-                      // Implement navigation to leaderboard page here...
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LeaderBoardPage()));
-                    },
-                  ),
-                  // Expanded(
-                  //   child: CarouselSlider(
-                  //     options: CarouselOptions(
-                  //       height: 400,
-                  //       aspectRatio: 16 / 9,
-                  //       viewportFraction: 1,
-                  //       initialPage: 0,
-                  //       enableInfiniteScroll: true,
-                  //       scrollPhysics: NeverScrollableScrollPhysics(),
-                  //       pauseAutoPlayOnTouch: false,
-                  //       reverse: false,
-                  //       autoPlay: false,
-                  //       autoPlayInterval: Duration(seconds: 4),
-                  //       autoPlayAnimationDuration: Duration(milliseconds: 800),
-                  //       autoPlayCurve: Curves.fastOutSlowIn,
-                  //       enlargeCenterPage: true,
-                  //       // onPageChanged: callbackFunction,
-                  //       scrollDirection: Axis.horizontal,
-                  //     ),
-                  //     items: [
-                  //       IconButton(
-                  //         padding: EdgeInsets.only(left: 5.0),
-                  //         icon: Icon(Icons.insert_chart_outlined),
-                  //         color: Colors.white,
-                  //         splashColor: Color.fromRGBO(220, 180, 57, 1.0),
-                  //         onPressed: () async {
-                  //           // Implement navigation to leaderboard page here...
-                  //           Navigator.push(
-                  //               context,
-                  //               MaterialPageRoute(
-                  //                   builder: (context) => LeaderBoardPage()));
-                  //         },
-                  //       ),
-                  //       // GestureDetector(
-                  //       //   onTap: () async {
-                  //       //     var randomPost = await randomPostMaker();
-                  //       //     Navigator.push(
-                  //       //         context,
-                  //       //         MaterialPageRoute(
-                  //       //             builder: (context) => PostDetail(randomPost)));
-                  //       //   },
-                  //       //   child: Container(
-                  //       //     margin: const EdgeInsets.all(7.0),
-                  //       //     padding: const EdgeInsets.all(7.0),
-                  //       //     decoration: BoxDecoration(
-                  //       //         border: Border.all(color: Colors.white),
-                  //       //         borderRadius: BorderRadius.circular(7)),
-                  //       //     child: Text(
-                  //       //       "Surprise",
-                  //       //       style: TextStyle(fontSize: 14.0, color: Colors.white),
-                  //       //     ),
-                  //       //   ),
-                  //       // ),
-                  //       // FocusedMenuHolder(
-                  //       //   menuWidth: MediaQuery.of(context).size.width * .95,
+                    // Expanded(
+                    //   child: CarouselSlider(
+                    //     options: CarouselOptions(
+                    //       height: 400,
+                    //       aspectRatio: 16 / 9,
+                    //       viewportFraction: 1,
+                    //       initialPage: 0,
+                    //       enableInfiniteScroll: true,
+                    //       scrollPhysics: NeverScrollableScrollPhysics(),
+                    //       pauseAutoPlayOnTouch: false,
+                    //       reverse: false,
+                    //       autoPlay: false,
+                    //       autoPlayInterval: Duration(seconds: 4),
+                    //       autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    //       autoPlayCurve: Curves.fastOutSlowIn,
+                    //       enlargeCenterPage: true,
+                    //       // onPageChanged: callbackFunction,
+                    //       scrollDirection: Axis.horizontal,
+                    //     ),
+                    //     items: [
+                    //       IconButton(
+                    //         padding: EdgeInsets.only(left: 5.0),
+                    //         icon: Icon(Icons.insert_chart_outlined),
+                    //         color: Colors.white,
+                    //         splashColor: Color.fromRGBO(220, 180, 57, 1.0),
+                    //         onPressed: () async {
+                    //           // Implement navigation to leaderboard page here...
+                    //           Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => LeaderBoardPage()));
+                    //         },
+                    //       ),
+                    //       // GestureDetector(
+                    //       //   onTap: () async {
+                    //       //     var randomPost = await randomPostMaker();
+                    //       //     Navigator.push(
+                    //       //         context,
+                    //       //         MaterialPageRoute(
+                    //       //             builder: (context) => PostDetail(randomPost)));
+                    //       //   },
+                    //       //   child: Container(
+                    //       //     margin: const EdgeInsets.all(7.0),
+                    //       //     padding: const EdgeInsets.all(7.0),
+                    //       //     decoration: BoxDecoration(
+                    //       //         border: Border.all(color: Colors.white),
+                    //       //         borderRadius: BorderRadius.circular(7)),
+                    //       //     child: Text(
+                    //       //       "Surprise",
+                    //       //       style: TextStyle(fontSize: 14.0, color: Colors.white),
+                    //       //     ),
+                    //       //   ),
+                    //       // ),
+                    //       // FocusedMenuHolder(
+                    //       //   menuWidth: MediaQuery.of(context).size.width * .95,
 
-                  //       //   blurSize: 5.0,
-                  //       //   menuItemExtent: 200,
-                  //       //   menuBoxDecoration: BoxDecoration(
-                  //       //       color: Colors.grey,
-                  //       //       borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  //       //   duration: Duration(milliseconds: 100),
-                  //       //   animateMenuItems: true,
-                  //       //   blurBackgroundColor: Colors.black54,
-                  //       //   openWithTap:
-                  //       //       true, // Open Focused-Menu on Tap rather than Long Press
-                  //       //   menuOffset:
-                  //       //       10.0, // Offset value to show menuItem from the selected item
-                  //       //   bottomOffsetHeight:
-                  //       //       80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
-                  //       //   menuItems: <FocusedMenuItem>[
-                  //       //     // Add Each FocusedMenuItem  for Menu Options
+                    //       //   blurSize: 5.0,
+                    //       //   menuItemExtent: 200,
+                    //       //   menuBoxDecoration: BoxDecoration(
+                    //       //       color: Colors.grey,
+                    //       //       borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    //       //   duration: Duration(milliseconds: 100),
+                    //       //   animateMenuItems: true,
+                    //       //   blurBackgroundColor: Colors.black54,
+                    //       //   openWithTap:
+                    //       //       true, // Open Focused-Menu on Tap rather than Long Press
+                    //       //   menuOffset:
+                    //       //       10.0, // Offset value to show menuItem from the selected item
+                    //       //   bottomOffsetHeight:
+                    //       //       80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                    //       //   menuItems: <FocusedMenuItem>[
+                    //       //     // Add Each FocusedMenuItem  for Menu Options
 
-                  //       //     FocusedMenuItem(
-                  //       //         title: Center(
-                  //       //             child: Text(
-                  //       //           "     Lowkey / Chill",
-                  //       //           style: GoogleFonts.robotoSlab(fontSize: 40),
-                  //       //         )),
-                  //       //         // trailingIcon: Icon(Icons.edit),
-                  //       //         onPressed: () {
-                  //       //           navigateToCategoryFeed(context, "Shows");
-                  //       //         }),
-                  //       //     FocusedMenuItem(
-                  //       //         backgroundColor: Colors.red[50],
-                  //       //         title: Text("          Rage",
-                  //       //             style: GoogleFonts.yeonSung(
-                  //       //                 fontSize: 50, color: Colors.red)),
-                  //       //         onPressed: () {
-                  //       //           navigateToCategoryFeed(context, "Parties");
-                  //       //         }),
-                  //       //   ],
-                  //       //   onPressed: () {},
-                  //       //   child: Container(
-                  //       //     margin: const EdgeInsets.all(7.0),
-                  //       //     padding: const EdgeInsets.all(7.0),
-                  //       //     decoration: BoxDecoration(
-                  //       //         border: Border.all(color: Colors.white),
-                  //       //         borderRadius: BorderRadius.circular(7)),
-                  //       //     child: Text(
-                  //       //       "Mood",
-                  //       //       style: TextStyle(fontSize: 14.0, color: Colors.white),
-                  //       //     ),
-                  //       //   ),
-                  //       // ),
-                  //     ].map((i) {
-                  //       return Builder(
-                  //         builder: (BuildContext context) {
-                  //           return Container(
-                  //               width: MediaQuery.of(context).size.width * 3,
-                  //               margin: EdgeInsets.symmetric(horizontal: 5.0),
-                  //               decoration: BoxDecoration(),
-                  //               child: Center(
-                  //                 child: i,
-                  //               ));
-                  //         },
-                  //       );
-                  //     }).toList(),
-                  //   ),
-                  // ),
+                    //       //     FocusedMenuItem(
+                    //       //         title: Center(
+                    //       //             child: Text(
+                    //       //           "     Lowkey / Chill",
+                    //       //           style: GoogleFonts.robotoSlab(fontSize: 40),
+                    //       //         )),
+                    //       //         // trailingIcon: Icon(Icons.edit),
+                    //       //         onPressed: () {
+                    //       //           navigateToCategoryFeed(context, "Shows");
+                    //       //         }),
+                    //       //     FocusedMenuItem(
+                    //       //         backgroundColor: Colors.red[50],
+                    //       //         title: Text("          Rage",
+                    //       //             style: GoogleFonts.yeonSung(
+                    //       //                 fontSize: 50, color: Colors.red)),
+                    //       //         onPressed: () {
+                    //       //           navigateToCategoryFeed(context, "Parties");
+                    //       //         }),
+                    //       //   ],
+                    //       //   onPressed: () {},
+                    //       //   child: Container(
+                    //       //     margin: const EdgeInsets.all(7.0),
+                    //       //     padding: const EdgeInsets.all(7.0),
+                    //       //     decoration: BoxDecoration(
+                    //       //         border: Border.all(color: Colors.white),
+                    //       //         borderRadius: BorderRadius.circular(7)),
+                    //       //     child: Text(
+                    //       //       "Mood",
+                    //       //       style: TextStyle(fontSize: 14.0, color: Colors.white),
+                    //       //     ),
+                    //       //   ),
+                    //       // ),
+                    //     ].map((i) {
+                    //       return Builder(
+                    //         builder: (BuildContext context) {
+                    //           return Container(
+                    //               width: MediaQuery.of(context).size.width * 3,
+                    //               margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    //               decoration: BoxDecoration(),
+                    //               child: Center(
+                    //                 child: i,
+                    //               ));
+                    //         },
+                    //       );
+                    //     }).toList(),
+                    //   ),
+                    // ),
+                  ],
+                ),
+
+                // child: Padding(
+                //   padding: const EdgeInsets.all(10.0),
+                //   child: Image.asset('lib/assets/ndlogo.png', height: 70),
+                // ),
+
+                backgroundColor: TextThemes.ndBlue,
+                //pinned: true,
+                actions: <Widget>[
+                  NamedIconMessages(
+                      iconData: Icons.mail_outline,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MessageList()));
+                      }),
+                  NamedIcon(
+                      iconData: Icons.notifications_active_outlined,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NotificationFeed()));
+                        Database().setNotifsSeen();
+                      }),
                 ],
-              );
-            }),
-
-        // child: Padding(
-        //   padding: const EdgeInsets.all(10.0),
-        //   child: Image.asset('lib/assets/ndlogo.png', height: 70),
-        // ),
-
-        backgroundColor: TextThemes.ndBlue,
-        //pinned: true,
-        actions: <Widget>[
-          NamedIconMessages(
-              iconData: Icons.mail_outline,
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MessageList()));
-              }),
-          NamedIcon(
-              iconData: Icons.notifications_active_outlined,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationFeed()));
-                Database().setNotifsSeen();
-              }),
-        ],
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.all(5),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {},
-                child: Bounce(
-                  duration: Duration(milliseconds: 50),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      PageRouteBuilder(pageBuilder: (_, __, ___) => Home()),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  child: Image.asset(
-                    'lib/assets/moovblue.png',
-                    fit: BoxFit.cover,
-                    height: 50.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: EdgeInsets.all(5),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {},
+                        child: Bounce(
+                          duration: Duration(milliseconds: 50),
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (_, __, ___) => Home()),
+                              (Route<dynamic> route) => false,
+                            );
+                          },
+                          child: Image.asset(
+                            'lib/assets/moovblue.png',
+                            fit: BoxFit.cover,
+                            height: 50.0,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
-      body: PageView(
-        physics: ClampingScrollPhysics(),
-        children: currentUser.userType.containsKey("clubExecutive")
-            ? <Widget>[
-                HomePage(),
-                SearchBar(),
-                StudentClubDashboard(),
-                MOOVSPage(),
-                ProfilePage()
-              ]
-            : currentUser.isBusiness
-                ? <Widget>[HomePage(), BusinessDirectory(), ProfilePage()]
-                : <Widget>[HomePage(), SearchBar(), MOOVSPage(), ProfilePage()],
-        controller: pageController,
-        onPageChanged: onPageChanged,
-      ),
-      bottomNavigationBar: currentUser.userType.containsKey("clubExecutive")
-          ? CupertinoTabBar(
-              inactiveColor: Colors.black,
-              currentIndex: currentIndex,
-              onTap: onTap,
-              activeColor: TextThemes.ndGold,
-              items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
-                  BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
-                  BottomNavigationBarItem(icon: Icon(Icons.corporate_fare)),
-                  BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
-                  BottomNavigationBarItem(
-                      icon: CircleAvatar(
-                          radius: 16,
-                          backgroundColor:
-                              pageIndex == 3 ? TextThemes.ndGold : Colors.black,
-                          child: currentUser.photoUrl != null
-                              ? CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage:
-                                      NetworkImage(currentUser.photoUrl))
-                              : CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage: AssetImage(
-                                      'lib/assets/incognitoPic.jpg')))
-                      // CircleAvatar(
-                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
-                      //   radius: 13)
-                      ),
-                ])
-          : currentUser.isBusiness ? 
-          CupertinoTabBar(
-              inactiveColor: Colors.black,
-              currentIndex: currentIndex,
-              onTap: onTap,
-              activeColor: TextThemes.ndGold,
-              items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
-                  BottomNavigationBarItem(icon: Icon(Icons.business)),
-  BottomNavigationBarItem(
-                      icon: CircleAvatar(
-                          radius: 16,
-                          backgroundColor:
-                              pageIndex == 3 ? TextThemes.ndGold : Colors.black,
-                          child: currentUser.photoUrl != null
-                              ? CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage:
-                                      NetworkImage(currentUser.photoUrl))
-                              : CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage: AssetImage(
-                                      'lib/assets/incognitoPic.jpg')))
-                      // CircleAvatar(
-                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
-                      //   radius: 13)
-                      ),              
-                ]) :
-          CupertinoTabBar(
-              inactiveColor: Colors.black,
-              currentIndex: currentIndex,
-              onTap: onTap,
-              activeColor: TextThemes.ndGold,
-              items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home_outlined)),
-                  BottomNavigationBarItem(icon: Icon(Icons.search_outlined)),
-                  BottomNavigationBarItem(icon: Icon(Icons.group_outlined)),
-                  BottomNavigationBarItem(
-                      icon: CircleAvatar(
-                          radius: 16,
-                          backgroundColor:
-                              pageIndex == 3 ? TextThemes.ndGold : Colors.black,
-                          child: currentUser.photoUrl != null
-                              ? CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage:
-                                      NetworkImage(currentUser.photoUrl))
-                              : CircleAvatar(
-                                  radius: 14,
-                                  backgroundImage: AssetImage(
-                                      'lib/assets/incognitoPic.jpg')))
-                      // CircleAvatar(
-                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
-                      //   radius: 13)
-                      ),
-                ]),
+              ),
+              body: PageView(
+                physics: ClampingScrollPhysics(),
+                children: currentUser.userType.containsKey("clubExecutive")
+                    ? <Widget>[
+                        HomePage(),
+                        SearchBar(),
+                        StudentClubDashboard(),
+                        MOOVSPage(),
+                        ProfilePage()
+                      ]
+                    : currentUser.isBusiness
+                        ? <Widget>[
+                            HomePage(),
+                            BusinessDirectory(),
+                            ProfilePage()
+                          ]
+                        : <Widget>[
+                            HomePage(),
+                            SearchBar(),
+                            MOOVSPage(),
+                            ProfilePage()
+                          ],
+                controller: pageController,
+                onPageChanged: onPageChanged,
+              ),
+              bottomNavigationBar:
+                  currentUser.userType.containsKey("clubExecutive")
+                      ? CupertinoTabBar(
+                          inactiveColor: Colors.black,
+                          currentIndex: currentIndex,
+                          onTap: onTap,
+                          activeColor: TextThemes.ndGold,
+                          items: [
+                              BottomNavigationBarItem(
+                                  icon: Icon(Icons.home_outlined)),
+                              BottomNavigationBarItem(
+                                  icon: Icon(Icons.search_outlined)),
+                              BottomNavigationBarItem(
+                                  icon: Icon(Icons.corporate_fare)),
+                              BottomNavigationBarItem(
+                                  icon: Icon(Icons.group_outlined)),
+                              BottomNavigationBarItem(
+                                  icon: CircleAvatar(
+                                      radius: 16,
+                                      backgroundColor: pageIndex == 3
+                                          ? TextThemes.ndGold
+                                          : Colors.black,
+                                      child: currentUser.photoUrl != null
+                                          ? CircleAvatar(
+                                              radius: 14,
+                                              backgroundImage: NetworkImage(
+                                                  currentUser.photoUrl))
+                                          : CircleAvatar(
+                                              radius: 14,
+                                              backgroundImage: AssetImage(
+                                                  'lib/assets/incognitoPic.jpg')))
+                                  // CircleAvatar(
+                                  //   backgroundImage: NetworkImage(currentUser.photoUrl),
+                                  //   radius: 13)
+                                  ),
+                            ])
+                      : currentUser.isBusiness
+                          ? CupertinoTabBar(
+                              inactiveColor: Colors.black,
+                              currentIndex: currentIndex,
+                              onTap: onTap,
+                              activeColor: TextThemes.ndGold,
+                              items: [
+                                  BottomNavigationBarItem(
+                                      icon: Icon(Icons.home_outlined)),
+                                  BottomNavigationBarItem(
+                                      icon: Icon(Icons.business)),
+                                  BottomNavigationBarItem(
+                                      icon: CircleAvatar(
+                                          radius: 16,
+                                          backgroundColor: pageIndex == 3
+                                              ? TextThemes.ndGold
+                                              : Colors.black,
+                                          child: currentUser.photoUrl != null
+                                              ? CircleAvatar(
+                                                  radius: 14,
+                                                  backgroundImage: NetworkImage(
+                                                      currentUser.photoUrl))
+                                              : CircleAvatar(
+                                                  radius: 14,
+                                                  backgroundImage: AssetImage(
+                                                      'lib/assets/incognitoPic.jpg')))
+                                      // CircleAvatar(
+                                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
+                                      //   radius: 13)
+                                      ),
+                                ])
+                          : CupertinoTabBar(
+                              inactiveColor: Colors.black,
+                              currentIndex: currentIndex,
+                              onTap: onTap,
+                              activeColor: TextThemes.ndGold,
+                              items: [
+                                  BottomNavigationBarItem(
+                                      icon: Icon(Icons.home_outlined)),
+                                  BottomNavigationBarItem(
+                                      icon: Icon(Icons.search_outlined)),
+                                  BottomNavigationBarItem(
+                                      icon: Icon(Icons.group_outlined)),
+                                  BottomNavigationBarItem(
+                                      icon: CircleAvatar(
+                                          radius: 16,
+                                          backgroundColor: pageIndex == 3
+                                              ? TextThemes.ndGold
+                                              : Colors.black,
+                                          child: currentUser.photoUrl != null
+                                              ? CircleAvatar(
+                                                  radius: 14,
+                                                  backgroundImage: NetworkImage(
+                                                      currentUser.photoUrl))
+                                              : CircleAvatar(
+                                                  radius: 14,
+                                                  backgroundImage: AssetImage(
+                                                      'lib/assets/incognitoPic.jpg')))
+                                      // CircleAvatar(
+                                      //   backgroundImage: NetworkImage(currentUser.photoUrl),
+                                      //   radius: 13)
+                                      ),
+                                ]),
+            );
+          }),
     );
     // return RaisedButton(
     //   child: Text('Logout'),
