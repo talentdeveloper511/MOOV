@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/businessInterfaces/MobileOrdering.dart';
+import 'package:MOOV/businessInterfaces/livePassesSheet.dart';
 import 'package:MOOV/pages/postStats.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:http/http.dart' as http;
@@ -1001,7 +1002,8 @@ class PaySkipSendRow extends StatelessWidget {
   final bool moovOver;
   final Map menu;
   final String userId, postId;
-  PaySkipSendRow(this.paymentAmount, this.moovOver, this.menu, this.userId, this.postId);
+  PaySkipSendRow(
+      this.paymentAmount, this.moovOver, this.menu, this.userId, this.postId);
 
   @override
   Widget build(BuildContext context) {
@@ -1020,30 +1022,61 @@ class PaySkipSendRow extends StatelessWidget {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MobileOrdering(userId: userId, postId: postId))),
+                              builder: (context) => MobileOrdering(
+                                  userId: userId, postId: postId))),
                       child: Icon(Icons.menu_book, color: Colors.purple)),
                 )
               : Container(),
           moovOver
               ? Padding(
                   padding: const EdgeInsets.only(left: 7.5, right: 10),
-                  child: GradientIcon(
-                      Icons.confirmation_num_outlined,
-                      35.0,
-                      LinearGradient(
-                        colors: <Color>[
-                          Colors.red,
-                          Colors.yellow,
-                          Colors.blue,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )),
+                  child: GestureDetector(
+                    onTap: () {
+                      showBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          builder: (context) =>
+                              BuyMoovOverPassSheet(userId, postId));
+                    },
+                    child: GradientIcon(
+                        Icons.confirmation_num_outlined,
+                        35.0,
+                        LinearGradient(
+                          colors: <Color>[
+                            Colors.red,
+                            Colors.yellow,
+                            Colors.blue,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )),
+                  ),
                 )
               : Container(),
           Padding(
             padding: const EdgeInsets.only(left: 10),
-            child: Icon(Icons.send, color: Colors.blue),
+            child: GestureDetector(
+                onTap: () {
+                  HapticFeedback.lightImpact();
+
+                  postsRef.doc(postId).get().then((value) {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.bottomToTop,
+                            child: SendMOOVSearch(
+                              value['userId'],
+                              value['image'],
+                              value['startDate'],
+                              value['postId'],
+                              value['title'],
+                              value['posterName'],
+                              value['image'],
+                            )));
+                  });
+                },
+                child: Icon(Icons.send, color: Colors.blue)),
           ),
         ],
       ),

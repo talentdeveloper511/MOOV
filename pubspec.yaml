@@ -245,6 +245,7 @@ flutter:
     - lib/assets/verif.png
     - lib/assets/verif2.png
     - lib/assets/music1.png
+    - lib/assets/mopass.png
     - lib/assets/bm1.png
     - lib/assets/virtual1.png
     - lib/assets/placeholderparty1.jpg
