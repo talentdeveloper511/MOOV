@@ -1,7 +1,5 @@
 import 'dart:io';
-
-import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
-import 'package:MOOV/pages/MoovMaker.dart';
+import 'package:MOOV/moovMoney/moovMoneyAdd.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/camera.dart';
@@ -12,13 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:worm_indicator/indicator.dart';
 import 'package:worm_indicator/shape.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class MobileOrdering extends StatelessWidget {
-  MobileOrdering({Key key}) : super(key: key);
+  final String userId;
+  MobileOrdering(this.userId);
 
   final PageController controller =
       PageController(initialPage: 0, viewportFraction: .8);
@@ -64,7 +62,7 @@ class MobileOrdering extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-          stream: usersRef.doc(currentUser.id).snapshots(),
+          stream: usersRef.doc(userId).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return linearProgress();
@@ -173,7 +171,8 @@ class MobileOrdering extends StatelessWidget {
                   ],
                 ),
                 Expanded(
-                  child: MobileOrderPageView(controller, mobileOrderMenu),
+                  child:
+                      MobileOrderPageView(controller, mobileOrderMenu, userId),
                 )
               ],
             );
@@ -185,7 +184,8 @@ class MobileOrdering extends StatelessWidget {
 class MobileOrderPageView extends StatefulWidget {
   final Map mobileOrderMenu;
   final PageController controller;
-  MobileOrderPageView(this.controller, this.mobileOrderMenu);
+  final String userId;
+  MobileOrderPageView(this.controller, this.mobileOrderMenu, this.userId);
 
   @override
   _MobileOrderPageViewState createState() => _MobileOrderPageViewState();
@@ -213,9 +213,9 @@ class _MobileOrderPageViewState extends State<MobileOrderPageView> {
             child: PageView(
           controller: widget.controller,
           children: [
-            MobileItemOne(widget.mobileOrderMenu['item1']),
-            MobileItemTwo(widget.mobileOrderMenu['item2']),
-            MobileItemThree(widget.mobileOrderMenu['item3']),
+            MobileItemOne(widget.mobileOrderMenu['item1'], widget.userId),
+            MobileItemTwo(widget.mobileOrderMenu['item2'], widget.userId),
+            MobileItemThree(widget.mobileOrderMenu['item3'], widget.userId),
           ],
         )),
       ],
@@ -225,7 +225,8 @@ class _MobileOrderPageViewState extends State<MobileOrderPageView> {
 
 class MobileItemOne extends StatelessWidget {
   final Map item1;
-  MobileItemOne(this.item1);
+  final String userId;
+  MobileItemOne(this.item1, this.userId);
 
   @override
   Widget build(BuildContext context) {
@@ -332,15 +333,22 @@ class MobileItemOne extends StatelessWidget {
                               HapticFeedback.lightImpact();
 
                               showBottomSheet(
+                                backgroundColor: Colors.blue[50],
                                   context: context,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
-                                  builder: (context) => BottomSheetWidget(1));
+                                  builder: (context) => currentUser.id == userId
+                                      ? BottomSheetWidget(1)
+                                      : BottomSheetBuy(1, item1['price'],
+                                          item1['name'], item1['photo']));
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('Set it',
-                                  style: TextStyle(color: Colors.white)),
+                              child: currentUser.id == userId
+                                  ? Text('Set it',
+                                      style: TextStyle(color: Colors.white))
+                                  : Text('Buy',
+                                      style: TextStyle(color: Colors.white)),
                             ))
                       ],
                     ),
@@ -370,7 +378,8 @@ class MobileItemOne extends StatelessWidget {
 
 class MobileItemTwo extends StatelessWidget {
   final Map item2;
-  MobileItemTwo(this.item2);
+  final String userId;
+  MobileItemTwo(this.item2, this.userId);
 
   @override
   Widget build(BuildContext context) {
@@ -479,12 +488,18 @@ class MobileItemTwo extends StatelessWidget {
                                   context: context,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
-                                  builder: (context) => BottomSheetWidget(2));
+                                  builder: (context) => currentUser.id == userId
+                                      ? BottomSheetWidget(2)
+                                      : BottomSheetBuy(2, item2['price'],
+                                          item2['name'], item2['photo']));
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('Set it',
-                                  style: TextStyle(color: Colors.white)),
+                              child: currentUser.id == userId
+                                  ? Text('Set it',
+                                      style: TextStyle(color: Colors.white))
+                                  : Text('Buy',
+                                      style: TextStyle(color: Colors.white)),
                             ))
                       ],
                     ),
@@ -513,7 +528,8 @@ class MobileItemTwo extends StatelessWidget {
 
 class MobileItemThree extends StatelessWidget {
   final Map item3;
-  MobileItemThree(this.item3);
+  final String userId;
+  MobileItemThree(this.item3, this.userId);
 
   @override
   Widget build(BuildContext context) {
@@ -622,12 +638,18 @@ class MobileItemThree extends StatelessWidget {
                                   context: context,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
-                                  builder: (context) => BottomSheetWidget(3));
+                                  builder: (context) => currentUser.id == userId
+                                      ? BottomSheetWidget(3)
+                                      : BottomSheetBuy(3, item3['price'],
+                                          item3['name'], item3['photo']));
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('Set it',
-                                  style: TextStyle(color: Colors.white)),
+                              child: currentUser.id == userId
+                                  ? Text('Set it',
+                                      style: TextStyle(color: Colors.white))
+                                  : Text('Buy',
+                                      style: TextStyle(color: Colors.white)),
                             ))
                       ],
                     ),
@@ -1050,5 +1072,127 @@ class _DecoratedTextFieldState extends State<DecoratedTextField> {
                       : Container()
             ],
           );
+  }
+}
+
+class BottomSheetBuy extends StatefulWidget {
+  final int itemNumber, price;
+  final String name, photo;
+  BottomSheetBuy(this.itemNumber, this.price, this.name, this.photo);
+
+  @override
+  _BottomSheetBuyState createState() => _BottomSheetBuyState();
+}
+
+class _BottomSheetBuyState extends State<BottomSheetBuy> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      height: 300,
+      width: MediaQuery.of(context).size.width * .95,
+      child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 5),
+          child: CircleAvatar(
+            radius: 45,
+            backgroundColor: widget.itemNumber == 1
+                ? Colors.blue[50]
+                : widget.itemNumber == 2
+                    ? Colors.pink[50]
+                    : Colors.orange[50],
+            child: CircleAvatar(
+              radius: 41,
+              backgroundImage: NetworkImage(widget.photo),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 300,
+          child: Text(
+            widget.name,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+              color: widget.itemNumber == 1
+                  ? Colors.blue[900]
+                  : widget.itemNumber == 2
+                      ? Colors.pink[900]
+                      : Colors.orange[900],
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 15.0, bottom: 20),
+          child: Text("\$" + widget.price.toString(),
+              style: TextStyle(fontSize: 20)),
+        ),
+        ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: widget.itemNumber == 1
+                  ? Colors.blue
+                  : widget.itemNumber == 2
+                      ? Colors.pink
+                      : Colors.orange,
+              elevation: 5.0,
+            ),
+            onPressed: () {
+              HapticFeedback.lightImpact();
+              if (currentUser.moovMoney < widget.price) {
+                showBottomSheet(
+                  backgroundColor: Colors.white,
+                    context: context,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    builder: (context) => BottomSheetDeposit());
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Confirm', style: TextStyle(color: Colors.white)),
+            ))
+      ]),
+    );
+  }
+}
+
+class BottomSheetDeposit extends StatelessWidget {
+  const BottomSheetDeposit({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+        height: 200,
+        width: MediaQuery.of(context).size.width * .95,
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 5),
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+                radius: 41, backgroundImage: AssetImage('lib/assets/mm.png')),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("You don't have enough MOOV Money!"),
+          ),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: TextThemes.ndGold,
+                elevation: 5.0,
+              ),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MoovMoneyAdd(0, currentUser.moovMoney))),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Deposit', style: TextStyle(color: Colors.white)),
+              ))
+        ]));
   }
 }

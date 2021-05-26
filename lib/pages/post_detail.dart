@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
+import 'package:MOOV/businessInterfaces/MobileOrdering.dart';
 import 'package:MOOV/pages/postStats.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:http/http.dart' as http;
@@ -416,6 +417,10 @@ class _NonImageContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map mobileOrderMenu;
+    if (course.data()['mobileOrderMenu'] != null) {
+      mobileOrderMenu = course['mobileOrderMenu'];
+    }
     return Container(
       //  margin: const EdgeInsets.all(8.0),
       child: Column(
@@ -426,8 +431,8 @@ class _NonImageContents extends StatelessWidget {
           PostTimeAndPlace(startDate, address, course['paymentAmount'],
               course['userId'], course['postId']),
           // _AuthorContent(userId, course),
-          PaySkipSendRow(
-              course['paymentAmount'], course['moovOver'], course['menu']),
+          PaySkipSendRow(course['paymentAmount'], course['moovOver'],
+              mobileOrderMenu, course['userId']),
           GestureDetector(
             onTap: () {
               showComments(context,
@@ -995,7 +1000,8 @@ class PaySkipSendRow extends StatelessWidget {
   final int paymentAmount;
   final bool moovOver;
   final Map menu;
-  PaySkipSendRow(this.paymentAmount, this.moovOver, this.menu);
+  final String userId;
+  PaySkipSendRow(this.paymentAmount, this.moovOver, this.menu, this.userId);
 
   @override
   Widget build(BuildContext context) {
@@ -1007,28 +1013,38 @@ class PaySkipSendRow extends StatelessWidget {
           paymentAmount != null && paymentAmount != 0
               ? Icon(Icons.attach_money, color: Colors.orange)
               : Container(),
-          menu.isNotEmpty
+          menu != null && menu.isNotEmpty
               ? Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Icon(Icons.menu_book, color: Colors.purple),
-              )
+                  padding: const EdgeInsets.only(left: 10, right: 7.5),
+                  child: GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MobileOrdering(userId))),
+                      child: Icon(Icons.menu_book, color: Colors.purple)),
+                )
+              : Container(),
+          moovOver
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 7.5, right: 10),
+                  child: GradientIcon(
+                      Icons.confirmation_num_outlined,
+                      35.0,
+                      LinearGradient(
+                        colors: <Color>[
+                          Colors.red,
+                          Colors.yellow,
+                          Colors.blue,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )),
+                )
               : Container(),
           Padding(
-            padding: const EdgeInsets.only(left: 15.0, right: 20),
-            child: GradientIcon(
-                Icons.confirmation_num_outlined,
-                35.0,
-                LinearGradient(
-                  colors: <Color>[
-                    Colors.red,
-                    Colors.yellow,
-                    Colors.blue,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                )),
+            padding: const EdgeInsets.only(left: 10),
+            child: Icon(Icons.send, color: Colors.blue),
           ),
-          Icon(Icons.send, color: Colors.blue),
         ],
       ),
     );

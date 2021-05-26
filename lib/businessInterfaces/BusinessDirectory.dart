@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/businessInterfaces/MobileOrdering.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
+import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
@@ -358,7 +359,7 @@ class _BusinessDirectoryState extends State<BusinessDirectory>
         Future.delayed(Duration(milliseconds: 500), () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MobileOrdering()),
+            MaterialPageRoute(builder: (context) => MobileOrdering(currentUser.id)),
           );
         });
       },

@@ -29,6 +29,7 @@ class User {
   final String businessType;
   final Map userType;
   final Map mobileOrderMenu;
+  final int moovMoney;
 
   User(
       {this.id,
@@ -58,6 +59,7 @@ class User {
       this.businessLocation,
       this.businessType,
       this.userType,
+      this.moovMoney,
       this.mobileOrderMenu});
 
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -89,6 +91,9 @@ class User {
         businessLocation: doc.data()['businessLocation'],
         businessType: doc.data()['businessType'],
         userType: doc.data()['userType'],
-        mobileOrderMenu: doc.data()['mobileOrderMenu'] == null ? null : doc.data()['mobileOrderMenu']);
+        moovMoney: doc.data()['moovMoney'],
+        mobileOrderMenu: doc.data()['mobileOrderMenu'] == null
+            ? null
+            : doc.data()['mobileOrderMenu']);
   }
 }

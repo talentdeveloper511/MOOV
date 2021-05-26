@@ -252,7 +252,7 @@ class _EditPostState extends State<EditPost> {
           String description = snapshot.data['description'];
 
           String maxOccupancy = snapshot.data['maxOccupancy'].toString();
-          String venmo = snapshot.data['venmo'].toString();
+          String venmo = snapshot.data['paymentAmount'].toString();
           final Map statuses = snapshot.data['statuses'];
 
           statuses.removeWhere((key, value) => value != -1 && value != 5);

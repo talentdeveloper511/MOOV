@@ -275,7 +275,7 @@ flutter:
     - lib/assets/icons/SportICON2.png
     - lib/assets/icons/HangoutsICON.png
     - lib/assets/icons/HangoutsICON2.png
-
+    - lib/assets/mm.png
     - lib/assets/icons/RecICON.png
     - lib/assets/icons/RecICON2.png
     - lib/assets/icons/ShowICON.png

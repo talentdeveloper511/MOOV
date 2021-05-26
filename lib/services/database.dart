@@ -222,7 +222,8 @@ class Database {
       posterName,
       bool push,
       int goingCount,
-      bool moovOver}) {
+      bool moovOver,
+      Map mobileOrderMenu}) {
     bool isPartyOrBar = false;
     if (type == "Parties" || type == "Bars & Restaurants") {
       isPartyOrBar = true;
@@ -252,7 +253,7 @@ class Database {
       "going": [],
       "isPartyOrBar": isPartyOrBar,
       "stats": {},
-      "moovOver": moovOver
+      "moovOver": moovOver,
     });
 
     postsRef.doc(postId).set({
@@ -279,7 +280,8 @@ class Database {
       "going": [],
       "isPartyOrBar": isPartyOrBar,
       "stats": {},
-      "moovOver": moovOver
+      "moovOver": moovOver,
+      "mobileOrderMenu": mobileOrderMenu
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {

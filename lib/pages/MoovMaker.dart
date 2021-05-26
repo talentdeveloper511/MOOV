@@ -404,6 +404,9 @@ class _MoovMakerFormState extends State<MoovMakerForm>
   bool push = true;
   int detailLength = 0;
   bool _moovOver = false;
+  bool _item1 = true;
+  bool _item2 = true;
+  bool _item3 = true;
 
   void refreshData() {
     id++;
@@ -890,50 +893,76 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                 currentUser.mobileOrderMenu != null &&
                         currentUser.mobileOrderMenu.isNotEmpty
                     ? Stack(
-                      children: [
-                        Container(
+                        children: [
+                          Container(
                             decoration: BoxDecoration(border: Border.all()),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 8, top: 25, bottom: 10),
                               child: Row(
                                 children: [
-                                  currentUser.mobileOrderMenu['item1'].isNotEmpty
+                                  currentUser
+                                          .mobileOrderMenu['item1'].isNotEmpty
                                       ? Expanded(
                                           child: CheckboxListTile(
-                                              title: Text(currentUser
-                                                      .mobileOrderMenu['item1']
-                                                  ['name']),
-                                              value: _moovOver,
-                                              onChanged: (bool value) => setState(
-                                                  () => _moovOver = value)),
+                                              title: Text(
+                                                currentUser.mobileOrderMenu[
+                                                    'item1']['name'],
+                                                maxLines: 2,
+                                              ),
+                                              value: _item1,
+                                              onChanged: (bool value) =>
+                                                  setState(
+                                                      () => _item1 = value)),
                                         )
                                       : Container(),
-                                  Expanded(
-                                    child: CheckboxListTile(
-                                        title: Text("Item 1"),
-                                        value: _moovOver,
-                                        onChanged: (bool value) =>
-                                            setState(() => _moovOver = value)),
-                                  ),
-                                  Expanded(
-                                    child: CheckboxListTile(
-                                        title: Text("Item 1"),
-                                        value: _moovOver,
-                                        onChanged: (bool value) =>
-                                            setState(() => _moovOver = value)),
-                                  ),
+                                  currentUser
+                                          .mobileOrderMenu['item2'].isNotEmpty
+                                      ? Expanded(
+                                          child: CheckboxListTile(
+                                              title: Text(
+                                                currentUser.mobileOrderMenu[
+                                                    'item2']['name'],
+                                                maxLines: 2,
+                                              ),
+                                              value: _item2,
+                                              onChanged: (bool value) =>
+                                                  setState(
+                                                      () => _item2 = value)),
+                                        )
+                                      : Container(),
+                                  currentUser
+                                          .mobileOrderMenu['item3'].isNotEmpty
+                                      ? Expanded(
+                                          child: CheckboxListTile(
+                                              title: Text(
+                                                currentUser.mobileOrderMenu[
+                                                    'item3']['name'],
+                                                maxLines: 2,
+                                              ),
+                                              value: _item3,
+                                              onChanged: (bool value) =>
+                                                  setState(
+                                                      () => _item3 = value)),
+                                        )
+                                      : Container()
                                 ],
                               ),
                             ),
                           ),
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: Text("Offer Mobile Ordering?",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 12)),
-                           ),
-                      ],
-                    )
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Offer Mobile Ordering?",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 12)),
+                            ),
+                          ),
+                        ],
+                      )
                     : Container(),
                 Padding(
                   padding:
@@ -1747,6 +1776,20 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                     paymentAmountInt = int.parse(x);
                                   }
 
+                                  //mobile ordering menu
+                                  if (currentUser
+                                      .mobileOrderMenu['item1'].isEmpty) {
+                                    _item1 = null;
+                                  }
+                                  if (currentUser
+                                      .mobileOrderMenu['item2'].isEmpty) {
+                                    _item2 = null;
+                                  }
+                                  if (currentUser
+                                      .mobileOrderMenu['item3'].isEmpty) {
+                                    _item3 = null;
+                                  }
+
                                   firebase_storage.UploadTask uploadTask;
 
                                   uploadTask = ref.putFile(_image);
@@ -1771,12 +1814,13 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                                     ? "Shows"
                                                     : "Recreation",
                                             privacy: "Public",
-                                            description:
-                                                descriptionController.text,
+                                            description: descriptionController
+                                                .text,
                                             address: currentUser.dorm,
                                             startDate: currentValue,
-                                            unix: currentValue
-                                                .millisecondsSinceEpoch,
+                                            unix:
+                                                currentValue
+                                                    .millisecondsSinceEpoch,
                                             statuses: inviteesNameList,
                                             maxOccupancy: maxOccupancyInt,
                                             paymentAmount: paymentAmountInt,
@@ -1785,28 +1829,36 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                             postId: postId,
                                             posterName: currentUser.displayName,
                                             push: push,
-                                            moovOver: _moovOver)
-                                        : Database().createPost(
-                                            title: titleController.text,
-                                            type: typeDropdownValue,
-                                            privacy: privacyDropdownValue,
-                                            description:
-                                                descriptionController.text,
-                                            address: addressController.text,
-                                            startDate: currentValue,
-                                            clubId: clubNameMap[clubPostValue],
-                                            unix: currentValue
-                                                .millisecondsSinceEpoch,
-                                            statuses: inviteesNameList,
-                                            maxOccupancy: maxOccupancyInt,
-                                            paymentAmount: paymentAmountInt,
-                                            imageUrl: downloadUrl,
-                                            userId: strUserId,
-                                            postId: postId,
-                                            posterName: currentUser.displayName,
-                                            push: push,
-                                            location: location,
-                                            moovOver: _moovOver);
+                                            moovOver: _moovOver,
+                                            mobileOrderMenu: {
+                                                "item1": _item1,
+                                                "item2": _item2,
+                                                "item3": _item3
+                                              })
+                                        : Database()
+                                            .createPost(
+                                                title: titleController.text,
+                                                type: typeDropdownValue,
+                                                privacy: privacyDropdownValue,
+                                                description:
+                                                    descriptionController.text,
+                                                address: addressController.text,
+                                                startDate: currentValue,
+                                                clubId:
+                                                    clubNameMap[clubPostValue],
+                                                unix: currentValue
+                                                    .millisecondsSinceEpoch,
+                                                statuses: inviteesNameList,
+                                                maxOccupancy: maxOccupancyInt,
+                                                paymentAmount: paymentAmountInt,
+                                                imageUrl: downloadUrl,
+                                                userId: strUserId,
+                                                postId: postId,
+                                                posterName:
+                                                    currentUser.displayName,
+                                                push: push,
+                                                location: location,
+                                                moovOver: _moovOver);
 
                                     nextSunday().then((value) {
                                       wrapupRef
