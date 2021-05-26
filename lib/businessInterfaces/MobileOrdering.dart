@@ -1121,6 +1121,7 @@ class _BottomSheetBuyState extends State<BottomSheetBuy> {
         ? linearProgress()
         : (success)
             ? Container(
+              height: 300,
                 width: MediaQuery.of(context).size.width * .95,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

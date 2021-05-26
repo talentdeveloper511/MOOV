@@ -286,7 +286,8 @@ class _MoneyAmountState extends State<MoneyAmount> {
                         Expanded(
                           flex: 1,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 150),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 150),
                             child: TextField(
                               decoration: InputDecoration(
                                   hintText: "\$",
@@ -370,7 +371,12 @@ class _MoneyAmountState extends State<MoneyAmount> {
                                   successCheck = true;
                                 }))
                             .then((value) => Timer(Duration(seconds: 3), () {
-                                  Navigator.pop(context);
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Home()),
+                                    (Route<dynamic> route) => false,
+                                  );
                                 }));
                       }
                     },
