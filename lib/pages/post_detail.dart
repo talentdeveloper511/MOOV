@@ -1,13 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
 import 'package:MOOV/businessInterfaces/MobileOrdering.dart';
 import 'package:MOOV/businessInterfaces/livePassesSheet.dart';
-import 'package:MOOV/pages/postStats.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
-import 'package:http/http.dart' as http;
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/Comment.dart';
@@ -31,7 +27,6 @@ import 'package:intl/intl.dart';
 import 'package:MOOV/widgets/going_statuses.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:share/share.dart';
 // import 'package:stripe_payment/stripe_payment.dart';
 import 'package:url_launcher/url_launcher.dart';
 

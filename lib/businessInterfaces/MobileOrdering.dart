@@ -1214,9 +1214,10 @@ class _BottomSheetBuyState extends State<BottomSheetBuy> {
                               }, SetOptions(merge: true));
 
                               usersRef.doc(currentUser.id).set({
-                                "livePasses": [
+                                "livePasses": FieldValue.arrayUnion([
                                   {
                                     "name": widget.name,
+                                    "type": "item",
                                     "price": widget.price,
                                     "photo": widget.photo,
                                     "time": Timestamp.now(),
@@ -1224,7 +1225,7 @@ class _BottomSheetBuyState extends State<BottomSheetBuy> {
                                     "postId": widget.postId,
                                     "passId": passId
                                   }
-                                ]
+                                ])
                               }, SetOptions(merge: true)).then(
                                   (value) => setState(() {
                                         isLoading = false;

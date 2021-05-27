@@ -8,6 +8,9 @@ import 'package:MOOV/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:worm_indicator/indicator.dart';
+import 'package:worm_indicator/shape.dart';
 
 class LivePassesSheet extends StatefulWidget {
   final List livePasses;
@@ -20,6 +23,7 @@ class LivePassesSheet extends StatefulWidget {
 class _LivePassesSheetState extends State<LivePassesSheet> {
   bool isLoading = false;
   bool success = false;
+  PageController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -36,66 +40,147 @@ class _LivePassesSheetState extends State<LivePassesSheet> {
                   color: Colors.white,
                 )
               ])
-            : Container(
-                color: Colors.green,
-                margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
-                height: 600,
-                width: MediaQuery.of(context).size.width * .95,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 5),
-                        child: CircleAvatar(
-                          radius: 90,
-                          backgroundColor: Colors.blue[50],
-                          child: CircleAvatar(
-                            backgroundColor: Colors.green,
-                            radius: 85,
-                            child:
-                                widget.livePasses[0]['name'] == "MOOV Over Pass"
-                                    ? GradientIcon(
-                                        Icons.confirmation_num_outlined,
-                                        100.0,
-                                        LinearGradient(
-                                          colors: <Color>[
-                                            Colors.red,
-                                            Colors.yellow,
-                                            Colors.blue,
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                        ))
-                                    : null,
-                            backgroundImage: widget.livePasses[0]['name'] ==
-                                    "MOOV Over Pass"
-                                ? null
-                                : NetworkImage(widget.livePasses[0]['photo']),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 300,
-                        child: Text(
-                          widget.livePasses[0]['name'],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white),
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                      SizedBox(height: 30),
-                      PulsatingCircleIconButton(widget.livePasses),
-                    ]),
+            : Column(
+                children: [
+                  // WormIndicator(
+                  //   controller: _controller,
+                  //   length: 1,
+                  //   shape: Shape(
+                  //       width: 100,
+                  //       height: 18,
+                  //       spacing: 0,
+                  //       shape: DotShape.Rectangle),
+                  // ),
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _controller,
+                      itemCount: widget.livePasses.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return StreamBuilder(
+                            stream: postsRef
+                                .doc(widget.livePasses[index]['postId'])
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Container();
+                              }
+                              String businessName = snapshot.data['posterName'];
+                              Timestamp startTime = snapshot.data['startDate'];
+
+                              return Container(
+                                  color: Colors.green,
+                                  margin: const EdgeInsets.only(
+                                      left: 15, right: 15, bottom: 10),
+                                  height: 400,
+                                  width:
+                                      MediaQuery.of(context).size.width * .95,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 5),
+                                        child: CircleAvatar(
+                                          radius: 90,
+                                          backgroundColor: Colors.blue[50],
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.green,
+                                            radius: 85,
+                                            child: widget.livePasses[index]
+                                                        ['type'] ==
+                                                    "MOOV Over Pass"
+                                                ? GradientIcon(
+                                                    Icons
+                                                        .confirmation_num_outlined,
+                                                    100.0,
+                                                    LinearGradient(
+                                                      colors: <Color>[
+                                                        Colors.red,
+                                                        Colors.yellow,
+                                                        Colors.blue,
+                                                      ],
+                                                      begin: Alignment.topLeft,
+                                                      end:
+                                                          Alignment.bottomRight,
+                                                    ))
+                                                : null,
+                                            backgroundImage:
+                                                widget.livePasses[index]
+                                                            ['type'] ==
+                                                        "MOOV Over Pass"
+                                                    ? null
+                                                    : NetworkImage(
+                                                        widget.livePasses[index]
+                                                            ['photo']),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 300,
+                                        child: Text(
+                                          widget.livePasses[index]['name'],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ),
+                                      SizedBox(height: 15),
+                                      Text(businessName,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20)),
+                                      Text(
+                                          DateFormat('EEE')
+                                              .add_jm()
+                                              .format(startTime.toDate()),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20)),
+                                      SizedBox(height: 35),
+                                      PulsatingCircleIconButton(
+                                          widget.livePasses[index]),
+                                      SizedBox(height: 20),
+                                    widget.livePasses.length > 1 ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 14.0,
+                                            height: 14.0,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Container(
+                                            width: 14.0,
+                                            height: 14.0,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ],
+                                      ): Container(),
+                                    ],
+                                  ));
+                            });
+                      },
+                    ),
+                  ),
+                ],
               );
   }
 }
 
 class PulsatingCircleIconButton extends StatefulWidget {
-  final List livePasses;
+  final Map livePasses;
   const PulsatingCircleIconButton(this.livePasses);
   @override
   _PulsatingCircleIconButtonState createState() =>
@@ -128,7 +213,7 @@ class _PulsatingCircleIconButtonState extends State<PulsatingCircleIconButton>
         onDoubleTap: _confirming
             ? () {
                 usersRef.doc(currentUser.id).set(
-                    {"livePasses": FieldValue.arrayRemove(widget.livePasses)},
+                    {"livePasses": FieldValue.arrayRemove([widget.livePasses])},
                     SetOptions(merge: true));
 
                 Navigator.pushAndRemoveUntil(
@@ -146,7 +231,7 @@ class _PulsatingCircleIconButtonState extends State<PulsatingCircleIconButton>
         child: AnimatedContainer(
           duration: Duration(seconds: 1),
           width: 300,
-          height: 300,
+          height: 250,
           child: Center(
               child: Stack(
             children: [
@@ -157,7 +242,7 @@ class _PulsatingCircleIconButtonState extends State<PulsatingCircleIconButton>
                   child: Text("RESTAURANT STAFF\n\nDOUBLE TAP",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 35,
                           color: Colors.white,
                           fontWeight: FontWeight.bold)),
                 ),
@@ -338,9 +423,18 @@ class _BuyMoovOverPassSheetState extends State<BuyMoovOverPassSheet>
                                             BottomSheetDeposit());
                                   } else {
                                     String passId = generateRandomString(20);
+
                                     usersRef.doc(currentUser.id).set({
-                                      "livePasses": [
+                                      "moovMoney": FieldValue.increment(-10)
+                                    }, SetOptions(merge: true));
+                                    usersRef.doc(widget.businessUserId).set(
+                                        {"moovMoney": FieldValue.increment(10)},
+                                        SetOptions(merge: true));
+
+                                    usersRef.doc(currentUser.id).set({
+                                      "livePasses": FieldValue.arrayUnion([
                                         {
+                                          "type": "MOOV Over Pass",
                                           "name": "MOOV Over Pass",
                                           "price": 10,
                                           "photo": "widget.photo",
@@ -349,7 +443,7 @@ class _BuyMoovOverPassSheetState extends State<BuyMoovOverPassSheet>
                                           "postId": widget.postId,
                                           "passId": passId
                                         }
-                                      ]
+                                      ])
                                     }, SetOptions(merge: true)).then(
                                         (value) => setState(() {
                                               _isLoading = false;
