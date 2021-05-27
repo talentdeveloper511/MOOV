@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:worm_indicator/indicator.dart';
 import 'package:worm_indicator/shape.dart';
 
@@ -40,142 +41,182 @@ class _LivePassesSheetState extends State<LivePassesSheet> {
                   color: Colors.white,
                 )
               ])
-            : Column(
+            : Stack(
                 children: [
-                  // WormIndicator(
-                  //   controller: _controller,
-                  //   length: 1,
-                  //   shape: Shape(
-                  //       width: 100,
-                  //       height: 18,
-                  //       spacing: 0,
-                  //       shape: DotShape.Rectangle),
-                  // ),
-                  Expanded(
-                    child: PageView.builder(
-                      controller: _controller,
-                      itemCount: widget.livePasses.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return StreamBuilder(
-                            stream: postsRef
-                                .doc(widget.livePasses[index]['postId'])
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Container();
-                              }
-                              String businessName = snapshot.data['posterName'];
-                              Timestamp startTime = snapshot.data['startDate'];
+                  Container(
+                    height: 550,
+                    child: Column(
+                      children: [
+                        // WormIndicator(
+                        //   controller: _controller,
+                        //   length: 1,
+                        //   shape: Shape(
+                        //       width: 100,
+                        //       height: 18,
+                        //       spacing: 0,
+                        //       shape: DotShape.Rectangle),
+                        // ),
+                        Expanded(
+                          child: PageView.builder(
+                            controller: _controller,
+                            itemCount: widget.livePasses.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return StreamBuilder(
+                                  stream: postsRef
+                                      .doc(widget.livePasses[index]['postId'])
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Container();
+                                    }
+                                    String businessName =
+                                        snapshot.data['posterName'];
+                                    Timestamp startTime =
+                                        snapshot.data['startDate'];
 
-                              return Container(
-                                  color: Colors.green,
-                                  margin: const EdgeInsets.only(
-                                      left: 15, right: 15, bottom: 10),
-                                  height: 400,
-                                  width:
-                                      MediaQuery.of(context).size.width * .95,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, bottom: 5),
-                                        child: CircleAvatar(
-                                          radius: 90,
-                                          backgroundColor: Colors.blue[50],
-                                          child: CircleAvatar(
-                                            backgroundColor: Colors.green,
-                                            radius: 85,
-                                            child: widget.livePasses[index]
-                                                        ['type'] ==
-                                                    "MOOV Over Pass"
-                                                ? GradientIcon(
-                                                    Icons
-                                                        .confirmation_num_outlined,
-                                                    100.0,
-                                                    LinearGradient(
-                                                      colors: <Color>[
-                                                        Colors.red,
-                                                        Colors.yellow,
-                                                        Colors.blue,
-                                                      ],
-                                                      begin: Alignment.topLeft,
-                                                      end:
-                                                          Alignment.bottomRight,
-                                                    ))
-                                                : null,
-                                            backgroundImage:
+                                    return Container(
+                                        color: Colors.green,
+                                        margin: const EdgeInsets.only(
+                                            left: 15, right: 15, bottom: 10),
+                                        height: 400,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .95,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 20, bottom: 5),
+                                              child: CircleAvatar(
+                                                radius: 90,
+                                                backgroundColor:
+                                                    Colors.blue[50],
+                                                child: CircleAvatar(
+                                                  backgroundColor: Colors.green,
+                                                  radius: 85,
+                                                  child: widget.livePasses[
+                                                              index]['type'] ==
+                                                          "MOOV Over Pass"
+                                                      ? GradientIcon(
+                                                          Icons
+                                                              .confirmation_num_outlined,
+                                                          100.0,
+                                                          LinearGradient(
+                                                            colors: <Color>[
+                                                              Colors.red,
+                                                              Colors.yellow,
+                                                              Colors.blue,
+                                                            ],
+                                                            begin: Alignment
+                                                                .topLeft,
+                                                            end: Alignment
+                                                                .bottomRight,
+                                                          ))
+                                                      : null,
+                                                  backgroundImage:
+                                                      widget.livePasses[index]
+                                                                  ['type'] ==
+                                                              "MOOV Over Pass"
+                                                          ? null
+                                                          : NetworkImage(widget
+                                                                  .livePasses[
+                                                              index]['photo']),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 300,
+                                              child: Text(
                                                 widget.livePasses[index]
-                                                            ['type'] ==
-                                                        "MOOV Over Pass"
-                                                    ? null
-                                                    : NetworkImage(
-                                                        widget.livePasses[index]
-                                                            ['photo']),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 300,
-                                        child: Text(
-                                          widget.livePasses[index]['name'],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.fade,
-                                        ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      Text(businessName,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20)),
-                                      Text(
-                                          DateFormat('EEE')
-                                              .add_jm()
-                                              .format(startTime.toDate()),
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20)),
-                                      SizedBox(height: 35),
-                                      PulsatingCircleIconButton(
-                                          widget.livePasses[index]),
-                                      SizedBox(height: 20),
-                                      widget.livePasses.length > 1
-                                          ? Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 14.0,
-                                                  height: 14.0,
-                                                  decoration: BoxDecoration(
+                                                    ['name'],
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 25,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Colors.white),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.fade,
+                                              ),
+                                            ),
+                                            SizedBox(height: 15),
+                                            Text(businessName,
+                                                style: TextStyle(
                                                     color: Colors.white,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                                SizedBox(width: 5),
-                                                Container(
-                                                  width: 14.0,
-                                                  height: 14.0,
-                                                  decoration: BoxDecoration(
+                                                    fontSize: 20)),
+                                            Text(
+                                                DateFormat('EEE')
+                                                    .add_jm()
+                                                    .format(startTime.toDate()),
+                                                style: TextStyle(
                                                     color: Colors.white,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          : Container(),
-                                    ],
-                                  ));
-                            });
-                      },
+                                                    fontSize: 20)),
+                                            SizedBox(height: 35),
+                                            PulsatingCircleIconButton(
+                                                widget.livePasses[index]),
+                                            SizedBox(height: 20),
+                                            widget.livePasses.length > 1
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        width: 14.0,
+                                                        height: 14.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Container(
+                                                        width: 14.0,
+                                                        height: 14.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Container(),
+                                          ],
+                                        ));
+                                  });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  Positioned(
+                      top: 5,
+                      right: 5,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.pink,
+                            elevation: 5.0,
+                          ),
+                          onPressed: () {
+                            HapticFeedback.lightImpact();
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return TipDialog();
+                                });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('TIP',
+                                style: TextStyle(color: Colors.white)),
+                          )))
                 ],
               );
   }
@@ -233,7 +274,7 @@ class _PulsatingCircleIconButtonState extends State<PulsatingCircleIconButton>
         child: AnimatedContainer(
           duration: Duration(seconds: 1),
           width: 300,
-          height: 220,
+          height: 185,
           child: Center(
               child: Stack(
             children: [
@@ -290,7 +331,8 @@ class BuyMoovOverPassSheet extends StatefulWidget {
   final bool haveAlready;
   final List livePasses;
 
-  BuyMoovOverPassSheet(this.businessUserId, this.postId, this.haveAlready, this.livePasses);
+  BuyMoovOverPassSheet(
+      this.businessUserId, this.postId, this.haveAlready, this.livePasses);
 
   @override
   _BuyMoovOverPassSheetState createState() => _BuyMoovOverPassSheetState();
@@ -493,5 +535,175 @@ class _BuyMoovOverPassSheetState extends State<BuyMoovOverPassSheet>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+}
+
+class TipDialog extends StatefulWidget {
+  final int moovMoneyBalance;
+  final int tip;
+
+  const TipDialog({this.moovMoneyBalance, this.tip});
+
+  @override
+  _TipDialogState createState() => _TipDialogState();
+}
+
+class _TipDialogState extends State<TipDialog> {
+  int _currentIntValue = 0;
+  bool isChecking = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      elevation: 10,
+      backgroundColor: Colors.transparent,
+      child: contentBox(context),
+    );
+  }
+
+  contentBox(context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(5),
+          margin: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: isChecking ? Colors.green : Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+              ]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                height: 110,
+              ),
+              isChecking
+                  ? Icon(Icons.check, size: 45, color: Colors.white)
+                  : Text(
+                      "Make their night.",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                    ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                "The highest tip of the night gets a FREE MOOV Over Pass™ and 100 points!",
+                style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 22,
+              ),
+                SizedBox(height: 16),
+        NumberPicker(
+          itemHeight: 30,
+          value: _currentIntValue,
+          minValue: 0,
+          maxValue: 10,
+          step: 1,
+          haptics: true,
+          onChanged: (value) => setState(() => _currentIntValue = value),
+        ),
+        SizedBox(height: 32),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove),
+              onPressed: () => setState(() {
+                final newValue = _currentIntValue - 1;
+                _currentIntValue = newValue.clamp(0, 10);
+              }),
+            ),
+            Text('Tip: \$$_currentIntValue'),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => setState(() {
+                final newValue = _currentIntValue + 1;
+                _currentIntValue = newValue.clamp(0, 10);
+              }),
+            ),
+          ],
+        ),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      isChecking = true;
+                    });
+                  },
+                  style: TextButton.styleFrom(
+                      side: BorderSide(color: Colors.green),
+                      primary: Colors.purple),
+                  child: Text(
+                    "Add",
+                    style: TextStyle(fontSize: 18, color: Colors.green),
+                  )),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 10,
+          left: 10,
+          right: 10,
+          child: Container(
+            child: Stack(alignment: Alignment.center, children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                child: Image.asset(
+                  'lib/assets/tip.jpeg',
+                  color: Colors.black38,
+                  colorBlendMode: BlendMode.darken,
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  width: MediaQuery.of(context).size.width * 0.75,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    alignment: Alignment(0.0, 0.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            Colors.black.withAlpha(0),
+                            Colors.black,
+                            Colors.black12,
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          "Tip",
+                          style: TextStyle(
+                              fontFamily: 'Solway',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 18.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        ),
+      ],
+    );
   }
 }

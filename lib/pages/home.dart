@@ -764,7 +764,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 context: context,
                                 backgroundColor: Colors.green,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15))),
                                 builder: (context) =>
                                     LivePassesSheet(livePasses));
                           },
