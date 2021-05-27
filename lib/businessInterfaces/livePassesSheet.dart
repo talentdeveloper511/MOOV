@@ -145,29 +145,31 @@ class _LivePassesSheetState extends State<LivePassesSheet> {
                                       PulsatingCircleIconButton(
                                           widget.livePasses[index]),
                                       SizedBox(height: 20),
-                                    widget.livePasses.length > 1 ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 14.0,
-                                            height: 14.0,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                          SizedBox(width: 5),
-                                          Container(
-                                            width: 14.0,
-                                            height: 14.0,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                        ],
-                                      ): Container(),
+                                      widget.livePasses.length > 1
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 14.0,
+                                                  height: 14.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Container(
+                                                  width: 14.0,
+                                                  height: 14.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : Container(),
                                     ],
                                   ));
                             });
@@ -212,9 +214,9 @@ class _PulsatingCircleIconButtonState extends State<PulsatingCircleIconButton>
       child: GestureDetector(
         onDoubleTap: _confirming
             ? () {
-                usersRef.doc(currentUser.id).set(
-                    {"livePasses": FieldValue.arrayRemove([widget.livePasses])},
-                    SetOptions(merge: true));
+                usersRef.doc(currentUser.id).set({
+                  "livePasses": FieldValue.arrayRemove([widget.livePasses])
+                }, SetOptions(merge: true));
 
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -231,7 +233,7 @@ class _PulsatingCircleIconButtonState extends State<PulsatingCircleIconButton>
         child: AnimatedContainer(
           duration: Duration(seconds: 1),
           width: 300,
-          height: 250,
+          height: 220,
           child: Center(
               child: Stack(
             children: [
@@ -285,7 +287,10 @@ class _PulsatingCircleIconButtonState extends State<PulsatingCircleIconButton>
 
 class BuyMoovOverPassSheet extends StatefulWidget {
   final String businessUserId, postId;
-  BuyMoovOverPassSheet(this.businessUserId, this.postId);
+  final bool haveAlready;
+  final List livePasses;
+
+  BuyMoovOverPassSheet(this.businessUserId, this.postId, this.haveAlready, this.livePasses);
 
   @override
   _BuyMoovOverPassSheetState createState() => _BuyMoovOverPassSheetState();
@@ -323,6 +328,9 @@ class _BuyMoovOverPassSheetState extends State<BuyMoovOverPassSheet>
 
   @override
   Widget build(BuildContext context) {
+    // if (){
+
+    // }
     return AnimatedContainer(
       height: 500,
       width: MediaQuery.of(context).size.width,
@@ -373,6 +381,8 @@ class _BuyMoovOverPassSheetState extends State<BuyMoovOverPassSheet>
               ),
             ),
           ),
+          // _alreadyHave ?
+
           !_confirming
               ? ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -381,13 +391,25 @@ class _BuyMoovOverPassSheetState extends State<BuyMoovOverPassSheet>
                   ),
                   onPressed: () {
                     HapticFeedback.lightImpact();
-                    setState(() {
-                      _confirming = true;
-                    });
+                    if (!widget.haveAlready) {
+                      setState(() {
+                        _confirming = true;
+                      });
+                    }
+                    showBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        builder: (context) =>
+                            LivePassesSheet(widget.livePasses));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('\$10', style: TextStyle(color: Colors.white)),
+                    child: widget.haveAlready
+                        ? Text('Show Pass',
+                            style: TextStyle(color: Colors.white))
+                        : Text('\$10', style: TextStyle(color: Colors.white)),
                   ))
               : Column(
                   children: [
@@ -423,6 +445,7 @@ class _BuyMoovOverPassSheetState extends State<BuyMoovOverPassSheet>
                                             BottomSheetDeposit());
                                   } else {
                                     String passId = generateRandomString(20);
+                                    print("H");
 
                                     usersRef.doc(currentUser.id).set({
                                       "moovMoney": FieldValue.increment(-10)

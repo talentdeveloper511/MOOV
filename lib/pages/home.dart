@@ -90,6 +90,9 @@ final adminRef = FirebaseFirestore.instance
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
+final PageStorageKey _pageKey = PageStorageKey("HOME");
+final PageStorageBucket _bucket = PageStorageBucket();
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -1027,7 +1030,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 physics: ClampingScrollPhysics(),
                 children: currentUser.userType.containsKey("clubExecutive")
                     ? <Widget>[
-                        HomePage(),
+                        PageStorage(
+                            bucket: _bucket, key: _pageKey, child: HomePage()),
                         SearchBar(),
                         StudentClubDashboard(),
                         MOOVSPage(),
@@ -1035,12 +1039,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       ]
                     : currentUser.isBusiness
                         ? <Widget>[
-                            HomePage(),
+                            PageStorage(
+                                bucket: _bucket,
+                                key: _pageKey,
+                                child: HomePage()),
                             BusinessDirectory(),
                             ProfilePage()
                           ]
                         : <Widget>[
-                            HomePage(),
+                            PageStorage(
+                                bucket: _bucket,
+                                key: _pageKey,
+                                child: HomePage()),
                             SearchBar(),
                             MOOVSPage(),
                             ProfilePage()

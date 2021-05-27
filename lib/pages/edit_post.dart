@@ -1160,7 +1160,7 @@ class _EditPostState extends State<EditPost> {
                                                     .FirebaseStorage.instance
                                                     .ref()
                                                     .child("images/" +
-                                                        titleController.text);
+                                                        postId);
 
                                             // Reference firebaseStorageRef =
                                             //     FirebaseStorage.instance

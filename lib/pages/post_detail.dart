@@ -1027,12 +1027,29 @@ class PaySkipSendRow extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 7.5, right: 10),
                   child: GestureDetector(
                     onTap: () {
-                      showBottomSheet(
+                      //check to see if they have the pass already
+                      usersRef.doc(currentUser.id).get().then((value) {
+                        if (value.data()['livePasses'] != null) {
+                          List livePasses = value['livePasses'];
+                          bool haveAlready = false;
+
+                          for (int i = 0; i < livePasses.length; i++) {
+                            if (livePasses[i]['businessId'] == userId &&
+                                livePasses[i]['type'] == "MOOV Over Pass") {
+                              //have the pass
+                              haveAlready = true;
+                            }
+                          }
+                           showBottomSheet(
                           context: context,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)),
                           builder: (context) =>
-                              BuyMoovOverPassSheet(userId, postId));
+                              BuyMoovOverPassSheet(userId, postId, haveAlready, livePasses));
+                        }
+                      });
+
+                     
                     },
                     child: GradientIcon(
                         Icons.confirmation_num_outlined,
