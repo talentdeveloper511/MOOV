@@ -34,7 +34,7 @@ class __ContentsState extends State<_Contents> {
         Padding(
           padding: isLargePhone
               ? const EdgeInsets.only(top: 100)
-              : const EdgeInsets.only(top: 60),
+              : const EdgeInsets.only(top: 40),
           child: Center(
             child: AnimatedOpacity(
                 opacity: _visible ? 1.0 : 0.0,
@@ -44,13 +44,13 @@ class __ContentsState extends State<_Contents> {
                     style: GoogleFonts.montserrat(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 35))),
+                        fontSize: isLargePhone ? 35 : 24))),
           ),
         ),
         Padding(
           padding: isLargePhone
               ? const EdgeInsets.only(top: 50.0)
-              : const EdgeInsets.only(top: 50.0),
+              : const EdgeInsets.only(top: 20.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Padding(
               padding: const EdgeInsets.all(2.5),
@@ -60,7 +60,7 @@ class __ContentsState extends State<_Contents> {
                 curve: Curves.fastOutSlowIn,
                 child: Container(
                   width: MediaQuery.of(context).size.width * .48,
-                  height: 370.0,
+                  height: isLargePhone ? 370.0 : 340,
                   child: Column(
                     children: [
                       SizedBox(height: 10),
@@ -73,14 +73,14 @@ class __ContentsState extends State<_Contents> {
                         child: Column(
                           children: [
                             Image.asset('lib/assets/popularSpots.png',
-                                height: 90),
+                                height: isLargePhone ? 90 : 70),
                             SizedBox(height: 10),
                             Text("The Popular\nSpots",
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.montserrat(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w300,
-                                    fontSize: 20)),
+                                    fontSize: isLargePhone ? 20 : 15)),
                           ],
                         ),
                       ),
@@ -121,11 +121,14 @@ class __ContentsState extends State<_Contents> {
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(color: Colors.white)),
                               child: Padding(
-                                padding: const EdgeInsets.all(20),
+                                padding: isLargePhone
+                                    ? const EdgeInsets.all(20)
+                                    : const EdgeInsets.all(15),
                                 child: Text(
                                   "Skip the lines!\n Order ahead!",
                                   style: GoogleFonts.montserrat(
-                                      color: Colors.white, fontSize: 14),
+                                      color: Colors.white,
+                                      fontSize: isLargePhone ? 14 : 12),
                                 ),
                               ),
                             ),
@@ -137,12 +140,7 @@ class __ContentsState extends State<_Contents> {
                                 ),
                                 onPressed: () {
                                   HapticFeedback.lightImpact();
-
-                                  // Navigator.push(
-                                  //     context,
-                                  //     PageTransition(
-                                  //         type: PageTransitionType.topToBottom,
-                                  //         child: MoovMaker(fromMoovOver: true)));
+                                  goPressed();
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -165,7 +163,7 @@ class __ContentsState extends State<_Contents> {
                 curve: Curves.fastOutSlowIn,
                 child: Container(
                   width: MediaQuery.of(context).size.width * .48,
-                  height: 370.0,
+                  height: isLargePhone ? 370.0 : 340,
                   child: Column(
                     children: [
                       SizedBox(height: 10),
@@ -178,14 +176,14 @@ class __ContentsState extends State<_Contents> {
                         child: Column(
                           children: [
                             Image.asset('lib/assets/SomethingNew.png',
-                                height: 90),
+                                height: isLargePhone ? 90 : 70),
                             SizedBox(height: 10),
                             Text("Something\nNew",
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.montserrat(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w300,
-                                    fontSize: 20)),
+                                    fontSize: isLargePhone ? 20 : 15)),
                           ],
                         ),
                       ),
@@ -226,12 +224,15 @@ class __ContentsState extends State<_Contents> {
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(color: Colors.white)),
                               child: Padding(
-                                padding: const EdgeInsets.all(20),
+                                padding: isLargePhone
+                                    ? const EdgeInsets.all(20)
+                                    : const EdgeInsets.all(15),
                                 child: Text(
                                   "Exclusive deals!\nLowkey gold!",
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.montserrat(
-                                      color: Colors.white, fontSize: 14),
+                                      color: Colors.white,
+                                      fontSize: isLargePhone ? 14 : 12),
                                 ),
                               ),
                             ),
@@ -243,12 +244,7 @@ class __ContentsState extends State<_Contents> {
                                 ),
                                 onPressed: () {
                                   HapticFeedback.lightImpact();
-
-                                  // Navigator.push(
-                                  //     context,
-                                  //     PageTransition(
-                                  //         type: PageTransitionType.topToBottom,
-                                  //         child: MoovMaker(fromMoovOver: true)));
+                                  goPressed();
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -273,14 +269,15 @@ class __ContentsState extends State<_Contents> {
           },
           child: Column(
             children: [
-              Image.asset('lib/assets/relax.png', height: 90),
+              Image.asset('lib/assets/relax.png',
+                  height: isLargePhone ? 90 : 70),
               SizedBox(height: 10),
               Text("Chill/Relax\nNight",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.montserrat(
                       color: Colors.white,
                       fontWeight: FontWeight.w300,
-                      fontSize: 20)),
+                      fontSize: isLargePhone ? 20 : 15)),
             ],
           ),
         ),
@@ -304,23 +301,7 @@ class __ContentsState extends State<_Contents> {
                   ),
                   onPressed: () {
                     HapticFeedback.lightImpact();
-                    SPHelper.setInt("Day", widget.today);
-
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (c, a1, a2) => Home(),
-                        transitionsBuilder: (c, anim, a2, child) =>
-                            FadeTransition(opacity: anim, child: child),
-                        transitionDuration: Duration(milliseconds: 2000),
-                      ),
-                    );
-
-                    // Navigator.push(
-                    //     context,
-                    //     PageTransition(
-                    //         type: PageTransitionType.topToBottom,
-                    //         child: MoovMaker(fromMoovOver: true)));
+                    goPressed();
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -330,6 +311,20 @@ class __ContentsState extends State<_Contents> {
           ),
         )
       ],
+    );
+  }
+
+  goPressed() {
+    SPHelper.setInt("Day", widget.today);
+
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (c, a1, a2) => Home(),
+        transitionsBuilder: (c, anim, a2, child) =>
+            FadeTransition(opacity: anim, child: child),
+        transitionDuration: Duration(milliseconds: 2000),
+      ),
     );
   }
 }
