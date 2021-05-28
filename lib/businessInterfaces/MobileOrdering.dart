@@ -1121,7 +1121,7 @@ class _BottomSheetBuyState extends State<BottomSheetBuy> {
         ? linearProgress()
         : (success)
             ? Container(
-              height: 300,
+                height: 300,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1213,24 +1213,25 @@ class _BottomSheetBuyState extends State<BottomSheetBuy> {
                                 "moovMoney": FieldValue.increment(widget.price)
                               }, SetOptions(merge: true));
 
-                              usersRef.doc(currentUser.id).set({
-                                "livePasses": FieldValue.arrayUnion([
-                                  {
-                                    "name": widget.name,
-                                    "type": "item",
-                                    "price": widget.price,
-                                    "photo": widget.photo,
-                                    "time": Timestamp.now(),
-                                    "businessId": widget.businessUserId,
-                                    "postId": widget.postId,
-                                    "passId": passId
-                                  }
-                                ])
+                              usersRef
+                                  .doc(currentUser.id)
+                                  .collection("livePasses")
+                                  .doc(passId)
+                                  .set({
+                                "name": widget.name,
+                                "type": "item",
+                                "price": widget.price,
+                                "photo": widget.photo,
+                                "time": Timestamp.now(),
+                                "businessId": widget.businessUserId,
+                                "postId": widget.postId,
+                                "passId": passId,
+                                "tip": 0
                               }, SetOptions(merge: true)).then(
-                                  (value) => setState(() {
-                                        isLoading = false;
-                                        success = true;
-                                      }));
+                                      (value) => setState(() {
+                                            isLoading = false;
+                                            success = true;
+                                          }));
                               Future.delayed(Duration(seconds: 2), () {
                                 Navigator.pop(context);
                               });

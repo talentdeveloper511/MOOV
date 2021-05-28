@@ -250,6 +250,7 @@ flutter:
     - lib/assets/mopass.png
     - lib/assets/bm1.png
     - lib/assets/virtual1.png
+    - lib/assets/popularSpots.png
     - lib/assets/placeholderparty1.jpg
     - lib/assets/placeholderparty2.jpg
     - lib/assets/placeholderparty3.jpg
@@ -264,6 +265,11 @@ flutter:
     - lib/assets/placeholderfood0.jpg
     - lib/assets/random.jpg
     - lib/assets/show3.png
+    - lib/assets/relax.png
+    - lib/assets/newfsLogo.png
+    - lib/assets/montLogo.png
+    - lib/assets/SomethingNew.png
+    - lib/assets/BrothersLogo.png
     - lib/assets/clemson.HEIC
     - lib/assets/venmo-icon.png
     - lib/assets/suggestion.png

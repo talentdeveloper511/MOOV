@@ -1028,28 +1028,28 @@ class PaySkipSendRow extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       //check to see if they have the pass already
-                      usersRef.doc(currentUser.id).get().then((value) {
-                        if (value.data()['livePasses'] != null) {
-                          List livePasses = value['livePasses'];
-                          bool haveAlready = false;
+                      List livePasses = [];
+                      usersRef
+                          .doc(currentUser.id)
+                          .collection("livePasses")
+                          .where("postId", isEqualTo: postId)
+                          .get()
+                          .then((value) {
+                        bool haveAlready = false;
 
-                          for (int i = 0; i < livePasses.length; i++) {
-                            if (livePasses[i]['businessId'] == userId &&
-                                livePasses[i]['type'] == "MOOV Over Pass") {
-                              //have the pass
-                              haveAlready = true;
-                            }
-                          }
-                           showBottomSheet(
-                          context: context,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          builder: (context) =>
-                              BuyMoovOverPassSheet(userId, postId, haveAlready, livePasses));
+                        if (value.docs.length != 0 &&
+                            value.docs[0]['type'] == "MOOV Over Pass") {
+                          livePasses = value.docs;
+                          haveAlready = true;
                         }
-                      });
 
-                     
+                        showBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            builder: (context) => BuyMoovOverPassSheet(
+                                userId, postId, haveAlready, livePasses));
+                      });
                     },
                     child: GradientIcon(
                         Icons.confirmation_num_outlined,

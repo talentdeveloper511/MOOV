@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 // import 'package:stripe_payment/stripe_payment.dart';
+import 'package:MOOV/helpers/SPHelper.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -15,6 +16,7 @@ import 'package:MOOV/pages/LoginPage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final bucketGlobalHome = PageStorageBucket();
 PageStorageKey homeKey = PageStorageKey("homeKey");
@@ -27,7 +29,10 @@ void main() async {
       statusBarColor: TextThemes.ndBlue));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(MOOV());
+    SharedPreferences.getInstance().then((SharedPreferences sp) {
+      SPHelper.setPref(sp);
+      runApp(MOOV());
+    });
   });
 }
 
