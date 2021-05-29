@@ -19,7 +19,6 @@ class _Contents extends StatefulWidget {
 }
 
 class __ContentsState extends State<_Contents> {
-  bool _selected = false;
   bool _visible = true;
   bool _revealPopularButton = false;
   bool _revealSomethingButton = false;

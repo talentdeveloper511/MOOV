@@ -39,16 +39,14 @@ class _MOTDPageViewState extends State<MOTDPageView> {
   List<Widget> _pages = List.generate(
     2,
     (index) {
-      return MOTD(index);
+      // return MOTD(index);
     },
   );
 
   @override
   Widget build(BuildContext context) {
     return PageView(
-      onPageChanged: (value) {
-        setState(() {});
-      },
+     
       children: _pages,
       controller: _pageController,
     );

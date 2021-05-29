@@ -5,6 +5,7 @@ import 'package:MOOV/pages/NotifyingPageView.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/services/database.dart';
+import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/widgets/poll2.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -36,7 +37,6 @@ class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   ScrollController _scrollController;
   AnimationController _hideFabAnimController;
-  EasyRefreshController _controller;
 
   List<dynamic> likedArray;
   String eventprofile, title;
@@ -61,6 +61,18 @@ class _HomePageState extends State<HomePage>
 
   Widget getChildWidget() => childWidgets[selectedIndex];
 
+  int _previousPage;
+  PageController _pageController;
+
+  void _onScroll() {
+    // Consider the page changed when the end of the scroll is reached
+    // Using onPageChanged callback from PageView causes the page to change when
+    // the half of the next card hits the center of the viewport, which is not
+    // what I want
+
+    _notifier?.value = _pageController.page - _previousPage;
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -72,7 +84,12 @@ class _HomePageState extends State<HomePage>
 
   void initState() {
     super.initState();
-    _controller = EasyRefreshController();
+    _pageController = PageController(
+      viewportFraction: 0.9,
+    )..addListener(_onScroll);
+
+    _previousPage = _pageController.initialPage;
+
     _scrollController = ScrollController();
     _hideFabAnimController = AnimationController(
       vsync: this,
@@ -97,7 +114,6 @@ class _HomePageState extends State<HomePage>
   String privacyDropdownValue = 'Featured';
 
   Widget build(BuildContext context) {
-    
     //check if its sunday for the weekly recap
     final dateToCheck = Timestamp.now().toDate();
     final aDate =
@@ -341,294 +357,271 @@ class _HomePageState extends State<HomePage>
                         return loadingMOOVs();
                       }
 
-                      return EasyRefresh(
-                        onRefresh: () async {
-                          await Future.delayed(Duration(seconds: 1), () {
-                            _controller.resetLoadState();
-                          });
-                        },
-                        onLoad: () async {
-                          await Future.delayed(Duration(seconds: 1), () {
-                            _controller.finishLoad();
-                          });
-                        },
-                        enableControlFinishRefresh: false,
-                        enableControlFinishLoad: true,
-                        controller: _controller,
-                        header: BezierCircleHeader(
-                            color: TextThemes.ndBlue,
-                            backgroundColor:
-                                _colorTween(Colors.white, Colors.black87)),
-                        footer:
-                            BezierBounceFooter(backgroundColor: Colors.white),
-                        bottomBouncing: false,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemCount: snapshot.data.docs.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return Column(children: [
-                                AnimatedBuilder(
-                                  animation: _notifier,
-                                  builder: (context, _) {
-                                    return Container(
-                                      color: _colorTween(
-                                          Colors.white, Colors.black87),
-                                      height: isLargePhone ? 390 : 360,
-                                      child: Column(children: <Widget>[
-                                        Container(
+                      return ListView.builder(
+                        controller: _scrollController,
+                        itemCount: snapshot.data.docs.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Column(children: [
+                              AnimatedBuilder(
+                                animation: _notifier,
+                                builder: (context, _) {
+                                  return Container(
+                                    color: _colorTween(
+                                        Colors.white, Colors.black87),
+                                    height: isLargePhone ? 390 : 360,
+                                    child: Column(children: <Widget>[
+                                      Container(
                                           height: isLargePhone ? 155 : 140,
-                                          child: MOTDPageView(
-                                            notifier: _notifier,
-                                            currentIndex:
-                                                _notifier.value.toInt(),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 2),
-                                          child: Align(
-                                              alignment: Alignment.center,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (_) =>
-                                                          CupertinoAlertDialog(
-                                                            title: Text(
-                                                                "Your MOOV."),
-                                                            content: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      top: 8.0),
-                                                              child: Text(
-                                                                  "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
-                                                            ),
+                                          child: PageView(
+                                            
+                                            controller: _pageController,
+                                            children: [
+                                              MOTD("MOTD"),
+                                              MOTD("MOTN"),
+                                            ],
+                                          )),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 2),
+                                        child: Align(
+                                            alignment: Alignment.center,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (_) =>
+                                                        CupertinoAlertDialog(
+                                                          title: Text(
+                                                              "Your MOOV."),
+                                                          content: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 8.0),
+                                                            child: Text(
+                                                                "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
                                                           ),
-                                                      barrierDismissible: true);
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: Stack(children: [
-                                                    AnimatedOpacity(
-                                                      opacity: _notifier.value,
-                                                      duration: Duration(
-                                                          milliseconds: 250),
-                                                      child: Text(
-                                                        "MOOV of the Night",
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'Open Sans',
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.white,
-                                                            fontSize: 16.0),
-                                                      ),
-                                                    ),
-                                                    AnimatedOpacity(
-                                                      opacity:
-                                                          1 - _notifier.value,
-                                                      duration: Duration(
-                                                          milliseconds: 100),
-                                                      child: Text(
-                                                        "MOOV of the Day",
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'Open Sans',
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.black,
-                                                            fontSize: 16.0),
-                                                      ),
-                                                    ),
-                                                  ]),
-                                                ),
-                                              )),
-                                        ),
-                                        Expanded(
-                                            flex: 8,
-                                            child: Center(
-                                                child: AnimatedBuilder(
-                                              animation: _notifier,
-                                              builder: (context, _) {
-                                                return Container(
-                                                  color: _colorTween(
-                                                      Colors.white,
-                                                      Color.fromRGBO(
-                                                          204, 204, 204, 0)),
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  height: 220,
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      _currentIndex == 0 ||
-                                                              todayOnly == 0 ||
-                                                              privacyDropdownValue !=
-                                                                  'Featured'
-                                                          ? CarouselSlider(
-                                                              options:
-                                                                  CarouselOptions(
-                                                                scrollPhysics:
-                                                                    AlwaysScrollableScrollPhysics(),
-                                                                height:
-                                                                    isLargePhone
-                                                                        ? 170
-                                                                        : 170,
-                                                                aspectRatio:
-                                                                    16 / 9,
-                                                                viewportFraction:
-                                                                    1,
-                                                                initialPage: 0,
-                                                                enableInfiniteScroll:
-                                                                    true,
-                                                                // scrollPhysics: NeverScrollableScrollPhysics(),
-                                                                pauseAutoPlayOnTouch:
-                                                                    false,
-                                                                reverse: false,
-                                                                autoPlay: true,
-                                                                autoPlayInterval:
-                                                                    Duration(
-                                                                        seconds:
-                                                                            6),
-                                                                autoPlayAnimationDuration:
-                                                                    Duration(
-                                                                        milliseconds:
-                                                                            800),
-                                                                autoPlayCurve:
-                                                                    Curves
-                                                                        .fastOutSlowIn,
-                                                                enlargeCenterPage:
-                                                                    true,
-                                                                // onPageChanged: callbackFunction,
-                                                                scrollDirection:
-                                                                    Axis.horizontal,
-                                                              ),
-                                                              items: [
-                                                                  SecondCarousel(
-                                                                      notifier:
-                                                                          _notifier),
-                                                                  PollView(
-                                                                      notifier:
-                                                                          _notifier),
-
-                                                                  // SuggestionBoxCarousel(),
-                                                                  // currentUser.friendGroups !=
-                                                                  //         null
-                                                                  //     ? GroupCarousel()
-                                                                  //     : null,
-                                                                  // HottestMOOV()
-                                                                ])
-                                                          : Container(),
-                                                      SizedBox(height: 10),
-                                                    ],
-                                                  ),
-                                                );
+                                                        ),
+                                                    barrierDismissible: true);
                                               },
-                                            ))),
-                                      ]),
-                                    );
-                                  },
-                                ),
-                              ]);
-                            }
-                            DocumentSnapshot course =
-                                snapshot.data.docs[index - 1];
-                            Timestamp startDate = course["startDate"];
-                            privacy = course['privacy'];
-                            Map<String, dynamic> statuses =
-                                (snapshot.data.docs[index - 1]['statuses']);
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Stack(children: [
+                                                  AnimatedOpacity(
+                                                    opacity: _notifier.value,
+                                                    duration: Duration(
+                                                        milliseconds: 250),
+                                                    child: Text(
+                                                      "MOOV of the Night",
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white,
+                                                          fontSize: 16.0),
+                                                    ),
+                                                  ),
+                                                  AnimatedOpacity(
+                                                    opacity:
+                                                        1 - _notifier.value,
+                                                    duration: Duration(
+                                                        milliseconds: 100),
+                                                    child: Text(
+                                                      "MOOV of the Day",
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'Open Sans',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.black,
+                                                          fontSize: 16.0),
+                                                    ),
+                                                  ),
+                                                ]),
+                                              ),
+                                            )),
+                                      ),
+                                      Expanded(
+                                          flex: 8,
+                                          child: Center(
+                                              child: AnimatedBuilder(
+                                            animation: _notifier,
+                                            builder: (context, _) {
+                                              return Container(
+                                                color: _colorTween(
+                                                    Colors.white,
+                                                    Color.fromRGBO(
+                                                        204, 204, 204, 0)),
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: 220,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    _currentIndex == 0 ||
+                                                            todayOnly == 0 ||
+                                                            privacyDropdownValue !=
+                                                                'Featured'
+                                                        ? CarouselSlider(
+                                                            options:
+                                                                CarouselOptions(
+                                                              scrollPhysics:
+                                                                  AlwaysScrollableScrollPhysics(),
+                                                              height:
+                                                                  isLargePhone
+                                                                      ? 170
+                                                                      : 170,
+                                                              aspectRatio:
+                                                                  16 / 9,
+                                                              viewportFraction:
+                                                                  1,
+                                                              initialPage: 0,
+                                                              enableInfiniteScroll:
+                                                                  true,
+                                                              // scrollPhysics: NeverScrollableScrollPhysics(),
+                                                              pauseAutoPlayOnTouch:
+                                                                  false,
+                                                              reverse: false,
+                                                              autoPlay: true,
+                                                              autoPlayInterval:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          6),
+                                                              autoPlayAnimationDuration:
+                                                                  Duration(
+                                                                      milliseconds:
+                                                                          800),
+                                                              autoPlayCurve: Curves
+                                                                  .fastOutSlowIn,
+                                                              enlargeCenterPage:
+                                                                  true,
+                                                              // onPageChanged: callbackFunction,
+                                                              scrollDirection:
+                                                                  Axis.horizontal,
+                                                            ),
+                                                            items: [
+                                                                SecondCarousel(
+                                                                    notifier:
+                                                                        _notifier),
+                                                                PollView(
+                                                                    notifier:
+                                                                        _notifier),
 
-                            int status = 0;
-                            List<dynamic> statusesIds = statuses.keys.toList();
+                                                                // SuggestionBoxCarousel(),
+                                                                // currentUser.friendGroups !=
+                                                                //         null
+                                                                //     ? GroupCarousel()
+                                                                //     : null,
+                                                                // HottestMOOV()
+                                                              ])
+                                                        : Container(),
+                                                    SizedBox(height: 10),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ))),
+                                    ]),
+                                  );
+                                },
+                              ),
+                            ]);
+                          }
+                          DocumentSnapshot course =
+                              snapshot.data.docs[index - 1];
+                          Timestamp startDate = course["startDate"];
+                          privacy = course['privacy'];
+                          Map<String, dynamic> statuses =
+                              (snapshot.data.docs[index - 1]['statuses']);
 
-                            List<dynamic> statusesValues =
-                                statuses.values.toList();
+                          int status = 0;
+                          List<dynamic> statusesIds = statuses.keys.toList();
 
-                            if (statuses != null) {
-                              for (int i = 0; i < statuses.length; i++) {
-                                if (statusesIds[i] == currentUser.id) {
-                                  if (statusesValues[i] == 3) {
-                                    status = 3;
-                                  }
+                          List<dynamic> statusesValues =
+                              statuses.values.toList();
+
+                          if (statuses != null) {
+                            for (int i = 0; i < statuses.length; i++) {
+                              if (statusesIds[i] == currentUser.id) {
+                                if (statusesValues[i] == 3) {
+                                  status = 3;
                                 }
                               }
                             }
+                          }
 
-                            bool hide = false;
+                          bool hide = false;
 
-                            if (startDate.millisecondsSinceEpoch <
-                                Timestamp.now().millisecondsSinceEpoch -
-                                    3600000) {
-                              print("Expired. See ya later.");
-                              Future.delayed(const Duration(milliseconds: 1000),
-                                  () {
-                                Database().deletePost(
-                                    course['postId'],
-                                    course['userId'],
-                                    course['title'],
-                                    course['statuses'],
-                                    course['posterName']);
-                              });
-                            }
-                            final now = DateTime.now();
-                            bool isToday = false;
-                            bool isTomorrow = false;
+                          if (startDate.millisecondsSinceEpoch <
+                              Timestamp.now().millisecondsSinceEpoch -
+                                  3600000) {
+                            print("Expired. See ya later.");
+                            Future.delayed(const Duration(milliseconds: 1000),
+                                () {
+                              Database().deletePost(
+                                  course['postId'],
+                                  course['userId'],
+                                  course['title'],
+                                  course['statuses'],
+                                  course['posterName']);
+                            });
+                          }
+                          final now = DateTime.now();
+                          bool isToday = false;
+                          bool isTomorrow = false;
 
-                            final today =
-                                DateTime(now.year, now.month, now.day);
+                          final today = DateTime(now.year, now.month, now.day);
 
-                            final tomorrow =
-                                DateTime(now.year, now.month, now.day + 1);
+                          final tomorrow =
+                              DateTime(now.year, now.month, now.day + 1);
 
-                            final dateToCheck = startDate.toDate();
-                            final aDate = DateTime(dateToCheck.year,
-                                dateToCheck.month, dateToCheck.day);
+                          final dateToCheck = startDate.toDate();
+                          final aDate = DateTime(dateToCheck.year,
+                              dateToCheck.month, dateToCheck.day);
 
-                            if (aDate == today) {
-                              isToday = true;
-                            } else if (aDate == tomorrow) {
-                              isTomorrow = true;
-                            }
-                            if (course['featured'] != true &&
-                                privacyDropdownValue == "Featured") {
-                              hide = true;
-                            }
-                            if (isToday == false && todayOnly == 1) {
-                              hide = true;
-                            }
-                            if (privacy == "Friends Only" ||
-                                privacy == "Invite Only") {
-                              hide = true;
-                            }
-                            if (privacyDropdownValue == "Private" &&
-                                (privacy != "Friends Only" ||
-                                    privacy != "Invite Only")) {
-                              hide = true;
-                            }
-                            if (privacy == "Friends Only" &&
-                                privacyDropdownValue == "Private" &&
-                                currentUser.friendArray
-                                    .contains(course['userId'])) {
-                              hide = false;
-                            }
-                            if (privacy == "Invite Only" &&
-                                privacyDropdownValue == "Private" &&
-                                course['statuses']
-                                    .keys
-                                    .contains(currentUser.id)) {
-                              hide = false;
-                            }
-                            return (hide == false)
-                                ? PostOnFeedNew(course, _notifier)
-                                : Container();
-                          },
-                        ),
+                          if (aDate == today) {
+                            isToday = true;
+                          } else if (aDate == tomorrow) {
+                            isTomorrow = true;
+                          }
+                          if (course['featured'] != true &&
+                              privacyDropdownValue == "Featured") {
+                            hide = true;
+                          }
+                          if (isToday == false && todayOnly == 1) {
+                            hide = true;
+                          }
+                          if (privacy == "Friends Only" ||
+                              privacy == "Invite Only") {
+                            hide = true;
+                          }
+                          if (privacyDropdownValue == "Private" &&
+                              (privacy != "Friends Only" ||
+                                  privacy != "Invite Only")) {
+                            hide = true;
+                          }
+                          if (privacy == "Friends Only" &&
+                              privacyDropdownValue == "Private" &&
+                              currentUser.friendArray
+                                  .contains(course['userId'])) {
+                            hide = false;
+                          }
+                          if (privacy == "Invite Only" &&
+                              privacyDropdownValue == "Private" &&
+                              course['statuses']
+                                  .keys
+                                  .contains(currentUser.id)) {
+                            hide = false;
+                          }
+                          return (hide == false)
+                              ? PostOnFeedNew(course, _notifier)
+                              : Container();
+                        },
                       );
                     },
                   ),

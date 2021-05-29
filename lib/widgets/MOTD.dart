@@ -18,9 +18,9 @@ import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MOTD extends StatefulWidget {
-  final int index;
+  final String type;
 
-  MOTD(this.index);
+  MOTD(this.type);
 
   @override
   _MOTDState createState() => _MOTDState();
@@ -36,257 +36,123 @@ class _MOTDState extends State<MOTD> {
     var title;
     var pic;
 
-    return (widget.index == 0)
-        ? FutureBuilder(
-            future: postsRef.where("MOTD", isEqualTo: true).get(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                bool isLargePhone = Screen.diagonal(context) > 766;
+    return FutureBuilder(
+        future: postsRef.where(widget.type, isEqualTo: true).get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Container();
+          }
+          return MediaQuery(
+            data: MediaQuery.of(context).removePadding(removeTop: true),
+            child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  bool isLargePhone = Screen.diagonal(context) > 766;
 
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey[300],
-                  highlightColor: Colors.grey[100],
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue[50],
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    height: 20.0,
-                    width: MediaQuery.of(context).size.width * .9,
-                  ),
-                );
-              } else
-                return MediaQuery(
-                  data: MediaQuery.of(context).removePadding(removeTop: true),
-                  child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: 1,
-                      itemBuilder: (context, index) {
-                        bool isLargePhone = Screen.diagonal(context) > 766;
+                  DocumentSnapshot course = snapshot.data.docs[index];
+                  pic = course['image'];
+                  title = course['title'];
 
-                        DocumentSnapshot course = snapshot.data.docs[index];
-                        pic = course['image'];
-                        title = course['title'];
-
-                        return Container(
-                          alignment: Alignment.center,
-                          // width: width * 0.8,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
-                                  height: isLargePhone
-                                      ? SizeConfig.blockSizeVertical * 15
-                                      : isTablet
-                                          ? 800
-                                          : SizeConfig.blockSizeVertical * 18,
-                                  child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    child: OpenContainer(
-                                      transitionType:
-                                          ContainerTransitionType.fade,
-                                      transitionDuration:
-                                          Duration(milliseconds: 500),
-                                      openBuilder: (context, _) =>
-                                          PostDetail(course.id),
-                                      closedElevation: 0,
-                                      closedBuilder: (context, _) =>
-                                          Stack(children: <Widget>[
-                                        FractionallySizedBox(
-                                          widthFactor: 1,
-                                          child: Container(
-                                            child: Container(
-                                              child: CachedNetworkImage(
-                                                imageUrl: pic,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    spreadRadius: 5,
-                                                    blurRadius: 7,
-                                                    offset: Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ],
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
-                                                ),
-                                              ),
+                  return Container(
+                    alignment: Alignment.center,
+                    // width: width * 0.8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            height: isLargePhone
+                                ? SizeConfig.blockSizeVertical * 15
+                                : isTablet
+                                    ? 800
+                                    : SizeConfig.blockSizeVertical * 18,
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              child: OpenContainer(
+                                transitionType: ContainerTransitionType.fade,
+                                transitionDuration: Duration(milliseconds: 500),
+                                openBuilder: (context, _) =>
+                                    PostDetail(course.id),
+                                closedElevation: 0,
+                                closedBuilder: (context, _) =>
+                                    Stack(children: <Widget>[
+                                  FractionallySizedBox(
+                                    widthFactor: 1,
+                                    child: Container(
+                                      child: Container(
+                                        child: CachedNetworkImage(
+                                          imageUrl: pic,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 5,
+                                              blurRadius: 7,
+                                              offset: Offset(0,
+                                                  3), // changes position of shadow
                                             ),
+                                          ],
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(0),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Container(
-                                              alignment: Alignment(0.0, 0.0),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(0)),
-                                                  gradient: LinearGradient(
-                                                    begin: Alignment.topCenter,
-                                                    end: Alignment.bottomCenter,
-                                                    colors: <Color>[
-                                                      Colors.black.withAlpha(0),
-                                                      Colors.black,
-                                                      Colors.black12,
-                                                    ],
-                                                  ),
-                                                ),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: Text(
-                                                    title,
-                                                    style: TextStyle(
-                                                        fontFamily: 'Solway',
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.white,
-                                                        fontSize: 20.0),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ]),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                );
-            })
-        : FutureBuilder(
-            future: postsRef.where("MOTN", isEqualTo: true).get(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                bool isLargePhone = Screen.diagonal(context) > 766;
-
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey[300],
-                  highlightColor: Colors.grey[100],
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue[50],
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    height: 20.0,
-                    width: MediaQuery.of(context).size.width * .9,
-                  ),
-                );
-              } else
-                return MediaQuery(
-                  data: MediaQuery.of(context).removePadding(removeTop: true),
-                  child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: 1,
-                      itemBuilder: (context, index) {
-                        bool isLargePhone = Screen.diagonal(context) > 766;
-
-                        DocumentSnapshot course = snapshot.data.docs[index];
-                        pic = course['image'];
-                        title = course['title'];
-
-                        return Container(
-                          alignment: Alignment.center,
-                          // width: width * 0.8,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: isLargePhone
-                                      ? SizeConfig.blockSizeVertical * 15
-                                      : SizeConfig.blockSizeVertical * 18,
-                                  child: OpenContainer(
-                                    transitionType:
-                                        ContainerTransitionType.fade,
-                                    transitionDuration:
-                                        Duration(milliseconds: 500),
-                                    openBuilder: (context, _) =>
-                                        PostDetail(course.id),
-                                    closedElevation: 0,
-                                    closedBuilder: (context, _) =>
-                                        Stack(children: <Widget>[
-                                      FractionallySizedBox(
-                                        widthFactor: 1,
+                                  Padding(
+                                    padding: const EdgeInsets.all(0),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        alignment: Alignment(0.0, 0.0),
                                         child: Container(
-                                          child: Container(
-                                            child: CachedNetworkImage(
-                                              imageUrl: pic,
-                                              fit: BoxFit.cover,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(0)),
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                              colors: <Color>[
+                                                Colors.black.withAlpha(0),
+                                                Colors.black,
+                                                Colors.black12,
+                                              ],
                                             ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.black,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(0),
-                                              ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(
+                                              title,
+                                              style: TextStyle(
+                                                  fontFamily: 'Solway',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                  fontSize: 20.0),
                                             ),
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: Container(
-                                            alignment: Alignment(0.0, 0.0),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20)),
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
-                                                  colors: <Color>[
-                                                    Colors.black.withAlpha(0),
-                                                    Colors.black,
-                                                    Colors.black12,
-                                                  ],
-                                                ),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Text(
-                                                  title,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Solway',
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white,
-                                                      fontSize: 20.0),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ]),
+                              ),
                             ),
                           ),
-                        );
-                      }),
-                );
-            });
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+          );
+        });
   }
 }
