@@ -122,7 +122,7 @@ class _TileLayerSampleState extends SampleViewState {
       body: FutureBuilder(
           future: postsRef.where("privacy", isEqualTo: "Public").get(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData || snapshot.data == null) {
+            if (!snapshot.hasData) {
               return loadingMOOVs();
             }
             for (int i = 0; i < snapshot.data.docs.length; i++) {

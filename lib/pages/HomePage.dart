@@ -337,7 +337,7 @@ class _HomePageState extends State<HomePage>
                   FutureBuilder(
                     future: postsRef.orderBy("startDate").get(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState != ConnectionState.done) {
+                      if (!snapshot.hasData) {
                         return loadingMOOVs();
                       }
 
