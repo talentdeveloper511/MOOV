@@ -970,7 +970,16 @@ class Database {
         ds.reference.delete();
       }
     });
-
+    //deleting livePasses
+    FirebaseFirestore.instance
+        .collectionGroup("livePasses")
+        .where("postId", isEqualTo: postId)
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
     //expiring moovs that appear in chats
     FirebaseFirestore.instance
         .collectionGroup("chat")

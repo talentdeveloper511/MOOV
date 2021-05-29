@@ -17,8 +17,9 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 
-class HomePage extends StatefulWidget {
+import '../helpers/SPHelper.dart';
 
+class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -134,6 +135,8 @@ class _HomePageState extends State<HomePage>
 
     SizeConfig().init(context);
     bool isLargePhone = Screen.diagonal(context) > 766;
+
+    String vibeType = SPHelper.getString("vibeType");
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -333,936 +336,1004 @@ class _HomePageState extends State<HomePage>
                         ));
                   }),
               Expanded(
-                child: TabBarView(controller: _tabController, children: [
-                  FutureBuilder(
-                    future: postsRef.orderBy("startDate").get(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return loadingMOOVs();
-                      }
+                child: AnimatedBuilder(
+                  animation: _notifier,
+                  builder: (context, _) {
+                    return TabBarView(controller: _tabController, children: [
+                      Container(
+                        child: FutureBuilder(
+                          future: postsRef.orderBy("startDate").get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return loadingMOOVs();
+                            }
 
-                      return ListView.builder(
-                        controller: _scrollController,
-                        itemCount: snapshot.data.docs.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return Column(children: [
-                              AnimatedBuilder(
-                                animation: _notifier,
-                                builder: (context, _) {
-                                  return Container(
-                                    color: _colorTween(
-                                        Colors.white, Colors.black87),
-                                    height: isLargePhone ? 390 : 360,
-                                    child: Column(children: <Widget>[
-                                      Container(
-                                          height: isLargePhone ? 155 : 140,
-                                          child: PageView(
-                                            controller: _pageController,
-                                            children: [
-                                              MOTD("MOTD"),
-                                              MOTD("MOTN"),
-                                            ],
-                                          )),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 2),
-                                        child: Align(
-                                            alignment: Alignment.center,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (_) =>
-                                                        CupertinoAlertDialog(
-                                                          title: Text(
-                                                              "Your MOOV."),
-                                                          content: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 8.0),
-                                                            child: Text(
-                                                                "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
+                            return ListView.builder(
+                              controller: _scrollController,
+                              itemCount: snapshot.data.docs.length + 1,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return Column(children: [
+                                    AnimatedBuilder(
+                                      animation: _notifier,
+                                      builder: (context, _) {
+                                        return Container(
+                                          color: _colorTween(
+                                              Colors.white, Colors.black87),
+                                          height: isLargePhone ? 390 : 360,
+                                          child: Column(children: <Widget>[
+                                            Container(
+                                                height:
+                                                    isLargePhone ? 155 : 140,
+                                                child: PageView(
+                                                  controller: _pageController,
+                                                  children: [
+                                                    MOTD("MOTD", vibeType),
+                                                    MOTD("MOTN", vibeType)
+                                                  ],
+                                                )),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 2),
+                                              child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (_) =>
+                                                              CupertinoAlertDialog(
+                                                                title: Text(
+                                                                    "Your MOOV."),
+                                                                content:
+                                                                    Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      top: 8.0),
+                                                                  child: Text(
+                                                                      "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
+                                                                ),
+                                                              ),
+                                                          barrierDismissible:
+                                                              true);
+                                                    },
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              4.0),
+                                                      child: Stack(children: [
+                                                        AnimatedOpacity(
+                                                          opacity:
+                                                              _notifier.value,
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  250),
+                                                          child: Text(
+                                                            "MOOV of the Night",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'Open Sans',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 16.0),
                                                           ),
                                                         ),
-                                                    barrierDismissible: true);
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Stack(children: [
-                                                  AnimatedOpacity(
-                                                    opacity: _notifier.value,
-                                                    duration: Duration(
-                                                        milliseconds: 250),
-                                                    child: Text(
-                                                      "MOOV of the Night",
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                              'Open Sans',
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white,
-                                                          fontSize: 16.0),
+                                                        AnimatedOpacity(
+                                                          opacity: 1 -
+                                                              _notifier.value,
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  100),
+                                                          child: Text(
+                                                            "MOOV of the Day",
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'Open Sans',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 16.0),
+                                                          ),
+                                                        ),
+                                                      ]),
                                                     ),
-                                                  ),
-                                                  AnimatedOpacity(
-                                                    opacity:
-                                                        1 - _notifier.value,
-                                                    duration: Duration(
-                                                        milliseconds: 100),
-                                                    child: Text(
-                                                      "MOOV of the Day",
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                              'Open Sans',
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black,
-                                                          fontSize: 16.0),
-                                                    ),
-                                                  ),
-                                                ]),
-                                              ),
-                                            )),
-                                      ),
-                                      Expanded(
-                                          flex: 8,
-                                          child: Center(
-                                              child: AnimatedBuilder(
-                                            animation: _notifier,
-                                            builder: (context, _) {
-                                              return Container(
-                                                color: _colorTween(
-                                                    Colors.white,
-                                                    Color.fromRGBO(
-                                                        204, 204, 204, 0)),
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 220,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    _currentIndex == 0 ||
-                                                            todayOnly == 0 ||
-                                                            privacyDropdownValue !=
-                                                                'Featured'
-                                                        ? CarouselSlider(
-                                                            options:
-                                                                CarouselOptions(
-                                                              scrollPhysics:
-                                                                  AlwaysScrollableScrollPhysics(),
-                                                              height:
-                                                                  isLargePhone
-                                                                      ? 170
-                                                                      : 170,
-                                                              aspectRatio:
-                                                                  16 / 9,
-                                                              viewportFraction:
-                                                                  1,
-                                                              initialPage: 0,
-                                                              enableInfiniteScroll:
-                                                                  true,
-                                                              // scrollPhysics: NeverScrollableScrollPhysics(),
-                                                              pauseAutoPlayOnTouch:
-                                                                  false,
-                                                              reverse: false,
-                                                              autoPlay: true,
-                                                              autoPlayInterval:
-                                                                  Duration(
-                                                                      seconds:
-                                                                          6),
-                                                              autoPlayAnimationDuration:
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          800),
-                                                              autoPlayCurve: Curves
-                                                                  .fastOutSlowIn,
-                                                              enlargeCenterPage:
-                                                                  true,
-                                                              // onPageChanged: callbackFunction,
-                                                              scrollDirection:
-                                                                  Axis.horizontal,
-                                                            ),
-                                                            items: [
-                                                                SecondCarousel(
-                                                                    notifier:
-                                                                        _notifier),
-                                                                PollView(
-                                                                    notifier:
-                                                                        _notifier),
+                                                  )),
+                                            ),
+                                            Expanded(
+                                                flex: 8,
+                                                child: Center(
+                                                    child: AnimatedBuilder(
+                                                  animation: _notifier,
+                                                  builder: (context, _) {
+                                                    return Container(
+                                                      color: _colorTween(
+                                                          Colors.white,
+                                                          Color.fromRGBO(204,
+                                                              204, 204, 0)),
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      height: 220,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          _currentIndex == 0 ||
+                                                                  todayOnly ==
+                                                                      0 ||
+                                                                  privacyDropdownValue !=
+                                                                      'Featured'
+                                                              ? CarouselSlider(
+                                                                  options:
+                                                                      CarouselOptions(
+                                                                    scrollPhysics:
+                                                                        AlwaysScrollableScrollPhysics(),
+                                                                    height:
+                                                                        isLargePhone
+                                                                            ? 170
+                                                                            : 170,
+                                                                    aspectRatio:
+                                                                        16 / 9,
+                                                                    viewportFraction:
+                                                                        1,
+                                                                    initialPage:
+                                                                        0,
+                                                                    enableInfiniteScroll:
+                                                                        true,
+                                                                    // scrollPhysics: NeverScrollableScrollPhysics(),
+                                                                    pauseAutoPlayOnTouch:
+                                                                        false,
+                                                                    reverse:
+                                                                        false,
+                                                                    autoPlay:
+                                                                        true,
+                                                                    autoPlayInterval:
+                                                                        Duration(
+                                                                            seconds:
+                                                                                6),
+                                                                    autoPlayAnimationDuration:
+                                                                        Duration(
+                                                                            milliseconds:
+                                                                                800),
+                                                                    autoPlayCurve:
+                                                                        Curves
+                                                                            .fastOutSlowIn,
+                                                                    enlargeCenterPage:
+                                                                        true,
+                                                                    // onPageChanged: callbackFunction,
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                  ),
+                                                                  items: [
+                                                                      SecondCarousel(
+                                                                          notifier:
+                                                                              _notifier),
+                                                                      PollView(
+                                                                          notifier:
+                                                                              _notifier),
 
-                                                                // SuggestionBoxCarousel(),
-                                                                // currentUser.friendGroups !=
-                                                                //         null
-                                                                //     ? GroupCarousel()
-                                                                //     : null,
-                                                                // HottestMOOV()
-                                                              ])
-                                                        : Container(),
-                                                    SizedBox(height: 10),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ))),
-                                    ]),
-                                  );
-                                },
-                              ),
-                            ]);
-                          }
-                          DocumentSnapshot course =
-                              snapshot.data.docs[index - 1];
-                          Timestamp startDate = course["startDate"];
-                          privacy = course['privacy'];
-                          Map<String, dynamic> statuses =
-                              (snapshot.data.docs[index - 1]['statuses']);
-
-                          int status = 0;
-                          List<dynamic> statusesIds = statuses.keys.toList();
-
-                          List<dynamic> statusesValues =
-                              statuses.values.toList();
-
-                          if (statuses != null) {
-                            for (int i = 0; i < statuses.length; i++) {
-                              if (statusesIds[i] == currentUser.id) {
-                                if (statusesValues[i] == 3) {
-                                  status = 3;
+                                                                      // SuggestionBoxCarousel(),
+                                                                      // currentUser.friendGroups !=
+                                                                      //         null
+                                                                      //     ? GroupCarousel()
+                                                                      //     : null,
+                                                                      // HottestMOOV()
+                                                                    ])
+                                                              : Container(),
+                                                          SizedBox(height: 10),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ))),
+                                          ]),
+                                        );
+                                      },
+                                    ),
+                                  ]);
                                 }
-                              }
-                            }
-                          }
+                                DocumentSnapshot course =
+                                    snapshot.data.docs[index - 1];
+                                Timestamp startDate = course["startDate"];
+                                privacy = course['privacy'];
+                                Map<String, dynamic> statuses =
+                                    (snapshot.data.docs[index - 1]['statuses']);
 
-                          bool hide = false;
+                                int status = 0;
+                                List<dynamic> statusesIds =
+                                    statuses.keys.toList();
 
-                          if (startDate.millisecondsSinceEpoch <
-                              Timestamp.now().millisecondsSinceEpoch -
-                                  3600000) {
-                            print("Expired. See ya later.");
-                            Future.delayed(const Duration(milliseconds: 1000),
-                                () {
-                              Database().deletePost(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['title'],
-                                  course['statuses'],
-                                  course['posterName']);
-                            });
-                          }
-                          final now = DateTime.now();
-                          bool isToday = false;
-                          bool isTomorrow = false;
+                                List<dynamic> statusesValues =
+                                    statuses.values.toList();
 
-                          final today = DateTime(now.year, now.month, now.day);
-
-                          final tomorrow =
-                              DateTime(now.year, now.month, now.day + 1);
-
-                          final dateToCheck = startDate.toDate();
-                          final aDate = DateTime(dateToCheck.year,
-                              dateToCheck.month, dateToCheck.day);
-
-                          if (aDate == today) {
-                            isToday = true;
-                          } else if (aDate == tomorrow) {
-                            isTomorrow = true;
-                          }
-                          if (course['featured'] != true &&
-                              privacyDropdownValue == "Featured") {
-                            hide = true;
-                          }
-                          if (isToday == false && todayOnly == 1) {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" ||
-                              privacy == "Invite Only") {
-                            hide = true;
-                          }
-                          if (privacyDropdownValue == "Private" &&
-                              (privacy != "Friends Only" ||
-                                  privacy != "Invite Only")) {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" &&
-                              privacyDropdownValue == "Private" &&
-                              currentUser.friendArray
-                                  .contains(course['userId'])) {
-                            hide = false;
-                          }
-                          if (privacy == "Invite Only" &&
-                              privacyDropdownValue == "Private" &&
-                              course['statuses']
-                                  .keys
-                                  .contains(currentUser.id)) {
-                            hide = false;
-                          }
-                          return (hide == false)
-                              ? PostOnFeedNew(course, _notifier)
-                              : Container();
-                        },
-                      );
-                    },
-                  ),
-                  FutureBuilder(
-                    //Parties
-                    future:
-                        postsRef.where("type", isEqualTo: "Food/Drink").get(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Center(
-                          child: Container(),
-                        );
-
-                      return ListView.builder(
-                        controller: _scrollController,
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot course = snapshot.data.docs[index];
-                          Timestamp startDate = course["startDate"];
-                          privacy = course['privacy'];
-                          Map<String, dynamic> statuses =
-                              (snapshot.data.docs[index]['statuses']);
-
-                          int status = 0;
-                          List<dynamic> statusesIds = statuses.keys.toList();
-
-                          List<dynamic> statusesValues =
-                              statuses.values.toList();
-
-                          if (statuses != null) {
-                            for (int i = 0; i < statuses.length; i++) {
-                              if (statusesIds[i] == currentUser.id) {
-                                if (statusesValues[i] == 3) {
-                                  status = 3;
+                                if (statuses != null) {
+                                  for (int i = 0; i < statuses.length; i++) {
+                                    if (statusesIds[i] == currentUser.id) {
+                                      if (statusesValues[i] == 3) {
+                                        status = 3;
+                                      }
+                                    }
+                                  }
                                 }
-                              }
-                            }
-                          }
 
-                          bool hide = false;
+                                bool hide = false;
 
-                          if (startDate.millisecondsSinceEpoch <
-                              Timestamp.now().millisecondsSinceEpoch -
-                                  3600000) {
-                            print("Expired. See ya later.");
-                            Future.delayed(const Duration(milliseconds: 1000),
-                                () {
-                              Database().deletePost(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['title'],
-                                  course['statuses'],
-                                  course['posterName']);
-                            });
-                          }
-                          final now = DateTime.now();
-                          bool isToday = false;
-                          bool isTomorrow = false;
-
-                          final today = DateTime(now.year, now.month, now.day);
-                          final yesterday =
-                              DateTime(now.year, now.month, now.day - 1);
-                          final tomorrow =
-                              DateTime(now.year, now.month, now.day + 1);
-
-                          final dateToCheck = startDate.toDate();
-                          final aDate = DateTime(dateToCheck.year,
-                              dateToCheck.month, dateToCheck.day);
-
-                          if (aDate == today) {
-                            isToday = true;
-                          } else if (aDate == tomorrow) {
-                            isTomorrow = true;
-                          }
-                          if (isToday == false && todayOnly == 1) {
-                            hide = true;
-                          }
-                          if (course['featured'] != true &&
-                              privacyDropdownValue == "Featured") {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" ||
-                              privacy == "Invite Only") {
-                            hide = true;
-                          }
-                          if (privacyDropdownValue == "Private" &&
-                              (privacy != "Friends Only" ||
-                                  privacy != "Invite Only")) {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" &&
-                              privacyDropdownValue == "Private" &&
-                              currentUser.friendArray
-                                  .contains(course['userId'])) {
-                            hide = false;
-                          }
-                          if (privacy == "Invite Only" &&
-                              privacyDropdownValue == "Private" &&
-                              course['statuses']
-                                  .keys
-                                  .contains(currentUser.id)) {
-                            hide = false;
-                          }
-
-                          // if (course['featured'] != true) {
-                          //   hide = true;
-                          // }
-
-                          return (hide == false)
-                              ? PostOnFeedNew(course, _notifier)
-                              : Container();
-                        },
-                      );
-                    },
-                  ),
-                  FutureBuilder(
-                    //Parties
-                    future: postsRef
-                        .where("type", isEqualTo: "Parties")
-                        .orderBy("startDate")
-                        .get(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Container();
-
-                      return ListView.builder(
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot course = snapshot.data.docs[index];
-                          Timestamp startDate = course["startDate"];
-                          privacy = course['privacy'];
-                          Map<String, dynamic> statuses =
-                              (snapshot.data.docs[index]['statuses']);
-
-                          int status = 0;
-                          List<dynamic> statusesIds = statuses.keys.toList();
-
-                          List<dynamic> statusesValues =
-                              statuses.values.toList();
-
-                          if (statuses != null) {
-                            for (int i = 0; i < statuses.length; i++) {
-                              if (statusesIds[i] == currentUser.id) {
-                                if (statusesValues[i] == 3) {
-                                  status = 3;
+                                if (startDate.millisecondsSinceEpoch <
+                                    Timestamp.now().millisecondsSinceEpoch -
+                                        3600000) {
+                                  print("Expired. See ya later.");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(
+                                        course['postId'],
+                                        course['userId'],
+                                        course['title'],
+                                        course['statuses'],
+                                        course['posterName']);
+                                  });
                                 }
-                              }
-                            }
-                          }
+                                final now = DateTime.now();
+                                bool isToday = false;
+                                bool isTomorrow = false;
 
-                          bool hide = false;
+                                final today =
+                                    DateTime(now.year, now.month, now.day);
 
-                          if (startDate.millisecondsSinceEpoch <
-                              Timestamp.now().millisecondsSinceEpoch -
-                                  3600000) {
-                            print("Expired. See ya later.");
-                            Future.delayed(const Duration(milliseconds: 1000),
-                                () {
-                              Database().deletePost(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['title'],
-                                  course['statuses'],
-                                  course['posterName']);
-                            });
-                          }
-                          final now = DateTime.now();
-                          bool isToday = false;
-                          bool isTomorrow = false;
+                                final tomorrow =
+                                    DateTime(now.year, now.month, now.day + 1);
 
-                          final today = DateTime(now.year, now.month, now.day);
-                          final tomorrow =
-                              DateTime(now.year, now.month, now.day + 1);
+                                final dateToCheck = startDate.toDate();
+                                final aDate = DateTime(dateToCheck.year,
+                                    dateToCheck.month, dateToCheck.day);
 
-                          final dateToCheck = startDate.toDate();
-                          final aDate = DateTime(dateToCheck.year,
-                              dateToCheck.month, dateToCheck.day);
-
-                          if (aDate == today) {
-                            isToday = true;
-                          } else if (aDate == tomorrow) {
-                            isTomorrow = true;
-                          }
-                          if (isToday == false && todayOnly == 1) {
-                            hide = true;
-                          }
-                          if (course['featured'] != true &&
-                              privacyDropdownValue == "Featured") {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" ||
-                              privacy == "Invite Only") {
-                            hide = true;
-                          }
-                          if (privacyDropdownValue == "Private" &&
-                              (privacy != "Friends Only" ||
-                                  privacy != "Invite Only")) {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" &&
-                              privacyDropdownValue == "Private" &&
-                              currentUser.friendArray
-                                  .contains(course['userId'])) {
-                            hide = false;
-                          }
-                          if (privacy == "Invite Only" &&
-                              privacyDropdownValue == "Private" &&
-                              course['statuses']
-                                  .keys
-                                  .contains(currentUser.id)) {
-                            hide = false;
-                          }
-                          return (hide == false)
-                              ? PostOnFeedNew(course, _notifier)
-                              : Container();
-                        },
-                      );
-                    },
-                  ),
-                  FutureBuilder(
-                    future: postsRef
-                        .where("type", isEqualTo: "Shows")
-                        .orderBy("startDate")
-                        .get(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Container();
-
-                      return ListView.builder(
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot course = snapshot.data.docs[index];
-                          Timestamp startDate = course["startDate"];
-                          privacy = course['privacy'];
-                          Map<String, dynamic> statuses =
-                              (snapshot.data.docs[index]['statuses']);
-
-                          int status = 0;
-                          List<dynamic> statusesIds = statuses.keys.toList();
-
-                          List<dynamic> statusesValues =
-                              statuses.values.toList();
-
-                          if (statuses != null) {
-                            for (int i = 0; i < statuses.length; i++) {
-                              if (statusesIds[i] == currentUser.id) {
-                                if (statusesValues[i] == 3) {
-                                  status = 3;
+                                if (aDate == today) {
+                                  isToday = true;
+                                } else if (aDate == tomorrow) {
+                                  isTomorrow = true;
                                 }
-                              }
-                            }
-                          }
-
-                          bool hide = false;
-
-                          if (startDate.millisecondsSinceEpoch <
-                              Timestamp.now().millisecondsSinceEpoch -
-                                  3600000) {
-                            print("Expired. See ya later.");
-                            Future.delayed(const Duration(milliseconds: 1000),
-                                () {
-                              Database().deletePost(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['title'],
-                                  course['statuses'],
-                                  course['posterName']);
-                            });
-                          }
-                          final now = DateTime.now();
-                          bool isToday = false;
-                          bool isTomorrow = false;
-
-                          final today = DateTime(now.year, now.month, now.day);
-                          final yesterday =
-                              DateTime(now.year, now.month, now.day - 1);
-                          final tomorrow =
-                              DateTime(now.year, now.month, now.day + 1);
-
-                          final dateToCheck = startDate.toDate();
-                          final aDate = DateTime(dateToCheck.year,
-                              dateToCheck.month, dateToCheck.day);
-
-                          if (aDate == today) {
-                            isToday = true;
-                          } else if (aDate == tomorrow) {
-                            isTomorrow = true;
-                          }
-                          if (isToday == false && todayOnly == 1) {
-                            hide = true;
-                          }
-                          if (course['featured'] != true &&
-                              privacyDropdownValue == "Featured") {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" ||
-                              privacy == "Invite Only") {
-                            hide = true;
-                          }
-                          if (privacyDropdownValue == "Private" &&
-                              (privacy != "Friends Only" ||
-                                  privacy != "Invite Only")) {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" &&
-                              privacyDropdownValue == "Private" &&
-                              currentUser.friendArray
-                                  .contains(course['userId'])) {
-                            hide = false;
-                          }
-                          if (privacy == "Invite Only" &&
-                              privacyDropdownValue == "Private" &&
-                              course['statuses']
-                                  .keys
-                                  .contains(currentUser.id)) {
-                            hide = false;
-                          }
-
-                          // if (course['featured'] != true) {
-                          //   hide = true;
-                          // }
-
-                          return (hide == false)
-                              ? PostOnFeedNew(course, _notifier)
-                              : Container();
-                        },
-                      );
-                    },
-                  ),
-                  FutureBuilder(
-                    //Sports
-                    future: postsRef
-                        .where("type", isEqualTo: "Sports")
-                        .orderBy("startDate")
-                        .get(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Container();
-
-                      return ListView.builder(
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot course = snapshot.data.docs[index];
-                          Timestamp startDate = course["startDate"];
-                          privacy = course['privacy'];
-                          Map<String, dynamic> statuses =
-                              (snapshot.data.docs[index]['statuses']);
-
-                          int status = 0;
-                          List<dynamic> statusesIds = statuses.keys.toList();
-
-                          List<dynamic> statusesValues =
-                              statuses.values.toList();
-
-                          if (statuses != null) {
-                            for (int i = 0; i < statuses.length; i++) {
-                              if (statusesIds[i] == currentUser.id) {
-                                if (statusesValues[i] == 3) {
-                                  status = 3;
+                                if (course['featured'] != true &&
+                                    privacyDropdownValue == "Featured") {
+                                  hide = true;
                                 }
-                              }
-                            }
-                          }
-
-                          bool hide = false;
-
-                          if (startDate.millisecondsSinceEpoch <
-                              Timestamp.now().millisecondsSinceEpoch -
-                                  3600000) {
-                            print("Expired. See ya later.");
-                            Future.delayed(const Duration(milliseconds: 1000),
-                                () {
-                              Database().deletePost(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['title'],
-                                  course['statuses'],
-                                  course['posterName']);
-                            });
-                          }
-                          final now = DateTime.now();
-                          bool isToday = false;
-                          bool isTomorrow = false;
-
-                          final today = DateTime(now.year, now.month, now.day);
-                          final yesterday =
-                              DateTime(now.year, now.month, now.day - 1);
-                          final tomorrow =
-                              DateTime(now.year, now.month, now.day + 1);
-
-                          final dateToCheck = startDate.toDate();
-                          final aDate = DateTime(dateToCheck.year,
-                              dateToCheck.month, dateToCheck.day);
-
-                          if (aDate == today) {
-                            isToday = true;
-                          } else if (aDate == tomorrow) {
-                            isTomorrow = true;
-                          }
-                          if (isToday == false && todayOnly == 1) {
-                            hide = true;
-                          }
-                          if (course['featured'] != true &&
-                              privacyDropdownValue == "Featured") {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" ||
-                              privacy == "Invite Only") {
-                            hide = true;
-                          }
-                          if (privacyDropdownValue == "Private" &&
-                              (privacy != "Friends Only" ||
-                                  privacy != "Invite Only")) {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" &&
-                              privacyDropdownValue == "Private" &&
-                              currentUser.friendArray
-                                  .contains(course['userId'])) {
-                            hide = false;
-                          }
-                          if (privacy == "Invite Only" &&
-                              privacyDropdownValue == "Private" &&
-                              course['statuses']
-                                  .keys
-                                  .contains(currentUser.id)) {
-                            hide = false;
-                          }
-
-                          // if (course['featured'] != true) {
-                          //   hide = true;
-                          // }
-
-                          return (hide == false)
-                              ? PostOnFeedNew(course, _notifier)
-                              : Container();
-                        },
-                      );
-                    },
-                  ),
-                  FutureBuilder(
-                    future: postsRef
-                        .where("type", isEqualTo: "Recreation")
-                        .orderBy("startDate")
-                        .get(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Container();
-
-                      return ListView.builder(
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot course = snapshot.data.docs[index];
-                          Timestamp startDate = course["startDate"];
-                          privacy = course['privacy'];
-                          Map<String, dynamic> statuses =
-                              (snapshot.data.docs[index]['statuses']);
-
-                          int status = 0;
-                          List<dynamic> statusesIds = statuses.keys.toList();
-
-                          List<dynamic> statusesValues =
-                              statuses.values.toList();
-
-                          if (statuses != null) {
-                            for (int i = 0; i < statuses.length; i++) {
-                              if (statusesIds[i] == currentUser.id) {
-                                if (statusesValues[i] == 3) {
-                                  status = 3;
+                                if (isToday == false && todayOnly == 1) {
+                                  hide = true;
                                 }
-                              }
-                            }
-                          }
-
-                          bool hide = false;
-
-                          if (startDate.millisecondsSinceEpoch <
-                              Timestamp.now().millisecondsSinceEpoch -
-                                  3600000) {
-                            print("Expired. See ya later.");
-                            Future.delayed(const Duration(milliseconds: 1000),
-                                () {
-                              Database().deletePost(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['title'],
-                                  course['statuses'],
-                                  course['posterName']);
-                            });
-                          }
-                          final now = DateTime.now();
-                          bool isToday = false;
-                          bool isTomorrow = false;
-
-                          final today = DateTime(now.year, now.month, now.day);
-                          final tomorrow =
-                              DateTime(now.year, now.month, now.day + 1);
-                          final dateToCheck = startDate.toDate();
-                          final aDate = DateTime(dateToCheck.year,
-                              dateToCheck.month, dateToCheck.day);
-
-                          if (aDate == today) {
-                            isToday = true;
-                          } else if (aDate == tomorrow) {
-                            isTomorrow = true;
-                          }
-                          if (isToday == false && todayOnly == 1) {
-                            hide = true;
-                          }
-                          if (course['featured'] != true &&
-                              privacyDropdownValue == "Featured") {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" ||
-                              privacy == "Invite Only") {
-                            hide = true;
-                          }
-                          if (privacyDropdownValue == "Private" &&
-                              (privacy != "Friends Only" ||
-                                  privacy != "Invite Only")) {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" &&
-                              privacyDropdownValue == "Private" &&
-                              currentUser.friendArray
-                                  .contains(course['userId'])) {
-                            hide = false;
-                          }
-                          if (privacy == "Invite Only" &&
-                              privacyDropdownValue == "Private" &&
-                              course['statuses']
-                                  .keys
-                                  .contains(currentUser.id)) {
-                            hide = false;
-                          }
-
-                          if (course['userId'] == currentUser.id) {
-                            hide = false;
-                          }
-
-                          return (hide == false)
-                              ? PostOnFeedNew(course, _notifier)
-                              : Container();
-                        },
-                      );
-                    },
-                  ),
-                  FutureBuilder(
-                    future: postsRef
-                        .where("type", isEqualTo: "Virtual")
-                        .orderBy("startDate")
-                        .get(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                        return Container();
-
-                      return ListView.builder(
-                        itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot course = snapshot.data.docs[index];
-                          Timestamp startDate = course["startDate"];
-                          privacy = course['privacy'];
-                          Map<String, dynamic> statuses =
-                              (snapshot.data.docs[index]['statuses']);
-
-                          int status = 0;
-                          List<dynamic> statusesIds = statuses.keys.toList();
-
-                          List<dynamic> statusesValues =
-                              statuses.values.toList();
-
-                          if (statuses != null) {
-                            for (int i = 0; i < statuses.length; i++) {
-                              if (statusesIds[i] == currentUser.id) {
-                                if (statusesValues[i] == 3) {
-                                  status = 3;
+                                if (privacy == "Friends Only" ||
+                                    privacy == "Invite Only") {
+                                  hide = true;
                                 }
-                              }
-                            }
-                          }
+                                if (privacyDropdownValue == "Private" &&
+                                    (privacy != "Friends Only" ||
+                                        privacy != "Invite Only")) {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    currentUser.friendArray
+                                        .contains(course['userId'])) {
+                                  hide = false;
+                                }
+                                if (privacy == "Invite Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    course['statuses']
+                                        .keys
+                                        .contains(currentUser.id)) {
+                                  hide = false;
+                                }
+                                return (hide == false)
+                                    ? PostOnFeedNew(course, _notifier)
+                                    : Container();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        color: _colorTween(Colors.white, Colors.black),
+                        child: FutureBuilder(
+                          future: postsRef
+                              .where("type", isEqualTo: "Food/Drink")
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.docs.length == 0)
+                              return Center(
+                                child: Container(),
+                              );
 
-                          bool hide = false;
+                            return ListView.builder(
+                              controller: _scrollController,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot course =
+                                    snapshot.data.docs[index];
+                                Timestamp startDate = course["startDate"];
+                                privacy = course['privacy'];
+                                Map<String, dynamic> statuses =
+                                    (snapshot.data.docs[index]['statuses']);
 
-                          if (startDate.millisecondsSinceEpoch <
-                              Timestamp.now().millisecondsSinceEpoch -
-                                  3600000) {
-                            print("Expired. See ya later.");
-                            Future.delayed(const Duration(milliseconds: 1000),
-                                () {
-                              Database().deletePost(
-                                  course['postId'],
-                                  course['userId'],
-                                  course['title'],
-                                  course['statuses'],
-                                  course['posterName']);
-                            });
-                          }
-                          final now = DateTime.now();
-                          bool isToday = false;
-                          bool isTomorrow = false;
+                                int status = 0;
+                                List<dynamic> statusesIds =
+                                    statuses.keys.toList();
 
-                          final today = DateTime(now.year, now.month, now.day);
-                          final yesterday =
-                              DateTime(now.year, now.month, now.day - 1);
-                          final tomorrow =
-                              DateTime(now.year, now.month, now.day + 1);
+                                List<dynamic> statusesValues =
+                                    statuses.values.toList();
 
-                          final dateToCheck = startDate.toDate();
-                          final aDate = DateTime(dateToCheck.year,
-                              dateToCheck.month, dateToCheck.day);
+                                if (statuses != null) {
+                                  for (int i = 0; i < statuses.length; i++) {
+                                    if (statusesIds[i] == currentUser.id) {
+                                      if (statusesValues[i] == 3) {
+                                        status = 3;
+                                      }
+                                    }
+                                  }
+                                }
 
-                          if (aDate == today) {
-                            isToday = true;
-                          } else if (aDate == tomorrow) {
-                            isTomorrow = true;
-                          }
-                          if (isToday == false && todayOnly == 1) {
-                            hide = true;
-                          }
-                          if (course['featured'] != true &&
-                              privacyDropdownValue == "Featured") {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" ||
-                              privacy == "Invite Only") {
-                            hide = true;
-                          }
-                          if (privacyDropdownValue == "Private" &&
-                              (privacy != "Friends Only" ||
-                                  privacy != "Invite Only")) {
-                            hide = true;
-                          }
-                          if (privacy == "Friends Only" &&
-                              privacyDropdownValue == "Private" &&
-                              currentUser.friendArray
-                                  .contains(course['userId'])) {
-                            hide = false;
-                          }
-                          if (privacy == "Invite Only" &&
-                              privacyDropdownValue == "Private" &&
-                              course['statuses']
-                                  .keys
-                                  .contains(currentUser.id)) {
-                            hide = false;
-                          }
+                                bool hide = false;
 
-                          if (course['userId'] == currentUser.id) {
-                            hide = false;
-                          }
+                                if (startDate.millisecondsSinceEpoch <
+                                    Timestamp.now().millisecondsSinceEpoch -
+                                        3600000) {
+                                  print("Expired. See ya later.");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(
+                                        course['postId'],
+                                        course['userId'],
+                                        course['title'],
+                                        course['statuses'],
+                                        course['posterName']);
+                                  });
+                                }
+                                final now = DateTime.now();
+                                bool isToday = false;
+                                bool isTomorrow = false;
 
-                          return (hide == false)
-                              ? PostOnFeedNew(course, _notifier)
-                              : Container();
-                        },
-                      );
-                    },
-                  ),
-                ]),
+                                final today =
+                                    DateTime(now.year, now.month, now.day);
+                                final yesterday =
+                                    DateTime(now.year, now.month, now.day - 1);
+                                final tomorrow =
+                                    DateTime(now.year, now.month, now.day + 1);
+
+                                final dateToCheck = startDate.toDate();
+                                final aDate = DateTime(dateToCheck.year,
+                                    dateToCheck.month, dateToCheck.day);
+
+                                if (aDate == today) {
+                                  isToday = true;
+                                } else if (aDate == tomorrow) {
+                                  isTomorrow = true;
+                                }
+                                if (isToday == false && todayOnly == 1) {
+                                  hide = true;
+                                }
+                                if (course['featured'] != true &&
+                                    privacyDropdownValue == "Featured") {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" ||
+                                    privacy == "Invite Only") {
+                                  hide = true;
+                                }
+                                if (privacyDropdownValue == "Private" &&
+                                    (privacy != "Friends Only" ||
+                                        privacy != "Invite Only")) {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    currentUser.friendArray
+                                        .contains(course['userId'])) {
+                                  hide = false;
+                                }
+                                if (privacy == "Invite Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    course['statuses']
+                                        .keys
+                                        .contains(currentUser.id)) {
+                                  hide = false;
+                                }
+
+                                // if (course['featured'] != true) {
+                                //   hide = true;
+                                // }
+
+                                return (hide == false)
+                                    ? PostOnFeedNew(course, _notifier)
+                                    : Container();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        color: _colorTween(Colors.white, Colors.black),
+                        child: FutureBuilder(
+                          //Parties
+                          future: postsRef
+                              .where("type", isEqualTo: "Parties")
+                              .orderBy("startDate")
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.docs.length == 0)
+                              return Container();
+
+                            return ListView.builder(
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot course =
+                                    snapshot.data.docs[index];
+                                Timestamp startDate = course["startDate"];
+                                privacy = course['privacy'];
+                                Map<String, dynamic> statuses =
+                                    (snapshot.data.docs[index]['statuses']);
+
+                                int status = 0;
+                                List<dynamic> statusesIds =
+                                    statuses.keys.toList();
+
+                                List<dynamic> statusesValues =
+                                    statuses.values.toList();
+
+                                if (statuses != null) {
+                                  for (int i = 0; i < statuses.length; i++) {
+                                    if (statusesIds[i] == currentUser.id) {
+                                      if (statusesValues[i] == 3) {
+                                        status = 3;
+                                      }
+                                    }
+                                  }
+                                }
+
+                                bool hide = false;
+
+                                if (startDate.millisecondsSinceEpoch <
+                                    Timestamp.now().millisecondsSinceEpoch -
+                                        3600000) {
+                                  print("Expired. See ya later.");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(
+                                        course['postId'],
+                                        course['userId'],
+                                        course['title'],
+                                        course['statuses'],
+                                        course['posterName']);
+                                  });
+                                }
+                                final now = DateTime.now();
+                                bool isToday = false;
+                                bool isTomorrow = false;
+
+                                final today =
+                                    DateTime(now.year, now.month, now.day);
+                                final tomorrow =
+                                    DateTime(now.year, now.month, now.day + 1);
+
+                                final dateToCheck = startDate.toDate();
+                                final aDate = DateTime(dateToCheck.year,
+                                    dateToCheck.month, dateToCheck.day);
+
+                                if (aDate == today) {
+                                  isToday = true;
+                                } else if (aDate == tomorrow) {
+                                  isTomorrow = true;
+                                }
+                                if (isToday == false && todayOnly == 1) {
+                                  hide = true;
+                                }
+                                if (course['featured'] != true &&
+                                    privacyDropdownValue == "Featured") {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" ||
+                                    privacy == "Invite Only") {
+                                  hide = true;
+                                }
+                                if (privacyDropdownValue == "Private" &&
+                                    (privacy != "Friends Only" ||
+                                        privacy != "Invite Only")) {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    currentUser.friendArray
+                                        .contains(course['userId'])) {
+                                  hide = false;
+                                }
+                                if (privacy == "Invite Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    course['statuses']
+                                        .keys
+                                        .contains(currentUser.id)) {
+                                  hide = false;
+                                }
+                                return (hide == false)
+                                    ? PostOnFeedNew(course, _notifier)
+                                    : Container();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        color: _colorTween(Colors.white, Colors.black),
+                        child: FutureBuilder(
+                          future: postsRef
+                              .where("type", isEqualTo: "Shows")
+                              .orderBy("startDate")
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.docs.length == 0)
+                              return Container();
+
+                            return ListView.builder(
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot course =
+                                    snapshot.data.docs[index];
+                                Timestamp startDate = course["startDate"];
+                                privacy = course['privacy'];
+                                Map<String, dynamic> statuses =
+                                    (snapshot.data.docs[index]['statuses']);
+
+                                int status = 0;
+                                List<dynamic> statusesIds =
+                                    statuses.keys.toList();
+
+                                List<dynamic> statusesValues =
+                                    statuses.values.toList();
+
+                                if (statuses != null) {
+                                  for (int i = 0; i < statuses.length; i++) {
+                                    if (statusesIds[i] == currentUser.id) {
+                                      if (statusesValues[i] == 3) {
+                                        status = 3;
+                                      }
+                                    }
+                                  }
+                                }
+
+                                bool hide = false;
+
+                                if (startDate.millisecondsSinceEpoch <
+                                    Timestamp.now().millisecondsSinceEpoch -
+                                        3600000) {
+                                  print("Expired. See ya later.");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(
+                                        course['postId'],
+                                        course['userId'],
+                                        course['title'],
+                                        course['statuses'],
+                                        course['posterName']);
+                                  });
+                                }
+                                final now = DateTime.now();
+                                bool isToday = false;
+                                bool isTomorrow = false;
+
+                                final today =
+                                    DateTime(now.year, now.month, now.day);
+                                final yesterday =
+                                    DateTime(now.year, now.month, now.day - 1);
+                                final tomorrow =
+                                    DateTime(now.year, now.month, now.day + 1);
+
+                                final dateToCheck = startDate.toDate();
+                                final aDate = DateTime(dateToCheck.year,
+                                    dateToCheck.month, dateToCheck.day);
+
+                                if (aDate == today) {
+                                  isToday = true;
+                                } else if (aDate == tomorrow) {
+                                  isTomorrow = true;
+                                }
+                                if (isToday == false && todayOnly == 1) {
+                                  hide = true;
+                                }
+                                if (course['featured'] != true &&
+                                    privacyDropdownValue == "Featured") {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" ||
+                                    privacy == "Invite Only") {
+                                  hide = true;
+                                }
+                                if (privacyDropdownValue == "Private" &&
+                                    (privacy != "Friends Only" ||
+                                        privacy != "Invite Only")) {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    currentUser.friendArray
+                                        .contains(course['userId'])) {
+                                  hide = false;
+                                }
+                                if (privacy == "Invite Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    course['statuses']
+                                        .keys
+                                        .contains(currentUser.id)) {
+                                  hide = false;
+                                }
+
+                                // if (course['featured'] != true) {
+                                //   hide = true;
+                                // }
+
+                                return (hide == false)
+                                    ? PostOnFeedNew(course, _notifier)
+                                    : Container();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        color: _colorTween(Colors.white, Colors.black),
+                        child: FutureBuilder(
+                          //Sports
+                          future: postsRef
+                              .where("type", isEqualTo: "Sports")
+                              .orderBy("startDate")
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.docs.length == 0)
+                              return Container();
+
+                            return ListView.builder(
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot course =
+                                    snapshot.data.docs[index];
+                                Timestamp startDate = course["startDate"];
+                                privacy = course['privacy'];
+                                Map<String, dynamic> statuses =
+                                    (snapshot.data.docs[index]['statuses']);
+
+                                int status = 0;
+                                List<dynamic> statusesIds =
+                                    statuses.keys.toList();
+
+                                List<dynamic> statusesValues =
+                                    statuses.values.toList();
+
+                                if (statuses != null) {
+                                  for (int i = 0; i < statuses.length; i++) {
+                                    if (statusesIds[i] == currentUser.id) {
+                                      if (statusesValues[i] == 3) {
+                                        status = 3;
+                                      }
+                                    }
+                                  }
+                                }
+
+                                bool hide = false;
+
+                                if (startDate.millisecondsSinceEpoch <
+                                    Timestamp.now().millisecondsSinceEpoch -
+                                        3600000) {
+                                  print("Expired. See ya later.");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(
+                                        course['postId'],
+                                        course['userId'],
+                                        course['title'],
+                                        course['statuses'],
+                                        course['posterName']);
+                                  });
+                                }
+                                final now = DateTime.now();
+                                bool isToday = false;
+                                bool isTomorrow = false;
+
+                                final today =
+                                    DateTime(now.year, now.month, now.day);
+                                final yesterday =
+                                    DateTime(now.year, now.month, now.day - 1);
+                                final tomorrow =
+                                    DateTime(now.year, now.month, now.day + 1);
+
+                                final dateToCheck = startDate.toDate();
+                                final aDate = DateTime(dateToCheck.year,
+                                    dateToCheck.month, dateToCheck.day);
+
+                                if (aDate == today) {
+                                  isToday = true;
+                                } else if (aDate == tomorrow) {
+                                  isTomorrow = true;
+                                }
+                                if (isToday == false && todayOnly == 1) {
+                                  hide = true;
+                                }
+                                if (course['featured'] != true &&
+                                    privacyDropdownValue == "Featured") {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" ||
+                                    privacy == "Invite Only") {
+                                  hide = true;
+                                }
+                                if (privacyDropdownValue == "Private" &&
+                                    (privacy != "Friends Only" ||
+                                        privacy != "Invite Only")) {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    currentUser.friendArray
+                                        .contains(course['userId'])) {
+                                  hide = false;
+                                }
+                                if (privacy == "Invite Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    course['statuses']
+                                        .keys
+                                        .contains(currentUser.id)) {
+                                  hide = false;
+                                }
+
+                                // if (course['featured'] != true) {
+                                //   hide = true;
+                                // }
+
+                                return (hide == false)
+                                    ? PostOnFeedNew(course, _notifier)
+                                    : Container();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        color: _colorTween(Colors.white, Colors.black),
+                        child: FutureBuilder(
+                          future: postsRef
+                              .where("type", isEqualTo: "Recreation")
+                              .orderBy("startDate")
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.docs.length == 0)
+                              return Container();
+
+                            return ListView.builder(
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot course =
+                                    snapshot.data.docs[index];
+                                Timestamp startDate = course["startDate"];
+                                privacy = course['privacy'];
+                                Map<String, dynamic> statuses =
+                                    (snapshot.data.docs[index]['statuses']);
+
+                                int status = 0;
+                                List<dynamic> statusesIds =
+                                    statuses.keys.toList();
+
+                                List<dynamic> statusesValues =
+                                    statuses.values.toList();
+
+                                if (statuses != null) {
+                                  for (int i = 0; i < statuses.length; i++) {
+                                    if (statusesIds[i] == currentUser.id) {
+                                      if (statusesValues[i] == 3) {
+                                        status = 3;
+                                      }
+                                    }
+                                  }
+                                }
+
+                                bool hide = false;
+
+                                if (startDate.millisecondsSinceEpoch <
+                                    Timestamp.now().millisecondsSinceEpoch -
+                                        3600000) {
+                                  print("Expired. See ya later.");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(
+                                        course['postId'],
+                                        course['userId'],
+                                        course['title'],
+                                        course['statuses'],
+                                        course['posterName']);
+                                  });
+                                }
+                                final now = DateTime.now();
+                                bool isToday = false;
+                                bool isTomorrow = false;
+
+                                final today =
+                                    DateTime(now.year, now.month, now.day);
+                                final tomorrow =
+                                    DateTime(now.year, now.month, now.day + 1);
+                                final dateToCheck = startDate.toDate();
+                                final aDate = DateTime(dateToCheck.year,
+                                    dateToCheck.month, dateToCheck.day);
+
+                                if (aDate == today) {
+                                  isToday = true;
+                                } else if (aDate == tomorrow) {
+                                  isTomorrow = true;
+                                }
+                                if (isToday == false && todayOnly == 1) {
+                                  hide = true;
+                                }
+                                if (course['featured'] != true &&
+                                    privacyDropdownValue == "Featured") {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" ||
+                                    privacy == "Invite Only") {
+                                  hide = true;
+                                }
+                                if (privacyDropdownValue == "Private" &&
+                                    (privacy != "Friends Only" ||
+                                        privacy != "Invite Only")) {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    currentUser.friendArray
+                                        .contains(course['userId'])) {
+                                  hide = false;
+                                }
+                                if (privacy == "Invite Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    course['statuses']
+                                        .keys
+                                        .contains(currentUser.id)) {
+                                  hide = false;
+                                }
+
+                                if (course['userId'] == currentUser.id) {
+                                  hide = false;
+                                }
+
+                                return (hide == false)
+                                    ? PostOnFeedNew(course, _notifier)
+                                    : Container();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        color: _colorTween(Colors.white, Colors.black),
+                        child: FutureBuilder(
+                          future: postsRef
+                              .where("type", isEqualTo: "Virtual")
+                              .orderBy("startDate")
+                              .get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.docs.length == 0)
+                              return Container();
+
+                            return ListView.builder(
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot course =
+                                    snapshot.data.docs[index];
+                                Timestamp startDate = course["startDate"];
+                                privacy = course['privacy'];
+                                Map<String, dynamic> statuses =
+                                    (snapshot.data.docs[index]['statuses']);
+
+                                int status = 0;
+                                List<dynamic> statusesIds =
+                                    statuses.keys.toList();
+
+                                List<dynamic> statusesValues =
+                                    statuses.values.toList();
+
+                                if (statuses != null) {
+                                  for (int i = 0; i < statuses.length; i++) {
+                                    if (statusesIds[i] == currentUser.id) {
+                                      if (statusesValues[i] == 3) {
+                                        status = 3;
+                                      }
+                                    }
+                                  }
+                                }
+
+                                bool hide = false;
+
+                                if (startDate.millisecondsSinceEpoch <
+                                    Timestamp.now().millisecondsSinceEpoch -
+                                        3600000) {
+                                  print("Expired. See ya later.");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Database().deletePost(
+                                        course['postId'],
+                                        course['userId'],
+                                        course['title'],
+                                        course['statuses'],
+                                        course['posterName']);
+                                  });
+                                }
+                                final now = DateTime.now();
+                                bool isToday = false;
+                                bool isTomorrow = false;
+
+                                final today =
+                                    DateTime(now.year, now.month, now.day);
+                                final yesterday =
+                                    DateTime(now.year, now.month, now.day - 1);
+                                final tomorrow =
+                                    DateTime(now.year, now.month, now.day + 1);
+
+                                final dateToCheck = startDate.toDate();
+                                final aDate = DateTime(dateToCheck.year,
+                                    dateToCheck.month, dateToCheck.day);
+
+                                if (aDate == today) {
+                                  isToday = true;
+                                } else if (aDate == tomorrow) {
+                                  isTomorrow = true;
+                                }
+                                if (isToday == false && todayOnly == 1) {
+                                  hide = true;
+                                }
+                                if (course['featured'] != true &&
+                                    privacyDropdownValue == "Featured") {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" ||
+                                    privacy == "Invite Only") {
+                                  hide = true;
+                                }
+                                if (privacyDropdownValue == "Private" &&
+                                    (privacy != "Friends Only" ||
+                                        privacy != "Invite Only")) {
+                                  hide = true;
+                                }
+                                if (privacy == "Friends Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    currentUser.friendArray
+                                        .contains(course['userId'])) {
+                                  hide = false;
+                                }
+                                if (privacy == "Invite Only" &&
+                                    privacyDropdownValue == "Private" &&
+                                    course['statuses']
+                                        .keys
+                                        .contains(currentUser.id)) {
+                                  hide = false;
+                                }
+
+                                if (course['userId'] == currentUser.id) {
+                                  hide = false;
+                                }
+
+                                return (hide == false)
+                                    ? PostOnFeedNew(course, _notifier)
+                                    : Container();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ]);
+                  },
+                ),
               ),
             ],
           ),

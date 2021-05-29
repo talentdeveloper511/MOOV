@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../helpers/SPHelper.dart';
+
 Scaffold tonightsVibe(today) {
   return Scaffold(backgroundColor: TextThemes.ndBlue, body: _Contents(today));
 }
@@ -138,8 +140,7 @@ class __ContentsState extends State<_Contents> {
                                   elevation: 5.0,
                                 ),
                                 onPressed: () {
-                                  HapticFeedback.lightImpact();
-                                  goPressed();
+                                  goPressed("Pop");
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -242,8 +243,7 @@ class __ContentsState extends State<_Contents> {
                                   elevation: 5.0,
                                 ),
                                 onPressed: () {
-                                  HapticFeedback.lightImpact();
-                                  goPressed();
+                                  goPressed("New");
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -299,8 +299,7 @@ class __ContentsState extends State<_Contents> {
                     elevation: 5.0,
                   ),
                   onPressed: () {
-                    HapticFeedback.lightImpact();
-                    goPressed();
+                    goPressed("Rel");
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -313,8 +312,10 @@ class __ContentsState extends State<_Contents> {
     );
   }
 
-  goPressed() {
+  goPressed(String vibeType) {
+    HapticFeedback.lightImpact();
     SPHelper.setInt("Day", widget.today);
+    SPHelper.setString("vibeType", vibeType);
 
     Navigator.push(
       context,

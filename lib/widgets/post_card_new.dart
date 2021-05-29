@@ -72,7 +72,7 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
         animation: widget.notifier,
         builder: (context, _) {
           return Container(
-            color: _colorTween(Colors.white, Color.fromRGBO(204, 204, 204, 0)),
+            color: _colorTween(Colors.white, Color.fromRGBO(220, 204, 204, 0)),
             child: Column(
               children: [
                 Stack(alignment: Alignment.center, children: <Widget>[

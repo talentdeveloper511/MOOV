@@ -101,7 +101,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   List livePasses = [];
 
   bool isAuth = false;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   FirebaseMessaging _fcm = FirebaseMessaging();
   PageController pageController;
   int pageIndex = 0;
@@ -301,78 +300,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
       }
-
-//      FlutterAppBadger.updateBadgeCount(1);
-      // if (page == 'chat') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => MessagesHub()));
-      // } else if (page == 'post') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-      // } else if (page == 'group') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
-      // } else if (page == 'user') {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => OtherProfile(pushId)));
-      // } else {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => NotificationFeed()));
-      // }
-//          if (recipientId == currentUser.id) {
       print('Notification shown');
-
-//      Flushbar snackbar = Flushbar(
-//          onTap: (data) {
-//            Navigator.push(context,
-//                MaterialPageRoute(builder: (context) => PostDetail(pushId)));
-//          },
-//          flushbarStyle: FlushbarStyle.FLOATING,
-//          boxShadows: [
-//            BoxShadow(
-//                color: Colors.blue[800],
-//                offset: Offset(0.0, 2.0),
-//                blurRadius: 3.0)
-//          ],
-//          backgroundGradient:
-//              LinearGradient(colors: [TextThemes.ndGold, TextThemes.ndGold]),
-//          icon: Icon(
-//            Icons.directions_run,
-//            color: Colors.green[700],
-//          ),
-//          duration: Duration(seconds: 4),
-//          flushbarPosition: FlushbarPosition.TOP,
-//          backgroundColor: Colors.green,
-//          messageText: Text(
-//            body,
-//            overflow: TextOverflow.ellipsis,
-//            style: TextStyle(color: Colors.white),
-//          ));
-//      // SnackBar snackybar = SnackBar(
-//      //     content: Text(body, overflow: TextOverflow.ellipsis),
-//      //     backgroundColor: Colors.green);
-//      // _scaffoldKey.currentState.showSnackBar(snackybar);
-//      snackbar.show(context);
-      // Get.snackbar("Message", body);
-//          }
     },
-//        onBackgroundMessage: myBackgroundMessageHandler,
         onResume: (Map<String, dynamic> message) async {
-      // if (Platform.isIOS) {
-      //   Navigator.push(context,
-      //       MaterialPageRoute(builder: (context) => MessageList()));
-      // }
-      //   _navigationService.navigateTo(
-      //   routes.EventDetail,
-      //      arguments: '${message["eventId"]}',
-      //   );
-      // } else {
-      //   _navigationService.navigateTo(
-      //    routes.EventDetail,
-      //      arguments: '${message["data"]["eventId"]}',
-      //    );
-      // }
-
+     
       print('message resume: $message');
       String pushId = "";
       String page = "";

@@ -17,6 +17,8 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -1154,8 +1156,7 @@ class _EditPostState extends State<EditPost> {
                                                 firebase_storage
                                                     .FirebaseStorage.instance
                                                     .ref()
-                                                    .child("images/" +
-                                                        postId);
+                                                    .child("images/" + postId);
 
                                             // Reference firebaseStorageRef =
                                             //     FirebaseStorage.instance
@@ -1319,17 +1320,113 @@ class _EditPostState extends State<EditPost> {
                                         currentUser.id ==
                                             "115805501102171844515"
                                     ? //ADMIN CONTROLS
-                                    GestureDetector(
-                                        onTap: () {
-                                          FirebaseFirestore.instance
-                                              .collection('notreDame')
-                                              .doc('data')
-                                              .collection('food')
-                                              .doc(postId)
-                                              .set({
-                                            "MOTD": true,
-                                          }, SetOptions(merge: true));
-                                        },
+                                    FocusedMenuHolder(
+                                        menuWidth:
+                                            MediaQuery.of(context).size.width *
+                                                0.50,
+                                        blurSize: 5.0,
+                                        menuItemExtent: 45,
+                                        menuBoxDecoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15.0))),
+                                        duration: Duration(milliseconds: 100),
+                                        animateMenuItems: true,
+                                        blurBackgroundColor: Colors.black54,
+                                        openWithTap:
+                                            true, // Open Focused-Menu on Tap rather than Long Press
+                                        menuOffset:
+                                            10.0, // Offset value to show menuItem from the selected item
+                                        bottomOffsetHeight:
+                                            80.0, // Offset height to consider, for showing the menu item ( for Suggestions bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                                        menuItems: <FocusedMenuItem>[
+                                          // Add Each FocusedMenuItem  for Menu Options
+
+                                          FocusedMenuItem(
+                                              title: Text("MOTD Popular"),
+                                              trailingIcon:
+                                                  Icon(Icons.person_add),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('notreDame')
+                                                    .doc('data')
+                                                    .collection('food')
+                                                    .doc(postId)
+                                                    .set({
+                                                  "MOTDPop": true,
+                                                }, SetOptions(merge: true));
+                                              }),
+
+                                          FocusedMenuItem(
+                                              backgroundColor: Colors.blue,
+                                              title: Text("MOTN Popular"),
+                                              trailingIcon: Icon(Icons.send),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('notreDame')
+                                                    .doc('data')
+                                                    .collection('food')
+                                                    .doc(postId)
+                                                    .set({
+                                                  "MOTNPop": true,
+                                                }, SetOptions(merge: true));
+                                              }),
+                                          FocusedMenuItem(
+                                              title: Text("MOTD New"),
+                                              trailingIcon: Icon(Icons.edit),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('notreDame')
+                                                    .doc('data')
+                                                    .collection('food')
+                                                    .doc(postId)
+                                                    .set({
+                                                  "MOTDNew": true,
+                                                }, SetOptions(merge: true));
+                                              }),
+                                          FocusedMenuItem(
+                                              backgroundColor: Colors.blue,
+                                              title: Text("MOTN New"),
+                                              trailingIcon: Icon(Icons.edit),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('notreDame')
+                                                    .doc('data')
+                                                    .collection('food')
+                                                    .doc(postId)
+                                                    .set({
+                                                  "MOTNPop": true,
+                                                }, SetOptions(merge: true));
+                                              }),
+                                          FocusedMenuItem(
+                                              title: Text("MOTD Rel"),
+                                              trailingIcon: Icon(Icons.edit),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('notreDame')
+                                                    .doc('data')
+                                                    .collection('food')
+                                                    .doc(postId)
+                                                    .set({
+                                                  "MOTDRel": true,
+                                                }, SetOptions(merge: true));
+                                              }),
+                                          FocusedMenuItem(
+                                              backgroundColor: Colors.blue,
+                                              title: Text("MOTN Rel"),
+                                              trailingIcon: Icon(Icons.edit),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('notreDame')
+                                                    .doc('data')
+                                                    .collection('food')
+                                                    .doc(postId)
+                                                    .set({
+                                                  "MOTNRel": true,
+                                                }, SetOptions(merge: true));
+                                              }),
+                                        ],
+                                        onPressed: () {},
                                         child: Container(
                                           height: 30,
                                           padding: EdgeInsets.all(4),
@@ -1388,7 +1485,8 @@ class _EditPostState extends State<EditPost> {
                                                     end: Alignment.centerRight,
                                                   ),
                                                   borderRadius:
-                                                      BorderRadius.circular(10.0)),
+                                                      BorderRadius.circular(
+                                                          10.0)),
                                               child: Text(
                                                 "FEATURE",
                                                 textAlign: TextAlign.center,
