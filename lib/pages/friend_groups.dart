@@ -25,7 +25,6 @@ class FriendGroupsPage extends StatefulWidget {
 class _FriendGroupsState extends State<FriendGroupsPage>
     with AutomaticKeepAliveClientMixin {
   Container buildNoContent() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
       color: TextThemes.ndBlue,
       child: Center(

@@ -1,22 +1,10 @@
-import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/CategoryFeed.dart';
-import 'package:MOOV/pages/NewSearch.dart';
-import 'package:MOOV/pages/create_group.dart';
-import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
-import 'package:MOOV/utils/themes_styles.dart';
-import 'package:MOOV/widgets/NextMOOV.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class HottestMOOV extends StatelessWidget {
-  const HottestMOOV({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(

@@ -1,21 +1,13 @@
-import 'package:MOOV/helpers/demo_values.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/pages/CategoryFeed.dart';
-import 'package:MOOV/pages/MOOVSPage.dart';
-import 'package:MOOV/widgets/MOTD.dart';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/pages/post_detail.dart';
-import 'package:MOOV/services/database.dart';
-
 import 'package:MOOV/helpers/themes.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:shimmer/shimmer.dart';
@@ -423,7 +415,7 @@ class TrendingSegmentState extends State<TrendingSegment>
 
 class PostOnTrending extends StatelessWidget {
   final DocumentSnapshot course;
-  bool isLoading = false;
+  final bool isLoading;
 
   PostOnTrending({this.course, this.isLoading = false});
 

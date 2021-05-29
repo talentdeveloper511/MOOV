@@ -1,32 +1,20 @@
 import 'dart:async';
 
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/leaderboard.dart';
-import 'package:MOOV/pages/notification_feed.dart';
-import 'package:MOOV/services/database.dart';
-import 'package:MOOV/widgets/chat.dart';
-import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
-import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:algolia/algolia.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
 import '../pages/ProfilePageWithHeader.dart';
 import '../pages/other_profile.dart';
 
 class SendMOOVSearch extends StatefulWidget {
-  String ownerId, previewImg;
-  dynamic startDate, moovId;
-  String title, ownerProPic, ownerName;
+  final String ownerId, previewImg;
+  final dynamic startDate, moovId;
+  final String title, ownerProPic, ownerName;
   SendMOOVSearch(this.ownerId, this.previewImg, this.startDate, this.moovId,
       this.title, this.ownerName, this.ownerProPic);
 

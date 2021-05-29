@@ -67,13 +67,10 @@ class _NextMOOVState extends State<NextMOOV> {
                   final now = DateTime.now();
                   bool isToday = false;
                   bool isTomorrow = false;
-                  bool isBoth = false;
-                  bool isEither = false;
 
                   bool isNextWeek = false;
 
                   final today = DateTime(now.year, now.month, now.day);
-                  final yesterday = DateTime(now.year, now.month, now.day - 1);
                   final tomorrow = DateTime(now.year, now.month, now.day + 1);
                   final week = DateTime(now.year, now.month, now.day + 6);
 

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/pages/CategoryFeed.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/group_detail.dart';
@@ -28,7 +27,7 @@ import 'package:page_transition/page_transition.dart';
 import 'home.dart';
 
 class EditPost extends StatefulWidget {
-  String postId;
+  final String postId;
   EditPost(this.postId);
 
   @override

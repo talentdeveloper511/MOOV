@@ -2,33 +2,26 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/models/going.dart';
-import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 typedef void HeightAdjustCallback(int val);
 
 class GoingPage extends StatelessWidget {
   final HeightAdjustCallback callback;
-
-  dynamic moovId;
-
+  final String moovId;
   GoingPage(this.moovId, this.callback);
-
-  bool _isPressed;
-  int status = 0;
 
   @override
   Widget build(BuildContext context) {
+    int status = 0;
+
     return StreamBuilder(
         stream: postsRef.doc(moovId).snapshots(),
         builder: (context, snapshot) {
@@ -551,7 +544,7 @@ class GoingPage extends StatelessWidget {
 }
 
 class GoingPageFriends extends StatelessWidget {
-    final HeightAdjustCallback callback;
+  final HeightAdjustCallback callback;
 
   dynamic moovId, likeCount;
   int status = 0;
@@ -587,7 +580,7 @@ class GoingPageFriends extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: statusesIds.length,
                       itemBuilder: (context, index) {
-                         Timer(Duration(microseconds: 1), () {
+                        Timer(Duration(microseconds: 1), () {
                           callback(statusesIds.length * 55);
                         });
                         bool hide = false;

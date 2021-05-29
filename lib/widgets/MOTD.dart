@@ -1,21 +1,13 @@
 import 'package:MOOV/helpers/size_config.dart';
-import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/leaderboard.dart';
-import 'package:MOOV/pages/edit_profile.dart';
-import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/post_detail.dart';
-import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
-import 'package:shimmer/shimmer.dart';
 
 class MOTD extends StatefulWidget {
   final String type;
@@ -33,8 +25,8 @@ class _MOTDState extends State<MOTD> {
     if (Device.get().isTablet) {
       isTablet = true;
     }
-    var title;
-    var pic;
+    String title;
+    String pic;
 
     return FutureBuilder(
         future: postsRef.where(widget.type, isEqualTo: true).get(),

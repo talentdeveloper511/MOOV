@@ -1,24 +1,15 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:ui';
-
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/going.dart';
-import 'package:MOOV/models/going_model.dart';
-import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
-import 'package:MOOV/pages/dm_page.dart';
 import 'package:MOOV/pages/leaderboard.dart';
-import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
 

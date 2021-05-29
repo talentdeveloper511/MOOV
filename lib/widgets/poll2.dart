@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/home.dart';
@@ -12,10 +11,8 @@ import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:polls/polls.dart';
-import 'package:shimmer/shimmer.dart';
 
 class PollView extends StatefulWidget {
   final ValueNotifier<double> notifier;
@@ -59,16 +56,16 @@ class _PollViewState extends State<PollView> {
   Color _colorTween(Color begin, Color end) {
     return ColorTween(begin: begin, end: end).transform(widget.notifier.value);
   }
+    var x;
+    var y;
 
   @override
   Widget build(BuildContext context) {
     String question;
     String choice1;
     String choice2;
-    var x;
-    var y;
 
-    bool isLargePhone = Screen.diagonal(context) > 766;
+
     final dateToCheck = Timestamp.now().toDate();
     final aDate =
         DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
@@ -97,8 +94,8 @@ class _PollViewState extends State<PollView> {
           String suggestorName = snapshot.data['suggestorName'];
           String suggestorYear = snapshot.data['suggestorYear'];
 
-          var _list = voters.values.toList();
-          var _list2 = voters.keys.toList();
+          List _list = voters.values.toList();
+
           option1 =
               _list.where((element) => element == 1).toList().length.toDouble();
           option2 =

@@ -8,18 +8,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FriendsList extends StatefulWidget {
-  TextEditingController searchController = TextEditingController();
   final id;
 
   FriendsList({this.id});
 
   @override
   State<StatefulWidget> createState() {
+    // ignore: todo
     // TODO: implement createState
     return FriendsListState(this.id);
   }
