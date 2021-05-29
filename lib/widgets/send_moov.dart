@@ -91,9 +91,6 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
           _currentIndex = (_tabController.animation.value).round();
         });
       });
-
-    // Simple declarations
-    TextEditingController searchController = TextEditingController();
   }
 
   @override

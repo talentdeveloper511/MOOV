@@ -1,34 +1,9 @@
-import 'dart:async';
 
-import 'package:MOOV/main.dart';
-import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/CategoryFeed.dart';
-import 'package:MOOV/pages/ProfilePageWithHeader.dart';
-import 'package:MOOV/pages/edit_post.dart';
-import 'package:MOOV/pages/friend_finder.dart';
 import 'package:MOOV/pages/friend_groups.dart';
-import 'package:MOOV/pages/group_detail.dart';
-import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/leaderboard.dart';
-import 'package:MOOV/pages/notification_feed.dart';
-import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/studentClubs/studentClubDashboard.dart';
-import 'package:MOOV/widgets/progress.dart';
-import 'package:MOOV/widgets/send_moov.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:MOOV/helpers/themes.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
-import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:share/share.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class MOOVSPage extends StatefulWidget {
   @override
@@ -48,13 +23,6 @@ class _MOOVSPageState extends State<MOOVSPage>
   String type;
   var todayOnly = 0;
 
-
-  @override
-  void initState() {
-    super.initState();
- 
-  }
-
   @override
   void dispose() {
     _tabController.dispose();
@@ -71,15 +39,6 @@ class _MOOVSPageState extends State<MOOVSPage>
          
           body: FriendGroupsPage(),
         ));
-
-    // FloatingActionButton.extended(
-    //     onPressed: () {
-    //       // Add your onPressed code here!
-    //     },
-    //     label: Text('Find a MOOV',
-    //         style: TextStyle(color: Colors.white)),
-    //     icon: Icon(Icons.search, color: Colors.white),
-    //     backgroundColor: Color.fromRGBO(220, 180, 57, 1.0))
   }
 
   void showAlertDialog(
@@ -108,89 +67,6 @@ class _MOOVSPageState extends State<MOOVSPage>
     );
   }
 }
-
-class VerticalSplitView extends StatefulWidget {
-  final Widget left;
-  final Widget right;
-  final double ratio;
-
-  const VerticalSplitView(
-      {Key key, @required this.left, @required this.right, this.ratio = 0.5})
-      : assert(left != null),
-        assert(right != null),
-        assert(ratio >= 0),
-        assert(ratio <= 1),
-        super(key: key);
-
-  @override
-  _VerticalSplitViewState createState() => _VerticalSplitViewState();
-}
-
-class _VerticalSplitViewState extends State<VerticalSplitView> {
-  final _dividerWidth = 16.0;
-
-  //from 0-1
-  double _ratio;
-  double _maxWidth;
-
-  get _width1 => _ratio * _maxWidth;
-
-  get _width2 => (1 - _ratio) * _maxWidth;
-
-  @override
-  void initState() {
-    super.initState();
-    _ratio = widget.ratio;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, BoxConstraints constraints) {
-      assert(_ratio <= 1);
-      assert(_ratio >= 0);
-      if (_maxWidth == null) _maxWidth = constraints.maxWidth - _dividerWidth;
-      if (_maxWidth != constraints.maxWidth) {
-        _maxWidth = constraints.maxWidth - _dividerWidth;
-      }
-
-      return SizedBox(
-        width: constraints.maxWidth,
-        child: Row(
-          children: <Widget>[
-            SizedBox(
-              width: _width1,
-              child: widget.left,
-            ),
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              child: SizedBox(
-                width: _dividerWidth,
-                height: constraints.maxHeight,
-                child: RotationTransition(
-                  child: Icon(Icons.drag_handle),
-                  turns: AlwaysStoppedAnimation(0.25),
-                ),
-              ),
-              onPanUpdate: (DragUpdateDetails details) {
-                setState(() {
-                  _ratio += details.delta.dx / _maxWidth;
-                  if (_ratio > 1)
-                    _ratio = 1;
-                  else if (_ratio < 0.0) _ratio = 0.0;
-                });
-              },
-            ),
-            SizedBox(
-              width: _width2,
-              child: widget.right,
-            ),
-          ],
-        ),
-      );
-    });
-  }
-}
-
 class BottomNavyBar extends StatelessWidget {
   BottomNavyBar({
     Key key,

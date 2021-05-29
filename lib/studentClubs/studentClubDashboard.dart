@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
-import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/edit_profile.dart';
@@ -21,7 +19,6 @@ import 'package:flutter/services.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StudentClubDashboard extends StatelessWidget {
   const StudentClubDashboard({Key key}) : super(key: key);

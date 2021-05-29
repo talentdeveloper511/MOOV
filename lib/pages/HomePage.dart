@@ -1,9 +1,7 @@
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/pages/NotifyingPageView.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/models/user.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/widgets/poll2.dart';
@@ -16,21 +14,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyrefresh/bezier_circle_header.dart';
 
 class HomePage extends StatefulWidget {
-  final int pageIndex, motdIndex;
-  final User user;
-  HomePage({Key key, this.user, this.pageIndex, this.motdIndex})
-      : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
-  static const IconData leaderboard_outlined =
-      IconData(0xe26f, fontFamily: 'MaterialIcons');
 }
 
 class _HomePageState extends State<HomePage>
@@ -50,7 +40,6 @@ class _HomePageState extends State<HomePage>
   int todayOnly = 0;
   String privacy;
 
-  // Current Index of tab
   int _currentIndex = 0;
   int motdIndex = 0;
   ValueNotifier<double> _notifier = ValueNotifier<double>(0);
@@ -65,11 +54,6 @@ class _HomePageState extends State<HomePage>
   PageController _pageController;
 
   void _onScroll() {
-    // Consider the page changed when the end of the scroll is reached
-    // Using onPageChanged callback from PageView causes the page to change when
-    // the half of the next card hits the center of the viewport, which is not
-    // what I want
-
     _notifier?.value = _pageController.page - _previousPage;
   }
 
@@ -374,7 +358,6 @@ class _HomePageState extends State<HomePage>
                                       Container(
                                           height: isLargePhone ? 155 : 140,
                                           child: PageView(
-                                            
                                             controller: _pageController,
                                             children: [
                                               MOTD("MOTD"),
@@ -793,8 +776,6 @@ class _HomePageState extends State<HomePage>
                           bool isTomorrow = false;
 
                           final today = DateTime(now.year, now.month, now.day);
-                          final yesterday =
-                              DateTime(now.year, now.month, now.day - 1);
                           final tomorrow =
                               DateTime(now.year, now.month, now.day + 1);
 

@@ -1,23 +1,18 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:MOOV/businessInterfaces/BusinessDirectory.dart';
 import 'package:MOOV/businessInterfaces/livePassesSheet.dart';
 import 'package:MOOV/helpers/SPHelper.dart';
 import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/models/post_model.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/moovMoney/moovMoneyAdd.dart';
-import 'package:MOOV/pages/BusinessTab.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
-import 'package:MOOV/pages/SettingsPage.dart';
 import 'package:MOOV/pages/TonightsVibe.dart';
-import 'package:MOOV/pages/WelcomePage.dart';
 import 'package:MOOV/pages/blockedPage.dart';
 import 'package:MOOV/pages/create_account.dart';
 import 'package:MOOV/pages/group_detail.dart';
@@ -27,8 +22,6 @@ import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/studentClubs/studentClubDashboard.dart';
-import 'package:MOOV/widgets/locationCheckIn.dart';
-import 'package:MOOV/widgets/progress.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -40,11 +33,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:random_string/random_string.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:splashscreen/splashscreen.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final Reference storageRef = FirebaseStorage.instance.ref();
@@ -92,9 +81,6 @@ final adminRef = FirebaseFirestore.instance
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
-final PageStorageKey _pageKey = PageStorageKey("HOME");
-final PageStorageBucket _bucket = PageStorageBucket();
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -112,16 +98,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   bool isSelected = false;
   String stringValue = "No value";
+  List livePasses = [];
 
   bool isAuth = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   FirebaseMessaging _fcm = FirebaseMessaging();
   PageController pageController;
   int pageIndex = 0;
-  dynamic startDate, moovId;
-  List<dynamic> likedArray;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-
   StreamSubscription iosSubscription;
   @override
   initState() {
@@ -749,13 +732,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 return Container();
               }
               int moovMoneyBalance = snapshot.data['moovMoney'];
-              List livePasses = [];
               if (snapshot.data.data()['livePasses'] != null) {
                 livePasses = snapshot.data['livePasses'];
               }
 
               return Scaffold(
-                key: _scaffoldKey,
                 floatingActionButton: FutureBuilder(
                     future: usersRef
                         .doc(currentUser.id)
@@ -935,14 +916,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       // ),
                     ],
                   ),
-
-                  // child: Padding(
-                  //   padding: const EdgeInsets.all(10.0),
-                  //   child: Image.asset('lib/assets/ndlogo.png', height: 70),
-                  // ),
-
                   backgroundColor: TextThemes.ndBlue,
-                  //pinned: true,
                   actions: <Widget>[
                     NamedIconMessages(
                         iconData: Icons.mail_outline,
@@ -994,10 +968,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   physics: ClampingScrollPhysics(),
                   children: currentUser.userType.containsKey("clubExecutive")
                       ? <Widget>[
-                          PageStorage(
-                              bucket: _bucket,
-                              key: _pageKey,
-                              child: HomePage()),
+                          HomePage(),
                           SearchBar(),
                           StudentClubDashboard(),
                           MOOVSPage(),
@@ -1005,18 +976,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         ]
                       : currentUser.isBusiness
                           ? <Widget>[
-                              PageStorage(
-                                  bucket: _bucket,
-                                  key: _pageKey,
-                                  child: HomePage()),
+                              HomePage(),
                               BusinessDirectory(),
                               ProfilePage()
                             ]
                           : <Widget>[
-                              PageStorage(
-                                  bucket: _bucket,
-                                  key: _pageKey,
-                                  child: HomePage()),
+                              HomePage(),
                               SearchBar(),
                               MOOVSPage(),
                               ProfilePage()
@@ -1117,20 +1082,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                             : CircleAvatar(
                                                 radius: 14,
                                                 backgroundImage: AssetImage(
-                                                    'lib/assets/incognitoPic.jpg')))
-                                    // CircleAvatar(
-                                    //   backgroundImage: NetworkImage(currentUser.photoUrl),
-                                    //   radius: 13)
-                                    ),
+                                                    'lib/assets/incognitoPic.jpg')))),
                               ]),
               );
             }),
       );
     }
-    // return RaisedButton(
-    //   child: Text('Logout'),
-    //   onPressed: logout,
-    // );
   }
 
   Scaffold buildUnAuthScreen() {
@@ -1198,7 +1155,7 @@ class NamedIconMessages extends StatelessWidget {
   final IconData iconData;
   final int messages;
   final VoidCallback onTap;
-  int messageCount;
+  final int messageCount;
 
   NamedIconMessages({
     Key key,
@@ -1259,7 +1216,7 @@ class NamedIcon extends StatelessWidget {
   final IconData iconData;
   final int notifs;
   final VoidCallback onTap;
-  int notificationCount;
+  final int notificationCount;
 
   NamedIcon({
     Key key,

@@ -1,17 +1,10 @@
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/user.dart';
-import 'package:MOOV/pages/edit_profile.dart';
 import 'package:MOOV/pages/home.dart' as home;
-import 'package:MOOV/pages/sign_in.dart';
-import 'package:MOOV/widgets/progress.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'HomePage.dart';
-import 'ProfilePageWithHeader.dart';
 import 'home.dart';
 
 class UserData extends StatefulWidget {
@@ -23,8 +16,6 @@ class UserData extends StatefulWidget {
 
 class _UserDataState extends State<UserData> {
   Container buildNoContent() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
-
     return Container(
       child: Center(
         child: ListView(

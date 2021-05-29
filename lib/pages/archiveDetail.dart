@@ -1,33 +1,22 @@
-import 'dart:async';
 import 'dart:ui';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/Comment.dart';
-import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/edit_post.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
-import 'package:MOOV/services/database.dart';
-import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/progress.dart';
-import 'package:MOOV/widgets/send_moov.dart';
-import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:MOOV/widgets/going_statuses.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:share/share.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ArchiveDetail extends StatefulWidget {
-  String postId;
+  final String postId;
   ArchiveDetail(this.postId);
 
   @override
@@ -79,10 +68,10 @@ class _ArchiveDetailState extends State<ArchiveDetail>
     });
   }
 
+  bool isIncognito;
+
   @override
   Widget build(BuildContext context) {
-    bool isIncognito;
-
     return StreamBuilder(
         stream: usersRef.doc(currentUser.id).snapshots(),
         builder: (context, snapshot) {
@@ -133,7 +122,6 @@ class _ArchiveDetailState extends State<ArchiveDetail>
                     ),
                   ),
                 ),
-             
                 body: SafeArea(
                   top: false,
                   child: Stack(children: [
@@ -159,7 +147,6 @@ class _ArchiveDetailState extends State<ArchiveDetail>
                           userId = course['userId'];
                           postId = course['postId'];
                           int maxOccupancy = course['maxOccupancy'];
-                          int venmo = course['venmo'];
                           int goingCount = course['going'].length;
                           return Container(
                             color: Colors.white,
@@ -189,8 +176,8 @@ class _ArchiveDetailState extends State<ArchiveDetail>
 }
 
 class _BannerImage extends StatelessWidget {
-  String bannerImage, userId, postId;
-  int maxOccupancy, goingCount;
+  final String bannerImage, userId, postId;
+  final int maxOccupancy, goingCount;
   _BannerImage(this.bannerImage, this.userId, this.postId, this.maxOccupancy,
       this.goingCount);
 
@@ -712,7 +699,6 @@ class _AuthorContent extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  
                 ],
               )),
             ),
@@ -819,7 +805,6 @@ class _GoingListSegmentState extends State<GoingListSegment>
               ),
             ),
           ),
-       
         ],
       ),
     );

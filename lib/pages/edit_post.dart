@@ -234,8 +234,6 @@ class _EditPostState extends State<EditPost> {
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
-
-    final groupNameController = TextEditingController();
     Stream stream = postsRef.doc(postId).snapshots();
 
     return StreamBuilder(
@@ -244,8 +242,6 @@ class _EditPostState extends State<EditPost> {
           if (!snapshot.hasData) return CircularProgressIndicator();
 
           String title = snapshot.data['title'];
-          String type = snapshot.data['type'];
-          String address = snapshot.data['address'];
           String visibility = snapshot.data['privacy'];
           String privacyDropdownValue = visibility;
           List<dynamic> going = snapshot.data['going'];

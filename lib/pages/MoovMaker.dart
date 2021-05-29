@@ -19,7 +19,6 @@ import 'package:MOOV/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
@@ -275,7 +274,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           title: Text(
-            "Show it off",
+            "Whaddaya got? 📸",
             style: TextStyle(color: Colors.white),
           ),
           children: <Widget>[
@@ -1930,6 +1929,7 @@ class _DatePickerState extends State<DatePicker> {
     final List<DateTime> picked = await DateRangePicker.showDatePicker(
         context: context,
         initialFirstDate: startDate1,
+        initialLastDate: null,
         // initialLastDate: _endDate,
         firstDate: new DateTime(DateTime.now().year),
         lastDate: new DateTime(DateTime.now().year + 10));

@@ -367,15 +367,15 @@ class _BuyMoovOverPassSheetState extends State<BuyMoovOverPassSheet>
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
     _animationController.repeat(reverse: true);
-    Animation _animation =
-        Tween(begin: 2.0, end: 15.0).animate(_animationController)
-          ..addListener(() {
-            setState(() {
-              top = FractionalOffset.bottomLeft;
-              bottom = FractionalOffset.topRight;
-              list = [Colors.blue, Colors.red];
-            });
-          });
+
+    Tween(begin: 2.0, end: 15.0).animate(_animationController)
+      ..addListener(() {
+        setState(() {
+          top = FractionalOffset.bottomLeft;
+          bottom = FractionalOffset.topRight;
+          list = [Colors.blue, Colors.red];
+        });
+      });
     super.initState();
   }
 

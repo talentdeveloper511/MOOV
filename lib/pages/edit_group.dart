@@ -1,19 +1,11 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'dart:ui';
-
 import 'package:MOOV/helpers/themes.dart';
-import 'package:MOOV/models/going.dart';
-import 'package:MOOV/models/going_model.dart';
 import 'package:MOOV/pages/HomePage.dart';
-import 'package:MOOV/pages/ProfilePageWithHeader.dart';
-import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -21,14 +13,11 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MOOV/services/database.dart';
-import 'package:page_transition/page_transition.dart';
-import '../widgets/add_users_group.dart';
-import 'edit_group.dart';
 import 'home.dart';
 
 class EditGroup extends StatefulWidget {
-  String photoUrl, displayName, gid;
-  List<dynamic> members;
+  final String photoUrl, displayName, gid;
+  final List<dynamic> members;
 
   EditGroup(this.photoUrl, this.displayName, this.members, this.gid);
 
