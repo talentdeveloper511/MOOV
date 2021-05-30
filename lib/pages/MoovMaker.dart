@@ -863,6 +863,7 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                         );
                         if (date != null) {
                           final time = await showTimePicker(
+                            initialEntryMode: TimePickerEntryMode.input,
                             context: context,
                             initialTime: TimeOfDay.fromDateTime(
                                 currentValue ?? DateTime.now()),

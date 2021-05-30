@@ -301,9 +301,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             MaterialPageRoute(builder: (context) => GroupDetail(pushId)));
       }
       print('Notification shown');
-    },
-        onResume: (Map<String, dynamic> message) async {
-     
+    }, onResume: (Map<String, dynamic> message) async {
       print('message resume: $message');
       String pushId = "";
       String page = "";
@@ -656,6 +654,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       //vibe has been set. lets roll.
 
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: FutureBuilder(
             future: usersRef.doc(currentUser.id).get(),
             builder: (context, snapshot) {

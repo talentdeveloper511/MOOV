@@ -8,6 +8,7 @@ import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/pointAnimation.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:animated_widgets/animated_widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -311,7 +312,7 @@ class _PollViewState extends State<PollView> {
                                                       TextThemes.ndBlue,
                                                   child: CircleAvatar(
                                                     backgroundImage:
-                                                        NetworkImage(pic),
+                                                        CachedNetworkImageProvider(pic),
                                                     radius: 17,
                                                     backgroundColor:
                                                         TextThemes.ndBlue,
@@ -319,7 +320,7 @@ class _PollViewState extends State<PollView> {
                                                       // backgroundImage: snapshot.data
                                                       //     .documents[index].data['photoUrl'],
                                                       backgroundImage:
-                                                          NetworkImage(pic),
+                                                          CachedNetworkImageProvider(pic),
                                                       radius: 18,
                                                     ),
                                                   ),
@@ -401,7 +402,7 @@ class _PollViewState extends State<PollView> {
                                                       TextThemes.ndBlue,
                                                   child: CircleAvatar(
                                                     backgroundImage:
-                                                        NetworkImage(pic2),
+                                                        CachedNetworkImageProvider(pic2),
                                                     radius: 17,
                                                     backgroundColor:
                                                         TextThemes.ndBlue,
@@ -409,7 +410,7 @@ class _PollViewState extends State<PollView> {
                                                       // backgroundImage: snapshot.data
                                                       //     .documents[index].data['photoUrl'],
                                                       backgroundImage:
-                                                          NetworkImage(pic2),
+                                                          CachedNetworkImageProvider(pic2),
                                                       radius: 18,
                                                     ),
                                                   ),

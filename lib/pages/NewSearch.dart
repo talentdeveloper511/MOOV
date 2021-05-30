@@ -68,21 +68,21 @@ class _SearchBarState extends State<SearchBar>
   final Algolia _algoliaApp = AlgoliaApplication.algolia;
   String _searchTerm;
 
-  Future<List<AlgoliaObjectSnapshot>> _operation0(String input) async {
+  Future<List<AlgoliaObjectSnapshot>> _groupSearch(String input) async {
     AlgoliaQuery query = _algoliaApp.instance.index("groups").search(input);
     AlgoliaQuerySnapshot querySnap = await query.getObjects();
     List<AlgoliaObjectSnapshot> results = querySnap.hits;
     return results;
   }
 
-  Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
+  Future<List<AlgoliaObjectSnapshot>> _userSearch(String input) async {
     AlgoliaQuery query = _algoliaApp.instance.index("users").search(input);
     AlgoliaQuerySnapshot querySnap = await query.getObjects();
     List<AlgoliaObjectSnapshot> results = querySnap.hits;
     return results;
   }
 
-  Future<List<AlgoliaObjectSnapshot>> _operation2(String input) async {
+  Future<List<AlgoliaObjectSnapshot>> _moovSearch(String input) async {
     AlgoliaQuery query = _algoliaApp.instance.index("events").search(input);
     AlgoliaQuerySnapshot querySnap = await query.getObjects();
     List<AlgoliaObjectSnapshot> results = querySnap.hits;
@@ -102,17 +102,13 @@ class _SearchBarState extends State<SearchBar>
     super.initState();
     textFieldFocusNode.addListener(_onFocusChange);
 
-    _tabController =
-        new TabController(vsync: this, length: 3, initialIndex: _currentIndex);
+    _tabController = new TabController(vsync: this, length: 3, initialIndex: 0);
     _tabController.animation
       ..addListener(() {
         setState(() {
           _currentIndex = (_tabController.animation.value).round();
         });
       });
-
-    // Simple declarations
-    TextEditingController searchController = TextEditingController();
   }
 
   @override
@@ -123,12 +119,46 @@ class _SearchBarState extends State<SearchBar>
     searchController.dispose();
   }
 
+  // Future<void> _showSearch() async {
+  //   final searchText = await showSearch<String>(
+  //     context: context,
+  //     delegate: SearchWithSuggestionDelegate(
+  //       onSearchChanged: _getRecentSearchesLike,
+  //     ),
+  //   );
+
+  //   //Save the searchText to SharedPref so that next time you can use them as recent searches.
+  //   await _saveToRecentSearches(searchText);
+
+  //   //Do something with searchText. Note: This is not a result.
+  // }
+
+  Future<List<String>> _getRecentSearchesLike(String query) async {
+    final pref = await SharedPreferences.getInstance();
+    final allSearches = pref.getStringList("recentSearches");
+    return allSearches.where((search) => search.startsWith(query)).toList();
+  }
+
+  Future<void> _saveToRecentSearches(String searchText) async {
+    if (searchText == null) return; //Should not be null
+    final pref = await SharedPreferences.getInstance();
+
+    //Use `Set` to avoid duplication of recentSearches
+    Set<String> allSearches =
+        pref.getStringList("recentSearches")?.toSet() ?? {};
+
+    //Place it at first in the set
+    allSearches = {searchText, ...allSearches};
+    pref.setStringList("recentSearches", allSearches.toList());
+  }
+
   @override
   Widget build(BuildContext context) {
     SharedPreferences preferences;
 
     return SafeArea(
         child: Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               backgroundColor: Colors.white,
               toolbarHeight: showTabs == true ? 96 : 50,
@@ -179,23 +209,20 @@ class _SearchBarState extends State<SearchBar>
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              // Sign In Button
-                              new FlatButton(
-                                splashColor: Colors.white,
-                                color: Colors.white,
+                              TextButton(
+                                style: ButtonStyle(
+                                  overlayColor: MaterialStateColor.resolveWith(
+                                      (states) => Colors.transparent),
+                                ),
                                 onPressed: () {
                                   _tabController.animateTo(0);
                                   setState(() {
-                                    _currentIndex = (_tabController
-                                            .animation.value)
-                                        .round(); //_tabController.animation.value returns double
-
                                     _currentIndex = 0;
                                   });
                                 },
                                 child: _currentIndex == 0
                                     ? GradientText(
-                                        '     People  ',
+                                        "    MOOVs",
                                         16.5,
                                         gradient: LinearGradient(colors: [
                                           Colors.blue.shade400,
@@ -203,23 +230,30 @@ class _SearchBarState extends State<SearchBar>
                                         ]),
                                       )
                                     : Text(
-                                        "     People  ",
-                                        style: TextStyle(fontSize: 16.5),
+                                        "    MOOVs",
+                                        style: TextStyle(
+                                            fontSize: 16.5,
+                                            color: Colors.black),
                                       ),
                               ),
-                              // Sign Up Button
-                              new FlatButton(
-                                splashColor: Colors.white,
-                                color: Colors.white,
+                              TextButton(
+                                style: ButtonStyle(
+                                  overlayColor: MaterialStateColor.resolveWith(
+                                      (states) => Colors.transparent),
+                                ),
                                 onPressed: () {
                                   _tabController.animateTo(1);
                                   setState(() {
+                                    _currentIndex = (_tabController
+                                            .animation.value)
+                                        .round(); //_tabController.animation.value returns double
+
                                     _currentIndex = 1;
                                   });
                                 },
                                 child: _currentIndex == 1
                                     ? GradientText(
-                                        "    MOOVs",
+                                        "     People ",
                                         16.5,
                                         gradient: LinearGradient(colors: [
                                           Colors.blue.shade400,
@@ -227,13 +261,17 @@ class _SearchBarState extends State<SearchBar>
                                         ]),
                                       )
                                     : Text(
-                                        "    MOOVs",
-                                        style: TextStyle(fontSize: 16.5),
+                                        "     People ",
+                                        style: TextStyle(
+                                            fontSize: 16.5,
+                                            color: Colors.black),
                                       ),
                               ),
-                              FlatButton(
-                                splashColor: Colors.white,
-                                color: Colors.white,
+                              TextButton(
+                                style: ButtonStyle(
+                                  overlayColor: MaterialStateColor.resolveWith(
+                                      (states) => Colors.transparent),
+                                ),
                                 onPressed: () {
                                   _tabController.animateTo(2);
                                   setState(() {
@@ -251,7 +289,9 @@ class _SearchBarState extends State<SearchBar>
                                       )
                                     : Text(
                                         "Friend Groups",
-                                        style: TextStyle(fontSize: 16.5),
+                                        style: TextStyle(
+                                            fontSize: 16.5,
+                                            color: Colors.black),
                                       ),
                               )
                             ],
@@ -263,7 +303,7 @@ class _SearchBarState extends State<SearchBar>
             body: _searchTerm == null
                 ? TrendingSegment()
                 : StreamBuilder<List<AlgoliaObjectSnapshot>>(
-                    stream: Stream.fromFuture(_operation0(_searchTerm)),
+                    stream: Stream.fromFuture(_groupSearch(_searchTerm)),
                     builder: (context, snapshot0) {
                       // if (!snapshot.hasData)
                       //   return Container(
@@ -283,7 +323,7 @@ class _SearchBarState extends State<SearchBar>
                       return Container(
                           child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
                               stream:
-                                  Stream.fromFuture(_operation(_searchTerm)),
+                                  Stream.fromFuture(_userSearch(_searchTerm)),
                               builder: (context, snapshot) {
                                 // if (!snapshot.hasData)
                                 //   return Container(
@@ -307,7 +347,7 @@ class _SearchBarState extends State<SearchBar>
                                 return StreamBuilder<
                                         List<AlgoliaObjectSnapshot>>(
                                     stream: Stream.fromFuture(
-                                        _operation2(_searchTerm)),
+                                        _moovSearch(_searchTerm)),
                                     builder: (context, snapshot2) {
                                       if (_searchTerm == null) {
                                         return linearProgress();
@@ -343,109 +383,6 @@ class _SearchBarState extends State<SearchBar>
                                         child: TabBarView(
                                             controller: _tabController,
                                             children: [
-                                              CustomScrollView(
-                                                shrinkWrap: true,
-                                                slivers: <Widget>[
-                                                  SliverList(
-                                                    delegate:
-                                                        SliverChildBuilderDelegate(
-                                                      (context, index) {
-                                                        return _searchTerm !=
-                                                                    null &&
-                                                                _currentIndex ==
-                                                                    0
-                                                            ? DisplaySearchResult(
-                                                                displayName: currSearchStuff[
-                                                                            index]
-                                                                        .data[
-                                                                    "displayName"],
-                                                                email: currSearchStuff[
-                                                                            index]
-                                                                        .data[
-                                                                    "email"],
-                                                                proPic: currSearchStuff[
-                                                                            index]
-                                                                        .data[
-                                                                    "photoUrl"],
-                                                                userId: currSearchStuff[
-                                                                        index]
-                                                                    .data["id"],
-                                                                verifiedStatus:
-                                                                    currSearchStuff[index]
-                                                                            .data[
-                                                                        "verifiedStatus"],
-                                                                isBusiness: currSearchStuff[
-                                                                            index]
-                                                                        .data[
-                                                                    'isBusiness'],
-                                                              )
-                                                            : _searchTerm !=
-                                                                        null &&
-                                                                    _currentIndex ==
-                                                                        1
-                                                                ? DisplayMOOVResult(
-                                                                    title: currSearchStuff2[index]
-                                                                            .data[
-                                                                        "title"],
-                                                                    description:
-                                                                        currSearchStuff2[index]
-                                                                            .data["description"],
-                                                                    type: currSearchStuff2[index]
-                                                                            .data[
-                                                                        "type"],
-                                                                    image: currSearchStuff2[index]
-                                                                            .data[
-                                                                        "image"],
-                                                                    userId: currSearchStuff2[index]
-                                                                            .data[
-                                                                        "userId"],
-                                                                    postId: currSearchStuff2[index]
-                                                                            .data[
-                                                                        "postId"],
-                                                                  )
-                                                                : _searchTerm !=
-                                                                            null &&
-                                                                        _currentIndex ==
-                                                                            2
-                                                                    ? DisplayGroupResult(
-                                                                        groupName:
-                                                                            currSearchStuff0[index].data["groupName"],
-                                                                        groupId:
-                                                                            currSearchStuff0[index].data["groupId"],
-                                                                        groupPic:
-                                                                            currSearchStuff0[index].data["groupPic"],
-                                                                        members:
-                                                                            currSearchStuff0[index].data["members"],
-                                                                        sendMOOV:
-                                                                            false,
-                                                                      )
-                                                                    : Container();
-                                                      },
-                                                      childCount: currSearchStuff
-                                                                      .length !=
-                                                                  null &&
-                                                              _currentIndex == 0
-                                                          ? currSearchStuff
-                                                              .length
-                                                          : currSearchStuff0
-                                                                          .length !=
-                                                                      null &&
-                                                                  _currentIndex ==
-                                                                      2
-                                                              ? currSearchStuff0
-                                                                  .length
-                                                              : currSearchStuff2
-                                                                              .length !=
-                                                                          null &&
-                                                                      _currentIndex ==
-                                                                          1
-                                                                  ? currSearchStuff2
-                                                                      .length
-                                                                  : 0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
                                               CustomScrollView(
                                                 shrinkWrap: true,
                                                 slivers: <Widget>[
@@ -499,6 +436,69 @@ class _SearchBarState extends State<SearchBar>
                                                           currSearchStuff2
                                                                   .length ??
                                                               0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              CustomScrollView(
+                                                shrinkWrap: true,
+                                                slivers: <Widget>[
+                                                  SliverList(
+                                                    delegate:
+                                                        SliverChildBuilderDelegate(
+                                                      (context, index) {
+                                                        return _searchTerm !=
+                                                                    null &&
+                                                                _currentIndex ==
+                                                                    1
+                                                            ? DisplaySearchResult(
+                                                                displayName: currSearchStuff[
+                                                                            index]
+                                                                        .data[
+                                                                    "displayName"],
+                                                                email: currSearchStuff[
+                                                                            index]
+                                                                        .data[
+                                                                    "email"],
+                                                                proPic: currSearchStuff[
+                                                                            index]
+                                                                        .data[
+                                                                    "photoUrl"],
+                                                                userId: currSearchStuff[
+                                                                        index]
+                                                                    .data["id"],
+                                                                verifiedStatus:
+                                                                    currSearchStuff[index]
+                                                                            .data[
+                                                                        "verifiedStatus"],
+                                                                isBusiness: currSearchStuff[
+                                                                            index]
+                                                                        .data[
+                                                                    'isBusiness'],
+                                                              )
+                                                            : Container();
+                                                      },
+                                                      childCount: currSearchStuff
+                                                                      .length !=
+                                                                  null &&
+                                                              _currentIndex == 0
+                                                          ? currSearchStuff
+                                                              .length
+                                                          : currSearchStuff0
+                                                                          .length !=
+                                                                      null &&
+                                                                  _currentIndex ==
+                                                                      2
+                                                              ? currSearchStuff0
+                                                                  .length
+                                                              : currSearchStuff2
+                                                                              .length !=
+                                                                          null &&
+                                                                      _currentIndex ==
+                                                                          1
+                                                                  ? currSearchStuff2
+                                                                      .length
+                                                                  : 0,
                                                     ),
                                                   ),
                                                 ],
@@ -1100,21 +1100,21 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
   final Algolia _algoliaApp = AlgoliaApplication.algolia;
   String _searchTerm;
 
-  Future<List<AlgoliaObjectSnapshot>> _operation0(String input) async {
+  Future<List<AlgoliaObjectSnapshot>> _groupSearch(String input) async {
     AlgoliaQuery query = _algoliaApp.instance.index("groups").search(input);
     AlgoliaQuerySnapshot querySnap = await query.getObjects();
     List<AlgoliaObjectSnapshot> results = querySnap.hits;
     return results;
   }
 
-  Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
+  Future<List<AlgoliaObjectSnapshot>> _userSearch(String input) async {
     AlgoliaQuery query = _algoliaApp.instance.index("users").search(input);
     AlgoliaQuerySnapshot querySnap = await query.getObjects();
     List<AlgoliaObjectSnapshot> results = querySnap.hits;
     return results;
   }
 
-  Future<List<AlgoliaObjectSnapshot>> _operation2(String input) async {
+  Future<List<AlgoliaObjectSnapshot>> _moovSearch(String input) async {
     AlgoliaQuery query = _algoliaApp.instance.index("events").search(input);
     AlgoliaQuerySnapshot querySnap = await query.getObjects();
     List<AlgoliaObjectSnapshot> results = querySnap.hits;
@@ -1132,8 +1132,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
   @override
   void initState() {
     super.initState();
-    _tabController =
-        new TabController(vsync: this, length: 3, initialIndex: _currentIndex);
+    _tabController = TabController(vsync: this, length: 3);
     _tabController.animation
       ..addListener(() {
         setState(() {
@@ -1156,6 +1155,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(
@@ -1195,6 +1195,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
           ),
         ),
         body: Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               backgroundColor: Colors.white,
               toolbarHeight: 96,
@@ -1244,10 +1245,9 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        // Sign In Button
-                        new FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white),
                           onPressed: () {
                             _tabController.animateTo(0);
                             setState(() {
@@ -1270,8 +1270,9 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                   "     People ",
                                 ),
                         ),
+
                         // Sign Up Button
-                        new FlatButton(
+                        FlatButton(
                           splashColor: Colors.white,
                           color: Colors.white,
                           onPressed: () {
@@ -1325,7 +1326,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
             body: _searchTerm == null
                 ? TrendingSegment()
                 : StreamBuilder<List<AlgoliaObjectSnapshot>>(
-                    stream: Stream.fromFuture(_operation0(_searchTerm)),
+                    stream: Stream.fromFuture(_moovSearch(_searchTerm)),
                     builder: (context, snapshot0) {
                       // if (!snapshot.hasData)
                       //   return Container(
@@ -1345,7 +1346,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                       return Container(
                           child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
                               stream:
-                                  Stream.fromFuture(_operation(_searchTerm)),
+                                  Stream.fromFuture(_userSearch(_searchTerm)),
                               builder: (context, snapshot) {
                                 // if (!snapshot.hasData)
                                 //   return Container(
@@ -1366,7 +1367,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                 return StreamBuilder<
                                         List<AlgoliaObjectSnapshot>>(
                                     stream: Stream.fromFuture(
-                                        _operation2(_searchTerm)),
+                                        _moovSearch(_searchTerm)),
                                     builder: (context, snapshot2) {
                                       if (_searchTerm == null) {
                                         return Container(
@@ -1535,5 +1536,72 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
                                     });
                               }));
                     })));
+  }
+}
+
+typedef OnSearchChanged = Future<List<String>> Function(String);
+
+class SearchWithSuggestionDelegate extends SearchDelegate<String> {
+  ///[onSearchChanged] gets the [query] as an argument. Then this callback
+  ///should process [query] then return an [List<String>] as suggestions.
+  ///Since its returns a [Future] you get suggestions from server too.
+  final OnSearchChanged onSearchChanged;
+
+  ///This [_oldFilters] used to store the previous suggestions. While waiting
+  ///for [onSearchChanged] to completed, [_oldFilters] are displayed.
+  List<String> _oldFilters = const [];
+
+  SearchWithSuggestionDelegate({String searchFieldLabel, this.onSearchChanged})
+      : super(searchFieldLabel: searchFieldLabel);
+
+  ///
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () => Navigator.pop(context),
+    );
+  }
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () => query = "",
+      ),
+    ];
+  }
+
+  ///OnSubmit in the keyboard, returns the [query]
+  @override
+  void showResults(BuildContext context) {
+    close(context, query);
+  }
+
+  ///Since [showResults] is overridden we can don't have to build the results.
+  @override
+  Widget buildResults(BuildContext context) => null;
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return FutureBuilder<List<String>>(
+      future: onSearchChanged != null ? onSearchChanged(query) : null,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) _oldFilters = snapshot.data;
+        return ListView.builder(
+          itemCount: _oldFilters.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              leading: Icon(Icons.restore),
+              title: Text("${_oldFilters[index]}"),
+              onTap: () {
+                close(context, _oldFilters[index]);
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }

@@ -85,45 +85,6 @@ class MOOV extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _MyHomePageState();
-  }
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool hide = false;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: SafeArea(
-        child: Column(
-          children: [
-            Opacity(
-                opacity: hide ? 0 : 1,
-                child: MaterialButton(
-                  onPressed: () {},
-                  child: Text('Me!'),
-                  color: Colors.green,
-                )),
-            MaterialButton(
-              onPressed: () {
-                setState(() {
-                  hide = !hide;
-                });
-              },
-              child: Text('${hide ? "Show" : "Hide"}'),
-              color: Colors.red,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class Screen {
   static double get _ppi => (Platform.isAndroid || Platform.isIOS) ? 150 : 96;
   static bool isLandscape(BuildContext c) =>
