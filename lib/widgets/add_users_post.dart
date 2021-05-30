@@ -79,9 +79,6 @@ class _SearchUsersPostState extends State<SearchUsersPost>
           _currentIndex = (_tabController.animation.value).round();
         });
       });
-
-    // Simple declarations
-    TextEditingController searchController = TextEditingController();
   }
 
   @override
@@ -93,8 +90,6 @@ class _SearchUsersPostState extends State<SearchUsersPost>
 
   @override
   Widget build(BuildContext context) {
-    bool isLargePhone = Screen.diagonal(context) > 766;
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -184,15 +179,14 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       // Sign In Button
-                      new FlatButton(
-                        splashColor: Colors.white,
-                        color: Colors.white,
+                      TextButton(
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.transparent),
+                        ),
                         onPressed: () {
                           _tabController.animateTo(0);
                           setState(() {
-                            _currentIndex = (_tabController.animation.value)
-                                .round(); //_tabController.animation.value returns double
-
                             _currentIndex = 0;
                           });
                         },
@@ -207,19 +201,19 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                               )
                             : Text(
                                 "People",
-                                style: TextStyle(fontSize: 16.5),
+                                style: TextStyle(
+                                    fontSize: 16.5, color: Colors.black),
                               ),
                       ),
-                      // Sign Up Button
-
-                      FlatButton(
-                        splashColor: Colors.white,
-                        color: Colors.white,
+                      SizedBox(width: 15),
+                      TextButton(
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.transparent),
+                        ),
                         onPressed: () {
                           _tabController.animateTo(1);
                           setState(() {
-                            _currentIndex =
-                                (_tabController.animation.value).round();
                             _currentIndex = 1;
                           });
                         },
@@ -234,7 +228,8 @@ class _SearchUsersPostState extends State<SearchUsersPost>
                               )
                             : Text(
                                 "Friend Groups",
-                                style: TextStyle(fontSize: 16.5),
+                                style: TextStyle(
+                                    fontSize: 16.5, color: Colors.black),
                               ),
                       )
                     ],
@@ -243,7 +238,65 @@ class _SearchUsersPostState extends State<SearchUsersPost>
           ),
           backgroundColor: Colors.white,
           body: _searchTerm == null
-              ? Container()
+              ? CustomScrollView(
+                  shrinkWrap: true,
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return (_currentIndex == 0)
+                              ? FutureBuilder(
+                                  future: usersRef
+                                      .doc(currentUser.friendArray[index])
+                                      .get(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData ||
+                                        currentUser.friendArray.isEmpty) {
+                                      return Container();
+                                    }
+                                    if (snapshot.connectionState !=
+                                        ConnectionState.done) {
+                                      return Container();
+                                    }
+                                    return UserPostResult(
+                                      snapshot.data["displayName"],
+                                      snapshot.data["email"],
+                                      snapshot.data["photoUrl"],
+                                      snapshot.data["id"],
+                                      snapshot.data["verifiedStatus"],
+                                      invitees,
+                                    );
+                                  })
+                              : FutureBuilder(
+                                  future: groupsRef
+                                      .doc(currentUser.friendGroups[index])
+                                      .get(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData ||
+                                        currentUser.friendGroups.isEmpty) {
+                                      return Container();
+                                    }
+                                    if (snapshot.connectionState !=
+                                        ConnectionState.done) {
+                                      return Container();
+                                    }
+                                    return InviteGroup(
+                                        snapshot.data["groupName"],
+                                        snapshot.data["groupId"],
+                                        snapshot.data["groupPic"],
+                                        snapshot.data["nextMOOV"],
+                                        snapshot.data["members"],
+                                        invitees,
+                                        snapshot.data["memberNames"]);
+                                  });
+                        },
+                        childCount: _currentIndex == 0
+                            ? currentUser.friendArray.length
+                            : currentUser.friendGroups.length ?? 0,
+                      ),
+                    ),
+                  ],
+                )
               : StreamBuilder<List<AlgoliaObjectSnapshot>>(
                   stream: Stream.fromFuture(_operation0(_searchTerm)),
                   builder: (context, snapshot0) {
@@ -688,7 +741,7 @@ class UserPostResult extends StatefulWidget {
   final String proPic;
   final String userId;
   final int verifiedStatus;
-  List<String> invitees;
+  final List<String> invitees;
 
   UserPostResult(this.displayName, this.email, this.proPic, this.userId,
       this.verifiedStatus, this.invitees);
@@ -713,6 +766,8 @@ class _UserPostResultState extends State<UserPostResult> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     invitees.contains(userId) ? status = true : false;
 
     return GestureDetector(
@@ -740,7 +795,7 @@ class _UserPostResultState extends State<UserPostResult> {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: 20),
+                  fontSize: isLargePhone ? 20 : 16),
             ),
           ),
           verifiedStatus == 3
@@ -830,8 +885,8 @@ class _UserPostResultState extends State<UserPostResult> {
 }
 
 class SearchUsersGroup extends StatefulWidget {
-  String gname, gid, pic, moov;
-  List<dynamic> members;
+  final String gname, gid, pic, moov;
+  final List<dynamic> members;
   SearchUsersGroup(this.gname, this.gid, this.pic, this.moov, this.members);
 
   @override
@@ -1055,8 +1110,8 @@ class UserGroupResultAdd extends StatefulWidget {
   final String userId;
   final int verifiedStatus;
   final List<dynamic> friendGroups;
-  String gname, gid, pic, moov;
-  List<dynamic> members;
+  final String gname, gid, pic, moov;
+  final List<dynamic> members;
 
   UserGroupResultAdd(
       this.displayName,
@@ -1111,6 +1166,8 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     friendGroups.contains(gid) ? status = true : false;
 
     return GestureDetector(
@@ -1138,7 +1195,7 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: 20),
+                  fontSize: isLargePhone ? 20 : 16),
             ),
           ),
           verifiedStatus == 2
@@ -1205,10 +1262,10 @@ class _UserGroupResultAddState extends State<UserGroupResultAdd> {
 }
 
 class InviteGroup extends StatefulWidget {
-  String gname, gid, pic, moov;
-  List<dynamic> members;
-  List<String> invitees;
-  List<dynamic> memberNames;
+  final String gname, gid, pic, moov;
+  final List<dynamic> members;
+  final List<String> invitees;
+  final List<dynamic> memberNames;
 
   InviteGroup(this.gname, this.gid, this.pic, this.moov, this.members,
       this.invitees, this.memberNames);
@@ -1231,8 +1288,9 @@ class _InviteGroupState extends State<InviteGroup> {
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
-
-    invitees.contains(gid) ? status = true : false;
+    if (invitees.contains(gid)) {
+      status = true;
+    }
     for (int i = 0; i < members.length; i++) {
       return StreamBuilder(
           stream:

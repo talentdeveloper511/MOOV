@@ -10,7 +10,6 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:shimmer/shimmer.dart';
 
 class TrendingSegment extends StatefulWidget {
   @override
@@ -135,36 +134,21 @@ class TrendingSegmentState extends State<TrendingSegment>
               child: ListView(children: [
                 SizedBox(height: 2.5),
                 Container(
-                  child: FutureBuilder(
-                      future: request('Food/Drink', false),
+                  child: StreamBuilder(
+                      stream: postsRef
+                          .where('type', isEqualTo: "Food/Drink")
+                          .where('privacy', isEqualTo: "Public")
+                          .orderBy("goingCount", descending: true)
+                          .limit(6)
+                          .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Text('');
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                        'lib/assets/icons/BarICON.png',
-                                        height: 35),
-                                  ),
-                                  Text('Food/Drink',
-                                      style: TextThemes.extraBold),
-                                ],
-                              ),
-                              PostOnTrending(
-                                isLoading: true,
-                              ),
-                            ],
-                          );
-                        }
+
                         return Container(
                           height: (snapshot.data.docs.length <= 3 &&
                                   isLargePhone)
-                              ? 210
+                              ? 200
                               : (snapshot.data.docs.length >= 3 && isLargePhone)
                                   ? 345
                                   : (snapshot.data.docs.length <= 3 &&
@@ -203,9 +187,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                                         DocumentSnapshot course =
                                             snapshot.data.docs[index];
 
-                                        return PostOnTrending(
-                                          course: course,
-                                        );
+                                        return PostOnTrending(course);
                                       }, childCount: snapshot.data.docs.length),
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
@@ -219,32 +201,17 @@ class TrendingSegmentState extends State<TrendingSegment>
                       }),
                 ),
                 Container(
-                  child: FutureBuilder(
-                      future: request("Parties", false),
+                  child: StreamBuilder(
+                      stream: postsRef
+                          .where('type', isEqualTo: "Parties")
+                          .where("privacy", isEqualTo: "Public")
+                          .orderBy("goingCount", descending: true)
+                          .limit(6)
+                          .snapshots(),
                       builder: (context, snapshot) {
                         bool hide = false;
                         if (!snapshot.hasData || snapshot.data.docs.length == 0)
                           return Text('');
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                        'lib/assets/icons/HangoutsICON.png',
-                                        height: 3),
-                                  ),
-                                  Text('Hangouts', style: TextThemes.extraBold),
-                                ],
-                              ),
-                              PostOnTrending(
-                                isLoading: true,
-                              ),
-                            ],
-                          );
-                        }
 
                         return Container(
                           height: (snapshot.data.docs.length <= 3 &&
@@ -295,7 +262,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                                         }
 
                                         return (hide == false)
-                                            ? PostOnTrending(course: course)
+                                            ? PostOnTrending(course)
                                             : Container();
                                       }, childCount: snapshot.data.docs.length),
                                       gridDelegate:
@@ -310,32 +277,17 @@ class TrendingSegmentState extends State<TrendingSegment>
                       }),
                 ),
                 Container(
-                  child: FutureBuilder(
-                      future: request("", true),
+                  child: StreamBuilder(
+                      stream: postsRef
+                          .where('isPartyOrBar', isEqualTo: false)
+                          .where('privacy', isEqualTo: 'Public')
+                          .orderBy("goingCount", descending: true)
+                          .limit(6)
+                          .snapshots(),
                       builder: (context, snapshot) {
                         bool hide = false;
                         if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                          return Text('');
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                        'lib/assets/icons/ShowICON.png',
-                                        height: 35),
-                                  ),
-                                  Text('More', style: TextThemes.extraBold),
-                                ],
-                              ),
-                              PostOnTrending(
-                                isLoading: true,
-                              ),
-                            ],
-                          );
-                        }
+                          return Container();
 
                         return Container(
                           height: (snapshot.data.docs.length <= 3 &&
@@ -390,7 +342,7 @@ class TrendingSegmentState extends State<TrendingSegment>
                                         }
 
                                         return (hide == false)
-                                            ? PostOnTrending(course: course)
+                                            ? PostOnTrending(course)
                                             : Container();
                                       }, childCount: snapshot.data.docs.length),
                                       gridDelegate:
@@ -415,197 +367,115 @@ class TrendingSegmentState extends State<TrendingSegment>
 
 class PostOnTrending extends StatelessWidget {
   final DocumentSnapshot course;
-  final bool isLoading;
 
-  PostOnTrending({this.course, this.isLoading = false});
+  PostOnTrending(this.course);
 
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
-    return (isLoading)
-        ? Shimmer.fromColors(
-            baseColor: Colors.grey[300],
-            highlightColor: Colors.grey[100],
-            child: Row(
-              children: [
-                Card(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    height: 130,
-                    width: isLargePhone
-                        ? MediaQuery.of(context).size.width * 0.31
-                        : MediaQuery.of(context).size.width * 0.29,
-                  ),
-                ),
-                Card(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    height: 130,
-                    width: isLargePhone
-                        ? MediaQuery.of(context).size.width * 0.315
-                        : MediaQuery.of(context).size.width * 0.32,
-                  ),
-                ),
-                Card(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    height: 130,
-                    width: isLargePhone
-                        ? MediaQuery.of(context).size.width * 0.315
-                        : MediaQuery.of(context).size.width * 0.32,
-                  ),
-                ),
-              ],
-            ),
-          )
-        : Container(
-            child: Card(
-              color: Colors.white,
-              clipBehavior: Clip.antiAlias,
-              child: OpenContainer(
-                transitionType: ContainerTransitionType.fade,
-                transitionDuration: Duration(milliseconds: 500),
-                openBuilder: (context, _) => PostDetail(course.id),
-                closedElevation: 0,
-                closedBuilder: (context, _) => Stack(
-                  children: <Widget>[
-                    InkWell(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child:
-                                Stack(alignment: Alignment.center, children: [
-                              Container(
-                                height: 500,
-                                child: CachedNetworkImage(
-                                  imageUrl: course['image'],
-                                  fit: BoxFit.cover,
-                                  width: isLargePhone
-                                      ? MediaQuery.of(context).size.width *
-                                          0.315
-                                      : MediaQuery.of(context).size.width *
-                                          0.315,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment(0.0, 0.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: <Color>[
-                                        Colors.black.withAlpha(0),
-                                        Colors.black,
-                                        Colors.black12,
-                                      ],
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      course['title'],
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                          fontFamily: 'Solway',
-                                          color: Colors.white,
-                                          fontSize: isLargePhone ? 13.0 : 10,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]),
+    return Container(
+      child: Card(
+        color: Colors.white,
+        clipBehavior: Clip.antiAlias,
+        child: OpenContainer(
+          transitionType: ContainerTransitionType.fade,
+          transitionDuration: Duration(milliseconds: 500),
+          openBuilder: (context, _) => PostDetail(course.id),
+          closedElevation: 0,
+          closedBuilder: (context, _) => Stack(
+            children: <Widget>[
+              InkWell(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Stack(alignment: Alignment.center, children: [
+                        Container(
+                          height: 500,
+                          child: CachedNetworkImage(
+                            imageUrl: course['image'],
+                            fit: BoxFit.cover,
+                            width: isLargePhone
+                                ? MediaQuery.of(context).size.width * 0.315
+                                : MediaQuery.of(context).size.width * 0.315,
                           ),
-                          Container(
-                            height: 21,
+                        ),
+                        Container(
+                          alignment: Alignment(0.0, 0.0),
+                          child: Container(
                             decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                    colors: [
-                                  Colors.pink[100],
-                                  Colors.blue[100]
-                                ])),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Padding(
-                                //   padding: const EdgeInsets.only(left: 4.0, top: 2.0),
-                                //   child: CircleAvatar(
-                                //     radius: 8.0,
-                                //     backgroundImage: NetworkImage(
-                                //       course['profilePic'],
-                                //     ),
-                                //     backgroundColor: Colors.transparent,
-                                //   ),
-                                // ),
-
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 2.0),
-                                  child: Text(
-                                      DateFormat('EEE')
-                                          .add_jm()
-                                          .format(course['startDate'].toDate()),
-                                      style: TextStyle(
-                                          fontFamily: 'Solway',
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w700)),
-                                )
-                              ],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: <Color>[
+                                  Colors.black.withAlpha(0),
+                                  Colors.black,
+                                  Colors.black12,
+                                ],
+                              ),
                             ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(
+                                course['title'],
+                                maxLines: 2,
+                                style: TextStyle(
+                                    fontFamily: 'Solway',
+                                    color: Colors.white,
+                                    fontSize: isLargePhone ? 13.0 : 10,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                    ),
+                    Container(
+                      height: 21,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Colors.pink[100], Colors.blue[100]])),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 4.0, top: 2.0),
+                          //   child: CircleAvatar(
+                          //     radius: 8.0,
+                          //     backgroundImage: NetworkImage(
+                          //       course['profilePic'],
+                          //     ),
+                          //     backgroundColor: Colors.transparent,
+                          //   ),
+                          // ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: Text(
+                                DateFormat('EEE')
+                                    .add_jm()
+                                    .format(course['startDate'].toDate()),
+                                style: TextStyle(
+                                    fontFamily: 'Solway',
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700)),
                           )
                         ],
                       ),
                     )
                   ],
                 ),
-              ),
-            ),
-          );
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

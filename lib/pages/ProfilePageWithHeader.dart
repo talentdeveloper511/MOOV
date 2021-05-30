@@ -3,27 +3,19 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/Friends_List.dart';
 import 'package:MOOV/pages/HomePage.dart';
-import 'package:MOOV/pages/MOOVSPage.dart';
-import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/ProfilePage.dart';
 import 'package:MOOV/pages/SettingsPage.dart';
-import 'package:MOOV/pages/contactsPage.dart';
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/leaderboard.dart';
 import 'package:MOOV/pages/edit_profile.dart';
-import 'package:MOOV/pages/notification_feed.dart';
-import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
 
 class ProfilePageWithHeader extends StatefulWidget {
-  User user;
-  ProfilePageWithHeader({Key key, this.user}) : super(key: key);
+  ProfilePageWithHeader();
 
   @override
   _ProfilePageWithHeaderState createState() => _ProfilePageWithHeaderState();
@@ -481,8 +473,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -562,8 +553,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -941,9 +931,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                           currentUser.businessType == "Restaurant/Bar"
                               ? RestaurantMenu(currentUser.id)
                               : Container(),
-
                           PopularityBadges(currentUser.id),
-
                           StreamBuilder(
                               stream: postsRef
                                   .where('userId', isEqualTo: currentUser.id)
@@ -994,8 +982,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1010,7 +997,6 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                   ),
                                 );
                               }),
-
                           StreamBuilder(
                               stream: postsRef
                                   .where('going', arrayContains: currentUser.id)
@@ -1074,8 +1060,7 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1090,69 +1075,6 @@ class _ProfilePageWithHeaderState extends State<ProfilePageWithHeader> {
                                   ),
                                 );
                               }),
-
-                          //             GestureDetector(
-                          //               onTap: (){
-                          //                     Navigator.push(
-                          //                         context,
-                          //                         MaterialPageRoute(
-                          //                             builder: (context) => MessageList()));
-                          //               },
-                          //               child: Container(
-                          //   child:
-                          //   Row(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //     children: [
-                          //       Padding(
-                          //         padding: const EdgeInsets.only(left: 8.0),
-                          //         child: Icon(
-                          //           Icons.message,
-                          //           color: Colors.white,
-                          //           size: 20,
-                          //         ),
-                          //       ),
-                          //       Expanded(
-                          //         child: Center(
-                          //           child: Padding(
-                          //             padding: const EdgeInsets.only(right: 15.0),
-                          //             child: Text(
-                          //               "Messages",
-                          //               style: TextStyle(
-                          //                   fontSize: isLargePhone ? 18 : 16,
-                          //                   color: Colors.white),
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          //   width: MediaQuery.of(context).size.width * .4,
-                          //   height: 50,
-                          //   decoration: BoxDecoration(
-                          //     boxShadow: [
-                          //       BoxShadow(
-                          //         color: Colors.grey.withOpacity(0.5),
-                          //         spreadRadius: 5,
-                          //         blurRadius: 7,
-                          //         offset: Offset(0, 3), // changes position of shadow
-                          //       ),
-                          //     ],
-                          //     borderRadius: BorderRadius.only(
-                          //         topLeft: Radius.circular(10),
-                          //         topRight: Radius.circular(10),
-                          //         bottomLeft: Radius.circular(10),
-                          //         bottomRight: Radius.circular(10)),
-                          //     gradient: LinearGradient(
-                          //       colors: [Colors.amber[300], Colors.amber[200]],
-                          //       begin: Alignment.centerLeft,
-                          //       end: Alignment.centerRight,
-                          //     ),
-                          //   ),
-                          // )),
-                          //             Padding(
-                          //               padding: const EdgeInsets.only(bottom: 8.0, top: 8),
-                          //               child: SeeContactsButton(),
-                          //             ),
                         ],
                       ),
                     )

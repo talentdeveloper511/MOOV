@@ -16,28 +16,28 @@ import 'package:MOOV/services/database.dart';
 import 'home.dart';
 
 Future dmChecker(String otherPersonId, String directMessageId) async {
-    messagesRef.doc(otherPersonId + currentUser.id).get().then((doc) async {
-      messagesRef.doc(currentUser.id + otherPersonId).get().then((doc2) async {
-        if (!doc2.exists && !doc.exists) {
-          directMessageId = "nothing";
-        } else if (!doc2.exists) {
-          directMessageId = doc['directMessageId'];
-        } else if (!doc.exists) {
-          directMessageId = doc2['directMessageId'];
-        }
-      });
+  messagesRef.doc(otherPersonId + currentUser.id).get().then((doc) async {
+    messagesRef.doc(currentUser.id + otherPersonId).get().then((doc2) async {
+      if (!doc2.exists && !doc.exists) {
+        directMessageId = "nothing";
+      } else if (!doc2.exists) {
+        directMessageId = doc['directMessageId'];
+      } else if (!doc.exists) {
+        directMessageId = doc2['directMessageId'];
+      }
     });
-  }
+  });
+}
 
-  void toMessageDetail(String otherPersonId, String directMessageId, context) {
-    Timer(Duration(milliseconds: 200), () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  MessageDetail(directMessageId, otherPersonId, false, "", [], {})));
-    });
-  }
+void toMessageDetail(String otherPersonId, String directMessageId, context) {
+  Timer(Duration(milliseconds: 200), () {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MessageDetail(
+                directMessageId, otherPersonId, false, "", [], {})));
+  });
+}
 
 class OtherProfile extends StatefulWidget {
   String id;
@@ -163,8 +163,6 @@ class _OtherProfileState extends State<OtherProfile> {
             }
         });
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -468,8 +466,9 @@ class _OtherProfileState extends State<OtherProfile> {
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(3.0))),
                                       onPressed: () {
-                                        dmChecker(id, directMessageId)
-                                            .then((value) => toMessageDetail(id, directMessageId, context));
+                                        dmChecker(id, directMessageId).then(
+                                            (value) => toMessageDetail(
+                                                id, directMessageId, context));
                                       },
                                       child: Text("Message",
                                           style:
@@ -772,8 +771,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -854,8 +852,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1104,8 +1101,9 @@ class _OtherProfileState extends State<OtherProfile> {
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(3.0))),
                                       onPressed: () {
-                                        dmChecker(id, directMessageId)
-                                            .then((value) => toMessageDetail(id, directMessageId, context));
+                                        dmChecker(id, directMessageId).then(
+                                            (value) => toMessageDetail(
+                                                id, directMessageId, context));
                                       },
                                       child: Text("Message",
                                           style:
@@ -1309,8 +1307,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1389,8 +1386,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),

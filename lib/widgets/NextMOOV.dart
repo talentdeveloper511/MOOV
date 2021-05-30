@@ -1,15 +1,9 @@
 import 'dart:async';
 
 import 'package:MOOV/helpers/size_config.dart';
-import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/main.dart';
-import 'package:MOOV/models/user.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/pages/leaderboard.dart';
-import 'package:MOOV/pages/edit_profile.dart';
-import 'package:MOOV/pages/notification_feed.dart';
 import 'package:MOOV/pages/post_detail.dart';
-import 'package:MOOV/widgets/contacts_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,10 +12,10 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class NextMOOV extends StatefulWidget {
-  String selected;
-  String suggestorId;
-  String groupId;
-  int unix;
+  final String selected;
+  final String suggestorId;
+  final String groupId;
+  final int unix;
 
   NextMOOV(this.selected, this.suggestorId, this.groupId, this.unix);
 
@@ -41,8 +35,8 @@ class _NextMOOVState extends State<NextMOOV> {
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
 
-    var title;
-    var pic;
+    String title;
+    String pic;
 
     return StreamBuilder(
         stream: postsRef.where("postId", isEqualTo: selected).snapshots(),

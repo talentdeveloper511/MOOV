@@ -218,8 +218,8 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                           ),
                           Padding(
-                            padding:
-                                const EdgeInsets.only(top: 2.0, bottom: 14.0, left: 30, right: 30),
+                            padding: const EdgeInsets.only(
+                                top: 2.0, bottom: 14.0, left: 30, right: 30),
                             child: showDorm == false
                                 ? Text(
                                     "Top secret year and dorm",
@@ -459,8 +459,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -540,8 +539,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                   DocumentSnapshot course =
                                                       snapshot.data.docs[index];
 
-                                                  return PostOnTrending(
-                                                      course: course);
+                                                  return PostOnTrending(course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -978,7 +976,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                       snapshot.data.docs[index];
 
                                                   return PostOnTrending(
-                                                      course: course);
+                                                       course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1058,7 +1056,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                       snapshot.data.docs[index];
 
                                                   return PostOnTrending(
-                                                      course: course);
+                                                   course);
                                                 },
                                                         childCount: snapshot
                                                             .data.docs.length),
@@ -1677,8 +1675,7 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Container(
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(Icons.menu_book),
                                       Text("Add your menu")
@@ -1701,15 +1698,16 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                           ]),
                     ),
                     Container(),
-                    "",0);
+                    "",
+                    0);
               }
               if (snapshot.data['menu'].isEmpty &&
                   widget.id != currentUser.id) {
                 return Container();
               }
               return Container(
-                    width: MediaQuery.of(context).size.width * .99,
-        height: 250,
+                width: MediaQuery.of(context).size.width * .99,
+                height: 250,
                 child: Column(
                   children: [
                     Align(
@@ -1747,7 +1745,8 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(10.0))))),
                                   Container(),
-                                  snapshot.data['menu'][index], index)
+                                  snapshot.data['menu'][index],
+                                  index)
                               : Padding(
                                   padding: const EdgeInsets.only(left: 8),
                                   child: OpenContainer(
@@ -1757,7 +1756,8 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                           Duration(milliseconds: 500),
                                       openBuilder: (context, _) =>
                                           PhotoFullScreen(
-                                              snapshot.data['menu'][index], index),
+                                              snapshot.data['menu'][index],
+                                              index),
                                       closedElevation: 0,
                                       closedBuilder: (context, _) => Container(
                                           child: ClipRRect(
@@ -1770,8 +1770,8 @@ class _RestaurantMenuState extends State<RestaurantMenu> {
                                           width: 175,
                                           decoration: BoxDecoration(
                                               color: Colors.red[50],
-                                              borderRadius:
-                                                  BorderRadius.all(Radius.circular(10.0))))),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0))))),
                                 )),
                     ),
                   ],

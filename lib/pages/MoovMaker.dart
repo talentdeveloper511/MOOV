@@ -430,7 +430,6 @@ class _MoovMakerFormState extends State<MoovMakerForm>
     if (pushList[0] == false) {
       push = false;
     }
-
     return Form(
       key: _formKey,
       child: isUploading
@@ -844,9 +843,9 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                       onShowPicker: (context, currentValue) async {
                         final date = await showDatePicker(
                           context: context,
-                          firstDate: DateTime(2021),
-                          initialDate: currentValue ?? DateTime.now(),
-                          lastDate: DateTime(2100),
+                          firstDate: DateTime.now(),
+                          initialDate: DateTime.now(),
+                          lastDate: DateTime(2023),
                           builder: (BuildContext context, Widget child) {
                             return Theme(
                               data: ThemeData.light().copyWith(
@@ -1655,17 +1654,19 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                               child: Icon(Icons.camera_alt))
                         ]),
                       )
-                    : RaisedButton(
-                        color: TextThemes.ndBlue,
+                    : ElevatedButton(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text('Upload Image/GIF',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20)),
                         ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0)),
-                        onPressed: () => selectImage(context)),
+                        onPressed: () => selectImage(context),
+                        style: ElevatedButton.styleFrom(
+                            primary: TextThemes.ndBlue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)))),
+
                 noImage == true && _image == null
                     ? Text(
                         "No pic, no fun.",
@@ -1673,219 +1674,199 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                       )
                     : Container(),
                 Padding(
-                    padding: EdgeInsets.only(bottom: 40.0, top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(80.0)),
-                            padding: EdgeInsets.all(0.0),
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      TextThemes.ndBlue,
-                                      Color(0xff64B6FF)
-                                    ],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              child: Container(
-                                constraints: BoxConstraints(
-                                    maxWidth: 125.0, minHeight: 50.0),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Post!",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 22),
-                                ),
-                              ),
-                            ),
-                            onPressed: () async {
-                              GeoPoint location;
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 30),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15))),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                            color: TextThemes.ndGold,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Container(
+                          width: 115,
+                          height: 40,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Post!',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        GeoPoint location;
 
-                              if (coords.isNotEmpty) {
-                                List parse = coords.toString().split(",");
-                                String parse0 = parse[0].replaceAll("[", "");
+                        if (coords.isNotEmpty) {
+                          List parse = coords.toString().split(",");
+                          String parse0 = parse[0].replaceAll("[", "");
 
-                                String parse2 = parse[1].replaceAll("]", "");
-                                double latitude = double.parse(parse0);
+                          String parse2 = parse[1].replaceAll("]", "");
+                          double latitude = double.parse(parse0);
 
-                                double longitude = double.parse(parse2);
+                          double longitude = double.parse(parse2);
 
-                                location = GeoPoint(latitude, longitude);
+                          location = GeoPoint(latitude, longitude);
+                        }
+
+                        HapticFeedback.lightImpact();
+
+                        // for (int i = 0;
+                        //     i < inviteesNameList.length;
+                        //     i++) {
+                        //   if (!_isNumeric(inviteesNameList[i]) &&
+                        //       inviteesNameList.length > 0) {
+                        //     final DocumentSnapshot result =
+                        //         await groupsRef
+                        //             .doc(inviteesNameList[i])
+                        //             .get();
+                        //     result.data()['members'].forEach(
+                        //         (element) => groupList.add(element));
+                        //   }
+                        // }
+                        // print(groupList);
+
+                        if (_image == null) {
+                          setState(() {
+                            noImage = true;
+                          });
+                        }
+                        if (_formKey.currentState.validate() &&
+                            _image != null) {
+                          setState(() {
+                            isUploading = true;
+                          });
+                        }
+
+                        final GoogleSignInAccount user =
+                            googleSignIn.currentUser;
+                        final strUserId = user.id;
+                        if (inviteesNameList.length == 0) {
+                          print("EMTPY");
+                        }
+                        if (_formKey.currentState.validate()) {
+                          if (_image != null) {
+                            firebase_storage.Reference ref = firebase_storage
+                                .FirebaseStorage.instance
+                                .ref()
+                                .child(
+                                    "images/" + user.id + titleController.text);
+                            if (maxOccupancyController.text.isEmpty) {
+                              maxOccupancyInt = 8000000;
+                            }
+
+                            if (maxOccupancyController.text.isNotEmpty) {
+                              maxOccupancyInt =
+                                  int.parse(maxOccupancyController.text);
+                            }
+                            if (paymentAmountController.text.isNotEmpty) {
+                              String x =
+                                  paymentAmountController.text.substring(1);
+                              paymentAmountInt = int.parse(x);
+                            }
+
+                            //mobile ordering menu
+                            if (currentUser.mobileOrderMenu != null) {
+                              if (currentUser
+                                  .mobileOrderMenu['item1'].isEmpty) {
+                                _item1 = null;
                               }
-
-                              HapticFeedback.lightImpact();
-
-                              // for (int i = 0;
-                              //     i < inviteesNameList.length;
-                              //     i++) {
-                              //   if (!_isNumeric(inviteesNameList[i]) &&
-                              //       inviteesNameList.length > 0) {
-                              //     final DocumentSnapshot result =
-                              //         await groupsRef
-                              //             .doc(inviteesNameList[i])
-                              //             .get();
-                              //     result.data()['members'].forEach(
-                              //         (element) => groupList.add(element));
-                              //   }
-                              // }
-                              // print(groupList);
-
-                              if (_image == null) {
-                                setState(() {
-                                  noImage = true;
-                                });
+                              if (currentUser
+                                  .mobileOrderMenu['item2'].isEmpty) {
+                                _item2 = null;
                               }
-                              if (_formKey.currentState.validate() &&
-                                  _image != null) {
-                                setState(() {
-                                  isUploading = true;
-                                });
+                              if (currentUser
+                                  .mobileOrderMenu['item3'].isEmpty) {
+                                _item3 = null;
                               }
+                            }
 
-                              final GoogleSignInAccount user =
-                                  googleSignIn.currentUser;
-                              final strUserId = user.id;
-                              if (inviteesNameList.length == 0) {
-                                print("EMTPY");
-                              }
-                              if (_formKey.currentState.validate()) {
-                                if (_image != null) {
-                                  firebase_storage.Reference ref =
-                                      firebase_storage.FirebaseStorage.instance
-                                          .ref()
-                                          .child("images/" +
-                                              user.id +
-                                              titleController.text);
-                                  if (maxOccupancyController.text.isEmpty) {
-                                    maxOccupancyInt = 8000000;
-                                  }
+                            firebase_storage.UploadTask uploadTask;
 
-                                  if (maxOccupancyController.text.isNotEmpty) {
-                                    maxOccupancyInt =
-                                        int.parse(maxOccupancyController.text);
-                                  }
-                                  if (paymentAmountController.text.isNotEmpty) {
-                                    String x = paymentAmountController.text
-                                        .substring(1);
-                                    paymentAmountInt = int.parse(x);
-                                  }
+                            uploadTask = ref.putFile(_image);
 
-                                  //mobile ordering menu
-                                  if (currentUser
-                                      .mobileOrderMenu['item1'].isEmpty) {
-                                    _item1 = null;
-                                  }
-                                  if (currentUser
-                                      .mobileOrderMenu['item2'].isEmpty) {
-                                    _item2 = null;
-                                  }
-                                  if (currentUser
-                                      .mobileOrderMenu['item3'].isEmpty) {
-                                    _item3 = null;
-                                  }
+                            firebase_storage.TaskSnapshot taskSnapshot =
+                                await uploadTask;
+                            if (uploadTask.snapshot.state ==
+                                firebase_storage.TaskState.success) {
+                              print("added to Firebase Storage");
+                              final String postId = generateRandomString(20);
+                              final String downloadUrl =
+                                  await taskSnapshot.ref.getDownloadURL();
+                              currentUser.isBusiness
+                                  ? Database().createBusinessPost(
+                                      title: titleController.text,
+                                      type: currentUser.businessType ==
+                                              "Restaurant/Bar"
+                                          ? "Food/Drink"
+                                          : currentUser.businessType ==
+                                                  "Theatre"
+                                              ? "Shows"
+                                              : "Recreation",
+                                      privacy: "Public",
+                                      description: descriptionController.text,
+                                      address: currentUser.dorm,
+                                      startDate: currentValue,
+                                      unix: currentValue.millisecondsSinceEpoch,
+                                      statuses: inviteesNameList,
+                                      maxOccupancy: maxOccupancyInt,
+                                      paymentAmount: paymentAmountInt,
+                                      imageUrl: downloadUrl,
+                                      userId: strUserId,
+                                      postId: postId,
+                                      posterName: currentUser.displayName,
+                                      push: push,
+                                      moovOver: _moovOver,
+                                      mobileOrderMenu: {
+                                          "item1": _item1,
+                                          "item2": _item2,
+                                          "item3": _item3
+                                        })
+                                  : Database().createPost(
+                                      title: titleController.text,
+                                      type: typeDropdownValue,
+                                      privacy: privacyDropdownValue,
+                                      description: descriptionController.text,
+                                      address: addressController.text,
+                                      startDate: currentValue,
+                                      clubId: clubNameMap[clubPostValue],
+                                      unix: currentValue.millisecondsSinceEpoch,
+                                      statuses: inviteesNameList,
+                                      maxOccupancy: maxOccupancyInt,
+                                      paymentAmount: paymentAmountInt,
+                                      imageUrl: downloadUrl,
+                                      userId: strUserId,
+                                      postId: postId,
+                                      posterName: currentUser.displayName,
+                                      push: push,
+                                      location: location,
+                                      moovOver: _moovOver);
 
-                                  firebase_storage.UploadTask uploadTask;
+                              nextSunday().then((value) {
+                                wrapupRef
+                                    .doc(currentUser.id)
+                                    .collection('wrapUp')
+                                    .doc(value)
+                                    .set({
+                                  "ownMOOVs": FieldValue.arrayUnion([
+                                    {
+                                      "pic": downloadUrl,
+                                      "postId": postId,
+                                      "title": titleController.text
+                                    }
+                                  ]),
+                                }, SetOptions(merge: true));
+                              });
 
-                                  uploadTask = ref.putFile(_image);
-
-                                  firebase_storage.TaskSnapshot taskSnapshot =
-                                      await uploadTask;
-                                  if (uploadTask.snapshot.state ==
-                                      firebase_storage.TaskState.success) {
-                                    print("added to Firebase Storage");
-                                    final String postId =
-                                        generateRandomString(20);
-                                    final String downloadUrl =
-                                        await taskSnapshot.ref.getDownloadURL();
-                                    currentUser.isBusiness
-                                        ? Database().createBusinessPost(
-                                            title: titleController.text,
-                                            type: currentUser.businessType ==
-                                                    "Restaurant/Bar"
-                                                ? "Food/Drink"
-                                                : currentUser.businessType ==
-                                                        "Theatre"
-                                                    ? "Shows"
-                                                    : "Recreation",
-                                            privacy: "Public",
-                                            description: descriptionController
-                                                .text,
-                                            address: currentUser.dorm,
-                                            startDate: currentValue,
-                                            unix:
-                                                currentValue
-                                                    .millisecondsSinceEpoch,
-                                            statuses: inviteesNameList,
-                                            maxOccupancy: maxOccupancyInt,
-                                            paymentAmount: paymentAmountInt,
-                                            imageUrl: downloadUrl,
-                                            userId: strUserId,
-                                            postId: postId,
-                                            posterName: currentUser.displayName,
-                                            push: push,
-                                            moovOver: _moovOver,
-                                            mobileOrderMenu: {
-                                                "item1": _item1,
-                                                "item2": _item2,
-                                                "item3": _item3
-                                              })
-                                        : Database()
-                                            .createPost(
-                                                title: titleController.text,
-                                                type: typeDropdownValue,
-                                                privacy: privacyDropdownValue,
-                                                description:
-                                                    descriptionController.text,
-                                                address: addressController.text,
-                                                startDate: currentValue,
-                                                clubId:
-                                                    clubNameMap[clubPostValue],
-                                                unix: currentValue
-                                                    .millisecondsSinceEpoch,
-                                                statuses: inviteesNameList,
-                                                maxOccupancy: maxOccupancyInt,
-                                                paymentAmount: paymentAmountInt,
-                                                imageUrl: downloadUrl,
-                                                userId: strUserId,
-                                                postId: postId,
-                                                posterName:
-                                                    currentUser.displayName,
-                                                push: push,
-                                                location: location,
-                                                moovOver: _moovOver);
-
-                                    nextSunday().then((value) {
-                                      wrapupRef
-                                          .doc(currentUser.id)
-                                          .collection('wrapUp')
-                                          .doc(value)
-                                          .set({
-                                        "ownMOOVs": FieldValue.arrayUnion([
-                                          {
-                                            "pic": downloadUrl,
-                                            "postId": postId,
-                                            "title": titleController.text
-                                          }
-                                        ]),
-                                      }, SetOptions(merge: true));
-                                    });
-
-                                    setState(() {
-                                      isUploading = false;
-                                    });
-                                  }
-                                  Navigator.pop(context);
-                                }
-                              }
-                            }),
-                      ],
-                    )),
+                              setState(() {
+                                isUploading = false;
+                              });
+                            }
+                            Navigator.pop(context);
+                          }
+                        }
+                      }),
+                ),
               ]),
             ),
     );

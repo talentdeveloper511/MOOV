@@ -253,7 +253,7 @@ class _SearchBarState extends State<SearchBar>
                                 },
                                 child: _currentIndex == 1
                                     ? GradientText(
-                                        "     People ",
+                                        "   People ",
                                         16.5,
                                         gradient: LinearGradient(colors: [
                                           Colors.blue.shade400,
@@ -261,7 +261,7 @@ class _SearchBarState extends State<SearchBar>
                                         ]),
                                       )
                                     : Text(
-                                        "     People ",
+                                        "   People ",
                                         style: TextStyle(
                                             fontSize: 16.5,
                                             color: Colors.black),
