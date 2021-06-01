@@ -35,7 +35,7 @@ void toMessageDetail(String otherPersonId, String directMessageId, context) {
         context,
         MaterialPageRoute(
             builder: (context) => MessageDetail(
-                directMessageId, otherPersonId, false, "", [], {})));
+                directMessageId:directMessageId, otherPerson: otherPersonId, members: [], sendingPost: {})));
   });
 }
 

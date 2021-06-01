@@ -867,8 +867,15 @@ class DisplayGroupResult extends StatelessWidget {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => MessageDetail(" ", " ", true, groupId,
-                  members, {"postId": postId, "pic": pic, "title": title})));
+              builder: (context) => MessageDetail(
+                      isGroupChat: true,
+                      gid: groupId,
+                      members: members,
+                      sendingPost: {
+                        "postId": postId,
+                        "pic": pic,
+                        "title": title
+                      })));
     });
   }
 

@@ -18,7 +18,6 @@ import 'package:MOOV/pages/home.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
-import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:intl/intl.dart';
 
 class Chat extends StatefulWidget {
@@ -50,8 +49,12 @@ class ChatState extends State<Chat> {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) =>
-              MessageDetail(directMessageId, otherPerson, false, " ", [], {}),
+          pageBuilder: (context, animation1, animation2) => MessageDetail(
+              directMessageId: directMessageId,
+              otherPerson: otherPerson,
+              isGroupChat: false,
+              members: [],
+              sendingPost: {}),
           transitionDuration: Duration(seconds: 0),
         ),
       );
@@ -455,8 +458,11 @@ class ChatState extends State<Chat> {
                               PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation1, animation2) =>
-                                        MessageDetail(directMessageId,
-                                            otherPerson, false, " ", [], {}),
+                                        MessageDetail(
+                                            directMessageId: directMessageId,
+                                            otherPerson: otherPerson,
+                                            members: [],
+                                            sendingPost: {}),
                                 transitionDuration: Duration(seconds: 0),
                               ),
                             );

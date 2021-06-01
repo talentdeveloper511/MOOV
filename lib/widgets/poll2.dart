@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/HomePage.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
@@ -40,32 +41,18 @@ class _PollViewState extends State<PollView> {
   List<dynamic> option1List;
   List<dynamic> option2List;
 
-  Future request(String id) async => await Future.delayed(
-        const Duration(milliseconds: 0),
-        () => usersRef.doc(id).get(),
-      );
-  Future request2(String day) async => await Future.delayed(
-        const Duration(milliseconds: 0),
-        () => FirebaseFirestore.instance
-            .collection('notreDame')
-            .doc('data')
-            .collection('poll')
-            .doc("PERMANENT")
-            .get(),
-      );
-
   Color _colorTween(Color begin, Color end) {
     return ColorTween(begin: begin, end: end).transform(widget.notifier.value);
   }
-    var x;
-    var y;
+
+  var x;
+  var y;
 
   @override
   Widget build(BuildContext context) {
     String question;
     String choice1;
     String choice2;
-
 
     final dateToCheck = Timestamp.now().toDate();
     final aDate =
@@ -312,15 +299,44 @@ class _PollViewState extends State<PollView> {
                                                       TextThemes.ndBlue,
                                                   child: CircleAvatar(
                                                     backgroundImage:
-                                                        CachedNetworkImageProvider(pic),
+                                                        CachedNetworkImageProvider(
+                                                            pic),
                                                     radius: 17,
                                                     backgroundColor:
                                                         TextThemes.ndBlue,
                                                     child: CircleAvatar(
                                                       // backgroundImage: snapshot.data
                                                       //     .documents[index].data['photoUrl'],
-                                                      backgroundImage:
-                                                          CachedNetworkImageProvider(pic),
+                                                      child: CachedNetworkImage(
+                                                        memCacheHeight: 15,
+                                                        memCacheWidth: 15,
+                                                        imageUrl: pic,
+                                                        imageBuilder: (context,
+                                                                imageProvider) =>
+                                                            CircleAvatar(
+                                                          foregroundImage:
+                                                              imageProvider,
+                                                        ),
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                Icon(
+                                                          Icons.person,
+                                                          color: Colors
+                                                                  .primaries[
+                                                              Random().nextInt(
+                                                                  Colors
+                                                                      .primaries
+                                                                      .length)],
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Icon(Icons.person,
+                                                                color:
+                                                                    Colors.red),
+                                                      ),
+                                                      // backgroundImage:
+                                                      //     CachedNetworkImageProvider(
+                                                      //         pic),
                                                       radius: 18,
                                                     ),
                                                   ),
@@ -402,7 +418,8 @@ class _PollViewState extends State<PollView> {
                                                       TextThemes.ndBlue,
                                                   child: CircleAvatar(
                                                     backgroundImage:
-                                                        CachedNetworkImageProvider(pic2),
+                                                        CachedNetworkImageProvider(
+                                                            pic2),
                                                     radius: 17,
                                                     backgroundColor:
                                                         TextThemes.ndBlue,
@@ -410,7 +427,8 @@ class _PollViewState extends State<PollView> {
                                                       // backgroundImage: snapshot.data
                                                       //     .documents[index].data['photoUrl'],
                                                       backgroundImage:
-                                                          CachedNetworkImageProvider(pic2),
+                                                          CachedNetworkImageProvider(
+                                                              pic2),
                                                       radius: 18,
                                                     ),
                                                   ),

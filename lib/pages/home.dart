@@ -193,14 +193,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     context,
                     MaterialPageRoute(
                         builder: (context) => MessageDetail(
-                            pushId, recipientId, false, " ", [], {})));
+                            directMessageId: pushId,
+                            otherPerson: recipientId,
+                            members: [],
+                            sendingPost: {})));
               }
               if (page == "chat" && !_isNumeric(pushId)) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            MessageDetail(" ", " ", true, pushId, [], {})));
+                        builder: (context) => MessageDetail(
+                            isGroupChat: true,
+                            gid: pushId,
+                            members: [],
+                            sendingPost: {})));
               }
 
               if (page == "user") {
@@ -281,15 +287,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    MessageDetail(pushId, recipientId, false, " ", [], {})));
+                builder: (context) => MessageDetail(
+                    directMessageId: pushId,
+                    otherPerson: recipientId,
+                    members: [],
+                    sendingPost: {})));
       }
       if (page == "chat" && !_isNumeric(pushId)) {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    MessageDetail(" ", " ", true, pushId, [], {})));
+                builder: (context) => MessageDetail(
+                    isGroupChat: true,
+                    gid: pushId,
+                    members: [],
+                    sendingPost: {})));
       }
 
       if (page == "user") {
@@ -363,15 +375,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    MessageDetail(pushId, recipientId, false, " ", [], {})));
+                builder: (context) => MessageDetail(
+                    directMessageId: pushId,
+                    otherPerson: recipientId,
+                    members: [],
+                    sendingPost: {})));
       }
       if (page == "chat" && !_isNumeric(pushId)) {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    MessageDetail(" ", " ", true, pushId, [], {})));
+                builder: (context) => MessageDetail(
+                    isGroupChat: true,
+                    gid: pushId,
+                    members: [],
+                    sendingPost: {})));
       }
 
       if (page == "user") {
@@ -471,14 +489,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                       builder: (context) => MessageDetail(
-                          pushId, recipientId, false, " ", [], {})));
+                          directMessageId: pushId,
+                          otherPerson: recipientId,
+                          members: [],
+                          sendingPost: {})));
             }
             if (page == "chat" && !_isNumeric(pushId)) {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          MessageDetail(" ", " ", true, pushId, [], {})));
+                      builder: (context) => MessageDetail(
+                          isGroupChat: true,
+                          gid: pushId,
+                          members: [],
+                          sendingPost: {})));
             }
 
             if (page == "user") {
@@ -623,6 +647,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     });
   }
 
+//// i think this may be a solution to the cache/memory problem?? ////
+  // void _checkMemory() {
+  //   ImageCache _imageCache = PaintingBinding.instance.imageCache;
+  //   if (_imageCache.liveImageCount >= 2) {
+  //           print(_imageCache.currentSizeBytes);
+
+  //     print(_imageCache.maximumSizeBytes);
+  //     _imageCache.clear();
+  //     _imageCache.clearLiveImages();
+  //   }
+  // }
+  ////       /////
+
+
   Scaffold buildAuthScreen() {
     // Future<String> randomPostMaker() async {
     //   String randomPost;
@@ -652,6 +690,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       return tonightsVibe(today);
     } else {
       //vibe has been set. lets roll.
+
+      // _checkMemory();
 
       return Scaffold(
         resizeToAvoidBottomInset: false,

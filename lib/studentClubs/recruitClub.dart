@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/studentClubs/promoteClub.dart';
@@ -45,6 +46,8 @@ class _RecruitClubState extends State<RecruitClub> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -140,7 +143,7 @@ class _RecruitClubState extends State<RecruitClub> {
                         ),
                         SizedBox(height: 20),
                         Container(
-                          height: 500,
+                          height: isLargePhone ? 500 : 340,
                           width: MediaQuery.of(context).size.width * .9,
                           decoration: BoxDecoration(
                               color: Colors.blue[50],

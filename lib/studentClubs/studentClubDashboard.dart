@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/MOOVSPage.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/edit_profile.dart';
@@ -25,6 +26,8 @@ class StudentClubDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return (currentUser.userType[("clubExecutive")].isEmpty)
         ? ClubMaker()
         : StreamBuilder(
@@ -54,13 +57,12 @@ class StudentClubDashboard extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MessageDetail(
-                                            " ",
-                                            " ",
-                                            true,
-                                            snapshot.data.docs[0]['clubId'],
-                                            snapshot.data.docs[0]
+                                            isClubChat: true,
+                                            gid: snapshot.data.docs[0]
+                                                ['clubId'],
+                                            members: snapshot.data.docs[0]
                                                 ['memberNames'],
-                                            {})));
+                                            sendingPost: {})));
                               },
                               icon: const Icon(Icons.chat_bubble,
                                   color: Colors.white),
@@ -98,7 +100,7 @@ class StudentClubDashboard extends StatelessWidget {
                           Image.asset(
                             "lib/assets/clubDash.jpeg",
                             width: MediaQuery.of(context).size.width,
-                            height: 150,
+                            height: isLargePhone ? 150 : 130,
                             fit: BoxFit.cover,
                           ),
                           Text(
@@ -130,7 +132,8 @@ class StudentClubDashboard extends StatelessWidget {
                           )
                         ],
                       ),
-                      ClubDashBody()
+                      ClubDashBody(),
+                      SizedBox(height: isLargePhone ? 0 : 60)
                     ],
                   ));
             });
@@ -144,7 +147,6 @@ class StudentClubMOOV extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(clubId);
     return StreamBuilder(
         stream: postsRef
             .where("clubId", isEqualTo: clubId)
@@ -1145,8 +1147,7 @@ class _ClubMembersListState extends State<ClubMembersList> {
                                               }),
                                           memberStatus[index] == 1
                                               ? FocusedMenuItem(
-                                                  title: Text(
-                                                      "Ask for/manage dues",
+                                                  title: Text("Manage dues",
                                                       style: TextStyle(
                                                           color: Colors.green)),
                                                   trailingIcon: Icon(

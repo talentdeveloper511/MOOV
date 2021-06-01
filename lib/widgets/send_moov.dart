@@ -188,7 +188,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                       child: _currentIndex == 0
                           ? GradientText(
                               "People",
-                                16.5,
+                              16.5,
                               gradient: LinearGradient(colors: [
                                 Colors.blue.shade400,
                                 Colors.blue.shade900,
@@ -215,7 +215,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                       child: _currentIndex == 1
                           ? GradientText(
                               "Friend Groups",
-                                16.5,
+                              16.5,
                               gradient: LinearGradient(colors: [
                                 Colors.blue.shade400,
                                 Colors.blue.shade900,
@@ -468,12 +468,14 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
           context,
           MaterialPageRoute(
               builder: (context) => MessageDetail(
-                  directMessageId,
-                  userId,
-                  false,
-                  "",
-                  [],
-                  {"postId": postId, "pic": pic, "title": title})));
+                      directMessageId: directMessageId,
+                      otherPerson: userId,
+                      members: [],
+                      sendingPost: {
+                        "postId": postId,
+                        "pic": pic,
+                        "title": title
+                      })));
     });
   }
 

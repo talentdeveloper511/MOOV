@@ -683,10 +683,12 @@ class MessageList extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MessageDetail(
-                                            course['directMessageId'],
-                                            otherPerson,
-                                            false,
-                                            " ", [], {})));
+                                            directMessageId:
+                                                course['directMessageId'],
+                                            otherPerson: otherPerson,
+                                            isGroupChat: false,
+                                            members: [],
+                                            sendingPost: {})));
                               },
                               child: Container(
                                 height: 100,
@@ -797,11 +799,12 @@ class MessageList extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MessageDetail(
-                                            " ",
-                                            " ",
-                                            true,
-                                            gid,
-                                            snapshot.data['members'], {})));
+                                            directMessageId: " ",
+                                            otherPerson: " ",
+                                            isGroupChat: true,
+                                            gid: gid,
+                                            members: snapshot.data['members'],
+                                            sendingPost: {})));
                               },
                               child: Container(
                                 height: 100,
@@ -950,18 +953,18 @@ class MessageList extends StatelessWidget {
 
 class MessageDetail extends StatefulWidget {
   final String otherPerson, directMessageId, gid;
-  final bool isGroupChat;
+  final bool isGroupChat, isClubChat;
   final List<dynamic> members;
   final Map<String, String> sendingPost;
 
   MessageDetail(
-    this.directMessageId,
-    this.otherPerson,
-    this.isGroupChat,
-    this.gid,
-    this.members,
-    this.sendingPost,
-  );
+      {this.directMessageId = " ",
+      this.otherPerson = " ",
+      this.isGroupChat = false,
+      this.isClubChat = false,
+      this.gid = " ",
+      this.members,
+      this.sendingPost});
 
   @override
   _MessageDetailState createState() => _MessageDetailState();
@@ -1004,7 +1007,7 @@ class _MessageDetailState extends State<MessageDetail> {
                               builder: (context) =>
                                   OtherProfile(widget.otherPerson)));
                         },
-                  child: (widget.isGroupChat == false)
+                  child: (widget.isGroupChat == false && widget.isClubChat == false)
                       ? StreamBuilder(
                           stream: usersRef.doc(widget.otherPerson).snapshots(),
                           builder: (context, snapshot) {
@@ -1031,8 +1034,53 @@ class _MessageDetailState extends State<MessageDetail> {
                                 ],
                               ),
                             );
-                          })
-                      : StreamBuilder(
+                          }) :
+                          (widget.isClubChat) //club chats
+                      ? StreamBuilder(
+                          stream: clubsRef.doc(widget.gid).snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return circularProgress();
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  // Container(
+                                  //   child: ClipRRect(
+                                  //     borderRadius:
+                                  //         BorderRadius.all(Radius.circular(15)),
+                                  //     child: CachedNetworkImage(
+                                  //       imageUrl: snapshot.data['groupPic'],
+                                  //       fit: BoxFit.cover,
+                                  //       height: isLargePhone
+                                  //           ? MediaQuery.of(context)
+                                  //                   .size
+                                  //                   .height *
+                                  //               0.04
+                                  //           : MediaQuery.of(context)
+                                  //                   .size
+                                  //                   .height *
+                                  //               0.06,
+                                  //       width:
+                                  //           MediaQuery.of(context).size.width *
+                                  //               0.15,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      snapshot.data['clubName'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          }):
+                          StreamBuilder(
                           stream: groupsRef.doc(widget.gid).snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData || snapshot.data == null) {
