@@ -154,7 +154,6 @@ class _SearchBarState extends State<SearchBar>
 
   @override
   Widget build(BuildContext context) {
-    SharedPreferences preferences;
 
     return SafeArea(
         child: Scaffold(

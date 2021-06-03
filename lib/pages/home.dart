@@ -77,6 +77,10 @@ final adminRef = FirebaseFirestore.instance
     .collection('notreDame')
     .doc('data')
     .collection('admin');
+  final communityGroupsRef = FirebaseFirestore.instance
+    .collection('notreDame')
+    .doc('data')
+    .collection('communityGroups');
 
 final DateTime timestamp = DateTime.now();
 User currentUser;

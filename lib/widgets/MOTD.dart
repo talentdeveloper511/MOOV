@@ -22,9 +22,8 @@ class _MOTDState extends State<MOTD> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: postsRef
-            .where(widget.type + widget.vibeType, isEqualTo: true)
-            .get(),
+        future:
+            postsRef.where("tags", arrayContains: widget.type + "All").get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Container();
@@ -32,16 +31,29 @@ class _MOTDState extends State<MOTD> {
           if (snapshot.data.docs.length == 0) {
             return FutureBuilder(
                 future: postsRef
-                    .where("goingCount", isGreaterThanOrEqualTo: 5)
+                    .where("tags", arrayContains: widget.type + widget.vibeType)
                     .get(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Container();
                   }
+
+                  if (snapshot.data.docs.length == 0) {
+                    return FutureBuilder(
+                        future: postsRef
+                            .where("goingCount", isGreaterThanOrEqualTo: 5)
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Container();
+                          }
+                          return MOTDUI(snapshot: snapshot);
+                        });
+                  }
                   return MOTDUI(snapshot: snapshot);
                 });
           }
-          return MOTDUI(snapshot: snapshot);
+          return (MOTDUI(snapshot: snapshot));
         });
   }
 }
@@ -54,6 +66,8 @@ class MOTDUI extends StatelessWidget {
   Widget build(BuildContext context) {
     String title;
     String pic;
+    String type;
+
     bool isTablet = false;
     if (Device.get().isTablet) {
       isTablet = true;
@@ -69,6 +83,14 @@ class MOTDUI extends StatelessWidget {
             DocumentSnapshot course = snapshot.data.docs[index];
             pic = course['image'];
             title = course['title'];
+
+            if (course['paymentAmount'] != null &&
+                course['paymentAmount'] != 0) {
+              type = "pay";
+            }
+            if (course.data()['mobileOrderMenu'] != null) {
+              type = "order";
+            }
 
             return Container(
               alignment: Alignment.center,
@@ -155,6 +177,7 @@ class MOTDUI extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            ExtraCornerElements(type)
                           ]),
                         ),
                       ),
@@ -165,6 +188,76 @@ class MOTDUI extends StatelessWidget {
             );
           }),
     );
+  }
+}
+
+class ExtraCornerElements extends StatelessWidget {
+  final String type;
+  const ExtraCornerElements(this.type);
+
+  @override
+  Widget build(BuildContext context) {
+    return (type == "order")
+        ? Positioned(
+            bottom: 2.5,
+            right: 2.5,
+            child: Container(
+              height: 30,
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.pink[400], Colors.purple[300]],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.menu_book,
+                    color: Colors.white,
+                    size: 15,
+                  ),
+                  Text(
+                    " Order Now",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          )
+        : (type == "pay")
+            ? Positioned(
+                bottom: 2.5,
+                right: 2.5,
+                child: Container(
+                  height: 30,
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.green[400], Colors.green[300]],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.attach_money,
+                        color: Colors.white,
+                        size: 15,
+                      ),
+                      Text(
+                        " Pay Now ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : Container();
   }
 }
 

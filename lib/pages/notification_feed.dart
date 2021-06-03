@@ -94,10 +94,9 @@ class _NotificationFeedState extends State<NotificationFeed>
       feedItems.add(NotificationFeedItem.fromDocument(doc));
       docIds.add(doc.id);
     });
-
     return docIds;
   }
-
+  
   getGroupFeed(int groupCount) async {
     QuerySnapshot snapshot = await notificationFeedRef
         .doc(currentUser.friendGroups[groupCount - 1])

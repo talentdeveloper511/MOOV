@@ -154,7 +154,8 @@ class Database {
       "going": [],
       "isPartyOrBar": isPartyOrBar,
       "stats": {},
-      "moovOver": moovOver
+      "moovOver": moovOver,
+      "tags": []
     });
 
     postsRef.doc(postId).set({
@@ -181,7 +182,8 @@ class Database {
       "going": [],
       "isPartyOrBar": isPartyOrBar,
       "stats": {},
-      "moovOver": moovOver
+      "moovOver": moovOver,
+      "tags": []
     }).then(      
       inviteesNotification(postId, imageUrl, title, statuses));
 
@@ -254,6 +256,7 @@ class Database {
       "isPartyOrBar": isPartyOrBar,
       "stats": {},
       "moovOver": moovOver,
+      "tags": []
     });
 
     postsRef.doc(postId).set({
@@ -281,7 +284,8 @@ class Database {
       "isPartyOrBar": isPartyOrBar,
       "stats": {},
       "moovOver": moovOver,
-      "mobileOrderMenu": mobileOrderMenu
+      "mobileOrderMenu": mobileOrderMenu,
+      "tags": []
     }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {

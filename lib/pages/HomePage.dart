@@ -3,6 +3,7 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/homepageWidgets/subcategories.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:MOOV/searchWidgets/interestCommunitiesDashboard.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/widgets/poll2.dart';
@@ -377,23 +378,27 @@ class _HomePageState extends State<HomePage>
                                                   alignment: Alignment.center,
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (_) =>
-                                                              CupertinoAlertDialog(
-                                                                title: Text(
-                                                                    "Your MOOV."),
-                                                                content:
-                                                                    Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      top: 8.0),
-                                                                  child: Text(
-                                                                      "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
-                                                                ),
-                                                              ),
-                                                          barrierDismissible:
-                                                              true);
+                                                          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WrapExample()),
+          );
+                                                      // showDialog(
+                                                      //     context: context,
+                                                      //     builder: (_) =>
+                                                      //         CupertinoAlertDialog(
+                                                      //           title: Text(
+                                                      //               "Your MOOV."),
+                                                      //           content:
+                                                      //               Padding(
+                                                      //             padding: const EdgeInsets
+                                                      //                     .only(
+                                                      //                 top: 8.0),
+                                                      //             child: Text(
+                                                      //                 "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
+                                                      //           ),
+                                                      //         ),
+                                                      //     barrierDismissible:
+                                                      //         true);
                                                     },
                                                     child: Padding(
                                                       padding:
@@ -536,14 +541,23 @@ class _HomePageState extends State<HomePage>
                                         );
                                       },
                                     ),
-                                   Subcategories(notifier: _notifier, type: "new")
+                                    /// subcategories are arranged based on 
+                                    /// the Tonights Vibe choice of "popular spots",
+                                    /// "something new" or "relax." each choice has 3
+                                    /// subcategories
+                                    Subcategories(
+                                        notifier: _notifier, type: "new"),
+                                  
+                                    Subcategories(
+                                        notifier: _notifier, type: "mountain"),
+                                   
                                   ]);
                                 }
                                 DocumentSnapshot course =
                                     snapshot.data.docs[index - 1];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                
+
                                 bool hide = false;
 
                                 if (startDate.millisecondsSinceEpoch <
@@ -733,7 +747,7 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                
+
                                 bool hide = false;
 
                                 if (startDate.millisecondsSinceEpoch <
@@ -848,7 +862,7 @@ class _HomePageState extends State<HomePage>
 
                                 final today =
                                     DateTime(now.year, now.month, now.day);
-                             
+
                                 final tomorrow =
                                     DateTime(now.year, now.month, now.day + 1);
 
@@ -947,7 +961,7 @@ class _HomePageState extends State<HomePage>
 
                                 final today =
                                     DateTime(now.year, now.month, now.day);
-                          
+
                                 final tomorrow =
                                     DateTime(now.year, now.month, now.day + 1);
 
@@ -1022,7 +1036,7 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                              
+
                                 bool hide = false;
 
                                 if (startDate.millisecondsSinceEpoch <
@@ -1118,7 +1132,7 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                              
+
                                 bool hide = false;
 
                                 if (startDate.millisecondsSinceEpoch <

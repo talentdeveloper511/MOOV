@@ -1353,7 +1353,8 @@ class _EditPostState extends State<EditPost> {
                                                     .collection('food')
                                                     .doc(postId)
                                                     .set({
-                                                  "MOTDPop": true,
+                                                  "tags": FieldValue.arrayUnion(
+                                                      ['MOTDPop'])
                                                 }, SetOptions(merge: true));
                                               }),
 
@@ -1368,7 +1369,8 @@ class _EditPostState extends State<EditPost> {
                                                     .collection('food')
                                                     .doc(postId)
                                                     .set({
-                                                  "MOTNPop": true,
+                                                  "tags": FieldValue.arrayUnion(
+                                                      ['MOTNPop'])
                                                 }, SetOptions(merge: true));
                                               }),
                                           FocusedMenuItem(
@@ -1381,7 +1383,8 @@ class _EditPostState extends State<EditPost> {
                                                     .collection('food')
                                                     .doc(postId)
                                                     .set({
-                                                  "MOTDNew": true,
+                                                  "tags": FieldValue.arrayUnion(
+                                                      ['MOTDNew'])
                                                 }, SetOptions(merge: true));
                                               }),
                                           FocusedMenuItem(
@@ -1395,7 +1398,8 @@ class _EditPostState extends State<EditPost> {
                                                     .collection('food')
                                                     .doc(postId)
                                                     .set({
-                                                  "MOTNPop": true,
+                                                  "tags": FieldValue.arrayUnion(
+                                                      ['MOTNPop'])
                                                 }, SetOptions(merge: true));
                                               }),
                                           FocusedMenuItem(
@@ -1408,7 +1412,8 @@ class _EditPostState extends State<EditPost> {
                                                     .collection('food')
                                                     .doc(postId)
                                                     .set({
-                                                  "MOTDRel": true,
+                                                  "tags": FieldValue.arrayUnion(
+                                                      ['MOTDRel'])
                                                 }, SetOptions(merge: true));
                                               }),
                                           FocusedMenuItem(
@@ -1422,7 +1427,37 @@ class _EditPostState extends State<EditPost> {
                                                     .collection('food')
                                                     .doc(postId)
                                                     .set({
-                                                  "MOTNRel": true,
+                                                  "tags": FieldValue.arrayUnion(
+                                                      ['MOTNRel'])
+                                                }, SetOptions(merge: true));
+                                              }),
+                                              FocusedMenuItem(
+                                              title: Text("MOTD All"),
+                                              trailingIcon: Icon(Icons.edit),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('notreDame')
+                                                    .doc('data')
+                                                    .collection('food')
+                                                    .doc(postId)
+                                                    .set({
+                                                  "tags": FieldValue.arrayUnion(
+                                                      ['MOTDAll'])
+                                                }, SetOptions(merge: true));
+                                              }),
+                                              FocusedMenuItem(
+                                              backgroundColor: Colors.blue,
+                                              title: Text("MOTN All"),
+                                              trailingIcon: Icon(Icons.edit),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('notreDame')
+                                                    .doc('data')
+                                                    .collection('food')
+                                                    .doc(postId)
+                                                    .set({
+                                                  "tags": FieldValue.arrayUnion(
+                                                      ['MOTNAll'])
                                                 }, SetOptions(merge: true));
                                               }),
                                         ],
