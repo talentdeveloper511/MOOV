@@ -38,17 +38,17 @@ class _MOTDState extends State<MOTD> {
                   if (!snapshot.hasData) {
                     return Container();
                   }
-                  return _MOTDUI(snapshot);
+                  return MOTDUI(snapshot: snapshot);
                 });
           }
-          return _MOTDUI(snapshot);
+          return MOTDUI(snapshot: snapshot);
         });
   }
 }
 
-class _MOTDUI extends StatelessWidget {
+class MOTDUI extends StatelessWidget {
   final AsyncSnapshot<QuerySnapshot> snapshot;
-  const _MOTDUI(this.snapshot);
+  const MOTDUI({this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +148,7 @@ class _MOTDUI extends StatelessWidget {
                                             fontFamily: 'Solway',
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
-                                            fontSize: 20.0),
+                                            fontSize: 20),
                                       ),
                                     ),
                                   ),
@@ -164,6 +164,115 @@ class _MOTDUI extends StatelessWidget {
               ),
             );
           }),
+    );
+  }
+}
+
+class BiteSizePostUI extends StatelessWidget {
+  final DocumentSnapshot course;
+  const BiteSizePostUI({this.course});
+
+  @override
+  Widget build(BuildContext context) {
+    String title = course['title'];
+    String pic = course['image'];
+    bool isTablet = false;
+    if (Device.get().isTablet) {
+      isTablet = true;
+    }
+    bool isLargePhone = Screen.diagonal(context) > 766;
+
+    return Container(
+      alignment: Alignment.center,
+      // width: width * 0.8,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              height: isLargePhone
+                  ? SizeConfig.blockSizeVertical * 15
+                  : isTablet
+                      ? 800
+                      : SizeConfig.blockSizeVertical * 18,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: OpenContainer(
+                  openElevation: 10,
+                  transitionType: ContainerTransitionType.fade,
+                  transitionDuration: Duration(milliseconds: 500),
+                  openBuilder: (context, _) => PostDetail(course.id),
+                  closedElevation: 0,
+                  closedBuilder: (context, _) => Stack(children: <Widget>[
+                    FractionallySizedBox(
+                      widthFactor: 1,
+                      child: Container(
+                        child: Container(
+                          child: CachedNetworkImage(
+                            imageUrl: pic,
+                            fit: BoxFit.cover,
+                          ),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          alignment: Alignment(0.0, 0.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(0)),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: <Color>[
+                                  Colors.black.withAlpha(0),
+                                  Colors.black,
+                                  Colors.black12,
+                                ],
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(
+                                title,
+                                style: TextStyle(
+                                    fontFamily: 'Solway',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 15),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

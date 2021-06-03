@@ -935,7 +935,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   ),
                 ),
                 body: PageView(
-                  physics: ClampingScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   children: currentUser.userType.containsKey("clubExecutive")
                       ? <Widget>[
                           HomePage(),

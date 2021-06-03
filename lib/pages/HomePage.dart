@@ -1,5 +1,6 @@
 import 'package:MOOV/helpers/size_config.dart';
 import 'package:MOOV/helpers/themes.dart';
+import 'package:MOOV/homepageWidgets/subcategories.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/services/database.dart';
@@ -91,10 +92,6 @@ class _HomePageState extends State<HomePage>
       });
   }
 
-  Color _colorTween(Color begin, Color end) {
-    return ColorTween(begin: begin, end: end).transform(_notifier.value);
-  }
-
   final privacyList = ["Featured", "All", "Private"];
   String privacyDropdownValue = 'Featured';
 
@@ -149,7 +146,8 @@ class _HomePageState extends State<HomePage>
                   animation: _notifier,
                   builder: (context, _) {
                     return Container(
-                        color: _colorTween(Colors.white, Colors.black87),
+                        color:
+                            colorTween(Colors.white, Colors.black87, _notifier),
                         height: 40,
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
@@ -358,8 +356,8 @@ class _HomePageState extends State<HomePage>
                                       animation: _notifier,
                                       builder: (context, _) {
                                         return Container(
-                                          color: _colorTween(
-                                              Colors.white, Colors.black87),
+                                          color: colorTween(Colors.white,
+                                              Colors.black87, _notifier),
                                           height: isLargePhone ? 390 : 360,
                                           child: Column(children: <Widget>[
                                             Container(
@@ -451,10 +449,11 @@ class _HomePageState extends State<HomePage>
                                                   animation: _notifier,
                                                   builder: (context, _) {
                                                     return Container(
-                                                      color: _colorTween(
+                                                      color: colorTween(
                                                           Colors.white,
-                                                          Color.fromRGBO(204,
-                                                              204, 204, 0)),
+                                                          Color.fromRGBO(
+                                                              204, 204, 204, 0),
+                                                          _notifier),
                                                       width:
                                                           MediaQuery.of(context)
                                                               .size
@@ -537,32 +536,14 @@ class _HomePageState extends State<HomePage>
                                         );
                                       },
                                     ),
+                                   Subcategories(notifier: _notifier, type: "new")
                                   ]);
                                 }
                                 DocumentSnapshot course =
                                     snapshot.data.docs[index - 1];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                Map<String, dynamic> statuses =
-                                    (snapshot.data.docs[index - 1]['statuses']);
-
-                                int status = 0;
-                                List<dynamic> statusesIds =
-                                    statuses.keys.toList();
-
-                                List<dynamic> statusesValues =
-                                    statuses.values.toList();
-
-                                if (statuses != null) {
-                                  for (int i = 0; i < statuses.length; i++) {
-                                    if (statusesIds[i] == currentUser.id) {
-                                      if (statusesValues[i] == 3) {
-                                        status = 3;
-                                      }
-                                    }
-                                  }
-                                }
-
+                                
                                 bool hide = false;
 
                                 if (startDate.millisecondsSinceEpoch <
@@ -636,7 +617,8 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                       Container(
-                        color: _colorTween(Colors.white, Colors.black),
+                        color:
+                            colorTween(Colors.white, Colors.black, _notifier),
                         child: FutureBuilder(
                           future: postsRef
                               .where("type", isEqualTo: "Food/Drink")
@@ -656,25 +638,6 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                Map<String, dynamic> statuses =
-                                    (snapshot.data.docs[index]['statuses']);
-
-                                int status = 0;
-                                List<dynamic> statusesIds =
-                                    statuses.keys.toList();
-
-                                List<dynamic> statusesValues =
-                                    statuses.values.toList();
-
-                                if (statuses != null) {
-                                  for (int i = 0; i < statuses.length; i++) {
-                                    if (statusesIds[i] == currentUser.id) {
-                                      if (statusesValues[i] == 3) {
-                                        status = 3;
-                                      }
-                                    }
-                                  }
-                                }
 
                                 bool hide = false;
 
@@ -698,8 +661,7 @@ class _HomePageState extends State<HomePage>
 
                                 final today =
                                     DateTime(now.year, now.month, now.day);
-                                final yesterday =
-                                    DateTime(now.year, now.month, now.day - 1);
+
                                 final tomorrow =
                                     DateTime(now.year, now.month, now.day + 1);
 
@@ -742,10 +704,6 @@ class _HomePageState extends State<HomePage>
                                   hide = false;
                                 }
 
-                                // if (course['featured'] != true) {
-                                //   hide = true;
-                                // }
-
                                 return (hide == false)
                                     ? PostOnFeedNew(course, _notifier)
                                     : Container();
@@ -755,7 +713,8 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                       Container(
-                        color: _colorTween(Colors.white, Colors.black),
+                        color:
+                            colorTween(Colors.white, Colors.black, _notifier),
                         child: FutureBuilder(
                           //Parties
                           future: postsRef
@@ -774,26 +733,7 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                Map<String, dynamic> statuses =
-                                    (snapshot.data.docs[index]['statuses']);
-
-                                int status = 0;
-                                List<dynamic> statusesIds =
-                                    statuses.keys.toList();
-
-                                List<dynamic> statusesValues =
-                                    statuses.values.toList();
-
-                                if (statuses != null) {
-                                  for (int i = 0; i < statuses.length; i++) {
-                                    if (statusesIds[i] == currentUser.id) {
-                                      if (statusesValues[i] == 3) {
-                                        status = 3;
-                                      }
-                                    }
-                                  }
-                                }
-
+                                
                                 bool hide = false;
 
                                 if (startDate.millisecondsSinceEpoch <
@@ -866,7 +806,8 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                       Container(
-                        color: _colorTween(Colors.white, Colors.black),
+                        color:
+                            colorTween(Colors.white, Colors.black, _notifier),
                         child: FutureBuilder(
                           future: postsRef
                               .where("type", isEqualTo: "Shows")
@@ -884,25 +825,6 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                Map<String, dynamic> statuses =
-                                    (snapshot.data.docs[index]['statuses']);
-
-                                int status = 0;
-                                List<dynamic> statusesIds =
-                                    statuses.keys.toList();
-
-                                List<dynamic> statusesValues =
-                                    statuses.values.toList();
-
-                                if (statuses != null) {
-                                  for (int i = 0; i < statuses.length; i++) {
-                                    if (statusesIds[i] == currentUser.id) {
-                                      if (statusesValues[i] == 3) {
-                                        status = 3;
-                                      }
-                                    }
-                                  }
-                                }
 
                                 bool hide = false;
 
@@ -926,8 +848,7 @@ class _HomePageState extends State<HomePage>
 
                                 final today =
                                     DateTime(now.year, now.month, now.day);
-                                final yesterday =
-                                    DateTime(now.year, now.month, now.day - 1);
+                             
                                 final tomorrow =
                                     DateTime(now.year, now.month, now.day + 1);
 
@@ -983,7 +904,8 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                       Container(
-                        color: _colorTween(Colors.white, Colors.black),
+                        color:
+                            colorTween(Colors.white, Colors.black, _notifier),
                         child: FutureBuilder(
                           //Sports
                           future: postsRef
@@ -1002,25 +924,6 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                Map<String, dynamic> statuses =
-                                    (snapshot.data.docs[index]['statuses']);
-
-                                int status = 0;
-                                List<dynamic> statusesIds =
-                                    statuses.keys.toList();
-
-                                List<dynamic> statusesValues =
-                                    statuses.values.toList();
-
-                                if (statuses != null) {
-                                  for (int i = 0; i < statuses.length; i++) {
-                                    if (statusesIds[i] == currentUser.id) {
-                                      if (statusesValues[i] == 3) {
-                                        status = 3;
-                                      }
-                                    }
-                                  }
-                                }
 
                                 bool hide = false;
 
@@ -1044,8 +947,7 @@ class _HomePageState extends State<HomePage>
 
                                 final today =
                                     DateTime(now.year, now.month, now.day);
-                                final yesterday =
-                                    DateTime(now.year, now.month, now.day - 1);
+                          
                                 final tomorrow =
                                     DateTime(now.year, now.month, now.day + 1);
 
@@ -1101,7 +1003,8 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                       Container(
-                        color: _colorTween(Colors.white, Colors.black),
+                        color:
+                            colorTween(Colors.white, Colors.black, _notifier),
                         child: FutureBuilder(
                           future: postsRef
                               .where("type", isEqualTo: "Recreation")
@@ -1119,26 +1022,7 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                Map<String, dynamic> statuses =
-                                    (snapshot.data.docs[index]['statuses']);
-
-                                int status = 0;
-                                List<dynamic> statusesIds =
-                                    statuses.keys.toList();
-
-                                List<dynamic> statusesValues =
-                                    statuses.values.toList();
-
-                                if (statuses != null) {
-                                  for (int i = 0; i < statuses.length; i++) {
-                                    if (statusesIds[i] == currentUser.id) {
-                                      if (statusesValues[i] == 3) {
-                                        status = 3;
-                                      }
-                                    }
-                                  }
-                                }
-
+                              
                                 bool hide = false;
 
                                 if (startDate.millisecondsSinceEpoch <
@@ -1215,7 +1099,8 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                       Container(
-                        color: _colorTween(Colors.white, Colors.black),
+                        color:
+                            colorTween(Colors.white, Colors.black, _notifier),
                         child: FutureBuilder(
                           future: postsRef
                               .where("type", isEqualTo: "Virtual")
@@ -1233,26 +1118,7 @@ class _HomePageState extends State<HomePage>
                                     snapshot.data.docs[index];
                                 Timestamp startDate = course["startDate"];
                                 privacy = course['privacy'];
-                                Map<String, dynamic> statuses =
-                                    (snapshot.data.docs[index]['statuses']);
-
-                                int status = 0;
-                                List<dynamic> statusesIds =
-                                    statuses.keys.toList();
-
-                                List<dynamic> statusesValues =
-                                    statuses.values.toList();
-
-                                if (statuses != null) {
-                                  for (int i = 0; i < statuses.length; i++) {
-                                    if (statusesIds[i] == currentUser.id) {
-                                      if (statusesValues[i] == 3) {
-                                        status = 3;
-                                      }
-                                    }
-                                  }
-                                }
-
+                              
                                 bool hide = false;
 
                                 if (startDate.millisecondsSinceEpoch <
@@ -1352,7 +1218,7 @@ class CategoryIconBar extends StatefulWidget {
 }
 
 class _CategoryIconBarState extends State<CategoryIconBar> {
-  Color _colorTween(Color begin, Color end) {
+  Color colorTween(Color begin, Color end) {
     return ColorTween(begin: begin, end: end).transform(widget.notifer.value);
   }
 
@@ -1362,7 +1228,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
         animation: widget.notifer,
         builder: (context, _) {
           return Container(
-            color: _colorTween(Colors.white, Colors.black87),
+            color: colorTween(Colors.white, Colors.black87),
             height: 85,
             width: MediaQuery.of(context).size.width,
             child: Row(
@@ -1404,7 +1270,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Food/Drink",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1439,7 +1305,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Food/Drink",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1480,7 +1346,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Hangouts",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1519,7 +1385,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Hangouts",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1558,7 +1424,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Shows",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1596,7 +1462,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Shows",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1631,7 +1497,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                       child: Text(
                                         "Sports",
                                         style: TextStyle(
-                                            color: _colorTween(
+                                            color: colorTween(
                                                 Colors.black, Colors.white),
                                             fontWeight: FontWeight.w600,
                                             fontSize: 13),
@@ -1667,7 +1533,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                       child: Text(
                                         "Sports",
                                         style: TextStyle(
-                                            color: _colorTween(
+                                            color: colorTween(
                                                 Colors.black, Colors.white),
                                             fontWeight: FontWeight.w600,
                                             fontSize: 13),
@@ -1701,7 +1567,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Recreation",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1742,7 +1608,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Recreation",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1781,7 +1647,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Virtual",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1819,7 +1685,7 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
                                         child: Text(
                                           "Virtual",
                                           style: TextStyle(
-                                              color: _colorTween(
+                                              color: colorTween(
                                                   Colors.black, Colors.white),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13),
@@ -1836,4 +1702,8 @@ class _CategoryIconBarState extends State<CategoryIconBar> {
           );
         });
   }
+}
+
+Color colorTween(Color begin, Color end, _notifier) {
+  return ColorTween(begin: begin, end: end).transform(_notifier.value);
 }
