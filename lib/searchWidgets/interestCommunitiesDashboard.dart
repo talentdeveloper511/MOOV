@@ -4,6 +4,7 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/searchWidgets/interestCommunityDetail.dart';
 import 'package:MOOV/searchWidgets/interestCommunityMaker.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -53,21 +54,24 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                 groupName = snapshot.data.docs[i]['groupName'];
                 groupId = snapshot.data.docs[i]['groupId'];
                 groupPic = snapshot.data.docs[i]['groupPic'];
-                _tiles4.add(GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              InterestCommunityDetail(groupId: groupId)),
-                    );
-                  },
-                  child: Container(
+                print(groupId);
+                _tiles4.add(
+                  OpenContainer(
+                    closedShape: ContinuousRectangleBorder(),
+                    transitionType: ContainerTransitionType.fade,
+                    transitionDuration: Duration(milliseconds: 500),
+                    openBuilder: (context, _) => InterestCommunityDetail(
+                                groupId: groupId =
+                                    snapshot.data.docs[i]['groupId']),
+                      
+                    closedElevation: 0,
+                    closedBuilder: (context, _) => 
+                  Container(
                     width: MediaQuery.of(context).size.width * .3,
                     height: 140,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(groupPic),
+                            image: NetworkImage(snapshot.data.docs[i]['groupPic']),
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(
                                 Colors.grey, BlendMode.darken)),
@@ -89,7 +93,7 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          groupName,
+                          snapshot.data.docs[i]['groupName'],
                           textAlign: TextAlign.center,
                           style: GoogleFonts.montserrat(
                               color: Colors.white,
@@ -142,7 +146,7 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                     children: [
                       GradientText(
                         "Create",
-                        16.5,
+                        17,
                         gradient: LinearGradient(colors: [
                           Colors.white,
                           Colors.blue.shade900,
@@ -165,6 +169,7 @@ class _CommunityGroupsState extends State<CommunityGroups> {
               ///
 
               for (int i = 5; i < snapshot.data.docs.length; i++) {
+                String groupId = snapshot.data.docs[i]['groupId'];
                 _tiles4.add(GestureDetector(
                   onTap: () {
                     Navigator.push(

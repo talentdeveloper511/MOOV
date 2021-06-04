@@ -193,7 +193,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   Icon _icon;
 
   _pickIcon() async {
-    IconData icon = await FlutterIconPicker.showIconPicker(context);
+    IconData icon = await FlutterIconPicker.showIconPicker(context,);
 
     _icon = Icon(icon, color: Colors.white, size: 40);
     setState(() {});
@@ -261,9 +261,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   right: 60,
                   bottom: 20,
                   child: _icon != null
-                      ? AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
-                          child: _icon != null ? _icon : Container())
+                      ? _icon
                       : IconButton(
                           icon: Icon(Icons.emoji_emotions,
                               size: 40,

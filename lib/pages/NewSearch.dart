@@ -1167,7 +1167,7 @@ class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
+    _tabController = TabController(vsync: this, length: 3, initialIndex: 0);
     _tabController.animation
       ..addListener(() {
         setState(() {

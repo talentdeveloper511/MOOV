@@ -972,6 +972,7 @@ class _GoingListSegmentState extends State<GoingListSegment>
                         itemCount: 1,
                         itemBuilder: (context, index) {
                           return GoingPage(moovId,
+    
                               (val) => setState(() => _statusHeight = val));
                         }),
                   ),
