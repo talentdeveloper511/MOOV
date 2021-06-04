@@ -9,7 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+// import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -190,16 +190,16 @@ class MyCustomFormState extends State<MyCustomForm> {
     });
   }
 
-  Icon _icon;
+  // Icon _icon;
 
-  _pickIcon() async {
-    IconData icon = await FlutterIconPicker.showIconPicker(context,);
+  // _pickIcon() async {
+  //   IconData icon = await FlutterIconPicker.showIconPicker(context,);
 
-    _icon = Icon(icon, color: Colors.white, size: 40);
-    setState(() {});
+  //   _icon = Icon(icon, color: Colors.white, size: 40);
+  //   setState(() {});
 
-    debugPrint('Picked Icon:  $icon');
-  }
+  //   debugPrint('Picked Icon:  $icon');
+  // }
 
   static final RegExp REGEX_EMOJI = RegExp(
       r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
@@ -257,19 +257,19 @@ class MyCustomFormState extends State<MyCustomForm> {
                           color: _noImage ? Colors.red : Colors.white),
                       onPressed: () => selectImage(context)),
                 ),
-                Positioned(
-                  right: 60,
-                  bottom: 20,
-                  child: _icon != null
-                      ? _icon
-                      : IconButton(
-                          icon: Icon(Icons.emoji_emotions,
-                              size: 40,
-                              color: _noEmoji ? Colors.red : Colors.white),
-                          onPressed: () {
-                            _pickIcon();
-                          }),
-                ),
+                // Positioned(
+                //   right: 60,
+                //   bottom: 20,
+                //   child: _icon != null
+                //       ? _icon
+                //       : IconButton(
+                //           icon: Icon(Icons.emoji_emotions,
+                //               size: 40,
+                //               color: _noEmoji ? Colors.red : Colors.white),
+                //           onPressed: () {
+                //             _pickIcon();
+                //           }),
+                // ),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 100.0, right: 100, top: 40),
