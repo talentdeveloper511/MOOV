@@ -9,7 +9,6 @@ import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/searchWidgets/interestCommunitiesDashboard.dart';
-import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
@@ -18,6 +17,7 @@ import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AlgoliaApplication {
@@ -58,7 +58,11 @@ class _SearchBarState extends State<SearchBar>
       setState(() {
         showTabs = true;
       });
+      // if (dismissKeyboard) {
+      //   textFieldFocusNode.unfocus();
+      // }
     } else {
+      // dismissKeyboard = false;
       _showTrending = true;
       setState(() {
         showTabs = false;
@@ -155,6 +159,11 @@ class _SearchBarState extends State<SearchBar>
     pref.setStringList("recentSearches", allSearches.toList());
   }
 
+  // bool dismissKeyboard = false;
+  // void _update(bool dismiss) {
+  //   setState(() => dismissKeyboard = dismiss);
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -186,6 +195,9 @@ class _SearchBarState extends State<SearchBar>
                               const Icon(Icons.search, color: Colors.black),
                           suffixIcon: GestureDetector(
                               onTap: () {
+                                // setState(() {
+                                //   dismissKeyboard = false;
+                                // });
                                 clearSearch();
                                 // Unfocus all focus nodes
                                 textFieldFocusNode.unfocus();
@@ -312,7 +324,11 @@ class _SearchBarState extends State<SearchBar>
                         child: TrendingSegment()),
                     secondChild: Container(
                         height: MediaQuery.of(context).size.height,
-                        child: CommunityGroups()))
+                        child: 
+                        // CommunityGroups(
+                        //     dismissKeyboardCallback: this._update)
+                             CommunityGroups()
+                            ))
                 : StreamBuilder<List<AlgoliaObjectSnapshot>>(
                     stream: Stream.fromFuture(_groupSearch(_searchTerm)),
                     builder: (context, snapshot0) {
@@ -1061,15 +1077,13 @@ class DisplayGroupResult extends StatelessWidget {
 }
 
 class GradientText extends StatelessWidget {
-  GradientText(
-    this.text,
-    this.size, {
-    @required this.gradient,
-  });
+  GradientText(this.text, this.size,
+      {@required this.gradient, this.montserrat = false});
 
   final String text;
   final double size;
   final Gradient gradient;
+  final bool montserrat;
 
   @override
   Widget build(BuildContext context) {
@@ -1082,11 +1096,14 @@ class GradientText extends StatelessWidget {
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
         maxLines: 2,
-        style: TextStyle(
-          // The color must be set to white for this to work
-          color: Colors.white,
-          fontSize: size,
-        ),
+        style: montserrat
+            ? GoogleFonts.montserrat(
+                color: Colors.white, fontSize: 17, fontWeight: FontWeight.w600)
+            : TextStyle(
+                // The color must be set to white for this to work
+                color: Colors.white,
+                fontSize: size,
+              ),
       ),
     );
   }

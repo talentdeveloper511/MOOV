@@ -1,14 +1,18 @@
+import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
+import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/searchWidgets/interestCommunityDetail.dart';
 import 'package:MOOV/searchWidgets/interestCommunityMaker.dart';
 import 'package:MOOV/utils/themes_styles.dart';
-import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:reorderables/reorderables.dart';
 
 class CommunityGroups extends StatefulWidget {
+  final ValueChanged<bool> dismissKeyboardCallback;
+  CommunityGroups({this.dismissKeyboardCallback});
+
   @override
   _CommunityGroupsState createState() => _CommunityGroupsState();
 }
@@ -49,10 +53,8 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                 groupName = snapshot.data.docs[i]['groupName'];
                 groupId = snapshot.data.docs[i]['groupId'];
                 groupPic = snapshot.data.docs[i]['groupPic'];
-                _tiles4.add(BouncingWidget(
-                  duration: Duration(milliseconds: 100),
-                  scaleFactor: 1.5,
-                  onPressed: () {
+                _tiles4.add(GestureDetector(
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -104,10 +106,8 @@ class _CommunityGroupsState extends State<CommunityGroups> {
               }
 
               ///create your own
-              _tiles4.add(BouncingWidget(
-                duration: Duration(milliseconds: 100),
-                scaleFactor: 1.5,
-                onPressed: () {
+              _tiles4.add(GestureDetector(
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -140,16 +140,23 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      GradientText(
                         "Create",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17),
+                        16.5,
+                        gradient: LinearGradient(colors: [
+                          Colors.white,
+                          Colors.blue.shade900,
+                        ]),
+                        montserrat: true,
                       ),
                       SizedBox(height: 10),
-                      Icon(Icons.add, size: 40, color: Colors.white),
+                      GradientIcon(
+                          Icons.add,
+                          40,
+                          LinearGradient(colors: [
+                            Colors.white,
+                            Colors.blue.shade900,
+                          ]))
                     ],
                   ),
                 ),
@@ -158,10 +165,8 @@ class _CommunityGroupsState extends State<CommunityGroups> {
               ///
 
               for (int i = 5; i < snapshot.data.docs.length; i++) {
-                _tiles4.add(BouncingWidget(
-                  duration: Duration(milliseconds: 100),
-                  scaleFactor: 1.5,
-                  onPressed: () {
+                _tiles4.add(GestureDetector(
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -232,9 +237,20 @@ class _CommunityGroupsState extends State<CommunityGroups> {
     );
 
     return Center(
-      child: SingleChildScrollView(
-        child: column,
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (scrollNotification) {
+          if (scrollNotification is ScrollStartNotification) {
+            // _onStartScroll(scrollNotification.metrics);
+          }
+        },
+        child: SingleChildScrollView(
+          child: column,
+        ),
       ),
     );
   }
+
+  // _onStartScroll(ScrollMetrics metrics) {
+  //   widget.dismissKeyboardCallback(true);
+  // }
 }
