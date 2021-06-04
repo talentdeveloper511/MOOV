@@ -8,6 +8,7 @@ import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
+import 'package:MOOV/searchWidgets/interestCommunitiesDashboard.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
@@ -36,8 +37,8 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar>
     with SingleTickerProviderStateMixin {
-  GlobalKey _searchKey = GlobalKey();
   bool showTabs = false;
+  bool _showTrending = true;
   // TabController to control and switch tabs
   TabController _tabController;
   int _currentIndex = 0;
@@ -53,10 +54,12 @@ class _SearchBarState extends State<SearchBar>
   final textFieldFocusNode = FocusNode();
   void _onFocusChange() {
     if (textFieldFocusNode.hasFocus) {
+      _showTrending = false;
       setState(() {
         showTabs = true;
       });
     } else {
+      _showTrending = true;
       setState(() {
         showTabs = false;
       });
@@ -154,7 +157,6 @@ class _SearchBarState extends State<SearchBar>
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
         child: Scaffold(
             resizeToAvoidBottomInset: false,
@@ -300,7 +302,17 @@ class _SearchBarState extends State<SearchBar>
             ),
             backgroundColor: Colors.white,
             body: _searchTerm == null
-                ? TrendingSegment()
+                ? AnimatedCrossFade(
+                    duration: Duration(milliseconds: 500),
+                    crossFadeState: _showTrending
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    firstChild: Container(
+                        height: MediaQuery.of(context).size.height,
+                        child: TrendingSegment()),
+                    secondChild: Container(
+                        height: MediaQuery.of(context).size.height,
+                        child: CommunityGroups()))
                 : StreamBuilder<List<AlgoliaObjectSnapshot>>(
                     stream: Stream.fromFuture(_groupSearch(_searchTerm)),
                     builder: (context, snapshot0) {

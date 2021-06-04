@@ -1,3 +1,4 @@
+
 name: MOOV
 description: A game changing app.
 
@@ -54,7 +55,7 @@ dependencies:
 #  get_it: ^4.0.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
+  cupertino_icons: ^0.1.2
   path_provider: ^1.3.0
   provider: ^4.3.2
   timeago: ^2.0.17
@@ -107,6 +108,8 @@ dependencies:
   numberpicker: ^2.1.1
   bouncing_widget: ^2.0.0
   reorderables: ^0.4.1
+  flutter_iconpicker: ^1.0.0
+
 
 
 

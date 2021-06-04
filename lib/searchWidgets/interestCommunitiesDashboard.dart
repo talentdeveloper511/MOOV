@@ -1,5 +1,6 @@
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/searchWidgets/interestCommunityDetail.dart';
+import 'package:MOOV/searchWidgets/interestCommunityMaker.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +8,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:reorderables/reorderables.dart';
 
-class WrapExample extends StatefulWidget {
+class CommunityGroups extends StatefulWidget {
   @override
-  _WrapExampleState createState() => _WrapExampleState();
+  _CommunityGroupsState createState() => _CommunityGroupsState();
 }
 
-class _WrapExampleState extends State<WrapExample> {
-  final double _iconSize = 90;
+class _CommunityGroupsState extends State<CommunityGroups> {
   List<Widget> _tiles4;
-  List _tiles2 = [];
 
   @override
   void initState() {
@@ -32,10 +31,13 @@ class _WrapExampleState extends State<WrapExample> {
       });
     }
 
+    String groupName;
+    String groupId;
+    String groupPic;
+
     var column = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 40),
         FutureBuilder(
             future: communityGroupsRef.get(),
             builder: (context, snapshot) {
@@ -43,14 +45,19 @@ class _WrapExampleState extends State<WrapExample> {
                 return Container();
               }
               List<Widget> _tiles4 = [];
-              for (int i = 0; i < 4; i++) {
+              for (int i = 0; i < 5; i++) {
+                groupName = snapshot.data.docs[i]['groupName'];
+                groupId = snapshot.data.docs[i]['groupId'];
+                groupPic = snapshot.data.docs[i]['groupPic'];
                 _tiles4.add(BouncingWidget(
                   duration: Duration(milliseconds: 100),
                   scaleFactor: 1.5,
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => InterestCommunityDetail(groupId:"1xDa2SqY77XVVEIYlTDI")),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              InterestCommunityDetail(groupId: groupId)),
                     );
                   },
                   child: Container(
@@ -58,7 +65,7 @@ class _WrapExampleState extends State<WrapExample> {
                     height: 140,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage('lib/assets/bouts.jpg'),
+                            image: NetworkImage(groupPic),
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(
                                 Colors.grey, BlendMode.darken)),
@@ -80,7 +87,116 @@ class _WrapExampleState extends State<WrapExample> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          snapshot.data.docs[i]['groupName'],
+                          groupName,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 17),
+                        ),
+                        SizedBox(height: 10),
+                        Icon(Icons.sports_football,
+                            size: 40, color: Colors.white),
+                      ],
+                    ),
+                  ),
+                ));
+              }
+
+              ///create your own
+              _tiles4.add(BouncingWidget(
+                duration: Duration(milliseconds: 100),
+                scaleFactor: 1.5,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InterestCommunityMaker()),
+                  );
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width * .3,
+                  height: 140,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('lib/assets/bouts.jpg'),
+                          fit: BoxFit.cover,
+                          colorFilter:
+                              ColorFilter.mode(Colors.grey, BlendMode.darken)),
+                      color: Colors.white,
+                      border: Border.all(
+                        width: 2,
+                        color: TextThemes.ndBlue,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withOpacity(0.9),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ]),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Create",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.montserrat(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17),
+                      ),
+                      SizedBox(height: 10),
+                      Icon(Icons.add, size: 40, color: Colors.white),
+                    ],
+                  ),
+                ),
+              ));
+
+              ///
+
+              for (int i = 5; i < snapshot.data.docs.length; i++) {
+                _tiles4.add(BouncingWidget(
+                  duration: Duration(milliseconds: 100),
+                  scaleFactor: 1.5,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              InterestCommunityDetail(groupId: groupId)),
+                    );
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * .3,
+                    height: 140,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(groupPic),
+                            fit: BoxFit.cover,
+                            colorFilter: ColorFilter.mode(
+                                Colors.grey, BlendMode.darken)),
+                        color: Colors.white,
+                        border: Border.all(
+                          width: 2,
+                          color: TextThemes.ndBlue,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blue.withOpacity(0.25),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ]),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          groupName,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.montserrat(
                               color: Colors.white,
@@ -115,8 +231,8 @@ class _WrapExampleState extends State<WrapExample> {
       ],
     );
 
-    return Scaffold(
-      body: SingleChildScrollView(
+    return Center(
+      child: SingleChildScrollView(
         child: column,
       ),
     );
