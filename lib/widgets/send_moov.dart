@@ -14,9 +14,9 @@ import '../pages/other_profile.dart';
 class SendMOOVSearch extends StatefulWidget {
   final String ownerId, previewImg;
   final dynamic startDate, moovId;
-  final String title, ownerProPic, ownerName;
+  final String title, ownerName;
   SendMOOVSearch(this.ownerId, this.previewImg, this.startDate, this.moovId,
-      this.title, this.ownerName, this.ownerProPic);
+      this.title, this.ownerName,);
 
   @override
   _SendMOOVSearchState createState() => _SendMOOVSearchState(
@@ -26,7 +26,7 @@ class SendMOOVSearch extends StatefulWidget {
       this.moovId,
       this.title,
       this.ownerName,
-      this.ownerProPic);
+      );
 }
 
 class _SendMOOVSearchState extends State<SendMOOVSearch>
@@ -36,9 +36,9 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
   int _currentIndex = 0;
 
   dynamic startDate, moovId;
-  String title, ownerProPic, ownerName;
+  String title, ownerName;
   _SendMOOVSearchState(this.ownerId, this.previewImg, this.startDate,
-      this.moovId, this.title, this.ownerName, this.ownerProPic);
+      this.moovId, this.title, this.ownerName);
 
   final TextEditingController searchController = TextEditingController();
   final textFieldFocusNode = FocusNode();
@@ -239,11 +239,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                   if (!snapshot.hasData ||
                       snapshot.data.length == 0 ||
                       _searchTerm == null) {
-                    Timer(Duration(milliseconds: 600), () {
-                      // setState(() {
-                      //   _searchTerm = "a";
-                      // });
-                    });
+                  
                   }
 
                   List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
@@ -290,7 +286,8 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                                                       return _searchTerm
                                                                   .length >
                                                               0
-                                                          ? SendMOOVResult(
+                                                          ? 
+                                                          SendMOOVResult(
                                                               currSearchStuff[
                                                                           index]
                                                                       .data[
@@ -316,7 +313,7 @@ class _SendMOOVSearchState extends State<SendMOOVSearch>
                                                               moovId,
                                                               title,
                                                               ownerName,
-                                                              ownerProPic)
+                                                              )
                                                           : Container();
                                                     },
                                                     childCount: currSearchStuff
@@ -386,9 +383,9 @@ class SendMOOVResult extends StatefulWidget {
   final String proPic;
   final String userId;
   final int verifiedStatus;
-  String ownerId, previewImg;
-  dynamic startDate, moovId;
-  String title, description, address, ownerProPic, ownerName, ownerEmail;
+  final String ownerId, previewImg;
+  final dynamic startDate, moovId;
+  final String title, ownerName;
 
   SendMOOVResult(
       this.displayName,
@@ -402,7 +399,7 @@ class SendMOOVResult extends StatefulWidget {
       this.moovId,
       this.title,
       this.ownerName,
-      this.ownerProPic);
+      );
 
   @override
   _SendMOOVResultState createState() => _SendMOOVResultState(
@@ -417,7 +414,7 @@ class SendMOOVResult extends StatefulWidget {
       this.moovId,
       this.title,
       this.ownerName,
-      this.ownerProPic);
+      );
 }
 
 class _SendMOOVResultState extends State<SendMOOVResult> {
@@ -428,7 +425,7 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
   int verifiedStatus;
   String ownerId, previewImg;
   dynamic startDate, moovId;
-  String title, description, address, ownerProPic, ownerName, ownerEmail;
+  String title, description, address, ownerName, ownerEmail;
   bool status = false;
 
   _SendMOOVResultState(
@@ -443,7 +440,7 @@ class _SendMOOVResultState extends State<SendMOOVResult> {
       this.moovId,
       this.title,
       this.ownerName,
-      this.ownerProPic);
+      );
 
   String directMessageId;
 

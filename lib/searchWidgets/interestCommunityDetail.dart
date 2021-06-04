@@ -1,11 +1,14 @@
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/utils/themes_styles.dart';
+import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/widgets/post_card_new.dart';
+import 'package:MOOV/widgets/set_moov.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 
 class InterestCommunityDetail extends StatelessWidget {
   final String groupId;
@@ -25,6 +28,7 @@ class InterestCommunityDetail extends StatelessWidget {
           List members = snapshot.data['members'];
 
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(
@@ -77,7 +81,7 @@ class InterestCommunityDetail extends StatelessWidget {
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: SizedBox(
-                          width: 300,
+                          width: MediaQuery.of(context).size.width * .65,
                           height: 40,
                           child: ListView.builder(
                             physics: AlwaysScrollableScrollPhysics(),
@@ -207,17 +211,32 @@ class InterestCommunityDetail extends StatelessWidget {
                             ),
                             onPressed: () {}),
                       ],
-                      child: Text(
-                        members.contains(currentUser.id) ? "Invite" : "  Join",
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17),
-                      ),
+                      child:
+                      Icon(Icons.person_add, color: Colors.blue),
+                      //  Text(
+                      //   members.contains(currentUser.id) ? "Invite" : "  Join",
+                      //   style: TextStyle(
+                      //       color: Colors.blue,
+                      //       fontWeight: FontWeight.bold,
+                      //       fontSize: 17),
+                      // ),
                       onPressed: () {},
                     ),
                     _Notifications(),
-                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType
+                                                        .bottomToTop,
+                                                    child: SearchSetMOOV(
+                                                        groupId: groupId,
+                                                        pickMOOV: true,
+                                                        )));},
+                                           
+                      child: Icon(Icons.add, color: Colors.blue)),
+                    SizedBox(width: 5),
                   ],
                 ),
                 Padding(
@@ -232,7 +251,7 @@ class InterestCommunityDetail extends StatelessWidget {
                 ),
                 FutureBuilder(
                   future: postsRef
-                      .where("tags", arrayContains: groupId)
+                      .where("tags", arrayContains: "m/"+groupName.toLowerCase())
                       .orderBy("startDate")
                       .get(),
                   builder: (context, snapshot) {
@@ -299,10 +318,10 @@ class InterestCommunityDetail extends StatelessWidget {
                           // }
 
                           ValueNotifier<double> _notifier =
-                              ValueNotifier<double>(.1);
+                              ValueNotifier<double>(0);
 
                           return (hide == false)
-                              ? PostOnFeedNew(course, _notifier)
+                              ? BiteSizePostUI(course: course)
                               : Container();
                         },
                       ),
@@ -335,6 +354,6 @@ class __NotificationsState extends State<_Notifications> {
         },
         child: _on
             ? Icon(Icons.notifications_outlined)
-            : Icon(Icons.notifications, color: Colors.blue));
+            : Icon(Icons.notifications_active, color: Colors.blue));
   }
 }

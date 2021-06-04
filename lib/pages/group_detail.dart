@@ -468,9 +468,9 @@ class _GroupDetailState extends State<GroupDetail> {
                                                     type: PageTransitionType
                                                         .bottomToTop,
                                                     child: SearchSetMOOV(
-                                                        members,
-                                                        gid,
-                                                        snapshot2.data[
+                                                        members: members,
+                                                        groupId: gid,
+                                                        groupName: snapshot2.data[
                                                             'groupName'])))
                                             .then(onGoBack);
                                       },

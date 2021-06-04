@@ -179,13 +179,18 @@ class MyCustomFormState extends State<MyCustomForm> {
   List takenNames = [];
   String groupName;
 
+  bool equalsIgnoreCase(String string1, String string2) {
+    return string1?.toLowerCase() == string2?.toLowerCase();
+  }
+
   @override
   void initState() {
     super.initState();
 
     communityGroupsRef.get().then((value) {
       for (int i = 0; i < value.docs.length; i++) {
-        takenNames.add(value.docs[i]['groupName']);
+        String name = value.docs[i]['groupName'].toLowerCase();
+        takenNames.add(name);
       }
     });
   }
@@ -308,13 +313,17 @@ class MyCustomFormState extends State<MyCustomForm> {
                                 if (input == null || input.isEmpty) {
                                   return 'No name? Strange.';
                                 }
+                                if (input.length > 18) {
+                                  return "That's a mouthful.";
+                                }
                                 final RegExp emoji = RegExp(
                                     r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
                                 if (emoji.hasMatch(input)) {
                                   return 'No emojis here';
                                 }
+                                String lower = input.toLowerCase();
 
-                                if (takenNames.contains(input)) {
+                                if (takenNames.contains(lower)) {
                                   return 'This community exists!';
                                 }
                                 return null;
@@ -338,8 +347,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                         setState(() {
                           _noImage = true;
                         });
-                      } else
-                      {
+                      } else {
                         setState(() {
                           _isUploading = true;
                         });

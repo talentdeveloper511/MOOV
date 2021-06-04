@@ -109,6 +109,8 @@ dependencies:
   bouncing_widget: ^2.0.0
   reorderables: ^0.4.1
   # flutter_iconpicker: ^1.0.0
+  icon_picker: ^2.0.0
+
 
 
 

@@ -833,7 +833,6 @@ class _AuthorContent extends StatelessWidget {
                                   course['startDate'],
                                   course['postId'],
                                   course['title'],
-                                  course1['photoUrl'],
                                   course1['displayName'],
                                 )));
                       },
@@ -972,7 +971,6 @@ class _GoingListSegmentState extends State<GoingListSegment>
                         itemCount: 1,
                         itemBuilder: (context, index) {
                           return GoingPage(moovId,
-    
                               (val) => setState(() => _statusHeight = val));
                         }),
                   ),
@@ -1085,7 +1083,7 @@ class PaySkipSendRow extends StatelessWidget {
                               value['postId'],
                               value['title'],
                               value['posterName'],
-                              value['image'],
+                              
                             )));
                   });
                 },

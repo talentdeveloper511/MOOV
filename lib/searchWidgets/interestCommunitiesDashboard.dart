@@ -36,10 +36,6 @@ class _CommunityGroupsState extends State<CommunityGroups> {
       });
     }
 
-    String groupName;
-    String groupId;
-    String groupPic;
-
     var column = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -51,27 +47,20 @@ class _CommunityGroupsState extends State<CommunityGroups> {
               }
               List<Widget> _tiles4 = [];
               for (int i = 0; i < 5; i++) {
-                groupName = snapshot.data.docs[i]['groupName'];
-                groupId = snapshot.data.docs[i]['groupId'];
-                groupPic = snapshot.data.docs[i]['groupPic'];
-                print(groupId);
-                _tiles4.add(
-                  OpenContainer(
-                    closedShape: ContinuousRectangleBorder(),
-                    transitionType: ContainerTransitionType.fade,
-                    transitionDuration: Duration(milliseconds: 500),
-                    openBuilder: (context, _) => InterestCommunityDetail(
-                                groupId: groupId =
-                                    snapshot.data.docs[i]['groupId']),
-                      
-                    closedElevation: 0,
-                    closedBuilder: (context, _) => 
-                  Container(
+                _tiles4.add(OpenContainer(
+                  closedShape: ContinuousRectangleBorder(),
+                  transitionType: ContainerTransitionType.fade,
+                  transitionDuration: Duration(milliseconds: 500),
+                  openBuilder: (context, _) => InterestCommunityDetail(
+                      groupId: snapshot.data.docs[i]['groupId']),
+                  closedElevation: 0,
+                  closedBuilder: (context, _) => Container(
                     width: MediaQuery.of(context).size.width * .3,
                     height: 140,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(snapshot.data.docs[i]['groupPic']),
+                            image:
+                                NetworkImage(snapshot.data.docs[i]['groupPic']),
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(
                                 Colors.grey, BlendMode.darken)),
@@ -184,7 +173,7 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                     height: 140,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(groupPic),
+                            image: NetworkImage(groupId = snapshot.data.docs[i]['groupPic']),
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(
                                 Colors.grey, BlendMode.darken)),
@@ -206,7 +195,7 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          groupName,
+                          groupId = snapshot.data.docs[i]['groupName'],
                           textAlign: TextAlign.center,
                           style: GoogleFonts.montserrat(
                               color: Colors.white,
