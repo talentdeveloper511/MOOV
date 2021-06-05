@@ -438,7 +438,6 @@ class _NonImageContents extends StatelessWidget {
       return PostComments(
         postId: postId,
         postOwnerId: ownerId,
-        postMediaUrl: mediaUrl,
       );
     }));
   }

@@ -9,6 +9,9 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconpicker/IconPicker/Packs/FontAwesome.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -42,6 +45,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     final image = await CustomCamera.openCamera();
     setState(() {
       _image = image;
+      _noImage = false;
       //  fileName = p.basename(_image.path);
     });
     _cropImage();
@@ -51,6 +55,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     final image = await CustomCamera.openGallery();
     setState(() {
       _image = image;
+      _noImage = false;
     });
     _cropImage();
   }
@@ -174,10 +179,10 @@ class MyCustomFormState extends State<MyCustomForm> {
   bool _isChecking = false;
   bool nameTaken = false;
   bool _noImage = false;
-  bool _noEmoji = false;
-  bool _emojiTapped = false;
+  bool _noIcon = false;
   List takenNames = [];
   String groupName;
+  Icon _icon;
 
   bool equalsIgnoreCase(String string1, String string2) {
     return string1?.toLowerCase() == string2?.toLowerCase();
@@ -195,23 +200,29 @@ class MyCustomFormState extends State<MyCustomForm> {
     });
   }
 
-  // Icon _icon;
+  _pickIcon() async {
+    IconData icon = await FlutterIconPicker.showIconPicker(context,
+        barrierDismissible: false,
+        iconPackMode: IconPack.custom,
+        customIconPack: fontAwesomeIcons,
+        iconColor: Colors.white);
 
-  // _pickIcon() async {
-  //   IconData icon = await FlutterIconPicker.showIconPicker(context,);
+    _icon = Icon(icon, color: Colors.white, size: 40);
 
-  //   _icon = Icon(icon, color: Colors.white, size: 40);
-  //   setState(() {});
+    if (icon == null) {
+      _icon = Icon(Icons.emoji_emotions, color: Colors.white, size: 41);
+    }
+    setState(() {});
 
-  //   debugPrint('Picked Icon:  $icon');
-  // }
+    debugPrint('Picked Icon:  $icon');
+  }
 
   static final RegExp REGEX_EMOJI = RegExp(
       r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
 
   @override
   Widget build(BuildContext context) {
-    bool isLargePhone = Screen.diagonal(context) > 766;
+
     return Theme(
       data: ThemeData.from(
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber)),
@@ -262,19 +273,23 @@ class MyCustomFormState extends State<MyCustomForm> {
                           color: _noImage ? Colors.red : Colors.white),
                       onPressed: () => selectImage(context)),
                 ),
-                // Positioned(
-                //   right: 60,
-                //   bottom: 20,
-                //   child: _icon != null
-                //       ? _icon
-                //       : IconButton(
-                //           icon: Icon(Icons.emoji_emotions,
-                //               size: 40,
-                //               color: _noEmoji ? Colors.red : Colors.white),
-                //           onPressed: () {
-                //             _pickIcon();
-                //           }),
-                // ),
+                Positioned(
+                  right: 60,
+                  bottom: 20,
+                  child: _icon != null
+                      ? GestureDetector(
+                          onTap: () {
+                            _pickIcon();
+                          },
+                          child: _icon)
+                      : IconButton(
+                          icon: Icon(Icons.emoji_emotions,
+                              size: 40,
+                              color: _noIcon ? Colors.red : Colors.white),
+                          onPressed: () {
+                            _pickIcon();
+                          }),
+                ),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 100.0, right: 100, top: 40),
@@ -342,16 +357,22 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      _formKey.currentState.validate();
-                      if (_image == null) {
-                        setState(() {
-                          _noImage = true;
-                        });
-                      } else {
-                        setState(() {
-                          _isUploading = true;
-                        });
-                        _createGroup(nameController.text);
+                      if (_formKey.currentState.validate()) {
+                        if (_icon == null || _icon.size == 41.0) {
+                          setState(() {
+                            _noIcon = true;
+                          });
+                        }
+                        if (_image == null) {
+                          setState(() {
+                            _noImage = true;
+                          });
+                        } else {
+                          setState(() {
+                            _isUploading = true;
+                          });
+                          _createGroup(nameController.text);
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -406,7 +427,13 @@ class MyCustomFormState extends State<MyCustomForm> {
         "groupId": groupId,
         "groupName": groupName,
         "members": [currentUser.id],
+        "admins": [currentUser.id],
+        "notifList": [currentUser.id],
         "groupPic": downloadUrl,
+        "groupIcon": {
+          "codePoint": _icon.icon.codePoint,
+          "fontFamily": _icon.icon.fontFamily,
+        }
       }).then((value) => setState(() {
             _isUploading = false;
             _isChecking = true;

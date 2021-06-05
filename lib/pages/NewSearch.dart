@@ -681,7 +681,6 @@ class DisplayMOOVResult extends StatelessWidget {
   final String userId;
   final String postId;
   final int verifiedStatus;
-  var startDate;
 
   DisplayMOOVResult(
       {Key key,
@@ -692,33 +691,12 @@ class DisplayMOOVResult extends StatelessWidget {
       this.userId,
       this.postId,
       this.verifiedStatus,
-      this.startDate})
+      })
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    // bool isToday = false;
-    // bool isTomorrow = false;
-    // bool isNextWeek = false;
-    // final week = DateTime(now.year, now.month, now.day + 6);
-
-    // final today = DateTime(now.year, now.month, now.day);
-    // final yesterday = DateTime(now.year, now.month, now.day - 1);
-    // final tomorrow = DateTime(now.year, now.month, now.day + 1);
-
-    // final dateToCheck = startDate.toDate();
-    // final aDate =
-    //     DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
-    // if (aDate.isAfter(week)) {
-    //   isNextWeek = true;
-    // }
-
-    // if (aDate == today) {
-    //   isToday = true;
-    // } else if (aDate == tomorrow) {
-    //   isTomorrow = true;
-    // }
+  
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(

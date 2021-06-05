@@ -4,6 +4,7 @@ import 'package:MOOV/widgets/sundayWrapup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 
 class Database {
   final dbRef = FirebaseFirestore.instance;
@@ -112,6 +113,7 @@ class Database {
       privacy,
       address,
       DateTime startDate,
+      String startDateSimpleString,
       int unix,
       statuses,
       String clubId,
@@ -166,6 +168,7 @@ class Database {
       'description': description,
       'address': address,
       'startDate': startDate,
+      'startDateSimpleString': startDateSimpleString,
       'unix': unix,
       'clubId': clubId,
       'statuses': {for (var v in statuses) v: -1},
@@ -184,8 +187,7 @@ class Database {
       "stats": {},
       "moovOver": moovOver,
       "tags": []
-    }).then(      
-      inviteesNotification(postId, imageUrl, title, statuses));
+    }).then(inviteesNotification(postId, imageUrl, title, statuses));
 
     if (privacy == 'Public' || privacy == 'Friends Only') {
       var peepsToAlert;
@@ -214,6 +216,7 @@ class Database {
       privacy,
       address,
       DateTime startDate,
+      String startDateSimpleString,
       int unix,
       statuses,
       int maxOccupancy,
@@ -241,6 +244,7 @@ class Database {
       'description': description,
       'address': address,
       'startDate': startDate,
+      'startDateSimpleString': startDateSimpleString,
       'unix': unix,
       'statuses': {for (var v in statuses) v: -1},
       'maxOccupancy': maxOccupancy,
@@ -269,6 +273,7 @@ class Database {
       'description': description,
       'address': address,
       'startDate': startDate,
+      'startDateSimpleString': startDateSimpleString,
       'unix': unix,
       'statuses': {for (var v in statuses) v: -1},
       'maxOccupancy': maxOccupancy,

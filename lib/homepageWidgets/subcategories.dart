@@ -34,10 +34,10 @@ class Subcategories extends StatelessWidget {
                 //     .orderBy("startDate")
                 //     .snapshots()
                 
-                // postsRef
-                //     .where("tags", arrayContains: type)
-                //     .orderBy("startDate")
-                //     .snapshots(),
+                stream: postsRef
+                    .where("tags", arrayContains: type)
+                    .orderBy("startDate")
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData || snapshot.data.docs.length == 0)
                     return Center(

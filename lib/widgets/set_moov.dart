@@ -8,6 +8,7 @@ import 'package:MOOV/services/database.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:algolia/algolia.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -104,11 +105,16 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
                     snapshot.data.length == 0 ||
                     _searchTerm == null)
                   return FutureBuilder(
-                    future: postsRef.where("privacy", isEqualTo: "Public").get(),
-                    builder: (context, snapshot) {
-                      return PickMOOV(postId: snapshot.data.docs[0]['postId'],groupId: widget.groupId);
-                    }
-                  );
+                      future:
+                          postsRef.where("privacy", isEqualTo: "Public").get(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Container();
+                        }
+                        return PickMOOV(
+                            postId: snapshot.data.docs[0]['postId'],
+                            groupName: widget.groupName);
+                      });
 
                 List<AlgoliaObjectSnapshot> currSearchStuff = snapshot.data;
 
@@ -146,7 +152,7 @@ class _SearchSetMOOVState extends State<SearchSetMOOV> {
                                   return PickMOOV(
                                       postId:
                                           currSearchStuff[index].data["postId"],
-                                      groupId: widget.groupId);
+                                      groupName: widget.groupName);
                                 }
                                 if (!widget.pickMOOV) {
                                   return _searchTerm != null && hide == false
@@ -389,15 +395,16 @@ class _SetMOOVResultState extends State<SetMOOVResult> {
 }
 
 class PickMOOV extends StatefulWidget {
-  final String postId, groupId;
+  final String postId, groupName;
 
-  PickMOOV({this.postId, this.groupId});
+  PickMOOV({this.postId, this.groupName});
 
   @override
   _PickMOOVState createState() => _PickMOOVState();
 }
 
 class _PickMOOVState extends State<PickMOOV> {
+  bool inCommunity = false;
   @override
   Widget build(BuildContext context) {
     bool isLargePhone = Screen.diagonal(context) > 766;
@@ -405,10 +412,17 @@ class _PickMOOVState extends State<PickMOOV> {
     return StreamBuilder(
         stream: postsRef.doc(widget.postId).snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return Container();
+          if (!snapshot.hasData) {
+            return Container();
+          }
 
           String title = snapshot.data['title'];
           String pic = snapshot.data['image'];
+          List tags = snapshot.data['tags'];
+
+          if (tags.contains("m/" + widget.groupName.toLowerCase())) {
+            inCommunity = true;
+          }
           return Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: GestureDetector(
@@ -481,71 +495,57 @@ class _PickMOOVState extends State<PickMOOV> {
                   ),
                 ),
                 Positioned(
-                  bottom: 7.5,
-                  child: StreamBuilder(
-                      stream:
-                          communityGroupsRef.doc(widget.groupId).snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Container();
-                        }
-                        List liveMOOVs = snapshot.data["liveMOOVs"];
-                        bool inCommunity = false;
-                        if (liveMOOVs.contains(widget.postId)) {
-                          inCommunity = true;
-                        }
-
-                        return GestureDetector(
-                          onTap: inCommunity
-                              ? null
-                              : () {
-                                  HapticFeedback.lightImpact();
-
-                                  Navigator.pop(context);
-                                },
-                          child: Container(
-                            height: 30,
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                                gradient: inCommunity
-                                    ? LinearGradient(
-                                        colors: [
-                                          Colors.green[400],
-                                          Colors.green[300]
-                                        ],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                      )
-                                    : LinearGradient(
-                                        colors: [
-                                          TextThemes.ndBlue,
-                                          TextThemes.ndBlue
-                                        ],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                      ),
-                                borderRadius: BorderRadius.circular(10.0)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 2.0, right: 2.0),
-                              child: inCommunity
-                                  ? Text(
-                                      "In Commmunity",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
-                                    )
-                                  : Text(
-                                      "Add",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
-                                    ),
-                            ),
-                          ),
-                        );
-                      }),
-                ),
+                    bottom: 7.5,
+                    child: GestureDetector(
+                      onTap: inCommunity
+                          ? null
+                          : () {
+                              postsRef.doc(snapshot.data['postId']).set({
+                                "tags": FieldValue.arrayUnion(
+                                    ["m/" + widget.groupName.toLowerCase()])
+                              }, SetOptions(merge: true)).then(
+                                  (value) => Navigator.pop(context));
+                            },
+                      child: Container(
+                        height: 30,
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            gradient: inCommunity
+                                ? LinearGradient(
+                                    colors: [
+                                      Colors.green[400],
+                                      Colors.green[300]
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  )
+                                : LinearGradient(
+                                    colors: [
+                                      TextThemes.ndBlue,
+                                      TextThemes.ndBlue
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 2.0, right: 2.0),
+                          child: inCommunity
+                              ? Text(
+                                  "In Commmunity",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                )
+                              : Text(
+                                  "Add",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                ),
+                        ),
+                      ),
+                    )),
               ]),
             ),
           );

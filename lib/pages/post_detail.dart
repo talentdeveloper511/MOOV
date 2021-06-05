@@ -22,6 +22,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/widgets/going_statuses.dart';
@@ -429,102 +432,8 @@ class _NonImageContents extends StatelessWidget {
           // _AuthorContent(userId, course),
           PaySkipSendRow(course['paymentAmount'], course['moovOver'],
               mobileOrderMenu, course['userId'], moovId),
-          GestureDetector(
-            onTap: () {
-              showComments(context,
-                  postId: moovId,
-                  ownerId: course['userId'],
-                  mediaUrl: currentUser.photoUrl);
-            },
-            child: GestureDetector(
-              onTap: () {
-                showComments(context,
-                    postId: moovId,
-                    ownerId: course['userId'],
-                    mediaUrl: currentUser.photoUrl);
-              },
-              child: StreamBuilder(
-                  stream:
-                      postsRef.doc(moovId).collection('comments').snapshots(),
-                  builder: (context, snapshot) {
-                    bool isLargePhone = Screen.diagonal(context) > 766;
-                    if (!snapshot.hasData || snapshot.data.docs.length == 0)
-                      return Container();
-                    String commentCount = snapshot.data.docs.length.toString();
-                    return Stack(children: [
-                      Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 1.0),
-                            child: Container(
-                              height: 1.0,
-                              width: 500.0,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 34,
-                                    backgroundColor: TextThemes.ndGold,
-                                    child: CircleAvatar(
-                                      // backgroundImage: snapshot.data
-                                      //     .documents[index].data['photoUrl'],
-                                      backgroundImage: NetworkImage(
-                                          snapshot.data.docs[
-                                                  snapshot.data.docs.length - 1]
-                                              ['avatarUrl']),
-                                      radius: 32,
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text("said")),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 1),
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                .5,
-                                        child: Text(
-                                          " \"" +
-                                              snapshot.data.docs[
-                                                  snapshot.data.docs.length -
-                                                      1]['comment'] +
-                                              "\"",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          // textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontStyle: FontStyle.italic,
-                                              fontSize: isLargePhone ? 14 : 13),
-                                        ),
-                                      )),
-                                ],
-                              )),
-                        ],
-                      ),
-                      Positioned(
-                          right: 5,
-                          bottom: 5,
-                          child: commentCount == "1"
-                              ? Text(
-                                  "View $commentCount\n Comment",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: TextThemes.ndBlue),
-                                )
-                              : Text(
-                                  "View all $commentCount\n Comments",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: TextThemes.ndBlue),
-                                ))
-                    ]);
-                  }),
-            ),
-          ),
+          CommentPreviewOnPost(
+              postId: course['postId'], postOwnerId: course['userId']),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.0),
             child: Container(
@@ -585,17 +494,16 @@ class _NonImageContents extends StatelessWidget {
       ),
     );
   }
+}
 
-  showComments(BuildContext context,
-      {String postId, String ownerId, String mediaUrl}) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return PostComments(
-        postId: postId,
-        postOwnerId: ownerId,
-        postMediaUrl: mediaUrl,
-      );
-    }));
-  }
+showComments(BuildContext context,
+    {String postId, String ownerId, String mediaUrl}) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return PostComments(
+      postId: postId,
+      postOwnerId: ownerId,
+    );
+  }));
 }
 
 class _Title extends StatelessWidget {
@@ -1083,7 +991,6 @@ class PaySkipSendRow extends StatelessWidget {
                               value['postId'],
                               value['title'],
                               value['posterName'],
-                              
                             )));
                   });
                 },
@@ -1904,3 +1811,117 @@ void showMax(BuildContext context) {
 //         });
 //   }
 // }
+
+class CommentPreviewOnPost extends StatelessWidget {
+  final String postId, postOwnerId;
+  final bool fromCommunity;
+  const CommentPreviewOnPost(
+      {this.postId, this.postOwnerId, this.fromCommunity = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showComments(
+          context,
+          postId: postId,
+          ownerId: postOwnerId,
+        );
+      },
+      child: StreamBuilder(
+          stream: postsRef.doc(postId).collection('comments').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
+            bool isLargePhone = Screen.diagonal(context) > 766;
+            if (snapshot.data.docs.length == 0 && fromCommunity) {
+              return ChatBubble(
+                  alignment: Alignment.centerLeft,
+                  clipper: ChatBubbleClipper5(type: BubbleType.sendBubble),
+                  backGroundColor: Colors.blue[400],
+                  margin: EdgeInsets.only(top: 20),
+                  child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.7,
+                      ),
+                      child: Text("talk about it..",
+                          style: TextStyle(color: Colors.white))));
+            }
+            if (!snapshot.hasData || snapshot.data.docs.length == 0)
+              return Container();
+
+            String commentCount = snapshot.data.docs.length.toString();
+            return Stack(children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 1.0),
+                    child: Container(
+                      height: 1.0,
+                      width: fromCommunity
+                          ? MediaQuery.of(context).size.width * .6
+                          : MediaQuery.of(context).size.width,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: TextThemes.ndGold,
+                            child: CircleAvatar(
+                              // backgroundImage: snapshot.data
+                              //     .documents[index].data['photoUrl'],
+                              backgroundImage: NetworkImage(snapshot
+                                      .data.docs[snapshot.data.docs.length - 1]
+                                  ['avatarUrl']),
+                              radius: 22,
+                            ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text("said")),
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 1),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * .5,
+                                child: Text(
+                                  " \"" +
+                                      snapshot.data.docs[
+                                              snapshot.data.docs.length - 1]
+                                          ['comment'] +
+                                      "\"",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  // textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: isLargePhone ? 14 : 13),
+                                ),
+                              )),
+                        ],
+                      )),
+                ],
+              ),
+              Positioned(
+                  right: fromCommunity ? 37.5 : 5,
+                  bottom: fromCommunity ? 20 : 5,
+                  child: commentCount == "1"
+                      ? Text(
+                          "View $commentCount\n Comment",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: TextThemes.ndBlue),
+                        )
+                      : Text(
+                          "View all $commentCount\n Comments",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: TextThemes.ndBlue),
+                        ))
+            ]);
+          }),
+    );
+  }
+}

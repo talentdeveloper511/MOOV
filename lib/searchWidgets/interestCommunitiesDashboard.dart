@@ -45,39 +45,37 @@ class _CommunityGroupsState extends State<CommunityGroups> {
               if (!snapshot.hasData) {
                 return Container();
               }
+
               List<Widget> _tiles4 = [];
               for (int i = 0; i < 5; i++) {
-                _tiles4.add(OpenContainer(
-                  closedShape: ContinuousRectangleBorder(),
-                  transitionType: ContainerTransitionType.fade,
-                  transitionDuration: Duration(milliseconds: 500),
-                  openBuilder: (context, _) => InterestCommunityDetail(
-                      groupId: snapshot.data.docs[i]['groupId']),
-                  closedElevation: 0,
-                  closedBuilder: (context, _) => Container(
+                _tiles4.add(GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InterestCommunityDetail(
+                            groupId: snapshot.data.docs[i]['groupId'])),
+                  ),
+                  child: Container(
                     width: MediaQuery.of(context).size.width * .3,
                     height: 140,
                     decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image:
-                                NetworkImage(snapshot.data.docs[i]['groupPic']),
-                            fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                                Colors.grey, BlendMode.darken)),
-                        color: Colors.white,
-                        border: Border.all(
-                          width: 2,
-                          color: TextThemes.ndBlue,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withOpacity(0.25),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blue.withOpacity(0.25),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ]),
+                      ],
+                      image: DecorationImage(
+                          image:
+                              NetworkImage(snapshot.data.docs[i]['groupPic']),
+                          fit: BoxFit.cover,
+                          colorFilter:
+                              ColorFilter.mode(Colors.grey, BlendMode.darken)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -90,8 +88,15 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                               fontSize: 17),
                         ),
                         SizedBox(height: 10),
-                        Icon(Icons.sports_football,
-                            size: 40, color: Colors.white),
+                        Icon(
+                            IconData(
+                                snapshot.data.docs[i]['groupIcon']['codePoint'],
+                                fontFamily: snapshot.data.docs[i]['groupIcon']
+                                    ['fontFamily'],
+                                fontPackage: "font_awesome_flutter"),
+                            color: Colors.white,
+                            size: 40),
+                        // Icon(Icons.face, size: 40, color: Colors.white),
                       ],
                     ),
                   ),
@@ -117,10 +122,6 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                           colorFilter:
                               ColorFilter.mode(Colors.grey, BlendMode.darken)),
                       color: Colors.white,
-                      border: Border.all(
-                        width: 2,
-                        color: TextThemes.ndBlue,
-                      ),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       boxShadow: [
                         BoxShadow(
@@ -158,14 +159,13 @@ class _CommunityGroupsState extends State<CommunityGroups> {
               ///
 
               for (int i = 5; i < snapshot.data.docs.length; i++) {
-                String groupId = snapshot.data.docs[i]['groupId'];
                 _tiles4.add(GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              InterestCommunityDetail(groupId: groupId)),
+                          builder: (context) => InterestCommunityDetail(
+                              groupId: snapshot.data.docs[i]['groupId'])),
                     );
                   },
                   child: Container(
@@ -173,15 +173,12 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                     height: 140,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(groupId = snapshot.data.docs[i]['groupPic']),
+                            image:
+                                NetworkImage(snapshot.data.docs[i]['groupPic']),
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(
                                 Colors.grey, BlendMode.darken)),
                         color: Colors.white,
-                        border: Border.all(
-                          width: 2,
-                          color: TextThemes.ndBlue,
-                        ),
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         boxShadow: [
                           BoxShadow(
@@ -195,7 +192,7 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          groupId = snapshot.data.docs[i]['groupName'],
+                          snapshot.data.docs[i]['groupName'],
                           textAlign: TextAlign.center,
                           style: GoogleFonts.montserrat(
                               color: Colors.white,
@@ -203,8 +200,14 @@ class _CommunityGroupsState extends State<CommunityGroups> {
                               fontSize: 17),
                         ),
                         SizedBox(height: 10),
-                        Icon(Icons.sports_football,
-                            size: 40, color: Colors.white),
+                        Icon(
+                            IconData(
+                                snapshot.data.docs[i]['groupIcon']['codePoint'],
+                                fontFamily: snapshot.data.docs[i]['groupIcon']
+                                    ['fontFamily'],
+                                fontPackage: "font_awesome_flutter"),
+                            color: Colors.white,
+                            size: 40),
                       ],
                     ),
                   ),

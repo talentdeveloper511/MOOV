@@ -12,19 +12,17 @@ import 'home.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostComments extends StatefulWidget {
-  final String postId, postOwnerId, postMediaUrl;
+  final String postId, postOwnerId;
 
   PostComments({
     this.postId,
     this.postOwnerId,
-    this.postMediaUrl,
   });
 
   @override
   PostCommentsState createState() => PostCommentsState(
         postId: this.postId,
         postOwnerId: this.postOwnerId,
-        postMediaUrl: this.postMediaUrl,
       );
 }
 
@@ -32,12 +30,10 @@ class PostCommentsState extends State<PostComments> {
   TextEditingController commentController = TextEditingController();
   final String postId;
   final String postOwnerId;
-  final String postMediaUrl;
 
   PostCommentsState({
     this.postId,
     this.postOwnerId,
-    this.postMediaUrl,
   });
 
   buildPostComments() {
@@ -69,7 +65,7 @@ class PostCommentsState extends State<PostComments> {
         "displayName": currentUser.displayName,
         "comment": commentController.text,
         "postId": postId,
-        "previewImg": postMediaUrl,
+        "previewImg": currentUser.photoUrl,
         "timestamp": timestamp,
         "avatarUrl": currentUser.photoUrl,
         "userId": currentUser.id,
@@ -80,7 +76,7 @@ class PostCommentsState extends State<PostComments> {
       });
       if (currentUser.id != postOwnerId) {
         Database().commentNotification(postOwnerId, commentController.text,
-            postId, timestamp, postMediaUrl);
+            postId, timestamp, currentUser.photoUrl);
       }
       commentController.clear();
     }
