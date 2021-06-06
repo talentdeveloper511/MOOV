@@ -345,7 +345,11 @@ class _CreateAccountState extends State<CreateAccount> {
 
       // 3) get username from create account, use it to make new user document in users collection
 
-      String abbrev = businessName.toLowerCase().replaceAll("’", "").replaceAll(" ", "").substring(0, 4);
+      String abbrev = businessName
+          .toLowerCase()
+          .replaceAll("’", "")
+          .replaceAll(" ", "")
+          .substring(0, 4);
       String businessCode = abbrev + (1000 + Random().nextInt(100)).toString();
 
       usersRef.doc(user.id).set({
@@ -379,7 +383,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "userType": userTypeMap,
         "isSingle": false,
         "venmoUsername": venmoUsername,
-        "mobileOrderMenu": {},
+        "mobileOrderMenu": {"item1": {}, "item2": {}, "item3": {}},
         "pushSettings": {
           "friendPosts": true,
           "going": true,
@@ -973,6 +977,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           GestureDetector(
                             onTap: businessAddress == ""
                                 ? () {
+                                    print(businessAddress);
                                     setState(() {
                                       noAddress = true;
                                     });

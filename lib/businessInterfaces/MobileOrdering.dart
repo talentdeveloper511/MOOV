@@ -34,8 +34,10 @@ class MobileOrdering extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pop(
+            Navigator.pushAndRemoveUntil(
               context,
+              MaterialPageRoute(builder: (context) => Home()),
+              (Route<dynamic> route) => false,
             );
           },
         ),
@@ -74,110 +76,305 @@ class MobileOrdering extends StatelessWidget {
             Map item2 = mobileOrderMenu['item2'];
             Map item3 = mobileOrderMenu['item3'];
 
-            return Column(
-              children: [
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () => controller.animateToPage(0,
-                          duration: Duration(seconds: 1),
-                          curve: Curves.fastOutSlowIn),
-                      child: Column(
+            return (postId != null) ?
+
+                ///this menu is being viewed from a specific post
+                StreamBuilder(
+                    stream: postsRef.doc(postId).snapshots(),
+                    builder: (context, snapshotPost) {
+                      if (!snapshotPost.hasData) {
+                        return Container();
+                      }
+
+                      int itemsOffered = 0;
+                      bool offeringItem1 =
+                          snapshotPost.data['mobileOrderMenu']['item1'];
+                      bool offeringItem2 =
+                          snapshotPost.data['mobileOrderMenu']['item2'];
+                      bool offeringItem3 =
+                          snapshotPost.data['mobileOrderMenu']['item3'];
+
+                      if (offeringItem1) {
+                        itemsOffered++;
+                      }
+                      if (offeringItem2) {
+                        itemsOffered++;
+                      }
+                      if (offeringItem3) {
+                        itemsOffered++;
+                      }
+
+                      return Column(
                         children: [
                           SizedBox(height: 10),
-                          item1.isNotEmpty
-                              ? CircleAvatar(
-                                  backgroundImage: NetworkImage(item1['photo']))
-                              : Icon(
-                                  Icons.brunch_dining,
-                                  size: 30,
-                                  color: Colors.grey,
+                          Row(
+                            children: [
+                              offeringItem1
+                                  ? GestureDetector(
+                                      onTap: () => controller.animateToPage(0,
+                                          duration: Duration(seconds: 1),
+                                          curve: Curves.fastOutSlowIn),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                (1 / itemsOffered),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 10),
+                                            item1.isNotEmpty
+                                                ? CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            item1['photo']))
+                                                : Icon(
+                                                    Icons.brunch_dining,
+                                                    size: 30,
+                                                    color: Colors.grey,
+                                                  ),
+                                            SizedBox(height: 5),
+                                            item1.isNotEmpty
+                                                ? SizedBox(
+                                                    height: 35,
+                                                    child: Text(
+                                                      item1['name'],
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 2,
+                                                    ),
+                                                  )
+                                                : Text("Item\nOne",
+                                                    textAlign:
+                                                        TextAlign.center),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                              offeringItem2
+                                  ? GestureDetector(
+                                      onTap: () => controller.animateToPage(1,
+                                          duration: Duration(seconds: 1),
+                                          curve: Curves.fastOutSlowIn),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                (1 / itemsOffered),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 10),
+                                            item2.isNotEmpty
+                                                ? CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            item2['photo']))
+                                                : Image.asset(
+                                                    'lib/assets/marg.png',
+                                                    height: 40),
+                                            SizedBox(height: 5),
+                                            item2.isNotEmpty
+                                                ? SizedBox(
+                                                    height: 35,
+                                                    child: Text(
+                                                      item2['name'],
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 2,
+                                                    ),
+                                                  )
+                                                : Text("Item\nTwo",
+                                                    textAlign:
+                                                        TextAlign.center),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                              offeringItem3
+                                  ? GestureDetector(
+                                      onTap: () => controller.animateToPage(2,
+                                          duration: Duration(seconds: 1),
+                                          curve: Curves.fastOutSlowIn),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                (1 / itemsOffered),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 10),
+                                            item3.isNotEmpty
+                                                ? CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            item3['photo']))
+                                                : Icon(
+                                                    Icons.local_pizza,
+                                                    size: 30,
+                                                    color: Colors.grey,
+                                                  ),
+                                            SizedBox(height: 5),
+                                            item3.isNotEmpty
+                                                ? SizedBox(
+                                                    height: 35,
+                                                    child: Text(
+                                                      item3['name'],
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 2,
+                                                    ),
+                                                  )
+                                                : Text("Item\nThree",
+                                                    textAlign:
+                                                        TextAlign.center),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container()
+                            ],
+                          ),
+                          Expanded(
+                            child: MobileOrderPageView(
+                                controller: controller,
+                                mobileOrderMenu: mobileOrderMenu,
+                                userId: userId,
+                                postId: postId,
+                                offeringItem1: offeringItem1,
+                                offeringItem2: offeringItem2,
+                                offeringItem3: offeringItem3,
+                                itemsOffered: itemsOffered,
+                                
                                 ),
-                          SizedBox(height: 5),
-                          item1.isNotEmpty
-                              ? SizedBox(
-                                  width: 40,
-                                  height: 35,
-                                  child: Text(
-                                    item1['name'],
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.clip,
-                                    maxLines: 2,
-                                  ),
-                                )
-                              : Text("Item\nOne", textAlign: TextAlign.center),
+                          )
                         ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => controller.animateToPage(1,
-                          duration: Duration(seconds: 1),
-                          curve: Curves.fastOutSlowIn),
-                      child: Column(
+                      );
+                    })
+                :
+
+                ///business is viewing the menu, this is not associated with a post
+                Column(
+                    children: [
+                      SizedBox(height: 10),
+                      Row(
                         children: [
-                          SizedBox(height: 10),
-                          item2.isNotEmpty
-                              ? CircleAvatar(
-                                  backgroundImage: NetworkImage(item2['photo']))
-                              : Image.asset('lib/assets/marg.png', height: 40),
-                          SizedBox(height: 5),
-                          item2.isNotEmpty
-                              ? SizedBox(
-                                  width: 40,
-                                  height: 35,
-                                  child: Text(
-                                    item2['name'],
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.clip,
-                                    maxLines: 2,
-                                  ),
-                                )
-                              : Text("Item\nTwo", textAlign: TextAlign.center),
+                          GestureDetector(
+                            onTap: () => controller.animateToPage(0,
+                                duration: Duration(seconds: 1),
+                                curve: Curves.fastOutSlowIn),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * .333,
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  item1.isNotEmpty
+                                      ? CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(item1['photo']))
+                                      : Icon(
+                                          Icons.brunch_dining,
+                                          size: 30,
+                                          color: Colors.grey,
+                                        ),
+                                  SizedBox(height: 5),
+                                  item1.isNotEmpty
+                                      ? SizedBox(
+                                          height: 35,
+                                          child: Text(
+                                            item1['name'],
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
+                                        )
+                                      : Text("Item\nOne",
+                                          textAlign: TextAlign.center),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => controller.animateToPage(1,
+                                duration: Duration(seconds: 1),
+                                curve: Curves.fastOutSlowIn),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * .333,
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  item2.isNotEmpty
+                                      ? CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(item2['photo']))
+                                      : Image.asset('lib/assets/marg.png',
+                                          height: 40),
+                                  SizedBox(height: 5),
+                                  item2.isNotEmpty
+                                      ? SizedBox(
+                                          height: 35,
+                                          child: Text(
+                                            item2['name'],
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
+                                        )
+                                      : Text("Item\nTwo",
+                                          textAlign: TextAlign.center),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => controller.animateToPage(2,
+                                duration: Duration(seconds: 1),
+                                curve: Curves.fastOutSlowIn),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * .333,
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  item3.isNotEmpty
+                                      ? CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(item3['photo']))
+                                      : Icon(
+                                          Icons.local_pizza,
+                                          size: 30,
+                                          color: Colors.grey,
+                                        ),
+                                  SizedBox(height: 5),
+                                  item3.isNotEmpty
+                                      ? SizedBox(
+                                          height: 35,
+                                          child: Text(
+                                            item3['name'],
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
+                                        )
+                                      : Text("Item\nThree",
+                                          textAlign: TextAlign.center),
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () => controller.animateToPage(2,
-                          duration: Duration(seconds: 1),
-                          curve: Curves.fastOutSlowIn),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 10),
-                          item3.isNotEmpty
-                              ? CircleAvatar(
-                                  backgroundImage: NetworkImage(item3['photo']))
-                              : Icon(
-                                  Icons.local_pizza,
-                                  size: 30,
-                                  color: Colors.grey,
-                                ),
-                          SizedBox(height: 5),
-                          item3.isNotEmpty
-                              ? SizedBox(
-                                  width: 40,
-                                  height: 35,
-                                  child: Text(
-                                    item3['name'],
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.clip,
-                                    maxLines: 2,
-                                  ),
-                                )
-                              : Text("Item\nThree",
-                                  textAlign: TextAlign.center),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                Expanded(
-                  child: MobileOrderPageView(
-                      controller, mobileOrderMenu, userId, postId),
-                )
-              ],
-            );
+                      Expanded(
+                        child: MobileOrderPageView(
+                            controller: controller,
+                            mobileOrderMenu: mobileOrderMenu,
+                            userId: userId,
+                            postId: postId),
+                      )
+                    ],
+                  );
           }),
     );
   }
@@ -187,8 +384,18 @@ class MobileOrderPageView extends StatefulWidget {
   final Map mobileOrderMenu;
   final PageController controller;
   final String userId, postId;
+  final bool offeringItem1, offeringItem2, offeringItem3;
+  final int itemsOffered;
+
   MobileOrderPageView(
-      this.controller, this.mobileOrderMenu, this.userId, this.postId);
+      {this.controller,
+      this.mobileOrderMenu,
+      this.userId,
+      this.postId,
+      this.offeringItem1,
+      this.offeringItem2,
+      this.offeringItem3,
+      this.itemsOffered});
 
   @override
   _MobileOrderPageViewState createState() => _MobileOrderPageViewState();
@@ -209,7 +416,7 @@ class _MobileOrderPageViewState extends State<MobileOrderPageView> {
       children: [
         SizedBox(height: 15),
         WormIndicator(
-          length: 3,
+          length: widget.itemsOffered != null ? widget.itemsOffered : 3,
           controller: widget.controller,
           shape: Shape(
               width: isLargePhone ? 135 : 100,
@@ -221,10 +428,13 @@ class _MobileOrderPageViewState extends State<MobileOrderPageView> {
             child: PageView(
           controller: widget.controller,
           children: [
+            widget.offeringItem1 == false ? Container(): 
             MobileItemOne(
                 widget.mobileOrderMenu['item1'], widget.userId, widget.postId),
+           widget.offeringItem2 == false ? Container():
             MobileItemTwo(
                 widget.mobileOrderMenu['item2'], widget.userId, widget.postId),
+           widget.offeringItem3 == false ? Container():
             MobileItemThree(
                 widget.mobileOrderMenu['item3'], widget.userId, widget.postId),
           ],
@@ -270,8 +480,8 @@ class MobileItemOne extends StatelessWidget {
                                       fontSize: 25,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.blue[900]),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               )
                             : Text('Add an item',
@@ -428,8 +638,8 @@ class MobileItemTwo extends StatelessWidget {
                                       fontSize: 25,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.pink[900]),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               )
                             : Text('Margarita',
@@ -583,8 +793,8 @@ class MobileItemThree extends StatelessWidget {
                                       fontSize: 25,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.orange[900]),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               )
                             : Text('Item three',
@@ -1172,8 +1382,8 @@ class _BottomSheetBuyState extends State<BottomSheetBuy> {
                                     ? Colors.pink[900]
                                     : Colors.orange[900],
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Padding(

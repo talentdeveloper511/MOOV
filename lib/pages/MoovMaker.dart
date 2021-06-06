@@ -890,59 +890,111 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                   ),
                 ),
                 currentUser.mobileOrderMenu != null &&
-                        currentUser.mobileOrderMenu.isNotEmpty
+                        currentUser.mobileOrderMenu['item1'].isNotEmpty
                     ? Stack(
                         children: [
                           Container(
-                            decoration: BoxDecoration(border: Border.all()),
+                            height: 104,
+                            width: MediaQuery.of(context).size.width,
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 8.0, right: 8, top: 25, bottom: 10),
+                                  left: 0.0, right: 0, top: 37),
                               child: Row(
                                 children: [
                                   currentUser
                                           .mobileOrderMenu['item1'].isNotEmpty
-                                      ? Expanded(
-                                          child: CheckboxListTile(
-                                              title: Text(
-                                                currentUser.mobileOrderMenu[
-                                                    'item1']['name'],
-                                                maxLines: 2,
+                                      ? Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .333,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 30,
+                                                child: Checkbox(
+                                                    value: _item1,
+                                                    onChanged: (bool value) =>
+                                                        setState(() =>
+                                                            _item1 = value)),
                                               ),
-                                              value: _item1,
-                                              onChanged: (bool value) =>
-                                                  setState(
-                                                      () => _item1 = value)),
+                                              SizedBox(
+                                                height: 34,
+                                                child: Text(
+                                                    currentUser.mobileOrderMenu[
+                                                        'item1']['name'],
+                                                    style:
+                                                        TextStyle(fontSize: 14),
+                                                    maxLines: 2),
+                                              ),
+                                            ],
+                                          ),
                                         )
                                       : Container(),
                                   currentUser
                                           .mobileOrderMenu['item2'].isNotEmpty
-                                      ? Expanded(
-                                          child: CheckboxListTile(
-                                              title: Text(
-                                                currentUser.mobileOrderMenu[
-                                                    'item2']['name'],
-                                                maxLines: 2,
+                                      ? Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .333,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 29,
+                                                child: Checkbox(
+                                                    value: _item2,
+                                                    onChanged: (bool value) =>
+                                                        setState(() =>
+                                                            _item2 = value)),
                                               ),
-                                              value: _item2,
-                                              onChanged: (bool value) =>
-                                                  setState(
-                                                      () => _item2 = value)),
+                                              SizedBox(
+                                                height: 34,
+                                                child: Text(
+                                                    currentUser.mobileOrderMenu[
+                                                        'item2']['name'],
+                                                    style:
+                                                        TextStyle(fontSize: 14),
+                                                    maxLines: 2),
+                                              ),
+                                            ],
+                                          ),
                                         )
                                       : Container(),
                                   currentUser
                                           .mobileOrderMenu['item3'].isNotEmpty
-                                      ? Expanded(
-                                          child: CheckboxListTile(
-                                              title: Text(
-                                                currentUser.mobileOrderMenu[
-                                                    'item3']['name'],
-                                                maxLines: 2,
+                                      ? Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .333,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 30,
+                                                child: Checkbox(
+                                                    value: _item3,
+                                                    onChanged: (bool value) =>
+                                                        setState(() =>
+                                                            _item3 = value)),
                                               ),
-                                              value: _item3,
-                                              onChanged: (bool value) =>
-                                                  setState(
-                                                      () => _item3 = value)),
+                                              SizedBox(
+                                                height: 34,
+                                                child: Text(
+                                                    currentUser.mobileOrderMenu[
+                                                        'item3']['name'],
+                                                    style:
+                                                        TextStyle(fontSize: 14),
+                                                    maxLines: 2),
+                                              ),
+                                            ],
+                                          ),
                                         )
                                       : Container()
                                 ],
@@ -1768,16 +1820,16 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                             //mobile ordering menu
                             if (currentUser.mobileOrderMenu != null) {
                               if (currentUser
-                                  .mobileOrderMenu['item1'].isEmpty) {
-                                _item1 = null;
+                                  .mobileOrderMenu['item1'].isEmpty || !_item1) {
+                                _item1 = false;
                               }
                               if (currentUser
-                                  .mobileOrderMenu['item2'].isEmpty) {
-                                _item2 = null;
+                                  .mobileOrderMenu['item2'].isEmpty|| !_item2) {
+                                _item2 = false;
                               }
                               if (currentUser
-                                  .mobileOrderMenu['item3'].isEmpty) {
-                                _item3 = null;
+                                  .mobileOrderMenu['item3'].isEmpty|| !_item3) {
+                                _item3 = false;
                               }
                             }
 
