@@ -46,7 +46,6 @@ dependencies:
 #  firebase_auth: ^0.18.2
   google_sign_in: ^4.4.4
   permission_handler: ^5.0.0
-  contacts_service: ^0.4.6
   flutter_sms: ^2.0.0
   firebase_analytics: ^6.0.0
   flutter_form_builder: ^3.7.2

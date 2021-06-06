@@ -31,9 +31,9 @@ class FriendFinder extends StatefulWidget {
 
 class _FriendFinderState extends State<FriendFinder>
     with AutomaticKeepAliveClientMixin {
-      
   Future request() async => await Future.delayed(
-      const Duration(milliseconds: 500), () => usersRef.doc(currentUser.id).get());
+      const Duration(milliseconds: 500),
+      () => usersRef.doc(currentUser.id).get());
   int todayOnly = 0;
   int tomorrowOnly = 0;
 
@@ -136,7 +136,8 @@ class _FriendFinderState extends State<FriendFinder>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0, top: 20, right: 5),
+                    padding:
+                        const EdgeInsets.only(bottom: 20.0, top: 20, right: 5),
                     child: todayOnly == 0
                         ? RaisedButton(
                             onPressed: () {
@@ -354,7 +355,6 @@ class _FriendFinderState extends State<FriendFinder>
           ? FutureBuilder(
               future: request(),
               builder: (context, snapshot) {
-
                 bool isLargePhone = Screen.diagonal(context) > 766;
 
                 if (!snapshot.hasData) return CircularProgressIndicator();
@@ -384,7 +384,17 @@ class _FriendFinderState extends State<FriendFinder>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                              padding: isLargePhone ? const EdgeInsets.only(top: 50.0, left: 50, right: 50, bottom: 10):const EdgeInsets.only(top: 10.0, left: 50, right: 50, bottom: 0),
+                              padding: isLargePhone
+                                  ? const EdgeInsets.only(
+                                      top: 50.0,
+                                      left: 50,
+                                      right: 50,
+                                      bottom: 10)
+                                  : const EdgeInsets.only(
+                                      top: 10.0,
+                                      left: 50,
+                                      right: 50,
+                                      bottom: 0),
                               child: RichText(
                                   textAlign: TextAlign.center,
                                   text: TextSpan(
@@ -412,17 +422,17 @@ class _FriendFinderState extends State<FriendFinder>
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        SearchBarWithHeader()),
+                                        SearchBar(fromFriendFinder: true)),
                                 (Route<dynamic> route) => false,
                               );
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Card(
- elevation: 20,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                                              child: Container(
-                                  
+                                elevation: 20,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(
                                     height: 45,
                                     width: 150,
                                     padding: EdgeInsets.all(1),
