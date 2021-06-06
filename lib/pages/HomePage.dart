@@ -378,27 +378,23 @@ class _HomePageState extends State<HomePage>
                                                   alignment: Alignment.center,
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => WrapExample()),
-          );
-                                                      // showDialog(
-                                                      //     context: context,
-                                                      //     builder: (_) =>
-                                                      //         CupertinoAlertDialog(
-                                                      //           title: Text(
-                                                      //               "Your MOOV."),
-                                                      //           content:
-                                                      //               Padding(
-                                                      //             padding: const EdgeInsets
-                                                      //                     .only(
-                                                      //                 top: 8.0),
-                                                      //             child: Text(
-                                                      //                 "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
-                                                      //           ),
-                                                      //         ),
-                                                      //     barrierDismissible:
-                                                      //         true);
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (_) =>
+                                                              CupertinoAlertDialog(
+                                                                title: Text(
+                                                                    "Your MOOV."),
+                                                                content:
+                                                                    Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      top: 8.0),
+                                                                  child: Text(
+                                                                      "Do you have the MOOV of the Day/Night? Email admin@whatsthemoov.com."),
+                                                                ),
+                                                              ),
+                                                          barrierDismissible:
+                                                              true);
                                                     },
                                                     child: Padding(
                                                       padding:
@@ -541,16 +537,16 @@ class _HomePageState extends State<HomePage>
                                         );
                                       },
                                     ),
-                                    /// subcategories are arranged based on 
+
+                                    /// subcategories are arranged based on
                                     /// the Tonights Vibe choice of "popular spots",
                                     /// "something new" or "relax." each choice has 3
                                     /// subcategories
                                     Subcategories(
                                         notifier: _notifier, type: "new"),
-                                  
+
                                     Subcategories(
                                         notifier: _notifier, type: "mountain"),
-                                   
                                   ]);
                                 }
                                 DocumentSnapshot course =

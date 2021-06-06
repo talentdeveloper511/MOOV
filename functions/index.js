@@ -116,6 +116,7 @@ const ALGOLIA_ADMIN_KEY = "53390b64ddeba1e1f32e81485ebf9492";
 const ALGOLIA_INDEX_NAME = "users";
 const ALGOLIA_INDEX_NAME2 = "events";
 const ALGOLIA_INDEX_NAME3 = "groups";
+const ALGOLIA_INDEX_NAME4 = "communityGroups";
 
 exports.createPost = functions.firestore
     .document("{college}/data/users/{userId}")
@@ -204,6 +205,36 @@ exports.deleteGroup = functions.firestore
       const oldID = snap.id;
       const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_KEY);
       const index = client.initIndex(ALGOLIA_INDEX_NAME3);
+      index.deleteObject(oldID);
+    });
+
+exports.createCommunityGroup = functions.firestore
+    .document("{college}/data/communityGroups/{groupId}")
+    .onCreate( async (snap, context) => {
+      const newValue = snap.data();
+      newValue.objectID = snap.id;
+      const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_KEY);
+      const index = client.initIndex(ALGOLIA_INDEX_NAME4);
+      index.saveObject(newValue);
+      console.log("Finished");
+    });
+
+exports.updateCommunityGroup = functions.firestore
+    .document("{college}/data/communityGroups/{groupId}")
+    .onUpdate( async (snap, context) => {
+      const afterUpdate = snap.after.data();
+      afterUpdate.objectID = snap.after.id;
+      const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_KEY);
+      const index = client.initIndex(ALGOLIA_INDEX_NAME4);
+      index.saveObject(afterUpdate);
+    });
+
+exports.deleteCommunityGroup = functions.firestore
+    .document("{college}/data/communityGroups/{groupId}")
+    .onDelete( async (snap, context) => {
+      const oldID = snap.id;
+      const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_KEY);
+      const index = client.initIndex(ALGOLIA_INDEX_NAME4);
       index.deleteObject(oldID);
     });
 

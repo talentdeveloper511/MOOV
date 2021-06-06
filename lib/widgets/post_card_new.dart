@@ -3,6 +3,7 @@ import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/ProfilePageWithHeader.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/widgets/progress.dart';
+import 'package:MOOV/widgets/send_moov.dart';
 import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,8 +12,12 @@ import 'package:MOOV/pages/post_detail.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/helpers/themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:intl/intl.dart';
 import 'package:MOOV/pages/home.dart';
+import 'package:page_transition/page_transition.dart';
 
 class PostOnFeedNew extends StatefulWidget {
   final ValueNotifier<double> notifier;
@@ -152,6 +157,69 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                       bottom: 10,
                       right: 22.5,
                       child: PostOwnerInfo(widget.course['userId'])),
+                  Positioned(
+                      bottom: 10,
+                      left: 24,
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                HapticFeedback.lightImpact();
+
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.bottomToTop,
+                                        child: SendMOOVSearch(
+                                          widget.course['userId'],
+                                          widget.course['image'],
+                                          widget.course['startDate'],
+                                          widget.course['postId'],
+                                          widget.course['title'],
+                                          widget.course['posterName'],
+                                        )));
+                              },
+                              child: Icon(Icons.send,
+                                  color: Colors.blue, size: 40)),
+                          FocusedMenuHolder(
+                              onPressed: () {},
+                              menuWidth:
+                                  MediaQuery.of(context).size.width * 0.50,
+                              blurSize: 5.0,
+                              menuItemExtent: 45,
+                              menuBoxDecoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15.0))),
+                              duration: Duration(milliseconds: 100),
+                              animateMenuItems: true,
+                              blurBackgroundColor: Colors.black54,
+                              openWithTap:
+                                  true, // Open Focused-Menu on Tap rather than Long Press
+                              menuOffset:
+                                  10.0, // Offset value to show menuItem from the selected item
+                              bottomOffsetHeight:
+                                  80.0, // Offset height to consider, for showing the menu item ( for Suggestions bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                              menuItems: <FocusedMenuItem>[
+                                FocusedMenuItem(
+                                    title: Text("Report MOOV"),
+                                    trailingIcon: Icon(Icons.report, color: Colors.red),
+                                    onPressed: () {
+                                      FirebaseFirestore.instance
+                                          .collection('notreDame')
+                                          .doc('data')
+                                          .collection('admin')
+                                          .doc(widget.course['postId'])
+                                          .set({
+                                        "reported": FieldValue.arrayUnion(
+                                            [currentUser.id])
+                                      }, SetOptions(merge: true));
+                                    }),
+                              ],
+                              child:
+                                  Icon(Icons.flag, color: Colors.red, size: 40))
+                        ],
+                      )),
                   isToday == true
                       ? Positioned(
                           top: 5,

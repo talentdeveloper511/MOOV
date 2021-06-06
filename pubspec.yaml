@@ -1,3 +1,4 @@
+
 name: MOOV
 description: A game changing app.
 
@@ -45,7 +46,6 @@ dependencies:
 #  firebase_auth: ^0.18.2
   google_sign_in: ^4.4.4
   permission_handler: ^5.0.0
-  contacts_service: ^0.4.6
   flutter_sms: ^2.0.0
   firebase_analytics: ^6.0.0
   flutter_form_builder: ^3.7.2
@@ -54,7 +54,6 @@ dependencies:
 #  get_it: ^4.0.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
   path_provider: ^1.3.0
   provider: ^4.3.2
   timeago: ^2.0.17
@@ -107,6 +106,18 @@ dependencies:
   numberpicker: ^2.1.1
   bouncing_widget: ^2.0.0
   reorderables: ^0.4.1
+  # flutter_iconpicker: ^1.0.0
+  icon_picker: ^2.0.0
+  flutter_iconpicker: ^2.0.3
+  cupertino_icons: ^1.0.2
+  font_awesome_flutter: ^8.12.0
+
+
+dependency_overrides:
+
+
+
+
 
 
 

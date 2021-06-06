@@ -1808,6 +1808,8 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                       address: currentUser.dorm,
                                       startDate: currentValue,
                                       unix: currentValue.millisecondsSinceEpoch,
+                                      startDateSimpleString: DateFormat('yMd')
+                                          .format(currentValue),
                                       statuses: inviteesNameList,
                                       maxOccupancy: maxOccupancyInt,
                                       paymentAmount: paymentAmountInt,
@@ -1829,6 +1831,8 @@ class _MoovMakerFormState extends State<MoovMakerForm>
                                       description: descriptionController.text,
                                       address: addressController.text,
                                       startDate: currentValue,
+                                      startDateSimpleString: DateFormat('yMd')
+                                          .format(currentValue),
                                       clubId: clubNameMap[clubPostValue],
                                       unix: currentValue.millisecondsSinceEpoch,
                                       statuses: inviteesNameList,

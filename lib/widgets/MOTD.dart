@@ -269,6 +269,7 @@ class BiteSizePostUI extends StatelessWidget {
   Widget build(BuildContext context) {
     String title = course['title'];
     String pic = course['image'];
+    int goingCount = course['goingCount'];
     bool isTablet = false;
     if (Device.get().isTablet) {
       isTablet = true;
@@ -280,8 +281,8 @@ class BiteSizePostUI extends StatelessWidget {
       // width: width * 0.8,
       child: Padding(
         padding: const EdgeInsets.all(8),
-        child: Column(
-          children: <Widget>[
+        child: Stack(
+          children: [
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -363,6 +364,18 @@ class BiteSizePostUI extends StatelessWidget {
                 ),
               ),
             ),
+            goingCount > 0
+                ? Positioned(
+                    bottom: 5,
+                    right: 5,
+                    child: Row(
+                      children: [
+                        Text(goingCount.toString(),
+                            style: TextStyle(color: Colors.green)),
+                        Icon(Icons.directions_run, color: Colors.green),
+                      ],
+                    ))
+                : Container()
           ],
         ),
       ),

@@ -65,7 +65,8 @@ class MOOV extends StatelessWidget {
                 .copyWith(brightness: Brightness.dark),
             scaffoldBackgroundColor: CupertinoColors.lightBackgroundGray,
             dialogBackgroundColor: Color.fromRGBO(2, 43, 91, 1.0),
-            primarySwatch: Colors.grey,
+            primarySwatch: Colors.blue,
+            dialogTheme: DialogTheme(contentTextStyle: TextStyle(color: Colors.white), titleTextStyle: TextStyle(color: Colors.white)),
             cardColor: Colors.white70,
             accentColor: Color.fromRGBO(220, 180, 57, 1.0),
             textTheme: TextTheme(

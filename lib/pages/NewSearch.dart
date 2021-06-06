@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:MOOV/helpers/common.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/MessagesHub.dart';
 import 'package:MOOV/pages/OtherGroup.dart';
@@ -8,7 +9,8 @@ import 'package:MOOV/pages/group_detail.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/pages/other_profile.dart';
 import 'package:MOOV/pages/post_detail.dart';
-import 'package:MOOV/services/database.dart';
+import 'package:MOOV/searchWidgets/interestCommunitiesDashboard.dart';
+import 'package:MOOV/searchWidgets/interestCommunityDetail.dart';
 import 'package:MOOV/utils/themes_styles.dart';
 import 'package:MOOV/widgets/progress.dart';
 import 'package:MOOV/widgets/trending_segment.dart';
@@ -17,6 +19,7 @@ import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AlgoliaApplication {
@@ -28,7 +31,8 @@ class AlgoliaApplication {
 }
 
 class SearchBar extends StatefulWidget {
-  SearchBar({Key key}) : super(key: key);
+  final bool fromFriendFinder;
+  SearchBar({this.fromFriendFinder = false});
 
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -36,8 +40,8 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar>
     with SingleTickerProviderStateMixin {
-  GlobalKey _searchKey = GlobalKey();
   bool showTabs = false;
+  bool _showTrending = true;
   // TabController to control and switch tabs
   TabController _tabController;
   int _currentIndex = 0;
@@ -53,10 +57,18 @@ class _SearchBarState extends State<SearchBar>
   final textFieldFocusNode = FocusNode();
   void _onFocusChange() {
     if (textFieldFocusNode.hasFocus) {
+      print("YR");
+      _showTrending = false;
       setState(() {
         showTabs = true;
       });
+      // if (dismissKeyboard) {
+      //   textFieldFocusNode.unfocus();
+      // }
     } else {
+      print("XX");
+
+      // dismissKeyboard = false;
       setState(() {
         showTabs = false;
       });
@@ -89,6 +101,15 @@ class _SearchBarState extends State<SearchBar>
     return results;
   }
 
+  Future<List<AlgoliaObjectSnapshot>> _communityGroupSearch(
+      String input) async {
+    AlgoliaQuery query =
+        _algoliaApp.instance.index("communityGroups").search(input);
+    AlgoliaQuerySnapshot querySnap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> results = querySnap.hits;
+    return results;
+  }
+
   clearSearch() {
     searchController.clear();
 
@@ -102,13 +123,13 @@ class _SearchBarState extends State<SearchBar>
     super.initState();
     textFieldFocusNode.addListener(_onFocusChange);
 
-    _tabController = new TabController(vsync: this, length: 3, initialIndex: 0);
-    _tabController.animation
-      ..addListener(() {
-        setState(() {
-          _currentIndex = (_tabController.animation.value).round();
-        });
-      });
+    _tabController = TabController(vsync: this, length: 3, initialIndex: 0);
+    // _tabController.animation
+    //   ..addListener(() {
+    //     setState(() {
+    //       _currentIndex = (_tabController.animation.value).round();
+    //     });
+    //   });
   }
 
   @override
@@ -133,417 +154,431 @@ class _SearchBarState extends State<SearchBar>
   //   //Do something with searchText. Note: This is not a result.
   // }
 
-  Future<List<String>> _getRecentSearchesLike(String query) async {
-    final pref = await SharedPreferences.getInstance();
-    final allSearches = pref.getStringList("recentSearches");
-    return allSearches.where((search) => search.startsWith(query)).toList();
-  }
+  // Future<List<String>> _getRecentSearchesLike(String query) async {
+  //   final pref = await SharedPreferences.getInstance();
+  //   final allSearches = pref.getStringList("recentSearches");
+  //   return allSearches.where((search) => search.startsWith(query)).toList();
+  // }
 
-  Future<void> _saveToRecentSearches(String searchText) async {
-    if (searchText == null) return; //Should not be null
-    final pref = await SharedPreferences.getInstance();
+  // Future<void> _saveToRecentSearches(String searchText) async {
+  //   if (searchText == null) return; //Should not be null
+  //   final pref = await SharedPreferences.getInstance();
 
-    //Use `Set` to avoid duplication of recentSearches
-    Set<String> allSearches =
-        pref.getStringList("recentSearches")?.toSet() ?? {};
+  //   //Use `Set` to avoid duplication of recentSearches
+  //   Set<String> allSearches =
+  //       pref.getStringList("recentSearches")?.toSet() ?? {};
 
-    //Place it at first in the set
-    allSearches = {searchText, ...allSearches};
-    pref.setStringList("recentSearches", allSearches.toList());
-  }
+  //   //Place it at first in the set
+  //   allSearches = {searchText, ...allSearches};
+  //   pref.setStringList("recentSearches", allSearches.toList());
+  // }
+
+  // bool dismissKeyboard = false;
+  // void _update(bool dismiss) {
+  //   setState(() => dismissKeyboard = dismiss);
+  // }
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
         child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              toolbarHeight: showTabs == true ? 96 : 50,
-              bottom: PreferredSize(
-                  preferredSize: null,
-                  child: Column(children: <Widget>[
-                    TextField(
-                        style: TextStyle(fontSize: 20),
-                        controller: searchController,
-                        onChanged: (val) {
-                          setState(() {
-                            _searchTerm = val;
-                          });
-                        },
-                        // Set Focus Node
-                        focusNode: textFieldFocusNode,
-                        decoration: InputDecoration(
-                          labelStyle: TextStyle(fontSize: 20),
-                          border: InputBorder.none,
-                          hintText: 'Search',
-                          hintStyle:
-                              TextStyle(color: Colors.grey, fontSize: 20),
-                          prefixIcon:
-                              const Icon(Icons.search, color: Colors.black),
-                          suffixIcon: GestureDetector(
-                              onTap: () {
-                                clearSearch();
-                                // Unfocus all focus nodes
-                                textFieldFocusNode.unfocus();
-
-                                // Disable text field's focus node request
-                                textFieldFocusNode.canRequestFocus = false;
-
-                                //Enable the text field's focus node request after some delay
-                                Future.delayed(Duration(milliseconds: 10), () {
-                                  textFieldFocusNode.canRequestFocus = true;
+            appBar: widget.fromFriendFinder
+                ? CustomAppBar()
+                : AppBar(
+                    backgroundColor: Colors.white,
+                    toolbarHeight: showTabs == true ? 96 : 50,
+                    bottom: PreferredSize(
+                        preferredSize: null,
+                        child: Column(children: <Widget>[
+                          TextField(
+                              style: TextStyle(fontSize: 20),
+                              controller: searchController,
+                              onChanged: (val) {
+                                setState(() {
+                                  _searchTerm = val;
                                 });
                               },
-                              child: IconButton(
-                                  onPressed: null,
-                                  icon: Icon(
-                                    Icons.clear,
-                                    color: Colors.black,
-                                  ))),
-                        )),
-                    showTabs == true
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              TextButton(
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateColor.resolveWith(
-                                      (states) => Colors.transparent),
-                                ),
-                                onPressed: () {
-                                  _tabController.animateTo(0);
-                                  setState(() {
-                                    _currentIndex = 0;
-                                  });
-                                },
-                                child: _currentIndex == 0
-                                    ? GradientText(
-                                        "    MOOVs",
-                                        16.5,
-                                        gradient: LinearGradient(colors: [
-                                          Colors.blue.shade400,
-                                          Colors.blue.shade900,
-                                        ]),
-                                      )
-                                    : Text(
-                                        "    MOOVs",
-                                        style: TextStyle(
-                                            fontSize: 16.5,
-                                            color: Colors.black),
-                                      ),
-                              ),
-                              TextButton(
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateColor.resolveWith(
-                                      (states) => Colors.transparent),
-                                ),
-                                onPressed: () {
-                                  _tabController.animateTo(1);
-                                  setState(() {
-                                    _currentIndex = (_tabController
-                                            .animation.value)
-                                        .round(); //_tabController.animation.value returns double
+                              // Set Focus Node
+                              focusNode: textFieldFocusNode,
+                              decoration: InputDecoration(
+                                labelStyle: TextStyle(fontSize: 20),
+                                border: InputBorder.none,
+                                hintText: 'Search',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 20),
+                                prefixIcon: const Icon(Icons.search,
+                                    color: Colors.black),
+                                suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      // setState(() {
+                                      //   dismissKeyboard = false;
+                                      // });
+                                      _showTrending = true;
 
-                                    _currentIndex = 1;
-                                  });
-                                },
-                                child: _currentIndex == 1
-                                    ? GradientText(
-                                        "   People ",
-                                        16.5,
-                                        gradient: LinearGradient(colors: [
-                                          Colors.blue.shade400,
-                                          Colors.blue.shade900,
-                                        ]),
-                                      )
-                                    : Text(
-                                        "   People ",
-                                        style: TextStyle(
-                                            fontSize: 16.5,
-                                            color: Colors.black),
+                                      clearSearch();
+                                      // Unfocus all focus nodes
+                                      textFieldFocusNode.unfocus();
+
+                                      // Disable text field's focus node request
+                                      textFieldFocusNode.canRequestFocus =
+                                          false;
+
+                                      //Enable the text field's focus node request after some delay
+                                      Future.delayed(Duration(milliseconds: 10),
+                                          () {
+                                        textFieldFocusNode.canRequestFocus =
+                                            true;
+                                      });
+                                    },
+                                    child: IconButton(
+                                        onPressed: null,
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: Colors.black,
+                                        ))),
+                              )),
+                          showTabs == true
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    TextButton(
+                                      style: ButtonStyle(
+                                        overlayColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => Colors.transparent),
                                       ),
-                              ),
-                              TextButton(
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateColor.resolveWith(
-                                      (states) => Colors.transparent),
-                                ),
-                                onPressed: () {
-                                  _tabController.animateTo(2);
-                                  setState(() {
-                                    _currentIndex = 2;
-                                  });
-                                },
-                                child: _currentIndex == 2
-                                    ? GradientText(
-                                        "Friend Groups",
-                                        16.5,
-                                        gradient: LinearGradient(colors: [
-                                          Colors.blue.shade400,
-                                          Colors.blue.shade900,
-                                        ]),
-                                      )
-                                    : Text(
-                                        "Friend Groups",
-                                        style: TextStyle(
-                                            fontSize: 16.5,
-                                            color: Colors.black),
+                                      onPressed: () {
+                                        _tabController.animateTo(0);
+                                        setState(() {
+                                          _currentIndex = 0;
+                                        });
+                                      },
+                                      child: _currentIndex == 0
+                                          ? GradientText(
+                                              "    MOOVs",
+                                              16.5,
+                                              gradient: LinearGradient(colors: [
+                                                Colors.blue.shade400,
+                                                Colors.blue.shade900,
+                                              ]),
+                                            )
+                                          : Text(
+                                              "    MOOVs",
+                                              style: TextStyle(
+                                                  fontSize: 16.5,
+                                                  color: Colors.black),
+                                            ),
+                                    ),
+                                    TextButton(
+                                      style: ButtonStyle(
+                                        overlayColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => Colors.transparent),
                                       ),
-                              )
-                            ],
-                          )
-                        : Container(),
-                  ])),
-            ),
+                                      onPressed: () {
+                                        _tabController.animateTo(1);
+                                        setState(() {
+                                          _currentIndex = (_tabController
+                                                  .animation.value)
+                                              .round(); //_tabController.animation.value returns double
+
+                                          _currentIndex = 1;
+                                        });
+                                      },
+                                      child: _currentIndex == 1
+                                          ? GradientText(
+                                              "   People ",
+                                              16.5,
+                                              gradient: LinearGradient(colors: [
+                                                Colors.blue.shade400,
+                                                Colors.blue.shade900,
+                                              ]),
+                                            )
+                                          : Text(
+                                              "   People ",
+                                              style: TextStyle(
+                                                  fontSize: 16.5,
+                                                  color: Colors.black),
+                                            ),
+                                    ),
+                                    TextButton(
+                                      style: ButtonStyle(
+                                        overlayColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => Colors.transparent),
+                                      ),
+                                      onPressed: () {
+                                        _tabController.animateTo(2);
+                                        setState(() {
+                                          _currentIndex = 2;
+                                        });
+                                      },
+                                      child: _currentIndex == 2
+                                          ? GradientText(
+                                              "Friend Groups",
+                                              16.5,
+                                              gradient: LinearGradient(colors: [
+                                                Colors.blue.shade400,
+                                                Colors.blue.shade900,
+                                              ]),
+                                            )
+                                          : Text(
+                                              "Friend Groups",
+                                              style: TextStyle(
+                                                  fontSize: 16.5,
+                                                  color: Colors.black),
+                                            ),
+                                    )
+                                  ],
+                                )
+                              : Container(),
+                        ])),
+                  ),
             backgroundColor: Colors.white,
             body: _searchTerm == null
-                ? TrendingSegment()
+                ? AnimatedCrossFade(
+                    duration: Duration(milliseconds: 500),
+                    crossFadeState: _showTrending
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    firstChild: Container(
+                        height: MediaQuery.of(context).size.height,
+                        child: TrendingSegment()),
+                    secondChild: Container(
+                        height: MediaQuery.of(context).size.height,
+                        child:
+                            // CommunityGroups(
+                            //     dismissKeyboardCallback: this._update)
+                            CommunityGroups()))
                 : StreamBuilder<List<AlgoliaObjectSnapshot>>(
                     stream: Stream.fromFuture(_groupSearch(_searchTerm)),
                     builder: (context, snapshot0) {
-                      // if (!snapshot.hasData)
-                      //   return Container(
-                      //       height: 4000, child: TrendingSegment());
-                      // if (snapshot.data.length == 0) {
-                      //   return Container(
-                      //       height: 4000, child: TrendingSegment());
-                      // }
-
-                      // if (_searchTerm.length <= 0) {
-                      //   return Container(
-                      //       height: 4000, child: TrendingSegment());
-                      // }
-
                       List<AlgoliaObjectSnapshot> currSearchStuff0 =
                           snapshot0.data;
-                      return Container(
-                          child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
-                              stream:
-                                  Stream.fromFuture(_userSearch(_searchTerm)),
-                              builder: (context, snapshot) {
-                                // if (!snapshot.hasData)
-                                //   return Container(
-                                //       height: 4000, child: TrendingSegment());
-                                // if (snapshot.data.length == 0) {
-                                //   return Container(
-                                //       height: 4000, child: TrendingSegment());
-                                // }
+                      return StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                          stream: Stream.fromFuture(
+                              _communityGroupSearch(_searchTerm)),
+                          builder: (context, snapshotCommunity) {
+                            if (!snapshotCommunity.hasData) {
+                              return Container();
+                            }
+                            List<AlgoliaObjectSnapshot>
+                                currSearchStuffCommunityGroup =
+                                snapshotCommunity.data;
+                            return Container(
+                                child:
+                                    StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                                        stream: Stream.fromFuture(
+                                            _userSearch(_searchTerm)),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return Container();
+                                          }
 
-                                // if (_searchTerm.length <= 0) {
-                                //   return Container(
-                                //       height: 4000, child: TrendingSegment());
-                                // }
-                                if (!snapshot.hasData) {
-                                  return circularProgress();
-                                }
+                                          List<AlgoliaObjectSnapshot>
+                                              currSearchStuff = snapshot.data;
 
-                                List<AlgoliaObjectSnapshot> currSearchStuff =
-                                    snapshot.data;
+                                          return StreamBuilder<
+                                                  List<AlgoliaObjectSnapshot>>(
+                                              stream: Stream.fromFuture(
+                                                  _moovSearch(_searchTerm)),
+                                              builder: (context, snapshot2) {
+                                                if (_searchTerm == null) {
+                                                  return linearProgress();
+                                                }
+                                                if (!snapshot2.hasData) {
+                                                  return Container();
+                                                }
 
-                                return StreamBuilder<
-                                        List<AlgoliaObjectSnapshot>>(
-                                    stream: Stream.fromFuture(
-                                        _moovSearch(_searchTerm)),
-                                    builder: (context, snapshot2) {
-                                      if (_searchTerm == null) {
-                                        return linearProgress();
-                                      }
-                                      if (!snapshot2.hasData) {
-                                        return circularProgress();
-                                      }
-                                      // switch (snapshot.connectionState) {
-                                      //   case ConnectionState.waiting:
-                                      //     return LinearProgressIndicator(
-                                      //         backgroundColor:
-                                      //             TextThemes.ndBlue,
-                                      //         valueColor:
-                                      //             new AlwaysStoppedAnimation<
-                                      //                 Color>(Colors.blue[200]));
-                                      //   default:
-                                      //     if (snapshot.hasError) {
-                                      //       return Text(
-                                      //           'Error: ${snapshot.error}');
-                                      //     } else {
-                                      // if (_searchTerm.length <= 0) {
-                                      //   return Container(
-                                      //       height: 4000, child: TrendingSegment());
-                                      // }
+                                                List<AlgoliaObjectSnapshot>
+                                                    currSearchStuff2 =
+                                                    snapshot2.data;
 
-                                      List<AlgoliaObjectSnapshot>
-                                          currSearchStuff2 = snapshot2.data;
-
-                                      return Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.90,
-                                        child: TabBarView(
-                                            controller: _tabController,
-                                            children: [
-                                              CustomScrollView(
-                                                shrinkWrap: true,
-                                                slivers: <Widget>[
-                                                  SliverList(
-                                                    delegate:
-                                                        SliverChildBuilderDelegate(
-                                                      (context, index) {
-                                                        String privacy =
-                                                            currSearchStuff2[
-                                                                        index]
-                                                                    .data[
-                                                                "privacy"];
-                                                        bool hide = false;
-                                                        if (privacy ==
-                                                                "Friends Only" ||
-                                                            privacy ==
-                                                                "Invite Only") {
-                                                          hide = true;
-                                                        }
-                                                        return _searchTerm !=
-                                                                    null &&
-                                                                hide == false
-                                                            ? DisplayMOOVResult(
-                                                                title: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "title"],
-                                                                description: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "description"],
-                                                                type: currSearchStuff2[
-                                                                        index]
-                                                                    .data["type"],
-                                                                image: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "image"],
-                                                                userId: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "userId"],
-                                                                postId: currSearchStuff2[
-                                                                            index]
-                                                                        .data[
-                                                                    "postId"],
-                                                              )
-                                                            : Container();
-                                                      },
-                                                      childCount:
-                                                          currSearchStuff2
-                                                                  .length ??
-                                                              0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              CustomScrollView(
-                                                shrinkWrap: true,
-                                                slivers: <Widget>[
-                                                  SliverList(
-                                                    delegate:
-                                                        SliverChildBuilderDelegate(
-                                                      (context, index) {
-                                                        return _searchTerm !=
-                                                                    null &&
-                                                                _currentIndex ==
-                                                                    1
-                                                            ? DisplaySearchResult(
-                                                                displayName: currSearchStuff[
-                                                                            index]
-                                                                        .data[
-                                                                    "displayName"],
-                                                                email: currSearchStuff[
-                                                                            index]
-                                                                        .data[
-                                                                    "email"],
-                                                                proPic: currSearchStuff[
-                                                                            index]
-                                                                        .data[
-                                                                    "photoUrl"],
-                                                                userId: currSearchStuff[
-                                                                        index]
-                                                                    .data["id"],
-                                                                verifiedStatus:
-                                                                    currSearchStuff[index]
-                                                                            .data[
-                                                                        "verifiedStatus"],
-                                                                isBusiness: currSearchStuff[
-                                                                            index]
-                                                                        .data[
-                                                                    'isBusiness'],
-                                                              )
-                                                            : Container();
-                                                      },
-                                                      childCount: currSearchStuff
-                                                                      .length !=
-                                                                  null &&
-                                                              _currentIndex == 0
-                                                          ? currSearchStuff
-                                                              .length
-                                                          : currSearchStuff0
-                                                                          .length !=
-                                                                      null &&
-                                                                  _currentIndex ==
-                                                                      2
-                                                              ? currSearchStuff0
-                                                                  .length
-                                                              : currSearchStuff2
-                                                                              .length !=
-                                                                          null &&
-                                                                      _currentIndex ==
-                                                                          1
-                                                                  ? currSearchStuff2
-                                                                      .length
-                                                                  : 0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              CustomScrollView(
-                                                shrinkWrap: true,
-                                                slivers: <Widget>[
-                                                  SliverList(
-                                                    delegate:
-                                                        SliverChildBuilderDelegate(
-                                                      (context, index) {
-                                                        return _searchTerm !=
-                                                                null
-                                                            ? DisplayGroupResult(
-                                                                groupName: currSearchStuff0[
-                                                                            index]
-                                                                        .data[
-                                                                    "groupName"],
-                                                                groupId: currSearchStuff0[
-                                                                            index]
-                                                                        .data[
-                                                                    "groupId"],
-                                                                groupPic: currSearchStuff0[
-                                                                            index]
-                                                                        .data[
-                                                                    "groupPic"],
-                                                                members: currSearchStuff0[
-                                                                            index]
-                                                                        .data[
-                                                                    "members"],
-                                                                sendMOOV: false,
-                                                              )
-                                                            : Container();
-                                                      },
-                                                      childCount:
-                                                          currSearchStuff0
-                                                                  .length ??
-                                                              0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ]),
-                                      );
-                                    });
-                              }));
+                                                return Container(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.90,
+                                                  child: TabBarView(
+                                                      controller:
+                                                          _tabController,
+                                                      children: [
+                                                        CustomScrollView(
+                                                          keyboardDismissBehavior:
+                                                              ScrollViewKeyboardDismissBehavior
+                                                                  .onDrag,
+                                                          shrinkWrap: true,
+                                                          slivers: <Widget>[
+                                                            SliverPadding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      left: 10,
+                                                                      top: 15,
+                                                                      right: 10,
+                                                                      bottom:
+                                                                          5),
+                                                              sliver:
+                                                                  SliverToBoxAdapter(
+                                                                child:
+                                                                    Container(
+                                                                  height: 140,
+                                                                  child: ListView
+                                                                      .builder(
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    itemCount:
+                                                                        currSearchStuffCommunityGroup
+                                                                            .length,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return (_searchTerm !=
+                                                                              null)
+                                                                          ? DisplayCommunityGroupResult(
+                                                                              groupId: currSearchStuffCommunityGroup[index].data["groupId"])
+                                                                          : Container();
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SliverList(
+                                                              delegate:
+                                                                  SliverChildBuilderDelegate(
+                                                                (context,
+                                                                    index) {
+                                                                  print(
+                                                                      _searchTerm);
+                                                                  String
+                                                                      privacy =
+                                                                      currSearchStuff2[index]
+                                                                              .data[
+                                                                          "privacy"];
+                                                                  bool hide =
+                                                                      false;
+                                                                  if (privacy ==
+                                                                          "Friends Only" ||
+                                                                      privacy ==
+                                                                          "Invite Only") {
+                                                                    hide = true;
+                                                                  }
+                                                                  return _searchTerm !=
+                                                                              null &&
+                                                                          hide ==
+                                                                              false
+                                                                      ? DisplayMOOVResult(
+                                                                          title:
+                                                                              currSearchStuff2[index].data["title"],
+                                                                          description:
+                                                                              currSearchStuff2[index].data["description"],
+                                                                          type:
+                                                                              currSearchStuff2[index].data["type"],
+                                                                          image:
+                                                                              currSearchStuff2[index].data["image"],
+                                                                          userId:
+                                                                              currSearchStuff2[index].data["userId"],
+                                                                          postId:
+                                                                              currSearchStuff2[index].data["postId"],
+                                                                        )
+                                                                      : Container();
+                                                                },
+                                                                childCount:
+                                                                    currSearchStuff2
+                                                                            .length ??
+                                                                        0,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        CustomScrollView(
+                                                          shrinkWrap: true,
+                                                          slivers: <Widget>[
+                                                            SliverList(
+                                                              delegate:
+                                                                  SliverChildBuilderDelegate(
+                                                                (context,
+                                                                    index) {
+                                                                  return _searchTerm !=
+                                                                              null &&
+                                                                          _currentIndex ==
+                                                                              1
+                                                                      ? DisplaySearchResult(
+                                                                          displayName:
+                                                                              currSearchStuff[index].data["displayName"],
+                                                                          email:
+                                                                              currSearchStuff[index].data["email"],
+                                                                          proPic:
+                                                                              currSearchStuff[index].data["photoUrl"],
+                                                                          userId:
+                                                                              currSearchStuff[index].data["id"],
+                                                                          verifiedStatus:
+                                                                              currSearchStuff[index].data["verifiedStatus"],
+                                                                          isBusiness:
+                                                                              currSearchStuff[index].data['isBusiness'],
+                                                                        )
+                                                                      : Container();
+                                                                },
+                                                                childCount: currSearchStuff.length !=
+                                                                            null &&
+                                                                        _currentIndex ==
+                                                                            0
+                                                                    ? currSearchStuff
+                                                                        .length
+                                                                    : currSearchStuff0.length !=
+                                                                                null &&
+                                                                            _currentIndex ==
+                                                                                2
+                                                                        ? currSearchStuff0
+                                                                            .length
+                                                                        : currSearchStuff2.length != null &&
+                                                                                _currentIndex == 1
+                                                                            ? currSearchStuff2.length
+                                                                            : 0,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        CustomScrollView(
+                                                          shrinkWrap: true,
+                                                          slivers: <Widget>[
+                                                            SliverList(
+                                                              delegate:
+                                                                  SliverChildBuilderDelegate(
+                                                                (context,
+                                                                    index) {
+                                                                  return _searchTerm !=
+                                                                              null &&
+                                                                          _currentIndex ==
+                                                                              2
+                                                                      ? DisplayGroupResult(
+                                                                          groupName:
+                                                                              currSearchStuff0[index].data["groupName"],
+                                                                          groupId:
+                                                                              currSearchStuff0[index].data["groupId"],
+                                                                          groupPic:
+                                                                              currSearchStuff0[index].data["groupPic"],
+                                                                          members:
+                                                                              currSearchStuff0[index].data["members"],
+                                                                          sendMOOV:
+                                                                              false,
+                                                                        )
+                                                                      : Container();
+                                                                },
+                                                                childCount:
+                                                                    currSearchStuff0
+                                                                            .length ??
+                                                                        0,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ]),
+                                                );
+                                              });
+                                        }));
+                          });
                     })));
   }
 }
@@ -653,44 +688,20 @@ class DisplayMOOVResult extends StatelessWidget {
   final String userId;
   final String postId;
   final int verifiedStatus;
-  var startDate;
 
-  DisplayMOOVResult(
-      {Key key,
-      this.description,
-      this.title,
-      this.type,
-      this.image,
-      this.userId,
-      this.postId,
-      this.verifiedStatus,
-      this.startDate})
-      : super(key: key);
+  DisplayMOOVResult({
+    Key key,
+    this.description,
+    this.title,
+    this.type,
+    this.image,
+    this.userId,
+    this.postId,
+    this.verifiedStatus,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    // bool isToday = false;
-    // bool isTomorrow = false;
-    // bool isNextWeek = false;
-    // final week = DateTime(now.year, now.month, now.day + 6);
-
-    // final today = DateTime(now.year, now.month, now.day);
-    // final yesterday = DateTime(now.year, now.month, now.day - 1);
-    // final tomorrow = DateTime(now.year, now.month, now.day + 1);
-
-    // final dateToCheck = startDate.toDate();
-    // final aDate =
-    //     DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
-    // if (aDate.isAfter(week)) {
-    //   isNextWeek = true;
-    // }
-
-    // if (aDate == today) {
-    //   isToday = true;
-    // } else if (aDate == tomorrow) {
-    //   isTomorrow = true;
-    // }
     bool isLargePhone = Screen.diagonal(context) > 766;
 
     return StreamBuilder(
@@ -1048,16 +1059,75 @@ class DisplayGroupResult extends StatelessWidget {
   }
 }
 
+class DisplayCommunityGroupResult extends StatelessWidget {
+  final String groupId;
+
+  DisplayCommunityGroupResult({this.groupId});
+
+  @override
+  Widget build(BuildContext context) {
+    // bool isLargePhone = Screen.diagonal(context) > 766;
+
+    return StreamBuilder(
+        stream: communityGroupsRef.doc(groupId).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return Container();
+          String pic = snapshot.data['groupPic'];
+          String name = snapshot.data['groupName'];
+
+          return Container(
+            width: MediaQuery.of(context).size.width * .3,
+            height: 140,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue.withOpacity(0.25),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+              image: DecorationImage(
+                  image: NetworkImage(pic),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(Colors.grey, BlendMode.darken)),
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  name,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17),
+                ),
+                SizedBox(height: 10),
+                Icon(
+                    IconData(snapshot.data['groupIcon']['codePoint'],
+                        fontFamily: snapshot.data['groupIcon']['fontFamily'],
+                        fontPackage: "font_awesome_flutter"),
+                    color: Colors.white,
+                    size: 40),
+                // Icon(Icons.face, size: 40, color: Colors.white),
+              ],
+            ),
+          );
+        });
+  }
+}
+
 class GradientText extends StatelessWidget {
-  GradientText(
-    this.text,
-    this.size, {
-    @required this.gradient,
-  });
+  GradientText(this.text, this.size,
+      {@required this.gradient, this.montserrat = false});
 
   final String text;
   final double size;
   final Gradient gradient;
+  final bool montserrat;
 
   @override
   Widget build(BuildContext context) {
@@ -1070,478 +1140,16 @@ class GradientText extends StatelessWidget {
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
         maxLines: 2,
-        style: TextStyle(
-          // The color must be set to white for this to work
-          color: Colors.white,
-          fontSize: size,
-        ),
+        style: montserrat
+            ? GoogleFonts.montserrat(
+                color: Colors.white, fontSize: 17, fontWeight: FontWeight.w600)
+            : TextStyle(
+                // The color must be set to white for this to work
+                color: Colors.white,
+                fontSize: size,
+              ),
       ),
     );
-  }
-}
-
-class SearchBarWithHeader extends StatefulWidget {
-  SearchBarWithHeader({Key key}) : super(key: key);
-
-  @override
-  _SearchBarWithHeaderState createState() => _SearchBarWithHeaderState();
-}
-
-class _SearchBarWithHeaderState extends State<SearchBarWithHeader>
-    with SingleTickerProviderStateMixin {
-  // TabController to control and switch tabs
-  TabController _tabController;
-  int _currentIndex = 0;
-  Map<int, Widget> map =
-      new Map(); // Cupertino Segmented Control takes children in form of Map.
-  List<Widget>
-      childWidgets; //The Widgets that has to be loaded when a tab is selected.
-  int selectedIndex = 0;
-
-  Widget getChildWidget() => childWidgets[selectedIndex];
-
-  final TextEditingController searchController = TextEditingController();
-  final textFieldFocusNode = FocusNode();
-
-  final Algolia _algoliaApp = AlgoliaApplication.algolia;
-  String _searchTerm;
-
-  Future<List<AlgoliaObjectSnapshot>> _groupSearch(String input) async {
-    AlgoliaQuery query = _algoliaApp.instance.index("groups").search(input);
-    AlgoliaQuerySnapshot querySnap = await query.getObjects();
-    List<AlgoliaObjectSnapshot> results = querySnap.hits;
-    return results;
-  }
-
-  Future<List<AlgoliaObjectSnapshot>> _userSearch(String input) async {
-    AlgoliaQuery query = _algoliaApp.instance.index("users").search(input);
-    AlgoliaQuerySnapshot querySnap = await query.getObjects();
-    List<AlgoliaObjectSnapshot> results = querySnap.hits;
-    return results;
-  }
-
-  Future<List<AlgoliaObjectSnapshot>> _moovSearch(String input) async {
-    AlgoliaQuery query = _algoliaApp.instance.index("events").search(input);
-    AlgoliaQuerySnapshot querySnap = await query.getObjects();
-    List<AlgoliaObjectSnapshot> results = querySnap.hits;
-    return results;
-  }
-
-  clearSearch() {
-    searchController.clear();
-
-    setState(() {
-      _searchTerm = null;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: 3);
-    _tabController.animation
-      ..addListener(() {
-        setState(() {
-          _currentIndex = (_tabController.animation.value).round();
-        });
-      });
-
-    // Simple declarations
-    TextEditingController searchController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-
-    searchController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => Home()),
-                (Route<dynamic> route) => false,
-              );
-            },
-          ),
-          backgroundColor: TextThemes.ndBlue,
-          flexibleSpace: FlexibleSpaceBar(
-            titlePadding: EdgeInsets.all(5),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  child: Image.asset(
-                    'lib/assets/moovblue.png',
-                    fit: BoxFit.cover,
-                    height: 50.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        body: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              toolbarHeight: 96,
-              bottom: PreferredSize(
-                  preferredSize: null,
-                  child: Column(children: <Widget>[
-                    TextField(
-                        style: TextStyle(fontSize: 20),
-                        controller: searchController,
-                        onChanged: (val) {
-                          setState(() {
-                            _searchTerm = val;
-                          });
-                        },
-                        // Set Focus Node
-                        focusNode: textFieldFocusNode,
-                        decoration: InputDecoration(
-                          labelStyle: TextStyle(fontSize: 20),
-                          border: InputBorder.none,
-                          hintText: 'Search',
-                          hintStyle:
-                              TextStyle(color: Colors.grey, fontSize: 20),
-                          prefixIcon:
-                              const Icon(Icons.search, color: Colors.black),
-                          suffixIcon: GestureDetector(
-                              onTap: () {
-                                clearSearch();
-                                // Unfocus all focus nodes
-                                textFieldFocusNode.unfocus();
-
-                                // Disable text field's focus node request
-                                textFieldFocusNode.canRequestFocus = false;
-
-                                //Enable the text field's focus node request after some delay
-                                Future.delayed(Duration(milliseconds: 10), () {
-                                  textFieldFocusNode.canRequestFocus = true;
-                                });
-                              },
-                              child: IconButton(
-                                  onPressed: null,
-                                  icon: Icon(
-                                    Icons.clear,
-                                    color: Colors.black,
-                                  ))),
-                        )),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.white),
-                          onPressed: () {
-                            _tabController.animateTo(0);
-                            setState(() {
-                              _currentIndex = (_tabController.animation.value)
-                                  .round(); //_tabController.animation.value returns double
-
-                              _currentIndex = 0;
-                            });
-                          },
-                          child: _currentIndex == 0
-                              ? GradientText(
-                                  "     People ",
-                                  16.5,
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "     People ",
-                                ),
-                        ),
-
-                        // Sign Up Button
-                        FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(1);
-                            setState(() {
-                              _currentIndex = 1;
-                            });
-                          },
-                          child: _currentIndex == 1
-                              ? GradientText(
-                                  "    MOOVs",
-                                  16.5,
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "    MOOVs",
-                                  style: TextStyle(fontSize: 16.5),
-                                ),
-                        ),
-                        FlatButton(
-                          splashColor: Colors.white,
-                          color: Colors.white,
-                          onPressed: () {
-                            _tabController.animateTo(2);
-                            setState(() {
-                              _currentIndex = 2;
-                            });
-                          },
-                          child: _currentIndex == 2
-                              ? GradientText(
-                                  "Friend Groups",
-                                  16.5,
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade400,
-                                    Colors.blue.shade900,
-                                  ]),
-                                )
-                              : Text(
-                                  "Friend Groups",
-                                  style: TextStyle(fontSize: 16.5),
-                                ),
-                        )
-                      ],
-                    )
-                  ])),
-            ),
-            backgroundColor: Colors.white,
-            body: _searchTerm == null
-                ? TrendingSegment()
-                : StreamBuilder<List<AlgoliaObjectSnapshot>>(
-                    stream: Stream.fromFuture(_moovSearch(_searchTerm)),
-                    builder: (context, snapshot0) {
-                      // if (!snapshot.hasData)
-                      //   return Container(
-                      //       height: 4000, child: TrendingSegment());
-                      // if (snapshot.data.length == 0) {
-                      //   return Container(
-                      //       height: 4000, child: TrendingSegment());
-                      // }
-
-                      // if (_searchTerm.length <= 0) {
-                      //   return Container(
-                      //       height: 4000, child: TrendingSegment());
-                      // }
-
-                      List<AlgoliaObjectSnapshot> currSearchStuff0 =
-                          snapshot0.data;
-                      return Container(
-                          child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
-                              stream:
-                                  Stream.fromFuture(_userSearch(_searchTerm)),
-                              builder: (context, snapshot) {
-                                // if (!snapshot.hasData)
-                                //   return Container(
-                                //       height: 4000, child: TrendingSegment());
-                                // if (snapshot.data.length == 0) {
-                                //   return Container(
-                                //       height: 4000, child: TrendingSegment());
-                                // }
-
-                                // if (_searchTerm.length <= 0) {
-                                //   return Container(
-                                //       height: 4000, child: TrendingSegment());
-                                // }
-
-                                List<AlgoliaObjectSnapshot> currSearchStuff =
-                                    snapshot.data;
-
-                                return StreamBuilder<
-                                        List<AlgoliaObjectSnapshot>>(
-                                    stream: Stream.fromFuture(
-                                        _moovSearch(_searchTerm)),
-                                    builder: (context, snapshot2) {
-                                      if (_searchTerm == null) {
-                                        return Container(
-                                            height: 4000,
-                                            child: TrendingSegment());
-                                      }
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.waiting:
-                                          return LinearProgressIndicator(
-                                              backgroundColor:
-                                                  TextThemes.ndBlue,
-                                              valueColor:
-                                                  new AlwaysStoppedAnimation<
-                                                      Color>(Colors.blue[200]));
-                                        default:
-                                          if (snapshot.hasError) {
-                                            return Text(
-                                                'Error: ${snapshot.error}');
-                                          } else {
-                                            // if (_searchTerm.length <= 0) {
-                                            //   return Container(
-                                            //       height: 4000, child: TrendingSegment());
-                                            // }
-
-                                            List<AlgoliaObjectSnapshot>
-                                                currSearchStuff2 =
-                                                snapshot2.data;
-
-                                            return Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.90,
-                                              child: TabBarView(
-                                                  controller: _tabController,
-                                                  children: [
-                                                    CustomScrollView(
-                                                      shrinkWrap: true,
-                                                      slivers: <Widget>[
-                                                        SliverList(
-                                                          delegate:
-                                                              SliverChildBuilderDelegate(
-                                                            (context, index) {
-                                                              return _searchTerm !=
-                                                                      null
-                                                                  ? DisplaySearchResult(
-                                                                      displayName:
-                                                                          currSearchStuff[index].data[
-                                                                              "displayName"],
-                                                                      email: currSearchStuff[index]
-                                                                              .data[
-                                                                          "email"],
-                                                                      proPic: currSearchStuff[index]
-                                                                              .data[
-                                                                          "photoUrl"],
-                                                                      userId: currSearchStuff[index]
-                                                                              .data[
-                                                                          "id"],
-                                                                      verifiedStatus:
-                                                                          currSearchStuff[index]
-                                                                              .data["verifiedStatus"])
-                                                                  : Container();
-                                                            },
-                                                            childCount:
-                                                                currSearchStuff
-                                                                        .length ??
-                                                                    0,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    CustomScrollView(
-                                                      shrinkWrap: true,
-                                                      slivers: <Widget>[
-                                                        SliverList(
-                                                          delegate:
-                                                              SliverChildBuilderDelegate(
-                                                            (context, index) {
-                                                              return _searchTerm
-                                                                              .length !=
-                                                                          null &&
-                                                                      _searchTerm
-                                                                              .length >
-                                                                          0
-                                                                  ? DisplayMOOVResult(
-                                                                      title: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "title"],
-                                                                      description:
-                                                                          currSearchStuff2[index]
-                                                                              .data["description"],
-                                                                      type: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "type"],
-                                                                      image: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "image"],
-                                                                      userId: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "userId"],
-                                                                      postId: currSearchStuff2[index]
-                                                                              .data[
-                                                                          "postId"],
-                                                                    )
-                                                                  : Container(
-                                                                      height:
-                                                                          4000,
-                                                                      child:
-                                                                          TrendingSegment());
-                                                            },
-                                                            childCount:
-                                                                currSearchStuff2
-                                                                        .length ??
-                                                                    0,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    CustomScrollView(
-                                                      shrinkWrap: true,
-                                                      slivers: <Widget>[
-                                                        SliverList(
-                                                          delegate:
-                                                              SliverChildBuilderDelegate(
-                                                            (context, index) {
-                                                              return _searchTerm
-                                                                              .length !=
-                                                                          null &&
-                                                                      _searchTerm
-                                                                              .length >
-                                                                          0
-                                                                  ? DisplayGroupResult(
-                                                                      groupName:
-                                                                          currSearchStuff0[index]
-                                                                              .data["groupName"],
-                                                                      groupId: currSearchStuff0[index]
-                                                                              .data[
-                                                                          "groupId"],
-                                                                      groupPic:
-                                                                          currSearchStuff0[index]
-                                                                              .data["groupPic"],
-                                                                      members: currSearchStuff0[index]
-                                                                              .data[
-                                                                          "members"],
-                                                                      sendMOOV:
-                                                                          false,
-                                                                    )
-                                                                  : Container(
-                                                                      height:
-                                                                          4000,
-                                                                      child:
-                                                                          TrendingSegment());
-                                                            },
-                                                            childCount:
-                                                                currSearchStuff0
-                                                                        .length ??
-                                                                    0,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ]),
-                                            );
-                                          }
-                                      }
-                                    });
-                              }));
-                    })));
   }
 }
 

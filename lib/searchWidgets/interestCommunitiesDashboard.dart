@@ -1,21 +1,25 @@
+import 'package:MOOV/businessInterfaces/CrowdManagement.dart';
+import 'package:MOOV/pages/NewSearch.dart';
 import 'package:MOOV/pages/home.dart';
 import 'package:MOOV/searchWidgets/interestCommunityDetail.dart';
+import 'package:MOOV/searchWidgets/interestCommunityMaker.dart';
 import 'package:MOOV/utils/themes_styles.dart';
-import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:reorderables/reorderables.dart';
 
-class WrapExample extends StatefulWidget {
+class CommunityGroups extends StatefulWidget {
+  final ValueChanged<bool> dismissKeyboardCallback;
+  CommunityGroups({this.dismissKeyboardCallback});
+
   @override
-  _WrapExampleState createState() => _WrapExampleState();
+  _CommunityGroupsState createState() => _CommunityGroupsState();
 }
 
-class _WrapExampleState extends State<WrapExample> {
-  final double _iconSize = 90;
+class _CommunityGroupsState extends State<CommunityGroups> {
   List<Widget> _tiles4;
-  List _tiles2 = [];
 
   @override
   void initState() {
@@ -32,93 +36,215 @@ class _WrapExampleState extends State<WrapExample> {
       });
     }
 
-    var column = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 40),
-        FutureBuilder(
-            future: communityGroupsRef.get(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
-              List<Widget> _tiles4 = [];
-              for (int i = 0; i < 4; i++) {
-                _tiles4.add(BouncingWidget(
-                  duration: Duration(milliseconds: 100),
-                  scaleFactor: 1.5,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => InterestCommunityDetail(groupId:"1xDa2SqY77XVVEIYlTDI")),
-                    );
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * .3,
-                    height: 140,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('lib/assets/bouts.jpg'),
-                            fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                                Colors.grey, BlendMode.darken)),
-                        color: Colors.white,
-                        border: Border.all(
-                          width: 2,
-                          color: TextThemes.ndBlue,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blue.withOpacity(0.25),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ]),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          snapshot.data.docs[i]['groupName'],
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.montserrat(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 17),
-                        ),
-                        SizedBox(height: 10),
-                        Icon(Icons.sports_football,
-                            size: 40, color: Colors.white),
-                      ],
-                    ),
-                  ),
-                ));
-              }
-              return ReorderableWrap(
-                  spacing: 8.0,
-                  runSpacing: 25.0,
-                  padding: const EdgeInsets.all(8),
-                  children: _tiles4,
-                  onReorder: _onReorder,
-                  onNoReorder: (int index) {
-                    //this callback is optional
-                    debugPrint(
-                        '${DateTime.now().toString().substring(5, 22)} reorder cancelled. index:$index');
-                  },
-                  onReorderStarted: (int index) {
-                    //this callback is optional
-                    debugPrint(
-                        '${DateTime.now().toString().substring(5, 22)} reorder started: index:$index');
-                  });
-            }),
-      ],
-    );
+    var container = Container(
+        height: MediaQuery.of(context).size.height * 2,
+        width: MediaQuery.of(context).size.width,
+        child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          children: <Widget>[
+            FutureBuilder(
+                future: communityGroupsRef.get(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: column,
-      ),
-    );
+                  List<Widget> _tiles4 = [];
+                  for (int i = 0; i < 5; i++) {
+                    _tiles4.add(GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InterestCommunityDetail(
+                                groupId: snapshot.data.docs[i]['groupId'])),
+                      ),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * .3,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.withOpacity(0.25),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  snapshot.data.docs[i]['groupPic']),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                  Colors.grey, BlendMode.darken)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              snapshot.data.docs[i]['groupName'],
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17),
+                            ),
+                            SizedBox(height: 10),
+                            Icon(
+                                IconData(
+                                    snapshot.data.docs[i]['groupIcon']
+                                        ['codePoint'],
+                                    fontFamily: snapshot.data.docs[i]
+                                        ['groupIcon']['fontFamily'],
+                                    fontPackage: "font_awesome_flutter"),
+                                color: Colors.white,
+                                size: 40),
+                            // Icon(Icons.face, size: 40, color: Colors.white),
+                          ],
+                        ),
+                      ),
+                    ));
+                  }
+
+                  ///create your own
+                  _tiles4.add(GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InterestCommunityMaker()),
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * .3,
+                      height: 140,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('lib/assets/bouts.jpg'),
+                              fit: BoxFit.cover,
+                              colorFilter: ColorFilter.mode(
+                                  Colors.grey, BlendMode.darken)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.withOpacity(0.9),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ]),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GradientText(
+                            "Create",
+                            17,
+                            gradient: LinearGradient(colors: [
+                              Colors.white,
+                              Colors.blue.shade900,
+                            ]),
+                            montserrat: true,
+                          ),
+                          SizedBox(height: 10),
+                          GradientIcon(
+                              Icons.add,
+                              40,
+                              LinearGradient(colors: [
+                                Colors.white,
+                                Colors.blue.shade900,
+                              ]))
+                        ],
+                      ),
+                    ),
+                  ));
+
+                  ///
+
+                  for (int i = 5; i < snapshot.data.docs.length; i++) {
+                    _tiles4.add(GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InterestCommunityDetail(
+                                  groupId: snapshot.data.docs[i]['groupId'])),
+                        );
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * .3,
+                        height: 140,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    snapshot.data.docs[i]['groupPic']),
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                    Colors.grey, BlendMode.darken)),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.blue.withOpacity(0.25),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              snapshot.data.docs[i]['groupName'],
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17),
+                            ),
+                            SizedBox(height: 10),
+                            Icon(
+                                IconData(
+                                    snapshot.data.docs[i]['groupIcon']
+                                        ['codePoint'],
+                                    fontFamily: snapshot.data.docs[i]
+                                        ['groupIcon']['fontFamily'],
+                                    fontPackage: "font_awesome_flutter"),
+                                color: Colors.white,
+                                size: 40),
+                          ],
+                        ),
+                      ),
+                    ));
+                  }
+                  return ReorderableWrap(
+                      spacing: 8.0,
+                      runSpacing: 25.0,
+                      padding: const EdgeInsets.all(8),
+                      children: _tiles4,
+                      onReorder: _onReorder,
+                      onNoReorder: (int index) {
+                        //this callback is optional
+                        debugPrint(
+                            '${DateTime.now().toString().substring(5, 22)} reorder cancelled. index:$index');
+                      },
+                      onReorderStarted: (int index) {
+                        //this callback is optional
+                        debugPrint(
+                            '${DateTime.now().toString().substring(5, 22)} reorder started: index:$index');
+                      });
+                }),
+          ],
+        ));
+
+    return container;
   }
+
+  // _onStartScroll(ScrollMetrics metrics) {
+  //   widget.dismissKeyboardCallback(true);
+  // }
 }
