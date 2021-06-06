@@ -267,12 +267,30 @@ class _NotificationSettingsState extends State<NotificationSettings> {
           going = snapshot.data['pushSettings']['going'];
           hourBefore = snapshot.data['pushSettings']['hourBefore'];
           suggestions = snapshot.data['pushSettings']['suggestions'];
+          String businessCode;
+          if (snapshot.data['isBusiness']) {
+            businessCode = snapshot.data['businessCode'];
+          }
 
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5.0),
               child: Column(children: [
                 Column(
                   children: [
+                    currentUser.isBusiness
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("YOUR BUSINESS CODE: "),
+                                Text(businessCode,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold))
+                              ],
+                            ),
+                          )
+                        : Container(),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
