@@ -57,6 +57,7 @@ class _SearchBarState extends State<SearchBar>
   final textFieldFocusNode = FocusNode();
   void _onFocusChange() {
     if (textFieldFocusNode.hasFocus) {
+      print("YR");
       _showTrending = false;
       setState(() {
         showTabs = true;
@@ -65,8 +66,9 @@ class _SearchBarState extends State<SearchBar>
       //   textFieldFocusNode.unfocus();
       // }
     } else {
+      print("XX");
+
       // dismissKeyboard = false;
-      _showTrending = true;
       setState(() {
         showTabs = false;
       });
@@ -212,6 +214,8 @@ class _SearchBarState extends State<SearchBar>
                                       // setState(() {
                                       //   dismissKeyboard = false;
                                       // });
+                                      _showTrending = true;
+
                                       clearSearch();
                                       // Unfocus all focus nodes
                                       textFieldFocusNode.unfocus();
@@ -402,26 +406,41 @@ class _SearchBarState extends State<SearchBar>
                                                           _tabController,
                                                       children: [
                                                         CustomScrollView(
+                                                          keyboardDismissBehavior:
+                                                              ScrollViewKeyboardDismissBehavior
+                                                                  .onDrag,
                                                           shrinkWrap: true,
                                                           slivers: <Widget>[
-                                                            SliverToBoxAdapter(
-                                                              child: Container(
-                                                                height: 140,
-                                                                child: ListView
-                                                                    .builder(
-                                                                  scrollDirection:
-                                                                      Axis.horizontal,
-                                                                  itemCount: currSearchStuffCommunityGroup.length,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index) {
-                                                                    return (_searchTerm !=
-                                                                            null)
-                                                                        ? DisplayCommunityGroupResult(
-                                                                            groupId:
-                                                                                currSearchStuffCommunityGroup[index].data["groupId"])
-                                                                        : Container();
-                                                                  },
+                                                            SliverPadding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      left: 10,
+                                                                      top: 15,
+                                                                      right: 10,
+                                                                      bottom:
+                                                                          5),
+                                                              sliver:
+                                                                  SliverToBoxAdapter(
+                                                                child:
+                                                                    Container(
+                                                                  height: 140,
+                                                                  child: ListView
+                                                                      .builder(
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    itemCount:
+                                                                        currSearchStuffCommunityGroup
+                                                                            .length,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return (_searchTerm !=
+                                                                              null)
+                                                                          ? DisplayCommunityGroupResult(
+                                                                              groupId: currSearchStuffCommunityGroup[index].data["groupId"])
+                                                                          : Container();
+                                                                    },
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
@@ -430,6 +449,8 @@ class _SearchBarState extends State<SearchBar>
                                                                   SliverChildBuilderDelegate(
                                                                 (context,
                                                                     index) {
+                                                                  print(
+                                                                      _searchTerm);
                                                                   String
                                                                       privacy =
                                                                       currSearchStuff2[index]
