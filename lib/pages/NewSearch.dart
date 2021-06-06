@@ -533,7 +533,7 @@ class _SearchBarState extends State<SearchBar>
                                                                             .length
                                                                         : currSearchStuff2.length != null &&
                                                                                 _currentIndex == 1
-                                                                            ? currSearchStuff2.length + 1
+                                                                            ? currSearchStuff2.length
                                                                             : 0,
                                                               ),
                                                             ),
@@ -580,8 +580,8 @@ class _SearchBarState extends State<SearchBar>
                                                                 },
                                                                 childCount:
                                                                     currSearchStuff0
-                                                                            .length - 1 ??
-                                                                        currSearchStuff2.length + 1,
+                                                                            .length ??
+                                                                        currSearchStuff2.length
                                                               ),
                                                             ),
                                                           ],

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
+import 'package:MOOV/pages/MoovMaker.dart';
 import 'package:MOOV/widgets/google_map.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -342,6 +344,10 @@ class _CreateAccountState extends State<CreateAccount> {
       // 2) if the user doesn't exist, then we want to take them to the create account page
 
       // 3) get username from create account, use it to make new user document in users collection
+
+      String abbrev = businessName.toLowerCase().replaceAll("’", "").replaceAll(" ", "").substring(0, 4);
+      String businessCode = abbrev + (1000 + Random().nextInt(100)).toString();
+
       usersRef.doc(user.id).set({
         "id": user.id,
         "email": user.email,
@@ -362,6 +368,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "dorm": businessAddress ?? "",
         "referral": "",
         "isBusiness": true,
+        "businessCode": businessCode,
         "postLimit": 3,
         "sendLimit": 5,
         "verifiedStatus": 3,
@@ -372,7 +379,7 @@ class _CreateAccountState extends State<CreateAccount> {
         "userType": userTypeMap,
         "isSingle": false,
         "venmoUsername": venmoUsername,
-        "mobileOrderMenu" : {},
+        "mobileOrderMenu": {},
         "pushSettings": {
           "friendPosts": true,
           "going": true,
@@ -959,8 +966,10 @@ class _CreateAccountState extends State<CreateAccount> {
                             ),
                           ),
                           SizedBox(height: isLargePhone ? 10 : 0),
-                           noAddress ? Text("Set your address!",
-                              style: TextStyle(color: Colors.red)) : Container(),
+                          noAddress
+                              ? Text("Set your address!",
+                                  style: TextStyle(color: Colors.red))
+                              : Container(),
                           GestureDetector(
                             onTap: businessAddress == ""
                                 ? () {
@@ -991,7 +1000,6 @@ class _CreateAccountState extends State<CreateAccount> {
                               ),
                             ),
                           ),
-                         
                         ],
                       ),
               ],
