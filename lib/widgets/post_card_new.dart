@@ -159,66 +159,77 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                       child: PostOwnerInfo(widget.course['userId'])),
                   Positioned(
                       bottom: 10,
-                      left: 24,
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                HapticFeedback.lightImpact();
+                      left: 22.5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blueGrey[50],
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    HapticFeedback.lightImpact();
 
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.bottomToTop,
-                                        child: SendMOOVSearch(
-                                          widget.course['userId'],
-                                          widget.course['image'],
-                                          widget.course['startDate'],
-                                          widget.course['postId'],
-                                          widget.course['title'],
-                                          widget.course['posterName'],
-                                        )));
-                              },
-                              child: Icon(Icons.send,
-                                  color: Colors.blue, size: 40)),
-                          FocusedMenuHolder(
-                              onPressed: () {},
-                              menuWidth:
-                                  MediaQuery.of(context).size.width * 0.50,
-                              blurSize: 5.0,
-                              menuItemExtent: 45,
-                              menuBoxDecoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.0))),
-                              duration: Duration(milliseconds: 100),
-                              animateMenuItems: true,
-                              blurBackgroundColor: Colors.black54,
-                              openWithTap:
-                                  true, // Open Focused-Menu on Tap rather than Long Press
-                              menuOffset:
-                                  10.0, // Offset value to show menuItem from the selected item
-                              bottomOffsetHeight:
-                                  80.0, // Offset height to consider, for showing the menu item ( for Suggestions bottom navigation bar), so that the popup menu will be shown on top of selected item.
-                              menuItems: <FocusedMenuItem>[
-                                FocusedMenuItem(
-                                    title: Text("Report MOOV"),
-                                    trailingIcon: Icon(Icons.report, color: Colors.red),
-                                    onPressed: () {
-                                      FirebaseFirestore.instance
-                                          .collection('notreDame')
-                                          .doc('data')
-                                          .collection('admin')
-                                          .doc(widget.course['postId'])
-                                          .set({
-                                        "reported": FieldValue.arrayUnion(
-                                            [currentUser.id])
-                                      }, SetOptions(merge: true));
-                                    }),
-                              ],
-                              child:
-                                  Icon(Icons.flag, color: Colors.red, size: 40))
-                        ],
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type:
+                                                PageTransitionType.bottomToTop,
+                                            child: SendMOOVSearch(
+                                              widget.course['userId'],
+                                              widget.course['image'],
+                                              widget.course['startDate'],
+                                              widget.course['postId'],
+                                              widget.course['title'],
+                                              widget.course['posterName'],
+                                            )));
+                                  },
+                                  child: Icon(Icons.send,
+                                      color: Colors.blue, size: 30)),
+                              FocusedMenuHolder(
+                                  onPressed: () {},
+                                  menuWidth:
+                                      MediaQuery.of(context).size.width * 0.50,
+                                  blurSize: 5.0,
+                                  menuItemExtent: 45,
+                                  menuBoxDecoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0))),
+                                  duration: Duration(milliseconds: 100),
+                                  animateMenuItems: true,
+                                  blurBackgroundColor: Colors.black54,
+                                  openWithTap:
+                                      true, // Open Focused-Menu on Tap rather than Long Press
+                                  menuOffset:
+                                      10.0, // Offset value to show menuItem from the selected item
+                                  bottomOffsetHeight:
+                                      80.0, // Offset height to consider, for showing the menu item ( for Suggestions bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                                  menuItems: <FocusedMenuItem>[
+                                    FocusedMenuItem(
+                                        title: Text("Report MOOV"),
+                                        trailingIcon: Icon(Icons.report,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          FirebaseFirestore.instance
+                                              .collection('notreDame')
+                                              .doc('data')
+                                              .collection('admin')
+                                              .doc(widget.course['postId'])
+                                              .set({
+                                            "reported": FieldValue.arrayUnion(
+                                                [currentUser.id])
+                                          }, SetOptions(merge: true));
+                                        }),
+                                  ],
+                                  child: Icon(Icons.flag,
+                                      color: Colors.red, size: 30))
+                            ],
+                          ),
+                        ),
                       )),
                   isToday == true
                       ? Positioned(
@@ -352,10 +363,8 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                           .doc(widget.course['postId'])
                                           .get(),
                                       builder: (context, snapshot) {
-                                        if (!snapshot.hasData ||
-                                            snapshot.connectionState !=
-                                                ConnectionState.done) {
-                                          return circularProgress();
+                                        if (!snapshot.hasData) {
+                                          return Container();
                                         }
                                         DocumentSnapshot course = snapshot.data;
 
@@ -410,12 +419,8 @@ class _PostOnFeedNewState extends State<PostOnFeedNew> {
                                                         .get(),
                                                     builder:
                                                         (context, snapshot2) {
-                                                      if (!snapshot2.hasData ||
-                                                          snapshot2
-                                                                  .connectionState !=
-                                                              ConnectionState
-                                                                  .done) {
-                                                        return circularProgress();
+                                                      if (!snapshot2.hasData) {
+                                                        return Container();
                                                       }
                                                       DocumentSnapshot course2 =
                                                           snapshot2.data;
@@ -594,23 +599,21 @@ class PostOwnerInfo extends StatelessWidget {
         child: StreamBuilder(
             stream: usersRef.doc(userId).snapshots(),
             builder: (context, snapshot2) {
-              bool isLargePhone = Screen.diagonal(context) > 766;
-              bool isPostOwner = false;
+              // bool isLargePhone = Screen.diagonal(context) > 766;
 
-              if (snapshot2.hasError) return CircularProgressIndicator();
-              if (!snapshot2.hasData) return CircularProgressIndicator();
+              if (snapshot2.hasError) return Container();
+              if (!snapshot2.hasData) return Container();
 
               int verifiedStatus = snapshot2.data['verifiedStatus'];
               String userYear = snapshot2.data['year'];
               String userDorm = snapshot2.data['dorm'];
               String displayName = snapshot2.data['displayName'];
-              String email = snapshot2.data['email'];
               String proPic = snapshot2.data['photoUrl'];
               bool isBusiness = snapshot2.data['isBusiness'];
 
-              if (currentUser.id == userId) {
-                isPostOwner = true;
-              }
+              // if (currentUser.id == userId) {
+              //  bool isPostOwner = true;
+              // }
 
               return Container(
                   child: Row(

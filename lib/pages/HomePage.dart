@@ -3,7 +3,6 @@ import 'package:MOOV/helpers/themes.dart';
 import 'package:MOOV/homepageWidgets/subcategories.dart';
 import 'package:MOOV/main.dart';
 import 'package:MOOV/pages/home.dart';
-import 'package:MOOV/searchWidgets/interestCommunitiesDashboard.dart';
 import 'package:MOOV/services/database.dart';
 import 'package:MOOV/widgets/MOTD.dart';
 import 'package:MOOV/widgets/poll2.dart';
@@ -44,7 +43,6 @@ class _HomePageState extends State<HomePage>
   String privacy;
 
   int _currentIndex = 0;
-  int motdIndex = 0;
   ValueNotifier<double> _notifier = ValueNotifier<double>(0);
 
   Map<int, Widget> map = Map();
@@ -366,6 +364,7 @@ class _HomePageState extends State<HomePage>
                                                     isLargePhone ? 155 : 140,
                                                 child: PageView(
                                                   controller: _pageController,
+                                                  
                                                   children: [
                                                     MOTD("MOTD", vibeType),
                                                     MOTD("MOTN", vibeType)

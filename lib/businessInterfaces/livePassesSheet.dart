@@ -219,7 +219,13 @@ class _LivePassesSheetState extends State<LivePassesSheet> {
                                               )
                                             ],
                                           ))
-                                      : Container()
+                                      : Container(),
+                                      Positioned(
+                                          top: 5,
+                                          left: 5,
+                                          child: GestureDetector(
+                                            onTap: () => Navigator.pop(context),
+                                            child: Icon(Icons.cancel)))
                                 ],
                               );
                             }),

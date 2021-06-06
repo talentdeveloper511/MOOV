@@ -1149,8 +1149,7 @@ class NamedIconMessages extends StatelessWidget {
             .where('seen', isEqualTo: false)
             .snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) return CircularProgressIndicator();
-          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (!snapshot.hasData) return Container();
           int notifs = snapshot.data.docs.length;
 
           return InkWell(
@@ -1211,8 +1210,7 @@ class NamedIcon extends StatelessWidget {
             .where('seen', isEqualTo: false)
             .snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) return CircularProgressIndicator();
-          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (!snapshot.hasData) return Container();
           int notifs = snapshot.data.docs.length;
 
           return InkWell(

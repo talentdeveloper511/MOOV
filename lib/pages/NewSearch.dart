@@ -20,7 +20,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AlgoliaApplication {
   static final Algolia algolia = Algolia.init(
@@ -57,7 +56,6 @@ class _SearchBarState extends State<SearchBar>
   final textFieldFocusNode = FocusNode();
   void _onFocusChange() {
     if (textFieldFocusNode.hasFocus) {
-      print("YR");
       _showTrending = false;
       setState(() {
         showTabs = true;
@@ -66,7 +64,6 @@ class _SearchBarState extends State<SearchBar>
       //   textFieldFocusNode.unfocus();
       // }
     } else {
-      print("XX");
 
       // dismissKeyboard = false;
       setState(() {
@@ -423,7 +420,7 @@ class _SearchBarState extends State<SearchBar>
                                                                   SliverToBoxAdapter(
                                                                 child:
                                                                     Container(
-                                                                  height: 140,
+                                                                  height: currSearchStuffCommunityGroup.length != 0 ? 140 : 0,
                                                                   child: ListView
                                                                       .builder(
                                                                     scrollDirection:
@@ -436,8 +433,11 @@ class _SearchBarState extends State<SearchBar>
                                                                             index) {
                                                                       return (_searchTerm !=
                                                                               null)
-                                                                          ? DisplayCommunityGroupResult(
-                                                                              groupId: currSearchStuffCommunityGroup[index].data["groupId"])
+                                                                          ? Padding(
+                                                                            padding: const EdgeInsets.all(4.0),
+                                                                            child: DisplayCommunityGroupResult(
+                                                                                groupId: currSearchStuffCommunityGroup[index].data["groupId"]),
+                                                                          )
                                                                           : Container();
                                                                     },
                                                                   ),
@@ -449,8 +449,7 @@ class _SearchBarState extends State<SearchBar>
                                                                   SliverChildBuilderDelegate(
                                                                 (context,
                                                                     index) {
-                                                                  print(
-                                                                      _searchTerm);
+                                                                 
                                                                   String
                                                                       privacy =
                                                                       currSearchStuff2[index]
@@ -534,7 +533,7 @@ class _SearchBarState extends State<SearchBar>
                                                                             .length
                                                                         : currSearchStuff2.length != null &&
                                                                                 _currentIndex == 1
-                                                                            ? currSearchStuff2.length
+                                                                            ? currSearchStuff2.length + 1
                                                                             : 0,
                                                               ),
                                                             ),
@@ -564,12 +563,25 @@ class _SearchBarState extends State<SearchBar>
                                                                           sendMOOV:
                                                                               false,
                                                                         )
-                                                                      : Container();
+                                                                      : DisplayMOOVResult(
+                                                                          title:
+                                                                              currSearchStuff2[index].data["title"],
+                                                                          description:
+                                                                              currSearchStuff2[index].data["description"],
+                                                                          type:
+                                                                              currSearchStuff2[index].data["type"],
+                                                                          image:
+                                                                              currSearchStuff2[index].data["image"],
+                                                                          userId:
+                                                                              currSearchStuff2[index].data["userId"],
+                                                                          postId:
+                                                                              currSearchStuff2[index].data["postId"],
+                                                                        );
                                                                 },
                                                                 childCount:
                                                                     currSearchStuff0
-                                                                            .length ??
-                                                                        0,
+                                                                            .length - 1 ??
+                                                                        currSearchStuff2.length + 1,
                                                               ),
                                                             ),
                                                           ],
@@ -800,7 +812,7 @@ class DisplayMOOVResult extends StatelessWidget {
                 //           child: isNextWeek ? Text("") : Text(""),
                 //         ),
                 //       )
-                //     : Container(),
+                //     : Container(height:50,color:Colors.red),
                 // isToday == true
                 //     ? Positioned(
                 //         top: 0,
@@ -1075,45 +1087,55 @@ class DisplayCommunityGroupResult extends StatelessWidget {
           String pic = snapshot.data['groupPic'];
           String name = snapshot.data['groupName'];
 
-          return Container(
-            width: MediaQuery.of(context).size.width * .3,
-            height: 140,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.25),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-              image: DecorationImage(
-                  image: NetworkImage(pic),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(Colors.grey, BlendMode.darken)),
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  name,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.montserrat(
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          InterestCommunityDetail(groupId: groupId)));
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * .3,
+              height: 140,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.25),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+                image: DecorationImage(
+                    image: NetworkImage(pic),
+                    fit: BoxFit.cover,
+                    colorFilter:
+                        ColorFilter.mode(Colors.grey, BlendMode.darken)),
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.montserrat(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17),
+                  ),
+                  SizedBox(height: 10),
+                  Icon(
+                      IconData(snapshot.data['groupIcon']['codePoint'],
+                          fontFamily: snapshot.data['groupIcon']['fontFamily'],
+                          fontPackage: "font_awesome_flutter"),
                       color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 17),
-                ),
-                SizedBox(height: 10),
-                Icon(
-                    IconData(snapshot.data['groupIcon']['codePoint'],
-                        fontFamily: snapshot.data['groupIcon']['fontFamily'],
-                        fontPackage: "font_awesome_flutter"),
-                    color: Colors.white,
-                    size: 40),
-                // Icon(Icons.face, size: 40, color: Colors.white),
-              ],
+                      size: 40),
+                  // Icon(Icons.face, size: 40, color: Colors.white),
+                ],
+              ),
             ),
           );
         });
