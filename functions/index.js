@@ -5,6 +5,34 @@ const algoliasearch = require("algoliasearch");
 const braintree = require("braintree");
 admin.initializeApp(functions.config().firebase);
 
+exports.businessPosted = functions.database.instance("moov4-4d3c4").ref("/businessPost/{postedItem}")
+    .onCreate((snapshot, context) => {
+      // Grab the current value of what was written to the Realtime Database.
+      // const businesses = {}
+      const data = snapshot.val();
+      // const businessId = data.businessId;
+      const postedItem = context.params.postedItem;
+      const details = data.details;
+      const startTime = data.startTime;
+      const maxOccupancy = data.maxOccupancy;
+      const cost = data.cost;
+      admin.firestore().collection("notreDame").doc("data").collection("food").doc(`${postedItem}`).set({
+        businessPost: true,
+        moovOver: true,
+        privacy: "Public",
+        type: "Food/Drink",
+        title: "SAMPLE EVENT",
+        userId: "29848444443",
+        address: "Brothers",
+        description: details,
+        startDate: startTime,
+        maxOccupancy: maxOccupancy,
+        paymentAmount: cost,
+        image: "https://firebasestorage.googleapis.com/v0/b/moov4-4d3c4.appspot.com/o/images?alt=media&token=b7bee8a5-34e6-4617-b4e4-7a6dfd741c73",
+      }, {merge: true});
+      return null;
+    });
+
 exports.brainTree = functions.firestore
     .document("{college}/data/users/{userId}/payments/{paymentMethodItem}")
     .onCreate(async (snapshot, context) => {
@@ -64,7 +92,7 @@ exports.brainTree = functions.firestore
         paymentMethodNonce: nonce,
       }, (err, result) => { });
       const devData = await doc.data().deviceData;
-      console.log("payment nonceee: ", nonce);
+      // console.log("payment nonceee: ", nonce);
       // create transaction
       gateway.transaction.sale({
         amount: amountCharged,
@@ -73,10 +101,13 @@ exports.brainTree = functions.firestore
         deviceData: devData,
         options: {
           submitForSettlement: true,
-          // storeInVaultOnSuccess: true,
+          storeInVaultOnSuccess: true,
         },
       }, (err, result) => {
         console.log(result);
+        admin.firestore().collection(`${college}`).doc("data").collection("users").doc(`${user}`).collection("payments").doc(`${paymentMethod}`).set({
+          status: "success",
+        }, {merge: true});
       });
     });
 
