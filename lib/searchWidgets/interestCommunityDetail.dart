@@ -106,7 +106,7 @@ class InterestCommunityDetail extends StatelessWidget {
                                     }
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
+                                          horizontal: 4.0),
                                       child: Column(
                                         children: [
                                           SizedBox(height: 4),

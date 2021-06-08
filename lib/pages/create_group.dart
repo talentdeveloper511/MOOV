@@ -506,7 +506,7 @@ class _GroupFormState extends State<GroupForm> {
                                         maxWidth: 300.0, minHeight: 50.0),
                                     alignment: Alignment.center,
                                     child: Text(
-                                      "Create Friend Group",
+                                      "Create",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 20),

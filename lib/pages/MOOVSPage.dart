@@ -1,9 +1,7 @@
-
 import 'package:MOOV/pages/friend_groups.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:MOOV/services/database.dart';
-
 
 class MOOVSPage extends StatefulWidget {
   @override
@@ -15,8 +13,6 @@ class _MOOVSPageState extends State<MOOVSPage>
   @override
   bool get wantKeepAlive => true;
 
-  GlobalKey _myPostsKey = GlobalKey();
-  GlobalKey _goingKey = GlobalKey();
   // TabController to control and switch tabs
   TabController _tabController;
   dynamic moovId;
@@ -32,11 +28,10 @@ class _MOOVSPageState extends State<MOOVSPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-   
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: Scaffold(
-         
           body: FriendGroupsPage(),
         ));
   }
@@ -67,9 +62,11 @@ class _MOOVSPageState extends State<MOOVSPage>
     );
   }
 }
+
 class BottomNavyBar extends StatelessWidget {
   BottomNavyBar({
     Key key,
+    this.fromFriendGroups = false,
     this.selectedIndex = 0,
     this.showElevation = true,
     this.iconSize = 24,
@@ -97,6 +94,7 @@ class BottomNavyBar extends StatelessWidget {
 
   /// Whether this navigation bar should show a elevation. Defaults to true.
   final bool showElevation;
+  final bool fromFriendGroups;
 
   /// Use this to change the item's animation duration. Defaults to 270ms.
   final Duration animationDuration;
@@ -148,6 +146,7 @@ class BottomNavyBar extends StatelessWidget {
               return GestureDetector(
                 onTap: () => onItemSelected(index),
                 child: _ItemWidget(
+                  fromFriendGroups: fromFriendGroups,
                   item: item,
                   iconSize: iconSize,
                   isSelected: index == selectedIndex,
@@ -167,7 +166,7 @@ class BottomNavyBar extends StatelessWidget {
 
 class _ItemWidget extends StatelessWidget {
   final double iconSize;
-  final bool isSelected;
+  final bool isSelected, fromFriendGroups;
   final BottomNavyBarItem item;
   final Color backgroundColor;
   final double itemCornerRadius;
@@ -182,6 +181,7 @@ class _ItemWidget extends StatelessWidget {
     @required this.animationDuration,
     @required this.itemCornerRadius,
     @required this.iconSize,
+    this.fromFriendGroups = false,
     this.curve = Curves.linear,
   }) : super(key: key);
 
@@ -191,20 +191,21 @@ class _ItemWidget extends StatelessWidget {
       container: true,
       selected: isSelected,
       child: AnimatedContainer(
-        width: isSelected ? 130 : 50,
+        width: isSelected ? 140 : 50,
         height: double.maxFinite,
         duration: animationDuration,
         curve: curve,
         decoration: BoxDecoration(
-          color:
-              isSelected ? item.activeColor.withOpacity(0.2) : backgroundColor,
+          color:isSelected
+              ? item.activeColor.withOpacity(0.2)
+                  : backgroundColor,
           borderRadius: BorderRadius.circular(itemCornerRadius),
         ),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics: NeverScrollableScrollPhysics(),
           child: Container(
-            width: isSelected ? 130 : 50,
+            width: isSelected ? 140 : 50,
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -225,10 +226,10 @@ class _ItemWidget extends StatelessWidget {
                 if (isSelected)
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      padding: fromFriendGroups ? EdgeInsets.only(right: 4): EdgeInsets.symmetric(horizontal: 4),
                       child: DefaultTextStyle.merge(
                         style: TextStyle(
-                          color: item.activeColor,
+                          color: fromFriendGroups ? Colors.black : item.activeColor,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
